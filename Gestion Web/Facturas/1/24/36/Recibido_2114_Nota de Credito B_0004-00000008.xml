@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FECAEResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FeCabResp xmlns="http://ar.gov.afip.dif.FEV1/">
+    <Cuit>20228242382</Cuit>
+    <PtoVta>4</PtoVta>
+    <CbteTipo>8</CbteTipo>
+    <FchProceso>20171205155529</FchProceso>
+    <CantReg>1</CantReg>
+    <Resultado>R</Resultado>
+    <Reproceso>N</Reproceso>
+  </FeCabResp>
+  <FeDetResp xmlns="http://ar.gov.afip.dif.FEV1/">
+    <FECAEDetResponse>
+      <Concepto>1</Concepto>
+      <DocTipo>80</DocTipo>
+      <DocNro>20333912660</DocNro>
+      <CbteDesde>8</CbteDesde>
+      <CbteHasta>8</CbteHasta>
+      <CbteFch>20171126</CbteFch>
+      <Resultado>R</Resultado>
+      <Observaciones>
+        <Obs>
+          <Code>10016</Code>
+          <Msg>Campo CbteFch Debe estar comprendido  en el  rango  N-5 y N+5 siendo N la fecha de envÃ­o del pedido  de autorizaciÃ³n para 1 - Productos</Msg>
+        </Obs>
+      </Observaciones>
+      <CAE />
+      <CAEFchVto />
+    </FECAEDetResponse>
+  </FeDetResp>
+</FECAEResponse>

@@ -1,0 +1,793 @@
+﻿using Disipar.Models;
+using ExportToExcel;
+using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
+using Gestion_Api.Modelo;
+using Gestor_Solution.Controladores;
+using Gestor_Solution.Modelo;
+using Microsoft.Reporting.WebForms;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Gestion_Web.Formularios.Reportes
+{
+    public partial class ImpresionReportes : System.Web.UI.Page
+    {
+        Mensajes m = new Mensajes();
+        controladorFacturacion contFacturacion = new controladorFacturacion();
+        ControladorPedido contPedido = new ControladorPedido();
+        controladorArticulo contArticulo = new controladorArticulo();
+        controladorVendedor contVendedor = new controladorVendedor();
+        controladorCliente contCliente = new controladorCliente();
+        controladorUsuario contUser = new controladorUsuario();
+        
+        private int valor;        
+        private int excel;
+        private string fechaD;
+        private string fechaH;
+        private int idSuc;
+        private int idGrupo;
+        private int idSubGrupo;
+        private int idArticulo;
+        private int idCliente;
+        private int idVendedor;
+        private int idProveedor;
+        private int idTraza;
+        //private int idLista;
+        private string listas;
+        private int estado;
+        private int tipo;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IsPostBack)
+                {                    
+                    this.valor = Convert.ToInt32(Request.QueryString["valor"]);                    
+                    this.excel = Convert.ToInt32(Request.QueryString["ex"]);
+                    this.fechaD = Request.QueryString["fd"] as string;
+                    this.fechaH = Request.QueryString["fh"] + " 23:59:59.000";
+                    this.idSuc = Convert.ToInt32(Request.QueryString["s"]);
+                    this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
+                    this.idSubGrupo = Convert.ToInt32(Request.QueryString["sg"]);
+                    this.idArticulo = Convert.ToInt32(Request.QueryString["a"]);
+                    this.idCliente = Convert.ToInt32(Request.QueryString["c"]);
+                    this.idVendedor = Convert.ToInt32(Request.QueryString["v"]);
+                    this.idProveedor = Convert.ToInt32(Request.QueryString["prov"]);
+                    this.estado = Convert.ToInt32(Request.QueryString["es"]);
+                    //this.idLista = Convert.ToInt32(Request.QueryString["l"]);
+                    this.listas = Request.QueryString["l"] as string;
+                    this.tipo = Convert.ToInt32(Request.QueryString["t"]);
+
+                    if (valor == 1)// reporte Articulos cantidad = 1 
+                    {
+                        this.generarReporte();
+                    }
+                    if (valor == 2)//reporte Articulos importes = 2
+                    {
+                        this.generarReporte2();
+                    }
+                    if (valor == 3)//reporte Cliente importes = 2
+                    {
+                        this.generarReporte3();
+                    }
+                    if (valor == 4)
+                    {
+                        this.generarReporte4();//reporte Sucursales importe
+                    }
+                    if (valor == 5)
+                    {
+                        this.generarReporte5();//Articulos x Cliente
+                    }
+                    if (valor == 6)
+                    {
+                        this.generarReporte6();//Importe x Vendedor Comision
+                    }
+                    if (valor == 7)
+                    {
+                        this.generarReporte7();// Reportes Articulos x Lista Precio Sucursal
+                    }
+                    if (valor == 8)
+                    {
+                        this.generarReporte8();//Reporte trazabilidad
+                    }
+                    if (valor == 9)
+                    {
+                        this.generarReporte9();//Reporte detalle trazabilidad
+                    }
+                    if (valor == 10)
+                    {
+                        this.generarReporte10(); //Reporte Articulos por Grupo
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de ventas. " + ex.Message));                
+            }
+        }
+
+        private void generarReporte()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.listas))
+                    this.listas = this.listas.Remove(listas.Length - 1);
+
+                //Tablas TOP Cantidades
+                //fechaH += " 23:59:59.000";
+                DataTable dtArticulosCant = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                DataTable dtClientesCant = contFacturacion.obtenerTopClientesCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                DataTable dtVendedoresCant = contFacturacion.obtenerTopVendedoresCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;               
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasR.rdlc");                                
+
+                //ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
+                ReportDataSource rds = new ReportDataSource("ArticulosCant", dtArticulosCant);
+                ReportDataSource rds2 = new ReportDataSource("ClientesCant", dtClientesCant);
+                ReportDataSource rds3 = new ReportDataSource("VendedoresCant", dtVendedoresCant);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                //this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Ranking_Ventas", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+                
+            }
+            catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));                
+            }
+        }
+
+        private void generarReporte2()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.listas))
+                    this.listas = this.listas.Remove(listas.Length - 1);
+                //Tablas TOP Importes
+                DataTable dtArticulosImporte = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                //DataTable dtClientesImporte = contFacturacion.obtenerTopClientesImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
+                //DataTable dtVendedoresImporte = contFacturacion.obtenerTopVendedoresImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Ventas2R.rdlc");
+
+                //ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
+                ReportDataSource rds = new ReportDataSource("ArticulosImporte", dtArticulosImporte);
+                //ReportDataSource rds2 = new ReportDataSource("ClientesCant", dtClientesCant);
+                //ReportDataSource rds3 = new ReportDataSource("VendedoresCant", dtVendedoresCant);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                //this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                //this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                //this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Ranking_Ventas", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));
+            }
+        }
+
+        private void generarReporte3()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.listas))
+                    this.listas = this.listas.Remove(listas.Length - 1);
+                //Tablas TOP Importes
+                //DataTable dtArticulosImporte = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
+                DataTable dtClientesImporte = contFacturacion.obtenerTopClientesImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                //DataTable dtVendedoresImporte = contFacturacion.obtenerTopVendedoresImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasClientesR.rdlc");
+
+                //ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
+                ReportDataSource rds = new ReportDataSource("ClientesImporte", dtClientesImporte);
+                //ReportDataSource rds2 = new ReportDataSource("ClientesCant", dtClientesCant);
+                //ReportDataSource rds3 = new ReportDataSource("VendedoresCant", dtVendedoresCant);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                //this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                //this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                //this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Ranking_Ventas", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));
+            }
+
+        }
+
+        private void generarReporte4()
+        {
+            try
+            {
+                
+                DataTable dtSucursalesImporte = contFacturacion.obtenerTopSucursalesImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor);
+                
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasSucursalesR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("SucursalesImporte", dtSucursalesImporte);
+                
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Ranking_Ventas_Sucursales", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));
+            }
+
+        }
+
+        private void generarReporte5()
+        {
+            try
+            {
+                
+                DataTable dtArticulosClientes = contFacturacion.obtenerCantidadArticulosCliente(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor);
+                
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosClientes.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("ArticulosClientes", dtArticulosClientes);
+                
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Cantidad_Articulos_Clientes", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas articulos x cliente. " + ex.Message));
+            }
+
+        }
+
+        private void generarReporte6()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.listas))
+                    this.listas = this.listas.Remove(listas.Length - 1);
+                DataTable dt = contFacturacion.obtenerTopVendedoresImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasVendedores.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("ImporteVendedor", dt);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Importe_Vendedores", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas articulos x cliente. " + ex.Message));
+            }
+
+        }
+        private void generarReporte7()
+        {
+            try
+            {
+                controladorListaPrecio contListas = new controladorListaPrecio();
+                                
+                string nombreLista = "";
+                string listasElegidas = "";
+                if (listas != "")
+                {
+                    listasElegidas = this.listas.Remove(listas.Length - 1);
+
+                    foreach (string nombre in listasElegidas.Split(','))
+                    {
+                        listaPrecio ls = contListas.obtenerlistaPrecioID(Convert.ToInt32(nombre));
+
+                        if (ls != null)
+                        {
+                            nombreLista += ls.nombre + ",";
+                        }
+
+                    }
+                }
+
+                DataTable dtImporte = contFacturacion.obtenerTopImporteArticulosListaSucursal(fechaD, fechaH, idSuc, idArticulo, listasElegidas,this.idProveedor);
+                DataTable dtCantidad = contFacturacion.obtenerTopCantidadArticulosListaSucursal(fechaD, fechaH, idSuc, idArticulo, listasElegidas,this.idProveedor);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosLista.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("DatosImportes", dtImporte);
+                ReportDataSource rds2 = new ReportDataSource("DatosCantidad", dtCantidad);
+
+                ReportParameter param = new ReportParameter("ParamLista", nombreLista);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                
+                this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Reporte_Articulos_Lista", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas articulos x cliente. " + ex.Message));
+            }
+
+        }
+
+        private void generarReporte8()
+        {
+            try
+            {
+                controladorCompraEntity contCompra = new controladorCompraEntity();
+                controladorReportes contReport = new controladorReportes();
+
+                DataTable dtTrazas = contCompra.obtenerTrazabilidadItemByArticuloGrupo(this.idGrupo, this.idArticulo, this.idSuc, this.estado);
+                DataTable dtDatos = new DataTable();
+
+                dtDatos.Columns.Add("Codigo");
+                dtDatos.Columns.Add("Articulo");                
+
+                List<Trazabilidad_Campos> lstCampos = this.contArticulo.obtenerCamposTrazabilidadByGrupo(this.idGrupo);
+                foreach (Trazabilidad_Campos campo in lstCampos)
+                {
+                    dtDatos.Columns.Add(campo.nombre);
+                }
+                dtDatos.Columns.Add("Estado");
+                dtDatos.Columns.Add("Sucursal");
+                dtDatos.Columns.Add("Numero");
+
+                int pos = 0;
+                int columnas = 0;
+
+                DataRow dr = dtDatos.NewRow();
+
+                foreach (DataRow row in dtTrazas.Rows)
+                {
+                    Log.EscribirSQL(1, "INFO", "Voy a pasar la traza con id " + row["Id"].ToString());
+                    //this.cargarEnPH(row, pos);                    
+                    if (columnas == 0)
+                    {
+                        dr = dtDatos.NewRow();
+                        Articulo arti = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(row["idArticulo"]));
+                        dr["Codigo"] = arti.codigo;
+                        dr["Articulo"] = arti.descripcion;                        
+                        dr["Numero"] = row["Traza"].ToString();
+                    }
+
+                    if (columnas < dtDatos.Columns.Count )
+                    {
+
+                        dr[columnas + 2] = row["valor"];
+                        columnas++;
+
+                    }
+                    if (columnas == (dtDatos.Columns.Count - 5))
+                    {
+
+                        if (row["estado"].ToString() == "1")
+                        {
+                            dr["Estado"] = "EN STOCK";
+                        }
+                        if (row["estado"].ToString() == "2")
+                        {
+                            dr["Estado"] = "VENDIDO";
+                        }
+
+                        dr["sucursal"] = row["sucursal"].ToString();
+
+                        dtDatos.Rows.Add(dr);
+                        columnas = 0;
+                        pos++;
+                    }
+                }
+                String path = HttpContext.Current.Server.MapPath("/Formularios/Reportes/Trazabildad/Excel/");
+
+                string archivo = contReport.exportarTrazabilidad(dtDatos, path);
+
+                Response.Redirect("/Formularios/Reportes/Trazabildad/Excel/" + archivo);
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void generarReporte9()
+        {
+            try
+            {
+                controladorReportes contReport = new controladorReportes();
+                Articulo art = this.contArticulo.obtenerArticuloByID(this.idArticulo);
+
+                DataTable dtDetalle = contReport.generarDetalleTrazabilidad(this.idArticulo,this.idTraza,this.idGrupo,this.idSuc);
+
+                String path = HttpContext.Current.Server.MapPath("/Formularios/Reportes/Trazabildad/Excel/");
+
+                string archivo = contReport.exportarTrazabilidad(dtDetalle, path,"DetalleTrazabilidad_" + art.codigo);
+
+                Response.Redirect("/Formularios/Reportes/Trazabildad/Excel/" + archivo);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void generarReporte10()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.listas))
+                    this.listas = this.listas.Remove(listas.Length - 1);
+
+                //Tablas TOP Cantidades
+                //fechaH += " 23:59:59.000";
+                DataTable dtArticulosCant = contFacturacion.obtenerTopGruposArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                DataTable dtClientesCant = contFacturacion.obtenerTopClientesCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                DataTable dtVendedoresCant = contFacturacion.obtenerTopVendedoresCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosGrupoR.rdlc");
+
+                //ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
+                ReportDataSource rds = new ReportDataSource("ArticulosCant", dtArticulosCant);
+                ReportDataSource rds2 = new ReportDataSource("ClientesCant", dtClientesCant);
+                ReportDataSource rds3 = new ReportDataSource("VendedoresCant", dtVendedoresCant);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                //this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Ranking_Ventas_Grupos", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));
+            }
+        }
+
+
+    }
+}

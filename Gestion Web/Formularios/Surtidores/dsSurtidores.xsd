@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsSurtidores" targetNamespace="http://tempuri.org/dsSurtidores.xsd" xmlns:mstns="http://tempuri.org/dsSurtidores.xsd" xmlns="http://tempuri.org/dsSurtidores.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsSurtidores" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsSurtidores" msprop:Generator_UserDSName="dsSurtidores">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DatosCierres" msprop:Generator_TableClassName="DatosCierresDataTable" msprop:Generator_TableVarName="tableDatosCierres" msprop:Generator_TablePropName="DatosCierres" msprop:Generator_RowDeletingName="DatosCierresRowDeleting" msprop:Generator_RowChangingName="DatosCierresRowChanging" msprop:Generator_RowEvHandlerName="DatosCierresRowChangeEventHandler" msprop:Generator_RowDeletedName="DatosCierresRowDeleted" msprop:Generator_UserTableName="DatosCierres" msprop:Generator_RowChangedName="DatosCierresRowChanged" msprop:Generator_RowEvArgName="DatosCierresRowChangeEvent" msprop:Generator_RowClassName="DatosCierresRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:string" minOccurs="0" />
+              <xs:element name="Fecha" msprop:Generator_ColumnVarNameInTable="columnFecha" msprop:Generator_ColumnPropNameInRow="Fecha" msprop:Generator_ColumnPropNameInTable="FechaColumn" msprop:Generator_UserColumnName="Fecha" type="xs:string" minOccurs="0" />
+              <xs:element name="Surtidor" msprop:Generator_ColumnVarNameInTable="columnSurtidor" msprop:Generator_ColumnPropNameInRow="Surtidor" msprop:Generator_ColumnPropNameInTable="SurtidorColumn" msprop:Generator_UserColumnName="Surtidor" type="xs:string" minOccurs="0" />
+              <xs:element name="CantidadInicial" msprop:Generator_ColumnVarNameInTable="columnCantidadInicial" msprop:Generator_ColumnPropNameInRow="CantidadInicial" msprop:Generator_ColumnPropNameInTable="CantidadInicialColumn" msprop:Generator_UserColumnName="CantidadInicial" type="xs:string" minOccurs="0" />
+              <xs:element name="CantidadCierre" msprop:Generator_ColumnVarNameInTable="columnCantidadCierre" msprop:Generator_ColumnPropNameInRow="CantidadCierre" msprop:Generator_ColumnPropNameInTable="CantidadCierreColumn" msprop:Generator_UserColumnName="CantidadCierre" type="xs:string" minOccurs="0" />
+              <xs:element name="PrecioVenta" msprop:Generator_ColumnVarNameInTable="columnPrecioVenta" msprop:Generator_ColumnPropNameInRow="PrecioVenta" msprop:Generator_ColumnPropNameInTable="PrecioVentaColumn" msprop:Generator_UserColumnName="PrecioVenta" type="xs:string" minOccurs="0" />
+              <xs:element name="Observaciones" msprop:Generator_ColumnVarNameInTable="columnObservaciones" msprop:Generator_ColumnPropNameInRow="Observaciones" msprop:Generator_ColumnPropNameInTable="ObservacionesColumn" msprop:Generator_UserColumnName="Observaciones" type="xs:string" minOccurs="0" />
+              <xs:element name="Usuarios" msprop:Generator_ColumnVarNameInTable="columnUsuarios" msprop:Generator_ColumnPropNameInRow="Usuarios" msprop:Generator_ColumnPropNameInTable="UsuariosColumn" msprop:Generator_UserColumnName="Usuarios" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

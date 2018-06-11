@@ -1,0 +1,412 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraABM.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraABM" %>
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="main">
+
+        <div>
+            <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Always">
+                <ContentTemplate>
+                    <div class="col-md-12 col-xs-12">
+                        <div class="widget stacked">
+
+                            <div class="widget-header">
+                                <i class="icon-wrench"></i>
+                                <h3>Herramientas</h3>
+                            </div>
+                            <!-- /widget-header -->
+
+                            <div class="widget-content">
+                                <div id="validation-form" role="form" class="form-horizontal col-md-8">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Sucursal</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="ListSucursal" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListSucursal_SelectedIndexChanged"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Pto Venta</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="ListPtoVenta" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListPtoVenta_SelectedIndexChanged"></asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Cod. Proveedor</label>
+                                            <div class="col-md-3">
+                                                <asp:TextBox ID="txtCodProveedor" class="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="btnBuscarCodigoProveedor" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodigoProveedor_Click" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Proveedor</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
+                                                    <ProgressTemplate>
+                                                        <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Cargando artículos del Proveedor. Por favor aguarde.</span>
+                                                    </ProgressTemplate>
+                                                </asp:UpdateProgress>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Numero</label>
+
+                                            <div class="col-md-2">
+                                                <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" disabled onchange="completar4Ceros(this, this.value)"></asp:TextBox>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled onchange="completar8Ceros(this, this.value)"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <%-- <asp:RequiredFieldValidator ControlToValidate="txtPVenta" ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <%--<asp:RequiredFieldValidator ControlToValidate="txtNumero" ID="RequiredFieldValidator6" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Fecha</label>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                                    <asp:TextBox ID="txtFecha" runat="server" class="form-control"></asp:TextBox>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:RequiredFieldValidator ControlToValidate="txtFecha" ID="RequiredFieldValidator42" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Fecha Entrega</label>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                                    <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:RequiredFieldValidator ControlToValidate="txtFechaEntrega" ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Observaciones</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <asp:Panel ID="Panel1" Visible="true" runat="server" class="col-md-12" Style="padding: 0px; margin-left: -1%;">
+                                            <table class="table table-bordered ">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Codigo</th>
+                                                        <th>Descripcion</th>
+                                                        <th>Costo</th>
+                                                        <th>Cantidad</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width: 20%">
+                                                            <div class="form-group">
+                                                                <div class="col-md-12">
+                                                                    <div class="input-group">
+                                                                        <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td style="width: 30%">
+                                                            <div style="width: 100%">
+                                                                <asp:TextBox ID="txtDescripcion" runat="server" class="form-control" Style="text-align: right"></asp:TextBox>
+                                                            </div>
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:TextBox ID="txtPrecio" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:TextBox ID="txtCantidad" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                        </td>
+                                                        <td style="width: 5%">
+                                                            <asp:LinkButton ID="lbtnAgregarArticuloASP" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarArticuloASP_Click" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </asp:Panel>
+                                    </fieldset>
+                                </div>
+                                <div id="validation-form2" role="form" class="form-horizontal col-md-4">
+                                    <fieldset>
+                                        <div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Mail:</label>
+                                                <div class="col-md-7">
+                                                    <asp:Label ID="lblMailOC" Text="" runat="server" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Requiere Autorización:</label>
+                                                <div class="col-md-7">
+                                                    <asp:Label ID="lblRequiereAutorizacionOC" Text="" runat="server" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Monto Autorización:</label>
+                                                <div class="col-md-7">
+                                                    <asp:Label ID="lblMontoAutorizacionOC" Text="" runat="server" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Requiere Anticipo:</label>
+                                                <div class="col-md-7">
+                                                    <asp:Label ID="lblRequiereAnticipoOC" Text="" runat="server" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                </div>
+
+                                <div id="validation-form3" role="form" class="form-horizontal col-md-8">
+                                    <div class="btn-toolbar">
+                                        <div class="btn-group">
+                                            <asp:Button ID="btnVerStockMinimo" type="button" runat="server" Text="Stock Minimo" class="btn btn-info" OnClick="btnVerStockMinimo_Click" />
+                                        </div>
+                                        <div class="btn-group">
+                                            <asp:Button ID="btnVerStockMinimoSucursal" type="button" runat="server" Text="Stock Minimo Sucursal" class="btn btn-info" OnClick="btnVerStockMinimoSucursal_Click" />
+                                        </div>
+                                        <div class="btn-group">
+                                            <asp:Button ID="btnVerOC" type="button" runat="server" Text="Ver OC" class="btn btn-info" OnClick="btnVerOC_Click" />
+                                            <asp:Label ID="lblVerCargados" Text="0" runat="server" Visible="false" />
+                                        </div>
+                                        <div class="btn-group">
+                                            <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                </div>
+
+
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Descripcion</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th>Stock Sucursal</th>
+                                            <th>Stock Total</th>
+                                            <th>Stock Minimo</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phProductos" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                                <br />
+                                <div class="btn-toolbar">
+                                    <div class="btn-group">
+                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />
+                                    </div>
+                                    <%--<div class="alert alert-info alert-dismissable col-md-2">
+                                        <asp:Label ID="lblCartelTotal" runat="server" Text="asd"/>
+                                    </div>--%>
+                                </div>
+
+                            </div>
+                            <!-- /widget-content -->
+
+                        </div>
+                        <!-- /widget -->
+                    </div>
+
+                </ContentTemplate>
+
+            </asp:UpdatePanel>
+        </div>
+    </div>
+
+    <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
+    </rsweb:ReportViewer>
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+    <script src="../../Scripts/Application.js"></script>
+    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+    <script>
+        $(function () {
+            $("#<%= txtFecha.ClientID %>").datepicker(
+                {
+                    dateFormat: 'dd/mm/yy'
+                }
+                );
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+                {
+                    dateFormat: 'dd/mm/yy'
+                }
+                );
+        });
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $(function () {
+                $("#<%= txtFecha.ClientID %>").datepicker(
+                    {
+                        dateFormat: 'dd/mm/yy'
+                    }
+                    );
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $(function () {
+                $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+                    {
+                        dateFormat: 'dd/mm/yy'
+                    }
+                    );
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataTables-example').dataTable({
+                "paging": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $('#dataTables-example').dataTable({
+
+                "paging": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+
+
+            });
+        }
+    </script>
+
+    <script>
+        //valida los campos solo numeros
+        function validarNro(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+            if (key < 48 || key > 57) {
+                if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+
+
+</asp:Content>

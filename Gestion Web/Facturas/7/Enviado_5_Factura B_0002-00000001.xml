@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FECAERequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FeCabReq xmlns="http://ar.gov.afip.dif.FEV1/">
+    <CantReg>1</CantReg>
+    <PtoVta>2</PtoVta>
+    <CbteTipo>11</CbteTipo>
+  </FeCabReq>
+  <FeDetReq xmlns="http://ar.gov.afip.dif.FEV1/">
+    <FECAEDetRequest>
+      <Concepto>1</Concepto>
+      <DocTipo>99</DocTipo>
+      <DocNro>0</DocNro>
+      <CbteDesde>1</CbteDesde>
+      <CbteHasta>1</CbteHasta>
+      <CbteFch>20171003</CbteFch>
+      <ImpTotal>1</ImpTotal>
+      <ImpTotConc>0</ImpTotConc>
+      <ImpNeto>1</ImpNeto>
+      <ImpOpEx>0</ImpOpEx>
+      <ImpTrib>0</ImpTrib>
+      <ImpIVA>0</ImpIVA>
+      <MonId>PES</MonId>
+      <MonCotiz>1</MonCotiz>
+      <Iva>
+        <AlicIva>
+          <Id>3</Id>
+          <BaseImp>1</BaseImp>
+          <Importe>0</Importe>
+        </AlicIva>
+      </Iva>
+    </FECAEDetRequest>
+  </FeDetReq>
+</FECAERequest>

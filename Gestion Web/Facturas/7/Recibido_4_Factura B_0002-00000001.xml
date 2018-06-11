@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FECAEResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FeCabResp xmlns="http://ar.gov.afip.dif.FEV1/">
+    <Cuit>20269853736</Cuit>
+    <PtoVta>2</PtoVta>
+    <CbteTipo>11</CbteTipo>
+    <FchProceso>20171003171119</FchProceso>
+    <CantReg>1</CantReg>
+    <Resultado>R</Resultado>
+    <Reproceso>N</Reproceso>
+  </FeCabResp>
+  <FeDetResp xmlns="http://ar.gov.afip.dif.FEV1/">
+    <FECAEDetResponse>
+      <Concepto>1</Concepto>
+      <DocTipo>99</DocTipo>
+      <DocNro>0</DocNro>
+      <CbteDesde>1</CbteDesde>
+      <CbteHasta>1</CbteHasta>
+      <CbteFch>20171003</CbteFch>
+      <Resultado>R</Resultado>
+      <Observaciones>
+        <Obs>
+          <Code>10071</Code>
+          <Msg>Para comprobantes tipo C el objeto IVA no debe informarse.</Msg>
+        </Obs>
+      </Observaciones>
+      <CAE />
+      <CAEFchVto />
+    </FECAEDetResponse>
+  </FeDetResp>
+</FECAEResponse>

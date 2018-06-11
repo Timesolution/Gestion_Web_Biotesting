@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='ISO-8859-1'?><TBError>
+  <tipoError>DATO</tipoError>
+  <codigoError>02</codigoError>
+  <mensajeError>El usuario ingresado y / o la contrase�a son inv�lidos.</mensajeError>
+</TBError>

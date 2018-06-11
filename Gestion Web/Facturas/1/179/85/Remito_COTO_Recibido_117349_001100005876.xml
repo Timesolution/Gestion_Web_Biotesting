@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='ISO-8859-1'?><TBCOMPROBANTE>
+  <cuitEmpresa>30516490140</cuitEmpresa>
+  <numeroComprobante>196679012</numeroComprobante>
+  <nombreArchivo>TB_30516490140_000000_20180103_000001.txt</nombreArchivo>
+  <codigoIntegridad>3568d8cac45abcb0ddd232283286b4e9</codigoIntegridad>
+  <validacionesRemitos class="list">
+    <remito>
+      <numeroUnico>91 R001100005876</numeroUnico>
+      <procesado>NO</procesado>
+      <errores class="list">
+        <error>
+          <codigo>84</codigo>
+          <descripcion>El campo DESTINATARIO_DOCUMENTO es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>83</codigo>
+          <descripcion>El campo DESTINATARIO_TIPO_DOCUMENTO es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>26</codigo>
+          <descripcion>El campo DESTINO_DOMICILIO_NUMERO es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>30</codigo>
+          <descripcion>El campo ORIGEN_DOMICILIO_CALLE es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>32</codigo>
+          <descripcion>El campo ORIGEN_DOMICILIO_LOCALIDAD es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>67</codigo>
+          <descripcion>El campo ORIGEN_DOMICILIO_CODIGOPOSTAL es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>34</codigo>
+          <descripcion>El campo TRANSPORTISTA_CUIT es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>95</codigo>
+          <descripcion>El campo IMPORTE es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>81</codigo>
+          <descripcion>Producto: 73-3 El campo PRODUCTO_UNICO es inv�lido o inexistente.</descripcion>
+        </error>
+      </errores>
+    </remito>
+  </validacionesRemitos>
+</TBCOMPROBANTE>

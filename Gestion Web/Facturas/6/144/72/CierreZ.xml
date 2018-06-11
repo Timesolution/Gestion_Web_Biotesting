@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items />
+  <TipoFactura>Cierre Z</TipoFactura>
+  <Total>0</Total>
+  <TotalPercepcion>0</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Descuento>0</Descuento>
+</FacturaXML>

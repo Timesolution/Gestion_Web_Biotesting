@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <FacturaItemXML>
+      <Descripcion>Articulo Prueba Codigo Barrass</Descripcion>
+      <Cantidad>3</Cantidad>
+      <PrecioUnitario>1000.00</PrecioUnitario>
+      <AlicuotaIva>21.00</AlicuotaIva>
+      <ImpuestosInternos>0.00</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+  </items>
+  <TipoFactura>Factura B</TipoFactura>
+  <Comprador>acevedo raul armando</Comprador>
+  <Cuit>00000000000</Cuit>
+  <TipoIva>Consumidor Final</TipoIva>
+  <FormaPago>Mutuales</FormaPago>
+  <Total>3000.00</Total>
+  <TotalPercepcion>0.00</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Direccion>lol - 25 DE MAYO - Buenos Aires</Direccion>
+  <Descuento>0.00</Descuento>
+</FacturaXML>

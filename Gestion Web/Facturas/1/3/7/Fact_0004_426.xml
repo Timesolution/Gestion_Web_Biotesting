@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <FacturaItemXML>
+      <Descripcion>NAFTA ULTRA  ECO |31.39L x $22.30</Descripcion>
+      <Cantidad>1</Cantidad>
+      <PrecioUnitario>700</PrecioUnitario>
+      <AlicuotaIva>21.00</AlicuotaIva>
+      <ImpuestosInternos>147.20</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+  </items>
+  <TipoFactura>Factura B</TipoFactura>
+  <Comprador>CONSUMIDOR FINAL</Comprador>
+  <Cuit>00000000000</Cuit>
+  <TipoIva>Consumidor Final</TipoIva>
+  <FormaPago>Contado</FormaPago>
+  <Total>700</Total>
+  <TotalPercepcion>0.00</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Descuento>0.00</Descuento>
+  <Observacion>Tasa vial Mun.= 0.00|ITC= 137.35|Tasa Hidr.= 9.85|Tasa Vial=0.00</Observacion>
+</FacturaXML>

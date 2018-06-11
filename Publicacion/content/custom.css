@@ -1,0 +1,23 @@
+/*------------------------------------------------------------------
+
+[Custom Stylesheet]
+
+
+Last change:	03/25/2013
+Assigned to:	You
+
+-------------------------------------------------------------------*/
+/* Don't display when printing */
+@media print {
+  .no-print {
+    display: none;
+  }
+  .left-side,
+  .header,
+  .content-header {
+    display: none;
+  }
+  .right-side {
+    margin: 0;
+  }
+}
