@@ -446,8 +446,8 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control C in phCheques.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    String estadoCh = tr.Cells[15].Text;
-                    CheckBox ch = tr.Cells[16].Controls[2] as CheckBox;
+                    String estadoCh = tr.Cells[12].Text;
+                    CheckBox ch = tr.Cells[14].Controls[2] as CheckBox;
                     //Si esta seleccionado, tiene estado disponible y es de terceros guardo el id.
                     if (ch.Checked == true && estadoCh == "Disponible")
                     {
@@ -528,8 +528,8 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control C in phCheques.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    String estadoCh = tr.Cells[15].Text;
-                    CheckBox ch = tr.Cells[16].Controls[2] as CheckBox;
+                    String estadoCh = tr.Cells[12].Text;
+                    CheckBox ch = tr.Cells[14].Controls[2] as CheckBox;
                     var cheque = this.controlador.obtenerChequeId(Convert.ToInt32(ch.ID.Split('_')[1]));
                     //Si esta seleccionado, tiene estado entregado .
                     if (ch.Checked == true && estadoCh == "Entregado" && cheque.origen == "P")
@@ -828,6 +828,10 @@ namespace Gestion_Web.Formularios.Valores
 
                 TableCell celTipo = new TableCell();
                 celTipo.Text = "";
+                if (ch.tipoCheque == 0)
+                    celTipo.Text = "Blanco";
+                if (ch.tipoCheque == 1)
+                    celTipo.Text = "Negro";
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celTipo);
@@ -918,7 +922,7 @@ namespace Gestion_Web.Formularios.Valores
 
                         int k = contCobranzaEnt.agregarCheques_Datos(cd);
                     }
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito!. ", "ChequesF.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito!. ", "ChequesF_2.aspx"));
                 }
                 else
                 {
