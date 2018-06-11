@@ -829,9 +829,9 @@ namespace Gestion_Web.Formularios.Valores
                 TableCell celTipo = new TableCell();
                 celTipo.Text = "";
                 if (ch.tipoCheque == 0)
-                    celTipo.Text = "Blanco";
+                    celTipo.Text = "FC";
                 if (ch.tipoCheque == 1)
-                    celTipo.Text = "Negro";
+                    celTipo.Text = "PRP";
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celTipo);

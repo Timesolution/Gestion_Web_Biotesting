@@ -560,6 +560,8 @@ namespace Gestion_Web.Formularios.Valores {
             
             private global::System.Data.DataColumn columnFechaEntregado;
             
+            private global::System.Data.DataColumn columnTipo;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosChequesDataTable() {
@@ -739,6 +741,14 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TipoColumn {
+                get {
+                    return this.columnTipo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -792,7 +802,8 @@ namespace Gestion_Web.Formularios.Valores {
                         string Observacion, 
                         string SucursalPago, 
                         string Proveedor, 
-                        string FechaEntregado) {
+                        string FechaEntregado, 
+                        string Tipo) {
                 DatosChequesRow rowDatosChequesRow = ((DatosChequesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         id,
@@ -812,7 +823,8 @@ namespace Gestion_Web.Formularios.Valores {
                         Observacion,
                         SucursalPago,
                         Proveedor,
-                        FechaEntregado};
+                        FechaEntregado,
+                        Tipo};
                 rowDatosChequesRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosChequesRow);
                 return rowDatosChequesRow;
@@ -853,6 +865,7 @@ namespace Gestion_Web.Formularios.Valores {
                 this.columnSucursalPago = base.Columns["SucursalPago"];
                 this.columnProveedor = base.Columns["Proveedor"];
                 this.columnFechaEntregado = base.Columns["FechaEntregado"];
+                this.columnTipo = base.Columns["Tipo"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -894,6 +907,8 @@ namespace Gestion_Web.Formularios.Valores {
                 base.Columns.Add(this.columnProveedor);
                 this.columnFechaEntregado = new global::System.Data.DataColumn("FechaEntregado", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFechaEntregado);
+                this.columnTipo = new global::System.Data.DataColumn("Tipo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTipo);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3641,6 +3656,22 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Tipo {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosCheques.TipoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Tipo\' in table \'DatosCheques\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosCheques.TipoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsidNull() {
                 return this.IsNull(this.tableDatosCheques.idColumn);
             }
@@ -3853,6 +3884,18 @@ namespace Gestion_Web.Formularios.Valores {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetFechaEntregadoNull() {
                 this[this.tableDatosCheques.FechaEntregadoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTipoNull() {
+                return this.IsNull(this.tableDatosCheques.TipoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTipoNull() {
+                this[this.tableDatosCheques.TipoColumn] = global::System.Convert.DBNull;
             }
         }
         
