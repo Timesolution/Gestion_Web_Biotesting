@@ -43,9 +43,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CRVsPackageLib, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
+    <Reference Include="CRVsPackageLib">
+      <HintPath>Auxiliar\CRVsPackageLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
@@ -58,9 +58,8 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp">
+      <HintPath>Auxiliar\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Mascotas Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,19 +103,17 @@
       <HintPath>..\..\..\..\..\..\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Millas_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Millas\Millas_Api\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+    <Reference Include="Millas_Api">
+      <HintPath>Auxiliar\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
     </Reference>
-    <Reference Include="Planario_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Plenario_Integracion\Planario_Api\Planario_Api\bin\Debug\Planario_Api.dll</HintPath>
+    <Reference Include="Planario_Api">
+      <HintPath>Auxiliar\Planario_Api.dll</HintPath>
     </Reference>
     <Reference Include="printButtonDLL">
-      <HintPath>..\Recursos\printButtonDLL.dll</HintPath>
+      <HintPath>Auxiliar\printButtonDLL.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
