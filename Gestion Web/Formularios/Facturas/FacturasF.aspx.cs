@@ -787,6 +787,12 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
+                string restaHoras;
+
+                if (Convert.ToInt32(modificoHora) == 1)
+                    restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = f.id.ToString();
@@ -943,6 +949,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");                  
+
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = Convert.ToInt32(row["id"]).ToString();
@@ -957,6 +965,12 @@ namespace Gestion_Web.Formularios.Facturas
                 //Celdas
                 TableCell celFecha = new TableCell();
                 celFecha.Text = Convert.ToDateTime(row["fecha"].ToString()).ToString("dd/MM/yyyy hh:mm");
+                if (modificoHora == "1")
+                {
+                    string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+                    var fechaAux = Convert.ToDateTime(row["fecha"].ToString());
+                    celFecha.Text = fechaAux.AddHours(Convert.ToInt32(restaHoras)).ToString("dd/MM/yyyy hh:mm");
+                }
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celFecha);
