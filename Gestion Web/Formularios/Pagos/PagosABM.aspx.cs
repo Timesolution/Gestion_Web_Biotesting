@@ -1826,8 +1826,8 @@ namespace Gestion_Web.Formularios.Pagos
                 this.phChequeCartera.Controls.Clear();
 
                 // Creo columna al DataTable para Tipo de Cheque, Blanco / Negro
-
-                dt.Columns.Add("Tipo");
+                if (dt.Columns["Tipo"] == null)
+                    dt.Columns.Add("Tipo");
 
                 foreach (var ch in cheques)
                 {
@@ -1956,7 +1956,7 @@ namespace Gestion_Web.Formularios.Pagos
                 foreach (Control C in phChequeCartera.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
                     if (ch.Checked == true)
                     {
                         string idtildado = ch.ID.Split('_')[1];

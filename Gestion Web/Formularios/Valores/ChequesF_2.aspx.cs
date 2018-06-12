@@ -57,7 +57,7 @@ namespace Gestion_Web.Formularios.Valores
                         this.cargarClientes();
                         this.cargarProveedores();
 
-                        this.inicializarVariables();
+                        this.inicializarControles();
 
                         Response.Redirect("ChequesF_2.aspx?fechaDesde=" + txtDesdeC.Text + "&fechaHasta=" + txtHastaC.Text + "&SucCobro=" + DropListSucursal.SelectedValue + "&SucPago=" + DropListSucursalPago.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&o=" + DropDownListOrigen.SelectedValue + "&e=" + DropListEstado.SelectedValue + "&prov=" + this.DropListProveedores.SelectedValue + "&tf=3");
                     }
@@ -1013,7 +1013,7 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
-        private void inicializarVariables()
+        private void inicializarControles()
         {
             try
             {
