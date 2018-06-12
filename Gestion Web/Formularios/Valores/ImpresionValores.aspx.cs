@@ -1114,22 +1114,24 @@ namespace Gestion_Web.Formularios.Valores
                 dtDatos.Columns.Add("Observacion");
                 dtDatos.Columns.Add("SucursalPago");
                 dtDatos.Columns.Add("Proveedor");
+                dtDatos.Columns.Add("Tipo");
 
                 foreach (ChequesValores ch in lstCheques)
                 {
                     DataRow drDatos = dtDatos.NewRow();
+
                     drDatos["id"] = ch.Cheque.id;
                     drDatos["fechaRE"] = "";
                     drDatos["FechaEntregado"] = "";
+
                     if (ch.FechaCobro > new DateTime(0001,1,1))
                         drDatos["fechaRE"] = ch.FechaCobro.ToString("dd/MM/yyyy");
                     if (ch.FechaPago > new DateTime(0001, 1, 1))
                         drDatos["FechaEntregado"] = ch.FechaPago.ToString("dd/MM/yyyy");
+
                     Cheques_Cuentas datosImputacion = this.contBanco.obtenerDatosImputacionChequeById(ch.Cheque.id);
                     if (datosImputacion != null)
-                    {
                         drDatos["fechaI"] = datosImputacion.fechaImputado.Value.ToString("dd/MM/yyyy");
-                    }
                     else
                         drDatos["fechaI"] = "";
 
@@ -1140,6 +1142,7 @@ namespace Gestion_Web.Formularios.Valores
                     drDatos["numero"] = ch.Cheque.numero;
                     drDatos["banco"] = ch.Cheque.banco.entidad;
                     drDatos["cuenta"] = ch.Cheque.cuenta;
+
                     if(!String.IsNullOrEmpty(ch.Cliente))
                         drDatos["cliente"] = ch.Cliente;
 
@@ -1156,41 +1159,32 @@ namespace Gestion_Web.Formularios.Valores
                     drDatos["cuit"] = ch.Cheque.cuit;
 
                     if (ch.Cheque.estado == 1)
-                    {
                         drDatos["estado"] = "Disponible";
-                    }
                     if (ch.Cheque.estado == 2)
-                    {
                         drDatos["estado"] = "Depositado";
-                    }
                     if (ch.Cheque.estado == 3)
-                    {
                         drDatos["estado"] = "Entregado";
-                    }
                     if (ch.Cheque.estado == 4)
-                    {
                         drDatos["estado"] = "Disponible";
-                    }
                     if (ch.Cheque.estado == 5)
-                    {
                         drDatos["estado"] = "Imputado a Cta.";
-                    }
 
                     Gestion_Api.Entitys.Cheques_Cuentas datos = this.contBanco.obtenerDatosImputacionChequeById(ch.Cheque.id);
                     if (datos != null)
                         drDatos["fechaI"] = datos.fechaImputado.Value.ToString("dd/MM/yyyy");
-
                     drDatos["Observacion"] = controlador.obtenerObservacionChequeManual(ch.Cheque.id);
+
+                    // Tipo de Cheque - Blanco(0)  / Negro(1)
+                    drDatos["Tipo"] = string.Empty;
+                    if (ch.tipoCheque == 0)
+                        drDatos["Tipo"] = "FC";
+                    if (ch.tipoCheque == 1)
+                        drDatos["Tipo"] = "PRP";
+
                     saldo += ch.Cheque.importe;
 
                     dtDatos.Rows.Add(drDatos);
                 }
-                //DataTable dtCheques = Session["datosCheques"] as DataTable;                
-                //Session["datosCheques"] = null;
-                ////dtCheques.Columns[]
-
-                //String totalCheques = Session["totalCheques"].ToString();
-                //Session["totalCheques"] = null;
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
 
@@ -1229,15 +1223,12 @@ namespace Gestion_Web.Formularios.Valores
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/ms-excel";
                     this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
-                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                     this.Response.BinaryWrite(xlsContent);
-
                     this.Response.End();
                 }
                 else
                 {
                     //get pdf content
-
                     Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                     this.Response.Clear();
@@ -1245,7 +1236,6 @@ namespace Gestion_Web.Formularios.Valores
                     this.Response.ContentType = "application/pdf";
                     this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                     this.Response.BinaryWrite(pdfContent);
-
                     this.Response.End();
                 }
             }

@@ -801,9 +801,9 @@ namespace Gestion_Web.Formularios.Herramientas
                 }
 
                 //Si el contador es mayor a 2, no lo dejo
-                if (c > 2)
+                if (c != 2)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Sólo puede seleccionar hasta dos columnas"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Sólo puede seleccionar dos columnas"));
                     return;
                 }
 
