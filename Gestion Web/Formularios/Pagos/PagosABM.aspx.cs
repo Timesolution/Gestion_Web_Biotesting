@@ -1824,9 +1824,14 @@ namespace Gestion_Web.Formularios.Pagos
 
                 //limpio el Place holder
                 this.phChequeCartera.Controls.Clear();
+
+                // Creo columna al DataTable para Tipo de Cheque, Blanco / Negro
+
+                dt.Columns.Add("Tipo");
+
                 foreach (var ch in cheques)
                 {
-                     DataRow drCheque = dt.NewRow();
+                    DataRow drCheque = dt.NewRow();
                     drCheque["Fecha"] = ch.fecha;
                     drCheque["Importe"] = ch.importe;
                     drCheque["Numero"] = ch.numero;
@@ -1837,7 +1842,7 @@ namespace Gestion_Web.Formularios.Pagos
                     drCheque["Cuit"] = ch.cuit;
                     drCheque["Librador"] = ch.librador;
                     drCheque["Monto"] = ch.importe;
-                    //drCheque["Observacion"] = this.contCobranza.obtenerObservacionChequeManual(ch.id);
+                    drCheque["Tipo"] = this.contCobranza.obtenerTipoCheque(ch);
 
                     //que me cargue la tabla, recibiendo una clase PAgo_contado
                     int pos = dt.Rows.IndexOf(drCheque);
@@ -1871,45 +1876,34 @@ namespace Gestion_Web.Formularios.Pagos
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = dr["Numero"].ToString();
-                //celNumero.Width = Unit.Percentage(20);
                 celNumero.HorizontalAlign = HorizontalAlign.Left;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumero);
 
                 TableCell celBanco = new TableCell();
                 celBanco.Text = dr["Banco Entidad"].ToString();
-                //celBanco.Width = Unit.Percentage(20);
                 celBanco.HorizontalAlign = HorizontalAlign.Left;
                 celBanco.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celBanco);
 
                 TableCell celCuenta = new TableCell();
                 celCuenta.Text = dr["Cuenta"].ToString();
-                //celCuenta.Width = Unit.Percentage(20);
                 celCuenta.HorizontalAlign = HorizontalAlign.Left;
                 celCuenta.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCuenta);
 
-                //TableCell celAccion2 = new TableCell();
-                //LinkButton btnEditar = new LinkButton();
-                //btnEditar.CssClass = "btn btn-info";
-                //btnEditar.ID = "btnEditarTercero_" + idCheque;
-                //btnEditar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                //btnEditar.Click += new EventHandler(this.EliminarChequeTercero);
-                //celAccion2.Controls.Add(btnEditar);
-                //celAccion2.Width = Unit.Percentage(5);
-                //celAccion2.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celAccion2);
-               
+                TableCell celTipo = new TableCell();
+                celTipo.Text = dr["Tipo"].ToString();
+                celTipo.HorizontalAlign = HorizontalAlign.Left;
+                celTipo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celTipo);
 
                 TableCell celSeleccion = new TableCell();
                 CheckBox cbSeleccion = new CheckBox();
-                //cbSeleccion.Text = "&nbsp;Imputar";
                 cbSeleccion.ID = "cbSeleccion_" + idCheque;
                 cbSeleccion.CssClass = "btn btn-info";
                 celSeleccion.Controls.Add(cbSeleccion);
                 celSeleccion.Width = Unit.Percentage(12);
-                //celSeleccion.VerticalAlign = VerticalAlign.Middle;
                 celSeleccion.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celSeleccion);
                 

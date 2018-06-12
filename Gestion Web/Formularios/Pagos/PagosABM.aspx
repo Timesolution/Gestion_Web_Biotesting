@@ -350,6 +350,7 @@
                                                                         <th>Numero</th>
                                                                         <th>Banco</th>
                                                                         <th>Cuenta</th>
+                                                                        <th>Tipo</th>
                                                                         <th class="td-actions">
                                                                             <asp:LinkButton ID="LinkButton3" ValidationGroup="ChequeTercero" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click1"></asp:LinkButton>
                                                                             <a class="btn btn-success" data-toggle="modal" href="#modalLiberar" id="A1" runat="server" style="display:none;">
