@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -108,7 +109,8 @@
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
     </Reference>
-    <Reference Include="Planario_Api">
+    <Reference Include="Planario_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Auxiliar\Planario_Api.dll</HintPath>
     </Reference>
     <Reference Include="printButtonDLL">
