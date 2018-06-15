@@ -94,6 +94,7 @@ namespace Gestion_Web.Formularios.Articulos
                 string descuentoCantidad = "0";
                 Decimal descuento = 0.00m;
                 Decimal descuento2 = 0.00m;
+                Decimal descuento3 = 0.00m;
 
                 if (accion == 1)//por filtro
                 {
@@ -147,12 +148,16 @@ namespace Gestion_Web.Formularios.Articulos
                 this.dtArticulos.Columns.Add("CantidadHastaDto1");
                 this.dtArticulos.Columns.Add("PocentajeDto1");
                 this.dtArticulos.Columns.Add("CantidadDto2"); //Desde
+                this.dtArticulos.Columns.Add("CantidadDto3");
                 this.dtArticulos.Columns.Add("CantidadHastaDto2");
+                this.dtArticulos.Columns.Add("CantidadHastaDto3");
                 this.dtArticulos.Columns.Add("PocentajeDto2");
+                this.dtArticulos.Columns.Add("PocentajeDto3");
                 this.dtArticulos.Columns.Add("Marca");
                 this.dtArticulos.Columns.Add("DescuentoPorCantidad");
                 this.dtArticulos.Columns.Add("Descuento1");
                 this.dtArticulos.Columns.Add("Descuento2");
+                this.dtArticulos.Columns.Add("Descuento3");
                 this.dtArticulos.Columns.Add("Observaciones");
 
                 foreach (Articulo articulo in listArticulos)
@@ -163,6 +168,7 @@ namespace Gestion_Web.Formularios.Articulos
                     descuentoCantidad = "0";
                     descuento = 0.00m;
                     descuento2 = 0.00m;
+                    descuento3 = 0.00m;
 
                     DataRow drDatos = dtArticulos.NewRow();
                     Articulo artTemporal = this.controlador.obtenerArticuloByID(articulo.id);
@@ -217,16 +223,30 @@ namespace Gestion_Web.Formularios.Articulos
                                 drDatos["PocentajeDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Descuento;
                                 descuento2 = (decimal)(articulo.precioVenta * (1-(artEntity.Articulos_Descuentos.ElementAt(1).Descuento / 100)));
                                 descuento2 = decimal.Round(descuento2, 2);
-                                
+
 
                                 //descuentoCantidad += Environment.NewLine +  "Desde " + drDatos["CantidadDto2"] + " Hasta " + drDatos["CantidadHastaDto2"] + " " + drDatos["PocentajeDto2"] + "%  - $"
                                 //+ descuento2.ToString();
+
+                                if (artEntity.Articulos_Descuentos.Count > 2)
+                                {
+                                    drDatos["CantidadDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Desde;
+                                    drDatos["CantidadHastaDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Hasta;
+                                    drDatos["PocentajeDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Descuento;
+                                    descuento3 = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.ElementAt(2).Descuento / 100)));
+                                    descuento3 = decimal.Round(descuento3, 2);
+
+
+                                    //descuentoCantidad += Environment.NewLine +  "Desde " + drDatos["CantidadDto2"] + " Hasta " + drDatos["CantidadHastaDto2"] + " " + drDatos["PocentajeDto2"] + "%  - $"
+                                    //+ descuento2.ToString();
+                                }
                             }
                         }
 
                         drDatos["DescuentoPorCantidad"] = descuentoCantidad;
                         drDatos["Descuento1"] = descuento;
                         drDatos["Descuento2"] = descuento2;
+                        drDatos["Descuento3"] = descuento3;
 
                         var marca = artEntity.Articulos_Marca.FirstOrDefault();
                         if (marca != null)

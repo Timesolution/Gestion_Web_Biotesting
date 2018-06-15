@@ -1956,7 +1956,7 @@ namespace Gestion_Web.Formularios.Pagos
                 foreach (Control C in phChequeCartera.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
                     if (ch.Checked == true)
                     {
                         string idtildado = ch.ID.Split('_')[1];

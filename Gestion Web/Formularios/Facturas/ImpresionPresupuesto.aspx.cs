@@ -1212,9 +1212,7 @@ namespace Gestion_Web.Formularios.Facturas
                     fechaVencCai = pv.caiVencimiento.ToString("dd/MM/yyyy");
                 }
                 catch
-                { }
-
-                
+                { }                
                 
                 DataTable dtComentarios = contRemito.obtenerComentarioRemito(idRemito);
 
