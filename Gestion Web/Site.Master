@@ -343,7 +343,13 @@
                                         <li><a href="/../../Formularios/Valores/CajaCierreF.aspx">Cierre Caja</a></li>
                                         <li><a href="/../../Formularios/Valores/CajaDiferenciasF.aspx">Caja Diferencias</a></li>
                                         <li><a href="/../../Formularios/Valores/CashFlowF.aspx">Cashflow</a></li>
-                                        <li><a href="/../../Formularios/Valores/ChequesF.aspx">Cheques</a></li>
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="" href="#">Cheques</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="/../../Formularios/Valores/ChequesF.aspx">Cheques 1</a></li>
+                                                <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques 2</a></li>
+                                            </ul>
+                                        </li>
                                         <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
                                         <li><a href="">Cuenta Personal</a></li>
                                         <li><a href="/../../Formularios/Valores/ABMDivisas.aspx">Divisas</a></li>

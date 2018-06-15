@@ -1826,8 +1826,8 @@ namespace Gestion_Web.Formularios.Pagos
                 this.phChequeCartera.Controls.Clear();
 
                 // Creo columna al DataTable para Tipo de Cheque, Blanco / Negro
-
-                dt.Columns.Add("Tipo");
+                if (dt.Columns["Tipo"] == null)
+                    dt.Columns.Add("Tipo");
 
                 foreach (var ch in cheques)
                 {
