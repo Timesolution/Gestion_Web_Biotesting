@@ -1197,7 +1197,8 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtCantidad.Focus();
                     this.totalItem();
                     this.obtenerDatosReferenciaArticulo();
-                    
+                    this.obtenerDescuentosCantidadArticulo();
+
 
                     Pedido c = Session["Pedido"] as Pedido;
                     this.txtRenglon.Text = (c.items.Count + 1).ToString();
@@ -2476,6 +2477,56 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.lblDatosReferenciaArt.Text = "";
                 this.lblDatosReferenciaArt.Visible = false;
+            }
+        }
+
+        private void obtenerDescuentosCantidadArticulo()
+        {
+            try
+            {
+                ControladorArticulosEntity contArticulosEntitys = new ControladorArticulosEntity();
+
+                Pedido p = Session["Pedido"] as Pedido;
+                articulo a = contArticulosEntitys.obtenerArticuloEntityByCod(this.txtCodigo.Text);
+                string datos = "";
+
+                if (a != null)
+                {
+                    var clienteDatos = this.contClienteEntity.obtenerClienteDatosByCliente(p.cliente.id);
+
+                    if (clienteDatos.Count > 0)
+                    {
+                        if (clienteDatos[0].AplicaDescuentoCantidad == 1)
+                        {
+                            ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+                            Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCod(this.txtCodigo.Text);
+                            if (artEnt != null)
+                            {
+                                var desc = artEnt.Articulos_Descuentos;
+                                int contador = 1;
+                                foreach (var item in desc)
+                                {
+                                    datos += "Descuento " + contador + " Desde " + item.Desde + " - " + item.Hasta + " = " + item.Descuento.ToString() + "% / ";                                    
+                                    contador++;
+                                }
+
+                                this.lblDescuentoCantidad.Visible = true;
+                                this.lblDescuentoCantidad.Text = datos;
+                            }
+                        }
+                    }                 
+                }
+                else
+                {
+                    this.lblDescuentoCantidad.Text = "";
+                    this.lblDescuentoCantidad.Visible = false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                this.lblDescuentoCantidad.Text = "";
+                this.lblDescuentoCantidad.Visible = false;
             }
         }
 

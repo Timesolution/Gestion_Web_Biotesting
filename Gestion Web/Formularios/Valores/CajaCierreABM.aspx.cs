@@ -326,9 +326,22 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 controladorFacturacion contFact = new controladorFacturacion();
+                ControladorPlenario contPlenario = new ControladorPlenario();
                 string fechaD = this.txtFecha.Text;
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
                 List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
+
+                // Si existen solicitudes de créditos, verifico que estén validadas
+                //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
+                //if (okSolicitudes <= 0)
+                //{
+                //    if (okSolicitudes == -1)
+                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "$.msgbox(\"Existen solicitudes de Créditos pendientes de validar. \");", true);
+                //    if (okSolicitudes == 0)
+                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Ocurrió un error verificando solicitudes de Créditos. \", {type: \"error\"});", true);
+
+                //    return;
+                //}
 
                 if (Facturas != null)
                 {

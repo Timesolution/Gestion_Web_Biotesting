@@ -317,7 +317,8 @@ namespace Gestion_Web.Formularios.Valores
                                 btnEditar.ID = "btnEditar_" + s.Id;
                                 btnEditar.CssClass = "btn btn-info";
                                 btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                                btnEditar.Click += new EventHandler(this.modificarSolicitud);
+                                //btnEditar.Click += new EventHandler(this.modificarSolicitud);
+                                btnEditar.PostBackUrl = "CreditosABM?id=" + s.Id;
                                 btnEditar.ClientIDMode = System.Web.UI.ClientIDMode.Static;
                                 btnEditar.Attributes.Add("onclick", "grisarClick('" + btnEditar.ID + "')");
                                 celAccion.Controls.Add(btnEditar);
@@ -350,7 +351,8 @@ namespace Gestion_Web.Formularios.Valores
                             btnEditar.ID = "btnEditar_" + s.Id;
                             btnEditar.CssClass = "btn btn-info";
                             btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                            btnEditar.Click += new EventHandler(this.modificarSolicitud);
+                            //btnEditar.Click += new EventHandler(this.modificarSolicitud);
+                            btnEditar.PostBackUrl = "CreditosABM?id=" + s.Id;
                             btnEditar.ClientIDMode = System.Web.UI.ClientIDMode.Static;
                             btnEditar.Attributes.Add("onclick", "grisarClick('" + btnEditar.ID + "')");
                             celAccion.Controls.Add(btnEditar);

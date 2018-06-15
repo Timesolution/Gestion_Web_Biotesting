@@ -675,6 +675,14 @@ namespace Gestion_Web.Formularios.Articulos {
             
             private global::System.Data.DataColumn columnObservaciones;
             
+            private global::System.Data.DataColumn columnCantidadHastaDto3;
+            
+            private global::System.Data.DataColumn columnDescuento3;
+            
+            private global::System.Data.DataColumn columnPocentajeDto3;
+            
+            private global::System.Data.DataColumn columnCantidadDto3;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ArticulosListaDataTable() {
@@ -886,6 +894,38 @@ namespace Gestion_Web.Formularios.Articulos {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CantidadHastaDto3Column {
+                get {
+                    return this.columnCantidadHastaDto3;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Descuento3Column {
+                get {
+                    return this.columnDescuento3;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PocentajeDto3Column {
+                get {
+                    return this.columnPocentajeDto3;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CantidadDto3Column {
+                get {
+                    return this.columnCantidadDto3;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -943,7 +983,11 @@ namespace Gestion_Web.Formularios.Articulos {
                         string DescuentoPorCantidad, 
                         string Descuento1, 
                         string Descuento2, 
-                        string Observaciones) {
+                        string Observaciones, 
+                        string CantidadHastaDto3, 
+                        string Descuento3, 
+                        string PocentajeDto3, 
+                        string CantidadDto3) {
                 ArticulosListaRow rowArticulosListaRow = ((ArticulosListaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Codigo,
@@ -967,7 +1011,11 @@ namespace Gestion_Web.Formularios.Articulos {
                         DescuentoPorCantidad,
                         Descuento1,
                         Descuento2,
-                        Observaciones};
+                        Observaciones,
+                        CantidadHastaDto3,
+                        Descuento3,
+                        PocentajeDto3,
+                        CantidadDto3};
                 rowArticulosListaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowArticulosListaRow);
                 return rowArticulosListaRow;
@@ -1012,6 +1060,10 @@ namespace Gestion_Web.Formularios.Articulos {
                 this.columnDescuento1 = base.Columns["Descuento1"];
                 this.columnDescuento2 = base.Columns["Descuento2"];
                 this.columnObservaciones = base.Columns["Observaciones"];
+                this.columnCantidadHastaDto3 = base.Columns["CantidadHastaDto3"];
+                this.columnDescuento3 = base.Columns["Descuento3"];
+                this.columnPocentajeDto3 = base.Columns["PocentajeDto3"];
+                this.columnCantidadDto3 = base.Columns["CantidadDto3"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1061,6 +1113,14 @@ namespace Gestion_Web.Formularios.Articulos {
                 base.Columns.Add(this.columnDescuento2);
                 this.columnObservaciones = new global::System.Data.DataColumn("Observaciones", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnObservaciones);
+                this.columnCantidadHastaDto3 = new global::System.Data.DataColumn("CantidadHastaDto3", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCantidadHastaDto3);
+                this.columnDescuento3 = new global::System.Data.DataColumn("Descuento3", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDescuento3);
+                this.columnPocentajeDto3 = new global::System.Data.DataColumn("PocentajeDto3", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPocentajeDto3);
+                this.columnCantidadDto3 = new global::System.Data.DataColumn("CantidadDto3", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCantidadDto3);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1738,6 +1798,70 @@ namespace Gestion_Web.Formularios.Articulos {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CantidadHastaDto3 {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosLista.CantidadHastaDto3Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CantidadHastaDto3\' in table \'ArticulosLista\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosLista.CantidadHastaDto3Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Descuento3 {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosLista.Descuento3Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Descuento3\' in table \'ArticulosLista\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosLista.Descuento3Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PocentajeDto3 {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosLista.PocentajeDto3Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PocentajeDto3\' in table \'ArticulosLista\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosLista.PocentajeDto3Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CantidadDto3 {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosLista.CantidadDto3Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CantidadDto3\' in table \'ArticulosLista\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosLista.CantidadDto3Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsCodigoNull() {
                 return this.IsNull(this.tableArticulosLista.CodigoColumn);
             }
@@ -1998,6 +2122,54 @@ namespace Gestion_Web.Formularios.Articulos {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetObservacionesNull() {
                 this[this.tableArticulosLista.ObservacionesColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCantidadHastaDto3Null() {
+                return this.IsNull(this.tableArticulosLista.CantidadHastaDto3Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCantidadHastaDto3Null() {
+                this[this.tableArticulosLista.CantidadHastaDto3Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDescuento3Null() {
+                return this.IsNull(this.tableArticulosLista.Descuento3Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDescuento3Null() {
+                this[this.tableArticulosLista.Descuento3Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPocentajeDto3Null() {
+                return this.IsNull(this.tableArticulosLista.PocentajeDto3Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPocentajeDto3Null() {
+                this[this.tableArticulosLista.PocentajeDto3Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCantidadDto3Null() {
+                return this.IsNull(this.tableArticulosLista.CantidadDto3Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCantidadDto3Null() {
+                this[this.tableArticulosLista.CantidadDto3Column] = global::System.Convert.DBNull;
             }
         }
         

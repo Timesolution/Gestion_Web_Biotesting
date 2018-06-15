@@ -1,9 +1,14 @@
 ﻿using Disipar.Models;
+using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
+using Gestor_Solution.Controladores;
+using iTextSharp.text.pdf;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -16,10 +21,16 @@ namespace Gestion_Web.Formularios.Facturas
         //controladorCotizaciones controlador = new controladorCotizaciones();
         controladorRemitos controlador = new controladorRemitos();
         controladorUsuario contUser = new controladorUsuario();
+        controladorFunciones contFunciones = new controladorFunciones();
+        controladorFacturacion controladorF = new controladorFacturacion();
+        controladorSucursal controlSucursal = new controladorSucursal();
+        controladorCliente controlCliente = new controladorCliente();
         Mensajes m = new Mensajes();
+        Configuracion c = new Configuracion();
         private int suc;
         private string fechaD;
         private string fechaH;
+        private int original;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -28,6 +39,7 @@ namespace Gestion_Web.Formularios.Facturas
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
                 suc= Convert.ToInt32(Request.QueryString["Sucursal"]);
+                this.original = Convert.ToInt32(Request.QueryString["o"]);
 
                 if (!IsPostBack)
                 {
@@ -588,6 +600,395 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando remitos para facturar. " + ex.Message));
+            }
+        }
+        protected void lbtnImprimirTodo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string path = Server.MapPath("pdfs/");
+
+                //limpio la carpeta donde van los pdfs asi no muestra pdfs viejos
+                BorrarPDFS(path);
+
+                string idtildado = "";
+                int contadorOk = 0;
+                int contadorTotal = 0;
+
+                //chequeo lo que este tildado y lo imprimo
+                foreach (Control C in phRemitos.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[4].Controls[2] as CheckBox;
+
+                    if (ch.Checked)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                        contadorTotal++;
+                    }
+                }
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    foreach (string id in idtildado.Split(';'))
+                    {
+                        if (!String.IsNullOrEmpty(id))
+                        {
+                            Remito r = this.controlador.obtenerRemitoId(Convert.ToInt32(id));
+                            string fileName = "rem-" + r.numero + "_" + r.id + ".pdf";
+                            int i = this.GenerarImpresionPDF(r.id, path + fileName);
+                            if (i > 0)
+                            {
+                                contadorOk++;
+                            }
+                        }
+                    }
+                }
+                //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
+                else
+                {
+                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue));
+
+                    foreach (var remito in listRemitos)
+                    {
+                        var idRemito = remito.id;
+                        idRemito = Convert.ToInt32(idRemito);
+                        Remito r = this.controlador.obtenerRemitoId(Convert.ToInt32(idRemito));
+                        string fileName = "rem-" + r.numero + "_" + r.id + ".pdf";
+                        int i = this.GenerarImpresionPDF(r.id, path + fileName);
+                        if (i > 0)
+                        {
+                            contadorOk++;
+                        }
+                    }
+                }
+
+                string[] pdfs = Directory.GetFiles(path);
+                string nombre = path + "rem-" + DateTime.Now.ToString("dd-MM-yyyy_hhmmss") + ".pdf";
+                int ok = this.contFunciones.CombineMultiplePDFs(pdfs, nombre);
+                if (ok > 0)
+                {
+                    this.descargar(nombre);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Realizados con exito:" + contadorOk + "de " + contadorTotal, ""));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo imprimir"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+            }
+        }
+        public void BorrarPDFS(string path)
+        {
+            string[] pdfs = Directory.GetFiles(path);
+
+            foreach (string filePath in pdfs)
+            {
+                File.Delete(filePath);
+            }
+        }
+        private void descargar(string path)
+        {
+            try
+            {
+                System.IO.FileInfo toDownload =
+                     new System.IO.FileInfo(path);
+
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.AddHeader("Content-Disposition",
+                           "attachment; filename=" + toDownload.Name);
+                HttpContext.Current.Response.AddHeader("Content-Length",
+                           toDownload.Length.ToString());
+                HttpContext.Current.Response.ContentType = "application/octet-stream";
+                //HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+                HttpContext.Current.Response.WriteFile(path);
+                HttpContext.Current.Response.End();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", " Error descargando excel de facturacion. " + ex.Message);
+
+            }
+        }
+        private int GenerarImpresionPDF(int idRemito, string pathGenerar)
+        {
+            try
+            {
+                DataTable dtDatos = controladorF.obtenerDetalleRemito(idRemito);
+
+                DataTable dtDetalle = controladorF.obtenerDatosRemito(idRemito);
+
+                DataTable dtNroFacturas = controladorF.obtenerNroFacturaByRemito(idRemito);
+                int sucursalFacturada = 0;
+                Sucursal sucursalOrigen = new Sucursal();
+                Sucursal sucursalRemitida = new Sucursal();
+                //Comentario factura
+                DataTable dtComentariosFactura = new DataTable();
+
+                //Si el remito es de una factura.
+                if (dtNroFacturas.Rows.Count > 0)
+                {
+                    //busco comentario con el idfactura que esta en el remito
+                    int nroFactura = Convert.ToInt32(dtNroFacturas.Rows[0].ItemArray[1].ToString());
+                    dtComentariosFactura = this.controladorF.obtenerComentarioPresupuesto(nroFactura);
+
+                    //obtengo el numero de la suc a la que se movio stock
+                    string sucFact = dtNroFacturas.Rows[0]["SucursalFacturada"].ToString();
+
+                    if (!String.IsNullOrEmpty(sucFact))
+                    {
+                        sucursalFacturada = Convert.ToInt32(sucFact);
+                    }
+
+                    ////si el comentario de la factura tiene la fecha en null o vacio, elimino la fila para que no se muestre la tabla en el report.
+                    //if (dtComentariosFactura.Rows[0].ItemArray[2].ToString() == null || dtComentariosFactura.Rows[0].ItemArray[2].ToString() == "")
+                    //{
+                    //    dtComentariosFactura.Rows.Remove(dtComentariosFactura.Rows[0]);
+                    //}                    
+                }
+
+                //suc de donde se hizo
+                int idSuc = Convert.ToInt32(dtDetalle.Rows[0]["sucursal"].ToString());
+                sucursalOrigen = this.controlSucursal.obtenerSucursalID(idSuc);
+
+                //suc remitida
+                if (sucursalFacturada > 0)
+                {
+                    sucursalRemitida = this.controlSucursal.obtenerSucursalID(sucursalFacturada);
+                }
+
+                DataRow srCliente = dtDetalle.Rows[0];
+                string codigoCliente = srCliente[5].ToString();
+                int idCliente = Convert.ToInt32(srCliente["idCliente"].ToString());
+
+                //DataTable dtTotal = controladorF.obtenerTotalPresupuesto(idPresupuesto);
+                DataTable dtTotales = controladorF.obtenerTotalRemito(idRemito);
+                DataRow dr = dtTotales.Rows[0];
+
+                //Busco senias de los pedidos remitidos
+                decimal senia = controlador.obtenerSeniaRemito(idRemito);
+                string seniaLetras = Numalet.ToCardinal(senia);
+
+                //neto no grabado
+                decimal subtotal = Convert.ToDecimal(dr[4]);
+
+                decimal descuento = Convert.ToDecimal(dr[1]);
+
+                //subtotal menos el descuento
+                decimal subtotal2 = Convert.ToDecimal(dr[5]);
+
+                //iva discriminado de la fact
+                decimal iva = Convert.ToDecimal(dr[3]);
+
+                subtotal = subtotal + iva;
+
+                //total de la factura
+                decimal total = Convert.ToDecimal(dr[2]);
+
+                //letras
+                string totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+                //string totalS = Numalet.ToCardinal("18.25");
+
+                //cant unidades
+                decimal cant = 2;
+
+                //direccion cliente
+                string direLegal = "-";
+                string direEntrega = "-";
+
+                DataTable dtDireccion = controlCliente.obtenerDireccionesById(idCliente);
+                if (dtDireccion != null)
+                {
+                    foreach (DataRow drl in dtDireccion.Rows)
+                    {
+                        if (drl["nombre"].ToString() == "Legal")
+                        {
+                            direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                                drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                        if (drl["nombre"].ToString() == "Entrega")
+                        {
+                            direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                                drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                    }
+                }
+
+                //controladorFRemitos contRemito = new controladorFRemitos();
+                //obtengo id empresa para buscar el logo correspondiente    
+                Remito r = controlador.obtenerRemitoId(idRemito);
+                //string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc +"/Logo.jpg");                
+                string logo = Server.MapPath("../../Facturas/" + sucursalOrigen.empresa.id + "/" + sucursalOrigen.id + "/" + r.ptoV.id + "/Logo.jpg");
+                Log.EscribirSQL(1, "INFO", "Ruta Logo " + logo);
+
+                //datos cai
+                string cai = "";
+                string fechaVencCai = "";
+                try
+                {
+                    var pv = this.controlSucursal.obtenerPuntoVentaPV(r.ptoV.puntoVenta.PadLeft(4, '0'), r.sucursal.id, r.empresa.id);
+                    cai = pv.caiRemito;
+                    fechaVencCai = pv.caiVencimiento.ToString("dd/MM/yyyy");
+                }
+                catch
+                { }
+
+                DataTable dtComentarios = controlador.obtenerComentarioRemito(idRemito);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("RemitoR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
+                ReportDataSource rds2 = new ReportDataSource("DatosPresupuesto", dtDatos);
+                ReportDataSource rds3 = new ReportDataSource("DetalleComentarios", dtComentarios);
+                ReportDataSource rds4 = new ReportDataSource("NumerosFacturas", dtNroFacturas);
+                ReportDataSource rds5 = new ReportDataSource("DetalleComentariosFactura", dtComentariosFactura);
+                //ReportDataSource rds3 = new ReportDataSource("TotalPresupuesto", dtTotal);
+                ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
+                ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
+                ReportParameter param3 = new ReportParameter("Descuento", descuento.ToString("C"));
+
+                ReportParameter param3b = new ReportParameter("Subtotal2", subtotal2.ToString("C"));
+                param3b.Visible = false;
+                ReportParameter param4b = new ReportParameter("Iva", iva.ToString("C"));
+                param4b.Visible = false;
+
+                ReportParameter param4 = new ReportParameter("DomicilioEntrega", direEntrega);
+                ReportParameter param5 = new ReportParameter("DomicilioLegal", direLegal);
+
+                ReportParameter param6 = new ReportParameter("CodigoCliente", codigoCliente);
+
+                ReportParameter param7 = new ReportParameter("TotalLetras", totalS);
+                ReportParameter param8 = new ReportParameter("TotalUnidades", cant.ToString());
+
+                ReportParameter param9 = new ReportParameter("ParamSenia", "Seña: $" + senia.ToString());
+                ReportParameter param10 = new ReportParameter("ParamSeniaLetras", seniaLetras);
+
+                ReportParameter param11 = new ReportParameter("ParamSucursalRemitida", sucursalRemitida.nombre);
+
+                ReportParameter param12 = new ReportParameter("ParamReimprime", this.original.ToString());
+
+                ReportParameter param13 = new ReportParameter("ParamSucursal", sucursalOrigen.nombre);
+
+                ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+
+                ReportParameter param33 = new ReportParameter();
+
+                //cot
+                if (c.cot == "1")
+                {
+                    try
+                    {
+                        ControladorRemitoEntity contRemEntity = new ControladorRemitoEntity();
+                        var rd = contRemEntity.obtenerRemitoDatosByRemito(idRemito);
+                        param33 = new ReportParameter("COT", rd.COT + " CODIGO UNICO " + rd.CodUnico);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                string imagen = this.generarCodigo(idRemito);
+                ReportParameter param34 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
+
+                ReportParameter param35 = new ReportParameter("CAI", cai);
+
+                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds5);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+
+                this.ReportViewer1.LocalReport.SetParameters(param3b);
+                this.ReportViewer1.LocalReport.SetParameters(param4b);
+
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+                this.ReportViewer1.LocalReport.SetParameters(param6);
+
+                this.ReportViewer1.LocalReport.SetParameters(param7);
+                this.ReportViewer1.LocalReport.SetParameters(param8);
+
+                this.ReportViewer1.LocalReport.SetParameters(param9);
+                this.ReportViewer1.LocalReport.SetParameters(param10);
+                this.ReportViewer1.LocalReport.SetParameters(param11);
+                this.ReportViewer1.LocalReport.SetParameters(param12);
+                this.ReportViewer1.LocalReport.SetParameters(param13);
+
+                this.ReportViewer1.LocalReport.SetParameters(param32);
+
+                this.ReportViewer1.LocalReport.SetParameters(param33);
+                this.ReportViewer1.LocalReport.SetParameters(param34);
+                this.ReportViewer1.LocalReport.SetParameters(param35);
+                this.ReportViewer1.LocalReport.SetParameters(param36);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                //save the generated report in the server
+                //String path = Server.MapPath("../../Facturas/" + f.empresa.id + "/" + "/fc-" + f.numero + "_" + f.id + ".pdf");
+                FileStream stream = File.Create(pathGenerar, pdfContent.Length);
+                stream.Write(pdfContent, 0, pdfContent.Length);
+                stream.Close();
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error enviando factura por mail. " + ex.Message));
+                return -1;
+            }
+        }
+        public string generarCodigo(int idRemito)
+        {
+            try
+            {
+                Barcode128 code128 = new Barcode128();
+                code128.CodeType = Barcode.CODE128;
+                code128.ChecksumText = true;
+                code128.GenerateChecksum = true;
+                code128.StartStopText = false;
+
+                code128.Code = idRemito.ToString();
+
+                System.Drawing.Bitmap bm = new System.Drawing.Bitmap(code128.CreateDrawingImage(System.Drawing.Color.Black, System.Drawing.Color.White));
+                String path = HttpContext.Current.Server.MapPath("/Remitos/" + idRemito + "/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                string archivo = path + "Codigo_" + idRemito + ".bmp";
+                bm.Save(archivo, System.Drawing.Imaging.ImageFormat.Bmp);
+                return archivo;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error generando codigo de barra para pedido. " + ex.Message);
+                return null;
             }
         }
 

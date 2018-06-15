@@ -125,7 +125,6 @@ namespace Gestion_Web.Formularios.Facturas
             //table.CssClass = "table table-striped table-bordered";
             //table.Width = Unit.Percentage(100);
 
-
             //para cargar el cliente
             int i = 0;
 
@@ -135,23 +134,26 @@ namespace Gestion_Web.Formularios.Facturas
                 //TableCell celCuit = new TableCell();
                 //celCuit.Text = cl.cuit;
 
-                TableCell celCodigo = new TableCell();
-                celCodigo.Text = cl.codigo;
-                celCodigo.Width = Unit.Percentage(10);
-                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                //si el estado es activo lo muestro
+                if(cl.estado.descripcion == "Activo")
+                {
+                    TableCell celCodigo = new TableCell();
+                    celCodigo.Text = cl.codigo;
+                    celCodigo.Width = Unit.Percentage(10);
+                    celCodigo.VerticalAlign = VerticalAlign.Middle;
 
-                TableCell celRazonSocial = new TableCell();
-                celRazonSocial.Text = cl.razonSocial;
-                celRazonSocial.Width = Unit.Percentage(40);
-                celRazonSocial.VerticalAlign = VerticalAlign.Middle;
+                    TableCell celRazonSocial = new TableCell();
+                    celRazonSocial.Text = cl.razonSocial;
+                    celRazonSocial.Width = Unit.Percentage(40);
+                    celRazonSocial.VerticalAlign = VerticalAlign.Middle;
 
-                TableCell celAlias = new TableCell();
-                celAlias.Text = cl.alias;
-                celAlias.Width = Unit.Percentage(40);
-                celAlias.VerticalAlign = VerticalAlign.Middle;
+                    TableCell celAlias = new TableCell();
+                    celAlias.Text = cl.alias;
+                    celAlias.Width = Unit.Percentage(40);
+                    celAlias.VerticalAlign = VerticalAlign.Middle;
 
-                TableCell celImage = new TableCell();
-                LinkButton btnDetails = new LinkButton();
+                    TableCell celImage = new TableCell();
+                    LinkButton btnDetails = new LinkButton();
                     btnDetails.ID = cl.id.ToString();
                     btnDetails.CssClass = "btn btn-info";
                     btnDetails.Text = "<span class='shortcut-icon icon-ok'></span>";
@@ -160,31 +162,30 @@ namespace Gestion_Web.Formularios.Facturas
                     btnDetails.Click += new EventHandler(this.RedireccionarCliente);
                     //btnDetails.Click += new EventHandler(this.mostrarClienteDetalles);
 
-                celImage.Controls.Add(btnDetails);
-                celImage.Width = Unit.Percentage(10);
-                celImage.VerticalAlign = VerticalAlign.Middle;
+                    celImage.Controls.Add(btnDetails);
+                    celImage.Width = Unit.Percentage(10);
+                    celImage.VerticalAlign = VerticalAlign.Middle;
 
-                //fila
-                TableRow tr = new TableRow();
-                tr.ID = cl.id + "TR";
-                //tr.ID = "tr_" + cl.cuit;
-                //tr.Attributes.Add("onclick", "javascript:document.getElementById('MainContent_" + tr.ID + "').style.background-color = 'orange'; return false;");
-                //tr.VerticalAlign = VerticalAlign.Middle;
-                //tr.Attributes.Add("onclick", string.Format("javascript:alert('hola)"));
+                    //fila
+                    TableRow tr = new TableRow();
+                    tr.ID = cl.id + "TR";
+                    //tr.ID = "tr_" + cl.cuit;
+                    //tr.Attributes.Add("onclick", "javascript:document.getElementById('MainContent_" + tr.ID + "').style.background-color = 'orange'; return false;");
+                    //tr.VerticalAlign = VerticalAlign.Middle;
+                    //tr.Attributes.Add("onclick", string.Format("javascript:alert('hola)"));
 
 
-                //agrego celda a filas
-                //tr.Cells.Add(celCuit);
-                tr.Cells.Add(celCodigo);
-                tr.Cells.Add(celRazonSocial);
-                tr.Cells.Add(celAlias);
-                tr.Cells.Add(celImage);
-                //arego fila a tabla
-                this.phClientes.Controls.Add(tr);
-
+                    //agrego celda a filas
+                    //tr.Cells.Add(celCuit);
+                    tr.Cells.Add(celCodigo);
+                    tr.Cells.Add(celRazonSocial);
+                    tr.Cells.Add(celAlias);
+                    tr.Cells.Add(celImage);
+                    //arego fila a tabla
+                    this.phClientes.Controls.Add(tr);
+                }
+                //agrego la tabla al placeholder
             }
-            //agrego la tabla al placeholder
-
         }
 
         private void buscar(string alias)

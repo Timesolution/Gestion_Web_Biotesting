@@ -19,6 +19,7 @@ using Gestion_Api.Entitys;
 using System.Globalization;
 using System.Web.Configuration;
 
+
 namespace Gestion_Web.Formularios.Facturas
 {
     public partial class FacturasF : System.Web.UI.Page
@@ -1995,20 +1996,33 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string path = Server.MapPath("pdfs/");
 
+                //limpio la carpeta donde van los pdfs asi no muestra pdfs viejos
+                BorrarPDFS(path);
+
                 string idtildado = "";
                 int contadorOk = 0;
                 int contadorTotal = 0;
+
+                //chequeo lo que este tildado y lo imprimo
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
                     CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
 
-                    idtildado += ch.ID.Split('_')[1] + ";";
-                    contadorTotal++;
+                    if (ch.Checked)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                        contadorTotal++;
+                    }                    
                 }
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-
                     foreach (string id in idtildado.Split(';'))
                     {
                         if (!String.IsNullOrEmpty(id))
@@ -2023,24 +2037,31 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                 }
-
-                if (!Directory.Exists(path))
+                //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
+                else
                 {
-                    Directory.CreateDirectory(path);
+                    DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue));
+
+                    foreach (DataRow row in dtFacturas.Rows)
+                    {
+                        var idfactura = row["id"];
+                        idfactura = Convert.ToInt32(idfactura);
+                        Factura f = this.controlador.obtenerFacturaId(Convert.ToInt32(idfactura));
+                        string fileName = "fc-" + f.numero + "_" + f.id + ".pdf";
+                        int i = this.GenerarImpresionPDF(f, path + fileName);
+                        if (i > 0)
+                        {
+                            contadorOk++;
+                        }
+                    }
+
                 }
+              
                 string[] pdfs = Directory.GetFiles(path);
                 string nombre = path + "fc-" + DateTime.Now.ToString("dd-MM-yyyy_hhmmss") + ".pdf";
                 int ok = this.contFunciones.CombineMultiplePDFs(pdfs, nombre);
                 if (ok > 0)
                 {
-                    try
-                    {
-                        foreach (string filePath in pdfs)
-                        {
-                            File.Delete(filePath);
-                        }
-                    }
-                    catch { }
                     this.descargar(nombre);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Realizados con exito:" + contadorOk + "de " + contadorTotal, ""));
                 }
@@ -2053,6 +2074,16 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+            }
+        }
+
+        public void BorrarPDFS(string path)
+        {
+            string[] pdfs = Directory.GetFiles(path);
+
+            foreach (string filePath in pdfs)
+            {
+                File.Delete(filePath);
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemitosR.aspx.cs" Inherits="Gestion_Web.Formularios.Facturas.RemitosR" %>
 
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
 
@@ -44,7 +46,28 @@
                                         </a>
                                     </div>
                                 </td>--%>
-
+                                <td style="width: 2%">
+                                <div class="btn-group pull-right" style="width: 100%">
+                                    <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
+                                        <i class="shortcut-icon icon-print"></i>&nbsp
+                                       
+                                        <asp:Literal ID="Literal1" runat="server"></asp:Literal>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Todo</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="lbtnImprimirTodo" runat="server" OnClick="lbtnImprimirTodo_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Imprimir
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
@@ -110,8 +133,8 @@
                                     </a>
                                                 </div>
                                         </td>--%>
-                            </tr>
-
+                                
+                            </tr>                            
                         </table>
                     </div>
                     <!-- /widget-content -->
@@ -395,6 +418,9 @@
             </div>
         </div>
         <%--Fin modalGrupo--%>
+
+        <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
+        </rsweb:ReportViewer>
 
         <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
