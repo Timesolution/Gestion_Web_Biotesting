@@ -107,7 +107,7 @@
                                                     </asp:DropDownList>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    <a class="btn btn-info" data-toggle="modal" href="#modalVendedor" style="display:none;">
+                                                    <a class="btn btn-info" data-toggle="modal" href="#modalVendedor" style="display: none;">
                                                         <i class="shortcut-icon icon-plus"></i>
                                                     </a>
                                                 </div>
@@ -116,8 +116,8 @@
                                                 </div>
                                             </div>
                                         </asp:Panel>
-                                         <asp:Panel runat="server" ID="panelClientes" Visible="false">
-                                             <div class="form-group">
+                                        <asp:Panel runat="server" ID="panelClientes" Visible="false">
+                                            <div class="form-group">
                                                 <label class="col-md-4">Buscar Cliente</label>
                                                 <div class="col-md-6">
                                                     <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
@@ -138,7 +138,6 @@
                                                     </asp:DropDownList>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    
                                                 </div>
                                                 <div class="col-md-3">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListClientes" InitialValue="-1" ValidationGroup="PVGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -147,7 +146,7 @@
                                         </asp:Panel>
 
                                         <asp:Panel runat="server" ID="PanelFamilia" Visible="false">
-                                             <div class="form-group">
+                                            <div class="form-group">
                                                 <label class="col-md-4">Buscar Cliente</label>
                                                 <div class="col-md-6">
                                                     <asp:TextBox ID="txtCodClienteFamilia" class="form-control" runat="server"></asp:TextBox>
@@ -168,7 +167,6 @@
                                                     </asp:DropDownList>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    
                                                 </div>
                                                 <div class="col-md-3">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListClientesFamilia" InitialValue="-1" ValidationGroup="PDGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -176,21 +174,60 @@
                                             </div>
                                         </asp:Panel>
                                     </fieldset>
-
                                 </div>
-
+                                <div class="col-md-8">
+                                    <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click" />
+                                    <asp:LinkButton ID="btnAgregarStore" runat="server" Text="Agregar al Store" Visible="false" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregarStore_Click"></asp:LinkButton>
+                                    <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="../Seguridad/UsuariosF.aspx" />
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
-
-                        <div class="col-md-8">
-                            <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click" />
-                            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="../Seguridad/UsuariosF.aspx" />
-                        </div>
                     </div>
                 </div>
             </div>
+            <asp:PlaceHolder ID="PHUsuariosStore" Visible="true" runat="server">
+                <div class="col-md-12 col-xs-12">
+                    <div class="widget stacked widget-table action-table">
+                        <div class="widget-header">
+                            <%--<i class="icon-credit-card"></i>--%>
+                            <h3>Datos Usuario Store</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="panel-body">
+                                <%--<div class="col-md-12 col-xs-12">--%>
+                                <asp:UpdatePanel ID="UpdatePanel3" UpdateMode="Conditional" runat="server">
+                                    <ContentTemplate>
+                                        <div class="table-responsive">
+                                            <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
+                                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 10%">Usuario</th>
+                                                        <th style="width: 10%">Contraseña</th>
+                                                        <th style="width: 10%">Nombre</th>
+                                                        <th style="width: 10%">Apellido</th>
+                                                        <th style="width: 10%">Telefono</th>
+                                                        <th style="width: 10%">Mail</th>
+                                                        <th style="width: 10%">Coeficiente</th>
+                                                        <%--<th class="td-actions" style="width: 10%"></th>--%>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <asp:PlaceHolder ID="PHUsuariosStoreTabla" runat="server"></asp:PlaceHolder>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
         </div>
     </div>
     <%--roww--%>
@@ -429,8 +466,96 @@
         </div>
     </div>
 
+    <div id="modalAgregarUsuarioAlStore" visible="false" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Agregar Usuario al Store</h4>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel ID="UpdatePanel2" UpdateMode="Always" runat="server">
+                        <ContentTemplate>
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+
+                                    <label class="col-md-4">Usuario</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtUsuarioStore" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtUsuarioStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Contraseña</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtContraseñaStore" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtContraseñaStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Nombre</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtNombreStore" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtNombreStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Apellido</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtApellidoStore" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtApellidoStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Telefono</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtTelefonoStore" runat="server" onkeypress="javascript:return validarNroSinComa(event)" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtTelefonoStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Mail</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtMailStore" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtMailStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Coeficiente</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtCoeficienteStore" runat="server" onkeypress="javascript:return validarNroSinComa(event)" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtCoeficienteStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                        </Triggers>
+                    </asp:UpdatePanel>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="AgregarUsuarioAlStore" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarUsuarioAlStore_Click" ValidationGroup="AgregarUsuarioAlStore" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>--%>
 
@@ -477,6 +602,31 @@
                 { return false; }
             }
             return true;
+        }
+
+        function validarNroSinComa(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            if (key < 48 || key > 57) {
+                if (key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                { return true; }
+                else
+                { return false; }
+            }
+            return true;
+        }
+    </script>
+    <script type="text/javascript">
+        function openModalAgregarUsuarioAlStore() {
+            $('#modalAgregarUsuarioAlStore').modal('show');
         }
     </script>
 
