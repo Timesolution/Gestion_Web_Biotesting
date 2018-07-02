@@ -2449,11 +2449,20 @@ namespace Gestion_Web.Formularios.Facturas
                     //agrego los txt
                     this.txtDescripcion.Text = art.descripcion;
 
-                    this.verificarStockMinimo();                    
-
-                    //decimal PrecioSinIva = decimal.Round(art.precioVenta - (art.precioVenta * (art.porcentajeIva / 100)),2);
-                    this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                    this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                    this.verificarStockMinimo();
+                    //TODO
+                    if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
+                    {
+                        this.txtIva.Text = 0 + "%";
+                        art.precioVenta = (art.precioVenta / ((1 + (art.porcentajeIva / 100))));
+                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                    }
+                    else
+                    {
+                        this.txtIva.Text = art.porcentajeIva.ToString() + "%";
+                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                        
+                    }
                     this.verificarAlertaArticulo(art);
 
                     if (config.infoImportacionFacturas == "1")
