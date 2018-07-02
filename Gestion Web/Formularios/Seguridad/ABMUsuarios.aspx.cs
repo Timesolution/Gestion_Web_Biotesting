@@ -33,6 +33,7 @@ namespace Gestion_Web.Formularios.Seguridad
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     this.cargarEmpresas();
                     this.cargarPerfiles();
+                    this.cargarPerfilesStore();
                     this.cargarVendedores();
                     this.cargarClientes();
                     this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
@@ -265,6 +266,32 @@ namespace Gestion_Web.Formularios.Seguridad
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Perfiles. " + ex.Message));
             }
         }
+        public void cargarPerfilesStore()
+        {
+            try
+            {
+                Store_Api.Controladores.ControladorUsuario contStoreUsuario = new Store_Api.Controladores.ControladorUsuario();
+
+                var perfilesStore = contStoreUsuario.obtenerPerfilesStore();
+
+                perfilesStore.Insert(0, new Store_Api.Entidades.Perfile
+                {
+                    @int = 0,
+                    Perfil = "Seleccione..."
+                }
+                );
+
+                this.DropPerfilStore.DataSource = perfilesStore;
+                this.DropPerfilStore.DataValueField = "int";
+                this.DropPerfilStore.DataTextField = "Perfil";
+                this.DropPerfilStore.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Perfiles. " + ex.Message));
+            }
+        }
         #endregion
         protected void DropListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -408,18 +435,18 @@ namespace Gestion_Web.Formularios.Seguridad
                 {
                     //agrego bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Alta Usuario: " + user.usuario);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario agregado con exito", "ABMUsuarios.aspx?valor=1"));
-
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario agregado con exito", "ABMUsuarios.aspx?valor=1"));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando Usuario"));
-
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando Usuario"));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                Log.EscribirSQL(1, "ERROR", "Error agregando usuario. " + ex.Message);
             }
         }
 
@@ -583,7 +610,8 @@ namespace Gestion_Web.Formularios.Seguridad
                             this.txtTelefonoStore.Text = cliente.contactos[0].numero.ToString();
                         if (!String.IsNullOrEmpty(cliente.contactos[0].mail))
                             this.txtMailStore.Text = cliente.contactos[0].mail.ToString();
-                    }                   
+                    }
+                    //this.DropPerfilStore.SelectedValue = user.perfil.id.ToString();
                 }
                 else
                 {
@@ -637,6 +665,8 @@ namespace Gestion_Web.Formularios.Seguridad
                 Log.EscribirSQL(1, "Info", "9");
                 usuarioStore.coeficiente = Convert.ToDecimal(this.txtCoeficienteStore.Text);
                 Log.EscribirSQL(1, "Info", "10");
+                usuarioStore.perfil = Convert.ToInt32(DropPerfilStore.SelectedValue);
+                Log.EscribirSQL(1, "Info", "11");
 
                 Log.EscribirSQL(1, "Info", "Cargue todos los datos, lo voy a agregar al store");
                 int temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
@@ -649,8 +679,6 @@ namespace Gestion_Web.Formularios.Seguridad
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("El usuario ya existe"));
                 else
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se pudo agregar usuario"));
-
-
 
             }
             catch (Exception ex)
@@ -744,6 +772,15 @@ namespace Gestion_Web.Formularios.Seguridad
                     celCoeficiente.VerticalAlign = VerticalAlign.Middle;
                     celCoeficiente.Width = Unit.Percentage(20);
                     tr.Cells.Add(celCoeficiente);
+
+                    TableCell celPerfil = new TableCell();
+                    if(usuarioStore.perfil == 1)
+                        celPerfil.Text = "Minorista";
+                    if (usuarioStore.perfil == 3)
+                        celPerfil.Text = "Minorista";
+                    celPerfil.VerticalAlign = VerticalAlign.Middle;
+                    celPerfil.Width = Unit.Percentage(20);
+                    tr.Cells.Add(celPerfil);
 
                     PHUsuariosStoreTabla.Controls.Add(tr);
                 }                
