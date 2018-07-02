@@ -2922,6 +2922,13 @@ namespace Gestion_Web.Formularios.Facturas
                         return;
                     }
 
+                    //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
+                    if (!validarNotaCreditoFactura())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                        return;
+                    }
+
                     //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
                     string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
                     if (!string.IsNullOrEmpty(combustible) && combustible == "1")
@@ -3170,6 +3177,13 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!this.validarSaldoMutual())
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
+                    return;
+                }
+
+                //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
+                if (!validarNotaCreditoFactura())
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
                     return;
                 }
 
@@ -3464,6 +3478,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         if (this.accion == 6)
                         {
+                            string facturas = Request.QueryString["facturas"];
                             Configuracion config = new Configuracion();
                             controladorFactEntity contFcEnt = new controladorFactEntity();
 
@@ -3475,7 +3490,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 //si NC de prp cuando facturo anulo el remito par devolver las trazas
                                 if (fact.tipo.tipo.Contains("Credito PRP") && config.egresoStock == "1")
                                 {
-                                    string facturas = Request.QueryString["facturas"];
+                                    
                                     Remito r = this.controlador.obtenerRemitoByFactura(Convert.ToInt32(facturas.Split(';')[0]));
                                     this.contArticulo.AnularTrazabilidadArticulosDesdeRemito(r);
                                 }
@@ -3483,7 +3498,6 @@ namespace Gestion_Web.Formularios.Facturas
                                 if (fact.formaPAgo.forma == "Mutuales")
                                 {
                                     //Pongo en estado 0 los pagarés generados
-                                    string facturas = Request.QueryString["facturas"];
                                     int  anularPagares = contFcEnt.quitarPagoMutualByFactura(Convert.ToInt32(facturas.Split(';')[0]));
                                     if (anularPagares >= 0)
                                         Log.EscribirSQL(1,"INFO","Se anularon los pagarés asociados a la factura con id " + facturas.Split(';')[0]);
@@ -3494,7 +3508,6 @@ namespace Gestion_Web.Formularios.Facturas
                             if (fact.tipo.tipo.Contains("Credito PRP"))//elimino el anticipo
                             {
                                 controladorCobranza contCobranza = new controladorCobranza();
-                                string facturas = Request.QueryString["facturas"];
                                 Gestion_Api.Entitys.Facturas_Anticipos datosAnticipo = contFcEnt.obtenerDatosFacturaAnticipo(Convert.ToInt32(facturas.Split(';')[0]));
                                 if (datosAnticipo != null)
                                 {
@@ -3502,6 +3515,13 @@ namespace Gestion_Web.Formularios.Facturas
                                     //contCobranza.ProcesoEliminarCobro(movAnticipo.id);
                                     contCobranza.ProcesoEliminarCobroCompensacion(movAnticipo.id);
                                 }
+                            }
+
+                            //Guardo la relación de la factura/s con la Nota de Crédito
+                            int f_nc = contFcEnt.agregarFacturas_NotasCredito(facturas, fact.id);
+                            if (f_nc <= 0)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error guardando la relación de la Nota de Crédito con la/s factura/s. \", {type: \"error\"});", true);
                             }
 
                         }
@@ -3613,6 +3633,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             this.EnviarFacturaMail(fact);
                         }
+
                         if (this.accion != 9)
                         {
                             this.agregarMovimientoMillas(fact);
@@ -5484,6 +5505,39 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
                 return -1;
+            }
+        }
+
+        private bool validarNotaCreditoFactura()
+        {
+            try
+            {
+                controladorFactEntity contFactEnt = new controladorFactEntity();
+                Factura factura = Session["Factura"] as Factura;
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                //Verifico si es Nota de Credito. Si lo es, realizo las validaciones
+                if (accion == 6)
+                {
+                    //Verifico si tiene el permiso para refacturar nota de crédito. Si lo tiene devuelvo true.
+                    string permisoReFacturarNotaCredito = listPermisos.Where(x => x == "149").FirstOrDefault();
+                    if (!string.IsNullOrEmpty(permisoReFacturarNotaCredito))
+                    {
+                        return true;
+                    }
+
+                    //Valido que no se hayan realizado Notas de Crédito para las facturas seleccionadas
+                    bool response = contFactEnt.verificarFacturas_NotasCreditoByFacturas(Request.QueryString["facturas"]);
+                    return response;
+                }
+
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error validando facturas para realizar Nota de Crédito. Excepción:" + Ex.Message + " \", {type: \"error\"});", true);
+                return false;
             }
         }
         #endregion
