@@ -193,6 +193,10 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             return 1;
                         }
+
+                        //Permiso para bloquear la lista de precios
+                        if (s == "151")
+                            this.DropListLista.Attributes.Add("disabled", "disabled");
                     }
                 }
 

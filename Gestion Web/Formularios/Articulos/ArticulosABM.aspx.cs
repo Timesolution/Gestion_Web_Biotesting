@@ -987,6 +987,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.guardarHistorialCosto(art);
 
                 int i = this.controlador.modificarArticulo(art,cod);
+                
                 if (i == 1)
                 {
                     //cargo bien
@@ -997,9 +998,16 @@ namespace Gestion_Web.Formularios.Articulos
                     am.idMarca = Convert.ToInt32(this.DropListMarca.SelectedValue);
                     am.TipoDistribucion = Convert.ToInt32(this.ListTipoDistribucion.SelectedValue);
                     i = this.contArtEnt.modificarMarca(am);
+                    
                     if (a == 1)
                     {
-                        this.irProximoArticulo(art.id);
+                        int existeSiguiente = this.irProximoArticulo(art.id);
+
+                        if (existeSiguiente == -8)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No existen mas articulos"));
+                            return;
+                        }
                     }
                     else
                     {
@@ -1007,7 +1015,7 @@ namespace Gestion_Web.Formularios.Articulos
                         //Response.Write("<html><body><script>history.go(-2);</script></body></html>");          
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.volverAtras());
                     }
-                }
+                }                
                 if (i == -2)
                 {
 
@@ -1019,7 +1027,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                     //Agrego mal
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El Codigo de Barras del Articulo ya fue ingresado"));
-                }
+                }                
                 else
                 {
                     //Agrego mal
@@ -1030,6 +1038,7 @@ namespace Gestion_Web.Formularios.Articulos
             catch(Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando articulo" + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error modificando articulo" + ex.Message);
             }
  
         }
@@ -1218,20 +1227,23 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Articulo. " + ex.Message));
             }
         }
-        private void irProximoArticulo(int idArticulo)
+        private int irProximoArticulo(int idArticulo)
         {
             try
             {
-                idArticulo = idArticulo + 1;
-                var art = this.controlador.obtenerArticuloId(idArticulo);
+                //idArticulo = idArticulo + 1;
+                var art = this.controlador.obtenerArticuloIdEstado(idArticulo, 1);
                 if (art != null)
                 {
-                    Response.Redirect("ArticulosABM.aspx?accion=2&id=" + idArticulo);
+                    Response.Redirect("ArticulosABM.aspx?accion=2&id=" + art.id);
                 }
-            }
-            catch
-            {
 
+                return -8;
+            }
+            catch(Exception ex)
+            {
+                Log.EscribirSQL(1,"ERROR","Error al ir al proximo articulo " + ex.Message);
+                return -1;
             }
         }
         protected void btnAgregarGrupo_Click(object sender, EventArgs e)
