@@ -756,6 +756,10 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Inicio a cargar datos del articulo store");
                 var store = this.controlador.obtenerArticuloStoreByArticulo(idArticulo);
+
+                this.txtDesdeHora.Text = "00:00";
+                this.txtHastaHora.Text = "00:00";
+
                 if (store != null)
                 {
                     //si aparece es porque esta tildado
