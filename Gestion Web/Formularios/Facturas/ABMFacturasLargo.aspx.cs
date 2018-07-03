@@ -384,6 +384,10 @@ namespace Gestion_Web.Formularios.Facturas
                         //Permiso para que pueda modificar forma de pago
                         if (s == "123")
                             this.DropListFormaPago.Attributes.Remove("disabled");
+
+                        //Permiso para bloquear la lista de precios
+                        if (s == "150")
+                            this.DropListLista.Attributes.Add("disabled","disabled");
                     }
                 }
 

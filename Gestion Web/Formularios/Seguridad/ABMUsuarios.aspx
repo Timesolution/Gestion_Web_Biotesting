@@ -211,6 +211,7 @@
                                                         <th style="width: 10%">Telefono</th>
                                                         <th style="width: 10%">Mail</th>
                                                         <th style="width: 10%">Coeficiente</th>
+                                                        <th style="width: 10%">Perfil</th>
                                                         <%--<th class="td-actions" style="width: 10%"></th>--%>
                                                     </tr>
                                                 </thead>
@@ -540,6 +541,18 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtCoeficienteStore" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">PerfilStore</label>
+                                    <div class="col-md-4">
+                                        <asp:DropDownList ID="DropPerfilStore" runat="server" class="form-control" AutoPostBack="true" ></asp:DropDownList> <%--OnSelectedIndexChanged="DropPerfilStore_SelectedIndexChanged"--%>
+
+                                        <!-- /input-group -->
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="DropPerfilStore" InitialValue="0" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                             </div>
