@@ -1567,7 +1567,13 @@ namespace Gestion_Web.Formularios.Articulos
                         this.tPrecioVentaMonedaOriginal.Value = precioVentaMonedaOriginal.ToString("0.00");
                     }
                 }
-                
+
+                if (this.DropDownMonedaVent.SelectedItem.Text == "Euro")
+                    this.litSimboloPesos.Text = "€";
+
+                if (this.DropDownMonedaVent.SelectedItem.Text == "Dolar")
+                    this.litSimboloPesos.Text = "u$s";
+
             }
             catch (Exception Ex)
             {
