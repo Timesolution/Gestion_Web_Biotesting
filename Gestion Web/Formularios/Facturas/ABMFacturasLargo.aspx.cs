@@ -2467,6 +2467,15 @@ namespace Gestion_Web.Formularios.Facturas
                         this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                         
                     }
+
+                    if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"]  == "1")
+                    {
+                        if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
+                        {
+                            this.txtPUnitario.Text = decimal.Round((art.precioVenta / ((1 + (art.porcentajeIva / 100)))), 2).ToString();
+                        }
+                    }
+
                     this.verificarAlertaArticulo(art);
 
                     if (config.infoImportacionFacturas == "1")
@@ -3920,10 +3929,18 @@ namespace Gestion_Web.Formularios.Facturas
                 item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
                 //en base al precio unitario calculo iva del item
                 item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
+                
+                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
+                {
+                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
+                    {
+                        item.precioSinIva = item.precioUnitario;
+                    }
+                }
+
                 //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
                 item.precioSinRecargo = item.precioSinIva;
                 item.precioVentaSinRecargo = item.precioUnitario;
-
                 item.porcentajeIIBB = item.articulo.ingBrutos;
                 item.porcentajeOtrosImpuestos = item.articulo.impInternos;
 
