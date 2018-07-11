@@ -663,7 +663,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleComprasR.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("DatosCompras", dtCompras);
+                ReportDataSource rds = new ReportDataSource("DatosCompras", dtCompras); //guarda el dataset en un datasource para el report viewer
                 ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
