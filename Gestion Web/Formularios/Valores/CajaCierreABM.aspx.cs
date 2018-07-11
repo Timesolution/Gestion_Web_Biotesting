@@ -331,6 +331,9 @@ namespace Gestion_Web.Formularios.Valores
                 string fechaD = this.txtFecha.Text;
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
                 List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
+                
+                 var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));	
+ 
 
                 // Si existen solicitudes de créditos, verifico que estén validadas
                 //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
@@ -346,7 +349,17 @@ namespace Gestion_Web.Formularios.Valores
 
                 if (Facturas != null)
                 {
-                    int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                    //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                    int ok;	
+-	
+-                    if (chequearMercaderia == 0)	
+-                    {	
+-                        ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));	
+-                    }	
+-                    else	
+-                    {	
+-                        ok = 1;	
+-                    }
                     if (ok > 0 && Facturas.Count > 0 || Facturas.Count == 0)
                     {
                         //agrego diferencia
