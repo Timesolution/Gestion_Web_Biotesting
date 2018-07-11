@@ -871,6 +871,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDatos = controlador.obtenerDatosPedidoMO(idPedido);
                 DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
                 DataTable dtTotal = controlador.obtenerTotalPedidoMO(idPedido);
+                DataTable dtTotalPesos = controlador.obtenerTotalPedido(idPedido);
 
                 dtDatos.Columns.Add("codigoBarra");
                 Articulo a = new Articulo();
@@ -973,7 +974,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
 
-
                 string imagen = this.generarCodigo(idPedido);
                 ReportParameter param10 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
 
@@ -985,11 +985,13 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds = new ReportDataSource("DatosDetalle", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosPedidoMO", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("TotalPedidoMO", dtTotal);
+                ReportDataSource rds4 = new ReportDataSource("TotalPedidoPesos", dtTotalPesos);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
                 this.ReportViewer1.LocalReport.SetParameters(paramZona);
                 this.ReportViewer1.LocalReport.SetParameters(paramTel);
                 this.ReportViewer1.LocalReport.SetParameters(param1);

@@ -40,6 +40,8 @@ namespace Gestion_Web.Formularios.Facturas {
         
         private TotalPedidoMODataTable tableTotalPedidoMO;
         
+        private TotalPedidoPesosDataTable tableTotalPedidoPesos;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -91,6 +93,9 @@ namespace Gestion_Web.Formularios.Facturas {
                 }
                 if ((ds.Tables["TotalPedidoMO"] != null)) {
                     base.Tables.Add(new TotalPedidoMODataTable(ds.Tables["TotalPedidoMO"]));
+                }
+                if ((ds.Tables["TotalPedidoPesos"] != null)) {
+                    base.Tables.Add(new TotalPedidoPesosDataTable(ds.Tables["TotalPedidoPesos"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -192,6 +197,16 @@ namespace Gestion_Web.Formularios.Facturas {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public TotalPedidoPesosDataTable TotalPedidoPesos {
+            get {
+                return this.tableTotalPedidoPesos;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -281,6 +296,9 @@ namespace Gestion_Web.Formularios.Facturas {
                 if ((ds.Tables["TotalPedidoMO"] != null)) {
                     base.Tables.Add(new TotalPedidoMODataTable(ds.Tables["TotalPedidoMO"]));
                 }
+                if ((ds.Tables["TotalPedidoPesos"] != null)) {
+                    base.Tables.Add(new TotalPedidoPesosDataTable(ds.Tables["TotalPedidoPesos"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -362,6 +380,12 @@ namespace Gestion_Web.Formularios.Facturas {
                     this.tableTotalPedidoMO.InitVars();
                 }
             }
+            this.tableTotalPedidoPesos = ((TotalPedidoPesosDataTable)(base.Tables["TotalPedidoPesos"]));
+            if ((initTable == true)) {
+                if ((this.tableTotalPedidoPesos != null)) {
+                    this.tableTotalPedidoPesos.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -388,6 +412,8 @@ namespace Gestion_Web.Formularios.Facturas {
             base.Tables.Add(this.tableDatosPedidoMO);
             this.tableTotalPedidoMO = new TotalPedidoMODataTable();
             base.Tables.Add(this.tableTotalPedidoMO);
+            this.tableTotalPedidoPesos = new TotalPedidoPesosDataTable();
+            base.Tables.Add(this.tableTotalPedidoPesos);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -435,6 +461,12 @@ namespace Gestion_Web.Formularios.Facturas {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeTotalPedidoMO() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeTotalPedidoPesos() {
             return false;
         }
         
@@ -516,6 +548,9 @@ namespace Gestion_Web.Formularios.Facturas {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void TotalPedidoMORowChangeEventHandler(object sender, TotalPedidoMORowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void TotalPedidoPesosRowChangeEventHandler(object sender, TotalPedidoPesosRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -2544,6 +2579,8 @@ namespace Gestion_Web.Formularios.Facturas {
             
             private global::System.Data.DataColumn columnNroRenglon;
             
+            private global::System.Data.DataColumn columnTotalPesos;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosPedidoMODataTable() {
@@ -2659,6 +2696,14 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TotalPesosColumn {
+                get {
+                    return this.columnTotalPesos;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2694,7 +2739,7 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DatosPedidoMORow AddDatosPedidoMORow(string Id, string Codigo, string Descripcion, string PrecioUnitario, string Cantidad, string Total, string Ubicacion, string Stock, string Item, string NroRenglon) {
+            public DatosPedidoMORow AddDatosPedidoMORow(string Id, string Codigo, string Descripcion, string PrecioUnitario, string Cantidad, string Total, string Ubicacion, string Stock, string Item, string NroRenglon, string TotalPesos) {
                 DatosPedidoMORow rowDatosPedidoMORow = ((DatosPedidoMORow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
@@ -2706,7 +2751,8 @@ namespace Gestion_Web.Formularios.Facturas {
                         Ubicacion,
                         Stock,
                         Item,
-                        NroRenglon};
+                        NroRenglon,
+                        TotalPesos};
                 rowDatosPedidoMORow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosPedidoMORow);
                 return rowDatosPedidoMORow;
@@ -2739,6 +2785,7 @@ namespace Gestion_Web.Formularios.Facturas {
                 this.columnStock = base.Columns["Stock"];
                 this.columnItem = base.Columns["Item"];
                 this.columnNroRenglon = base.Columns["NroRenglon"];
+                this.columnTotalPesos = base.Columns["TotalPesos"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2768,6 +2815,8 @@ namespace Gestion_Web.Formularios.Facturas {
                 base.Columns.Add(this.columnItem);
                 this.columnNroRenglon = new global::System.Data.DataColumn("NroRenglon", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNroRenglon);
+                this.columnTotalPesos = new global::System.Data.DataColumn("TotalPesos", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotalPesos);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3129,6 +3178,281 @@ namespace Gestion_Web.Formularios.Facturas {
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
                 attribute2.FixedValue = "TotalPedidoMODataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class TotalPedidoPesosDataTable : global::System.Data.TypedTableBase<TotalPedidoPesosRow> {
+            
+            private global::System.Data.DataColumn columnTotalFinal;
+            
+            private global::System.Data.DataColumn columnsubtotal;
+            
+            private global::System.Data.DataColumn columndescuento;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public TotalPedidoPesosDataTable() {
+                this.TableName = "TotalPedidoPesos";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal TotalPedidoPesosDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected TotalPedidoPesosDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TotalFinalColumn {
+                get {
+                    return this.columnTotalFinal;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn subtotalColumn {
+                get {
+                    return this.columnsubtotal;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn descuentoColumn {
+                get {
+                    return this.columndescuento;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public TotalPedidoPesosRow this[int index] {
+                get {
+                    return ((TotalPedidoPesosRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event TotalPedidoPesosRowChangeEventHandler TotalPedidoPesosRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event TotalPedidoPesosRowChangeEventHandler TotalPedidoPesosRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event TotalPedidoPesosRowChangeEventHandler TotalPedidoPesosRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event TotalPedidoPesosRowChangeEventHandler TotalPedidoPesosRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddTotalPedidoPesosRow(TotalPedidoPesosRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public TotalPedidoPesosRow AddTotalPedidoPesosRow(string TotalFinal, string subtotal, string descuento) {
+                TotalPedidoPesosRow rowTotalPedidoPesosRow = ((TotalPedidoPesosRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        TotalFinal,
+                        subtotal,
+                        descuento};
+                rowTotalPedidoPesosRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowTotalPedidoPesosRow);
+                return rowTotalPedidoPesosRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                TotalPedidoPesosDataTable cln = ((TotalPedidoPesosDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new TotalPedidoPesosDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnTotalFinal = base.Columns["TotalFinal"];
+                this.columnsubtotal = base.Columns["subtotal"];
+                this.columndescuento = base.Columns["descuento"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnTotalFinal = new global::System.Data.DataColumn("TotalFinal", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotalFinal);
+                this.columnsubtotal = new global::System.Data.DataColumn("subtotal", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnsubtotal);
+                this.columndescuento = new global::System.Data.DataColumn("descuento", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columndescuento);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public TotalPedidoPesosRow NewTotalPedidoPesosRow() {
+                return ((TotalPedidoPesosRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new TotalPedidoPesosRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(TotalPedidoPesosRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.TotalPedidoPesosRowChanged != null)) {
+                    this.TotalPedidoPesosRowChanged(this, new TotalPedidoPesosRowChangeEvent(((TotalPedidoPesosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.TotalPedidoPesosRowChanging != null)) {
+                    this.TotalPedidoPesosRowChanging(this, new TotalPedidoPesosRowChangeEvent(((TotalPedidoPesosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.TotalPedidoPesosRowDeleted != null)) {
+                    this.TotalPedidoPesosRowDeleted(this, new TotalPedidoPesosRowChangeEvent(((TotalPedidoPesosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.TotalPedidoPesosRowDeleting != null)) {
+                    this.TotalPedidoPesosRowDeleting(this, new TotalPedidoPesosRowChangeEvent(((TotalPedidoPesosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveTotalPedidoPesosRow(TotalPedidoPesosRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                dsPedidos ds = new dsPedidos();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "TotalPedidoPesosDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -4639,6 +4963,22 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TotalPesos {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosPedidoMO.TotalPesosColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TotalPesos\' in table \'DatosPedidoMO\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosPedidoMO.TotalPesosColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsIdNull() {
                 return this.IsNull(this.tableDatosPedidoMO.IdColumn);
             }
@@ -4756,6 +5096,18 @@ namespace Gestion_Web.Formularios.Facturas {
             public void SetNroRenglonNull() {
                 this[this.tableDatosPedidoMO.NroRenglonColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTotalPesosNull() {
+                return this.IsNull(this.tableDatosPedidoMO.TotalPesosColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTotalPesosNull() {
+                this[this.tableDatosPedidoMO.TotalPesosColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -4854,6 +5206,105 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetDescuentoNull() {
                 this[this.tableTotalPedidoMO.DescuentoColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class TotalPedidoPesosRow : global::System.Data.DataRow {
+            
+            private TotalPedidoPesosDataTable tableTotalPedidoPesos;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal TotalPedidoPesosRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableTotalPedidoPesos = ((TotalPedidoPesosDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TotalFinal {
+                get {
+                    try {
+                        return ((string)(this[this.tableTotalPedidoPesos.TotalFinalColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TotalFinal\' in table \'TotalPedidoPesos\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTotalPedidoPesos.TotalFinalColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string subtotal {
+                get {
+                    try {
+                        return ((string)(this[this.tableTotalPedidoPesos.subtotalColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'subtotal\' in table \'TotalPedidoPesos\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTotalPedidoPesos.subtotalColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string descuento {
+                get {
+                    try {
+                        return ((string)(this[this.tableTotalPedidoPesos.descuentoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'descuento\' in table \'TotalPedidoPesos\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTotalPedidoPesos.descuentoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTotalFinalNull() {
+                return this.IsNull(this.tableTotalPedidoPesos.TotalFinalColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTotalFinalNull() {
+                this[this.tableTotalPedidoPesos.TotalFinalColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IssubtotalNull() {
+                return this.IsNull(this.tableTotalPedidoPesos.subtotalColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetsubtotalNull() {
+                this[this.tableTotalPedidoPesos.subtotalColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsdescuentoNull() {
+                return this.IsNull(this.tableTotalPedidoPesos.descuentoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetdescuentoNull() {
+                this[this.tableTotalPedidoPesos.descuentoColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -5115,6 +5566,40 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public TotalPedidoMORow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class TotalPedidoPesosRowChangeEvent : global::System.EventArgs {
+            
+            private TotalPedidoPesosRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public TotalPedidoPesosRowChangeEvent(TotalPedidoPesosRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public TotalPedidoPesosRow Row {
                 get {
                     return this.eventRow;
                 }
