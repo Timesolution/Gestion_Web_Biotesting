@@ -350,16 +350,16 @@ namespace Gestion_Web.Formularios.Valores
                 if (Facturas != null)
                 {
                     //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
-                    int ok;	
--	
--                    if (chequearMercaderia == 0)	
--                    {	
--                        ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));	
--                    }	
--                    else	
--                    {	
--                        ok = 1;	
--                    }
+                    int ok;
+
+                    if (chequearMercaderia == 0)
+                    {
+                        ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                    }
+                    else
+                    {
+                        ok = 1;
+                    }
                     if (ok > 0 && Facturas.Count > 0 || Facturas.Count == 0)
                     {
                         //agrego diferencia
