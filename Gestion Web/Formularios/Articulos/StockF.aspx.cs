@@ -160,7 +160,7 @@ namespace Gestion_Web.Formularios.Articulos
                     else
                     {
                         //o si tiene permiso cambio suc                        
-                        string permiso4 = listPermisos.Where(x => x == "75").FirstOrDefault();
+                        string permiso4 = listPermisos.Where(x => x == "153").FirstOrDefault();
                         if (permiso4 != null)
                         {
                             this.lstSucursal.Attributes.Remove("disabled");
