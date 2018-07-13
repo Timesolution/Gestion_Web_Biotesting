@@ -395,7 +395,7 @@
 
                                                             <div class="col-md-4">
                                                                 <div class="input-group">
-                                                                    <span class="input-group-addon">$</span>
+                                                                    <span class="input-group-addon"><asp:Literal ID="litSimboloPesos" runat="server"></asp:Literal></span>
                                                                     <input id="tPrecioVentaMonedaOriginal" runat="server" class="form-control" disabled="" value="0" style="text-align: right" />
 
                                                                 </div>
