@@ -659,7 +659,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //string idCliente = WebConfigurationManager.AppSettings.Get("ClienteDefecto");
+                if (accion == 4)
+                    return;
 
                 idSucursal = (int)Session["Login_SucUser"];
                 if (IsPostBack)//Si cambio la sucursal en el list manualmente uso ese valor en lugar del de usuario.

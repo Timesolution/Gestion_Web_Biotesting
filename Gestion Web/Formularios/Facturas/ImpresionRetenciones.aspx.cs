@@ -243,7 +243,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (dtRetencionesRealizadas != null)
                 {
                     dtRetencionesRealizadas.Columns.Add("Documento");
-                    //Todo esto es nuevo
+                    
                     foreach (DataRow dr in dtRetencionesRealizadas.Rows)
                     {
                         DataTable dtCobroRetencion = this.controlador.obtenerCobrosRetencionesById(Convert.ToInt32(dr["id"]));
