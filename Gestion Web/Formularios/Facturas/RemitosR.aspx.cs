@@ -147,13 +147,13 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc)
+        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc)/////////////
         {
             try
             {
                 if (fechaD != null && fechaH != null && suc != 0)
                 {
-                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc);
+                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc,0);
                     decimal saldo = 0;
                     foreach (Remito r in remitos)
                     {
@@ -165,7 +165,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    List<Remito> remitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue));
+                    List<Remito> remitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue),0);
                     decimal saldo = 0;
                     foreach (Remito r in remitos)
                     {
@@ -652,7 +652,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
                 else
                 {
-                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue));
+                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue),0);
 
                     foreach (var remito in listRemitos)
                     {
