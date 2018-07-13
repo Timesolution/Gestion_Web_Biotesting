@@ -185,16 +185,36 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
-                foreach (string s in listPermisos)
+
+                var perIngresaPantalla = listPermisos.Where(x => x == "37").FirstOrDefault();
+
+                if (perIngresaPantalla == "37")
                 {
-                    if (!String.IsNullOrEmpty(s))
-                    {
-                        if (s == "37")
-                        {
-                            return 1;
-                        }
-                    }
+                    var perBloqueoListaPrecios = listPermisos.Where(x => x == "151").FirstOrDefault();
+
+                    //Permiso para bloquear la lista de precios
+                    if (perBloqueoListaPrecios == "151")
+                        this.DropListLista.Attributes.Add("disabled", "disabled");
+
+                    return 1;
                 }
+
+
+                //foreach (string s in listPermisos)
+                //{
+                //    if (!String.IsNullOrEmpty(s))
+                //    {
+
+                //        if (perIngresaPantalla == "37")
+                //        {
+                //            //Permiso para bloquear la lista de precios
+                //            if (s == "151")
+                //                this.DropListLista.Attributes.Add("disabled", "disabled");
+
+                //            return 1;
+                //        }
+                //    }
+                //}
 
                 return 0;
             }
@@ -639,7 +659,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //string idCliente = WebConfigurationManager.AppSettings.Get("ClienteDefecto");
+                if (accion == 4)
+                    return;
 
                 idSucursal = (int)Session["Login_SucUser"];
                 if (IsPostBack)//Si cambio la sucursal en el list manualmente uso ese valor en lugar del de usuario.

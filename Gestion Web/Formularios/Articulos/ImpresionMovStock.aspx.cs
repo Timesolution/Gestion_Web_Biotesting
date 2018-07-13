@@ -126,9 +126,10 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                DateTime fechaHasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59).AddSeconds(59);
                 Articulo articulo = this.controlador.obtenerArticuloId(this.idArticulo);
-                DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.suc));
-                DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.suc));
+                DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), fechaHasta, Convert.ToInt32(this.suc));
+                DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), fechaHasta, Convert.ToInt32(this.suc));
                 DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.suc));
 
                 dt.Merge(dt2);

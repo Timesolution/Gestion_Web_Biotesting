@@ -7,6 +7,7 @@
                 <div class="widget stacked">
                     <div class="stat">
                     </div>
+
                     <div class="widget-header">
                         <i class="icon-pencil"></i>
                         <h3>Editar</h3>
@@ -35,6 +36,30 @@
                             </fieldset>
                         </div>
                     </div>
+                    <br />
+                    <br />
+                    <div class="widget-header">
+                        <i class="icon-pencil"></i>
+                        <h3>Validar Seguro</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="form-horizontal col-md-12">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-2">Comentario</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox runat="server" ID="txtComentarioValidarSeguro" CssClass="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <asp:Button ID="btnValidarSeguro" Text="Validar" runat="server" class="btn btn-success" OnClick="btnValidarSeguro_Click" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -280,7 +280,8 @@ namespace Gestion_Web.Formularios.Valores
                 //Celdas
 
                 TableCell celFechaCierre = new TableCell();
-                celFechaCierre.Text = c.FechaCierre.Value.ToString("dd/MM/yyyy");
+                //celFechaCierre.Text = c.FechaCierre.Value.ToString("dd/MM/yyyy");
+                celFechaCierre.Text = c.FechaCierre.Value.ToString("dd/MM/yyyy hh:mm");
                 celFechaCierre.VerticalAlign = VerticalAlign.Middle;
                 celFechaCierre.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celFechaCierre);
