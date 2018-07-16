@@ -39,6 +39,7 @@ namespace Gestion_Web.Formularios.Facturas
         int accion;
         string numero = string.Empty;
         string cliente = string.Empty;
+        string observacion = string.Empty;
         //para el de la lista
         int Vendedor;
 
@@ -65,6 +66,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.numero = Request.QueryString["n"];
                 this.cliente = Request.QueryString["c"];
+                this.observacion = Request.QueryString["o"];
 
                 if (!IsPostBack)
                 {
@@ -173,6 +175,12 @@ namespace Gestion_Web.Formularios.Facturas
                         lbtnFacturarFamilia.Visible = true;
                         this.iconoBusqueda.Attributes.Add("disabled", "disabled");
                     }
+                }
+                //busco por observacion
+                if(accion == 4)
+                {
+                    this.buscarPorObservacion();
+                    this.lbtnFacturar.Visible = true;
                 }
             }
             catch (Exception ex)
@@ -740,6 +748,25 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por cliente. " + ex.Message));
             }
         }
+        private void buscarPorObservacion()
+        {
+            try
+            {
+                var pedidos = this.controlador.obtenerListaPedidosPorObservacion(this.observacion,13); //13 es el tipo de documento pedido
+                if (pedidos != null)
+                {
+                    this.phPedidos.Controls.Clear();
+                    foreach (var p in pedidos)
+                    {
+                        this.cargarEnPh(p);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por cliente. " + ex.Message));
+            }
+        }
         #endregion
 
         #region carga informacion busquedas
@@ -1185,6 +1212,10 @@ namespace Gestion_Web.Formularios.Facturas
             if (!string.IsNullOrEmpty(this.txtCodigoCliente.Text))
             {
                 Response.Redirect("PedidosP.aspx?a=2&c=" + this.txtCodigoCliente.Text);
+            }
+            if (!string.IsNullOrEmpty(this.txtObservacion.Text))
+            {
+                Response.Redirect("PedidosP.aspx?a=4&o=" + this.txtObservacion.Text);
             }
         }
         protected void btnFacturar_Click(object sender, EventArgs e)

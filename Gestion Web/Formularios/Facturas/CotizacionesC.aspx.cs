@@ -21,12 +21,15 @@ namespace Gestion_Web.Formularios.Facturas
         private int suc;
         private string fechaD;
         private string fechaH;
+        int accion;
 
         private int idCliente;
         private int idEstado;
         private int vendedor;
 
         int idVendedor;
+
+        string observacion = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -39,8 +42,8 @@ namespace Gestion_Web.Formularios.Facturas
                 idCliente = Convert.ToInt32(Request.QueryString["Cliente"]);
                 idEstado = Convert.ToInt32(Request.QueryString["estado"]);
                 vendedor = Convert.ToInt32(Request.QueryString["V"]);
-
-
+                accion = Convert.ToInt32(Request.QueryString["a"]);
+                observacion = Request.QueryString["o"];
 
                 if (!IsPostBack)
                 {
@@ -68,7 +71,15 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListEstado.SelectedValue = idEstado.ToString();
                     DropListClientes.SelectedValue = idCliente.ToString();
                 }
-                this.cargarCotizacionesRango(fechaD, fechaH, suc);
+
+                if(accion == 0)
+                {
+                    this.cargarCotizacionesRango(fechaD, fechaH, suc);
+                }
+                else if(accion == 1)
+                {
+                    buscarPorObservacion();
+                }
 
             }
             catch (Exception ex)
@@ -309,8 +320,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
-
                 // if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
                 if (fechaD != null && fechaD != null )
                 {
@@ -330,7 +339,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando cotizaciones rango. " + ex.Message));
             }
         }
 
@@ -350,7 +359,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de Pedidos. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de Cotizaciones. " + ex.Message));
 
             }
         }
@@ -364,7 +373,6 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.ID = p["id"].ToString();
 
                 //Celdas
-
                 TableCell celFecha = new TableCell();
                 celFecha.Text = Convert.ToDateTime(p["fecha"]).ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
@@ -454,11 +462,113 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando pedido. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando cotizacion en ph dr. " + ex.Message));
             }
 
         }
+        private void cargarEnPh(Pedido p)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+                tr.ID = p.id.ToString();
 
+                //Celdas
+
+                TableCell celFecha = new TableCell();
+                celFecha.Text = p.fecha.ToString("dd/MM/yyyy");
+                celFecha.HorizontalAlign = HorizontalAlign.Left;
+                celFecha.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celFecha);
+
+                TableCell celNumero = new TableCell();
+                celNumero.Text = p.numero.ToString().PadLeft(8, '0');
+                celNumero.HorizontalAlign = HorizontalAlign.Left;
+                celNumero.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celNumero);
+
+                TableCell celRazon = new TableCell();
+                celRazon.Text = p.cliente.razonSocial;
+                celRazon.HorizontalAlign = HorizontalAlign.Left;
+                celRazon.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celRazon);
+
+
+                TableCell celTotal = new TableCell();
+                //si es cliente lo muestro sin iva para Team
+                string perfil2 = Session["Login_NombrePerfil"] as string;
+                if (perfil2 == "Cliente")
+                {
+                    celTotal.Text = "$" + Decimal.Round((p.total / (decimal)1.21), 2).ToString();
+                }
+                else
+                {
+                    celTotal.Text = "$" + p.total;
+                }
+                celTotal.VerticalAlign = VerticalAlign.Middle;
+                celTotal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celTotal);
+
+                TableCell celTipo = new TableCell();
+                celTipo.Text = p.estado.descripcion;
+                celTipo.HorizontalAlign = HorizontalAlign.Left;
+                celTipo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celTipo);
+
+                //arego fila a tabla
+
+                TableCell celAccion = new TableCell();
+
+                LinkButton btnEliminar = new LinkButton();
+                btnEliminar.CssClass = "btn btn-info ui-tooltip";
+                btnEliminar.Attributes.Add("data-toggle", "tooltip");
+                btnEliminar.Attributes.Add("title data-original-title", "Detalles");
+                btnEliminar.ID = "btnSelec_" + p.id;
+                btnEliminar.Text = "<span class='shortcut-icon fa fa-search-plus'></span>";
+                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                btnEliminar.Font.Size = 12;
+                btnEliminar.Click += new EventHandler(this.detallePedido);
+                celAccion.Controls.Add(btnEliminar);
+                celAccion.Width = Unit.Percentage(10);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
+
+                CheckBox cbSeleccion = new CheckBox();
+                //cbSeleccion.Text = "&nbsp;Imputar";
+                cbSeleccion.ID = "cbSeleccion_" + p.id;//_id
+                cbSeleccion.CssClass = "btn btn-info";
+                cbSeleccion.Font.Size = 12;
+                celAccion.Controls.Add(cbSeleccion);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAccion.Controls.Add(l2);
+
+                Literal lDetail = new Literal();
+                lDetail.ID = "btnEditar_" + p.id.ToString();
+                lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p.id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
+                lDetail.Text += "</a>";
+
+                //if (this.verificarPermisoEditar() > 0)
+                //{
+                //    celAccion.Controls.Add(lDetail);
+                //}
+                tr.Cells.Add(celAccion);
+
+                phCotizaciones.Controls.Add(tr);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando cotizacion. " + ex.Message));
+            }
+
+        }
         private void detallePedido(object sender, EventArgs e)
         {
             try
@@ -492,13 +602,6 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
             }
         }
-
-
-
-
-
-
-
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -656,6 +759,37 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
+            }
+        }
+        private void buscarPorObservacion()
+        {
+            try
+            {
+                //var cotizaciones = this.controlador.obtenerPedidosPorObservacionDT(this.observacion,10); //10 es el tipo de documento cotizacion
+                //if (cotizaciones != null)
+                //{
+                //    this.cargarCotizacion(cotizaciones);
+                //}
+                var cotizaciones = this.controlador.obtenerListaPedidosPorObservacion(this.observacion, 10); //10 es el tipo de documento pedido
+                if (cotizaciones != null)
+                {
+                    this.phCotizaciones.Controls.Clear();
+                    foreach (var c in cotizaciones)
+                    {
+                        this.cargarEnPh(c);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cotizacion por observacion. " + ex.Message));
+            }
+        }
+        protected void btnBuscarNumeros_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.txtObservacion.Text))
+            {
+                Response.Redirect("CotizacionesC.aspx?a=1&o=" + this.txtObservacion.Text);
             }
         }
     }
