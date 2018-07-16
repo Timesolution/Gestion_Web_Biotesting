@@ -379,10 +379,14 @@
                                 <!-- /input-group -->
 
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-4">Buscar por observacion</label>
+                                <div class="col-md-4">
+                                    <asp:TextBox ID="txtObservacion" runat="server" class="form-control"></asp:TextBox>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
                     </div>
