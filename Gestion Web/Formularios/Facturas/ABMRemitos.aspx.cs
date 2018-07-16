@@ -545,7 +545,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     this.obtenerRemito(this.cliente.iva);
-                    this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
+
+                    try { this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();}
+                    catch { }
+
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
                     this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
                     //this.DropListIva.SelectedIndex = 1;

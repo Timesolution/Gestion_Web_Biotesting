@@ -202,7 +202,8 @@ namespace Gestion_Web.Formularios.Valores
                 cc.Sucursal = this.sucursal;
                 cc.PuntoVenta = this.puntoVenta;
                 cc.FechaApertura = Convert.ToDateTime(this.txtFechaApertura.Text, new CultureInfo("es-AR")).AddHours(7);
-                cc.FechaCierre = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
+                cc.FechaCierre = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")).AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute).AddSeconds(DateTime.Now.Second);
+
                 cc.Total = Convert.ToDecimal(this.txtTotal.Text);
                 cc.Numero = this.txtNumeroCierre.Text;
 
@@ -330,7 +331,9 @@ namespace Gestion_Web.Formularios.Valores
                 string fechaD = this.txtFecha.Text;
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
                 List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
-                var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));
+                
+                 var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));	
+ 
 
                 // Si existen solicitudes de créditos, verifico que estén validadas
                 //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
@@ -346,6 +349,7 @@ namespace Gestion_Web.Formularios.Valores
 
                 if (Facturas != null)
                 {
+                    //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
                     int ok;
 
                     if (chequearMercaderia == 0)
@@ -356,7 +360,6 @@ namespace Gestion_Web.Formularios.Valores
                     {
                         ok = 1;
                     }
-
                     if (ok > 0 && Facturas.Count > 0 || Facturas.Count == 0)
                     {
                         //agrego diferencia
