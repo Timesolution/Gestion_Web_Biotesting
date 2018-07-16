@@ -32,6 +32,7 @@ namespace Gestion_Web.Formularios.Facturas
         private string fechaH;
         private int original;
         private int cliente;
+        private int sinFactura;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -39,9 +40,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.VerificarLogin();
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
-                suc= Convert.ToInt32(Request.QueryString["Sucursal"]);
+                suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
                 this.original = Convert.ToInt32(Request.QueryString["o"]);
-                this.cliente = Convert.ToInt32(Request.QueryString["cliente"]);//TODO ramiro
+                this.cliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.sinFactura = Convert.ToInt32(Request.QueryString["sF"]);
 
                 if (!IsPostBack)
                 {
@@ -52,22 +54,28 @@ namespace Gestion_Web.Formularios.Facturas
                         suc = (int)Session["Login_SucUser"];
                         this.cargarSucursal();
 
-                        fechaD = DateTime.Now.ToString("dd/MM/yyyy");
-                        fechaH = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        DropListSucursal.SelectedValue = suc.ToString();
-                        DropListClientes.SelectedValue = cliente.ToString();
+                        this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.DropListSucursal.SelectedValue = suc.ToString();
+                        this.DropListClientes.SelectedValue = cliente.ToString();
                     }
                     this.cargarSucursal();
-                    txtFechaDesde.Text = fechaD;
-                    txtFechaHasta.Text = fechaH;
-                    DropListSucursal.SelectedValue = suc.ToString();
-                    DropListClientes.SelectedValue = cliente.ToString();
-
+                    this.txtFechaDesde.Text = fechaD;
+                    this.txtFechaHasta.Text = fechaH;
+                    this.DropListSucursal.SelectedValue = suc.ToString();
+                    this.DropListClientes.SelectedValue = cliente.ToString();
+                    if (sinFactura == 1)
+                    {
+                        chkRemSinFacturas.Checked = true;
+                    }
+                    else
+                    {
+                        chkRemSinFacturas.Checked = false;
+                    }
+                    this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura);
                 }
-                this.cargarRemitosRango(fechaD, fechaH, suc, cliente);
-
             }
             catch (Exception ex)
             {
@@ -159,13 +167,13 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc, int cliente)
+        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc, int cliente, int sinFactura)
         {
             try
             {
                 if (fechaD != null && fechaH != null && suc != -1)
                 {
-                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc,cliente);
+                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc,cliente,sinFactura);
                     decimal saldo = 0;
                     foreach (Remito r in remitos)
                     {
@@ -498,10 +506,17 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (DropListSucursal.SelectedValue != "-1")
                     {
+                        sinFactura = 0;
+
+                        if (chkRemSinFacturas.Checked)
+                        {
+                            sinFactura = 1;
+                        }
+                        
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
                         Response.Redirect("RemitosR.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + 
                             txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue +
-                            "&cliente=" + DropListClientes.SelectedValue);
+                            "&cliente=" + DropListClientes.SelectedValue + "&sF=" + sinFactura);
                     }
                     else
                     {
@@ -651,7 +666,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
                 else
                 {
-                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue),0);
+                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue),0,sinFactura);
 
                     foreach (var remito in listRemitos)
                     {
