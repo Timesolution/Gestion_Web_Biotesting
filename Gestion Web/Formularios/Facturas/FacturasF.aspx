@@ -1306,8 +1306,7 @@
                 if (key < 48 || key > 57) {
                     if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                     { return true; }
-                    else
-                    { return false; }
+                    else { return false; }
                 }
                 return true;
             }
