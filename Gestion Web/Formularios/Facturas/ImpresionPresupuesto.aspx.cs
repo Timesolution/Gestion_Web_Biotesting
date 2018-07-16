@@ -1100,6 +1100,11 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDetalle = controlador.obtenerDatosRemito(idRemito);
 
                 DataTable dtNroFacturas = controlador.obtenerNroFacturaByRemito(idRemito);
+
+                controladorMoneda contMoneda = new controladorMoneda();
+
+                List<Moneda> dtMonedas = contMoneda.obtenerMonedas();
+
                 int sucursalFacturada = 0;
                 Sucursal sucursalOrigen = new Sucursal();
                 Sucursal sucursalRemitida = new Sucursal();
@@ -1152,6 +1157,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //neto no grabado
                 decimal subtotal = Convert.ToDecimal(dr[4]);
+                decimal neto = Convert.ToDecimal(dr[4]);
 
                 decimal descuento = Convert.ToDecimal(dr[1]);
 
@@ -1212,8 +1218,10 @@ namespace Gestion_Web.Formularios.Facturas
                     fechaVencCai = pv.caiVencimiento.ToString("dd/MM/yyyy");
                 }
                 catch
-                { }                
-                
+                { }
+
+                var euro = dtMonedas.Where(x => x.moneda == "Euro").FirstOrDefault().cambio;
+
                 DataTable dtComentarios = contRemito.obtenerComentarioRemito(idRemito);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -1224,6 +1232,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds3 = new ReportDataSource("DetalleComentarios", dtComentarios);
                 ReportDataSource rds4 = new ReportDataSource("NumerosFacturas", dtNroFacturas);
                 ReportDataSource rds5 = new ReportDataSource("DetalleComentariosFactura", dtComentariosFactura);
+
                 //ReportDataSource rds3 = new ReportDataSource("TotalPresupuesto", dtTotal);
                 ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
@@ -1274,7 +1283,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter param35 = new ReportParameter("CAI", cai);
 
-                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);
+                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);     
+                           
+                ReportParameter param37 = new ReportParameter("Neto", neto.ToString("C"));
+
+                ReportParameter param38 = new ReportParameter("Euro", euro.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -1309,6 +1322,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param34);
                 this.ReportViewer1.LocalReport.SetParameters(param35);
                 this.ReportViewer1.LocalReport.SetParameters(param36);
+                this.ReportViewer1.LocalReport.SetParameters(param37);
+                this.ReportViewer1.LocalReport.SetParameters(param38);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
