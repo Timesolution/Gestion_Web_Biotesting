@@ -1105,6 +1105,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 List<Moneda> dtMonedas = contMoneda.obtenerMonedas();
 
+                decimal euro = 0;
                 int sucursalFacturada = 0;
                 Sucursal sucursalOrigen = new Sucursal();
                 Sucursal sucursalRemitida = new Sucursal();
@@ -1216,11 +1217,13 @@ namespace Gestion_Web.Formularios.Facturas
                     var pv = this.controlSucursal.obtenerPuntoVentaPV(r.ptoV.puntoVenta.PadLeft(4, '0'), r.sucursal.id, r.empresa.id);
                     cai = pv.caiRemito;
                     fechaVencCai = pv.caiVencimiento.ToString("dd/MM/yyyy");
+
+                    euro = dtMonedas.Where(x => x.moneda == "Euro").FirstOrDefault().cambio;
                 }
                 catch
                 { }
 
-                var euro = dtMonedas.Where(x => x.moneda == "Euro").FirstOrDefault().cambio;
+                
 
                 DataTable dtComentarios = contRemito.obtenerComentarioRemito(idRemito);
 
