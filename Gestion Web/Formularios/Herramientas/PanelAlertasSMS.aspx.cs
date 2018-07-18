@@ -18,6 +18,7 @@ namespace Gestion_Web.Formularios.Herramientas
         Configuracion configuracion = new Configuracion();
         ControladorConfiguracion contConfig = new ControladorConfiguracion();
         ControladorSMS contSMS = new ControladorSMS();
+        Mensajes mje = new Mensajes();
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -131,6 +132,11 @@ namespace Gestion_Web.Formularios.Herramientas
                             this.chkAlertaCumple.Checked = true;
                             this.txtEnvioCumple.Attributes.Remove("disabled");
                         }
+                        if (configs.AlertaCobro.Value == 1)
+                        {
+                            this.chkAlertaCobro.Checked = true;
+                            this.txtEnvioCobro.Attributes.Remove("disabled");
+                        }
                         this.txtEnvioFact.Text = configs.MensajeFC;
                         this.txtEnvioNC.Text = configs.MensajeNC;
                         this.txtEnvioPRP.Text = configs.MensajePRP;
@@ -139,6 +145,7 @@ namespace Gestion_Web.Formularios.Herramientas
                         this.txtDiaSaldoCtaCte.Text = configs.MensajeSaldoCC;
                         this.txtEnvioSaldoMax.Text = configs.MensajeSaldoMax;
                         this.txtEnvioCumple.Text = configs.MensajeCumpleanios;
+                        this.txtEnvioCobro.Text = configs.MensajeCobro;
 
                         this.PanelConfig.Visible = true;
                         this.PanelCondiciones.Visible = false;
@@ -224,34 +231,44 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
-                Configuraciones_SMS config = this.contConfig.ObtenerConfiguracionesAlertasSMS();
-
-                config.AlertaFC = Convert.ToInt32(this.chkAlertaFC.Checked);
-                config.AlertaNC = Convert.ToInt32(this.chkAlertaNC.Checked);
-                config.AlertaPRP = Convert.ToInt32(this.chkAlertaPRP.Checked);
-                config.AlertaNCPRP = Convert.ToInt32(this.chkAlertaNCPRP.Checked);
-                config.AlertaFcVencida = Convert.ToInt32(this.chkAlertaFCVencida.Checked);
-                config.AlertaSaldoCC = Convert.ToInt32(this.chkAlertaSaldoCtaCte.Checked);
-                config.AlertaSaldoMax = Convert.ToInt32(this.chkAlertaSaldoMax.Checked);
-                config.AlertaCumpleanios = Convert.ToInt32(this.chkAlertaCumple.Checked);
-
-                config.MensajeFC = this.txtEnvioFact.Text;
-                config.MensajeFcVencida = this.txtEnvioFactVencida.Text;
-                config.MensajeNC = this.txtEnvioNC.Text;
-                config.MensajeNCPRP = this.txtEnvioNCPRP.Text;
-                config.MensajePRP = this.txtEnvioPRP.Text;
-                config.MensajeSaldoCC = this.txtDiaSaldoCtaCte.Text;
-                config.MensajeSaldoMax = this.txtEnvioSaldoMax.Text;
-                config.MensajeCumpleanios = this.txtEnvioCumple.Text;
-
-                int i = this.contConfig.guardarConfiguracionesSMS(config);
-                if (i > 0)
+                if (!txtEnvioCobro.Text.Contains("@@COBRO"))
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Guardado con exito!.\", {type: \"info\"});location.href='PanelAlertasSMS.aspx';", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@COBRO'. \", {type: \"error\"});", true);
+                    //txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO ";
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar cambios\";", true);                    
+                    Configuraciones_SMS config = this.contConfig.ObtenerConfiguracionesAlertasSMS();
+
+                    config.AlertaFC = Convert.ToInt32(this.chkAlertaFC.Checked);
+                    config.AlertaNC = Convert.ToInt32(this.chkAlertaNC.Checked);
+                    config.AlertaPRP = Convert.ToInt32(this.chkAlertaPRP.Checked);
+                    config.AlertaNCPRP = Convert.ToInt32(this.chkAlertaNCPRP.Checked);
+                    config.AlertaFcVencida = Convert.ToInt32(this.chkAlertaFCVencida.Checked);
+                    config.AlertaSaldoCC = Convert.ToInt32(this.chkAlertaSaldoCtaCte.Checked);
+                    config.AlertaSaldoMax = Convert.ToInt32(this.chkAlertaSaldoMax.Checked);
+                    config.AlertaCumpleanios = Convert.ToInt32(this.chkAlertaCumple.Checked);
+                    config.AlertaCobro = Convert.ToInt32(this.chkAlertaCobro.Checked);
+
+                    config.MensajeFC = this.txtEnvioFact.Text;
+                    config.MensajeFcVencida = this.txtEnvioFactVencida.Text;
+                    config.MensajeNC = this.txtEnvioNC.Text;
+                    config.MensajeNCPRP = this.txtEnvioNCPRP.Text;
+                    config.MensajePRP = this.txtEnvioPRP.Text;
+                    config.MensajeSaldoCC = this.txtDiaSaldoCtaCte.Text;
+                    config.MensajeSaldoMax = this.txtEnvioSaldoMax.Text;
+                    config.MensajeCumpleanios = this.txtEnvioCumple.Text;
+                    config.MensajeCobro = this.txtEnvioCobro.Text;
+
+                    int i = this.contConfig.guardarConfiguracionesSMS(config);
+                    if (i > 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Guardado con exito!.\", {type: \"info\"});location.href='PanelAlertasSMS.aspx';", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar cambios\";", true);
+                    }
                 }
             }
             catch

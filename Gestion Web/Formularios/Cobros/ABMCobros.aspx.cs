@@ -1506,7 +1506,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        protected void btnAgregarPago_Click(object sender, EventArgs e)
+        protected void btnAgregarPago_Click(object sender, EventArgs e)//TODO ramiro
         {
             try
             {
@@ -1520,6 +1520,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.hacerCobroPagoCuenta();
                     }
+                    //TODO ramiro 
                 }
                 else
                 {
@@ -1978,15 +1979,15 @@ namespace Gestion_Web.Formularios.Facturas
 
                                 //Verifico si hay que liquidar pagarés. Si no hay que liquidar, el entero es = 0
                                 int l = this.liquidarPagares(i);
-
+                                //TODO ramiro agregar aca la fun de envio de mensaje
+                                int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
+                                
                                 if (l > 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se liquidaron correctamente los pagarés en el cobro \", {type: \"info\"}); location.href = '../Valores/PagaresF.aspx';", true);
                                 if (l < 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudieron liquidar los pagarés en el cobro. \", {type: \"alert\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
 
-
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
-
+                                mostrarMensaje(c, cobro.id,i);
                             }
                             else
                             {
@@ -2016,6 +2017,34 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error generando cobro. " + ex.Message), true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("No se pudo agregar cobro  " + ex.Message));
+            }
+        }
+
+        /*smsCobro devuelve > que 0 si pudo enviar el mensaje y 
+         * procesaCobro devuelve > 0 tambien si pudo realizar correctamente el cobro
+         * cobro es el numero id del cobro realizado
+         * */
+        private void mostrarMensaje(int smsCorrecto,int idCobro, int cobroCorrecto)
+        {
+            if(cobroCorrecto > 0)//si pudo realizarse el pago
+            {
+                string mensajeDevolver = "Cobro agregado ";
+                if (cobroCorrecto >= 0)
+                {
+                    if (smsCorrecto > 0)
+                    {
+                        mensajeDevolver += "mensaje enviado";
+                    }
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"" + mensajeDevolver + ". \", {type: \"info\"});');location.href = 'CobranzaF.aspx';", true);
+                }
+                else
+                {//si no pudo enviarse el sms
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(),
+                        "alert", " $.msgbox(\"" + mensajeDevolver + "Mensaje no enviado. \", {type: \"info\"});');location.href = 'CobranzaF.aspx';", true);
+                }
+            }
+            else{
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro no realizado. \", {type: \"info\"})');location.href = 'CobranzaF.aspx';", true);
             }
         }
 
@@ -2111,8 +2140,11 @@ namespace Gestion_Web.Formularios.Facturas
                                 this.btnFinalizarPago.Visible = false;
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Genero el Recibo de Cobro N°" + this.txtNumeroCobro.Text);
                                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
 
+                                //TODO ramiro agregar aca la fun de envio de mensaje
+                                int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
+                                mostrarMensaje(c, cobro.id, i);
+                                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
                             }
                             else
                             {
