@@ -742,6 +742,24 @@ namespace Gestion_Web.Formularios.Seguridad {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator17;
         
         /// <summary>
+        /// DropStore control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropStore;
+        
+        /// <summary>
+        /// RequiredFieldValidator16 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator16;
+        
+        /// <summary>
         /// AgregarUsuarioAlStore control.
         /// </summary>
         /// <remarks>

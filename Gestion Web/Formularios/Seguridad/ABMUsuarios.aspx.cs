@@ -38,8 +38,9 @@ namespace Gestion_Web.Formularios.Seguridad
                     this.cargarClientes();
                     this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
+                    this.cargarStores();
 
-                    if(this.valor == 2)
+                    if (this.valor == 2)
                     {
                         this.cargarUsuario(idUsuario);
                     }
@@ -285,6 +286,32 @@ namespace Gestion_Web.Formularios.Seguridad
                 this.DropPerfilStore.DataValueField = "int";
                 this.DropPerfilStore.DataTextField = "Perfil";
                 this.DropPerfilStore.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Perfiles. " + ex.Message));
+            }
+        }
+        public void cargarStores()
+        {
+            try
+            {
+                controladorStore contStore = new controladorStore();
+
+                var stores = contStore.ObtenerStores();
+
+                stores.Insert(0, new Gestion_Api.Entitys.Store
+                {
+                    Id = 0,
+                    Descripcion = "Seleccione..."
+                }
+                );
+
+                this.DropStore.DataSource = stores;
+                this.DropStore.DataValueField = "Id";
+                this.DropStore.DataTextField = "Descripcion";
+                this.DropStore.DataBind();
 
             }
             catch (Exception ex)
@@ -598,20 +625,32 @@ namespace Gestion_Web.Formularios.Seguridad
                 Usuario user = this.controlador.obtenerUsuariosID(idUsuario);
                 Gestor_Solution.Modelo.Cliente cliente = new Gestor_Solution.Modelo.Cliente();
                 cliente = contCliente.obtenerClienteID(idUsuario);
-                
+
+                Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
+                Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
+                usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                controladorStore contStore = new controladorStore();
+
                 if (this.User != null && cliente != null)
                 {
                     this.txtUsuarioStore.Text = user.usuario;
                     this.txtContraseñaStore.Text = user.contraseña;
                     this.txtNombreStore.Text = cliente.razonSocial;
-                    if(cliente.contactos.Count > 0)
-                    {
-                        if (!String.IsNullOrEmpty(cliente.contactos[0].numero))
-                            this.txtTelefonoStore.Text = cliente.contactos[0].numero.ToString();
-                        if (!String.IsNullOrEmpty(cliente.contactos[0].mail))
-                            this.txtMailStore.Text = cliente.contactos[0].mail.ToString();
-                    }
-                    //this.DropPerfilStore.SelectedValue = user.perfil.id.ToString();
+                    this.txtApellidoStore.Text = usuarioStore.apellido;
+
+                    //if(cliente.contactos.Count > 0)
+                    //{
+                    //    if (!String.IsNullOrEmpty(cliente.contactos[0].numero))
+                    //        this.txtTelefonoStore.Text = cliente.contactos[0].numero.ToString();
+                    //    if (!String.IsNullOrEmpty(cliente.contactos[0].mail))
+                    //        this.txtMailStore.Text = cliente.contactos[0].mail.ToString();
+                    //}
+
+                    this.txtTelefonoStore.Text = usuarioStore.telefono;
+                    this.txtMailStore.Text = usuarioStore.mail;
+                    this.txtCoeficienteStore.Text = usuarioStore.coeficiente.ToString();
+                    this.DropPerfilStore.SelectedValue = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).@int.ToString();
+                    this.DropStore.SelectedValue = contStore.ObtenerStoresPorID((int)usuarioStore.store).Id.ToString();
                 }
                 else
                 {
@@ -644,6 +683,8 @@ namespace Gestion_Web.Formularios.Seguridad
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
 
+                usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+
                 Log.EscribirSQL(1, "Info", "asigno los valores");
                 usuarioStore.usuario1 =  this.txtUsuarioStore.Text;
                 Log.EscribirSQL(1, "Info", "1");
@@ -667,18 +708,40 @@ namespace Gestion_Web.Formularios.Seguridad
                 Log.EscribirSQL(1, "Info", "10");
                 usuarioStore.perfil = Convert.ToInt32(DropPerfilStore.SelectedValue);
                 Log.EscribirSQL(1, "Info", "11");
+                usuarioStore.store = Convert.ToInt32(DropStore.SelectedValue);
+                
+                int temp = 0;
 
-                Log.EscribirSQL(1, "Info", "Cargue todos los datos, lo voy a agregar al store");
-                int temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
+                //agregar usuario
+                if (this.valor == 1)
+                {
+                    Log.EscribirSQL(1, "Info", "Cargue todos los datos, lo voy a agregar al store");
+                    temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
 
-                Log.EscribirSQL(1, "Info", "Resultado de agregar al store: " + temp);
+                    if (temp == 1)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.", null));
+                    else if (temp == -2)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("El usuario ya existe"));
+                    else
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se pudo agregar usuario"));
+                }
+                //modificar usuario
+                else if(this.valor == 2)
+                {
+                    Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");                   
+                    temp = controladorUsuarioStore.ModificarUsuario(usuarioStore);
 
-                if (temp == 1)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.",null));
-                else if (temp == -2)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("El usuario ya existe"));
-                else
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se pudo agregar usuario"));
+                    if (temp >= 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
+                    else if (temp == -2)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("Error modificando usuario"));
+                    else
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se hicieron modificaciones"));
+                }                    
+
+                Log.EscribirSQL(1, "Info", "Resultado de agregar al store: " + temp);                
+
+                CargarUsuariosEnPH();
 
             }
             catch (Exception ex)
@@ -726,6 +789,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
 
                 usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                controladorStore contStore = new controladorStore();
 
                 if(usuarioStore != null)
                 {
@@ -774,13 +838,20 @@ namespace Gestion_Web.Formularios.Seguridad
                     tr.Cells.Add(celCoeficiente);
 
                     TableCell celPerfil = new TableCell();
-                    if(usuarioStore.perfil == 1)
-                        celPerfil.Text = "Minorista";
-                    if (usuarioStore.perfil == 3)
-                        celPerfil.Text = "Minorista";
+                    //if(usuarioStore.perfil == 1)
+                    //    celPerfil.Text = "Minorista";
+                    //if (usuarioStore.perfil == 3)
+                    //    celPerfil.Text = "Minorista";
+                    celPerfil.Text = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).Perfil;
                     celPerfil.VerticalAlign = VerticalAlign.Middle;
                     celPerfil.Width = Unit.Percentage(20);
                     tr.Cells.Add(celPerfil);
+
+                    TableCell celStore = new TableCell();
+                    celStore.Text = contStore.ObtenerStoresPorID((int)usuarioStore.store).Descripcion;
+                    celStore.VerticalAlign = VerticalAlign.Middle;
+                    celStore.Width = Unit.Percentage(20);
+                    tr.Cells.Add(celStore);
 
                     PHUsuariosStoreTabla.Controls.Add(tr);
                 }                

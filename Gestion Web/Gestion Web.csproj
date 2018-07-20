@@ -116,8 +116,9 @@
     <Reference Include="printButtonDLL">
       <HintPath>Auxiliar\printButtonDLL.dll</HintPath>
     </Reference>
-    <Reference Include="Store_Api">
-      <HintPath>Auxiliar\Store_Api.dll</HintPath>
+    <Reference Include="Store_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Repositorio Store Api\Store_Api\bin\Debug\Store_Api.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
