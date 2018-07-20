@@ -463,12 +463,14 @@ namespace Gestion_Web.Formularios.Seguridad
                     //agrego bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Alta Usuario: " + user.usuario);
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario agregado con exito", "ABMUsuarios.aspx?valor=1"));
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
+                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
                 }
                 else
                 {
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando Usuario"));
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
+                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
                 }
             }
             catch(Exception ex)
@@ -636,21 +638,25 @@ namespace Gestion_Web.Formularios.Seguridad
                     this.txtUsuarioStore.Text = user.usuario;
                     this.txtContraseñaStore.Text = user.contraseña;
                     this.txtNombreStore.Text = cliente.razonSocial;
-                    this.txtApellidoStore.Text = usuarioStore.apellido;
 
-                    //if(cliente.contactos.Count > 0)
-                    //{
-                    //    if (!String.IsNullOrEmpty(cliente.contactos[0].numero))
-                    //        this.txtTelefonoStore.Text = cliente.contactos[0].numero.ToString();
-                    //    if (!String.IsNullOrEmpty(cliente.contactos[0].mail))
-                    //        this.txtMailStore.Text = cliente.contactos[0].mail.ToString();
-                    //}
+                    if (cliente.contactos.Count > 0)
+                    {
+                        if (!String.IsNullOrEmpty(cliente.contactos[0].numero))
+                            this.txtTelefonoStore.Text = cliente.contactos[0].numero.ToString();
+                        if (!String.IsNullOrEmpty(cliente.contactos[0].mail))
+                            this.txtMailStore.Text = cliente.contactos[0].mail.ToString();
+                    }
 
-                    this.txtTelefonoStore.Text = usuarioStore.telefono;
-                    this.txtMailStore.Text = usuarioStore.mail;
-                    this.txtCoeficienteStore.Text = usuarioStore.coeficiente.ToString();
-                    this.DropPerfilStore.SelectedValue = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).@int.ToString();
-                    this.DropStore.SelectedValue = contStore.ObtenerStoresPorID((int)usuarioStore.store).Id.ToString();
+                    if (usuarioStore != null)
+                    {
+                        this.txtTelefonoStore.Text = usuarioStore.telefono;
+                        this.txtMailStore.Text = usuarioStore.mail;
+                        this.txtApellidoStore.Text = usuarioStore.apellido;
+                        this.txtCoeficienteStore.Text = usuarioStore.coeficiente.ToString();
+                        this.DropPerfilStore.SelectedValue = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).@int.ToString();
+                        this.DropStore.SelectedValue = contStore.ObtenerStoresPorID((int)usuarioStore.store).Id.ToString();
+                    }                    
+                    
                 }
                 else
                 {
@@ -681,12 +687,138 @@ namespace Gestion_Web.Formularios.Seguridad
                 //cliente = contCliente.obtenerClienteID(cliente.id);
 
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
+                Store_Api.Controladores.ControladorUsuario controladorUsuarioStore2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
 
-                usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                //int temp = 0;
 
+                //agregar usuario
+                //if (this.valor == 1)
+                //{
+                //    Log.EscribirSQL(1, "Info", "Cargue todos los datos, lo voy a agregar al store");
+                //    if (usuarioStore.store == 1)
+                //    {
+                //        usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                //        temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
+                //    }
+                //    else if(usuarioStore.store == 2)
+                //    {
+                //        usuarioStore = controladorUsuarioStore2.obtenerUsuario(user.usuario);
+                //        temp = controladorUsuarioStore2.agregarUsuarioStore(usuarioStore);
+                //    }
+
+                //    if (temp == 1)
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.", null));
+                //    else if (temp == -2)
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("El usuario ya existe"));
+                //    else
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se pudo agregar usuario"));
+                //}
+                //modificar usuario
+                //else if(this.valor == 2)
+                //{
+                //    Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");
+                //    if (usuarioStore.store == 1)
+                //    {
+                //        usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                //        temp = controladorUsuarioStore.ModificarUsuario(usuarioStore);
+                //    }
+                //    else if (usuarioStore.store == 2)
+                //    {
+                //        usuarioStore = controladorUsuarioStore2.obtenerUsuario(user.usuario);
+                //        temp = controladorUsuarioStore2.ModificarUsuario(usuarioStore);
+                //    }
+
+                //    if (temp >= 0)
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
+                //    else if (temp == -2)
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("Error modificando usuario"));
+                //    else
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se hicieron modificaciones"));
+                //}                    
+                usuarioStore = CargarDatosUsuarioStore(usuarioStore, cliente);
+
+                Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");
+                if (usuarioStore.store == 1)
+                {
+                    AgregarOModificarUsuario(controladorUsuarioStore,user,usuarioStore,cliente);
+
+                }
+                else if (usuarioStore.store == 2)
+                {
+                    AgregarOModificarUsuario(controladorUsuarioStore2, user, usuarioStore,cliente);
+                }
+
+                //if (temp >= 0)
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
+                //else if (temp == -2)
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("Error modificando usuario"));
+                //else
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se hicieron modificaciones"));
+
+                Log.EscribirSQL(1, "Info", "Usuario agregado o modificado");                
+
+                CargarUsuariosEnPH();
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error agregando usuario en el store." + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando usuario en el store." + ex.Message));
+            }
+        }
+
+        public void AgregarOModificarUsuario(Store_Api.Controladores.ControladorUsuario controladorUsuarioStore,Usuario user, Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
+        {
+            try
+            {
+                Store_Api.Entidades.Usuario usuarioStoreTemp = new Store_Api.Entidades.Usuario();
+
+                int temp = 0;
+
+                usuarioStoreTemp = controladorUsuarioStore.obtenerUsuario(user.usuario);
+
+                if (usuarioStoreTemp == null)
+                {
+                    temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
+                    if (temp == 1)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.", null));
+                    }
+                }
+                if (usuarioStoreTemp != null)
+                {
+                    if (usuarioStoreTemp.usuario1 == usuarioStore.usuario1)
+                    {
+                        usuarioStoreTemp = CargarDatosUsuarioStore(usuarioStore, cliente);
+
+                        temp = controladorUsuarioStore.ModificarUsuario(usuarioStoreTemp);
+
+                        if (temp >= 0)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
+                        }
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Error modificando usuario.", null));
+                        }
+
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error agregando o modificando usuario en el store." + ex.Message);
+            }           
+            
+        }
+
+        public Store_Api.Entidades.Usuario CargarDatosUsuarioStore(Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
+        {
+            try
+            {
                 Log.EscribirSQL(1, "Info", "asigno los valores");
-                usuarioStore.usuario1 =  this.txtUsuarioStore.Text;
+                usuarioStore.usuario1 = this.txtUsuarioStore.Text;
                 Log.EscribirSQL(1, "Info", "1");
                 usuarioStore.contraseña = this.txtContraseñaStore.Text;
                 Log.EscribirSQL(1, "Info", "2");
@@ -709,46 +841,14 @@ namespace Gestion_Web.Formularios.Seguridad
                 usuarioStore.perfil = Convert.ToInt32(DropPerfilStore.SelectedValue);
                 Log.EscribirSQL(1, "Info", "11");
                 usuarioStore.store = Convert.ToInt32(DropStore.SelectedValue);
-                
-                int temp = 0;
 
-                //agregar usuario
-                if (this.valor == 1)
-                {
-                    Log.EscribirSQL(1, "Info", "Cargue todos los datos, lo voy a agregar al store");
-                    temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
-
-                    if (temp == 1)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.", null));
-                    else if (temp == -2)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("El usuario ya existe"));
-                    else
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se pudo agregar usuario"));
-                }
-                //modificar usuario
-                else if(this.valor == 2)
-                {
-                    Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");                   
-                    temp = controladorUsuarioStore.ModificarUsuario(usuarioStore);
-
-                    if (temp >= 0)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
-                    else if (temp == -2)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("Error modificando usuario"));
-                    else
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se hicieron modificaciones"));
-                }                    
-
-                Log.EscribirSQL(1, "Info", "Resultado de agregar al store: " + temp);                
-
-                CargarUsuariosEnPH();
-
+                return usuarioStore;
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "Error", "Error agregando usuario en el store." + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando usuario en el store." + ex.Message));
-            }
+                Log.EscribirSQL(1, "Error", "Error cargando datos de usuario store." + ex.Message);
+                return null;
+            }            
         }
 
         public void VerificarEstadoAgregarStore()
