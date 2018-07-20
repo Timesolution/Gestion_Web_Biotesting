@@ -2028,19 +2028,13 @@ namespace Gestion_Web.Formularios.Facturas
         {
             if(cobroCorrecto > 0)//si pudo realizarse el pago
             {
-                string mensajeDevolver = "Cobro agregado ";
-                if (cobroCorrecto >= 0)
+                if (smsCorrecto > 0)
                 {
-                    if (smsCorrecto > 0)
-                    {
-                        mensajeDevolver += "mensaje enviado";
-                    }
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"" + mensajeDevolver + ". \", {type: \"info\"});');location.href = 'CobranzaF.aspx';", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se ha enviado correctamente el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx';", true);
                 }
                 else
-                {//si no pudo enviarse el sms
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(),
-                        "alert", " $.msgbox(\"" + mensajeDevolver + "Mensaje no enviado. \", {type: \"info\"});');location.href = 'CobranzaF.aspx';", true);
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Ocurrió un error enviando el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx';", true);
                 }
             }
             else{
