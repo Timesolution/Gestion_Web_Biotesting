@@ -17,6 +17,7 @@ namespace Gestion_Web.Formularios.Herramientas
         Configuracion configuracion = new Configuracion();
         controladorSucursal contrSucu = new controladorSucursal();
         controladorUsuario contUser = new controladorUsuario();
+        ControladorPedido contPedido = new ControladorPedido();
         private int idSucursal;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,6 +30,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (!IsPostBack)
                 {
                     this.cargarConfiguracion();
+                    this.cargarEstados();
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -116,7 +118,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.txtTopeMinimoRetenciones.Text = configuracion.TopeMinimoRetencion;
                 this.DropListRedondearPrecioVenta.SelectedValue = configuracion.RedondearPrecioVenta;
                 this.DropListFacturarPRP.SelectedValue = configuracion.FacturarPRP;
-
+                this.DropListEstadoPedidos.SelectedValue = configuracion.EstadoInicialPedidos;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -165,6 +167,32 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando visualización de articulos. Excepción: " + Ex.Message));
+            }
+        }
+
+        //funcion carga DDL
+        public void cargarEstados()
+        {
+            try
+            {
+
+                DataTable dt = this.contPedido.obtenerEstadosPedidos();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListEstadoPedidos.DataSource = dt;
+                this.DropListEstadoPedidos.DataValueField = "id";
+                this.DropListEstadoPedidos.DataTextField = "descripcion";
+
+                this.DropListEstadoPedidos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Estados de Pedidos a la lista. " + ex.Message));
             }
         }
 
@@ -826,6 +854,28 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando visualización de Cheques. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnEstadoIniPedidos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.EstadoInicialPedidos = this.DropListEstadoPedidos.SelectedValue;
+                int i = configuracion.ModificarEstadoInicialPedido();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de estado inicial pedidos.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Estado inicial pedidos modificado con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Estado inicial pedidos!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
             }
         }
     }
