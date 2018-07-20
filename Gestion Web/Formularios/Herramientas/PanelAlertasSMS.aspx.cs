@@ -234,7 +234,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (!txtEnvioCobro.Text.Contains("@@COBRO"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@COBRO'. \", {type: \"error\"});", true);
-                    //txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO ";
+                    txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO ";
                 }
                 else
                 {

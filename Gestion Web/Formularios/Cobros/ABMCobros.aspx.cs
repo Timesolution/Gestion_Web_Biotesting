@@ -2142,6 +2142,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
 
                                 //TODO ramiro agregar aca la fun de envio de mensaje
+                                //public int enviarSmsCobro(int idClient, int idUser, Cobro cobro);
                                 int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
                                 mostrarMensaje(c, cobro.id, i);
                                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
