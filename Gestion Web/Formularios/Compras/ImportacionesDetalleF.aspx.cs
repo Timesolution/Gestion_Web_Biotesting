@@ -181,6 +181,12 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
                 tr.Controls.Add(celCantidad);
 
+                TableCell celSIM= new TableCell();//TODO ramiro new
+                celSIM.Text = item.SIM;
+                celSIM.HorizontalAlign = HorizontalAlign.Center;
+                celSIM.VerticalAlign = VerticalAlign.Middle;
+                tr.Controls.Add(celSIM);
+
                 TableCell celFOB = new TableCell();
                 celFOB.Text = item.FOB.Value.ToString("C");
                 celFOB.HorizontalAlign = HorizontalAlign.Right;
@@ -278,6 +284,7 @@ namespace Gestion_Web.Formularios.Compras
                 Importaciones_Detalle item = new Importaciones_Detalle();
                 item.Articulo = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);
                 item.FOB = Convert.ToDecimal(this.txtFOB.Text);
+                item.SIM = this.txtSIM.Text;//TODO ramiro new
                 item.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
                 item.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
                 item.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$",""));
@@ -433,7 +440,6 @@ namespace Gestion_Web.Formularios.Compras
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Ocurrio un error. " + ex.Message + "\";", true);
             }
         }
-
         protected void lbtnActualizarMargen_Click(object sender, EventArgs e)
         {
             try

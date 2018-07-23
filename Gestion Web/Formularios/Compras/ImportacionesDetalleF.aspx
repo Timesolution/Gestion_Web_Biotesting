@@ -48,6 +48,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="name" class="col-md-2">SIM:</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtSIM" runat="server" class="form-control" Style="text-align: right;" TextMode="MultiLine" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="name" class="col-md-2">FOB:</label>
                                         <div class="col-md-4">
                                             <div class="input-group">
@@ -119,6 +125,7 @@
                                             <th>Codigo</th>
                                             <th style="width: 20%;">Articulo</th>
                                             <th style="text-align: right;">Cantidad</th>
+                                            <th style="text-align: right;">SIM</th>
                                             <th style="text-align: right;">FOB</th>
                                             <th style="text-align: right;">Total FOB</th>
                                             <th style="text-align: right;">PPP</th>
