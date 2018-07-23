@@ -466,7 +466,7 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
-        private void enviarAvisoSaldoCtaCte()
+        private void enviarAvisoSaldoCtaCte()//TODO fun de envio sms
         {
             try
             {

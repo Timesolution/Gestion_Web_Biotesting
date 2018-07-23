@@ -33,6 +33,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorSucursal cs = new controladorSucursal();
         controladorCotizaciones ct = new controladorCotizaciones();
         controladorFacturacion cf = new controladorFacturacion();
+        Configuracion confEstados = new Configuracion();
 
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
 
@@ -1803,9 +1804,6 @@ namespace Gestion_Web.Formularios.Facturas
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
                         p.senia = this.txtSenia.Text;
-                        p.estado.id = 1;//por defecto lo pongo en estado pendiente.
-
-                        
 
                         if (cotizacion == 1)
                         {
@@ -1830,7 +1828,7 @@ namespace Gestion_Web.Formularios.Facturas
                             }
                             else
                             {
-                                p.estado = this.controlador.obtenerEstadoDesc("Pendiente");
+                                p.estado.id = int.Parse(confEstados.EstadoInicialPedidos);
                             }
                         }
 
