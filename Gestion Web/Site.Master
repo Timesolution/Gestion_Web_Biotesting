@@ -241,10 +241,12 @@
                                             <ul class="dropdown-menu">
                                                 <li><a href="/../../Formularios/PlanCuentas/CuentasF.aspx">Cuentas</a></li>
                                             </ul>
-                                        </li>
+                                        </li>                                        
+
                                         <li><a href="/../../Formularios/Articulos/ABMProcedencias.aspx">Procedencias</a></li>
                                         <li><a href="/../../Formularios/Promociones/PromocionesF.aspx">Promociones</a></li>
                                         <li><a href="/../../Formularios/clientes/ProveedoresF.aspx">Proveedores</a></li>
+                                        <li><a href="/../../Formularios/Stores/StoresF.aspx">Stores</a></li>
                                         <li><a href="/../../Formularios/Sucursales/ABMSucursales.aspx">Sucursales</a></li>
 
                                         <li class="dropdown-submenu">
