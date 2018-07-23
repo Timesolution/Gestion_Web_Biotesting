@@ -167,6 +167,20 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label class="col-md-2">9. AVISO DE COBRO:</label>
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <asp:CheckBox ID="chkAlertaCobro" runat="server" class="input-group-addon" onclick="cambioChk(this,9);" />
+                                                    <asp:TextBox ID="txtEnvioCobro" runat="server" class="form-control" TextMode="MultiLine" Rows="4" disabled placeholder="'Ingrese su texto' @@COBRO " />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Probar SMS" href="#modalEnvioSMS" onclick="pruebaSMS(8);">
+                                                    Probar
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <asp:Button ID="btnGuardar" runat="server" class="btn btn-success" Text="Guardar" OnClick="btnGuardar_Click" />
                                         </div>
                                     </asp:Panel>
@@ -272,6 +286,9 @@
                 document.getElementById("<%= txtMensajeSMS.ClientID %>").value = document.getElementById("<%= txtEnvioSaldoMax.ClientID %>").value;
             if (numero == 8)
                 document.getElementById("<%= txtMensajeSMS.ClientID %>").value = document.getElementById("<%= txtEnvioCumple.ClientID %>").value;
+            if (numero == 9)
+                document.getElementById("<%= txtEnvioCobro.ClientID %>").value = document.getElementById("<%= txtEnvioCobro.ClientID %>").value;
+        
         }
         function cambioChk(chk, numero) {
             if (chk.checked) {
@@ -291,6 +308,8 @@
                     $("#<%= txtEnvioSaldoMax.ClientID %>").removeAttr("disabled");
                 if (numero == 8)
                     $("#<%= txtEnvioCumple.ClientID %>").removeAttr("disabled");
+                if (numero == 9)
+                    $("#<%= txtEnvioCobro.ClientID %>").removeAttr("disabled");
             }
             else {
                 if (numero == 1)
@@ -309,6 +328,8 @@
                     $("#<%= txtEnvioSaldoMax.ClientID %>").attr("disabled", "disabled");
                 if (numero == 8)
                     $("#<%= txtEnvioCumple.ClientID %>").attr("disabled", "disabled");
+                if (numero == 9)
+                    $("#<%= txtEnvioCobro.ClientID %>").attr("disabled", "disabled");
             }
         }
         function validarNroSinComa(e) {
