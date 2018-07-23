@@ -635,6 +635,7 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 if (this.User != null && cliente != null)
                 {
+                    this.txtUsuarioStore.Enabled = false;
                     this.txtUsuarioStore.Text = user.usuario;
                     this.txtContraseñaStore.Text = user.contraseña;
                     this.txtNombreStore.Text = cliente.razonSocial;
@@ -684,77 +685,22 @@ namespace Gestion_Web.Formularios.Seguridad
                 Gestor_Solution.Modelo.Cliente cliente = new Gestor_Solution.Modelo.Cliente();
                 Log.EscribirSQL(1, "Info", "Voy a obtener el cliente");
                 cliente = contCliente.obtenerClienteID(user.vendedor.id);
-                //cliente = contCliente.obtenerClienteID(cliente.id);
-
+                
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
 
-                //int temp = 0;
-
-                //agregar usuario
-                //if (this.valor == 1)
-                //{
-                //    Log.EscribirSQL(1, "Info", "Cargue todos los datos, lo voy a agregar al store");
-                //    if (usuarioStore.store == 1)
-                //    {
-                //        usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
-                //        temp = controladorUsuarioStore.agregarUsuarioStore(usuarioStore);
-                //    }
-                //    else if(usuarioStore.store == 2)
-                //    {
-                //        usuarioStore = controladorUsuarioStore2.obtenerUsuario(user.usuario);
-                //        temp = controladorUsuarioStore2.agregarUsuarioStore(usuarioStore);
-                //    }
-
-                //    if (temp == 1)
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.", null));
-                //    else if (temp == -2)
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("El usuario ya existe"));
-                //    else
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se pudo agregar usuario"));
-                //}
-                //modificar usuario
-                //else if(this.valor == 2)
-                //{
-                //    Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");
-                //    if (usuarioStore.store == 1)
-                //    {
-                //        usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
-                //        temp = controladorUsuarioStore.ModificarUsuario(usuarioStore);
-                //    }
-                //    else if (usuarioStore.store == 2)
-                //    {
-                //        usuarioStore = controladorUsuarioStore2.obtenerUsuario(user.usuario);
-                //        temp = controladorUsuarioStore2.ModificarUsuario(usuarioStore);
-                //    }
-
-                //    if (temp >= 0)
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
-                //    else if (temp == -2)
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("Error modificando usuario"));
-                //    else
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se hicieron modificaciones"));
-                //}                    
-                usuarioStore = CargarDatosUsuarioStore(usuarioStore, cliente);
+                CargarDatosUsuarioStore(usuarioStore, cliente);
 
                 Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");
                 if (usuarioStore.store == 1)
                 {
                     AgregarOModificarUsuario(controladorUsuarioStore,user,usuarioStore,cliente);
-
                 }
                 else if (usuarioStore.store == 2)
                 {
                     AgregarOModificarUsuario(controladorUsuarioStore2, user, usuarioStore,cliente);
                 }
-
-                //if (temp >= 0)
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario modificado con exito.", null));
-                //else if (temp == -2)
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("Error modificando usuario"));
-                //else
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "warning", mje.mensajeBoxAtencion("No se hicieron modificaciones"));
 
                 Log.EscribirSQL(1, "Info", "Usuario agregado o modificado");                
 
@@ -772,11 +718,8 @@ namespace Gestion_Web.Formularios.Seguridad
         {
             try
             {
-                Store_Api.Entidades.Usuario usuarioStoreTemp = new Store_Api.Entidades.Usuario();
-
                 int temp = 0;
-
-                usuarioStoreTemp = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                Store_Api.Entidades.Usuario usuarioStoreTemp = controladorUsuarioStore.obtenerUsuario(user.usuario);
 
                 if (usuarioStoreTemp == null)
                 {
@@ -786,11 +729,11 @@ namespace Gestion_Web.Formularios.Seguridad
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario agregado con exito.", null));
                     }
                 }
-                if (usuarioStoreTemp != null)
+                else if (usuarioStoreTemp != null)
                 {
-                    if (usuarioStoreTemp.usuario1 == usuarioStore.usuario1)
+                    if (usuarioStoreTemp.usuario1.ToLower().Trim() == usuarioStore.usuario1.ToLower().Trim())
                     {
-                        usuarioStoreTemp = CargarDatosUsuarioStore(usuarioStore, cliente);
+                        CargarDatosUsuarioStore(usuarioStoreTemp, cliente);
 
                         temp = controladorUsuarioStore.ModificarUsuario(usuarioStoreTemp);
 
@@ -802,7 +745,6 @@ namespace Gestion_Web.Formularios.Seguridad
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Error modificando usuario.", null));
                         }
-
                     }
                 }
             }
@@ -813,10 +755,11 @@ namespace Gestion_Web.Formularios.Seguridad
             
         }
 
-        public Store_Api.Entidades.Usuario CargarDatosUsuarioStore(Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
+        public void CargarDatosUsuarioStore(Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
         {
             try
             {
+                //si modifico griseo el campo usuario
                 Log.EscribirSQL(1, "Info", "asigno los valores");
                 usuarioStore.usuario1 = this.txtUsuarioStore.Text;
                 Log.EscribirSQL(1, "Info", "1");
@@ -842,12 +785,10 @@ namespace Gestion_Web.Formularios.Seguridad
                 Log.EscribirSQL(1, "Info", "11");
                 usuarioStore.store = Convert.ToInt32(DropStore.SelectedValue);
 
-                return usuarioStore;
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error cargando datos de usuario store." + ex.Message);
-                return null;
             }            
         }
 
@@ -886,75 +827,17 @@ namespace Gestion_Web.Formularios.Seguridad
                 cliente = contCliente.obtenerClienteID(user.vendedor.id);
 
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
-                Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
+                Store_Api.Controladores.ControladorUsuario controladorUsuarioStore2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
 
-                usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                Store_Api.Entidades.Usuario usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                Store_Api.Entidades.Usuario usuarioStore2 = controladorUsuarioStore2.obtenerUsuario(user.usuario);
+
                 controladorStore contStore = new controladorStore();
 
-                if(usuarioStore != null)
-                {
-                    TableRow tr = new TableRow();
+                //seteo-configuro el ph (esto esta hecho asi porque necesitamos crear 2 controladores diferentes para apuntar a los diferentes stores)
+                SetearPH(usuarioStore, controladorUsuarioStore, contStore);
+                SetearPH(usuarioStore2, controladorUsuarioStore2, contStore);
 
-                    TableCell celUsuario = new TableCell();
-                    celUsuario.Text = usuarioStore.usuario1;
-                    celUsuario.VerticalAlign = VerticalAlign.Middle;
-                    celUsuario.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celUsuario);
-
-                    TableCell celContraseña = new TableCell();
-                    celContraseña.Text = usuarioStore.contraseña;
-                    celContraseña.VerticalAlign = VerticalAlign.Middle;
-                    celContraseña.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celContraseña);
-
-                    TableCell celNombre = new TableCell();
-                    celNombre.Text = usuarioStore.nombre;
-                    celNombre.VerticalAlign = VerticalAlign.Middle;
-                    celNombre.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celNombre);
-
-                    TableCell celApellido = new TableCell();
-                    celApellido.Text = usuarioStore.apellido;
-                    celApellido.VerticalAlign = VerticalAlign.Middle;
-                    celApellido.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celApellido);
-
-                    TableCell celTelefono = new TableCell();
-                    celTelefono.Text = usuarioStore.telefono;
-                    celTelefono.VerticalAlign = VerticalAlign.Middle;
-                    celTelefono.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celTelefono);
-
-                    TableCell celMail = new TableCell();
-                    celMail.Text = usuarioStore.mail;
-                    celMail.VerticalAlign = VerticalAlign.Middle;
-                    celMail.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celMail);
-
-                    TableCell celCoeficiente = new TableCell();
-                    celCoeficiente.Text = usuarioStore.coeficiente.ToString();
-                    celCoeficiente.VerticalAlign = VerticalAlign.Middle;
-                    celCoeficiente.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celCoeficiente);
-
-                    TableCell celPerfil = new TableCell();
-                    //if(usuarioStore.perfil == 1)
-                    //    celPerfil.Text = "Minorista";
-                    //if (usuarioStore.perfil == 3)
-                    //    celPerfil.Text = "Minorista";
-                    celPerfil.Text = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).Perfil;
-                    celPerfil.VerticalAlign = VerticalAlign.Middle;
-                    celPerfil.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celPerfil);
-
-                    TableCell celStore = new TableCell();
-                    celStore.Text = contStore.ObtenerStoresPorID((int)usuarioStore.store).Descripcion;
-                    celStore.VerticalAlign = VerticalAlign.Middle;
-                    celStore.Width = Unit.Percentage(20);
-                    tr.Cells.Add(celStore);
-
-                    PHUsuariosStoreTabla.Controls.Add(tr);
-                }                
             }
             catch (Exception ex)
             {
@@ -963,6 +846,67 @@ namespace Gestion_Web.Formularios.Seguridad
                 Log.EscribirSQL(1,"Error", "Error cargando usuario en el PH, inner exception" + ex.InnerException.Message);
             }
             
+        }
+
+        public void SetearPH(Store_Api.Entidades.Usuario usuarioStore, Store_Api.Controladores.ControladorUsuario controladorUsuarioStore, controladorStore contStore)
+        {
+            TableRow tr = new TableRow();
+
+            TableCell celUsuario = new TableCell();
+            celUsuario.Text = usuarioStore.usuario1;
+            celUsuario.VerticalAlign = VerticalAlign.Middle;
+            celUsuario.Width = Unit.Percentage(20);
+            tr.Cells.Add(celUsuario);
+
+            TableCell celContraseña = new TableCell();
+            celContraseña.Text = usuarioStore.contraseña;
+            celContraseña.VerticalAlign = VerticalAlign.Middle;
+            celContraseña.Width = Unit.Percentage(20);
+            tr.Cells.Add(celContraseña);
+
+            TableCell celNombre = new TableCell();
+            celNombre.Text = usuarioStore.nombre;
+            celNombre.VerticalAlign = VerticalAlign.Middle;
+            celNombre.Width = Unit.Percentage(20);
+            tr.Cells.Add(celNombre);
+
+            TableCell celApellido = new TableCell();
+            celApellido.Text = usuarioStore.apellido;
+            celApellido.VerticalAlign = VerticalAlign.Middle;
+            celApellido.Width = Unit.Percentage(20);
+            tr.Cells.Add(celApellido);
+
+            TableCell celTelefono = new TableCell();
+            celTelefono.Text = usuarioStore.telefono;
+            celTelefono.VerticalAlign = VerticalAlign.Middle;
+            celTelefono.Width = Unit.Percentage(20);
+            tr.Cells.Add(celTelefono);
+
+            TableCell celMail = new TableCell();
+            celMail.Text = usuarioStore.mail;
+            celMail.VerticalAlign = VerticalAlign.Middle;
+            celMail.Width = Unit.Percentage(20);
+            tr.Cells.Add(celMail);
+
+            TableCell celCoeficiente = new TableCell();
+            celCoeficiente.Text = usuarioStore.coeficiente.ToString();
+            celCoeficiente.VerticalAlign = VerticalAlign.Middle;
+            celCoeficiente.Width = Unit.Percentage(20);
+            tr.Cells.Add(celCoeficiente);
+
+            TableCell celPerfil = new TableCell();
+            celPerfil.Text = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).Perfil;
+            celPerfil.VerticalAlign = VerticalAlign.Middle;
+            celPerfil.Width = Unit.Percentage(20);
+            tr.Cells.Add(celPerfil);
+
+            TableCell celStore = new TableCell();
+            celStore.Text = contStore.ObtenerStoresPorID((int)usuarioStore.store).Descripcion;
+            celStore.VerticalAlign = VerticalAlign.Middle;
+            celStore.Width = Unit.Percentage(20);
+            tr.Cells.Add(celStore);
+
+            PHUsuariosStoreTabla.Controls.Add(tr);
         }
     }
 }
