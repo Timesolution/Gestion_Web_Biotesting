@@ -472,6 +472,7 @@
     <Content Include="Formularios\Reportes\ReportesVentas.aspx" />
     <Content Include="Formularios\Reportes\StockF.aspx" />
     <Content Include="Formularios\Reportes\VentasUnidadesF.aspx" />
+    <Content Include="Formularios\Stores\StoresF.aspx" />
     <Content Include="Formularios\Surtidores\ABMSurtidoresCierre.aspx" />
     <Content Include="Formularios\Surtidores\ABMSurtidores.aspx" />
     <Content Include="Formularios\Surtidores\ImpresionSurtidores.aspx" />
@@ -2249,6 +2250,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\VentasUnidadesF.aspx.designer.cs">
       <DependentUpon>VentasUnidadesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresF.aspx.cs">
+      <DependentUpon>StoresF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresF.aspx.designer.cs">
+      <DependentUpon>StoresF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Surtidores\ABMSurtidoresCierre.aspx.cs">
       <DependentUpon>ABMSurtidoresCierre.aspx</DependentUpon>
