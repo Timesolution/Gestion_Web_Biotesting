@@ -22,11 +22,11 @@
                                 <td style="width: 30%">
                                     <div class="col-md-12">
                                         <div class="input-group">
-                                    </div>
+                                        </div>
                                 </td>
                                 <td style="width: 2%">
                                     <div class="btn-group" style="height: 100%">
-                                        <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Agregar Store" href="#" style="width: 100%">
+                                        <a class="btn btn-primary ui-tooltip" data-original-title="Agregar Store" href="StoresABM.aspx?accion=1" style="width: 100%">
                                             <i class="shortcut-icon icon-plus"></i>
                                         </a>
                                     </div>
@@ -67,4 +67,25 @@
             </div>
         </div>
     </div>
+
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <%--<script src="../../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
+
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+
+    <script src="../../Scripts/Application.js"></script>
+
+    <script src="../../Scripts/demo/gallery.js"></script>
+
+    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
+
 </asp:Content>

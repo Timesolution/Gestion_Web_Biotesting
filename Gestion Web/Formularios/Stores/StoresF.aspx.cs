@@ -27,7 +27,6 @@ namespace Gestion_Web.Formularios.Stores
                     this.idUsuario = (int)Session["Login_IdUser"];
                     
                     this.cargarStoresTablaDT();
-                    this.CargarStores();
                 }
             }
             catch (Exception ex)
@@ -82,11 +81,6 @@ namespace Gestion_Web.Formularios.Stores
             }
         }
 
-        public void CargarStores()
-        {
-
-        }
-
         private void cargarStoresTablaDT()
         {
             try
@@ -132,8 +126,7 @@ namespace Gestion_Web.Formularios.Stores
                 Literal lDetail = new Literal();
                 lDetail.ID = row.Id.ToString();
 
-                lDetail.Text = "<a href=\"StoresBanners.aspx?accion=2&idStore=" + row.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
-                //lDetail.Text += "style=\"width: 100%\">";
+                lDetail.Text = "<a href=\"StoresABM.aspx?accion=2&idStore=" + row.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
                 lDetail.Text += "<i class=\"shortcut-icon icon-search\"></i>";
                 lDetail.Text += "</a>";
                 celAction.Controls.Add(lDetail);
@@ -146,7 +139,7 @@ namespace Gestion_Web.Formularios.Stores
                 lBanner.ID = row.Id.ToString();
                 celAction.Controls.Add(lBanner);
 
-                lBanner.Text = "<a href=\"StoresBanners.aspx?idStore=" + row.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
+                lBanner.Text = "<a href=\"StoresBanners.aspx?idStore=" + row.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Modificar Banners\" >";
                 //lDetail.Text += "style=\"width: 100%\">";
                 lBanner.Text += "<i class=\"shortcut-icon icon-list-alt\"></i>";
                 lBanner.Text += "</a>";                
