@@ -49,19 +49,28 @@ namespace Gestion_Web.Formularios.Compras
                     fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    this.btnAccion.Visible = false;
+
+                    this.cargarSucursal();
+                    txtFechaDesde.Text = fechaD;
+                    txtFechaHasta.Text = fechaH;
+                    this.ListTipoFecha.SelectedValue = this.tipoFecha.ToString();
+                    this.DropListProveedor.SelectedValue = proveedor.ToString();
+                    Response.Redirect("ImportacionesF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&tf=" + this.ListTipoFecha.SelectedValue);
                     
+                    //this.btnAccion.Visible = false;
+
                 }
                 else
                 {
-                    this.btnAccion.Visible = true;
+                    //this.btnAccion.Visible = true;
                 }
 
                 this.cargarSucursal();
                 txtFechaDesde.Text = fechaD;
                 txtFechaHasta.Text = fechaH;
                 this.ListTipoFecha.SelectedValue = this.tipoFecha.ToString();
-                this.DropListProveedor.SelectedValue = proveedor.ToString();                
+                this.DropListProveedor.SelectedValue = proveedor.ToString();
+                
             }
             //verifico si el perfil tiene permiso para anular
             this.verficarPermisoAnular();
@@ -382,7 +391,13 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
+                    //TODO r new
                     Response.Redirect("ImportacionesDetalleF.aspx?id=" + idtildado);
+                }
+                else
+                {//TODO r new
+                    Response.Redirect("ImportacionesDetalleF.aspx?id=" + idtildado);
+                    //Response.Redirect("ImportacionesF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&tf=" + this.ListTipoFecha.SelectedValue);
                 }
             }
             catch(Exception ex)

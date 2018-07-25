@@ -66,6 +66,9 @@
                                         <div class="col-md-1">
                                             <asp:LinkButton ID="lbtnAgregarArticulo" runat="server" class="btn btn-success" Text="<i class='shortcut-icon icon-ok'></i>" OnClick="lbtnAgregarArticulo_Click" />
                                         </div>
+                                        <div class="col-md-1">
+                                            <asp:LinkButton ID="lbtnCancelarEdicion" runat="server" class="btn btn-danger" Text="cancelar"/>
+                                        </div>
                                     </div>
                                 </fieldset>
                             </div>
