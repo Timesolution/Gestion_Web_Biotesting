@@ -5,7 +5,7 @@
         <div class="widget stacked">
             <div class="widget-header">
                 <i class="icon-th-large"></i>
-                <h3>Galeria de Imagenes</h3>
+                <h3>Banners</h3>
             </div>
             <!-- /widget-header -->
             <div class="widget stacked">

@@ -472,6 +472,8 @@
     <Content Include="Formularios\Reportes\ReportesVentas.aspx" />
     <Content Include="Formularios\Reportes\StockF.aspx" />
     <Content Include="Formularios\Reportes\VentasUnidadesF.aspx" />
+    <Content Include="Formularios\Stores\StoresABM.aspx" />
+    <Content Include="Formularios\Stores\StoresBanners.aspx" />
     <Content Include="Formularios\Stores\StoresF.aspx" />
     <Content Include="Formularios\Surtidores\ABMSurtidoresCierre.aspx" />
     <Content Include="Formularios\Surtidores\ABMSurtidores.aspx" />
@@ -2250,6 +2252,20 @@
     </Compile>
     <Compile Include="Formularios\Reportes\VentasUnidadesF.aspx.designer.cs">
       <DependentUpon>VentasUnidadesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresABM.aspx.cs">
+      <DependentUpon>StoresABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresABM.aspx.designer.cs">
+      <DependentUpon>StoresABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresBanners.aspx.cs">
+      <DependentUpon>StoresBanners.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresBanners.aspx.designer.cs">
+      <DependentUpon>StoresBanners.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Stores\StoresF.aspx.cs">
       <DependentUpon>StoresF.aspx</DependentUpon>

@@ -24,9 +24,10 @@ namespace Gestion_Web.Formularios.Stores
                 this.idStore = Request.QueryString["idStore"];
                 if (!IsPostBack)
                 {
-                    this.idUsuario = (int)Session["Login_IdUser"];
-                    this.cargarBanners();
+                    this.idUsuario = (int)Session["Login_IdUser"];                    
                 }
+
+                this.cargarBanners();
             }
             catch (Exception ex)
             {
@@ -93,15 +94,15 @@ namespace Gestion_Web.Formularios.Stores
                     var files = di.GetFiles();
                     foreach (var f in files)
                     {
-                        if (f.Name == "Banner1.jpg")
+                        if (f.Name.Contains("Banner1"))
                         {
                             this.Image1.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
                         }
-                        if (f.Name == "Banner2.jpg")
+                        if (f.Name.Contains("Banner2"))
                         {
                             this.Image2.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
                         }
-                        if (f.Name == "Banner3.jpg")
+                        if (f.Name.Contains("Banner3"))
                         {
                             this.Image3.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
                         }
@@ -124,13 +125,14 @@ namespace Gestion_Web.Formularios.Stores
         {
             if (IsPostBack)
             {
+                BorrarImagenesPrevias("Banner1");
                 Boolean fileOK = false; 
                 String path = Server.MapPath("../../images/Store/" + idStore + "/");
                 if (FileUpload1.HasFile)
                 {
                     String fileExtension =
                         System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
-                    String[] allowedExtensions = { ".jpg" };
+                    String[] allowedExtensions = { ".jpg",".png", ".jpeg" };
                     for (int i = 0; i < allowedExtensions.Length; i++)
                     {
                         if (fileExtension == allowedExtensions[i])
@@ -155,7 +157,8 @@ namespace Gestion_Web.Formularios.Stores
                         FileUpload1.PostedFile.SaveAs(path
                             + FileUpload1.FileName);
                         //modifico e nombre
-                        this.modificarNombre(FileUpload1.FileName, "Banner1.jpg");
+                        this.modificarNombre(FileUpload1.FileName, "Banner1");
+
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
                         Response.Redirect("StoresBanners.aspx?idStore="+idStore);
                     }
@@ -175,13 +178,14 @@ namespace Gestion_Web.Formularios.Stores
         {
             if (IsPostBack)
             {
+                BorrarImagenesPrevias("Banner2");
                 Boolean fileOK = false;
                 String path = Server.MapPath("../../images/Store/" + idStore + "/");
                 if (FileUpload2.HasFile)
                 {
                     String fileExtension =
                         System.IO.Path.GetExtension(FileUpload2.FileName).ToLower();
-                    String[] allowedExtensions = { ".jpg" };
+                    String[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
                     for (int i = 0; i < allowedExtensions.Length; i++)
                     {
                         if (fileExtension == allowedExtensions[i])
@@ -206,7 +210,7 @@ namespace Gestion_Web.Formularios.Stores
                         FileUpload2.PostedFile.SaveAs(path
                             + FileUpload2.FileName);
                         //modifico e nombre
-                        this.modificarNombre(FileUpload2.FileName, "Banner2.jpg");
+                        this.modificarNombre(FileUpload2.FileName, "Banner2");
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
                         Response.Redirect("StoresBanners.aspx?idStore=" + idStore);
                     }
@@ -226,13 +230,14 @@ namespace Gestion_Web.Formularios.Stores
         {
             if (IsPostBack)
             {
+                BorrarImagenesPrevias("Banner3");
                 Boolean fileOK = false;
                 String path = Server.MapPath("../../images/Store/" + idStore + "/");
                 if (FileUpload3.HasFile)
                 {
                     String fileExtension =
                         System.IO.Path.GetExtension(FileUpload3.FileName).ToLower();
-                    String[] allowedExtensions = { ".jpg" };
+                    String[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
                     for (int i = 0; i < allowedExtensions.Length; i++)
                     {
                         if (fileExtension == allowedExtensions[i])
@@ -257,7 +262,7 @@ namespace Gestion_Web.Formularios.Stores
                         FileUpload3.PostedFile.SaveAs(path
                             + FileUpload3.FileName);
                         //modifico e nombre
-                        this.modificarNombre(FileUpload3.FileName, "Banner3.jpg");
+                        this.modificarNombre(FileUpload3.FileName, "Banner3");
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
                         Response.Redirect("StoresBanners.aspx?idStore=" + idStore);
                     }
@@ -272,24 +277,47 @@ namespace Gestion_Web.Formularios.Stores
                 }
             }
         }
-        private bool modificarNombre(string file, string banner)
+        private string modificarNombre(string file, string banner)
         {
             try
             {
+                FileInfo fi = new FileInfo(file);
+
                 //borro el banner
-                banner = Server.MapPath("../../images/Store/" + idStore + "/") + banner;
+                banner = Server.MapPath("../../images/Store/" + idStore + "/") + banner + "_" + DateTime.Now.ToString("ddMMyyhhmm") + fi.Extension;
                 file = Server.MapPath("../../images/Store/" + idStore + "/") + file;
+
+                FileInfo nuevoNombreDeBanner = new FileInfo(banner);
 
                 File.Copy(file, banner, true);
                 File.Delete(file);
-                return true;
+                return nuevoNombreDeBanner.Name;
             }
             catch (Exception ex)
             {
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Error cambiando nombre de banner" + ex.Message + " ');", true);
-                return false;
+                return null;
 
             }
+        }
+
+        public void BorrarImagenesPrevias(string bannerABorrar)
+        {
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(Server.MapPath("../../images/Store/" + idStore + "/"));
+
+                foreach (var item in di.GetFiles().ToList())
+                {
+                    if (item.Name.Contains(bannerABorrar))
+                        item.Delete();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"ERROR","Error al intentar borrar las imagenes previas " + ex.Message);
+            }
+            
         }
     }
 }

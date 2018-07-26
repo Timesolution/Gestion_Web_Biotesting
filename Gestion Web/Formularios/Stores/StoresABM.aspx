@@ -65,6 +65,7 @@
                                             <div class="col-md-8">
                                                 <asp:LinkButton ID="btnAceptar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAceptar_Click" ValidationGroup="StoreGroup" Visible="false"></asp:LinkButton>
                                                 <asp:LinkButton ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" Onclick="btnAgregar_Click" ValidationGroup="StoreGroup" Visible="false"></asp:LinkButton>
+                                                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="StoresF.aspx" />
                                             </div>
                                         </fieldset>
                                     </div>

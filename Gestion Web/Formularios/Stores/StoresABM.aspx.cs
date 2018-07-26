@@ -136,6 +136,8 @@ namespace Gestion_Web.Formularios.Stores
                 else if(temp < 0)
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "error", mje.mensajeBoxError("Error realizando modificaciones"),false);
 
+                Response.Redirect("StoresF.aspx");
+
             }
             catch (Exception ex)
             {
@@ -167,6 +169,7 @@ namespace Gestion_Web.Formularios.Stores
                     Log.EscribirSQL(1, "Info", "Error agregando store.");
                 }
 
+                Response.Redirect("StoresF.aspx");
             }
             catch (Exception ex)
             {

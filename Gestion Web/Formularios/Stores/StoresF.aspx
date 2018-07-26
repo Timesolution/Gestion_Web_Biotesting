@@ -8,7 +8,7 @@
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i>Maestro > Articulos > Articulos</h5>
+                        <h5><i class="icon-map-marker"></i>Maestro > Stores</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-wrench"></i>

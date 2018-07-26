@@ -141,7 +141,7 @@ namespace Gestion_Web.Formularios.Stores
 
                 lBanner.Text = "<a href=\"StoresBanners.aspx?idStore=" + row.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Modificar Banners\" >";
                 //lDetail.Text += "style=\"width: 100%\">";
-                lBanner.Text += "<i class=\"shortcut-icon icon-list-alt\"></i>";
+                lBanner.Text += "<i class=\"shortcut-icon icon-picture\"></i>";
                 lBanner.Text += "</a>";                
 
                 Literal l2 = new Literal();
