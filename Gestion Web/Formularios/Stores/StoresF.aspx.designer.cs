@@ -10,15 +10,15 @@
 namespace Gestion_Web.Formularios.Stores {
     
     
-    public partial class StoresF {
+    public partial class StoresF1 {
         
         /// <summary>
-        /// phImagenesArticulos control.
+        /// phArticulos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phImagenesArticulos;
+        protected global::System.Web.UI.WebControls.PlaceHolder phArticulos;
     }
 }

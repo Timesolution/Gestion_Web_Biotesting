@@ -212,6 +212,7 @@
                                                         <th style="width: 10%">Mail</th>
                                                         <th style="width: 10%">Coeficiente</th>
                                                         <th style="width: 10%">Perfil</th>
+                                                        <th style="width: 10%">Store</th>
                                                         <%--<th class="td-actions" style="width: 10%"></th>--%>
                                                     </tr>
                                                 </thead>
@@ -553,6 +554,15 @@
 
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="DropPerfilStore" InitialValue="0" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Store</label>
+                                    <div class="col-md-4">
+                                        <asp:DropDownList ID="DropStore" runat="server" class="form-control" AutoPostBack="true" ></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="DropStore" InitialValue="0" ValidationGroup="AgregarUsuarioAlStore" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                             </div>
