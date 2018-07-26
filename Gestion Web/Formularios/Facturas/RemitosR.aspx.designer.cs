@@ -328,6 +328,15 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.DropDownList DropListClientes;
         
         /// <summary>
+        /// chkRemSinFacturas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkRemSinFacturas;
+        
+        /// <summary>
         /// lbtnBuscar control.
         /// </summary>
         /// <remarks>

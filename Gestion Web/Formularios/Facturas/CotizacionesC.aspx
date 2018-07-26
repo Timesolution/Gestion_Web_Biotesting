@@ -19,7 +19,6 @@
                 <div class="widget-content">
                     <table style="width: 100%">
                         <tr>
-
                             <td style="width: 85%">
                                 <asp:PlaceHolder ID="phAcciones" runat="server">
                                     <div class="btn-group">
@@ -34,18 +33,20 @@
                             </td>
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
-
+                                    <a class="btn btn-primary" data-toggle="modal" href="#modalNro" style="width: 100%">
+                                        <i class="shortcut-icon icon-search"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td style="width: 5%">
+                                <div class="shortcuts" style="height: 100%">
                                     <a href="/" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
                                         <i class="shortcut-icon icon-print"></i>
                                     </a>
                                 </div>
-                            </td>
-
+                            </td>                            
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
-
-
-
                                     <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                         <i class="shortcut-icon icon-filter"></i>
                                     </a>
@@ -473,8 +474,8 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstado" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-                           
-                                 </ContentTemplate>
+
+                            </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
                 </div>
@@ -485,6 +486,42 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Busqueda</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <%--<div class="form-group">
+                            <label class="col-md-4">N° Cliente</label>
+                            <div class="col-md-4">
+                                <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
+                            </div>
+                        </div>--%>
+                        <%--<div class="form-group">
+                            <label class="col-md-4">N° Pedido</label>
+                            <div class="col-md-4">
+                                <asp:TextBox ID="txtNumeroPedido" runat="server" class="form-control"></asp:TextBox>
+                            </div>
+                        </div>--%>
+                        <div class="form-group">
+                            <label class="col-md-4">Buscar por observacion</label>
+                            <div class="col-md-4">
+                                <asp:TextBox ID="txtObservacion" runat="server" class="form-control"></asp:TextBox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click"/>
+                </div>
+            </div>
         </div>
     </div>
 

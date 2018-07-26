@@ -116,8 +116,9 @@
     <Reference Include="printButtonDLL">
       <HintPath>Auxiliar\printButtonDLL.dll</HintPath>
     </Reference>
-    <Reference Include="Store_Api">
-      <HintPath>Auxiliar\Store_Api.dll</HintPath>
+    <Reference Include="Store_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Repositorio Store Api\Store_Api\bin\Debug\Store_Api.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -471,6 +472,9 @@
     <Content Include="Formularios\Reportes\ReportesVentas.aspx" />
     <Content Include="Formularios\Reportes\StockF.aspx" />
     <Content Include="Formularios\Reportes\VentasUnidadesF.aspx" />
+    <Content Include="Formularios\Stores\StoresABM.aspx" />
+    <Content Include="Formularios\Stores\StoresBanners.aspx" />
+    <Content Include="Formularios\Stores\StoresF.aspx" />
     <Content Include="Formularios\Surtidores\ABMSurtidoresCierre.aspx" />
     <Content Include="Formularios\Surtidores\ABMSurtidores.aspx" />
     <Content Include="Formularios\Surtidores\ImpresionSurtidores.aspx" />
@@ -2248,6 +2252,27 @@
     </Compile>
     <Compile Include="Formularios\Reportes\VentasUnidadesF.aspx.designer.cs">
       <DependentUpon>VentasUnidadesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresABM.aspx.cs">
+      <DependentUpon>StoresABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresABM.aspx.designer.cs">
+      <DependentUpon>StoresABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresBanners.aspx.cs">
+      <DependentUpon>StoresBanners.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresBanners.aspx.designer.cs">
+      <DependentUpon>StoresBanners.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresF.aspx.cs">
+      <DependentUpon>StoresF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Stores\StoresF.aspx.designer.cs">
+      <DependentUpon>StoresF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Surtidores\ABMSurtidoresCierre.aspx.cs">
       <DependentUpon>ABMSurtidoresCierre.aspx</DependentUpon>

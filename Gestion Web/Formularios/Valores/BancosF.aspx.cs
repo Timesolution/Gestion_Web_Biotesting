@@ -57,7 +57,7 @@ namespace Gestion_Web.Formularios.Valores
                     this.cargarEmpresas();
                     this.cargarConceptos();
                     this.obtenerDatosBancos();
-
+                    
                     this.txtFechaDesde.Text = fechaD;
                     this.txtFechaHasta.Text = fechaH;
                     this.txtFechaAgregar.Text = fechaD;
@@ -535,6 +535,7 @@ namespace Gestion_Web.Formularios.Valores
                 if (ok > 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Agregado con exito!.", "BancosF.aspx"));
+                    //Response.Redirect("BancosF.aspx?fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&cuit=" + this.ListEmpresa.SelectedValue + "&cta=" + this.ListCuentas.SelectedValue + "&c=" + this.ListConcepto.SelectedValue + "&tc=" + this.ListTipoConceptos.SelectedValue);
                 }
                 else
                 {
