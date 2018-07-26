@@ -40,44 +40,36 @@ namespace Gestion_Web.Formularios.Compras
                 this.idArt = Convert.ToInt32(Request.QueryString["idArt"]);
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
 
-                this.VerificarLogin();                
+                this.VerificarLogin();
 
                 if (!IsPostBack)
                 {
-                    
+                    if (accion == 2)
+                    {
+                        this.llenarCamposArt();
+                    }
                 }
                 this.cargarDetalleImportacion();
-                if (accion == 2)
-                {
-                    this.cargarArticuloEdit();
-                }
+
             }
             catch (Exception ex)
             {
- 
+
             }
 
         }
-        private void cargarArticuloEdit()//TODO r new fun
+
+        private void llenarCamposArt()//TODO r new fun
         {
             try
             {
-                Importacione imp = contImportacion.obtenerImportacionByID(this.idImportacion);
+                Importacione importacion = contImportacion.obtenerImportacionByID(idImportacion);
                 Importaciones_Detalle itemDet = new Importaciones_Detalle();
-                foreach (var obj in imp.Importaciones_Detalle)
-                {
-                    itemDet = obj;
-                }
+                itemDet = contImportacion.obtenerDetalleImportacionById(idArt);
                 Articulo articulo = contArticulos.obtenerArticuloByID(Int32.Parse(itemDet.Articulo.ToString()));
-                this.txtBusqueda.Text = articulo.codigo;
                 this.txtCantidad.Text = itemDet.Cantidad.ToString();
                 this.txtSIM.Text = itemDet.SIM;
                 this.txtFOB.Text = itemDet.FOB.ToString();
-
-                //Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
-                //this.ListArticulosBusqueda.SelectedValue = desc;
-                //string art = Request.QueryString["art"];
-                //int art = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);//29730
                 this.ListArticulosBusqueda.Items.Clear();
                 ListItem valor = new ListItem(articulo.descripcion, articulo.id.ToString());
                 this.ListArticulosBusqueda.Items.Add(valor);
@@ -88,24 +80,37 @@ namespace Gestion_Web.Formularios.Compras
                 decimal precioVentaMonedaOriginal = Math.Round(articulo.costoReal / Convert.ToDecimal(moneda.cambio), 2);
                 this.txtPrecioVenta.Text = precioVentaMonedaOriginal.ToString("0.00");
                 this.txtPPP.Text = this.contImportacion.obtenerPPPArticulo(articulo.id).ToString();
-                stock s = this.contArtEnt.obtenerStockArticuloLocal(articulo.id, imp.Sucursal.Value);
+                stock s = this.contArtEnt.obtenerStockArticuloLocal(articulo.id, importacion.Sucursal.Value);
                 if (s != null)
                 {
                     this.txtStockActual.Text = s.stock1.Value.ToString();
                 }
-
-
-
-
-
+               
+                //Articulo articulo = contArticulos.obtenerArticuloByID(Int32.Parse(itemDet.Articulo.ToString()));
+                //this.txtCantidad.Text = itemDet.Cantidad.ToString();
+                //this.txtSIM.Text = itemDet.SIM;
+                //this.txtFOB.Text = itemDet.FOB.ToString();
+                //this.ListArticulosBusqueda.Items.Clear();
+                //ListItem valor = new ListItem(articulo.descripcion, articulo.id.ToString());
+                //this.ListArticulosBusqueda.Items.Add(valor);
+                ////divido el precio de venta en pesos por la moneda utilizada en el articulo
+                //this.txtPrecioCompra.Text = articulo.costo.ToString();
+                //Moneda moneda = new Moneda();
+                //moneda = contMoneda.obtenerMonedaDesc(articulo.monedaVenta.moneda);
+                //decimal precioVentaMonedaOriginal = Math.Round(articulo.costoReal / Convert.ToDecimal(moneda.cambio), 2);
+                //this.txtPrecioVenta.Text = precioVentaMonedaOriginal.ToString("0.00");
+                //this.txtPPP.Text = this.contImportacion.obtenerPPPArticulo(articulo.id).ToString();
+                //stock s = this.contArtEnt.obtenerStockArticuloLocal(articulo.id, imp.Sucursal.Value);
+                //if (s != null)
+                //{
+                //    this.txtStockActual.Text = s.stock1.Value.ToString();
+                //}
             }
             catch (Exception)
             {
 
                 throw;
             }
-            
-            
         }
         private void VerificarLogin()
         {
@@ -190,12 +195,12 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 this.phItems.Controls.Clear();
-                
+
                 Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
                 if (i != null)
                 {
                     foreach (var item in i.Importaciones_Detalle)
-                    {                        
+                    {
                         this.totalFob += item.FOB.Value * item.Cantidad.Value;
                         this.totalCompra += item.PrecioCompra.Value * item.Cantidad.Value;
                     }
@@ -208,7 +213,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.lblTotalFob.Text = this.totalFob.ToString("C");
                 this.lblTotalCompra.Text = this.totalCompra.ToString("C");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -227,7 +232,7 @@ namespace Gestion_Web.Formularios.Compras
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Controls.Add(celCodigo);
 
-                TableCell celArticulo = new TableCell();                
+                TableCell celArticulo = new TableCell();
                 celArticulo.Text = art.descripcion;
                 celArticulo.HorizontalAlign = HorizontalAlign.Center;
                 celArticulo.VerticalAlign = VerticalAlign.Middle;
@@ -239,7 +244,7 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
                 tr.Controls.Add(celCantidad);
 
-                TableCell celSIM= new TableCell();//TODO ramiro new
+                TableCell celSIM = new TableCell();
                 celSIM.Text = item.SIM;
                 celSIM.HorizontalAlign = HorizontalAlign.Center;
                 celSIM.VerticalAlign = VerticalAlign.Middle;
@@ -310,7 +315,7 @@ namespace Gestion_Web.Formularios.Compras
                 btnEliminar.Attributes.Add("href", "#modalConfirmacion");
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
                 btnEliminar.OnClientClick = "abrirdialog(" + item.Id.ToString() + ");";
-                celAccion.Controls.Add(btnEliminar);                
+                celAccion.Controls.Add(btnEliminar);
 
                 Literal l = new Literal();
                 l.Text = "&nbsp";
@@ -330,21 +335,14 @@ namespace Gestion_Web.Formularios.Compras
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
 
-                LinkButton btnEditar = new LinkButton();//TODO r new
-                btnEditar.ID = "btnEditar_" + item.Id.ToString();
-                btnEditar.CssClass = "btn btn-info";
-                //btnEditar.PostBackUrl = "a=2&i=23=ar=40";
-                //btnEditar.Text = "<a href=\"ImportacionesDetalleF.aspx?id=" + this.idImportacion + "&idArt=" + item.Id + "&a=2" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
-                btnEditar.Text = "<a href=\"ImportacionesDetalleF.aspx?id=" + this.idImportacion + "&idArt=" + item.Id + "&a=2>";
-                //lDetail.Text += "style=\"width: 100%\">";
-                //btnEditar.Text += "<i class=\"shortcut-icon icon-search\"></i>";
-                btnEditar.Text += "<span class='shortcut-icon icon-pencil'></span>";
-                btnEditar.Text += "</a>";
+                Literal l3 = new Literal();
 
-                //btnEditar.PostBackUrl =  "../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion + "&idArt=" + item.Id + "&a=2";
-                //btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                //btnEditar.Click += new EventHandler(this.EditarArticulo);
-                celAccion.Controls.Add(btnEditar);
+                l3.Text = "<a href=\"ImportacionesDetalleF.aspx?a=2&id=" + this.idImportacion + "&idArt=" + item.Id +
+                "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
+                l3.Text += "<span class='shortcut-icon icon-pencil'></span>";
+                l3.Text += "</a>";
+
+                celAccion.Controls.Add(l3);
 
                 tr.Controls.Add(celAccion);
 
@@ -354,70 +352,34 @@ namespace Gestion_Web.Formularios.Compras
             {
 
             }
-        }       
+        }
+
+        protected void lbtnCancelarEdicion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         protected void lbtnAgregarArticulo_Click(object sender, EventArgs e)
         {
             try
             {
-                lbtnAgregarArticulo.Visible = false;
-                var articulo = Convert.ToInt32(Request.QueryString["IdArt"]);
-                if (articulo == 0)
+                //lbtnAgregarArticulo.Visible = false;
+                //var articulo = Convert.ToInt32(Request.QueryString["IdArt"]);
+                if(accion == 2)
                 {
-                    Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
-                    Importaciones_Detalle item = new Importaciones_Detalle();
-                    item.Articulo = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);
-                    item.FOB = Convert.ToDecimal(this.txtFOB.Text);
-                    item.SIM = this.txtSIM.Text;
-                    item.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
-                    item.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
-                    item.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$", ""));
-                    item.PrecioVenta = Convert.ToDecimal(this.txtPrecioVenta.Text.Replace("$", ""));
-                    decimal ultimoPpp = Convert.ToDecimal(this.txtPPP.Text.Replace("$", ""));
-                    item.PPP = ((ultimoPpp * item.StockActual) + (item.FOB * item.Cantidad)) / (item.StockActual + item.Cantidad);
-                    i.Importaciones_Detalle.Add(item);
-
-                    int ok = this.contImportacion.modificarImportacion(i);
-                    if (ok > 0)
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Agregada con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
-                    }
-                    else
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se Pudo agregar.\";", true);
-                    }
+                    EditarDetalleArticulos();
                 }
                 else
                 {
-                    Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
-                    Importaciones_Detalle item = new Importaciones_Detalle();
-                    item.Articulo = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);
-                    item.FOB = Convert.ToDecimal(this.txtFOB.Text);
-                    item.SIM = this.txtSIM.Text;
-                    item.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
-                    item.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
-                    item.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$", ""));
-                    item.PrecioVenta = Convert.ToDecimal(this.txtPrecioVenta.Text.Replace("$", ""));
-                    decimal ultimoPpp = Convert.ToDecimal(this.txtPPP.Text.Replace("$", ""));
-                    item.PPP = ((ultimoPpp * item.StockActual) + (item.FOB * item.Cantidad)) / (item.StockActual + item.Cantidad);
-                    string desc = Request.QueryString["desc"];
-                    int idItm = Convert.ToInt32(Request.QueryString["idItm"]);
-                    //TODO ramiro elimino el articulo y lo creo devuelta con los datos modificados
-                    int okk = contImportacion.eliminarDetalleImportacion(Convert.ToInt32(idItm));
-                    i.Importaciones_Detalle.Add(item);
-                    
-                    int ok = this.contImportacion.modificarImportacion(i);
-                    if (ok > 0)
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Agregada con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
-                        Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion);
-                    }
-                    else
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se Pudo agregar.\";", true);
-                        Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion);
-                    }
+                    AgregarDetalleArticulos();
                 }
-                
             }
             catch (Exception ex)
             {
@@ -501,7 +463,7 @@ namespace Gestion_Web.Formularios.Compras
                     decimal totalGastos = item.Importacione.Importaciones_Gastos.Sum(x => x.ImportePesos.Value);
                     totalGastos = decimal.Round(totalGastos, 2);
 
-                    decimal porcentualGastos = ((item.FOB.Value * item.Cantidad.Value) / this.totalFob) * totalGastos;                    
+                    decimal porcentualGastos = ((item.FOB.Value * item.Cantidad.Value) / this.totalFob) * totalGastos;
                     porcentualGastos = decimal.Round(porcentualGastos, 2);
 
                     decimal totalLocal = ((porcentualGastos / item.Cantidad.Value) + (item.FOB.Value * item.Importacione.DolarDespacho.Value));
@@ -512,11 +474,11 @@ namespace Gestion_Web.Formularios.Compras
                     decimal incidencia = costoNuevo + (costoNuevo * (art.incidencia.Value / 100));
                     incidencia = decimal.Round(incidencia * moneda.cambio, 2);
                     decimal costoReal = incidencia + (incidencia * (art.impInternos.Value / 100)) + (incidencia * (art.ingresosBrutos.Value / 100));
-                    costoReal = decimal.Round(costoReal,2);
+                    costoReal = decimal.Round(costoReal, 2);
 
                     decimal margen = ((art.precioSinIva.Value / costoReal) - 1) * 100;
                     margen = decimal.Round(margen, 2);
-                    
+
 
                     decimal precioNuevo = costoReal * (1 + (art.margen.Value / 100));
                     //precioNuevo = precioNuevo * moneda.cambio;
@@ -533,7 +495,7 @@ namespace Gestion_Web.Formularios.Compras
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "abrirdialog2(0);", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -584,34 +546,131 @@ namespace Gestion_Web.Formularios.Compras
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Ocurrio un error. " + ex.Message + "\";", true);
             }
         }
-        private void EditarArticulo(object sender, EventArgs e)
-        {//Edita el articulo seleccionado, pasa los atributos por url y lo borra
+
+        private void AgregarDetalleArticulos()
+        {
             try
             {
-                string idBoton = (sender as LinkButton).ID;
-
-                string[] atributos = idBoton.Split('_');
-                string idItem = atributos[1];
-                Importaciones_Detalle itemImp = new Importaciones_Detalle();                
-                Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
-                if (i != null)
+                Importaciones_Detalle item = new Importaciones_Detalle();
+                item.Articulo = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);
+                item.IdImportacion = this.idImportacion;
+                item.FOB = Convert.ToDecimal(this.txtFOB.Text);
+                item.SIM = this.txtSIM.Text;
+                item.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
+                item.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
+                item.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$", ""));
+                item.PrecioVenta = Convert.ToDecimal(this.txtPrecioVenta.Text.Replace("$", ""));
+                decimal ultimoPpp = Convert.ToDecimal(this.txtPPP.Text.Replace("$", ""));
+                item.PPP = ((ultimoPpp * item.StockActual) + (item.FOB * item.Cantidad)) / (item.StockActual + item.Cantidad);
+                int ok = this.contImportacion.agregarDetalleImportacion(item);
+                if (ok > 0)
                 {
-                    foreach (var item in i.Importaciones_Detalle)
-                    {
-                        if(item.Id.ToString() == idItem)
-                        {
-                            var art = this.contArtEnt.obtenerArticuloEntity(item.Articulo.Value);
-                            Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id="+this.idImportacion+"&art="+art.codigo+"&idItm="+idItem+"&desc="+art.descripcion+"&cnt="+item.Cantidad+"&SIM="+item.SIM+"&FOB="+item.FOB);
-                        }        
-                    }
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Agregada con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
                 }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se Pudo agregar.\";", true);
+                }
+                //Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
+                //Importaciones_Detalle item = new Importaciones_Detalle();
+                //item.Articulo = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);
+                //item.FOB = Convert.ToDecimal(this.txtFOB.Text);
+                //item.SIM = this.txtSIM.Text;
+                //item.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
+                //item.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
+                //item.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$", ""));
+                //item.PrecioVenta = Convert.ToDecimal(this.txtPrecioVenta.Text.Replace("$", ""));
+                //decimal ultimoPpp = Convert.ToDecimal(this.txtPPP.Text.Replace("$", ""));
+                //item.PPP = ((ultimoPpp * item.StockActual) + (item.FOB * item.Cantidad)) / (item.StockActual + item.Cantidad);
+                //i.Importaciones_Detalle.Add(item);
+
+                //int ok = this.contImportacion.modificarImportacion(i);
+                //if (ok > 0)
+                //{
+                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Agregada con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
+                //}
+                //else
+                //{
+                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se Pudo agregar.\";", true);
+                //}
             }
             catch (Exception)
             {
 
                 throw;
             }
-            //txtBusqueda
         }
+        private void EditarDetalleArticulos()
+        {//Edita el articulo seleccionado, pasa los atributos por url y lo borra
+            Importacione i = this.contImportacion.obtenerImportacionByID(this.idImportacion);
+            Importaciones_Detalle item = new Importaciones_Detalle();
+            item.Id = idArt;
+            item.Articulo = Convert.ToInt32(this.ListArticulosBusqueda.SelectedValue);
+            item.FOB = Convert.ToDecimal(this.txtFOB.Text);
+            item.SIM = this.txtSIM.Text;
+            //item.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
+            item.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
+            item.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$", ""));
+            item.PrecioVenta = Convert.ToDecimal(this.txtPrecioVenta.Text.Replace("$", ""));
+            decimal ultimoPpp = Convert.ToDecimal(this.txtPPP.Text.Replace("$", ""));
+            item.PPP = ((ultimoPpp * item.StockActual) + (item.FOB * item.Cantidad)) / (item.StockActual + item.Cantidad);
+            int agregar = contImportacion.modificarDetalleImportacion(item);
+            if (agregar == 0)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Detalle actualizado con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
+                Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion);
+            }
+            else
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se Pudo modificar el articulo.\";", true);
+            }
+                //string desc = Request.QueryString["desc"];
+                //TODO ramiro elimino el articulo y lo creo devuelta con los datos modificados
+                //    int eliminar = contImportacion.eliminarDetalleImportacion(articulo);
+                //    if (eliminar > 0)
+                //    {
+                //        i.Importaciones_Detalle.Add(item);
+                //        int ok = this.contImportacion.modificarImportacion(i);
+                //        if (ok > 0)
+                //        {
+                //            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Agregada con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
+                //            Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion);
+                //        }
+                //        else
+                //        {
+                //            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se Pudo modificar el articulo.\";", true);
+                //            Response.Redirect("../Compras/ImportacionesDetalleF.aspx?id=" + this.idImportacion);
+                //        }
+                //    }
+            }
+        //private void EliminarDetalleArticulos()
+        //{//Elimina el articulo seleccionado
+        //    try
+        //    {
+        //        int eliminar = contimportacion.eliminardetalleimportacion(articulo);
+        //        if (eliminar > 0)
+        //        {
+        //            i.importaciones_detalle.add(item);
+        //            int ok = this.contimportacion.modificarimportacion(i);
+        //            if (ok > 0)
+        //            {
+        //                scriptmanager.registerclientscriptblock(this.updatepanel1, updatepanel1.gettype(), "alert", "$.msgbox(\"agregada con exito\", {type: \"info\"});location.href = '" + request.url.tostring() + "';", true);
+        //                response.redirect("../compras/importacionesdetallef.aspx?id=" + this.idimportacion);
+        //            }
+        //            else
+        //            {
+        //                scriptmanager.registerclientscriptblock(this.updatepanel1, updatepanel1.gettype(), "alert", "$.msgbox(\"no se pudo modificar el articulo.\";", true);
+        //                response.redirect("../compras/importacionesdetallef.aspx?id=" + this.idimportacion);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+        //}
     }
 }
+
+
