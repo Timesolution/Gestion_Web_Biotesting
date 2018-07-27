@@ -38,13 +38,15 @@ namespace Gestion_Web.Formularios.Seguridad
                     this.cargarClientes();
                     this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
-                    this.cargarStores();
-
-                    if (this.valor == 2)
-                    {
-                        this.cargarUsuario(idUsuario);
-                    }
+                    this.cargarStores();                    
                 }
+
+                //esto va afuera del post back porque sino te pisa los datos de los textbox
+                if (this.valor == 2)
+                {
+                    this.cargarUsuario(idUsuario);
+                }
+
             }
             catch
             {
@@ -826,17 +828,21 @@ namespace Gestion_Web.Formularios.Seguridad
                 Gestor_Solution.Modelo.Cliente cliente = new Gestor_Solution.Modelo.Cliente();
                 cliente = contCliente.obtenerClienteID(user.vendedor.id);
 
-                Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
-                Store_Api.Controladores.ControladorUsuario controladorUsuarioStore2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
+                var controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
+                var controladorUsuarioStore2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
 
-                Store_Api.Entidades.Usuario usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
-                Store_Api.Entidades.Usuario usuarioStore2 = controladorUsuarioStore2.obtenerUsuario(user.usuario);
+                var usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
+                var usuarioStore2 = controladorUsuarioStore2.obtenerUsuario(user.usuario);
 
                 controladorStore contStore = new controladorStore();
 
+                this.PHUsuariosStoreTabla.Controls.Clear();
+
                 //seteo-configuro el ph (esto esta hecho asi porque necesitamos crear 2 controladores diferentes para apuntar a los diferentes stores)
-                SetearPH(usuarioStore, controladorUsuarioStore, contStore);
-                SetearPH(usuarioStore2, controladorUsuarioStore2, contStore);
+                if (usuarioStore != null)
+                    SetearPH(usuarioStore, controladorUsuarioStore, contStore);
+                if(usuarioStore2 != null)
+                    SetearPH(usuarioStore2, controladorUsuarioStore2, contStore);
 
             }
             catch (Exception ex)
@@ -906,7 +912,71 @@ namespace Gestion_Web.Formularios.Seguridad
             celStore.Width = Unit.Percentage(20);
             tr.Cells.Add(celStore);
 
+            TableCell celAction = new TableCell();
+            celAction.Width = Unit.Percentage(20);
+
+            Literal lDetail = new Literal();
+            //lDetail.ID = usuarioStore.id.ToString();
+            
+            lDetail.Text = "<a href=\"UsuarioStoreABM.aspx?idUsuarioStore=" + usuarioStore.id.ToString() +  "&idUsuario=" + usuarioStore.idUsuario.ToString() + "&idStore=" + usuarioStore.store.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
+            lDetail.Text += "<i class=\"shortcut-icon icon-search\"></i>";
+            lDetail.Text += "</a>";
+            celAction.Controls.Add(lDetail);
+
+            Literal l2 = new Literal();
+            l2.Text = "&nbsp";
+            celAction.Controls.Add(l2);
+
+            
+
+            LinkButton btn_eliminar = new LinkButton();
+            btn_eliminar.CssClass = "btn btn-info";
+            btn_eliminar.Attributes.Add("data-toggle", "modal");
+            //btn_eliminar.Attributes.Add("href", "#modalConfirmacion");
+            btn_eliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+            btn_eliminar.OnClientClick = "abrirConfirmacion('" + usuarioStore.id + "_" + usuarioStore.store + "');";
+            
+
+
+            celAction.Controls.Add(btn_eliminar);
+
+            tr.Cells.Add(celAction);            
+
             PHUsuariosStoreTabla.Controls.Add(tr);
+        }
+
+        private void BorrarUsuario(int idUsuarioStore, int idStore)
+        {
+            try
+            {
+                Store_Api.Controladores.ControladorUsuario contUsuario = new Store_Api.Controladores.ControladorUsuario();
+                Store_Api.Controladores.ControladorUsuario contUsuario2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
+                //obtengo numero factura
+                
+                if (idStore == 1)
+                    contUsuario.BorrarUsuarioStorePorID(idUsuarioStore);
+                else if (idStore == 2)
+                    contUsuario2.BorrarUsuarioStorePorID(idUsuarioStore);
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario borrado con exito. ",null));
+
+                Response.Redirect("ABMUsuarios.aspx?valor=2&id=" + idUsuario);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error al borrar usuario del store. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al borrar usuario del store. " + ex.Message);
+            }
+        }
+
+        protected void btnSi_Click(object sender, EventArgs e)
+        {
+            
+            string[] atributos = txtIDUsuario.Text.Split('_');
+            int idUsuarioStore = Convert.ToInt32(atributos[0]);
+            int idStore = Convert.ToInt32(atributos[1]);
+
+            BorrarUsuario(idUsuarioStore,idStore);
         }
     }
 }

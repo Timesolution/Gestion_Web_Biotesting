@@ -213,7 +213,7 @@
                                                         <th style="width: 10%">Coeficiente</th>
                                                         <th style="width: 10%">Perfil</th>
                                                         <th style="width: 10%">Store</th>
-                                                        <%--<th class="td-actions" style="width: 10%"></th>--%>
+                                                        <th class="td-actions" style="width: 10%"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -579,6 +579,51 @@
         </div>
     </div>
 
+    <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="lblMensaje" Text="Esta seguro que desea eliminar el usuario seleccionado del store?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="txtIDUsuario" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                            <%--                                <div class="form-group">
+                                    
+                                </div>--%>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick ="btnSi_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+
+                            <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    
+
     <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>--%>
 
@@ -647,11 +692,20 @@
             return true;
         }
     </script>
+
     <script type="text/javascript">
+        function abrirConfirmacion(valor) {
+            $('#modalConfirmacion').modal('show');
+                document.getElementById('<%= txtIDUsuario.ClientID %>').value = valor;
+                
+        }
+
         function openModalAgregarUsuarioAlStore() {
             $('#modalAgregarUsuarioAlStore').modal('show');
         }
     </script>
+
+    
 
 
 </asp:Content>
