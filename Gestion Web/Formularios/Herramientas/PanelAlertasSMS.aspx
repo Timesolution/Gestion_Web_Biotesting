@@ -175,7 +175,21 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
-                                                <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Probar SMS" href="#modalEnvioSMS" onclick="pruebaSMS(8);">
+                                                <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Probar SMS" href="#modalEnvioSMS" onclick="pruebaSMS(9);">
+                                                    Probar
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-2">10. AVISO DE MAIL FACTURA:</label>
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <asp:CheckBox ID="chkAlertaEnvioFC" runat="server" class="input-group-addon" onclick="cambioChk(this,10);" />
+                                                    <asp:TextBox ID="txtEnvioMailFC" runat="server" class="form-control" TextMode="MultiLine" Rows="4" disabled placeholder="'Ingrese su texto' @@FACTURA" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Probar SMS" href="#modalEnvioSMS" onclick="pruebaSMS(10);">
                                                     Probar
                                                 </a>
                                             </div>
@@ -288,6 +302,8 @@
                 document.getElementById("<%= txtMensajeSMS.ClientID %>").value = document.getElementById("<%= txtEnvioCumple.ClientID %>").value;
             if (numero == 9)
                 document.getElementById("<%= txtEnvioCobro.ClientID %>").value = document.getElementById("<%= txtEnvioCobro.ClientID %>").value;
+            if (numero == 10)
+                document.getElementById("<%= txtEnvioMailFC.ClientID %>").value = document.getElementById("<%= txtEnvioMailFC.ClientID %>").value;
         
         }
         function cambioChk(chk, numero) {
@@ -310,6 +326,8 @@
                     $("#<%= txtEnvioCumple.ClientID %>").removeAttr("disabled");
                 if (numero == 9)
                     $("#<%= txtEnvioCobro.ClientID %>").removeAttr("disabled");
+                if (numero == 10)
+                    $("#<%= txtEnvioMailFC.ClientID %>").removeAttr("disabled");
             }
             else {
                 if (numero == 1)
@@ -330,6 +348,8 @@
                     $("#<%= txtEnvioCumple.ClientID %>").attr("disabled", "disabled");
                 if (numero == 9)
                     $("#<%= txtEnvioCobro.ClientID %>").attr("disabled", "disabled");
+                if (numero == 10)
+                    $("#<%= txtEnvioMailFC.ClientID %>").attr("disabled", "disabled");
             }
         }
         function validarNroSinComa(e) {
