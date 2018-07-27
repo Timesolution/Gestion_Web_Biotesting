@@ -391,13 +391,7 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    //TODO r new
                     Response.Redirect("ImportacionesDetalleF.aspx?id=" + idtildado);
-                }
-                else
-                {//TODO r new
-                    Response.Redirect("ImportacionesDetalleF.aspx?id=" + idtildado);
-                    //Response.Redirect("ImportacionesF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&tf=" + this.ListTipoFecha.SelectedValue);
                 }
             }
             catch(Exception ex)
