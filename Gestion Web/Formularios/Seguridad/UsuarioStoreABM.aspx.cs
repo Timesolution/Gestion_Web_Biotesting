@@ -249,7 +249,7 @@ namespace Gestion_Web.Formularios.Seguridad
             try
             {                
                 user.usuario1 = this.txtUsuarioStore.Text;
-                user.mail = txtUsuarioStore.Text;
+                user.mail = txtMailStore.Text;
                 user.contraseña = txtContraseñaStore.Text;
                 user.coeficiente = Convert.ToDecimal(txtCoeficienteStore.Text);
                 return user;
