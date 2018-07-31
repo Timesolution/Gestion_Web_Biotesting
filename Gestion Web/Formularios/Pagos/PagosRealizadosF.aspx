@@ -274,6 +274,31 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListPuntoVenta" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
+                                <!-- TODO r new -->
+
+                               
+                                
+
+                                <div class="form-group">
+                                    <label class="col-md-4">Formas de pago</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListFormaPago" runat="server" class="form-control">
+                                            <asp:ListItem Value="0" Text="Todos"></asp:ListItem>
+                                            <asp:ListItem Value="1" Text="Efectivo"></asp:ListItem>
+                                            <asp:ListItem Value="2" Text="Cheque propio"></asp:ListItem>
+                                            <asp:ListItem Value="3" Text="Transferencia"></asp:ListItem>
+                                            <asp:ListItem Value="5" Text="Tarjeta"></asp:ListItem>
+                                            <asp:ListItem Value="6" Text="Retencion"></asp:ListItem>
+                                            <asp:ListItem Value="7" Text="Cheque Tercero"></asp:ListItem>
+                                        </asp:DropDownList>
+
+                                        <!-- /input-group -->
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListPuntoVenta" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
                                 <%--<div class="form-group">
                                     <label class="col-md-4">Tipo</label>
                                     <div class="col-md-6">

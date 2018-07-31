@@ -38,6 +38,7 @@ namespace Gestion_Web.Formularios.Pagos
         private int idEmpresa;
         private int idSucursal;
         private int puntoVenta;
+        private int formaPago;
         //private int idTipo;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -48,6 +49,7 @@ namespace Gestion_Web.Formularios.Pagos
                 this.idEmpresa = Convert.ToInt32(Request.QueryString["e"]);
                 this.idSucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.puntoVenta = Convert.ToInt32(Request.QueryString["pv"]);
+                this.formaPago = Convert.ToInt32(Request.QueryString["fp"]);//TODO r new querystring
                 //this.idTipo = Convert.ToInt32(Request.QueryString["t"]);
                 this.fechaD = Request.QueryString["fd"];
                 this.fechaH = Request.QueryString["fh"];
@@ -63,6 +65,7 @@ namespace Gestion_Web.Formularios.Pagos
                         this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         this.idProveedor = -1;
+                        this.formaPago = 0;//TODO r new
                         //this.puntoVenta = this.contCobranza.obtenerPrimerPuntoVenta(idSucursal, idEmpresa);
                         //this.puntoVenta = 1;
                     }
@@ -74,6 +77,7 @@ namespace Gestion_Web.Formularios.Pagos
                     this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
                     this.ListPuntoVenta.SelectedValue = this.puntoVenta.ToString();
+                    this.DropListFormaPago.SelectedValue = this.formaPago.ToString(); //TODO r new
                     //this.DropListTipo.SelectedValue = this.idTipo.ToString();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
@@ -308,7 +312,7 @@ namespace Gestion_Web.Formularios.Pagos
         {
             try
             {
-                Response.Redirect("PagosRealizadosF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + ListProveedor.SelectedValue + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + this.ListPuntoVenta.SelectedValue);
+                Response.Redirect("PagosRealizadosF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + ListProveedor.SelectedValue + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + this.ListPuntoVenta.SelectedValue + "&fp=" + this.DropListFormaPago.SelectedValue);//TODO r new
 
             }
             catch (Exception ex)
@@ -323,7 +327,6 @@ namespace Gestion_Web.Formularios.Pagos
             {
                 controladorPagos contPagos = new controladorPagos();
                 
-                
                 if (idProveedor == 0 && idEmpresa == 0 && idSucursal == 0 )
                 {
                     this.idProveedor = Convert.ToInt32(ListProveedor.SelectedValue);
@@ -334,14 +337,16 @@ namespace Gestion_Web.Formularios.Pagos
                     this.fechaD = this.txtFechaDesde.Text;
                     this.fechaH = this.txtFechaHasta.Text;
 
-
                     var pagos = contPagos.buscarPagos(Convert.ToDateTime(fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(fechaH, new CultureInfo("es-AR")), idProveedor, idEmpresa, idSucursal, puntoVenta);
                     phPagosRealizados.Controls.Clear();
                     decimal saldo = 0;
                     foreach (Gestion_Api.Entitys.PagosCompra p in pagos)
                     {
                         saldo += Convert.ToDecimal(p.Total);
-                        this.cargarEnPh(p);
+                        if (verificarFormaPago(p))
+                        {
+                            this.cargarEnPh(p);
+                        }
                     }
                     this.labelSaldo.Text = "$ " + saldo.ToString("N", CultureInfo.DefaultThreadCurrentUICulture);
                     //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("C");
@@ -356,7 +361,10 @@ namespace Gestion_Web.Formularios.Pagos
                     foreach (Gestion_Api.Entitys.PagosCompra p in pagos)
                     {
                         saldo += Convert.ToDecimal(p.Total);
-                        this.cargarEnPh(p);
+                        if (verificarFormaPago(p))
+                        {
+                            this.cargarEnPh(p);
+                        }
                     }
                     this.labelSaldo.Text = "$ " + saldo.ToString("N", CultureInfo.DefaultThreadCurrentUICulture);
                     //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("C");
@@ -366,6 +374,31 @@ namespace Gestion_Web.Formularios.Pagos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando pagos. " + ex.Message));
+            }
+        }
+
+        private bool verificarFormaPago(Gestion_Api.Entitys.PagosCompra p)
+        {
+            try
+            {
+                if (this.formaPago > 0)
+                {
+                    var pago = this.contPagos.obtenerPagoById(p.Id);
+                    foreach (var item in pago.Pagos_Compras)
+                    {
+                        if (item.TipoPago == formaPago)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return true;
+                throw;
             }
         }
 

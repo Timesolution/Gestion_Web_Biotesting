@@ -20,8 +20,10 @@ namespace Gestion_Web.Formularios.Compras
         ControladorImportaciones contImportaciones = new ControladorImportaciones();
         controladorSucursal contSucursal = new controladorSucursal();
         controladorCliente contCliente = new controladorCliente();
+        controladorArticulo contArticulo = new controladorArticulo();
+        controladorCompraEntity contCompEntity = new controladorCompraEntity();
         Mensajes m = new Mensajes();
-        
+
         private string fechaD;
         private string fechaH;
         private int sucursal;
@@ -36,10 +38,10 @@ namespace Gestion_Web.Formularios.Compras
             sucursal = Convert.ToInt32(Request.QueryString["suc"]);
             proveedor = Convert.ToInt32(Request.QueryString["p"]);
             tipoFecha = Convert.ToInt32(Request.QueryString["tf"]);
-            
+
             if (!IsPostBack)
             {
-                this.cargarProveedores();                
+                this.cargarProveedores();
 
                 if (fechaD == null && fechaH == null)
                 {
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.ListTipoFecha.SelectedValue = this.tipoFecha.ToString();
                     this.DropListProveedor.SelectedValue = proveedor.ToString();
                     Response.Redirect("ImportacionesF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&tf=" + this.ListTipoFecha.SelectedValue);
-                    
+
                     //this.btnAccion.Visible = false;
 
                 }
@@ -70,7 +72,7 @@ namespace Gestion_Web.Formularios.Compras
                 txtFechaHasta.Text = fechaH;
                 this.ListTipoFecha.SelectedValue = this.tipoFecha.ToString();
                 this.DropListProveedor.SelectedValue = proveedor.ToString();
-                
+
             }
             //verifico si el perfil tiene permiso para anular
             this.verficarPermisoAnular();
@@ -78,8 +80,8 @@ namespace Gestion_Web.Formularios.Compras
             if (fechaD != null && fechaH != null)
             {
                 this.buscar(fechaD, fechaH, proveedor, sucursal);
-            }   
-            
+            }
+
         }
         private void VerificarLogin()
         {
@@ -114,7 +116,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (!String.IsNullOrEmpty(s))
                     {
                         if (s == "29")
-                        {                           
+                        {
                             return 1;
                         }
                     }
@@ -138,7 +140,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataRow dr = dt.NewRow();
                 dr["nombre"] = "Todas";
                 dr["id"] = 0;
-                dt.Rows.InsertAt(dr, 0);                
+                dt.Rows.InsertAt(dr, 0);
 
 
                 this.DropListSucursal.DataSource = dt;
@@ -206,11 +208,11 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal)
+        private void buscar(string fDesde, string fHasta, int proveedor, int idSucursal)
         {
             try
             {
-                this.phImportaciones.Controls.Clear(); 
+                this.phImportaciones.Controls.Clear();
 
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
                 DateTime hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR")).AddHours(23);
@@ -252,7 +254,7 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Controls.Add(celNroFactura);
 
                 Sucursal s = this.contSucursal.obtenerSucursalID(i.Sucursal.Value);
-                TableCell celSucursal = new TableCell();                
+                TableCell celSucursal = new TableCell();
                 celSucursal.Text = s.nombre;
                 tr.Controls.Add(celSucursal);
 
@@ -278,7 +280,7 @@ namespace Gestion_Web.Formularios.Compras
                 btnEliminar.CssClass = "btn btn-info";
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
                 btnEliminar.Attributes.Add("data-toggle", "modal");
-                btnEliminar.Attributes.Add("href", "#modalConfirmacion");                
+                btnEliminar.Attributes.Add("href", "#modalConfirmacion");
                 btnEliminar.OnClientClick = "abrirdialog(" + i.Id.ToString() + ");";
                 celAccion.Controls.Add(btnEliminar);
 
@@ -288,13 +290,13 @@ namespace Gestion_Web.Formularios.Compras
 
                 CheckBox chkSeleccion = new CheckBox();
                 chkSeleccion.ID = "chkSeleccion_" + i.Id.ToString();
-                chkSeleccion.CssClass = "btn btn-info";                
+                chkSeleccion.CssClass = "btn btn-info";
                 celAccion.Controls.Add(chkSeleccion);
                 tr.Controls.Add(celAccion);
 
                 this.phImportaciones.Controls.Add(tr);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -337,13 +339,13 @@ namespace Gestion_Web.Formularios.Compras
                 if (ok > 0)
                 {
                     Gestion_Api.Modelo.Log.EscribirSQL(usuario, "INFO", "ANULACION Importacion id: " + id);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Importacion anulada con exito. ", Request.Url.ToString()));                    
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Importacion anulada con exito. ", Request.Url.ToString()));
                 }
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error anulando Importacion. "));
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -355,7 +357,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                
+
             }
             catch
             {
@@ -367,7 +369,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                
+
             }
             catch
             {
@@ -394,7 +396,7 @@ namespace Gestion_Web.Formularios.Compras
                     Response.Redirect("ImportacionesDetalleF.aspx?id=" + idtildado);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -429,6 +431,13 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                int flag = 0;
+                if (string.IsNullOrEmpty(txtPuntoVenta.Text) || string.IsNullOrEmpty(txtNumeroRemito.Text))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", " $.msgbox(\"Debe completar el numero de remito. \");", true);
+                    return;
+                }
+
                 int usuario = (int)Session["Login_IdUser"];
                 string idtildado = "";
                 foreach (Control C in phImportaciones.Controls)
@@ -438,37 +447,117 @@ namespace Gestion_Web.Formularios.Compras
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
+                        flag++;
                     }
                 }
+                
+                if (flag > 1)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", " $.msgbox(\"Debe seleccionar solo una importacion a la vez. \");", true);
+                    return;
+                }
+
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Importacione i = this.contImportaciones.obtenerImportacionByID(Convert.ToInt32(idtildado));
-                    if (i.MercaderiaArribo == 0)
+                    Importacione importacion = this.contImportaciones.obtenerImportacionByID(Convert.ToInt32(idtildado));
+                    if (importacion.MercaderiaArribo == 0)
                     {
-                        int ok = this.contImportaciones.cargarStockMercaderiaImportacion(Convert.ToInt32(idtildado));
-                        if (ok > 0)
+                        RemitosCompra rc = new RemitosCompra();
+                        rc.IdProveedor = 40465;
+                        rc.Numero = txtPuntoVenta.Text + txtNumeroRemito.Text;
+                        rc.Fecha = DateTime.Now;
+                        rc.IdSucursal = 144;
+                        rc.Tipo = 1;
+                        rc.Devolucion = 0;
+                        rc.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
+                        rc.RemitosCompras_Comentarios.Observacion = "Remito generado por Arribo de mercaderia";
+
+                        rc.RemitosCompras_Items = obtenerItems(importacion);
+                        if (rc.RemitosCompras_Items.Count > 0)
                         {
-                            Gestion_Api.Modelo.Log.EscribirSQL(usuario, "INFO", "Carga Mercaderia Importacion id: " + idtildado);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mercaderia cargada con exito. ", Request.Url.ToString()));
+                            int i = this.contCompEntity.agregarRemito(rc, (int)rc.IdSucursal);
+                            if (i > 0)
+                            {
+                                importacion.MercaderiaArribo = 1;
+                                this.contImportaciones.modificarImportacion(importacion);
+                                Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Arribo de mercaderia procesado con exito");
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", " $.msgbox(\"Arribo de mercaderia procesado con exito. \");", true);
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", "$.msgbox(\"No se pudo guardar remito. Reintente\");", true);
+                            }
                         }
                         else
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puedo cargar mercaderia. "));
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", "$.msgbox(\"La cantidad de items de la importacion debe ser mayor a 0.\");", true);
                         }
+                        #region Old
+                        //int ok = this.contImportaciones.cargarStockMercaderiaImportacion(Convert.ToInt32(idtildado));
+                        //if (ok > 0)
+                        //{
+                        //    Gestion_Api.Modelo.Log.EscribirSQL(usuario, "INFO", "Carga Mercaderia Importacion id: " + idtildado);
+                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mercaderia cargada con exito. ", Request.Url.ToString()));
+                        #endregion
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Este despacho ya fue cargado como arribado. "));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", " $.msgbox(\"La mercaderia ya ha sido arribada. \");", true);
                     }
                 }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", " $.msgbox(\"Debe seleccionar alguna importacion para arribar. \");", true);
+                }
+              
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. "));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", " $.msgbox(\"Ocurrio un error. \");", true); 
             }
         }
 
-        
+        private List<RemitosCompras_Items> obtenerItems(Importacione importacion)
+        {
+            try
+            {
+                List<RemitosCompras_Items> list = new List<RemitosCompras_Items>();
 
+                foreach (var item in importacion.Importaciones_Detalle)
+                {
+                    var itemRemitoCompra = new RemitosCompras_Items();
+
+                    Articulo articulo = contArticulo.obtenerArticuloByID((int)item.Articulo);
+
+                    itemRemitoCompra.Codigo = item.Articulo;
+                    itemRemitoCompra.Cantidad = item.Cantidad;
+                    itemRemitoCompra.Lote = string.Empty;
+                    itemRemitoCompra.Vencimiento = string.Empty;
+                    itemRemitoCompra.NumeroDespacho = string.Empty;
+                    itemRemitoCompra.FechaDespacho = DateTime.Now;
+                    itemRemitoCompra.Trazabilidad = 0;
+
+                    if (articulo != null)
+                    {
+                        int trazable = contArticulo.verificarGrupoTrazableByID(articulo.id);
+                        if (trazable > 0)
+                        {
+                            itemRemitoCompra.Trazabilidad = 1;
+                        }
+                    }
+
+                    list.Add(itemRemitoCompra);
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cargando items a remito" + ex.Message);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelArriboMercaderia, UpdatePanelArriboMercaderia.GetType(), "alert", "$.msgbox(\"Error cargando items a remito. " + ex.Message + ". \", {type: \"error\"});", true);
+                return null;
+            }
+        }
     }
+
 }

@@ -51,6 +51,7 @@ namespace Gestion_Web.Formularios.Compras
             }
 
         }
+
         private void VerificarLogin()
         {
             try
@@ -112,6 +113,7 @@ namespace Gestion_Web.Formularios.Compras
                 return -1;
             }
         }
+
         public int verficarPermisoCambiarSucursal()
         {
             try
@@ -136,6 +138,7 @@ namespace Gestion_Web.Formularios.Compras
                 return 0;
             }
         }
+
         private void CrearTablaItems()
         {
             try
@@ -199,6 +202,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
+
         public void cargarSucursal()
         {
             try
@@ -226,6 +230,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+
         private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio, int idArticulo)
         {
             try
@@ -344,7 +349,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
             }
         }
-
+        
         protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e)
         {
             try
@@ -392,7 +397,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void guardarRemito()
+        private void guardarRemito()//TODO r usar esta funcion para agregar un remito
         {
             try
             {
@@ -466,6 +471,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando remito. " + ex.Message));
             }
         }
+
         private void limpiarCampos()
         {
             try
@@ -482,6 +488,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error limpiando campos. " + ex.Message));
             }
         }
+
         private List<RemitosCompras_Items> obtenerItems()
         {
             try
@@ -598,6 +605,7 @@ namespace Gestion_Web.Formularios.Compras
                 return -1;
             }
         }
+
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
             try

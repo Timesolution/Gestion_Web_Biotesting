@@ -381,7 +381,6 @@ namespace Gestion_Web.Formularios.Pagos
                     Decimal transferencias = 0.00m;
                     Decimal retenciones = 0.00m;
                     Decimal tarjetas = 0.00m;
-
                     var p = contPagos.obtenerPagoById(Convert.ToInt64(pag));
                     var dtDatosCompra = this.obtenerDatosCompra(p);
                     var dtDetalleCompra = this.contPagos.obtenerDetallePago(p.Id);
