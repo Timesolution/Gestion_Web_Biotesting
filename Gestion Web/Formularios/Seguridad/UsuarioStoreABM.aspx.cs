@@ -124,14 +124,26 @@ namespace Gestion_Web.Formularios.Seguridad
             if (this.User != null && cliente != null)
             {
                 this.DropStore.Enabled = false;
+                this.DropStore.CssClass = "form-control";
+
                 this.txtUsuarioStore.Enabled = false;
+                this.txtUsuarioStore.CssClass = "form-control";
+
                 this.txtTelefonoStore.Enabled = false;
+                this.txtTelefonoStore.CssClass = "form-control";
+
                 this.txtApellidoStore.Enabled = false;
+                this.txtApellidoStore.CssClass = "form-control";
+
                 this.DropPerfilStore.Enabled = false;
+                this.DropPerfilStore.CssClass = "form-control";
+
                 this.txtNombreStore.Enabled = false;
-                this.txtUsuarioStore.Text = user.usuario;
-                this.txtContraseñaStore.Text = user.contraseña;
-                this.txtNombreStore.Text = cliente.razonSocial;
+                this.txtNombreStore.CssClass = "form-control";
+
+                //this.txtUsuarioStore.Text = user.usuario;
+                //this.txtContraseñaStore.Text = user.contraseña;
+                //this.txtNombreStore.Text = cliente.razonSocial;
 
                 if (cliente.contactos.Count > 0)
                 {
@@ -143,6 +155,9 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 if (usuarioStore != null)
                 {
+                    this.txtUsuarioStore.Text = usuarioStore.usuario1;
+                    this.txtContraseñaStore.Text = usuarioStore.contraseña;
+                    this.txtNombreStore.Text = usuarioStore.nombre;
                     this.txtTelefonoStore.Text = usuarioStore.telefono;
                     this.txtMailStore.Text = usuarioStore.mail;
                     this.txtApellidoStore.Text = usuarioStore.apellido;

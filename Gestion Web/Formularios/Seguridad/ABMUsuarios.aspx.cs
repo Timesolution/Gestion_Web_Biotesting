@@ -38,14 +38,16 @@ namespace Gestion_Web.Formularios.Seguridad
                     this.cargarClientes();
                     this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
-                    this.cargarStores();                    
+                    this.cargarStores();
+
+                    if (this.valor == 2)
+                    {
+                        this.cargarUsuario(idUsuario);
+                    }
                 }
 
                 //esto va afuera del post back porque sino te pisa los datos de los textbox
-                if (this.valor == 2)
-                {
-                    this.cargarUsuario(idUsuario);
-                }
+                
 
             }
             catch
@@ -508,7 +510,8 @@ namespace Gestion_Web.Formularios.Seguridad
                 {
                     //agrego bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Modifico Usuario: " + user.usuario);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario modificado con exito", "UsuariosF.aspx"));
+                    ScriptManager.RegisterStartupScript(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Usuario modificado con exito.\", {type: \"info\"}); location.href = 'UsuariosF.aspx';", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario modificado con exito", "UsuariosF.aspx"));
                 }
                 else
                 {
@@ -631,6 +634,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 cliente = contCliente.obtenerClienteID(user.vendedor.id);
 
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
+                
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
                 usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
                 controladorStore contStore = new controladorStore();
@@ -638,6 +642,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 if (this.User != null && cliente != null)
                 {
                     this.txtUsuarioStore.Enabled = false;
+                    this.txtUsuarioStore.CssClass = "form-control";
                     this.txtUsuarioStore.Text = user.usuario;
                     this.txtContraseñaStore.Text = user.contraseña;
                     this.txtNombreStore.Text = cliente.razonSocial;
@@ -803,8 +808,8 @@ namespace Gestion_Web.Formularios.Seguridad
                 if (Convert.ToInt32(modoIntegradoGestion) == 1 && this.valor == 2 && this.DropListPerfil.SelectedItem.Text == "Cliente")
                 {
                     PHUsuariosStore.Visible = true;
-                    CargarUsuariosEnPH();
                     this.btnAgregarStore.Visible = true;
+                    CargarUsuariosEnPH();
                 }
                 else
                 {
@@ -823,6 +828,7 @@ namespace Gestion_Web.Formularios.Seguridad
         {
             try
             {
+                int flag = 0;
                 controladorCliente contCliente = new controladorCliente();
                 Usuario user = this.controlador.obtenerUsuariosID(idUsuario);
                 Gestor_Solution.Modelo.Cliente cliente = new Gestor_Solution.Modelo.Cliente();
@@ -840,9 +846,21 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 //seteo-configuro el ph (esto esta hecho asi porque necesitamos crear 2 controladores diferentes para apuntar a los diferentes stores)
                 if (usuarioStore != null)
+                {
                     SetearPH(usuarioStore, controladorUsuarioStore, contStore);
+                    flag++;
+                }
+                    
                 if(usuarioStore2 != null)
+                {
                     SetearPH(usuarioStore2, controladorUsuarioStore2, contStore);
+                    flag++;
+                }
+                
+                if (flag == 2)
+                {
+                    btnAgregarStore.Visible = false;
+                }    
 
             }
             catch (Exception ex)
@@ -856,93 +874,102 @@ namespace Gestion_Web.Formularios.Seguridad
 
         public void SetearPH(Store_Api.Entidades.Usuario usuarioStore, Store_Api.Controladores.ControladorUsuario controladorUsuarioStore, controladorStore contStore)
         {
-            TableRow tr = new TableRow();
+            try
+            {
+                TableRow tr = new TableRow();
 
-            TableCell celUsuario = new TableCell();
-            celUsuario.Text = usuarioStore.usuario1;
-            celUsuario.VerticalAlign = VerticalAlign.Middle;
-            celUsuario.Width = Unit.Percentage(20);
-            tr.Cells.Add(celUsuario);
+                TableCell celUsuario = new TableCell();
+                celUsuario.Text = usuarioStore.usuario1;
+                celUsuario.VerticalAlign = VerticalAlign.Middle;
+                celUsuario.Width = Unit.Percentage(20);
+                tr.Cells.Add(celUsuario);
 
-            TableCell celContraseña = new TableCell();
-            celContraseña.Text = usuarioStore.contraseña;
-            celContraseña.VerticalAlign = VerticalAlign.Middle;
-            celContraseña.Width = Unit.Percentage(20);
-            tr.Cells.Add(celContraseña);
+                TableCell celContraseña = new TableCell();
+                celContraseña.Text = usuarioStore.contraseña;
+                celContraseña.VerticalAlign = VerticalAlign.Middle;
+                celContraseña.Width = Unit.Percentage(20);
+                tr.Cells.Add(celContraseña);
 
-            TableCell celNombre = new TableCell();
-            celNombre.Text = usuarioStore.nombre;
-            celNombre.VerticalAlign = VerticalAlign.Middle;
-            celNombre.Width = Unit.Percentage(20);
-            tr.Cells.Add(celNombre);
+                TableCell celNombre = new TableCell();
+                celNombre.Text = usuarioStore.nombre;
+                celNombre.VerticalAlign = VerticalAlign.Middle;
+                celNombre.Width = Unit.Percentage(20);
+                tr.Cells.Add(celNombre);
 
-            TableCell celApellido = new TableCell();
-            celApellido.Text = usuarioStore.apellido;
-            celApellido.VerticalAlign = VerticalAlign.Middle;
-            celApellido.Width = Unit.Percentage(20);
-            tr.Cells.Add(celApellido);
+                TableCell celApellido = new TableCell();
+                celApellido.Text = usuarioStore.apellido;
+                celApellido.VerticalAlign = VerticalAlign.Middle;
+                celApellido.Width = Unit.Percentage(20);
+                tr.Cells.Add(celApellido);
 
-            TableCell celTelefono = new TableCell();
-            celTelefono.Text = usuarioStore.telefono;
-            celTelefono.VerticalAlign = VerticalAlign.Middle;
-            celTelefono.Width = Unit.Percentage(20);
-            tr.Cells.Add(celTelefono);
+                TableCell celTelefono = new TableCell();
+                celTelefono.Text = usuarioStore.telefono;
+                celTelefono.VerticalAlign = VerticalAlign.Middle;
+                celTelefono.Width = Unit.Percentage(20);
+                tr.Cells.Add(celTelefono);
 
-            TableCell celMail = new TableCell();
-            celMail.Text = usuarioStore.mail;
-            celMail.VerticalAlign = VerticalAlign.Middle;
-            celMail.Width = Unit.Percentage(20);
-            tr.Cells.Add(celMail);
+                TableCell celMail = new TableCell();
+                celMail.Text = usuarioStore.mail;
+                celMail.VerticalAlign = VerticalAlign.Middle;
+                celMail.Width = Unit.Percentage(20);
+                tr.Cells.Add(celMail);
 
-            TableCell celCoeficiente = new TableCell();
-            celCoeficiente.Text = usuarioStore.coeficiente.ToString();
-            celCoeficiente.VerticalAlign = VerticalAlign.Middle;
-            celCoeficiente.Width = Unit.Percentage(20);
-            tr.Cells.Add(celCoeficiente);
+                TableCell celCoeficiente = new TableCell();
+                celCoeficiente.Text = usuarioStore.coeficiente.ToString();
+                celCoeficiente.VerticalAlign = VerticalAlign.Middle;
+                celCoeficiente.Width = Unit.Percentage(20);
+                tr.Cells.Add(celCoeficiente);
 
-            TableCell celPerfil = new TableCell();
-            celPerfil.Text = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).Perfil;
-            celPerfil.VerticalAlign = VerticalAlign.Middle;
-            celPerfil.Width = Unit.Percentage(20);
-            tr.Cells.Add(celPerfil);
+                TableCell celPerfil = new TableCell();
+                celPerfil.Text = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).Perfil;
+                celPerfil.VerticalAlign = VerticalAlign.Middle;
+                celPerfil.Width = Unit.Percentage(20);
+                tr.Cells.Add(celPerfil);
 
-            TableCell celStore = new TableCell();
-            celStore.Text = contStore.ObtenerStoresPorID((int)usuarioStore.store).Descripcion;
-            celStore.VerticalAlign = VerticalAlign.Middle;
-            celStore.Width = Unit.Percentage(20);
-            tr.Cells.Add(celStore);
+                TableCell celStore = new TableCell();
+                celStore.Text = contStore.ObtenerStoresPorID((int)usuarioStore.store).Descripcion;
+                celStore.VerticalAlign = VerticalAlign.Middle;
+                celStore.Width = Unit.Percentage(20);
+                tr.Cells.Add(celStore);
 
-            TableCell celAction = new TableCell();
-            celAction.Width = Unit.Percentage(20);
+                TableCell celAction = new TableCell();
+                celAction.Width = Unit.Percentage(20);
 
-            Literal lDetail = new Literal();
-            //lDetail.ID = usuarioStore.id.ToString();
+                Literal lDetail = new Literal();
+                //lDetail.ID = usuarioStore.id.ToString();
+
+                lDetail.Text = "<a href=\"UsuarioStoreABM.aspx?idUsuarioStore=" + usuarioStore.id.ToString() + "&idUsuario=" + usuarioStore.idUsuario.ToString() + "&idStore=" + usuarioStore.store.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
+                lDetail.Text += "<i class=\"shortcut-icon icon-search\"></i>";
+                lDetail.Text += "</a>";
+                celAction.Controls.Add(lDetail);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAction.Controls.Add(l2);
+
+
+
+                LinkButton btn_eliminar = new LinkButton();
+                btn_eliminar.CssClass = "btn btn-info";
+                btn_eliminar.Attributes.Add("data-toggle", "modal");
+                //btn_eliminar.Attributes.Add("href", "#modalConfirmacion");
+                btn_eliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                btn_eliminar.OnClientClick = "abrirConfirmacion('" + usuarioStore.id + "_" + usuarioStore.store + "');";
+
+
+
+                celAction.Controls.Add(btn_eliminar);
+
+                tr.Cells.Add(celAction);
+
+                PHUsuariosStoreTabla.Controls.Add(tr);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             
-            lDetail.Text = "<a href=\"UsuarioStoreABM.aspx?idUsuarioStore=" + usuarioStore.id.ToString() +  "&idUsuario=" + usuarioStore.idUsuario.ToString() + "&idStore=" + usuarioStore.store.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
-            lDetail.Text += "<i class=\"shortcut-icon icon-search\"></i>";
-            lDetail.Text += "</a>";
-            celAction.Controls.Add(lDetail);
-
-            Literal l2 = new Literal();
-            l2.Text = "&nbsp";
-            celAction.Controls.Add(l2);
-
-            
-
-            LinkButton btn_eliminar = new LinkButton();
-            btn_eliminar.CssClass = "btn btn-info";
-            btn_eliminar.Attributes.Add("data-toggle", "modal");
-            //btn_eliminar.Attributes.Add("href", "#modalConfirmacion");
-            btn_eliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-            btn_eliminar.OnClientClick = "abrirConfirmacion('" + usuarioStore.id + "_" + usuarioStore.store + "');";
-            
-
-
-            celAction.Controls.Add(btn_eliminar);
-
-            tr.Cells.Add(celAction);            
-
-            PHUsuariosStoreTabla.Controls.Add(tr);
         }
 
         private void BorrarUsuario(int idUsuarioStore, int idStore)
@@ -964,19 +991,26 @@ namespace Gestion_Web.Formularios.Seguridad
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error al borrar usuario del store. " + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error al borrar usuario del store. " + ex.Message);
             }
         }
 
         protected void btnSi_Click(object sender, EventArgs e)
         {
-            
-            string[] atributos = txtIDUsuario.Text.Split('_');
-            int idUsuarioStore = Convert.ToInt32(atributos[0]);
-            int idStore = Convert.ToInt32(atributos[1]);
+            try
+            {
+                string[] atributos = txtIDUsuario.Text.Split('_');
+                int idUsuarioStore = Convert.ToInt32(atributos[0]);
+                int idStore = Convert.ToInt32(atributos[1]);
 
-            BorrarUsuario(idUsuarioStore,idStore);
+                BorrarUsuario(idUsuarioStore, idStore);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

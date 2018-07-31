@@ -76,15 +76,6 @@ namespace Gestion_Web.Formularios.Seguridad {
         protected global::System.Web.UI.WebControls.TextBox txtApellidoStore;
         
         /// <summary>
-        /// RequiredFieldValidator12 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator12;
-        
-        /// <summary>
         /// txtTelefonoStore control.
         /// </summary>
         /// <remarks>
@@ -94,15 +85,6 @@ namespace Gestion_Web.Formularios.Seguridad {
         protected global::System.Web.UI.WebControls.TextBox txtTelefonoStore;
         
         /// <summary>
-        /// RequiredFieldValidator13 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator13;
-        
-        /// <summary>
         /// txtMailStore control.
         /// </summary>
         /// <remarks>
@@ -110,15 +92,6 @@ namespace Gestion_Web.Formularios.Seguridad {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMailStore;
-        
-        /// <summary>
-        /// RequiredFieldValidator14 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator14;
         
         /// <summary>
         /// txtCoeficienteStore control.
