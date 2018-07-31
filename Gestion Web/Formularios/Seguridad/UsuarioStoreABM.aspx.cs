@@ -107,7 +107,7 @@ namespace Gestion_Web.Formularios.Seguridad
             {
                 Usuario user = this.controlador.obtenerUsuariosID(idUsuario);
                 Gestor_Solution.Modelo.Cliente cliente = new Gestor_Solution.Modelo.Cliente();
-                cliente = contCliente.obtenerClienteID(idUsuario);
+                cliente = contCliente.obtenerClienteID(user.vendedor.id);
 
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
                 usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
