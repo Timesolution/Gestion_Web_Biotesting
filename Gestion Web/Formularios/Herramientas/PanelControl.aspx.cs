@@ -878,5 +878,54 @@ namespace Gestion_Web.Formularios.Herramientas
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
             }
         }
+
+        protected void lbtnGuardarPersonalizarStock_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorVisualizacion contVisualizacion = new controladorVisualizacion();
+
+                //Para que no se produzca un desfazaje de las columnas, solo puede haber 2 items tildados
+
+                //Creo un contador para contabilizar los items tildados
+                int c = 0;
+
+                foreach (Control ctrl in UpdatePanelVisualizacionCheques.ContentTemplateContainer.Controls)
+                {
+                    if (ctrl is CheckBox)
+                    {
+                        if ((ctrl as CheckBox).Checked)
+                            c++;
+                    }
+                }
+
+                //Si el contador es mayor a 2, no lo dejo
+                if (c != 2)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Sólo puede seleccionar dos columnas"));
+                    return;
+                }
+
+                VisualizacionCheques vista = new VisualizacionCheques();
+
+                vista.columnaReciboCobro = Convert.ToInt16(this.CheckBoxChReciboCobro.Checked);
+                vista.columnaReciboPago = Convert.ToInt16(this.CheckBoxChReciboPago.Checked);
+                vista.columnaSucursalCobro = Convert.ToInt16(this.CheckBoxChSucCobro.Checked);
+                vista.columnaSucursalPago = Convert.ToInt16(this.CheckBoxChSucPago.Checked);
+                vista.columnaObservacion = Convert.ToInt16(this.CheckBoxChObservacion.Checked);
+
+                int i = contVisualizacion.ModificarVisualizacionCheques(vista);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Vista de cheques modificada con éxito!", null));
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar la vista de cheques"));
+
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando visualización de Cheques. Excepción: " + Ex.Message));
+            }
+        }
     }
 }

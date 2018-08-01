@@ -499,6 +499,15 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizarCheques;
         
         /// <summary>
+        /// lbtnPersonalizarStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizarStock;
+        
+        /// <summary>
         /// lbtnModoSeguro control.
         /// </summary>
         /// <remarks>
@@ -668,5 +677,50 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGuardarPersonalizarCheques;
+        
+        /// <summary>
+        /// UpdatePanelVisualizacionStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelVisualizacionStock;
+        
+        /// <summary>
+        /// CheckBoxStockRemitosP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockRemitosP;
+        
+        /// <summary>
+        /// CheckBoxStockImportacionesP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockImportacionesP;
+        
+        /// <summary>
+        /// CheckBoxStockReal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockReal;
+        
+        /// <summary>
+        /// lbtnGuardarPersonalizarStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGuardarPersonalizarStock;
     }
 }
