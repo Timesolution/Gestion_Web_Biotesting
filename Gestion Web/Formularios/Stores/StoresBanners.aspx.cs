@@ -106,6 +106,26 @@ namespace Gestion_Web.Formularios.Stores
                         {
                             this.Image3.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
                         }
+                        if (f.Name.Contains("Banner4"))
+                        {
+                            this.Image4.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
+                        }
+                        if (f.Name.Contains("Banner5"))
+                        {
+                            this.Image5.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
+                        }
+                        if (f.Name.Contains("Banner6"))
+                        {
+                            this.Image6.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
+                        }
+                        if (f.Name.Contains("Banner7"))
+                        {
+                            this.Image7.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
+                        }
+                        if (f.Name.Contains("Banner8"))
+                        {
+                            this.Image8.ImageUrl = "../../images/Store/" + idStore + "/" + f.Name;
+                        }
                     }
                 }
                 else
@@ -123,158 +143,92 @@ namespace Gestion_Web.Formularios.Stores
         }
         protected void btnAct1_Click(object sender, EventArgs e)
         {
-            if (IsPostBack)
+            try
             {
-                BorrarImagenesPrevias("Banner1");
-                Boolean fileOK = false; 
-                String path = Server.MapPath("../../images/Store/" + idStore + "/");
-                if (FileUpload1.HasFile)
-                {
-                    String fileExtension =
-                        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
-                    String[] allowedExtensions = { ".jpg",".png", ".jpeg" };
-                    for (int i = 0; i < allowedExtensions.Length; i++)
-                    {
-                        if (fileExtension == allowedExtensions[i])
-                        {
-                            fileOK = true;
-                        }
-                    }
-                }
-
-                if (fileOK)
-                {
-                    try
-                    {
-                        //creo el directorio si no exites y subo la foto
-                        Log.EscribirSQL(1, "Info", "Voy a subir imagen");
-                        if (!Directory.Exists(path))
-                        {
-                            Log.EscribirSQL(1, "Info", "No existe directorio. " + path + ". lo creo");
-                            Directory.CreateDirectory(path);
-                            Log.EscribirSQL(1, "Info", "directorio creado");
-                        }
-                        FileUpload1.PostedFile.SaveAs(path
-                            + FileUpload1.FileName);
-                        //modifico e nombre
-                        this.modificarNombre(FileUpload1.FileName, "Banner1");
-
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
-                        Response.Redirect("StoresBanners.aspx?idStore="+idStore);
-                    }
-                    catch (Exception ex)
-                    {
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Error actualizando el banner. " + ex.Message + "');", true); ;
-                    }
-                }
-                else
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Formato de archivo no permitido. Solo se permiten imagenes con extension JPG ');", true); ;
-                }
+                SubirBanner("Banner1", FileUpload1);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
             }
         }
 
         protected void btnAct2_Click(object sender, EventArgs e)
         {
-            if (IsPostBack)
+            try
             {
-                BorrarImagenesPrevias("Banner2");
-                Boolean fileOK = false;
-                String path = Server.MapPath("../../images/Store/" + idStore + "/");
-                if (FileUpload2.HasFile)
-                {
-                    String fileExtension =
-                        System.IO.Path.GetExtension(FileUpload2.FileName).ToLower();
-                    String[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
-                    for (int i = 0; i < allowedExtensions.Length; i++)
-                    {
-                        if (fileExtension == allowedExtensions[i])
-                        {
-                            fileOK = true;
-                        }
-                    }
-                }
-
-                if (fileOK)
-                {
-                    try
-                    {
-                        //creo el directorio si no exites y subo la foto
-                        Log.EscribirSQL(1, "Info", "Voy a subir imagen");
-                        if (!Directory.Exists(path))
-                        {
-                            Log.EscribirSQL(1, "Info", "No existe directorio. " + path + ". lo creo");
-                            Directory.CreateDirectory(path);
-                            Log.EscribirSQL(1, "Info", "directorio creado");
-                        }
-                        FileUpload2.PostedFile.SaveAs(path
-                            + FileUpload2.FileName);
-                        //modifico e nombre
-                        this.modificarNombre(FileUpload2.FileName, "Banner2");
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
-                        Response.Redirect("StoresBanners.aspx?idStore=" + idStore);
-                    }
-                    catch (Exception ex)
-                    {
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Error actualizando el banner. " + ex.Message + "');", true); ;
-                    }
-                }
-                else
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Formato de archivo no permitido. Solo se permiten imagenes con extension JPG ');", true); ;
-                }
+                SubirBanner("Banner2", FileUpload2);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
             }
         }
 
         protected void btnAct3_Click(object sender, EventArgs e)
         {
-            if (IsPostBack)
+            try
             {
-                BorrarImagenesPrevias("Banner3");
-                Boolean fileOK = false;
-                String path = Server.MapPath("../../images/Store/" + idStore + "/");
-                if (FileUpload3.HasFile)
-                {
-                    String fileExtension =
-                        System.IO.Path.GetExtension(FileUpload3.FileName).ToLower();
-                    String[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
-                    for (int i = 0; i < allowedExtensions.Length; i++)
-                    {
-                        if (fileExtension == allowedExtensions[i])
-                        {
-                            fileOK = true;
-                        }
-                    }
-                }
-
-                if (fileOK)
-                {
-                    try
-                    {
-                        //creo el directorio si no exites y subo la foto
-                        Log.EscribirSQL(1, "Info", "Voy a subir imagen");
-                        if (!Directory.Exists(path))
-                        {
-                            Log.EscribirSQL(1, "Info", "No existe directorio. " + path + ". lo creo");
-                            Directory.CreateDirectory(path);
-                            Log.EscribirSQL(1, "Info", "directorio creado");
-                        }
-                        FileUpload3.PostedFile.SaveAs(path
-                            + FileUpload3.FileName);
-                        //modifico e nombre
-                        this.modificarNombre(FileUpload3.FileName, "Banner3");
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
-                        Response.Redirect("StoresBanners.aspx?idStore=" + idStore);
-                    }
-                    catch (Exception ex)
-                    {
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Error actualizando el banner. " + ex.Message + "');", true); ;
-                    }
-                }
-                else
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Formato de archivo no permitido. Solo se permiten imagenes con extension JPG ');", true); ;
-                }
+                SubirBanner("Banner3", FileUpload3);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
+            }
+        }
+        protected void btnAct4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SubirBanner("Banner4", FileUpload4);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
+            }
+        }
+        protected void btnAct5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SubirBanner("Banner5", FileUpload5);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
+            }
+        }
+        protected void btnAct6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SubirBanner("Banner6", FileUpload6);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
+            }
+        }
+        protected void btnAct7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SubirBanner("Banner7", FileUpload7);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir banner " + ex.Message);
+            }
+        }
+        protected void btnAct8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SubirBanner("Banner8",FileUpload8);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al subir banner " + ex.Message);
             }
         }
         private string modificarNombre(string file, string banner)
@@ -318,6 +272,109 @@ namespace Gestion_Web.Formularios.Stores
                 Log.EscribirSQL(1,"ERROR","Error al intentar borrar las imagenes previas " + ex.Message);
             }
             
+        }
+
+        public void SubirBanner(string bannerName, FileUpload fileUpload)
+        {
+            try
+            {
+                if (IsPostBack)
+                {
+                    BorrarImagenesPrevias(bannerName);
+                    Boolean fileOK = false;
+                    String path = Server.MapPath("../../images/Store/" + idStore + "/");
+                    if (fileUpload.HasFile)
+                    {
+                        String fileExtension =
+                            System.IO.Path.GetExtension(fileUpload.FileName).ToLower();
+                        String[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
+                        for (int i = 0; i < allowedExtensions.Length; i++)
+                        {
+                            if (fileExtension == allowedExtensions[i])
+                            {
+                                fileOK = true;
+                            }
+                        }
+                    }
+
+                    if (fileOK)
+                    {
+                        try
+                        {
+                            //creo el directorio si no exites y subo la foto
+                            Log.EscribirSQL(1, "Info", "Voy a subir imagen");
+                            if (!Directory.Exists(path))
+                            {
+                                Log.EscribirSQL(1, "Info", "No existe directorio. " + path + ". lo creo");
+                                Directory.CreateDirectory(path);
+                                Log.EscribirSQL(1, "Info", "directorio creado");
+                            }
+                            fileUpload.PostedFile.SaveAs(path
+                                + fileUpload.FileName);
+                            //modifico e nombre
+                            this.modificarNombre(fileUpload.FileName, bannerName);
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Banner Modificado con Exito');", true);
+                            Response.Redirect("StoresBanners.aspx?idStore=" + idStore);
+                        }
+                        catch (Exception ex)
+                        {
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Error actualizando el banner. " + ex.Message + "');", true); ;
+                        }
+                    }
+                    else
+                    {
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Formato de archivo no permitido. Solo se permiten imagenes con extension JPG ');", true); ;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al subir banner " + ex.Message);
+            }            
+        }
+
+        protected void btnEliminar_1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idBoton = (sender as Button).ID;
+
+                string[] atributos = idBoton.Split('_');
+                string idBanner = atributos[1];
+
+                EliminarBanners(idBanner);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al eliminar banner " + ex.Message);
+            }
+        }
+
+        public void EliminarBanners(string idBanner)
+        {
+            try
+            {
+                String path = Server.MapPath("../../images/Store/" + idStore + "/");
+
+                if (Directory.Exists(path))
+                {
+                    DirectoryInfo di = new DirectoryInfo(path);
+
+                    var files = di.GetFiles();
+                    foreach (var f in files)
+                    {
+                        if (f.Name.ToLower().Contains("banner" + idBanner))
+                        {
+                            f.Delete();
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Banner Eliminado con exito!", "StoresBanners.aspx?idStore="+idStore));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al eliminar banner " + ex.Message);
+            }
         }
     }
 }
