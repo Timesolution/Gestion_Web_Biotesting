@@ -472,6 +472,7 @@
     <Content Include="Formularios\Reportes\ReportesVentas.aspx" />
     <Content Include="Formularios\Reportes\StockF.aspx" />
     <Content Include="Formularios\Reportes\VentasUnidadesF.aspx" />
+    <Content Include="Formularios\Seguridad\UsuarioStoreABM.aspx" />
     <Content Include="Formularios\Stores\StoresABM.aspx" />
     <Content Include="Formularios\Stores\StoresBanners.aspx" />
     <Content Include="Formularios\Stores\StoresF.aspx" />
@@ -2252,6 +2253,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\VentasUnidadesF.aspx.designer.cs">
       <DependentUpon>VentasUnidadesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Seguridad\UsuarioStoreABM.aspx.cs">
+      <DependentUpon>UsuarioStoreABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Seguridad\UsuarioStoreABM.aspx.designer.cs">
+      <DependentUpon>UsuarioStoreABM.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Stores\StoresABM.aspx.cs">
       <DependentUpon>StoresABM.aspx</DependentUpon>
