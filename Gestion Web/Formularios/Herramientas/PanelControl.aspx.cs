@@ -144,6 +144,9 @@ namespace Gestion_Web.Formularios.Herramientas
 
                 //Visualizacion de Cheques
                 this.cargarVisualizacionCheques();
+
+                //Visualizacion de Stock
+                this.cargarVisualizacionStock();
                 
             }
             catch
@@ -166,7 +169,23 @@ namespace Gestion_Web.Formularios.Herramientas
             }
             catch (Exception Ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando visualización de articulos. Excepción: " + Ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando visualización de cheques. Excepción: " + Ex.Message));
+            }
+        }
+
+        private void cargarVisualizacionStock()
+        {
+            try
+            {
+                VisualizacionStock vista = new VisualizacionStock();
+
+                this.CheckBoxStockImportacionesP.Checked = Convert.ToBoolean(vista.columnaImportacionesPendientes);
+                this.CheckBoxStockRemitosP.Checked = Convert.ToBoolean(vista.columnaRemitosPendientes);
+                this.CheckBoxStockReal.Checked = Convert.ToBoolean(vista.columnaStockReal);
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando visualización de stock. Excepción: " + Ex.Message));
             }
         }
 
@@ -888,43 +907,41 @@ namespace Gestion_Web.Formularios.Herramientas
                 //Para que no se produzca un desfazaje de las columnas, solo puede haber 2 items tildados
 
                 //Creo un contador para contabilizar los items tildados
-                int c = 0;
+                //int c = 0;
 
-                foreach (Control ctrl in UpdatePanelVisualizacionCheques.ContentTemplateContainer.Controls)
-                {
-                    if (ctrl is CheckBox)
-                    {
-                        if ((ctrl as CheckBox).Checked)
-                            c++;
-                    }
-                }
+                //foreach (Control ctrl in UpdatePanelVisualizacionStock.ContentTemplateContainer.Controls)
+                //{
+                //    if (ctrl is CheckBox)
+                //    {
+                //        if ((ctrl as CheckBox).Checked)
+                //            c++;
+                //    }
+                //}
 
-                //Si el contador es mayor a 2, no lo dejo
-                if (c != 2)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Sólo puede seleccionar dos columnas"));
-                    return;
-                }
+                ////Si el contador es mayor a 2, no lo dejo
+                //if (c != 2)
+                //{
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Sólo puede seleccionar dos columnas"));
+                //    return;
+                //}
 
-                VisualizacionCheques vista = new VisualizacionCheques();
+                VisualizacionStock vista = new VisualizacionStock();
 
-                vista.columnaReciboCobro = Convert.ToInt16(this.CheckBoxChReciboCobro.Checked);
-                vista.columnaReciboPago = Convert.ToInt16(this.CheckBoxChReciboPago.Checked);
-                vista.columnaSucursalCobro = Convert.ToInt16(this.CheckBoxChSucCobro.Checked);
-                vista.columnaSucursalPago = Convert.ToInt16(this.CheckBoxChSucPago.Checked);
-                vista.columnaObservacion = Convert.ToInt16(this.CheckBoxChObservacion.Checked);
+                vista.columnaRemitosPendientes = Convert.ToInt16(this.CheckBoxStockRemitosP.Checked);
+                vista.columnaImportacionesPendientes = Convert.ToInt16(this.CheckBoxStockImportacionesP.Checked);
+                vista.columnaStockReal = Convert.ToInt16(this.CheckBoxStockReal.Checked);
 
-                int i = contVisualizacion.ModificarVisualizacionCheques(vista);
+                int i = contVisualizacion.ModificarVisualizacionStock(vista);
 
                 if (i > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Vista de cheques modificada con éxito!", null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Vista de stock modificada con éxito!", null));
                 else
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar la vista de cheques"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar la vista de stock"));
 
             }
             catch (Exception Ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando visualización de Cheques. Excepción: " + Ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando visualización de stock. Excepción: " + Ex.Message));
             }
         }
     }

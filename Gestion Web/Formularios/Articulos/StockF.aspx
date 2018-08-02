@@ -65,9 +65,23 @@
                                             <ContentTemplate>
                                                 <table class="table table-striped table-bordered table-hover">
                                                     <thead>
+
                                                         <tr>
                                                             <th>Sucursal</th>
                                                             <th>Stock</th>
+
+                                                            <asp:PlaceHolder runat="server" ID="phImportacionesPendientes" Visible="false">
+                                                                <th>Importaciones Pendientes</th>
+                                                            </asp:PlaceHolder>
+
+                                                            <asp:PlaceHolder runat="server" ID="phRemitosPendientes" Visible="false">
+                                                                <th>Remitos Pendientes</th>
+                                                            </asp:PlaceHolder>
+
+                                                            <asp:PlaceHolder runat="server" ID="phStockReal" Visible="false">
+                                                                <th>Stock Real</th>
+                                                            </asp:PlaceHolder>
+
                                                             <th></th>
                                                         </tr>
 
