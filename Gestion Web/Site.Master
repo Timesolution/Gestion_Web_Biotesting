@@ -325,6 +325,7 @@
                                         <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
                                         <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
                                         <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
+                                        <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
                                         <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
                                             <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
                                         </asp:PlaceHolder>

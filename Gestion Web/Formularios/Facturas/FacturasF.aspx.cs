@@ -3727,8 +3727,32 @@ namespace Gestion_Web.Formularios.Facturas
 
 
 
+
         #endregion
 
-       
+        protected void lbtnOrdenReparacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    Response.Redirect("../OrdenReparacion/OrdenReparacionABM.aspx?presupuesto=" + idtildado);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al generar orden de reparacion " + ex.Message);
+            }
+        }
     }
 } 
