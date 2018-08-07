@@ -22,6 +22,7 @@ namespace Gestion_Web.Formularios.Compras
         controladorCliente contCliente = new controladorCliente();
         controladorArticulo contArticulo = new controladorArticulo();
         controladorCompraEntity contCompEntity = new controladorCompraEntity();
+        Configuracion config = new Configuracion();
         Mensajes m = new Mensajes();
 
         private string fechaD;
@@ -462,11 +463,14 @@ namespace Gestion_Web.Formularios.Compras
                     Importacione importacion = this.contImportaciones.obtenerImportacionByID(Convert.ToInt32(idtildado));
                     if (importacion.MercaderiaArribo == 0)
                     {
+                        string datosRemito = config.ArriboMercaderia;
+                        string idProv = datosRemito.Split(';')[0];
+                        string idSuc = datosRemito.Split(';')[1];
                         RemitosCompra rc = new RemitosCompra();
-                        rc.IdProveedor = 40465;
+                        rc.IdProveedor = Convert.ToInt32(idProv);
                         rc.Numero = txtPuntoVenta.Text + txtNumeroRemito.Text;
                         rc.Fecha = DateTime.Now;
-                        rc.IdSucursal = 144;
+                        rc.IdSucursal = Convert.ToInt32(idSuc);
                         rc.Tipo = 1;
                         rc.Devolucion = 0;
                         rc.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();

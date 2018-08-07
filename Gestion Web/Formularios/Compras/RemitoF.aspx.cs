@@ -50,12 +50,12 @@ namespace Gestion_Web.Formularios.Compras
                     //tipo de documento??
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    this.btnAccion.Visible = false;
+                    //this.btnAccion.Visible = false;
                     
                 }
                 else
                 {
-                    this.btnAccion.Visible = true;
+                    //this.btnAccion.Visible = true;
                 }
 
                 this.cargarSucursal();
@@ -246,7 +246,7 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
-                DateTime Hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR"));
+                DateTime Hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR")).AddHours(23);
                 List<Gestion_Api.Entitys.RemitosCompra> remitos = this.contCompraEntity.buscarRemito(desde, Hasta, proveedor, idSucursal, tipo, devolucion);
 
                 this.cargarRemitos(remitos);

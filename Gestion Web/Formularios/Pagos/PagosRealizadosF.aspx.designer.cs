@@ -76,6 +76,15 @@ namespace Gestion_Web.Formularios.Pagos {
         protected global::System.Web.UI.WebControls.LinkButton lbtnEnvioReciboMail;
         
         /// <summary>
+        /// lbtnModalImputarTarjetaBanco control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnModalImputarTarjetaBanco;
+        
+        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>
@@ -335,5 +344,41 @@ namespace Gestion_Web.Formularios.Pagos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEnviarMail;
+        
+        /// <summary>
+        /// UpdatePanelImputarTarjetaBanco control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelImputarTarjetaBanco;
+        
+        /// <summary>
+        /// dropListEmpresaModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList dropListEmpresaModal;
+        
+        /// <summary>
+        /// dropListCuentaBancoModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList dropListCuentaBancoModal;
+        
+        /// <summary>
+        /// lbtnImputarTarjetaBanco control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImputarTarjetaBanco;
     }
 }

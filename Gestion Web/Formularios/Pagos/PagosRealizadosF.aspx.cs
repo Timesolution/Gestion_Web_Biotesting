@@ -28,6 +28,7 @@ namespace Gestion_Web.Formularios.Pagos
         controladorDocumentos contDocumentos = new controladorDocumentos();
         controladorUsuario contUser = new controladorUsuario();
         controladorPagos contPagos = new controladorPagos();
+        ControladorBanco contBanco = new ControladorBanco();
         Cliente cliente = new Cliente();
         CuentaCorriente cuenta = new CuentaCorriente();
         Mensajes mje = new Mensajes();
@@ -66,6 +67,7 @@ namespace Gestion_Web.Formularios.Pagos
                         this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         this.idProveedor = -1;
                         this.formaPago = 0;//TODO r new
+                        this.DropListEmpresa.SelectedIndex = 0;
                         //this.puntoVenta = this.contCobranza.obtenerPrimerPuntoVenta(idSucursal, idEmpresa);
                         //this.puntoVenta = 1;
                     }
@@ -154,6 +156,7 @@ namespace Gestion_Web.Formularios.Pagos
                 DataRow dr = dt.NewRow();
                 dr["Razon Social"] = "Seleccione...";
                 dr["Id"] = -1;
+                dr["Cuit"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
 
@@ -161,8 +164,13 @@ namespace Gestion_Web.Formularios.Pagos
                 this.DropListEmpresa.DataValueField = "Id";
                 this.DropListEmpresa.DataTextField = "Razon Social";
 
-                this.DropListEmpresa.DataBind();
+                this.dropListEmpresaModal.DataSource = dt;
+                this.dropListEmpresaModal.DataValueField = "Cuit";
+                this.dropListEmpresaModal.DataTextField = "Razon Social";
 
+                this.DropListEmpresa.DataBind();
+                this.dropListEmpresaModal.DataBind();
+                
             }
             catch (Exception ex)
             {
@@ -183,15 +191,11 @@ namespace Gestion_Web.Formularios.Pagos
                 dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
-
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();
-
-
-
 
             }
             catch (Exception ex)
@@ -304,6 +308,8 @@ namespace Gestion_Web.Formularios.Pagos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
+
+
         #endregion
 
         #region busquedas
@@ -768,6 +774,11 @@ namespace Gestion_Web.Formularios.Pagos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error enviando Recibo de Pago por mail. Excepción: " + Ex.Message));
             }
         }
+
+        protected void lbtnImputarDebitarDeCuentaCorriente_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Funciones Auxiliares
@@ -841,5 +852,160 @@ namespace Gestion_Web.Formularios.Pagos
         }
         #endregion
 
+        protected void dropListEmpresaModal_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.dropListEmpresaModal.SelectedValue != "-1")
+                {
+                    this.cargarCuentas(this.dropListEmpresaModal.SelectedValue);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        private void cargarCuentas(string cuit)
+        {
+            try
+            {
+                this.dropListCuentaBancoModal.Items.Clear();
+                cuit = cuit.Replace("-", "");
+                List<CuentasBancaria> cuentas = this.contBanco.obtenerCuentasBancariasByCuit(cuit);
+
+                foreach (var cta in cuentas)
+                {
+                    string text = cta.Banco1.entidad + " - " + cta.Numero;
+                    this.dropListCuentaBancoModal.Items.Add(new ListItem(text, cta.Id.ToString()));
+                }
+
+                this.dropListCuentaBancoModal.Items.Insert(0, new ListItem("Seleccione...", "0"));
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnImputarTarjetaBanco_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.formaPago != 5)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Debe filtrar forma de pago por tarjeta. \");", true);
+                    return;
+                }
+                if (dropListCuentaBancoModal.SelectedValue == "0" || dropListEmpresaModal.SelectedValue == "-1" || string.IsNullOrEmpty(dropListCuentaBancoModal.SelectedValue))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Debe seleccionar una empresa y cuenta de banco. \");", true);
+                    return;
+                }
+                string idtildado = "";
+                foreach (Control C in phPagosRealizados.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                }
+                if (string.IsNullOrEmpty(idtildado))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Debe seleccionar al menos un pago a imputar. \");", true);
+                    return;
+                }
+
+                imputarTarjetaBanco(idtildado);
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Se ha producido un error en pagosRealizadosF. " + Ex.Message + "\");", true);
+                throw;
+            }
+        }
+
+        private void imputarTarjetaBanco(string pagos)
+        {
+            try
+            {
+                pagos = pagos.Substring(0,(pagos.Length-1));
+                var listPagos = pagos.Split(';');
+                decimal total = 0;
+
+                foreach (var item in listPagos)
+                {
+                    var p = this.contPagos.obtenerPagoById(Convert.ToInt32(item));
+
+                    if (p != null)
+                    {
+                        foreach (var tipoPago in p.Pagos_Compras)
+                        {
+                            if (tipoPago.TipoPago != 5)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Un pago seleccionado no fue hecho con tarjeta. \");", true);
+                                return;
+                            }
+                        }
+                        if (this.contPagos.verificarPagoImputacion((long)p.Id))//verifico si ese pago ya existe en la tabla
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Este pago ya fue imputado. \");", true);
+                            return;
+                        }
+
+                        total += (decimal)p.Total;
+                    }
+                }
+
+                CuentasBancarias_Movimientos mov = new CuentasBancarias_Movimientos();
+                mov.Fecha = DateTime.Now;
+                mov.Monto = total;
+                mov.IdCuenta = Convert.ToInt32(this.dropListCuentaBancoModal.SelectedValue);
+                mov.IdConcepto = 0;
+                mov.Observaciones = "Pago resumen Tarjeta Crédito";
+
+                var concepto = this.contBanco.obtenerConceptosBancariosByDescripcion("Debito Tarjeta Credito");
+
+                if (concepto != null)
+                {
+                    mov.IdConcepto = concepto.Id;
+                }
+
+                int ok = this.contBanco.agregarMovimientoBancos(mov);
+                if (ok > 0)
+                {
+                    //Agrega en tabla Pagos_ImputadosBancos
+                    int okImputar = contPagos.agregarPagos_imputadosBancos(pagos,mov);
+                    if (okImputar > 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Agregado con exito!. \", {type: \"info\"});location.href = 'PagosRealizadosF.aspx';", true);
+                        //ClientScript.RegisterClientScriptBlock(, "alert", mje.mensajeBoxInfo("Agregado con exito!.", "PagosRealizadosF.aspx"));
+                    }
+                    else
+                    {
+                        int a = this.contBanco.anularMovimientoBancos(mov);
+                        if (a < 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Error al agregar imputacion. \");", true);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Error al agregar imputacion. Se anulo el movimiento del banco. \");", true);
+                        }
+                    }
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"No se pudo agregar movimiento. \");", true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Se ha producido un error al imputar tarjeta banco. "));
+                throw;
+            }
+        }
     }
 }
