@@ -100,10 +100,11 @@
                                             <th>Numero Orden</th>
                                             <th>Numero Serie</th>
                                             <th>Sucursal</th>
-                                            <th>PRP</th>
+                                            <th>PRP/Factura</th>
                                             <th>Fecha Compra</th>
                                             <th>Cliente</th>
                                             <th>Plazo Reparacion</th>
+                                            <th></th>
                                         </tr>
 
                                     </thead>

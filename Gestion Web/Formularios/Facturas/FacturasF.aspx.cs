@@ -3746,7 +3746,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Response.Redirect("../OrdenReparacion/OrdenReparacionABM.aspx?presupuesto=" + idtildado);
+                    Response.Redirect("../OrdenReparacion/OrdenReparacionABM.aspx?a=1&presupuesto=" + idtildado);
                 }
             }
             catch (Exception ex)

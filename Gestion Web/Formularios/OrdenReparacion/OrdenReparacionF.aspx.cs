@@ -7,8 +7,16 @@ using System.Web.UI.WebControls;
 
 namespace Gestion_Web.Formularios.OrdenReparacion
 {
+    using Gestion_Api.Entitys;
+    using Gestion_Api.Controladores;
+    using Gestion_Api.Modelo;
+    using Disipar.Models;
+
     public partial class OrdenReparacionF : System.Web.UI.Page
     {
+        ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
+        Mensajes m = new Mensajes();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -16,7 +24,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 this.VerificarLogin();
                 if (!IsPostBack)
                 {
-
+                    CargarOrdenesReparacion();
                 }
 
             }
@@ -71,6 +79,172 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch
             {
                 return -1;
+            }
+        }
+
+        private void cargarEnPh(OrdenReparacion or)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+                tr.ID = or.Id.ToString();
+
+                //Celdas
+
+                TableCell celFecha = new TableCell();
+                celFecha.Text = or.Fecha;
+                celFecha.HorizontalAlign = HorizontalAlign.Left;
+                celFecha.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celFecha);
+
+                TableCell celNumeroOrden = new TableCell();
+                celNumeroOrden.Text = or.NumeroOrdenReparacion.Value.ToString("D8");
+                celNumeroOrden.HorizontalAlign = HorizontalAlign.Left;
+                celNumeroOrden.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celNumeroOrden);
+
+                TableCell celNumeroSerie = new TableCell();
+                celNumeroSerie.Text = or.NumeroSerie;
+                celNumeroSerie.HorizontalAlign = HorizontalAlign.Left;
+                celNumeroSerie.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celNumeroSerie);
+
+
+                TableCell celSucursal = new TableCell();
+                celSucursal.Text = or.SucursalOrigen;
+                celSucursal.VerticalAlign = VerticalAlign.Middle;
+                celSucursal.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celSucursal);
+
+                TableCell celPRP = new TableCell();
+                celPRP.Text = or.NumeroPRP;
+                celPRP.HorizontalAlign = HorizontalAlign.Left;
+                celPRP.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celPRP);
+
+                TableCell celFechaCompra = new TableCell();
+                celFechaCompra.Text = or.FechaCompra;
+                celFechaCompra.HorizontalAlign = HorizontalAlign.Left;
+                celFechaCompra.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celFechaCompra);
+
+                TableCell celCliente = new TableCell();
+                celCliente.Text = or.Cliente;
+                celCliente.HorizontalAlign = HorizontalAlign.Left;
+                celCliente.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCliente);
+
+                TableCell celPlazoReparacion = new TableCell();
+                celPlazoReparacion.Text = or.PlazoLimiteReparacion.ToString();
+                celPlazoReparacion.HorizontalAlign = HorizontalAlign.Left;
+                celPlazoReparacion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celPlazoReparacion);
+                //arego fila a tabla
+
+                TableCell celAccion = new TableCell();
+
+                Literal lDetail = new Literal();
+                lDetail.ID = "btnEditar_" + or.Id.ToString();
+                lDetail.Text = "<a href=\"OrdenReparacionABM.aspx?a=2&idordenreparacion=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                lDetail.Text += "<span class=\"shortcut-icon icon-pencil\"></span>";
+                lDetail.Text += "</a>";
+
+                celAccion.Controls.Add(lDetail);
+
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+                celAccion.Controls.Add(l1);
+
+                LinkButton btnEditar = new LinkButton();
+                btnEditar.CssClass = "btn btn-info ui-tooltip";
+                btnEditar.Attributes.Add("data-toggle", "tooltip");
+                btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                btnEditar.ID = "btnSelec_" + or.Id;
+                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                btnEditar.Font.Size = 12;
+                btnEditar.Click += new EventHandler(DetalleOrdenReparacion);
+                celAccion.Controls.Add(btnEditar);
+                celAccion.Width = Unit.Percentage(10);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
+
+                CheckBox cbSeleccion = new CheckBox();
+                cbSeleccion.ID = "cbSeleccion_" + or.Id;
+                cbSeleccion.CssClass = "btn btn-info";
+                cbSeleccion.Font.Size = 12;
+                celAccion.Controls.Add(cbSeleccion);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAccion.Controls.Add(l2);
+
+                //Literal lDetail = new Literal();
+                //lDetail.ID = "btnEditar_" + or.Id.ToString();
+                //lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                //lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
+                //lDetail.Text += "</a>";
+
+                tr.Cells.Add(celAccion);
+
+                phOrdenReparacion.Controls.Add(tr);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+            }
+        }
+
+        private void DetalleOrdenReparacion(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtengo numero factura
+                string idBoton = (sender as LinkButton).ID;
+                string[] atributos = idBoton.Split('_');
+                string idOrdenReparacion = atributos[1];
+
+                OrdenReparacion or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idOrdenReparacion));
+
+                or.Estado = 0;
+
+                var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                if (temp > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Pongo orden de reparacion en estado 0 " + or.Id);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación eliminada con exito!.", null));
+                }
+                else if(temp == -1)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al modificar orden de reparación. " + or.Id);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al modificar orden de reparación"));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de cotizacion desde la interfaz. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
+            }
+        }
+
+        public void CargarOrdenesReparacion()
+        {
+            try
+            {
+                foreach (var item in contOrdenReparacion.ObtenerOrdenesReparacion())
+                {
+                    cargarEnPh(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                
             }
         }
     }
