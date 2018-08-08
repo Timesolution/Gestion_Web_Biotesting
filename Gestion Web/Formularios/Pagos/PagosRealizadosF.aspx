@@ -62,6 +62,9 @@
                                                     <li>
                                                         <asp:LinkButton ID="lbtnEnvioReciboMail" runat="server" OnClick="lbtnEnvioReciboPagoMail_Click">Enviar Recibo de Pago por Mail</asp:LinkButton>
                                                     </li>
+                                                    <li>
+                                                        <asp:LinkButton ID="lbtnModalImputarTarjetaBanco" runat="server" data-toggle="modal" href="#modalImputarTarjetaBanco">Imputar Tarjeta a Banco</asp:LinkButton>
+                                                    </li>
 
                                                 </ul>
                                             </div>
@@ -274,6 +277,31 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListPuntoVenta" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
+                                <!-- TODO r new -->
+
+
+
+
+                                <div class="form-group">
+                                    <label class="col-md-4">Formas de pago</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListFormaPago" runat="server" class="form-control">
+                                            <asp:ListItem Value="0" Text="Todos"></asp:ListItem>
+                                            <asp:ListItem Value="1" Text="Efectivo"></asp:ListItem>
+                                            <asp:ListItem Value="2" Text="Cheque propio"></asp:ListItem>
+                                            <asp:ListItem Value="3" Text="Transferencia"></asp:ListItem>
+                                            <asp:ListItem Value="5" Text="Tarjeta"></asp:ListItem>
+                                            <asp:ListItem Value="6" Text="Retencion"></asp:ListItem>
+                                            <asp:ListItem Value="7" Text="Cheque Tercero"></asp:ListItem>
+                                        </asp:DropDownList>
+
+                                        <!-- /input-group -->
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListPuntoVenta" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
                                 <%--<div class="form-group">
                                     <label class="col-md-4">Tipo</label>
                                     <div class="col-md-6">
@@ -349,6 +377,47 @@
         </div>
     </div>
 
+    <div id="modalImputarTarjetaBanco" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="btnCerrarModalImputarTarjetaBanco" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Imputar a Banco</h4>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel runat="server" ID="UpdatePanelImputarTarjetaBanco" UpdateMode="Always">
+                        <ContentTemplate>
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Empresa:</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="dropListEmpresaModal" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="dropListEmpresaModal_SelectedIndexChanged"></asp:DropDownList>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cuenta Banco</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="dropListCuentaBancoModal" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <asp:LinkButton ID="lbtnImputarTarjetaBanco" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="ImputarTarjetaBancoGroup" OnClick="lbtnImputarTarjetaBanco_Click" />
+                            </div>
+
+                        </ContentTemplate>
+                        <Triggers></Triggers>
+                    </asp:UpdatePanel>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function abrirdialog(valor) {

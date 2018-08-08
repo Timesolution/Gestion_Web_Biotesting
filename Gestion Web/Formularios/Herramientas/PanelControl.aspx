@@ -387,6 +387,13 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Personalizar tabla Stock:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnPersonalizarStock" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalPersonalizacionStock" class="btn btn-success" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Modo Seguro:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnModoSeguro" runat="server" OnClick="lbtnModoSeguro_Click" />
@@ -545,7 +552,49 @@
         </div>
     </div>
 
-
+    <div id="modalPersonalizacionStock" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 75%;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Visualizacion Stock</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel runat="server" UpdateMode="Always" ID="UpdatePanelVisualizacionStock">
+                            <ContentTemplate>
+                                <fieldset>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Remitos Pendientes</label>
+                                        <div class="input-group">
+                                            <asp:CheckBox ID="CheckBoxStockRemitosP" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Importaciones Pendientes</label>
+                                        <div class="input-group">
+                                            <asp:CheckBox ID="CheckBoxStockImportacionesP" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Stock Real</label>
+                                        <div class="input-group">
+                                            <asp:CheckBox ID="CheckBoxStockReal" runat="server" />
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnGuardarPersonalizarStock" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnGuardarPersonalizarStock_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Core Scripts - Include with every page -->

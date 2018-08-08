@@ -74,8 +74,10 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         chkRemSinFacturas.Checked = false;
                     }
-                    this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura);
+                    
                 }
+
+                this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura);
             }
             catch (Exception ex)
             {
