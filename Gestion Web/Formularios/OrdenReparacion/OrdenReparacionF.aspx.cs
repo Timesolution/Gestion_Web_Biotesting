@@ -156,32 +156,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 Literal lDetail = new Literal();
                 lDetail.ID = "btnEditar_" + or.Id.ToString();
-                lDetail.Text = "<span href=\"OrdenReparacionABM.aspx?a=2&idordenreparacion=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style=\"font-size:12pt\">";
+                lDetail.Text = "<a href=\"OrdenReparacionABM.aspx?a=2&idordenreparacion=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
                 lDetail.Text += "<span class=\"shortcut-icon icon-pencil\"></span>";
-                lDetail.Text += "</span>";
+                lDetail.Text += "</a>";
 
                 celAccion.Controls.Add(lDetail);
 
                 Literal l1 = new Literal();
                 l1.Text = "&nbsp";
                 celAccion.Controls.Add(l1);
-
-                //LinkButton btnEditar = new LinkButton();
-                //btnEditar.CssClass = "btn btn-info ui-tooltip";
-                //btnEditar.Attributes.Add("data-toggle", "tooltip");
-                //btnEditar.Attributes.Add("title data-original-title", "Detalles");
-                //btnEditar.ID = "btnSelec_" + or.Id;
-                //btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                ////btnEliminar.PostBackUrl = "#modalFacturaDetalle";
-                //btnEditar.Font.Size = 12;
-                //btnEditar.Click += new EventHandler(DetalleOrdenReparacion);
-                //celAccion.Controls.Add(btnEditar);
-                //celAccion.Width = Unit.Percentage(10);
-                //celAccion.VerticalAlign = VerticalAlign.Middle;
-
-                //Literal l3 = new Literal();
-                //l3.Text = "&nbsp";
-                //celAccion.Controls.Add(l3);
 
                 CheckBox cbSeleccion = new CheckBox();
                 cbSeleccion.ID = "cbSeleccion_" + or.Id;
@@ -252,7 +235,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        protected void lbtnAnular_Click(object sender, EventArgs e)
+        protected void btnSi_Click(object sender, EventArgs e)
         {
             try
             {
@@ -266,9 +249,24 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         idtildado += ch.ID.Split('_')[1];
                     }
                 }
+
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Response.Redirect("../OrdenReparacion/OrdenReparacionABM.aspx?a=1&presupuesto=" + idtildado);
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                    or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("Anulada").Id;
+
+                    var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                    if (temp > 0)
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Pongo orden de reparacion en estado 0 " + or.Id);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación eliminada con exito!.", "OrdenReparacionF.aspx"));
+                    }
+                    else if (temp == -1)
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al modificar orden de reparación. " + or.Id);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al modificar orden de reparación"));
+                    }
                 }
             }
             catch (Exception ex)
