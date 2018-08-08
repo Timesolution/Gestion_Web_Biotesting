@@ -117,6 +117,7 @@ namespace Gestion_Web.Formularios.Clientes
                         this.linkEntregas.Visible = true;
                         this.linkEventos.Visible = true;
                         this.linkFamilia.Visible = true;
+                        this.linkCodigoBTB.Visible = true;
                         //this.linkEmpleado.Visible = true;
                         //this.linkExportacion.Visible = true;//lo muestro solo si el cliente es iva del exteriros
                     }
