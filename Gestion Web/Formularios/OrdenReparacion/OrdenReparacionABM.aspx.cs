@@ -12,6 +12,9 @@ using System.Web.UI.WebControls;
 namespace Gestion_Web.Formularios.OrdenReparacion
 {
     using Gestion_Api.Entitys;
+    using Gestor_Solution.Controladores;
+    using System.Globalization;
+
     public partial class OrdenReparacionABM : System.Web.UI.Page
     {
         Mensajes m = new Mensajes();
@@ -32,16 +35,14 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 idOrdenReparacion = Convert.ToInt32(Request.QueryString["idordenreparacion"]);
                 accion = Convert.ToInt32(Request.QueryString["a"]);
 
-                //if (!IsPostBack)
-                //{
-                //    //CargarArticulosDropDownList();
-                    
-                //}
-
-                if (accion == 1)
-                    CargarDatosFacturaEnOrdenReparacion();
-                else if (accion == 2)
-                    ModificarOrdenReparacion();
+                if (!IsPostBack)
+                {
+                    //CargarArticulosDropDownList();
+                    if (accion == 1)
+                        CargarDatosFacturaEnOrdenReparacion();
+                    else if (accion == 2)
+                        ModificarOrdenReparacion();
+                }
 
             }
             catch
@@ -103,6 +104,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 var or = new OrdenReparacion();
 
+                or.Estado = 1;
+
                 SetearValoresEnOrdenReparacion(or);
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
@@ -129,19 +132,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 or.Autoriza = txtAutoriza.Text;
-                or.Celular = txtCelular.Text;
-                or.Cliente = txtCliente.Text;
+                or.Celular = txtCodArea.Text + txtCelular.Text;
+                or.Cliente = Convert.ToInt32(ListCliente.SelectedValue);//txtCliente.Text;
                 //or.DatosTrazabilidad = txtDatosTrazabilidad.Text;
                 or.DescripcionFalla = txtDescripcionFalla.Text;
-                or.Estado = 1;
-                or.Fecha = txtFecha.Text.ToString();
-                or.FechaCompra = txtFechaCompra.Text;
+                //or.Estado = 1;
+                or.Fecha = Convert.ToDateTime(txtFecha.Text, new CultureInfo("es-AR"));
+                or.FechaCompra = Convert.ToDateTime(txtFechaCompra.Text,new CultureInfo("es-AR"));
                 or.NumeroOrdenReparacion = Convert.ToInt32(txtNumeroOrden.Text);
-                or.NumeroPRP = txtNumeroPRP.Text;
+                or.NumeroPRP = Convert.ToInt32(ListNumeroPRPoFactura.SelectedValue);//txtNumeroPRP.Text;
                 or.NumeroSerie = txtNumeroSerie.Text;
                 or.PlazoLimiteReparacion = Convert.ToInt32(DropListPlazoLimite.SelectedValue);
-                or.Producto = ListProductos.SelectedValue;
-                or.SucursalOrigen = txtSucOrigen.Text;
+                or.Producto = Convert.ToInt32(ListProductos.SelectedValue); //ListProductos.SelectedValue;
+                or.SucursalOrigen = Convert.ToInt32(ListSucursal.SelectedValue); //txtSucOrigen.Text;
             }
             catch (Exception ex)
             {
@@ -163,25 +166,50 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtNumeroOrden.CssClass = "form-control";
                 txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 txtFecha.CssClass = "form-control";
-                txtSucOrigen.Text = f.sucursal.nombre;
-                txtSucOrigen.CssClass = "form-control";
-                txtNumeroPRP.Text = f.numero;
-                txtNumeroPRP.CssClass = "form-control";
+
+                ListSucursal.Items.Add(new ListItem
+                {
+                    Value = f.sucursal.id.ToString(),
+                    Text = f.sucursal.nombre
+                });
+                ListSucursal.CssClass = "form-control";
+
+                ListCliente.Items.Add(new ListItem
+                {
+                    Value = f.cliente.id.ToString(),
+                    Text = f.cliente.razonSocial
+                });
+                ListCliente.CssClass = "form-control";
+
+                ListNumeroPRPoFactura.Items.Add(new ListItem
+                {
+                    Value = f.id.ToString(),
+                    Text = f.numero
+                });
+                ListNumeroPRPoFactura.CssClass = "form-control";
+
                 txtFechaCompra.Text = f.fecha.ToString("dd/MM/yyyy");
                 txtFechaCompra.CssClass = "form-control";
-                txtCliente.Text = f.cliente.razonSocial;
-                txtCliente.CssClass = "form-control";
 
+                #region celular
                 if (f.cliente.contactos.Count > 0 && f.cliente.contactos[0].numero != null)
-                    txtCelular.Text = f.cliente.contactos[0].numero;
+                {
+                    string numeroCelular = f.cliente.contactos[0].numero.Trim();
 
+                    if (numeroCelular.StartsWith("11"))
+                    {
+                        txtCodArea.Text = "11";
+                        txtCelular.Text = numeroCelular.Substring(Math.Max(0, numeroCelular.Length - 8));
+                    }
+                    else
+                    {
+                        txtCelular.Text = numeroCelular.Substring(Math.Max(0, numeroCelular.Length - 6));
+                        numeroCelular = numeroCelular.Replace(txtCelular.Text, string.Empty);
+                        txtCodArea.Text = numeroCelular;
+                    }
+                }
+                #endregion
                 CargarArticulosDropDownList(f.items);
-                //var itemsFactura = contFacturacion.obtenerItemsFact(f.id);                
-
-                //foreach (var itemFactura in itemsFactura)
-                //{
-                //    var trazas = contArticulo.ObtenerTrazabilidadByFacturaArticulo(itemFactura.articulo.id, f.id);
-                //}
 
             }
             catch (Exception ex)
@@ -194,30 +222,77 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
+                controladorSucursal contSucursal = new controladorSucursal();
+                controladorCliente contCliente = new controladorCliente();
+
                 btnGuardar.Visible = true;
 
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(idOrdenReparacion);
 
                 txtNumeroOrden.Text = or.NumeroOrdenReparacion.Value.ToString("D8");
                 txtNumeroOrden.CssClass = "form-control";
-                txtFecha.Text = or.Fecha;
+                txtFecha.Text = or.Fecha.Value.ToString("dd/MM/yyyy");
                 txtFecha.CssClass = "form-control";
-                txtSucOrigen.Text = or.SucursalOrigen;
-                txtSucOrigen.CssClass = "form-control";
-                txtNumeroPRP.Text = or.NumeroPRP;
-                txtNumeroPRP.CssClass = "form-control";
-                txtFechaCompra.Text = or.FechaCompra;
+
+                var suc = contSucursal.obtenerSucursalID((int)or.SucursalOrigen);
+
+                ListSucursal.Items.Add(new ListItem
+                {
+                    Value = suc.id.ToString(),
+                    Text = suc.nombre
+                });
+                ListSucursal.CssClass = "form-control";
+
+                var cliente = contCliente.obtenerClienteID((int)or.Cliente);
+
+                ListCliente.Items.Add(new ListItem
+                {
+                    Value = cliente.id.ToString(),
+                    Text = cliente.razonSocial
+                });
+                ListCliente.CssClass = "form-control";
+
+                var f = contFacturacion.obtenerFacturaId((int)or.NumeroPRP);
+
+                ListNumeroPRPoFactura.Items.Add(new ListItem
+                {
+                    Value = f.id.ToString(),
+                    Text = f.numero
+                });
+                ListNumeroPRPoFactura.CssClass = "form-control";
+                txtFechaCompra.Text = or.FechaCompra.Value.ToString("dd/MM/yyyy");
                 txtFechaCompra.CssClass = "form-control";
-                txtCliente.Text = or.Cliente;
-                txtCliente.CssClass = "form-control";
                 txtCelular.Text = or.Celular;
+
+                #region celular
+                string numeroCelular = or.Celular.Trim();
+
+                if (numeroCelular.StartsWith("11"))
+                {
+                    txtCodArea.Text = "11";
+                    txtCelular.Text = numeroCelular.Substring(Math.Max(0, numeroCelular.Length - 8));
+                }
+                else
+                {
+                    txtCelular.Text = numeroCelular.Substring(Math.Max(0, numeroCelular.Length - 6));
+                    numeroCelular = numeroCelular.Replace(txtCelular.Text, string.Empty);
+                    txtCodArea.Text = numeroCelular;
+                }
+                #endregion
+
                 txtAutoriza.Text = or.Autoriza;
-                //txtDatosTrazabilidad.Text = or.DatosTrazabilidad;
                 txtDescripcionFalla.Text = or.DescripcionFalla;
                 txtNumeroSerie.Text = or.NumeroSerie;
                 DropListPlazoLimite.Text = or.PlazoLimiteReparacion.ToString();
+
                 var art = contArticulo.obtenerArticuloByID(Convert.ToInt32(or.Producto));
-                ListProductos.Items.Add(art.codigo + " - " + art.descripcion);
+
+                ListProductos.Items.Add(new ListItem
+                {
+                    Value = art.id.ToString(),
+                    Text = art.codigo + " - " + art.descripcion
+                } );
+
                 ListProductos.Enabled = false;
                 ListProductos.CssClass = "form-control";
             }
@@ -239,25 +314,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //obtengo los articulos de la factura
                 var articulosFactura = itemsFactura.Select(x => x.articulo).ToList();
 
-                //List<Articulo> articulos = new List<Articulo>();
-
                 //uso los articulos que tenia la factura para buscar en la tabla articulos y asi la descripcion viene sin la trazabilidad
                 List<Articulo> articulos = articulosFactura.Select(x => contArticulo.obtenerArticuloByID(x.id)).ToList();
 
-                //foreach (var articulo in articulosFactura)
-                //{
-                //    articulos.Add(contArticulo.obtenerArticuloByID(articulo.id));
-                //}
-
                 //cargo el datatable con los articulos que tiene la factura. uso el tolist al final porque al ser lazy no se ejecuta el select inmediatamente y entonces no le pasa valores al datatable
                 articulos.Select(x => dtArticulos.Rows.Add(x.id, x.codigo + " - " + x.descripcion)).ToList();
-
-                //foreach (var articulo in articulos)
-                //{
-                //    dtArticulos.Rows.Add(articulo.id,articulo.codigo + " - " + articulo.descripcion);
-                //}
-
-                //dtArticulos.Rows.Add(articulos.Select(x => x.id).,articulos.Select(x => x.descripcion).FirstOrDefault());
 
                 this.ListProductos.DataSource = dtArticulos;
                 this.ListProductos.DataValueField = "id";

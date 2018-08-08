@@ -11,6 +11,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
     using Gestion_Api.Controladores;
     using Gestion_Api.Modelo;
     using Disipar.Models;
+    using Gestor_Solution.Controladores;
 
     public partial class OrdenReparacionF : System.Web.UI.Page
     {
@@ -86,6 +87,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
+                controladorSucursal contSucursal = new controladorSucursal();
+                controladorFacturacion contFacturacion = new controladorFacturacion();
+                controladorCliente contCliente = new controladorCliente();
+
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = or.Id.ToString();
@@ -93,7 +98,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //Celdas
 
                 TableCell celFecha = new TableCell();
-                celFecha.Text = or.Fecha;
+                celFecha.Text = or.Fecha.ToString();
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
@@ -111,26 +116,26 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 tr.Cells.Add(celNumeroSerie);
 
 
-                TableCell celSucursal = new TableCell();
-                celSucursal.Text = or.SucursalOrigen;
+                TableCell celSucursal = new TableCell();                
+                celSucursal.Text = contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre;
                 celSucursal.VerticalAlign = VerticalAlign.Middle;
                 celSucursal.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celSucursal);
 
                 TableCell celPRP = new TableCell();
-                celPRP.Text = or.NumeroPRP;
+                celPRP.Text = contFacturacion.obtenerFacturaId((int)or.NumeroPRP).numero;
                 celPRP.HorizontalAlign = HorizontalAlign.Left;
                 celPRP.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celPRP);
 
                 TableCell celFechaCompra = new TableCell();
-                celFechaCompra.Text = or.FechaCompra;
+                celFechaCompra.Text = or.FechaCompra.ToString();
                 celFechaCompra.HorizontalAlign = HorizontalAlign.Left;
                 celFechaCompra.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFechaCompra);
 
                 TableCell celCliente = new TableCell();
-                celCliente.Text = or.Cliente;
+                celCliente.Text = contCliente.obtenerClienteID((int)or.Cliente).razonSocial;
                 celCliente.HorizontalAlign = HorizontalAlign.Left;
                 celCliente.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCliente);
@@ -140,15 +145,20 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celPlazoReparacion.HorizontalAlign = HorizontalAlign.Left;
                 celPlazoReparacion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celPlazoReparacion);
-                //arego fila a tabla
+
+                TableCell celEstado = new TableCell();
+                celEstado.Text = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID((int)or.Estado).Descripcion;
+                celEstado.HorizontalAlign = HorizontalAlign.Left;
+                celEstado.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celEstado);
 
                 TableCell celAccion = new TableCell();
 
                 Literal lDetail = new Literal();
                 lDetail.ID = "btnEditar_" + or.Id.ToString();
-                lDetail.Text = "<a href=\"OrdenReparacionABM.aspx?a=2&idordenreparacion=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                lDetail.Text = "<span href=\"OrdenReparacionABM.aspx?a=2&idordenreparacion=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style=\"font-size:12pt\">";
                 lDetail.Text += "<span class=\"shortcut-icon icon-pencil\"></span>";
-                lDetail.Text += "</a>";
+                lDetail.Text += "</span>";
 
                 celAccion.Controls.Add(lDetail);
 
@@ -156,22 +166,22 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 l1.Text = "&nbsp";
                 celAccion.Controls.Add(l1);
 
-                LinkButton btnEditar = new LinkButton();
-                btnEditar.CssClass = "btn btn-info ui-tooltip";
-                btnEditar.Attributes.Add("data-toggle", "tooltip");
-                btnEditar.Attributes.Add("title data-original-title", "Detalles");
-                btnEditar.ID = "btnSelec_" + or.Id;
-                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
-                btnEditar.Font.Size = 12;
-                btnEditar.Click += new EventHandler(DetalleOrdenReparacion);
-                celAccion.Controls.Add(btnEditar);
-                celAccion.Width = Unit.Percentage(10);
-                celAccion.VerticalAlign = VerticalAlign.Middle;
+                //LinkButton btnEditar = new LinkButton();
+                //btnEditar.CssClass = "btn btn-info ui-tooltip";
+                //btnEditar.Attributes.Add("data-toggle", "tooltip");
+                //btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                //btnEditar.ID = "btnSelec_" + or.Id;
+                //btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                ////btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                //btnEditar.Font.Size = 12;
+                //btnEditar.Click += new EventHandler(DetalleOrdenReparacion);
+                //celAccion.Controls.Add(btnEditar);
+                //celAccion.Width = Unit.Percentage(10);
+                //celAccion.VerticalAlign = VerticalAlign.Middle;
 
-                Literal l3 = new Literal();
-                l3.Text = "&nbsp";
-                celAccion.Controls.Add(l3);
+                //Literal l3 = new Literal();
+                //l3.Text = "&nbsp";
+                //celAccion.Controls.Add(l3);
 
                 CheckBox cbSeleccion = new CheckBox();
                 cbSeleccion.ID = "cbSeleccion_" + or.Id;
@@ -182,12 +192,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 Literal l2 = new Literal();
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
-
-                //Literal lDetail = new Literal();
-                //lDetail.ID = "btnEditar_" + or.Id.ToString();
-                //lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
-                //lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
-                //lDetail.Text += "</a>";
 
                 tr.Cells.Add(celAccion);
 
@@ -245,6 +249,31 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 
+            }
+        }
+
+        protected void lbtnAnular_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                foreach (Control C in phOrdenReparacion.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    Response.Redirect("../OrdenReparacion/OrdenReparacionABM.aspx?a=1&presupuesto=" + idtildado);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al anular orden de reparacion. " + ex.Message);
             }
         }
     }

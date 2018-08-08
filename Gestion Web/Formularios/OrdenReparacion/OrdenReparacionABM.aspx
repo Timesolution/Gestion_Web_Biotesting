@@ -84,19 +84,19 @@
                                             <div class="form-group">
                                                 <label for="name" class="col-md-4">Sucursal Origen</label>
                                                 <div class="col-md-4">
-                                                    <asp:TextBox ID="txtSucOrigen" runat="server" class="form-control" Enabled="false"></asp:TextBox>
+                                                    <asp:DropDownList ID="ListSucursal" runat="server" class="form-control" Enabled="false"></asp:DropDownList>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtSucOrigen" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListSucursal" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="name" class="col-md-4">Numero de PRP/Factura</label>
                                                 <div class="col-md-4">
-                                                    <asp:TextBox ID="txtNumeroPRP" runat="server" class="form-control" Enabled="false"></asp:TextBox>
+                                                    <asp:DropDownList ID="ListNumeroPRPoFactura" runat="server" class="form-control" Enabled="false"></asp:DropDownList>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtNumeroPRP" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListNumeroPRPoFactura" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -111,7 +111,10 @@
                                             <div class="form-group">
                                                 <label class="col-md-4">Fecha de Compra</label>
                                                 <div class="col-md-4">
-                                                    <asp:TextBox ID="txtFechaCompra" runat="server" class="form-control" Enabled="false"></asp:TextBox>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                                        <asp:TextBox ID="txtFechaCompra" runat="server" class="form-control" Enabled="false"></asp:TextBox>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaCompra" ValidationGroup="StoreGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -120,13 +123,25 @@
                                             <div class="form-group">
                                                 <label for="name" class="col-md-4">Cliente</label>
                                                 <div class="col-md-4">
-                                                    <asp:TextBox ID="txtCliente" runat="server" class="form-control" Enabled="false"></asp:TextBox>
+                                                    <asp:DropDownList ID="ListCliente" runat="server" class="form-control" Enabled="false"></asp:DropDownList>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtCliente" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListCliente" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                <label class="col-md-4">Celular</label>
+                                                <div class="col-md-2">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">0</span>
+                                                        <asp:TextBox ID="txtCodArea" runat="server" class="form-control" placeholder="Cod. Area" MaxLength="4"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <asp:TextBox ID="txtCelular" runat="server" class="form-control" placeholder="Ej.: 1111 2222" MaxLength="8"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                            <%--<div class="form-group">
                                                 <label for="name" class="col-md-4">Celular</label>
                                                 <div class="col-md-4">
                                                     <asp:TextBox ID="txtCelular" runat="server" class="form-control"></asp:TextBox>
@@ -134,7 +149,7 @@
                                                 <div class="col-md-4">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtCelular" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
-                                            </div>
+                                            </div>--%>
                                             <%--<div class="form-group">
                                                 <label for="name" class="col-md-4">Datos de Trazabilidad</label>
                                                 <div class="col-md-4">
@@ -191,10 +206,10 @@
     <script>
         $(function () {
             $("#<%= txtFechaCompra.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+        });
 
-            $(function () {
-                $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+        $(function () {
+            $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
     </script>
 </asp:Content>
