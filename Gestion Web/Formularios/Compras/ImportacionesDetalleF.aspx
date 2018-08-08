@@ -48,6 +48,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="name" class="col-md-2">SIM:</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtSIM" runat="server" class="form-control" Style="text-align: right;" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="name" class="col-md-2">FOB:</label>
                                         <div class="col-md-4">
                                             <div class="input-group">
@@ -59,6 +65,9 @@
                                         </div>
                                         <div class="col-md-1">
                                             <asp:LinkButton ID="lbtnAgregarArticulo" runat="server" class="btn btn-success" Text="<i class='shortcut-icon icon-ok'></i>" OnClick="lbtnAgregarArticulo_Click" />
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:LinkButton ID="lbtnCancelarEdicion" runat="server" class="btn btn-danger" Text="cancelar" OnClick="lbtnCancelarEdicion_Click" />
                                         </div>
                                     </div>
                                 </fieldset>
@@ -119,6 +128,7 @@
                                             <th>Codigo</th>
                                             <th style="width: 20%;">Articulo</th>
                                             <th style="text-align: right;">Cantidad</th>
+                                            <th style="text-align: right;">SIM</th>
                                             <th style="text-align: right;">FOB</th>
                                             <th style="text-align: right;">Total FOB</th>
                                             <th style="text-align: right;">PPP</th>

@@ -427,6 +427,7 @@
                                             </ul>
                                         </li>
                                         <li><a href="/../../Formularios/Herramientas/FormasVenta.aspx">Formas de venta</a></li>
+                                        <li><a href="/../../Formularios/Herramientas/InformeBTBF.aspx">Informe BTB</a></li>
                                         <li><a href="/../../Formularios/Herramientas/ActPadronF.aspx">Ingresos Brutos</a></li>
                                         <li><a href="/../../Formularios/Herramientas/NumeracionDocumentos.aspx">Numeracion Documentos</a></li>
                                         <li><a href="/../../Formularios/Herramientas/PanelControl.aspx">Panel de Control</a></li>
