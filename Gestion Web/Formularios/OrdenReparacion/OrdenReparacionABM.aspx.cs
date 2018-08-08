@@ -239,19 +239,25 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //obtengo los articulos de la factura
                 var articulosFactura = itemsFactura.Select(x => x.articulo).ToList();
 
-                List<Articulo> articulos = new List<Articulo>();
+                //List<Articulo> articulos = new List<Articulo>();
 
                 //uso los articulos que tenia la factura para buscar en la tabla articulos y asi la descripcion viene sin la trazabilidad
-                foreach (var articulo in articulosFactura)
-                {
-                    articulos.Add(contArticulo.obtenerArticuloByID(articulo.id));
-                }
+                List<Articulo> articulos = articulosFactura.Select(x => contArticulo.obtenerArticuloByID(x.id)).ToList();
 
-                //cargo el datatable con los articulos que tiene la factura
-                foreach (var articulo in articulos)
-                {
-                    dtArticulos.Rows.Add(articulo.id,articulo.codigo + " - " + articulo.descripcion);
-                }
+                //foreach (var articulo in articulosFactura)
+                //{
+                //    articulos.Add(contArticulo.obtenerArticuloByID(articulo.id));
+                //}
+
+                //cargo el datatable con los articulos que tiene la factura. uso el tolist al final porque al ser lazy no se ejecuta el select inmediatamente y entonces no le pasa valores al datatable
+                articulos.Select(x => dtArticulos.Rows.Add(x.id, x.codigo + " - " + x.descripcion)).ToList();
+
+                //foreach (var articulo in articulos)
+                //{
+                //    dtArticulos.Rows.Add(articulo.id,articulo.codigo + " - " + articulo.descripcion);
+                //}
+
+                //dtArticulos.Rows.Add(articulos.Select(x => x.id).,articulos.Select(x => x.descripcion).FirstOrDefault());
 
                 this.ListProductos.DataSource = dtArticulos;
                 this.ListProductos.DataValueField = "id";
