@@ -50,12 +50,12 @@ namespace Gestion_Web.Formularios.Compras
                     //tipo de documento??
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    //this.btnAccion.Visible = false;
+                    this.btnAccion.Visible = false;
                     
                 }
                 else
                 {
-                    //this.btnAccion.Visible = true;
+                    this.btnAccion.Visible = true;
                 }
 
                 this.cargarSucursal();
