@@ -228,6 +228,12 @@
                                             </ul>
                                         </li>
                                         <li class="dropdown-submenu">
+                                            <a tabindex="" href="#">Orden de reparacion</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="/../../Formularios/OrdenReparacion/ServicioTecnicoABM.aspx">Servicio Tecnico</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
                                             <a tabindex="" href="#">Personal</a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="/../../Formularios/Personal/Empleados.aspx">Personal</a></li>
