@@ -201,15 +201,23 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 l1.Text = "&nbsp";
                 celAccion.Controls.Add(l1);
 
+                Literal lReport = new Literal();
+                lReport.ID = "btnReporte_" + or.Id.ToString();
+                lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lReport.Text += "<span class=\"shortcut-icon icon-search\"></span>";
+                lReport.Text += "</a>";
+
+                celAccion.Controls.Add(lReport);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAccion.Controls.Add(l2);
+
                 CheckBox cbSeleccion = new CheckBox();
                 cbSeleccion.ID = "cbSeleccion_" + or.Id;
                 cbSeleccion.CssClass = "btn btn-info";
                 cbSeleccion.Font.Size = 12;
                 celAccion.Controls.Add(cbSeleccion);
-
-                Literal l2 = new Literal();
-                l2.Text = "&nbsp";
-                celAccion.Controls.Add(l2);
 
                 tr.Cells.Add(celAccion);
 
@@ -323,7 +331,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=1&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue);
+                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -431,7 +439,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=0&n=" + this.txtNumeroOrden.Text);
+                Response.Redirect("OrdenReparacionF.aspx?a=1&n=" + this.txtNumeroOrden.Text);
             }
             catch (Exception ex)
             {
