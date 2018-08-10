@@ -12,21 +12,56 @@ namespace Gestion_Web.Formularios.OrdenReparacion
     using Gestion_Api.Modelo;
     using Disipar.Models;
     using Gestor_Solution.Controladores;
+    using System.Globalization;
+    using System.Data;
 
     public partial class OrdenReparacionF : System.Web.UI.Page
     {
         ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
         Mensajes m = new Mensajes();
+        int accion = 0;
+        int numeroOrden = 0;
+        int cliente = 0;
+        int sucursal = 0;
+        int estado = 0;
+        string fechaD = "";
+        string fechaH = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 this.VerificarLogin();
+
+                accion = Convert.ToInt32(Request.QueryString["a"]);
+                numeroOrden = Convert.ToInt32(Request.QueryString["n"]);
+                cliente = Convert.ToInt32(Request.QueryString["c"]);
+                sucursal = Convert.ToInt32(Request.QueryString["s"]);
+                estado = Convert.ToInt32(Request.QueryString["e"]);
+                fechaD = Request.QueryString["fd"];
+                fechaH = Request.QueryString["fh"];
+
                 if (!IsPostBack)
                 {
-                    CargarOrdenesReparacion();
+                    if(string.IsNullOrEmpty(fechaD))
+                        txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    else
+                        txtFechaDesde.Text = fechaD.ToString(new CultureInfo("es-AR"));
+
+                    if (string.IsNullOrEmpty(fechaH))
+                        txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    else
+                        txtFechaHasta.Text = fechaH.ToString(new CultureInfo("es-AR"));
+
+                    this.cargarSucursal();
+                    this.cargarClientes();
+                    this.cargarEstados();
                 }
+
+                if (accion == 0)
+                    CargarOrdenesReparacion();                
+                else if(accion == 1)
+                    BuscarPorNumeroOrden();
 
             }
             catch
@@ -205,7 +240,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (temp > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Pongo orden de reparacion en estado 0 " + or.Id);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación eliminada con exito!.", null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación eliminada con exito!", null));
                 }
                 else if(temp == -1)
                 {
@@ -224,14 +259,25 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                foreach (var item in contOrdenReparacion.ObtenerOrdenesReparacion())
+                phOrdenReparacion.Controls.Clear();
+
+                var desde = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                var hasta = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
+                var sucursal = Convert.ToInt32(DropListSucursal.SelectedValue);
+                var cliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                var estado = Convert.ToInt32(DropListEstados.SelectedValue);
+
+                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente,estado);
+
+                foreach (var item in ordenesReparacion)
                 {
                     cargarEnPh(item);
                 }
             }
             catch (Exception ex)
             {
-                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar ordenes de reparacion por filtro. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al cargar ordenes de reparacion por filtro. " + ex.Message);
             }
         }
 
@@ -246,32 +292,166 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
-                        idtildado += ch.ID.Split('_')[1];
-                    }
-                }
+                        idtildado = ch.ID.Split('_')[1];
 
-                if (!String.IsNullOrEmpty(idtildado))
-                {
-                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                    or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("Anulada").Id;
+                        var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("Anulada").Id;
 
-                    var temp = contOrdenReparacion.ModificarOrdenReparacion();
+                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
-                    if (temp > 0)
-                    {
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Pongo orden de reparacion en estado 0 " + or.Id);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación eliminada con exito!.", "OrdenReparacionF.aspx"));
-                    }
-                    else if (temp == -1)
-                    {
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al modificar orden de reparación. " + or.Id);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al modificar orden de reparación"));
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Anulo orden de reparacion " + or.Id);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!.", "OrdenReparacionF.aspx"));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al anular orden de reparación. " + or.Id);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al anular orden de reparación"));
+                        }
+                        
                     }
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al anular orden de reparacion. " + ex.Message);
+            }
+        }
+
+        protected void lbtnBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("OrdenReparacionF.aspx?a=1&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al filtrar. " + ex.Message);
+            }
+        }
+
+        public void cargarSucursal()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursales();
+
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todas";
+                dr["id"] = 0;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListSucursal.DataSource = dt;
+                this.DropListSucursal.DataValueField = "Id";
+                this.DropListSucursal.DataTextField = "nombre";
+                this.DropListSucursal.DataBind();
+
+                this.DropListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        public void cargarEstados()
+        {
+            try
+            {
+                var listEstados = contOrdenReparacion.ObtenerEstadosOrdenReparacion();
+
+                this.DropListEstados.DataSource = listEstados;
+                this.DropListEstados.DataValueField = "Id";
+                this.DropListEstados.DataTextField = "Descripcion";
+                this.DropListEstados.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = this.txtCodCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
+
+        public void cargarClientes()
+        {
+            try
+            {
+                controladorCliente contCliente = new controladorCliente();
+
+                DataTable dt = new DataTable();
+
+                dt = contCliente.obtenerClientesDT();                
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr1 = dt.NewRow();
+                dr1["alias"] = "Todos";
+                dr1["id"] = 0;
+                dt.Rows.InsertAt(dr1, 1);
+
+                this.DropListClientes.DataSource = dt;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+
+                this.DropListClientes.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
+
+        protected void btnBuscarNumeros_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("OrdenReparacionF.aspx?a=0&n=" + this.txtNumeroOrden.Text);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al buscar orden de reparacion por numero de orden. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al buscar orden de reparacion por numero de orden. " + ex.Message));
+            }
+        }
+
+        public void BuscarPorNumeroOrden()
+        {
+            try
+            {
+                OrdenReparacion or = contOrdenReparacion.ObtenerOrdenReparacionPorNumeroOrden(numeroOrden);
+                this.phOrdenReparacion.Controls.Clear();
+                this.cargarEnPh(or);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al buscar orden de reparacion por numero de orden. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al buscar orden de reparacion por numero de orden. " + ex.Message));
             }
         }
     }

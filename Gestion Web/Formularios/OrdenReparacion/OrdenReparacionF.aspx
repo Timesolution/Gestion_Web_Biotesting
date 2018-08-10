@@ -31,6 +31,13 @@
                                 <td style="width: 65%"></td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
+                                        <a class="btn btn-primary" data-toggle="modal" href="#modalNro" style="width: 100%">
+                                            <i class="shortcut-icon icon-search"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td style="width: 5%">
+                                    <div class="shortcuts" style="height: 100%">
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                             <i class="shortcut-icon icon-filter"></i>
                                         </a>
@@ -128,6 +135,29 @@
                 </div>
             </div>
         </div>
+        <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Busqueda</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-4">N° de Orden</label>
+                                <div class="col-md-4">
+                                    <asp:TextBox ID="txtNumeroOrden" runat="server" class="form-control"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -179,12 +209,27 @@
                                         <div class="col-md-6">
                                             <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
                                         </div>
+
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4">Cliente</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
-                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListClientes" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Estado</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListEstados" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </div>
@@ -192,6 +237,9 @@
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnBuscar_Click" class="btn btn-success" ValidationGroup="BusquedaGroup" />
                     </div>
                 </div>
             </div>

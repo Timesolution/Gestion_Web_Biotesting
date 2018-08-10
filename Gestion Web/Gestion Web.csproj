@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -412,6 +412,7 @@
     <Content Include="Formularios\Formas\FormasPagoF.aspx" />
     <Content Include="Formularios\Herramientas\ABMAsuntosSMS.aspx" />
     <Content Include="Formularios\Herramientas\ExportarTapiceF.aspx" />
+    <Content Include="Formularios\Herramientas\InformeBTBF.aspx" />
     <Content Include="Formularios\Herramientas\PanelAlertasSMS.aspx" />
     <Content Include="Formularios\Herramientas\AsuntosSMS.aspx" />
     <Content Include="Formularios\Herramientas\Soporte.aspx" />
@@ -1489,6 +1490,13 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\ExportarTapiceF.aspx.designer.cs">
       <DependentUpon>ExportarTapiceF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\InformeBTBF.aspx.cs">
+      <DependentUpon>InformeBTBF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\InformeBTBF.aspx.designer.cs">
+      <DependentUpon>InformeBTBF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Herramientas\PanelAlertasSMS.aspx.cs">
       <DependentUpon>PanelAlertasSMS.aspx</DependentUpon>
