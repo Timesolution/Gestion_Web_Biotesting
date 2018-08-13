@@ -38,11 +38,14 @@
                                     <div class="col-md-2">
                                         <div class="input-group">
                                             <span class="input-group-addon">0</span>
-                                            <asp:TextBox ID="txtCodArea" runat="server" class="form-control" placeholder="Cod. Area" MaxLength="4"></asp:TextBox>
+                                            <asp:TextBox ID="txtCodArea" runat="server" class="form-control" placeholder="Cod. Area" MaxLength="4" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <asp:TextBox ID="txtCelular" runat="server" class="form-control" placeholder="Ej.: 1111 2222" MaxLength="8"></asp:TextBox>
+                                        <asp:TextBox ID="txtCelular" runat="server" class="form-control" placeholder="Ej.: 1111 2222" MaxLength="8" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ControlToValidate="txtCelular" ID="RequiredFieldValidator1" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ForeColor="Red" ValidationGroup="PVGroup" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -85,6 +88,9 @@
                                             <div class="col-md-3">
                                                 <asp:ListBox ID="ListBoxMarcas" runat="server" SelectionMode="Multiple" class="form-control"></asp:ListBox>
                                             </div>
+                                            <div class="col-md-4">
+                                                <asp:RequiredFieldValidator ControlToValidate="ListBoxMarcas" ID="RequiredFieldValidator4" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ForeColor="Red" ValidationGroup="PVGroup" Font-Bold="true"></asp:RequiredFieldValidator>
+                                            </div>
                                             <div class="col-md-3">
                                                 <asp:LinkButton ID="btnQuitarMarca" runat="server" Text="<span class='shortcut-icon icon-trash'></span>" class="btn btn-danger" OnClick="btnQuitarMarca_Click" />
                                             </div>
@@ -94,10 +100,10 @@
                             </fieldset>
                         </div>
                         <div class="col-md-8">
-                            <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click"/>
-                            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="../OrdenReparacion/ServicioTecnicoABM.aspx" />
+                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnGuardar_Click" Visible="false"/>
+                            <asp:Button ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click" Visible="true"/>
+                            <asp:LinkButton ID="lbtnCancelar" runat="server" Text="Cancelar" class="btn btn-default" OnClick="lbtnCancelar_Click"></asp:LinkButton>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -121,6 +127,7 @@
                                                     <th>Telefono</th>
                                                     <th>Observaciones</th>
                                                     <th>Marcas</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>

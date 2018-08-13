@@ -19,13 +19,30 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         controladorServicioTecnicoEntity contServTecEnt = new controladorServicioTecnicoEntity();
         Mensajes m = new Mensajes();
 
+        int accion = 0;
+        int stID = 0;
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            accion = Convert.ToInt32(Request.QueryString["a"]);
+            stID = Convert.ToInt32(Request.QueryString["st"]);
+
             if (!IsPostBack)
             {
                 cargarMarcas();
+
+                if (accion == 2)
+                {
+                    btnGuardar.Visible = true;
+                    btnAgregar.Visible = false;
+                    ModificarServicioTecnico();
+                }
             }
+
             CargarServicioTecnicos();
+
+            
+                
 
         }
 
@@ -98,11 +115,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 ServicioTecnico st = new ServicioTecnico();
                 List<string> stList = new List<string>();
 
-                st.Localidad = txtLocalidad.Text;
-                st.Direccion = txtDireccion.Text;
-                st.Telefono = txtCodArea.Text + txtCelular.Text;
-                st.Observaciones = txtObservaciones.Text;
-                st.Estado = 1;
+                SetearServicioTecnico(st);
 
                 foreach (var item in ListBoxMarcas.Items)
                 {
@@ -128,6 +141,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
+                phServicioTecnico.Controls.Clear();
+
                 foreach (var item in contServTecEnt.ObtenerServiciosTecnicos())
                 {
                     cargarEnPh(item);
@@ -175,7 +190,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var marcas = contServTecEnt.ObtenerMarcasByIDServicioTecnico(st.Id);
                 for (int i = 0; i < marcas.Count; i++)
                 {
-                    if(i == marcas.Count)
+                    if(i == marcas.Count - 1)
                         celMarcas.Text += marcas[i].descripcion;
                     else
                         celMarcas.Text += marcas[i].descripcion + ", ";
@@ -185,19 +200,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celMarcas.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celMarcas);
 
-                //TableCell celAccion = new TableCell();
+                TableCell celAccion = new TableCell();
 
-                //Literal lDetail = new Literal();
-                //lDetail.ID = "btnEditar_" + st.Id.ToString();
-                //lDetail.Text = "<a href=\"OrdenReparacionABM.aspx?a=2&idordenreparacion=" + or.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                //lDetail.Text += "<span class=\"shortcut-icon icon-pencil\"></span>";
-                //lDetail.Text += "</a>";
+                Literal lDetail = new Literal();
+                lDetail.ID = "btnEditar_" + st.Id.ToString();
+                lDetail.Text = "<a href=\"ServicioTecnicoABM.aspx?a=2&st=" + st.Id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lDetail.Text += "<span class=\"shortcut-icon icon-pencil\"></span>";
+                lDetail.Text += "</a>";
 
-                //celAccion.Controls.Add(lDetail);
+                celAccion.Controls.Add(lDetail);
 
-                //Literal l1 = new Literal();
-                //l1.Text = "&nbsp";
-                //celAccion.Controls.Add(l1);
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+                celAccion.Controls.Add(l1);
 
                 //Literal lReport = new Literal();
                 //lReport.ID = "btnReporte_" + or.Id.ToString();
@@ -217,7 +232,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //cbSeleccion.Font.Size = 12;
                 //celAccion.Controls.Add(cbSeleccion);
 
-                //tr.Cells.Add(celAccion);
+                tr.Cells.Add(celAccion);
 
                 phServicioTecnico.Controls.Add(tr);
 
@@ -225,6 +240,97 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+            }
+        }
+
+        public void ModificarServicioTecnico()
+        {
+            try
+            {
+                var st = contServTecEnt.ObtenerServicioTecnicoByID(stID);
+                txtLocalidad.Text = st.Localidad;
+                txtDireccion.Text = st.Direccion;
+
+                string numeroCelular = st.Telefono.Trim();
+
+                if (numeroCelular.StartsWith("11"))
+                {
+                    txtCodArea.Text = "11";
+                    txtCelular.Text = numeroCelular.Substring(Math.Max(0, numeroCelular.Length - 8));
+                }
+                else
+                {
+                    txtCelular.Text = numeroCelular.Substring(Math.Max(0, numeroCelular.Length - 6));
+                    numeroCelular = numeroCelular.Replace(txtCelular.Text, string.Empty);
+                    txtCodArea.Text = numeroCelular;
+                }
+
+                txtObservaciones.Text = st.Observaciones;
+
+                var marcas = contServTecEnt.ObtenerMarcasByIDServicioTecnico(stID);
+
+                ListBoxMarcas.Items.Clear();
+
+                foreach (var item in marcas)
+                {
+                    ListBoxMarcas.Items.Add(item.descripcion);
+                }
+
+                ListBoxMarcas.Items[0].Selected = true;
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando servicio tecnico. " + ex.Message));
+            }
+        }
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ServicioTecnico st = contServTecEnt.ObtenerServicioTecnicoByID(stID);
+
+                SetearServicioTecnico(st);          
+
+                var temp = contServTecEnt.ModificarServicioTecnico();
+
+                if (temp > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico modificado con exito!", "ServicioTecnicoABM.aspx"));
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando servicio tecnico."));
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando servicio tecnico. " + ex.Message));
+            }
+        }
+
+        public void SetearServicioTecnico(ServicioTecnico st)
+        {
+            try
+            {
+                st.Localidad = txtLocalidad.Text;
+                st.Direccion = txtDireccion.Text;
+                st.Telefono = txtCodArea.Text + txtCelular.Text;
+                st.Observaciones = txtObservaciones.Text;
+                st.Estado = 1;
+            }
+            catch (Exception)
+            {
+                Log.EscribirSQL(1,"Error","Error seteando servicio tecnico");
+            }
+        }
+
+        protected void lbtnCancelar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("ServicioTecnicoABM.aspx");
+            }
+            catch (Exception)
+            {   
+
             }
         }
     }

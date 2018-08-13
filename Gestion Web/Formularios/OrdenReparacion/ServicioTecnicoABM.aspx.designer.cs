@@ -67,6 +67,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.TextBox txtCelular;
         
         /// <summary>
+        /// RequiredFieldValidator1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        
+        /// <summary>
         /// txtObservaciones control.
         /// </summary>
         /// <remarks>
@@ -139,6 +148,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.ListBox ListBoxMarcas;
         
         /// <summary>
+        /// RequiredFieldValidator4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
+        
+        /// <summary>
         /// btnQuitarMarca control.
         /// </summary>
         /// <remarks>
@@ -146,6 +164,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnQuitarMarca;
+        
+        /// <summary>
+        /// btnGuardar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardar;
         
         /// <summary>
         /// btnAgregar control.
@@ -157,13 +184,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.Button btnAgregar;
         
         /// <summary>
-        /// btnCancelar control.
+        /// lbtnCancelar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelar;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnCancelar;
         
         /// <summary>
         /// UpdatePanel1 control.
