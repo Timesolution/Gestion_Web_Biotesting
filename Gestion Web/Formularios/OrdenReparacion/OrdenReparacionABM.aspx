@@ -141,24 +141,6 @@
                                                     <asp:TextBox ID="txtCelular" runat="server" class="form-control" placeholder="Ej.: 1111 2222" MaxLength="8"></asp:TextBox>
                                                 </div>
                                             </div>
-                                            <%--<div class="form-group">
-                                                <label for="name" class="col-md-4">Celular</label>
-                                                <div class="col-md-4">
-                                                    <asp:TextBox ID="txtCelular" runat="server" class="form-control"></asp:TextBox>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtCelular" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                </div>
-                                            </div>--%>
-                                            <%--<div class="form-group">
-                                                <label for="name" class="col-md-4">Datos de Trazabilidad</label>
-                                                <div class="col-md-4">
-                                                    <asp:TextBox ID="txtDatosTrazabilidad" runat="server" class="form-control"></asp:TextBox>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDatosTrazabilidad" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                </div>
-                                            </div>--%>
                                             <div class="form-group">
                                                 <label for="name" class="col-md-4">Descripcion de la Falla</label>
                                                 <div class="col-md-4">
