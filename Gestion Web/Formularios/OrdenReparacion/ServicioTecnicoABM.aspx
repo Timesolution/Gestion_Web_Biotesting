@@ -16,12 +16,12 @@
                         <div id="validation-form" role="form" class="form-horizontal col-md-10">
                             <fieldset>
                                 <div class="form-group">
-                                    <label for="name" class="col-md-4">Localidad</label>
+                                    <label for="name" class="col-md-4">Nombre Servicio Tecnico</label>
                                     <div class="col-md-4">
-                                        <asp:TextBox ID="txtLocalidad" runat="server" class="form-control"></asp:TextBox>
+                                        <asp:TextBox ID="txtNombre" runat="server" class="form-control"></asp:TextBox>
                                     </div>
                                     <div class="col-md-4">
-                                        <asp:RequiredFieldValidator ControlToValidate="txtLocalidad" ID="RequiredFieldValidator2" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ForeColor="Red" ValidationGroup="PVGroup" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ControlToValidate="txtNombre" ID="RequiredFieldValidator2" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ForeColor="Red" ValidationGroup="PVGroup" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -122,7 +122,7 @@
                                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                             <thead>
                                                 <tr>
-                                                    <th>Localidad</th>
+                                                    <th>Nombre</th>
                                                     <th>Direccion</th>
                                                     <th>Telefono</th>
                                                     <th>Observaciones</th>

@@ -213,7 +213,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 //Celdas
                 TableCell celLocalidad = new TableCell();
-                celLocalidad.Text = st.Localidad;
+                celLocalidad.Text = st.Nombre;
                 celLocalidad.HorizontalAlign = HorizontalAlign.Left;
                 celLocalidad.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celLocalidad);                
@@ -295,7 +295,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 var st = contServTecEnt.ObtenerServicioTecnicoByID(stID);
-                txtLocalidad.Text = st.Localidad;
+                txtNombre.Text = st.Nombre;
                 txtDireccion.Text = st.Direccion;
 
                 string numeroCelular = st.Telefono.Trim();
@@ -364,7 +364,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                st.Localidad = txtLocalidad.Text;
+                st.Nombre = txtNombre.Text;
                 st.Direccion = txtDireccion.Text;
                 st.Telefono = txtCodArea.Text + txtCelular.Text;
                 st.Observaciones = txtObservaciones.Text;

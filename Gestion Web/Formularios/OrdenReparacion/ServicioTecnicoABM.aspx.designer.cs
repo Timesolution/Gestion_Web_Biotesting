@@ -13,13 +13,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
     public partial class ServicioTecnicoABM {
         
         /// <summary>
-        /// txtLocalidad control.
+        /// txtNombre control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLocalidad;
+        protected global::System.Web.UI.WebControls.TextBox txtNombre;
         
         /// <summary>
         /// RequiredFieldValidator2 control.
