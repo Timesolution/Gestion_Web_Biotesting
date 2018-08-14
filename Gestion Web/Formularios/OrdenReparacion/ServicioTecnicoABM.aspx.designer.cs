@@ -13,6 +13,24 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
     public partial class ServicioTecnicoABM {
         
         /// <summary>
+        /// lbtnEfectivo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEfectivo;
+        
+        /// <summary>
+        /// UpdatePanel3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel3;
+        
+        /// <summary>
         /// txtNombre control.
         /// </summary>
         /// <remarks>

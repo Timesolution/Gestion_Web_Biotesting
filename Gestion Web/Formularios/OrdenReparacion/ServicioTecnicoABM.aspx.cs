@@ -175,9 +175,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var temp = contServTecEnt.AgregarServicioTecnico(st,stList);
 
                 if(temp > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico agregado con exito!","ServicioTecnicoABM.aspx"));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "info", " $.msgbox(\"Servicio tecnico agregado correctamente! \", {type: \"info\"}); location.href = '../OrdenReparacion/ServicioTecnicoABM.aspx';", true);
                 else
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando servicio tecnico."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Error agregando servicio tecnico!. \", {type: \"error\"});", true);
 
             }
             catch (Exception ex)
