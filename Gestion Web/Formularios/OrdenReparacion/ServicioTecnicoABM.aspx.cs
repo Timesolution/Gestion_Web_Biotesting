@@ -24,6 +24,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            this.VerificarLogin();
+
             accion = Convert.ToInt32(Request.QueryString["a"]);
             stID = Convert.ToInt32(Request.QueryString["st"]);
 
@@ -39,11 +41,55 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 }
             }
 
-            CargarServicioTecnicos();
+            CargarServiciosTecnicos();            
+        }
 
-            
-                
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.verificarAcceso() != 1)
+                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../Account/Login.aspx");
+            }
+        }
 
+        private int verificarAcceso()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                foreach (string s in listPermisos)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        if (s == "57")
+                        {
+                            return 1;
+                        }
+                    }
+                }
+
+                return 0;
+            }
+            catch
+            {
+                return -1;
+            }
         }
 
         public void cargarMarcas()
@@ -100,6 +146,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 this.ListBoxMarcas.Items.Remove(this.ListBoxMarcas.SelectedItem);
+
+                //despues de borrar una marca dejo seleccionado el primero ya que con el required field validator si no hay uno seleccionado no te deja guardar
+                if (ListBoxMarcas.Items.Count > 0)
+                    ListBoxMarcas.Items[0].Selected = true;
             }
             catch (Exception ex)
             {
@@ -137,7 +187,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        public void CargarServicioTecnicos()
+        public void CargarServiciosTecnicos()
         {
             try
             {
@@ -214,23 +264,20 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 l1.Text = "&nbsp";
                 celAccion.Controls.Add(l1);
 
-                //Literal lReport = new Literal();
-                //lReport.ID = "btnReporte_" + or.Id.ToString();
-                //lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                //lReport.Text += "<span class=\"shortcut-icon icon-search\"></span>";
-                //lReport.Text += "</a>";
+                LinkButton btnEliminar = new LinkButton();
+                btnEliminar.ID = "btnEliminar_" + st.Id;
+                btnEliminar.CssClass = "btn btn-info";
+                btnEliminar.Attributes.Add("data-toggle", "modal");
+                btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                btnEliminar.OnClientClick = "abrirdialog(" + st.Id + ");";
+                celAccion.Controls.Add(btnEliminar);
+                celAccion.Width = Unit.Percentage(10);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+                celAccion.HorizontalAlign = HorizontalAlign.Center;
+                tr.Cells.Add(celAccion);
 
-                //celAccion.Controls.Add(lReport);
-
-                //Literal l2 = new Literal();
-                //l2.Text = "&nbsp";
-                //celAccion.Controls.Add(l2);
-
-                //CheckBox cbSeleccion = new CheckBox();
-                //cbSeleccion.ID = "cbSeleccion_" + or.Id;
-                //cbSeleccion.CssClass = "btn btn-info";
-                //cbSeleccion.Font.Size = 12;
-                //celAccion.Controls.Add(cbSeleccion);
+                celAccion.Controls.Add(btnEliminar);
 
                 tr.Cells.Add(celAccion);
 
@@ -291,9 +338,16 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 ServicioTecnico st = contServTecEnt.ObtenerServicioTecnicoByID(stID);
 
-                SetearServicioTecnico(st);          
+                SetearServicioTecnico(st);
 
-                var temp = contServTecEnt.ModificarServicioTecnico();
+                List<string> marcas = new List<string>();
+
+                foreach (var item in ListBoxMarcas.Items)
+                {
+                    marcas.Add(item.ToString());
+                }
+
+                var temp = contServTecEnt.ModificarServicioTecnico(st,marcas);
 
                 if (temp > 0)
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico modificado con exito!", "ServicioTecnicoABM.aspx"));
@@ -318,7 +372,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
             catch (Exception)
             {
-                Log.EscribirSQL(1,"Error","Error seteando servicio tecnico");
+                Log.EscribirSQL(1,"Error","Error seteando campos de servicio tecnico");
             }
         }
 
@@ -331,6 +385,31 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception)
             {   
 
+            }
+        }
+
+        protected void btnSi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idServicioTecnico = Convert.ToInt32(this.txtMovimiento.Text);
+                ServicioTecnico st = contServTecEnt.ObtenerServicioTecnicoByID(idServicioTecnico);
+
+                int i = contServTecEnt.EliminarServicioTecnicoByServicioTecnico(st);
+                if (i >= 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Elimino el servicio tecnico: " + st.Id);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico eliminado con exito!", "ServicioTecnicoABM.aspx"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error eliminando Servicio tecnico"));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar Servicio tecnico. " + ex.Message));
+                Log.EscribirSQL(1,"Error","Error eliminando Servicio tecnico " + ex.Message);
             }
         }
     }

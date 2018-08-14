@@ -100,8 +100,8 @@
                             </fieldset>
                         </div>
                         <div class="col-md-8">
-                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnGuardar_Click" Visible="false"/>
-                            <asp:Button ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click" Visible="true"/>
+                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnGuardar_Click" Visible="false" />
+                            <asp:Button ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click" Visible="true" />
                             <asp:LinkButton ID="lbtnCancelar" runat="server" Text="Cancelar" class="btn btn-default" OnClick="lbtnCancelar_Click"></asp:LinkButton>
                         </div>
                     </div>
@@ -146,6 +146,40 @@
         </div>
     </div>
 
+    <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="lblMensaje" Text="Esta seguro que desea eliminar la Procedencia?" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
+                            <div class="col-md-3">
+                                <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
 
@@ -167,7 +201,11 @@
     <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-
+    <script>
+        function abrirdialog(valor) {
+            document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
+        }
+    </script>
     <script>
         //valida los campos solo numeros
         function validarNro(e) {
