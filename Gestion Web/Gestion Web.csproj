@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -424,8 +424,10 @@
     <Content Include="Formularios\Herramientas\ActPadronF.aspx" />
     <Content Include="Formularios\Herramientas\NumeracionDocumentos.aspx" />
     <Content Include="Formularios\Herramientas\PanelControl.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx" />
     <Content Include="Formularios\Pagos\ImpresionPago.aspx" />
     <Content Include="Formularios\Pagos\PagosRealizadosF.aspx" />
     <Content Include="Formularios\Pagos\ReportesR.Aspx" />
@@ -707,6 +709,17 @@
     </Content>
     <Content Include="Formularios\Pagos\dsDatosPagos.xsc">
       <DependentUpon>dsDatosPagos.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsc">
+      <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsOrdenReparacion.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\OrdenReparacion\dsOrdenReparacion.xss">
+      <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
     </Content>
     <None Include="Formularios\Pagos\dsDatosPagos.xsd">
       <Generator>MSDataSetGenerator</Generator>
@@ -1554,6 +1567,18 @@
     <Compile Include="Formularios\Herramientas\RegimenF.aspx.designer.cs">
       <DependentUpon>RegimenF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\OrdenReparacion\dsOrdenReparacion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx.cs">
+      <DependentUpon>ImpresionOrdenReparacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx.designer.cs">
+      <DependentUpon>ImpresionOrdenReparacion.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx.cs">
       <DependentUpon>OrdenReparacionABM.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1567,6 +1592,13 @@
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx.designer.cs">
       <DependentUpon>OrdenReparacionF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.cs">
+      <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.designer.cs">
+      <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Pagos\dsDatosPagos.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2845,6 +2877,7 @@
     <EmbeddedResource Include="Formularios\Facturas\RemitoR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Report2.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionR.rdlc" />
+    <EmbeddedResource Include="Formularios\OrdenReparacion\OrdenReparacionR.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\DetallePagos.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\PagosListado.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\ReciboPagos.rdlc" />
