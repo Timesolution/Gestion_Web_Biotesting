@@ -28,6 +28,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">A Service Oficial</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" OnClick="lbtnDevolucionProveedor_Click">Devolucion a proveedor</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

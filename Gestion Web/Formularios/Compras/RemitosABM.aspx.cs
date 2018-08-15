@@ -26,11 +26,15 @@ namespace Gestion_Web.Formularios.Compras
         DataTable dtItemsTemp;
         Mensajes m = new Mensajes();
         int accion;
+        int or;
+        int orID;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
+                this.or = Convert.ToInt32(Request.QueryString["or"]);
+                this.orID = Convert.ToInt32(Request.QueryString["orID"]);
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 this.VerificarLogin();
                 this.CargarItems();
@@ -44,6 +48,11 @@ namespace Gestion_Web.Formularios.Compras
                     this.dtItemsTemp = new DataTable();
                     this.CrearTablaItems();
                 }
+
+                if (or == 2)
+                    GenerarRemitoDesdeOrdenReparacion();
+
+
             }
             catch (Exception ex)
             {
@@ -706,6 +715,26 @@ namespace Gestion_Web.Formularios.Compras
         protected void lbtnAgregarArticuloASP_Click1(object sender, EventArgs e)
         {
 
+        }
+
+        public void GenerarRemitoDesdeOrdenReparacion()
+        {
+            try
+            {
+                ControladorOrdenReparacionEntity contOrdenReparacionEnt = new ControladorOrdenReparacionEntity();
+
+                var or = contOrdenReparacionEnt.ObtenerOrdenReparacionPorID(orID);
+
+                ListTipoRemito.SelectedIndex = 1;
+
+                ListDevolucion.SelectedIndex = 0;
+
+                ListProveedor.SelectedValue = contArticulos.obtenerArticuloByID((int)or.Producto).proveedor.razonSocial;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error generando remito desde orden de reparacion " + ex.Message);
+            }
         }
 
         //protected void GridProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)

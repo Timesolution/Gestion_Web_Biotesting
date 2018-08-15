@@ -336,7 +336,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Anulo orden de reparacion " + or.Id);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!.", "OrdenReparacionF.aspx"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!", "OrdenReparacionF.aspx"));
                         }
                         else if (temp == -1)
                         {
@@ -493,8 +493,52 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                string idtildado = "";               
+                string idtildado = "";
 
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    foreach (Control C in phOrdenReparacion.Controls)
+                    {
+                        TableRow tr = C as TableRow;
+                        CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                        if (ch.Checked == true)
+                        {
+                            idtildado = ch.ID.Split('_')[1];
+
+                            var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                            or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En servicio tecnico").Id;
+
+                            var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                            if (temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a service oficial " + or.Id);
+                                Session["Login_idcliente"] = or.Cliente;
+                                Session["Login_idArticulo"] = or.Producto;
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a service con exito!", "../Facturas/ABMRemitos.aspx?accion=5"));
+                            }
+                            else if (temp == -1)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al service. " + or.Id);
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al service."));
+                            }
+
+                        }
+                    }
+                }                
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al service oficial. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al service oficial. " + ex.Message));
+            }
+        }
+
+        public bool ComprobarOrdenReparacionTildada()
+        {
+            try
+            {
                 int tildados = 0;
 
                 foreach (Control C in phOrdenReparacion.Controls)
@@ -509,47 +553,66 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (tildados <= 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una orden de reparacion!"));
-                    return;
+                    return false;
                 }
                 if (tildados > 1)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo una orden de reparacion!"));
-                    return;
+                    return false;
                 }
 
-                foreach (Control C in phOrdenReparacion.Controls)
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error comprobando si hay una sola orden de reparacion seleccionada. " + ex.Message);
+                return false;
+            }
+        }
+
+        protected void lbtnDevolucionProveedor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
                 {
-                    TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
-                    if (ch.Checked == true)
+                    foreach (Control C in phOrdenReparacion.Controls)
                     {
-                        idtildado = ch.ID.Split('_')[1];
-
-                        var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En servicio tecnico").Id;
-
-                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
-
-                        if (temp > 0)
+                        TableRow tr = C as TableRow;
+                        CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                        if (ch.Checked == true)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a service oficial " + or.Id);
-                            Session["Login_idcliente"] = or.Cliente;
-                            Session["Login_idArticulo"] = or.Producto;
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a service con exito!.", "../Facturas/ABMRemitos.aspx?accion=5"));
-                        }
-                        else if (temp == -1)
-                        {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al service. " + or.Id);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al service."));
-                        }
+                            idtildado = ch.ID.Split('_')[1];
 
+                            var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                            or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En proveedor").Id;
+
+                            var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                            if (temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a proveedor " + or.Id);
+                                Session["Login_idcliente"] = or.Cliente;
+                                Session["Login_idArticulo"] = or.Producto;
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a proveedor con exito!", "../Compras/RemitosABM.aspx?a=1&or=1&orID=" + or.Id));
+                            }
+                            else if (temp == -1)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al proveedor. " + or.Id);
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al proveedor."));
+                            }
+
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al service oficial. " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al service oficial. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al proveedor. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al proveedor. " + ex.Message));
             }
         }
     }
