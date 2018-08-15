@@ -25,7 +25,7 @@ namespace Gestion_Web.Formularios.Herramientas
             try
             {
                 this.VerificarLogin();
-                lbtnGenerar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(lbtnGenerar, null) + ";");
+                lbtnGenerarBTBVenta.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(lbtnGenerarBTBVenta, null) + ";");
                 if (!IsPostBack)
                 {
                     DateTime today = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);

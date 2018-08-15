@@ -99,6 +99,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarEntregas();
                     this.cargarZonas();
                     this.cargarClientesReferir();
+                    this.cargarBTB();
                     //this.cargarTipoContacto();
 
                     this.asignarNombreLabel(accion);
@@ -125,11 +126,13 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         this.linkGanancias.Visible = true;
                         this.linkOrdenesCompra.Visible = true;
+                        this.linkCodigoBTB.Visible = true;
+                        this.phCodigoBTB2.Visible = true;
                         this.cargarCuentas();
                         this.cargarGanancias();
                         this.cargarProveedor_OC();
                         this.cargarDatosCuentaProveedor();                        
-                        this.cargarProveedor(this.idCliente);                        
+                        this.cargarProveedor(this.idCliente); 
                     }
                     //si es nuevo genero codigo
                     if (this.accion == 1 || this.accion == 3)
@@ -744,6 +747,22 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        private void cargarBTB()//
+        {
+            try
+            {
+                var btb = contClienteEntity.obtenerCodigoBTBbyIdClienteProveedor(this.idCliente);
+                if (btb != null)
+                {
+                    txtCodigoBTB1.Text = btb.CodigoBTB1;
+                    txtCodigoBTB2.Text = btb.CodigoBTB2;
+                }
+            }
+            catch
+            {
+                
+            }
+        }
         #endregion
 
         #region datos clientes
@@ -3813,6 +3832,32 @@ namespace Gestion_Web.Formularios.Clientes
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos para las  Ordenes de Compra de proveedor. Excepción: " + Ex.Message));
+            }
+        }
+        #endregion
+
+        #region codigo BTB
+        protected void lbtnCodigoBTB_Click(object sender, EventArgs e)//Guarda los nuevos valores de BTB
+        {
+            try
+            {
+                Clientes_CodigoBTB cliBTB = new Clientes_CodigoBTB();
+                cliBTB.Cliente = this.idCliente;
+                cliBTB.CodigoBTB1 = this.txtCodigoBTB1.Text.PadLeft(5,'0');
+                cliBTB.CodigoBTB2 = this.txtCodigoBTB2.Text.PadLeft(5, '0');
+                int ok = contClienteEntity.generarCodigoBTB(cliBTB);
+                if(ok >= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Codigo BTB actualizado con exito.",null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando codigo BTB." ));
+                }
+            }
+            catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("SE ha producido un error en ClientesABM. Metodo: lbtnCodigoBTB_Click. Exception: " + ex.Message));
             }
         }
         #endregion
