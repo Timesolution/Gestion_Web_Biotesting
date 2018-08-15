@@ -9,18 +9,21 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Disipar.Models;
 using System.Data;
+using Gestor_Solution.Controladores;
 
 namespace Gestion_Web.Formularios.OrdenReparacion
 {
     public partial class ServicioTecnicoABM : System.Web.UI.Page
     {
         controladorArticulo contArt = new controladorArticulo();
+        controladorCliente contCliente = new controladorCliente();
         ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
         controladorServicioTecnicoEntity contServTecEnt = new controladorServicioTecnicoEntity();
         Mensajes m = new Mensajes();
 
         int accion = 0;
         int stID = 0;
+        string buscar = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,10 +31,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
             accion = Convert.ToInt32(Request.QueryString["a"]);
             stID = Convert.ToInt32(Request.QueryString["st"]);
+            buscar = Request.QueryString["buscar"];
 
             if (!IsPostBack)
             {
                 cargarMarcas();
+                cargarClientes();
 
                 if (accion == 2)
                 {
@@ -41,7 +46,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 }
             }
 
-            CargarServiciosTecnicos();            
+            if(accion == 3)
+                CargarServiciosTecnicosPorBusqueda();
+            else
+                CargarServiciosTecnicos();
         }
 
         private void VerificarLogin()
@@ -111,6 +119,26 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 Log.EscribirSQL(1, "Error", "Error cargando lista de marcas " + Ex.Message);
             }
         }
+        public void cargarClientes()
+        {
+            try
+            {
+                DataTable dt = contCliente.obtenerClientesDT();
+
+                this.ListClientes.DataSource = dt;
+                this.ListClientes.DataValueField = "id";
+                this.ListClientes.DataTextField = "razonSocial";
+
+                this.ListClientes.DataBind();
+
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de marcas. " + Ex.Message));
+                Log.EscribirSQL(1, "Error", "Error cargando lista de marcas " + Ex.Message);
+            }
+        }
+
 
         protected void btnBuscarMarca_Click(object sender, EventArgs e)
         {
@@ -124,6 +152,21 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando marca. " + ex.Message));
                 Log.EscribirSQL(1, "Error", "Error buscando marca " + ex.Message);
+            }
+        }
+
+        protected void btnBuscarCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var cliente = contCliente.obtenerClientesRazonSocial(txtCliente.Text);
+
+                this.ListClientes.SelectedValue = cliente.id.ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+                Log.EscribirSQL(1, "Error", "Error buscando cliente " + ex.Message);
             }
         }
 
@@ -186,7 +229,22 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 Log.EscribirSQL(1, "Error", "Error agregando servicio tecnico " + ex.Message);
             }
         }
+        public void CargarServiciosTecnicosPorBusqueda()
+        {
+            try
+            {
+                phServicioTecnico.Controls.Clear();
 
+                foreach (var item in contServTecEnt.ObtenerServiciosTecnicosByCampo(buscar))
+                {
+                    cargarEnPh(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error cargando servicios tecnicos " + ex.Message);
+            }
+        }
         public void CargarServiciosTecnicos()
         {
             try
@@ -235,6 +293,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celObservaciones.HorizontalAlign = HorizontalAlign.Left;
                 celObservaciones.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celObservaciones);
+
+                TableCell celCliente = new TableCell();
+                celCliente.Text = contCliente.obtenerClienteID((int)st.Cliente).razonSocial;
+                celCliente.HorizontalAlign = HorizontalAlign.Left;
+                celCliente.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCliente);
 
                 TableCell celMarcas = new TableCell();
                 var marcas = contServTecEnt.ObtenerMarcasByIDServicioTecnico(st.Id);
@@ -297,7 +361,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var st = contServTecEnt.ObtenerServicioTecnicoByID(stID);
                 txtNombre.Text = st.Nombre;
                 txtDireccion.Text = st.Direccion;
-
+                txtCliente.Text =  contCliente.obtenerClienteID((int)st.Cliente).razonSocial;
                 string numeroCelular = st.Telefono.Trim();
 
                 if (numeroCelular.StartsWith("11"))
@@ -368,6 +432,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 st.Direccion = txtDireccion.Text;
                 st.Telefono = txtCodArea.Text + txtCelular.Text;
                 st.Observaciones = txtObservaciones.Text;
+                st.Cliente = contCliente.obtenerClientesRazonSocial(ListClientes.SelectedValue).id;
                 st.Estado = 1;
             }
             catch (Exception)
@@ -411,6 +476,23 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar Servicio tecnico. " + ex.Message));
                 Log.EscribirSQL(1,"Error","Error eliminando Servicio tecnico " + ex.Message);
             }
+        }
+
+        protected void lbBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("ServicioTecnicoABM.aspx?a=3&buscar=" + txtBusqueda.Text);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        protected void btnAgregarClientes_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
