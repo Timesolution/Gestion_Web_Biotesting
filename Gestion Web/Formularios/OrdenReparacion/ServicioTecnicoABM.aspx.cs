@@ -361,7 +361,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var st = contServTecEnt.ObtenerServicioTecnicoByID(stID);
                 txtNombre.Text = st.Nombre;
                 txtDireccion.Text = st.Direccion;
-                txtCliente.Text =  contCliente.obtenerClienteID((int)st.Cliente).razonSocial;
+                ListClientes.SelectedValue = contCliente.obtenerClienteID((int)st.Cliente).id.ToString();
                 string numeroCelular = st.Telefono.Trim();
 
                 if (numeroCelular.StartsWith("11"))
@@ -414,9 +414,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var temp = contServTecEnt.ModificarServicioTecnico(st,marcas);
 
                 if (temp > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico modificado con exito!", "ServicioTecnicoABM.aspx"));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "info", " $.msgbox(\"Servicio tecnico modificado con exito! \", {type: \"info\"}); location.href = '../OrdenReparacion/ServicioTecnicoABM.aspx';", true);
                 else
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando servicio tecnico."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Error modificando servicio tecnico!. \", {type: \"error\"});", true);
+
             }
             catch (Exception ex)
             {
@@ -432,12 +433,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 st.Direccion = txtDireccion.Text;
                 st.Telefono = txtCodArea.Text + txtCelular.Text;
                 st.Observaciones = txtObservaciones.Text;
-                st.Cliente = contCliente.obtenerClientesRazonSocial(ListClientes.SelectedValue).id;
+                st.Cliente = contCliente.obtenerClienteID(Convert.ToInt32(ListClientes.SelectedValue)).id;
                 st.Estado = 1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error seteando campos de servicio tecnico");
+                Log.EscribirSQL(1,"Error","Error seteando campos de servicio tecnico " + ex.Message);
             }
         }
 

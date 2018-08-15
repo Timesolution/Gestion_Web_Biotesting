@@ -25,6 +25,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">A Service Oficial</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -118,23 +121,46 @@
                                     <asp:TextBox runat="server" ID="TextBox1" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
-                            <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                         </div>
-
-
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-
-                            <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
+
+        <div id="modalServiceOficial" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Elegir Service Oficial</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-md-4">Servicio Tecnico</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListServicioTecnico" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
+                                        </div>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="DropListServicioTecnico" ValidationGroup="ServiceOficial"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnGuardarServiceOficial_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">

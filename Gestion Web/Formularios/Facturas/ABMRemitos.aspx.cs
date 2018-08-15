@@ -35,6 +35,9 @@ namespace Gestion_Web.Formularios.Facturas
         int accion;
         int idEmpresa;
         int idSucursal;
+        //orden de reparacion
+        int idCliente;
+        int idArticulo;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -59,6 +62,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
+
+                    //orden de reparacion
+                    idCliente = (int)Session["Login_idcliente"];
+                    idArticulo = (int)Session["Login_idArticulo"];
 
                     Remito rem = new Remito();
                     Session.Add("Remito", rem);
@@ -98,6 +105,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         int idPedido = Convert.ToInt32(Request.QueryString["id_ped"]);
                         GenerarRemitoPedido(idPedido);
+                    }
+                    //cuando viene de una orden de reparacion
+                    if (this.accion == 5)
+                    {
+                        GenerarRemitoOrdenReparacion();
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
@@ -436,6 +448,59 @@ namespace Gestion_Web.Formularios.Facturas
                 this.obtenerNroRemito();
             }
             catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
+
+            }
+        }
+
+        public void GenerarRemitoOrdenReparacion()
+        {
+            try
+            {
+                Remito r = new Remito();                
+                //this.ListEmpresa.SelectedValue = r.empresa.id.ToString();
+                //this.cargarSucursal(r.empresa.id);
+                //this.cargarPuntoVta(r.sucursal.id);
+                this.cargarCliente(idCliente);
+                this.DropListClientes.SelectedValue = idCliente.ToString();
+                //this.DropListVendedor.SelectedValue = r.vendedor.id.ToString();
+                //this.DropListFormaPago.SelectedValue = r.formaPAgo.id.ToString();
+                //this.DropListLista.SelectedValue = r.listaP.id.ToString();
+                //this.ListSucursal.SelectedValue = r.sucursal.id.ToString();
+                //this.ListPuntoVenta.SelectedValue = r.ptoV.id.ToString();
+                //this.txtComentarios.Text = r.comentario;
+                //if (r.comentario.Length > 0)
+                //{
+                //    this.checkDatos.Checked = true;
+                //    this.phDatosEntrega.Visible = true;
+                //}
+                ItemRemito ir = new ItemRemito();
+
+                var art = contArticulo.obtenerArticuloByID(idArticulo);
+
+                ir.articulo = art;
+                ir.cantidad = 1;
+                ir.descuento = 0;
+                ir.descripcion = art.descripcion;
+                ir.precioUnitario = art.precioVenta;
+                ir.total = art.precioVenta;
+
+                this.agregarItemRemito(ir,0);
+
+                r.items.Add(ir);
+                r.cliente = contCliente.obtenerClienteID(idCliente);
+
+                Session.Add("Remito", r);
+
+                this.cargarItems();
+                this.actualizarTotales();
+                this.obtenerNroRemito();
+
+                
+
+            }
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
 

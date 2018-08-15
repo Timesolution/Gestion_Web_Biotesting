@@ -18,6 +18,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
     public partial class OrdenReparacionF : System.Web.UI.Page
     {
         ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
+        controladorServicioTecnicoEntity contServTecnico = new controladorServicioTecnicoEntity();
         Mensajes m = new Mensajes();
         int accion = 0;
         int numeroOrden = 0;
@@ -56,6 +57,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     this.cargarSucursal();
                     this.cargarClientes();
                     this.cargarEstados();
+                    this.CargarServiciosTecnicos();
                 }
 
                 if (accion == 0)
@@ -115,6 +117,30 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch
             {
                 return -1;
+            }
+        }
+
+        public void CargarServiciosTecnicos()
+        {
+            try
+            {
+                var dt = contServTecnico.ObtenerServiciosTecnicos();
+
+                //DataRow dr = dt.NewRow();
+                //dr["nombre"] = "Todas";
+                //dr["id"] = 0;
+                //dt.Rows.InsertAt(dr, 0);
+
+                this.DropListServicioTecnico.DataSource = dt;
+                this.DropListServicioTecnico.DataValueField = "Id";
+                this.DropListServicioTecnico.DataTextField = "Nombre";
+                this.DropListServicioTecnico.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar servicios tecnicos. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al cargar servicios tecnicos. " + ex.Message);
             }
         }
 
@@ -460,6 +486,70 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 Log.EscribirSQL(1, "ERROR", "Error al buscar orden de reparacion por numero de orden. " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al buscar orden de reparacion por numero de orden. " + ex.Message));
+            }
+        }
+
+        protected void btnGuardarServiceOficial_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";               
+
+                int tildados = 0;
+
+                foreach (Control C in phOrdenReparacion.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+
+                    if (ch.Checked == true)
+                        tildados++;
+                }
+
+                if (tildados <= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una orden de reparacion!"));
+                    return;
+                }
+                if (tildados > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo una orden de reparacion!"));
+                    return;
+                }
+
+                foreach (Control C in phOrdenReparacion.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+
+                        var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En servicio tecnico").Id;
+
+                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a service oficial " + or.Id);
+                            Session["Login_idcliente"] = or.Cliente;
+                            Session["Login_idArticulo"] = or.Producto;
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a service con exito!.", "../Facturas/ABMRemitos.aspx?accion=5"));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al service. " + or.Id);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al service."));
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al service oficial. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al service oficial. " + ex.Message));
             }
         }
     }
