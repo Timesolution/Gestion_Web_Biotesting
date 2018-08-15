@@ -67,12 +67,21 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
         
         /// <summary>
-        /// lbtnGenerar control.
+        /// lbtnGenerarBTBVenta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button lbtnGenerar;
+        protected global::System.Web.UI.WebControls.Button lbtnGenerarBTBVenta;
+        
+        /// <summary>
+        /// lbtnGenerarBTBPago control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button lbtnGenerarBTBPago;
     }
 }

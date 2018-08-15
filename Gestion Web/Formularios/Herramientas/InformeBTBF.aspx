@@ -63,7 +63,8 @@
                                 </asp:UpdatePanel>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        <asp:Button ID="lbtnGenerar" Text="Generar" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" ValidationGroup="RegimenGroup" />
+                                        <asp:Button ID="lbtnGenerarBTBVenta" Text="Generar BTB compra" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" ValidationGroup="RegimenGroup" />
+                                        <asp:Button ID="lbtnGenerarBTBPago" Text="Generar BTB venta" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" ValidationGroup="RegimenGroup" />
                                     </div>
                                 </div>
                             </fieldset>
@@ -73,9 +74,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
