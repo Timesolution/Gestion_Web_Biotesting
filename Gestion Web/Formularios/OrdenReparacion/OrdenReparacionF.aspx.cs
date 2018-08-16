@@ -38,6 +38,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 numeroOrden = Convert.ToInt32(Request.QueryString["n"]);
                 cliente = Convert.ToInt32(Request.QueryString["c"]);
                 sucursal = Convert.ToInt32(Request.QueryString["s"]);
+
                 estado = Convert.ToInt32(Request.QueryString["e"]);
                 fechaD = Request.QueryString["fd"];
                 fechaH = Request.QueryString["fh"];

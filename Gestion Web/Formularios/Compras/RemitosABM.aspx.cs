@@ -17,6 +17,7 @@ using System.Web.UI.WebControls;
 
 namespace Gestion_Web.Formularios.Compras
 {
+    using Gestion_Api.Entitys;
     public partial class RemitosABM : System.Web.UI.Page
     {
         controladorCompraEntity controlador = new controladorCompraEntity();
@@ -49,7 +50,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.CrearTablaItems();
                 }
 
-                if (or == 2)
+                if (or == 1)
                     GenerarRemitoDesdeOrdenReparacion();
 
 
@@ -727,13 +728,83 @@ namespace Gestion_Web.Formularios.Compras
 
                 ListTipoRemito.SelectedIndex = 1;
 
-                ListDevolucion.SelectedIndex = 0;
+                ListDevolucion.SelectedIndex = 2;
 
-                ListProveedor.SelectedValue = contArticulos.obtenerArticuloByID((int)or.Producto).proveedor.razonSocial;
+                ListProveedor.SelectedValue = contArticulos.obtenerArticuloByID((int)or.Producto).proveedor.id.ToString();
+
+                txtComentario.Text = or.DescripcionFalla;
+
+                Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
+                c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
+                if (!String.IsNullOrEmpty(c.alerta.descripcion))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
+                }
+
+                this.cargarArticuloOrdenReparacion(or);
+
+                //this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+
+                if (!c.pais.descripcion.Contains("Argentina"))
+                {
+                    this.panelDespacho.Visible = true;
+                }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error generando remito desde orden de reparacion " + ex.Message);
+            }
+        }
+
+        private void cargarArticuloOrdenReparacion(OrdenReparacion or)
+        {
+            try
+            {
+                Articulo a = this.contArticulos.obtenerArticuloByID((int)or.Producto);
+                //limpio el dt
+                this.dtItems.Rows.Clear();
+
+                DataTable dt = this.dtItems;
+
+                DataRow drFila = dt.NewRow();
+
+                //cargo otros proveedores, si lo tiene configuraco
+                string codProveedor = WebConfigurationManager.AppSettings.Get("CodProveedorCompras");
+                if (codProveedor == "1" && !String.IsNullOrEmpty(codProveedor))
+                {
+                    List<ProveedorArticulo> ProvArticulo = this.contArticulos.obtenerProveedorArticulosByArticulo(a.id);
+                    string codArtProveedor = "";
+                    foreach (var p in ProvArticulo)
+                    {
+                        codArtProveedor += p.codigoProveedor + " - ";
+                    }
+
+                    if (codArtProveedor.Length > 0)//saco el ultimo guion
+                    {
+                        codArtProveedor = codArtProveedor.Substring(0, codArtProveedor.Length - 3);
+                    }
+
+                    drFila["Codigo"] = a.codigo + " (" + codArtProveedor + ") ";
+                }
+                else
+                {
+                    drFila["Codigo"] = a.codigo;
+                }
+
+                drFila["Descripcion"] = a.descripcion;
+                drFila["Cant"] = 1;
+                drFila["Costo"] = a.costo;
+                drFila["IdArticulos"] = a.id;
+
+                dt.Rows.Add(drFila);
+
+                this.dtItems = dt;
+
+                this.CargarItems();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos del proveedor. " + ex.Message));
             }
         }
 
