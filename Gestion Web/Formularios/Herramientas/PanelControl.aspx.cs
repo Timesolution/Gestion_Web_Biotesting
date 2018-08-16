@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     this.cargarConfiguracion();
                     this.cargarEstados();
+                    this.CargarSucursalesParaGarantia();
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -942,6 +943,36 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando visualización de stock. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnSucGarantia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al seleccionar la sucursal de garantia " + ex.Message);
+            }
+        }
+
+        public void CargarSucursalesParaGarantia()
+        {
+            try
+            {
+                DataTable dt = contrSucu.obtenerSucursales();
+
+                this.DropListSucGarantia.DataSource = dt;
+                this.DropListSucGarantia.DataValueField = "id";
+                this.DropListSucGarantia.DataTextField = "nombre";
+
+                this.DropListSucGarantia.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al cargar sucursales para garantia " + ex.Message);
             }
         }
     }

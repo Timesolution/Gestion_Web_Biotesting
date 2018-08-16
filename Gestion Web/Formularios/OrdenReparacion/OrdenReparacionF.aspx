@@ -31,6 +31,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" OnClick="lbtnDevolucionProveedor_Click">Devolucion a proveedor</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnRepararLocalmente" runat="server" OnClick="lbtnRepararLocalmente_Click">Reparar localmente</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

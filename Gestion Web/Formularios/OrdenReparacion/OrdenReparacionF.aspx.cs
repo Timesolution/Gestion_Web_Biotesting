@@ -616,5 +616,52 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al proveedor. " + ex.Message));
             }
         }
+
+        protected void lbtnRepararLocalmente_Click(object sender, EventArgs e)
+        {
+            string idtildado = "";
+
+            //compruebo si hay una sola orden de reparacion tildada
+            if (ComprobarOrdenReparacionTildada())
+            {
+                foreach (Control C in phOrdenReparacion.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+
+                        var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En reparacion").Id;
+
+                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a sucursal de reparacion " + or.Id);
+                            Session["Login_idcliente"] = or.Cliente;
+                            Session["Login_idArticulo"] = or.Producto;
+                            stockMovimiento sm = new stockMovimiento();
+                            controladorSucursal contSuc = new controladorSucursal();
+                            sm.Articulo = or.Producto;
+                            sm.Cantidad = 1;
+                            sm.Comentarios = "Aumento stock por producto en reparacion";
+                            sm.Fecha = or.Fecha;
+                            sm.IdUsuario = (int)Session["Login_IdUser"];
+                            sm.IdSucursal = contSuc.obtenerSucursalNombre("Garantia").id;
+
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "../Facturas/ABMFacturasLargo.aspx?accion=13&orID=" + or.Id));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación a sucursal de reparacion. " + or.Id);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación a sucursal de reparacion."));
+                        }
+
+                    }
+                }
+            }
+        }
     }
 }

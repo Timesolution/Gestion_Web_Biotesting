@@ -463,6 +463,24 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnRefacturarPRP;
         
         /// <summary>
+        /// DropListSucGarantia control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListSucGarantia;
+        
+        /// <summary>
+        /// lbtnSucGarantia control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnSucGarantia;
+        
+        /// <summary>
         /// DropListEstadoPedidos control.
         /// </summary>
         /// <remarks>
