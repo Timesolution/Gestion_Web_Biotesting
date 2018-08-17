@@ -300,9 +300,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var hasta = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
                 var sucursal = Convert.ToInt32(DropListSucursal.SelectedValue);
                 var cliente = Convert.ToInt32(DropListClientes.SelectedValue);
-                var estado = Convert.ToInt32(DropListEstados.SelectedValue);
+                //var estado = Convert.ToInt32(DropListEstados.SelectedValue);
 
-                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente,estado);
+                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado);
 
                 foreach (var item in ordenesReparacion)
                 {
@@ -644,14 +644,38 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             Session["Login_idArticulo"] = or.Producto;
                             stockMovimiento sm = new stockMovimiento();
                             controladorSucursal contSuc = new controladorSucursal();
+                            ControladorConfiguracion contConfiguracion = new ControladorConfiguracion();
+                            controladorArticulo contArticulo = new controladorArticulo();
+
+                            Sucursal sucGarantia = contSuc.obtenerSucursalID(Convert.ToInt32(contConfiguracion.ObtenerConfiguracionId(51)));
+
                             sm.Articulo = or.Producto;
                             sm.Cantidad = 1;
                             sm.Comentarios = "Aumento stock por producto en reparacion";
                             sm.Fecha = or.Fecha;
                             sm.IdUsuario = (int)Session["Login_IdUser"];
-                            sm.IdSucursal = contSuc.obtenerSucursalNombre("Garantia").id;
+                            sm.IdSucursal = sucGarantia.id;
+                            sm.TipoMovimiento = "Recibo stock para reparar de la sucursal: " + contSuc.obtenerSucursalID((int)or.SucursalOrigen).nombre;
 
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "../Facturas/ABMFacturasLargo.aspx?accion=13&orID=" + or.Id));
+                            List<Stock> stocks = contArticulo.obtenerStockArticulo((int)or.Producto);
+                            Stock stock = stocks.Where(x => x.sucursal.id == sucGarantia.id).FirstOrDefault();
+
+                            int j = contArticulo.AgregarMovimientoStock(sm);
+                            if (j > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Agregue correctamente el movimiento stock en la sucursal de reparacion.");
+                                int i = contArticulo.ActualizarStock(stock.id, 1);
+                                if (i > 0)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Agregue correctamente el stock en la sucursal de reparacion.");
+                                }
+                                else
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar stock en sucursal de reparacion.");
+                            }
+                            else
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar movimiento stock en sucursal de reparacion.");
+
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "OrdenReparacionF.aspx"));
                         }
                         else if (temp == -1)
                         {
