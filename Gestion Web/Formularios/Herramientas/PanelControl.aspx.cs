@@ -119,6 +119,9 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListRedondearPrecioVenta.SelectedValue = configuracion.RedondearPrecioVenta;
                 this.DropListFacturarPRP.SelectedValue = configuracion.FacturarPRP;
                 this.DropListEstadoPedidos.SelectedValue = configuracion.EstadoInicialPedidos;
+                this.DropListVerSaldoClienteObservacionesPRP.SelectedValue = configuracion.VerSaldoClienteObservacionesPRP;
+                this.DropListIncidenciaObligatoria.SelectedValue = configuracion.IncidenciaObligatoria;
+                this.DropListMargenObligatorio.SelectedValue = configuracion.MargenObligatorio;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -142,11 +145,14 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.lbtnModoSeguro.Text = "Desactivado";
                 }
 
-                //Visualizacion de Cheques
+                // Visualizacion de Cheques
                 this.cargarVisualizacionCheques();
 
-                //Visualizacion de Stock
+                // Visualizacion de Stock
                 this.cargarVisualizacionStock();
+
+                // Tiempo por lineas de Pedido
+                this.cargarTiempoLineasPedido();
                 
             }
             catch
@@ -186,6 +192,32 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando visualización de stock. Excepción: " + Ex.Message));
+            }
+        }
+
+        private void cargarTiempoLineasPedido()
+        {
+            try
+            {
+                if (configuracion.TiempoLineasPedido.Contains(";"))
+                {
+                    var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                    var minutos = tiempo[0];
+                    var segundos = tiempo[1];
+
+                    this.txtMinutosLineas.Text = minutos;
+                    this.txtSegundosLineas.Text = segundos;
+                }
+                else
+                {
+                    this.txtMinutosLineas.Text = "0";
+                    this.txtSegundosLineas.Text = "0";
+                }
+                
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando tiempo por lineas de pedido. Excepción: " + Ex.Message));
             }
         }
 
@@ -903,28 +935,6 @@ namespace Gestion_Web.Formularios.Herramientas
             try
             {
                 controladorVisualizacion contVisualizacion = new controladorVisualizacion();
-
-                //Para que no se produzca un desfazaje de las columnas, solo puede haber 2 items tildados
-
-                //Creo un contador para contabilizar los items tildados
-                //int c = 0;
-
-                //foreach (Control ctrl in UpdatePanelVisualizacionStock.ContentTemplateContainer.Controls)
-                //{
-                //    if (ctrl is CheckBox)
-                //    {
-                //        if ((ctrl as CheckBox).Checked)
-                //            c++;
-                //    }
-                //}
-
-                ////Si el contador es mayor a 2, no lo dejo
-                //if (c != 2)
-                //{
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Sólo puede seleccionar dos columnas"));
-                //    return;
-                //}
-
                 VisualizacionStock vista = new VisualizacionStock();
 
                 vista.columnaRemitosPendientes = Convert.ToInt16(this.CheckBoxStockRemitosP.Checked);
@@ -942,6 +952,104 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando visualización de stock. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnTiempoLineas_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt32(this.txtMinutosLineas.Text) > 60 || Convert.ToInt32(this.txtSegundosLineas.Text) > 60)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El tiempo ingresado es incorrecto!. \");", true);
+                    return;
+                }
+
+                var tiempo = this.txtMinutosLineas.Text.Trim() + ";" + this.txtSegundosLineas.Text.Trim();
+
+                configuracion.TiempoLineasPedido = tiempo;
+
+                int i = configuracion.ModificarTiempoLineasPedido();
+
+                if (i > 0)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Tiempo por linea de pedido modificado con éxito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo modificar el tiempo por linea de pedido. \", {type: \"error\"});", true);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrió un error modificando el tiempo por linea de pedido. Excepción: " + ex.Message + ". \", {type: \"error\"});", true);
+            }
+        }
+
+        protected void lbtnVerSaldoClienteObservacionesPRP_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.VerSaldoClienteObservacionesPRP = this.DropListVerSaldoClienteObservacionesPRP.SelectedValue;
+                int i = configuracion.ModificarVerSaldoClienteObservacionesPRP();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Ver Saldo Cliente Observaciones PRP.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Configuración Ver Saldo Clientes en Observaciones PRP modificada con éxito. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Ver Saldo Clientes en Observaciones PRP. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrió un error modificando la configuración para ver el saldo del cliente en observaciones del PRP. Excepción: " + ex.Message + ". \", {type: \"error\"});", true);
+            }
+        }
+
+        protected void lbtnIncidenciaObligatoria_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.IncidenciaObligatoria = this.DropListIncidenciaObligatoria.SelectedValue;
+                int i = configuracion.ModificarIncidenciaObligatoria();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Incidencia Obligatoria.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Configuración Incidencia Obligatoria modificada con éxito. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Incidencia Obligatoria. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrió un error modificando la configuración de Incidencia Obligatoria. Excepción: " + ex.Message + ". \", {type: \"error\"});", true);
+            }
+        }
+
+        protected void lbtnMargenObligatorio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.MargenObligatorio = this.DropListMargenObligatorio.SelectedValue;
+                int i = configuracion.ModificarMargenObligatorio();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Margen Obligatorio.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Configuración Margen Obligatorio modificada con éxito. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Margen Obligatorio. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrió un error modificando la configuración de Margen Obligatorio. Excepción: " + ex.Message + ". \", {type: \"error\"});", true);
             }
         }
     }
