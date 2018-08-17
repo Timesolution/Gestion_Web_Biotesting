@@ -373,6 +373,75 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Tiempo de preparación por linea de pedido:</label>
+                                            <div class="col-md-2">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Minutos</span>
+                                                    <asp:TextBox ID="txtMinutosLineas" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Minutos" MaxLength="2" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Segundos</span>
+                                                    <asp:TextBox ID="txtSegundosLineas" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Segundos" MaxLength="2" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnTiempoLineas" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnTiempoLineas_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Ver saldo de Cliente en Observaciones del PRP:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListVerSaldoClienteObservacionesPRP" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnVerSaldoClienteObservacionesPRP" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnVerSaldoClienteObservacionesPRP_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Incidencia Obligatoria:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListIncidenciaObligatoria" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnIncidenciaObligatoria" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnIncidenciaObligatoria_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Margen Obligatorio:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListMargenObligatorio" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnMargenObligatorio" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnMargenObligatorio_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Personalizar tabla Articulos:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnPersonalizar" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalPersonalizacion" class="btn btn-success" />
@@ -400,7 +469,7 @@
                                             </div>
                                         </div>
 
-                                        
+
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </fieldset>
@@ -661,7 +730,7 @@
         });
         $(function () {
             $("#<%= txtFechaCuentaCorrienteVentas.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-         });
+        });
     </script>
 
 
