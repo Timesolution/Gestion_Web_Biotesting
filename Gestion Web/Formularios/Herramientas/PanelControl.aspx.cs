@@ -950,7 +950,17 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
-
+                configuracion.EstadoInicialPedidos = this.DropListSucGarantia.SelectedValue;
+                int i = configuracion.ModificarEstadoInicialPedido();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de sucursal de garantia.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Sucursal garantia modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Sucursal Garantia!. \", {type: \"info\"});", true);
+                }
             }
             catch (Exception ex)
             {
