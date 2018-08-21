@@ -26,7 +26,7 @@
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">A Service Oficial</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial" OnClick="lbtnServiceOficial_Click">A Service Oficial</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" data-toggle="modal" href="#modalDevolucionProveedor">Devolucion a proveedor</asp:LinkButton>
@@ -210,7 +210,7 @@
         </div>
 
         <div id="modalServiceOficial" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
+            <div class="modal-dialog" style="width: 60%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -222,13 +222,31 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="col-md-4">Servicio Tecnico</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <asp:DropDownList ID="DropListServicioTecnico" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
                                         </div>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="DropListServicioTecnico" ValidationGroup="ServiceOficial"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                             </div>
+                            <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Direccion</th>
+                                                <th>Marcas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <asp:PlaceHolder ID="phServicioTecnico" runat="server"></asp:PlaceHolder>
+                                        </tbody>
+                                    </table>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
                         </div>
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnGuardarServiceOficial_Click" />

@@ -257,6 +257,54 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
+        private void cargarEnPhServiceOficial(ServicioTecnico st)
+        {
+            try
+            {
+                //controladorSucursal contSucursal = new controladorSucursal();
+                //controladorFacturacion contFacturacion = new controladorFacturacion();
+                //controladorCliente contCliente = new controladorCliente();
+
+                var marcas = contServTecnico.ObtenerMarcasByIDServicioTecnico((int)st.Id);
+
+                //fila
+                TableRow tr = new TableRow();
+                tr.ID = st.Id.ToString();
+
+                //Celdas
+
+                TableCell celNombre = new TableCell();
+                celNombre.Text = st.Nombre;
+                celNombre.HorizontalAlign = HorizontalAlign.Left;
+                celNombre.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celNombre);
+
+                TableCell celDireccion = new TableCell();
+                celDireccion.Text = st.Direccion;
+                celDireccion.HorizontalAlign = HorizontalAlign.Left;
+                celDireccion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celDireccion);
+
+                TableCell celMarcas = new TableCell();
+                for (int i = 0; i < marcas.Count; i++)
+                {
+                    if (i == marcas.Count - 1)
+                        celMarcas.Text += marcas[i].descripcion;
+                    else
+                        celMarcas.Text += marcas[i].descripcion + ", ";
+                }
+                celMarcas.HorizontalAlign = HorizontalAlign.Left;
+                celMarcas.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celMarcas);
+                phServicioTecnico.Controls.Add(tr);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+            }
+        }
+
         private void DetalleOrdenReparacion(object sender, EventArgs e)
         {
             try
@@ -736,6 +784,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     }
                 }
+            }
+        }
+
+        protected void lbtnServiceOficial_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }
