@@ -29,10 +29,12 @@
                                                 <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">A Service Oficial</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" OnClick="lbtnDevolucionProveedor_Click">Devolucion a proveedor</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" data-toggle="modal" href="#modalDevolucionProveedor">Devolucion a proveedor</asp:LinkButton>
+                                                <%--OnClick="lbtnDevolucionProveedor_Click"--%>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnRepararLocalmente" runat="server" OnClick="lbtnRepararLocalmente_Click">Reparar localmente</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnRepararLocalmente" runat="server" data-toggle="modal" href="#modalRepararLocalmente">Reparar localmente</asp:LinkButton>
+                                                <%--OnClick="lbtnRepararLocalmente_Click"--%>
                                             </li>
                                         </ul>
                                     </div>
@@ -130,6 +132,76 @@
                         </div>
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalDevolucionProveedor" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Devolucion a Proveedor</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label3" Text="Esta seguro que desea enviar la orden de reparacion al proveedor?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox3" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnSiDevolucionProveedor" Text="Enviar" class="btn btn-success" OnClick="btnSiDevolucionProveedor_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalRepararLocalmente" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label2" Text="Esta seguro que desea enviar la orden de reparacion a reparacion local?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox2" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnSiReparacionLocalmente" Text="Enviar" class="btn btn-success" OnClick="btnSiReparacionLocalmente_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -309,7 +381,7 @@
 
         <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
+        <script src="../../js/daypilot-modal-2.0.js"></script>
         <script>
 
 

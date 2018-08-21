@@ -571,7 +571,58 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        protected void lbtnDevolucionProveedor_Click(object sender, EventArgs e)
+        //protected void lbtnDevolucionProveedor_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string idtildado = "";
+
+        //        //compruebo si hay una sola orden de reparacion tildada
+        //        if (ComprobarOrdenReparacionTildada())
+        //        {
+        //            foreach (Control C in phOrdenReparacion.Controls)
+        //            {
+        //                TableRow tr = C as TableRow;
+        //                CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+        //                if (ch.Checked == true)
+        //                {
+        //                    idtildado = ch.ID.Split('_')[1];
+
+        //                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+        //                    or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En proveedor").Id;
+
+        //                    var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+        //                    if (temp > 0)
+        //                    {
+        //                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a proveedor " + or.Id);
+        //                        Session["Login_idcliente"] = or.Cliente;
+        //                        Session["Login_idArticulo"] = or.Producto;
+        //                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a proveedor con exito!", "../Compras/RemitosABM.aspx?a=1&or=1&orID=" + or.Id));
+        //                    }
+        //                    else if (temp == -1)
+        //                    {
+        //                        Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al proveedor. " + or.Id);
+        //                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al proveedor."));
+        //                    }
+
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al proveedor. " + ex.Message);
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al proveedor. " + ex.Message));
+        //    }
+        //}
+
+        //protected void lbtnRepararLocalmente_Click(object sender, EventArgs e)
+        //{
+            
+        //}
+
+        protected void btnSiDevolucionProveedor_Click(object sender, EventArgs e)
         {
             try
             {
@@ -617,7 +668,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        protected void lbtnRepararLocalmente_Click(object sender, EventArgs e)
+        protected void btnSiReparacionLocalmente_Click(object sender, EventArgs e)
         {
             string idtildado = "";
 
