@@ -58,7 +58,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     this.cargarSucursal();
                     this.cargarClientes();
                     this.cargarEstados();
-                    this.CargarServiciosTecnicos();
                 }
 
                 if (accion == 0)
@@ -118,30 +117,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch
             {
                 return -1;
-            }
-        }
-
-        public void CargarServiciosTecnicos()
-        {
-            try
-            {
-                var dt = contServTecnico.ObtenerServiciosTecnicos();
-
-                //DataRow dr = dt.NewRow();
-                //dr["nombre"] = "Todas";
-                //dr["id"] = 0;
-                //dt.Rows.InsertAt(dr, 0);
-
-                this.DropListServicioTecnico.DataSource = dt;
-                this.DropListServicioTecnico.DataValueField = "Id";
-                this.DropListServicioTecnico.DataTextField = "Nombre";
-                this.DropListServicioTecnico.DataBind();
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar servicios tecnicos. " + ex.Message));
-                Log.EscribirSQL(1, "ERROR", "Error al cargar servicios tecnicos. " + ex.Message);
             }
         }
 
@@ -230,7 +205,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 Literal lReport = new Literal();
                 lReport.ID = "btnReporte_" + or.Id.ToString();
-                lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "&target=\"_blank\"" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
                 lReport.Text += "<span class=\"shortcut-icon icon-search\"></span>";
                 lReport.Text += "</a>";
 
@@ -257,33 +232,35 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        private void cargarEnPhServiceOficial(ServicioTecnico st)
+        private void cargarEnPhServiceOficial(DataRow dr)
         {
             try
             {
-                //controladorSucursal contSucursal = new controladorSucursal();
-                //controladorFacturacion contFacturacion = new controladorFacturacion();
-                //controladorCliente contCliente = new controladorCliente();
-
-                var marcas = contServTecnico.ObtenerMarcasByIDServicioTecnico((int)st.Id);
+                var marcas = contServTecnico.ObtenerMarcasByIDServicioTecnico(Convert.ToInt32(dr["Id"].ToString()));
 
                 //fila
                 TableRow tr = new TableRow();
-                tr.ID = st.Id.ToString();
+                tr.ID = dr["Id"].ToString();
 
                 //Celdas
 
                 TableCell celNombre = new TableCell();
-                celNombre.Text = st.Nombre;
+                celNombre.Text = dr["Nombre"].ToString();
                 celNombre.HorizontalAlign = HorizontalAlign.Left;
                 celNombre.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNombre);
 
                 TableCell celDireccion = new TableCell();
-                celDireccion.Text = st.Direccion;
+                celDireccion.Text = dr["Direccion"].ToString();
                 celDireccion.HorizontalAlign = HorizontalAlign.Left;
                 celDireccion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDireccion);
+
+                TableCell celObservaciones = new TableCell();
+                celObservaciones.Text = dr["Observaciones"].ToString();
+                celObservaciones.HorizontalAlign = HorizontalAlign.Left;
+                celObservaciones.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celObservaciones);
 
                 TableCell celMarcas = new TableCell();
                 for (int i = 0; i < marcas.Count; i++)
@@ -296,8 +273,20 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celMarcas.HorizontalAlign = HorizontalAlign.Left;
                 celMarcas.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celMarcas);
-                phServicioTecnico.Controls.Add(tr);
 
+                TableCell celAccion = new TableCell();
+                CheckBox cbSeleccion = new CheckBox();
+                //cbSeleccion.Text = "&nbsp;Imputar";
+                cbSeleccion.ID = "cbSeleccion_" + dr["Id"].ToString();
+                cbSeleccion.CssClass = "btn btn-info";
+                cbSeleccion.Font.Size = 12;
+                celAccion.Controls.Add(cbSeleccion);
+                celAccion.Width = Unit.Percentage(10);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+
+                tr.Cells.Add(celAccion);
+
+                phServicioTecnico.Controls.Add(tr);
             }
             catch (Exception ex)
             {
@@ -542,40 +531,44 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                string idtildado = "";
-
-                //compruebo si hay una sola orden de reparacion tildada
-                if (ComprobarOrdenReparacionTildada())
+                //chequeo si hay un servicio tecnico seleccionado
+                if (ComprobarServicioTecnicoTildado())
                 {
-                    foreach (Control C in phOrdenReparacion.Controls)
+                    string idtildado = "";
+
+                    //compruebo si hay una sola orden de reparacion tildada
+                    if (ComprobarOrdenReparacionTildada())
                     {
-                        TableRow tr = C as TableRow;
-                        CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
-                        if (ch.Checked == true)
+                        foreach (Control C in phOrdenReparacion.Controls)
                         {
-                            idtildado = ch.ID.Split('_')[1];
-
-                            var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                            or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En servicio tecnico").Id;
-
-                            var temp = contOrdenReparacion.ModificarOrdenReparacion();
-
-                            if (temp > 0)
+                            TableRow tr = C as TableRow;
+                            CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                            if (ch.Checked == true)
                             {
-                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a service oficial " + or.Id);
-                                Session["Login_idcliente"] = or.Cliente;
-                                Session["Login_idArticulo"] = or.Producto;
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a service con exito!", "../Facturas/ABMRemitos.aspx?accion=5"));
-                            }
-                            else if (temp == -1)
-                            {
-                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al service. " + or.Id);
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al service."));
-                            }
+                                idtildado = ch.ID.Split('_')[1];
 
+                                var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                                or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En servicio tecnico").Id;
+
+                                var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                                if (temp > 0)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a service oficial " + or.Id);
+                                    Session["Login_idcliente"] = or.Cliente;
+                                    Session["Login_idArticulo"] = or.Producto;
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a service con exito!", "../Facturas/ABMRemitos.aspx?accion=5"));
+                                }
+                                else if (temp == -1)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al service. " + or.Id);
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al service."));
+                                }
+
+                            }
                         }
                     }
-                }                
+                }                             
             }
             catch (Exception ex)
             {
@@ -607,6 +600,43 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (tildados > 1)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo una orden de reparacion!"));
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error comprobando si hay una sola orden de reparacion seleccionada. " + ex.Message);
+                return false;
+            }
+        }
+
+        public bool ComprobarServicioTecnicoTildado()
+        {
+            try
+            {
+                ObtenerServiciosTecnicos(txtServicioTecnico.Text);
+
+                int tildados = 0;
+
+                foreach (Control C in phServicioTecnico.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[4].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true)
+                        tildados++;
+                }
+
+                if (tildados <= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar un servicio tecnico!"));
+                    return false;
+                }
+                if (tildados > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un servicio tecnico!"));
                     return false;
                 }
 
@@ -667,7 +697,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
         //protected void lbtnRepararLocalmente_Click(object sender, EventArgs e)
         //{
-            
+
         //}
 
         protected void btnSiDevolucionProveedor_Click(object sender, EventArgs e)
@@ -787,16 +817,32 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        protected void lbtnServiceOficial_Click(object sender, EventArgs e)
+        protected void btnBuscarServicioTecnico_Click(object sender, EventArgs e)
         {
             try
             {
-
+                ObtenerServiciosTecnicos(txtServicioTecnico.Text);
             }
             catch (Exception ex)
             {
+                Log.EscribirSQL(1, "ERROR", "Error al buscar servicio tecnico. " + ex.Message);
+            }
+        }
 
-                throw;
+        public void ObtenerServiciosTecnicos(string buscar)
+        {
+            try
+            {
+                var serviciosTecnicos = contServTecnico.ObtenerServiciosTecnicosByCampoDT(buscar);
+
+                foreach (DataRow item in serviciosTecnicos.Rows)
+                {
+                    cargarEnPhServiceOficial(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al buscar servicio tecnico. " + ex.Message);
             }
         }
     }

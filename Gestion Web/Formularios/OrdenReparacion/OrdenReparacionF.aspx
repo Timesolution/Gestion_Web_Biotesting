@@ -26,7 +26,8 @@
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial" OnClick="lbtnServiceOficial_Click">A Service Oficial</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">A Service Oficial</asp:LinkButton>
+                                                <%----%>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" data-toggle="modal" href="#modalDevolucionProveedor">Devolucion a proveedor</asp:LinkButton>
@@ -218,25 +219,29 @@
                     </div>
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="col-md-4">Servicio Tecnico</label>
-                                        <div class="col-md-4">
-                                            <asp:DropDownList ID="DropListServicioTecnico" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
-                                        </div>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="DropListServicioTecnico" ValidationGroup="ServiceOficial"></asp:RequiredFieldValidator>
-                                    </div>
-                                </div>
-                            </div>
                             <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name" class="col-md-4">Buscar Servicio Tecnico</label>
+                                                <div class="col-md-3">
+                                                    <asp:TextBox ID="txtServicioTecnico" class="form-control" runat="server"></asp:TextBox>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <asp:LinkButton ID="btnBuscarServicioTecnico" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarServicioTecnico_Click" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Direccion</th>
+                                                <th>Observaciones</th>
                                                 <th>Marcas</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -248,10 +253,10 @@
                                 </Triggers>
                             </asp:UpdatePanel>
                         </div>
-                        <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnGuardarServiceOficial_Click" />
-                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                        </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnGuardarServiceOficial_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -410,6 +415,10 @@
             $(function () {
                 $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
+
+            function openModalAgregarServiceOficial() {
+                $('#modalServiceOficial').modal('show');
+            }
 
         </script>
 
