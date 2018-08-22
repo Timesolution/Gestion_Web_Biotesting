@@ -135,7 +135,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //Celdas
 
                 TableCell celFecha = new TableCell();
-                celFecha.Text = or.Fecha.ToString();
+                celFecha.Text = or.Fecha.Value.ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
@@ -166,7 +166,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 tr.Cells.Add(celPRP);
 
                 TableCell celFechaCompra = new TableCell();
-                celFechaCompra.Text = or.FechaCompra.ToString();
+                celFechaCompra.Text = or.FechaCompra.Value.ToString("dd/MM/yyyy");
                 celFechaCompra.HorizontalAlign = HorizontalAlign.Left;
                 celFechaCompra.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFechaCompra);
@@ -205,7 +205,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 Literal lReport = new Literal();
                 lReport.ID = "btnReporte_" + or.Id.ToString();
-                lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "&target=\"_blank\"" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "\"" + "target =\"_blank\"" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
                 lReport.Text += "<span class=\"shortcut-icon icon-search\"></span>";
                 lReport.Text += "</a>";
 
