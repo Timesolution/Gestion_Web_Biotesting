@@ -152,7 +152,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celNumeroSerie.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumeroSerie);
 
-
                 TableCell celSucursal = new TableCell();                
                 celSucursal.Text = contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre;
                 celSucursal.VerticalAlign = VerticalAlign.Middle;
@@ -183,11 +182,50 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celPlazoReparacion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celPlazoReparacion);
 
+                TableCell celTopeReparacion = new TableCell();
+                celTopeReparacion.Text = or.Fecha.Value.AddDays((int)or.PlazoLimiteReparacion).ToString("dd/MM/yyyy");
+                celTopeReparacion.HorizontalAlign = HorizontalAlign.Left;
+                celTopeReparacion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celTopeReparacion);
+
                 TableCell celEstado = new TableCell();
                 celEstado.Text = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID((int)or.Estado).Descripcion;
                 celEstado.HorizontalAlign = HorizontalAlign.Left;
                 celEstado.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celEstado);
+
+                TableCell celProgressBar = new TableCell();
+                Literal lProgressBar = new Literal();
+                int progreso = CalcularProgressBar((DateTime)or.Fecha,(int)or.PlazoLimiteReparacion);
+                if(progreso <= 70)
+                {
+                    lProgressBar.Text = "<div class=\"progress\"> <div class=\"progress-bar progress-bar-success\" style=\"width: " + progreso + "% \"></div></div>";
+                }                    
+                else if(progreso > 70 && progreso < 90)
+                {
+                    lProgressBar.Text = "<div class=\"progress\">";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-success\" style=\"width: 70% \"></div>";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-warning\" style=\"width: " + (progreso*20)/100 + "% \"></div>";
+                    lProgressBar.Text += "</div>";
+                }
+                else if(progreso >= 90 && progreso <= 100)
+                {
+                    lProgressBar.Text = "<div class=\"progress\">";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-success\" style=\"width: 70% \"></div>";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-warning\" style=\"width: 20% \"></div>";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-danger\" style=\"width: " + (progreso*10)/100 + "% \"></div>";
+                    lProgressBar.Text += "</div>";
+                }
+                else
+                {
+                    lProgressBar.Text = "<div class=\"progress\">";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-success\" style=\"width: 70% \"></div>";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-warning\" style=\"width: 20% \"></div>";
+                    lProgressBar.Text += "<div class=\"progress-bar progress-bar-danger\" style=\"width: 10% \"></div>";
+                    lProgressBar.Text += "</div>";
+                }
+                celProgressBar.Controls.Add(lProgressBar);
+                tr.Cells.Add(celProgressBar);
 
                 TableCell celAccion = new TableCell();
 
@@ -229,6 +267,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+            }
+        }
+
+        public int CalcularProgressBar(DateTime fechaCompra,int plazoReparacion)
+        {
+            try
+            {
+                return (Convert.ToInt32((DateTime.Today - fechaCompra).TotalDays) * 100) / plazoReparacion;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al calcular la progress bar " + ex.Message);
+                return -1;
             }
         }
 
@@ -844,6 +895,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 Log.EscribirSQL(1, "ERROR", "Error al buscar servicio tecnico. " + ex.Message);
             }
+        }
+
+        protected void btnAsignarORalServiceOficial_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
