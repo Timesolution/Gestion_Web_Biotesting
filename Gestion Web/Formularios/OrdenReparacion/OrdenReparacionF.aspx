@@ -58,13 +58,13 @@
                                         </a>
                                     </div>
                                 </td>
-                                <td style="width: 5%">
+                                <%--<td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
                                         <a href="OrdenReparacionABM.aspx" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
                                             <i class="shortcut-icon icon-plus"></i>
                                         </a>
                                     </div>
-                                </td>
+                                </td>--%>
                             </tr>
                         </table>
                     </div>
@@ -223,14 +223,14 @@
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
                             <div class="form-group">
-                                    <label class="col-md-4">Fecha a Reparar en Service Oficial</label>
-                                    <div class="col-md-4">
-                                        <asp:TextBox ID="txtFechaReparar" runat="server" class="form-control"></asp:TextBox>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                    </div>
+                                <label class="col-md-4">Fecha a Reparar en Service Oficial</label>
+                                <div class="col-md-4">
+                                    <asp:TextBox ID="txtFechaReparar" runat="server" class="form-control"></asp:TextBox>
                                 </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-4">Numero Orden Reparacion</label>
                                 <div class="col-md-4">
@@ -243,6 +243,10 @@
                                     <asp:TextBox ID="txtPlazoEstimadoReparacion" runat="server" class="form-control"></asp:TextBox>
                                 </div>
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="Button1" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -453,12 +457,15 @@
 
         $(function () {
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+        });
 
-            function openModalAgregarServiceOficial() {
-                $('#modalServiceOficial').modal('show');
-            }
+        function openModalAgregarServiceOficial() {
+            $('#modalServiceOficial').modal('show');
+        }
 
+        $(function () {
+            $("#<%= txtFechaReparar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
     </script>
 
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>

@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         controladorArticulo contArticulo = new controladorArticulo();
         controladorFacturacion contFacturacion = new controladorFacturacion();
         ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
+        controladorServicioTecnicoEntity contServTecnico = new controladorServicioTecnicoEntity();
         int idPresupuesto;
         int idOrdenReparacion;
         int accion;
@@ -106,11 +107,20 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 or.Estado = 1;
 
-                SetearValoresEnOrdenReparacion(or);
+                SetearValoresEnOrdenReparacion(or);                
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                if(temp > 0)
+                var observacion = new OrdenReparacion_Observaciones();
+
+                observacion.IdOrdenReparacion = or.Id;
+                observacion.Fecha = DateTime.Now;
+                observacion.Usuario = (int)Session["Login_IdUser"];
+                observacion.Observaciones = "Se genera orden de reparacion";
+
+                contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
+
+                if (temp > 0)
                 {
                     Log.EscribirSQL(1, "Info", "Orden de reparacion agregada con exito");
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación agregada con exito!.", "OrdenReparacionF.aspx"));

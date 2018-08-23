@@ -200,7 +200,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if(progreso <= 70)
                 {
                     lProgressBar.Text = "<div class=\"progress\"> <div class=\"progress-bar progress-bar-success\" style=\"width: " + progreso + "% \"></div></div>";
-                }                    
+                }
                 else if(progreso > 70 && progreso < 90)
                 {
                     lProgressBar.Text = "<div class=\"progress\">";
@@ -252,6 +252,18 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 Literal l2 = new Literal();
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
+
+                Literal lObservacion = new Literal();
+                lObservacion.ID = "btnObservacion_" + or.Id.ToString();
+                lObservacion.Text = "<a href=\"OrdenReparacionObservacionesABM.aspx?or=" + or.Id.ToString() + "\"" + "target =\"_blank\"" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lObservacion.Text += "<span class=\"shortcut-icon icon-comment\"></span>";
+                lObservacion.Text += "</a>";
+
+                celAccion.Controls.Add(lObservacion);
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
 
                 CheckBox cbSeleccion = new CheckBox();
                 cbSeleccion.ID = "cbSeleccion_" + or.Id;
@@ -773,6 +785,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                             var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
+                            var observacion = new OrdenReparacion_Observaciones();
+
+                            observacion.IdOrdenReparacion = or.Id;
+                            observacion.Fecha = DateTime.Now;
+                            observacion.Usuario = (int)Session["Login_IdUser"];
+                            observacion.Observaciones = "Se envia producto al proveedor";
+
+                            contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
+
                             if (temp > 0)
                             {
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a proveedor " + or.Id);
@@ -816,6 +837,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En reparacion").Id;
 
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        var observacion = new OrdenReparacion_Observaciones();
+
+                        observacion.IdOrdenReparacion = or.Id;
+                        observacion.Fecha = DateTime.Now;
+                        observacion.Usuario = (int)Session["Login_IdUser"];
+                        observacion.Observaciones = "Se envia producto a sucursal de reparacion";
+
+                        contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
 
                         if (temp > 0)
                         {
