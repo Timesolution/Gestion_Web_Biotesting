@@ -397,7 +397,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void guardarRemito()//TODO r usar esta funcion para agregar un remito
+        private void guardarRemito()
         {
             try
             {

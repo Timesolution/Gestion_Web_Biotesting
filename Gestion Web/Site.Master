@@ -335,6 +335,9 @@
                                         <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
                                             <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
                                         </asp:PlaceHolder>
+                                        <asp:PlaceHolder ID="phImagenes" runat="server" Visible="true">
+                                            <li><a href="/../../Formularios/Facturas/ABMFacturasImagenes.aspx">Ventas Imagenes</a></li>
+                                        </asp:PlaceHolder>
                                     </ul>
                                 </li>
 

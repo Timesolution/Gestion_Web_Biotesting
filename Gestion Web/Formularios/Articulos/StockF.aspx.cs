@@ -255,7 +255,7 @@ namespace Gestion_Web.Formularios.Articulos
                 celStock.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celStock);
 
-                cargarVisualizacionTablaStock(tr, s);//TODO r new fun
+                cargarVisualizacionTablaStock(tr, s);
                 TableCell celAccion = new TableCell();
 
                 LinkButton btnHistorico = new LinkButton();
@@ -299,11 +299,11 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando stock en la lista. " + ex.Message));
             }
         }
-        void cargarVisualizacionTablaStock(TableRow tr, Stock s)//TODO r new fun carga las columnas dinamicamente
+        void cargarVisualizacionTablaStock(TableRow tr, Stock s)//carga las columnas dinamicamente
         {
             VisualizacionStock visualizacionStock = new VisualizacionStock();
-            var stockImpPendiente = contArticulo.obtenerStockImportacionesPendientesBySuc(s.articulo.id, s.sucursal.id);//TODO r asignar el dato; 
-            var stockRemitoPendiente = contArticulo.obtenerStockRemitosPendientesBySuc(s.articulo.id, s.sucursal.id);//TODO r asignar el dato 
+            var stockImpPendiente = contArticulo.obtenerStockImportacionesPendientesBySuc(s.articulo.id, s.sucursal.id);//asigna el dato; 
+            var stockRemitoPendiente = contArticulo.obtenerStockRemitosPendientesBySuc(s.articulo.id, s.sucursal.id);//asigna el dato 
             if (visualizacionStock.columnaImportacionesPendientes == 1)
             {
                 TableCell celStock = new TableCell();
