@@ -501,6 +501,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 var listEstados = contOrdenReparacion.ObtenerEstadosOrdenReparacion();
 
+                listEstados = listEstados.Where(x => x.Id != 6).ToList(); //6 es anuladas
+
                 this.DropListEstados.DataSource = listEstados;
                 this.DropListEstados.DataValueField = "Id";
                 this.DropListEstados.DataTextField = "Descripcion";
