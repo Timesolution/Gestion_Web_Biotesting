@@ -228,7 +228,7 @@
                                     <asp:TextBox ID="txtFechaReparar" runat="server" class="form-control"></asp:TextBox>
                                 </div>
                                 <div class="col-md-4">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaReparar" ValidationGroup="ServiceOficial" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -236,16 +236,22 @@
                                 <div class="col-md-4">
                                     <asp:TextBox ID="txtNumOrdenReparacion" runat="server" class="form-control"></asp:TextBox>
                                 </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtNumOrdenReparacion" ValidationGroup="ServiceOficial" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4">Plazo estimado de reparacion</label>
                                 <div class="col-md-4">
-                                    <asp:TextBox ID="txtPlazoEstimadoReparacion" runat="server" class="form-control"></asp:TextBox>
+                                    <asp:TextBox ID="txtPlazoEstimadoReparacion" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtPlazoEstimadoReparacion" ValidationGroup="ServiceOficial" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="Button1" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" />
+                            <asp:Button runat="server" ID="btnAgregarOrdenReparacionServicioTecnico" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnAgregarOrdenReparacionServicioTecnico_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -262,12 +268,14 @@
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
-                        <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
+                        <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Conditional" runat="server">
                             <ContentTemplate>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="name" class="col-md-4">Buscar Servicio Tecnico</label>
+                                            <asp:Label runat="server" ID="lblIdServicioTecnico" Visible="false"></asp:Label>
+                                            <asp:Label runat="server" ID="lblIdOrdenReparacion" Visible="false"></asp:Label>
                                             <div class="col-md-3">
                                                 <asp:TextBox ID="txtServicioTecnico" class="form-control" runat="server"></asp:TextBox>
                                             </div>
@@ -297,7 +305,7 @@
                         </asp:UpdatePanel>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnGuardarServiceOficial_Click" />
+                        <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" OnClick="btnGuardarServiceOficial_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
@@ -466,10 +474,30 @@
         $(function () {
             $("#<%= txtFechaReparar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
+
+        function validarNro(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            if (key < 48 || key > 57) {
+                if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                { return true; }
+                else { return false; }
+            }
+            return true;
+        }
+
     </script>
 
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-    </div>
+    
 </asp:Content>

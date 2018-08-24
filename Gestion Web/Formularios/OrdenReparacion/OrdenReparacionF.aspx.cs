@@ -60,6 +60,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     this.cargarEstados();
                 }
 
+                //esto lo hacemos para que se mantengan los servicios tecnicos tildados cuando vas a accion > seleccionar servicio tecnico y buscas servicios tecnicos
+                if(!String.IsNullOrEmpty(txtServicioTecnico.Text))
+                    ObtenerServiciosTecnicos(txtServicioTecnico.Text);
+
                 if (accion == 0)
                     CargarOrdenesReparacion();                
                 else if(accion == 1)
@@ -424,13 +428,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
 
                         var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("Anulada").Id;
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(6).Id;
 
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -605,29 +609,70 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         foreach (Control C in phOrdenReparacion.Controls)
                         {
                             TableRow tr = C as TableRow;
-                            CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                            CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
                             if (ch.Checked == true)
                             {
                                 idtildado = ch.ID.Split('_')[1];
 
-                                var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                                or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En servicio tecnico").Id;
+                                int temp;
 
-                                var temp = contOrdenReparacion.ModificarOrdenReparacion();
+                                //obtengo la orden de reparacion
+                                var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));                                
+
+                                //linqueo la orden de reparacion con el servicio tecnico
+                                OrdenReparacion_ServicioTecnico or_st = new OrdenReparacion_ServicioTecnico();
+
+                                or_st.IdOrdenReparacion = or.Id;
+                                or_st.IdServicioTecnico = Convert.ToInt32(lblIdServicioTecnico.Text);
+
+                                var tempOr_St = contOrdenReparacion.AgregarOrdenReparacion_ServicioTecnico(or_st);
+
+                                if (tempOr_St > 0)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Servicio tecnico seleccionado con exito!");
+                                }
+                                else if (tempOr_St == -1)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al seleccionar servicio tecnico.");
+                                }
+                                
+                                //creo la observacion
+                                var observacion = new OrdenReparacion_Observaciones();
+
+                                observacion.IdOrdenReparacion = or.Id;
+                                observacion.Fecha = DateTime.Now;
+                                observacion.Usuario = (int)Session["Login_IdUser"];
+                                observacion.Observaciones = "Servicio tecnico asignado a la orden de reparacion";
+
+                                temp = contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
 
                                 if (temp > 0)
                                 {
-                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a service oficial " + or.Id);
-                                    Session["Login_idcliente"] = or.Cliente;
-                                    Session["Login_idArticulo"] = or.Producto;
-                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a service con exito!", "../Facturas/ABMRemitos.aspx?accion=5"));
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
                                 }
                                 else if (temp == -1)
                                 {
-                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al service. " + or.Id);
-                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al service."));
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
                                 }
 
+                                //le cambio el estado a la orden de reparacion, la modifico a lo ultimo asi lo redirijo a la misma pagina y evito problemas
+                                or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(4).Id;
+
+                                temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                                if (temp > 0)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Servicio tecnico seleccionado con exito!");
+                                    Session["Login_idcliente"] = or.Cliente;
+                                    Session["Login_idArticulo"] = or.Producto;
+                                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", "../Facturas/ABMRemitos.aspx?accion=5"));
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", "OrdenReparacionF.aspx"));
+                                }
+                                else if (temp == -1)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al seleccionar servicio tecnico.");
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al seleccionar servicio tecnico."));
+                                }
                             }
                         }
                     }
@@ -649,7 +694,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
 
                     if (ch.Checked == true)
                         tildados++;
@@ -679,7 +724,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                ObtenerServiciosTecnicos(txtServicioTecnico.Text);
+                //chequeo si hay servicios tecnicos tildados, si hay guardo el id en un label invisible
 
                 int tildados = 0;
 
@@ -689,7 +734,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     CheckBox ch = tr.Cells[4].Controls[0] as CheckBox;
 
                     if (ch.Checked == true)
+                    {
                         tildados++;
+                        lblIdServicioTecnico.Text = ch.ID.Split('_')[1];
+                    }
                 }
 
                 if (tildados <= 0)
@@ -712,57 +760,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        //protected void lbtnDevolucionProveedor_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        string idtildado = "";
-
-        //        //compruebo si hay una sola orden de reparacion tildada
-        //        if (ComprobarOrdenReparacionTildada())
-        //        {
-        //            foreach (Control C in phOrdenReparacion.Controls)
-        //            {
-        //                TableRow tr = C as TableRow;
-        //                CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
-        //                if (ch.Checked == true)
-        //                {
-        //                    idtildado = ch.ID.Split('_')[1];
-
-        //                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-        //                    or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En proveedor").Id;
-
-        //                    var temp = contOrdenReparacion.ModificarOrdenReparacion();
-
-        //                    if (temp > 0)
-        //                    {
-        //                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a proveedor " + or.Id);
-        //                        Session["Login_idcliente"] = or.Cliente;
-        //                        Session["Login_idArticulo"] = or.Producto;
-        //                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a proveedor con exito!", "../Compras/RemitosABM.aspx?a=1&or=1&orID=" + or.Id));
-        //                    }
-        //                    else if (temp == -1)
-        //                    {
-        //                        Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación al proveedor. " + or.Id);
-        //                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación al proveedor."));
-        //                    }
-
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al proveedor. " + ex.Message);
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al proveedor. " + ex.Message));
-        //    }
-        //}
-
-        //protected void lbtnRepararLocalmente_Click(object sender, EventArgs e)
-        //{
-
-        //}
-
         protected void btnSiDevolucionProveedor_Click(object sender, EventArgs e)
         {
             try
@@ -775,13 +772,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     foreach (Control C in phOrdenReparacion.Controls)
                     {
                         TableRow tr = C as TableRow;
-                        CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                        CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
                         if (ch.Checked == true)
                         {
                             idtildado = ch.ID.Split('_')[1];
 
                             var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                            or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En proveedor").Id;
+                            or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(5).Id;
 
                             var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -828,13 +825,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[4] as CheckBox;
+                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
 
                         var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorDescripcion("En reparacion").Id;
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
 
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -898,11 +895,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
+        //este metodo es el boton de la lupita cuando se selecciona el servicio tecnico, al apretar la lupita se vuelve a cargar la pagina y en el page load se guarda la opcion tildada, NO BORRAR ESTE METODO
         protected void btnBuscarServicioTecnico_Click(object sender, EventArgs e)
         {
             try
             {
-                ObtenerServiciosTecnicos(txtServicioTecnico.Text);
+                
             }
             catch (Exception ex)
             {
@@ -920,6 +918,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     cargarEnPhServiceOficial(item);
                 }
+
+                UpdatePanel7.Update();
             }
             catch (Exception ex)
             {
@@ -927,9 +927,89 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        protected void btnAsignarORalServiceOficial_Click(object sender, EventArgs e)
+        protected void btnAgregarOrdenReparacionServicioTecnico_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string idtildado = "";
 
+                foreach (Control C in phOrdenReparacion.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+
+                        int temp;
+                        var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+
+                        //obtengo OrdenReparacion_ServicioTecnico
+                        OrdenReparacion_ServicioTecnico or_st = contOrdenReparacion.ObtenerOrdenReparacion_ServicioTecnicoPorORdenReparacionID(Convert.ToInt32(or.Id));
+
+                        //asi chequeo si previamente se le asigno un servicio tecnico a la orden de reparacion
+                        if (or_st != null)
+                        {
+                            or_st.Fecha = Convert.ToDateTime(txtFechaReparar.Text, new CultureInfo("es-AR"));
+                            or_st.NumeroOrden = txtNumeroOrden.Text;
+                            or_st.PlazoReparacion = Convert.ToInt32(txtPlazoEstimadoReparacion.Text);
+
+                            temp = contOrdenReparacion.ModificarOrdenReparacion_ServicioTecnico();
+
+                            if (temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifique correctamente OrdenReparacion_ServicioTecnico, le asigne fecha, numero de orden y plazo reparacion");
+                            }
+                            else if (temp == -1)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al modificar OrdenReparacion_ServicioTecnico.");
+                            }
+
+                            var observacion = new OrdenReparacion_Observaciones();
+
+                            observacion.IdOrdenReparacion = or.Id;
+                            observacion.Fecha = DateTime.Now;
+                            observacion.Usuario = (int)Session["Login_IdUser"];
+                            observacion.Observaciones = "Producto enviado al servicio tecnico, numero de orden: " + txtNumeroOrden.Text;
+
+                            temp = contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
+
+                            if (temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
+                            }
+                            else if (temp == -1)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
+                            }
+
+                            or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(8).Id;
+
+                            temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                            if (temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se envio la orden de reparacion al service oficial correctamente!");
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se envio la orden de reparacion al service oficial correctamente!", "../Facturas/ABMRemitos.aspx?accion=5"));
+                            }
+                            else if (temp == -1)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparacion al servicio tecnico.");
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al servicio tecnico."));
+                            }
+                        }
+                        else
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Falta asignarle un servicio tecnico a la orden de reparacion.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Falta asignarle un servicio tecnico a la orden de reparacion."));
+                        }                       
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al servicio tecnico. " + ex.Message);
+            }
         }
     }
 }
