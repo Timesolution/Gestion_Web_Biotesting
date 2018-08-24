@@ -817,7 +817,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        protected void btnSiReparacionLocalmente_Click(object sender, EventArgs e)
+        protected void btnSiEnviarAReparacionLocalmente_Click(object sender, EventArgs e)
         {
             string idtildado = "";
 
@@ -833,7 +833,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         idtildado = ch.ID.Split('_')[1];
 
                         var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(9).Id;
 
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -1011,6 +1011,81 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al enviar orden de reparacion al servicio tecnico. " + ex.Message);
+            }
+        }
+
+        protected void btnSiReparacionLocalmente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    foreach (Control C in phOrdenReparacion.Controls)
+                    {
+                        TableRow tr = C as TableRow;
+                        CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
+                        if (ch.Checked == true)
+                        {
+                            idtildado = ch.ID.Split('_')[1];
+
+                            var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+
+                            if(or.Estado == 9)
+                            {
+                                var observacion = new OrdenReparacion_Observaciones();
+
+                                observacion.IdOrdenReparacion = or.Id;
+                                observacion.Fecha = DateTime.Now;
+                                observacion.Usuario = (int)Session["Login_IdUser"];
+                                observacion.Observaciones = "Producto en reparacion";
+
+                                var temp = contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
+
+                                if (temp > 0)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
+                                }
+                                else if (temp == -1)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
+                                }
+
+                                or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
+                                temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                                if (temp > 0)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra en reparacion");
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra en reparacion!", "OrdenReparacionF.aspx"));
+                                }
+                                else if (temp == -1)
+                                {
+                                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al poner el producto en reparacion.");
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al poner el producto en reparacion."));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al cambiar de estado de orden de reparacion a \"En reparacion\". " + ex.Message);
+            }
+        }
+
+        protected void btnDevolverASucursal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al enviar producto a la sucursal de origen. " + ex.Message);
             }
         }
     }
