@@ -1120,5 +1120,26 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 Log.EscribirSQL(1, "ERROR", "Error al devolver el producto a la sucursal de origen. " + ex.Message);
             }
         }
+
+        protected void lbtnEtiqueta_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    string idtildado = ObtenerIdTildadoOrdenReparacion();
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionOrdenReparacion.aspx?a=2&or=" + idtildado + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    //Response.Redirect("ImpresionOrdenReparacion.aspx?a=2&or=" + idtildado);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una orden de reparacion!"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al generar etiqueta. " + ex.Message);
+            }
+        }
     }
 }

@@ -25,6 +25,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnEtiqueta" runat="server" OnClick="lbtnEtiqueta_Click">Imprimir Etiqueta</asp:LinkButton>
+                                            </li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="-1" href="#">A Service Oficial</a>
                                                 <ul class="dropdown-menu">

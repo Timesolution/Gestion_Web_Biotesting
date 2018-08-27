@@ -254,7 +254,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (var item in contServTecEnt.ObtenerServiciosTecnicos())
                 {
                     cargarEnPh(item);
-                } 
+                }
             }
             catch (Exception ex)
             {

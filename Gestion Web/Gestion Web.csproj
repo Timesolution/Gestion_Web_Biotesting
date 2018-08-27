@@ -2847,6 +2847,9 @@
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\PedidosBultos.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosConsolidado.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosGrupo.rdlc" />
@@ -2885,13 +2888,11 @@
     <EmbeddedResource Include="Formularios\Facturas\RemitoR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Report2.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionR.rdlc" />
+    <EmbeddedResource Include="Formularios\OrdenReparacion\EtiquetasOR.rdlc" />
     <EmbeddedResource Include="Formularios\OrdenReparacion\OrdenReparacionR.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\DetallePagos.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\PagosListado.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\ReciboPagos.rdlc" />
-    <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Articulos\ReporteStock2.rdlc" />
     <EmbeddedResource Include="Formularios\Cobros\DetalleImpagas.rdlc" />
     <EmbeddedResource Include="Formularios\Personal\ReciboPagoRemuneracionR.rdlc" />

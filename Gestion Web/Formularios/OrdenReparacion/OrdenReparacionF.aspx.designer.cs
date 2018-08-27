@@ -31,6 +31,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.LinkButton lbtnAnular;
         
         /// <summary>
+        /// lbtnEtiqueta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEtiqueta;
+        
+        /// <summary>
         /// lbtnSeleccionarServiceOficial control.
         /// </summary>
         /// <remarks>
