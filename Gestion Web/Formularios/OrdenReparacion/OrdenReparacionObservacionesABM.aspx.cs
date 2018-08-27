@@ -134,14 +134,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                OrdenReparacion_Observaciones or_observaciones = new OrdenReparacion_Observaciones();
-
-                or_observaciones.IdOrdenReparacion = idOrdenReparacion;
-                or_observaciones.Usuario = (int)Session["Login_IdUser"];
-                or_observaciones.Observaciones = txtDetalleObservacion.Text;
-                or_observaciones.Fecha = DateTime.Now;
-
-                int temp = contOrdenReparacion.AgregarObservacionAOrdenReparacion(or_observaciones);
+                int temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(idOrdenReparacion, (int)Session["Login_IdUser"], txtDetalleObservacion.Text);
 
                 if(temp >= 0)
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Observacion agregada con exito!", "OrdenReparacionObservacionesABM.aspx?or="+ idOrdenReparacion));

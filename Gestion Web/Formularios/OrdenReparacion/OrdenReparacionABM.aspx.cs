@@ -111,14 +111,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                var observacion = new OrdenReparacion_Observaciones();
-
-                observacion.IdOrdenReparacion = or.Id;
-                observacion.Fecha = DateTime.Now;
-                observacion.Usuario = (int)Session["Login_IdUser"];
-                observacion.Observaciones = "Se genera orden de reparacion";
-
-                contOrdenReparacion.AgregarObservacionAOrdenReparacion(observacion);
+                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion");
 
                 if (temp > 0)
                 {

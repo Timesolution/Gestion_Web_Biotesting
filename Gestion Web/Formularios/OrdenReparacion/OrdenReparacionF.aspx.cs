@@ -983,59 +983,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al poner el producto en reparacion."));
                         }
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error al cambiar de estado de orden de reparacion a \"En reparacion\". " + ex.Message);
-            }
-        }
-
-        protected void btnDevolverASucursal_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string idtildado = "";
-
-                //compruebo si hay una sola orden de reparacion tildada
-                if (ComprobarOrdenReparacionTildada())
-                {
-                    idtildado = ObtenerIdTildadoOrdenReparacion();
-
-                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
-
-                    if (or.Estado == 9)
+                    else
                     {
-                        var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Producto reparado, enviado a la sucursal de origen");
-
-                        if (temp > 0)
-                        {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
-                        }
-                        else if (temp == -1)
-                        {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
-                        }
-
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
-                        temp = contOrdenReparacion.ModificarOrdenReparacion();
-
-                        if (temp > 0)
-                        {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra en reparacion");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra en reparacion!", "OrdenReparacionF.aspx"));
-                        }
-                        else if (temp == -1)
-                        {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al poner el producto en reparacion.");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al poner el producto en reparacion."));
-                        }
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El producto no fue enviado a la sucursal de reparacion!"));
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "Error al enviar producto a la sucursal de origen. " + ex.Message);
+                Log.EscribirSQL(1, "ERROR", "Error al cambiar de estado de orden de reparacion a \"En reparacion\". " + ex.Message);
             }
         }
 
@@ -1058,6 +1014,110 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 Log.EscribirSQL(1, "ERROR", "Error al obtener id tildado de la orden de reparacion. " + ex.Message);
                 return string.Empty;
+            }
+        }
+
+        protected void btnReparado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+
+                    if (or.Estado == 7)
+                    {
+                        var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Producto reparado");
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
+                        }
+
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(3).Id;
+                        temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra reparado");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra reparado!", "OrdenReparacionF.aspx"));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al poner el producto en reparacion.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al poner el producto en estado reparado."));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El producto debe encontrarse reparado en la sucursal de reparacion!"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al cambiar el estado del producto a reparado. " + ex.Message);
+            }
+        }
+
+        protected void btnDevolverASucursalOrigen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+
+                    if (or.Estado == 3)
+                    {
+                        var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Producto enviado a la sucursal de origen");
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
+                        }
+
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(10).Id;
+                        temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto fue devuelto a la sucursal de origen");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue devuelto a la sucursal de origen!", "OrdenReparacionF.aspx"));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al devolver el producto a la sucursal de origen.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al devolver el producto a la sucursal de origen."));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El producto debe encontrarse reparado!"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al devolver el producto a la sucursal de origen. " + ex.Message);
             }
         }
     }

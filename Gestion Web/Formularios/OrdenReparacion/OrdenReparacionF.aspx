@@ -43,7 +43,8 @@
                                                     <li>
                                                         <asp:LinkButton ID="lbtnEnviarARepararLocalmente" runat="server" data-toggle="modal" href="#modalEnviarARepararLocalmente">Enviar a sucursal de reparacion</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnRepararLocalmente" runat="server" data-toggle="modal" href="#modalEnReparacion">En Reparacion</asp:LinkButton>
-                                                        <asp:LinkButton ID="lbtnDevolverASucursal" runat="server" data-toggle="modal" href="#modalDevolverASucursal">Devolver a Sucursal</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnReparado" runat="server" data-toggle="modal" href="#modalReparado">Reparado</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnDevolverASucursal" runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -256,7 +257,7 @@
             </div>
         </div>
 
-        <div id="modalDevolverASucursal" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modalReparado" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -273,7 +274,7 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h5>
-                                        <asp:Label runat="server" ID="Label5" Text="Esta seguro que desea enviar el producto a la sucursal de origen?" Style="text-align: center"></asp:Label>
+                                        <asp:Label runat="server" ID="Label5" Text="Esta seguro que desea cambiar el estado de la orden a 'Reparado' ?" Style="text-align: center"></asp:Label>
                                     </h5>
                                 </div>
 
@@ -283,7 +284,42 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnDevolverASucursal" Text="Enviar" class="btn btn-success" OnClick="btnDevolverASucursal_Click" />
+                            <asp:Button runat="server" ID="btnReparado" Text="Enviar" class="btn btn-success" OnClick="btnReparado_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalDevolucionASucursal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label6" Text="Esta seguro que desea enviar al producto a la sucursal de origen?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox6" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnDevolverASucursalOrigen" Text="Enviar" class="btn btn-success" OnClick="btnDevolverASucursalOrigen_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
