@@ -1849,161 +1849,112 @@
             <%--Fin modalGrupo--%>
         </asp:PlaceHolder>
 
-        <div class="col-md-12 col-xs-12">
-            <asp:LinkButton ID="lbtnAvanzada" runat="server" Text="Facturacion avanzada" OnClick="lbtnAvanzada_Click"></asp:LinkButton>
-            <div class="widget stacked widget-table action-table">
-                <div class="widget-content">
-                    <div class="shortcuts">
-                        <div class="col-md-4" style="padding-top: 2%; padding-bottom: 2%;">
-                            <asp:Label ID="lbNaftaNumeroFc" runat="server" Text="Factura B Nº" class="h4 text-muted"></asp:Label>
-                        </div>
-                        <div class="col-md-5" style="padding-top: 2%; padding-bottom: 2%;">
-                            <asp:Label ID="lbNaftaCliente" runat="server" Text="" class="h4 text-muted"></asp:Label>
-                        </div>
-                        <div class="col-md-1" style="padding-top: 1%;">
-                            <a class="shortcut" onclick="createC();" style="width: 100%;">
-                                <i class="h4 icon-search"></i>
-                            </a>
-                        </div>
-                        <div class="col-md-1" style="padding-top: 1%;">
-                            <a href="#modalAltaRapida" class="shortcut" data-toggle="modal" data-toggle="tooltip" title data-original-title="Alta rapida" style="width: 100%;">
-                                <i class="h4 icon-bolt"></i>
-                            </a>
+        <div class="main">
+            <asp:UpdatePanel runat="server" ID="updatePanelModoImagen">
+                <ContentTemplate>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="widget stacked">
+                                <div class="widget-header">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-th-large"></i>
+                                    <h3>Facturacion</h3>
+                                </div>
+                                <!-- /widget-header -->
+
+                                <!-- columna izquierda-->
+
+                                <div class="widget-content">
+
+
+                                    <div class="col-md-6 col-xs-12">
+
+                                        <div class="widget stacked widget-table action-table">
+
+                                            <div class="widget-content">
+
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 10%">Codigo</th>
+                                                            <th style="width: 40%">Descripcion</th>
+                                                            <th style="width: 10%">precio</th>
+                                                            <th style="width: 10%">Cant.</th>
+                                                            <th style="width: 10%">Total</th>
+                                                            <th style="width: 20%"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <asp:PlaceHolder ID="phItemsModoImagenes" runat="server"></asp:PlaceHolder>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- /widget-content -->
+
+                                        </div>
+                                        <!-- /table -->
+
+
+                                        <div class="widget stacked widget-table action-table">
+                                            <div class="widget-header">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <asp:PlaceHolder ID="phTotalModoImagen" runat="server"></asp:PlaceHolder>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <!-- /widget-header -->
+                                        </div>
+                                        <!-- /table -->
+
+                                        <div>
+                                            <asp:Button ID="btnFactImagen" class="btn btn-success" OnClick="btnFacturarImagen_Click" runat="server" Text="Facturar" />
+                                            &nbsp
+                                            <asp:LinkButton ID="btnIrAHome" runat="server" class="btn btn-success" Text="Volver al sistema" PostBackUrl="~/Default.aspx"></asp:LinkButton>
+                                            &nbsp
+                                            <asp:LinkButton ID="btnCancelarFactura" runat="server" class="btn btn-danger" Text="Cancelar" OnClick="btnCancelarFactura_Click"></asp:LinkButton>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6 col-xs-12">
+
+                                        <div class="widget stacked">
+                                            <div class="widget-content">
+
+                                                <div class="shortcuts">
+
+                                                    <div class="shortcuts" style="height: 400px; overflow-y: scroll;">
+                                                        <%--aca van a ir los ascx con los botones grupo--%>
+                                                        <asp:PlaceHolder ID="phImagenCuadroGrupos" runat="server"></asp:PlaceHolder>
+                                                        <asp:PlaceHolder ID="phImagenCuadroArt" runat="server"></asp:PlaceHolder>
+                                                    </div>
+                                                    <!-- /shortcuts -->
+
+                                                </div>
+
+                                            </div>
+                                            <!-- /widget-content -->
+
+                                        </div>
+                                        <!-- botones con imagenes -->
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-xs-12">
-            <!-- columna izquierda-->
-            <div class="widget stacked widget-table action-table">
-
-                <div class="widget-header">
-                    <i class="icon-th-list"></i>
-                    <h3>Articulos</h3>
-                </div>
-                <!-- /widget-header -->
-
-                <div class="widget-content">
-                    <%--<asp:UpdatePanel ID="UpdatePanel15" UpdateMode="Always" runat="server">
-                        <ContentTemplate>--%>
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Descripcion</th>
-                                        <th>precio</th>
-                                        <th>Cant.</th>
-                                        <th>Total</th>
-                                        <th class="td-actions"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <asp:PlaceHolder ID="phItemsModoImagenes" runat="server"></asp:PlaceHolder>
-                                </tbody>
-                            </table>
-                       <%-- </ContentTemplate>
-                    </asp:UpdatePanel>--%>
-                </div>
-                <!-- /widget-content -->
-            </div>
-            <!-- /table -->
-
-
-            <div class="widget stacked widget-table action-table">
-                <div class="widget-header">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <asp:PlaceHolder ID="phTotalModoImagen" runat="server"></asp:PlaceHolder>
-                            </tr>
-                        </thead>
-
-                    </table>
-                </div>
-                <!-- /widget-header -->
-            </div>
-            <!-- /table -->
-        </div>
-
-        <div class="container">
-            <div class="col-md-6">
-
-            <div class="widget stacked">
-                <div class="widget-header">
-                    <i class="icon-bookmark"></i>
-                    <h3>Grupos</h3>
-                    <asp:Label runat="server" ID="lblIdGrupo" Visible="false"></asp:Label>
-                </div>
-                <!-- /widget-header -->
-
-                <div class="widget-content">
-
-                    <div class="shortcuts">
-
-                        <div class="shortcuts" style="height: 300px; overflow-y: scroll;">
-                            <%--aca van a ir los ascx con los botones grupo--%>
-                           <%-- <asp:UpdatePanel ID="UpdatePanelImagenesCuadroGrupo" runat="server">
-                                <ContentTemplate>--%>
-
-                                    <asp:PlaceHolder ID="phImagenCuadroGrupos" runat="server"></asp:PlaceHolder>
-
-                                <%--</ContentTemplate>
-                                <Triggers>
-                                </Triggers>
-                            </asp:UpdatePanel>--%>
-                        </div>
-                        <!-- /shortcuts -->
-
                     </div>
-
-                </div>
-                <!-- /widget-content -->
-
-            </div>
-            <!-- botones con imagenes -->
-
-
-            <div class="widget stacked">
-                <div class="widget-header">
-                    <i class="icon-bookmark"></i>
-                    <h3>Articulos</h3>
-                </div>
-                <!-- /widget-header -->
-
-                <div class="widget-content">
-
-                    <div class="shortcuts">
-
-                        <div class="shortcuts" style="height: 300px; overflow-y: scroll;">
-
-                            <%--aca van a ir los ascx con los botones articulos--%>
-                            <%--<asp:UpdatePanel ID="UpdatePanelImagenesCuadroArt" runat="server">
-                                <ContentTemplate>--%>
-                                    <asp:PlaceHolder ID="phImagenCuadroArt" runat="server"></asp:PlaceHolder>
-                               <%-- </ContentTemplate>
-                                <Triggers>
-                                </Triggers>
-                            </asp:UpdatePanel>--%>
-                        </div>
-                        <!-- /shortcuts -->
-                    </div>
-                    <!-- /widget-content -->
-
-                </div>
-                <!-- botones con imagenes -->
-
-            </div>
-            <!-- botones imagenes-->
-
+                </ContentTemplate>
+            </asp:UpdatePanel>
         </div>
+        <!-- /main modo imagenes-->
 
-        </div>
 
-        
     </div>
-    <!-- /main -->
+    <!-- /main principal-->
+
 
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
@@ -2030,31 +1981,31 @@
     <script>
         function pageLoad() {
             $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= txtFechaSolicitudManual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= txtFechaNacimientoCredito.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= txtFechaVtoCuotaMutual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= txtFechaPagareMutual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= lbtnAnticipo.ClientID %>").tooltip();
-                $("#<%= lbtnAnticipoMutual.ClientID %>").tooltip();
-                $("#<%= btnEnviarCodigoCredito.ClientID %>").tooltip();
-                $("#<%= lbtnNoValidar.ClientID %>").tooltip();
-                $("#<%= lblMovSolicitud.ClientID %>").tooltip();
-                $("#<%= lbtnVolverValidar.ClientID %>").tooltip();
-                $("#<%= btnLimpiarProcesoCredito.ClientID %>").tooltip();
-                $("#<%= lbtnBuscarSolicitudes.ClientID %>").tooltip();
-                $("#<%= btnCredito.ClientID %>").tooltip();
-                $("#<%= btnMutual.ClientID %>").tooltip();
-                $("#<%= lbtnVerCtaCte.ClientID %>").tooltip();
-                $("#<%= btnCierreZ.ClientID %>").tooltip();
-                $("#<%= txtMailEntrega.ClientID %>").popover();
-                $("#<%= txtCapitalSolicitudManual.ClientID %>").popover();
+            $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaSolicitudManual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaNacimientoCredito.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaVtoCuotaMutual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaPagareMutual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= lbtnAnticipo.ClientID %>").tooltip();
+            $("#<%= lbtnAnticipoMutual.ClientID %>").tooltip();
+            $("#<%= btnEnviarCodigoCredito.ClientID %>").tooltip();
+            $("#<%= lbtnNoValidar.ClientID %>").tooltip();
+            $("#<%= lblMovSolicitud.ClientID %>").tooltip();
+            $("#<%= lbtnVolverValidar.ClientID %>").tooltip();
+            $("#<%= btnLimpiarProcesoCredito.ClientID %>").tooltip();
+            $("#<%= lbtnBuscarSolicitudes.ClientID %>").tooltip();
+            $("#<%= btnCredito.ClientID %>").tooltip();
+            $("#<%= btnMutual.ClientID %>").tooltip();
+            $("#<%= lbtnVerCtaCte.ClientID %>").tooltip();
+            $("#<%= btnCierreZ.ClientID %>").tooltip();
+            $("#<%= txtMailEntrega.ClientID %>").popover();
+            $("#<%= txtCapitalSolicitudManual.ClientID %>").popover();
         }
     </script>
     <script>
         $(function () {
             $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                $("#<%= txtFechaSolicitudManual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaSolicitudManual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
     </script>
     <script>
@@ -2083,15 +2034,15 @@
         function desbloquear() {
             if (!Page_ClientValidate("FacturaGroup")) {
                 document.getElementById("<%= this.btnAgregarRemitir.ClientID %>").removeAttribute("disabled");
-                    document.getElementById("<%= this.btnAgregarRemitir.ClientID %>").removeAttribute("style");
-                    document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
-                    document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
+                document.getElementById("<%= this.btnAgregarRemitir.ClientID %>").removeAttribute("style");
+                document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
+                document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
             }
         }
 
         function foco() {
             document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
-                var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
+            var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
             var screenPosition = note.getBoundingClientRect();
 
             window.scrollTo(0, screenPosition.bottom / 2);
@@ -2099,7 +2050,7 @@
 
         function focoDesc() {
             <%--document.getElementById("<%= this.TxtDescuentoArri.ClientID %>").focus();--%>
-                document.getElementById("<%= this.txtPUnitario.ClientID %>").focus();
+            document.getElementById("<%= this.txtPUnitario.ClientID %>").focus();
         }
 
     </script>
@@ -2108,7 +2059,7 @@
 
         function updateboxCredito(valor, id) {
             var textboxAnticipo = document.getElementById("<%=txtAnticipo.ClientID%>");
-                var textboxAnticipoManual = document.getElementById("<%=txtAnticipoSolicitudManual.ClientID%>");
+            var textboxAnticipoManual = document.getElementById("<%=txtAnticipoSolicitudManual.ClientID%>");
             var chk1 = document.getElementById("cbSeleccion_" + id);
 
             if (chk1.checked) {
@@ -2139,25 +2090,25 @@
 
         function updatebox(valor, id) {
             var cantActual = document.getElementById("<%=lblTrazaActual.ClientID%>").textContent;
-                var cantTotal = document.getElementById("<%=lblTrazaTotal.ClientID%>").textContent;
+            var cantTotal = document.getElementById("<%=lblTrazaTotal.ClientID%>").textContent;
 
-                var chk1 = document.getElementById(id);
-                if (cantActual == cantTotal) {
-                    if (chk1.checked == false) {
-                        cantActual = parseInt(parseInt(cantActual) - 1);
-                        document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
-                    }
+            var chk1 = document.getElementById(id);
+            if (cantActual == cantTotal) {
+                if (chk1.checked == false) {
+                    cantActual = parseInt(parseInt(cantActual) - 1);
+                    document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+                }
 
-                    document.getElementById(id).checked = false;
+                document.getElementById(id).checked = false;
+            }
+            else {
+                if (chk1.checked) {
+                    cantActual = parseInt(parseInt(cantActual) + 1);
                 }
                 else {
-                    if (chk1.checked) {
-                        cantActual = parseInt(parseInt(cantActual) + 1);
-                    }
-                    else {
-                        cantActual = parseInt(parseInt(cantActual) - 1);
-                    }
-                    document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+                    cantActual = parseInt(parseInt(cantActual) - 1);
+                }
+                document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
             }
 
         }
@@ -2167,12 +2118,12 @@
             var chk1 = document.getElementById(id);
             if (chk1.checked) {
                 document.getElementById('<%=txtNroSolicitud.ClientID%>').value = valor;
-                    document.getElementById('<%=txtAnticipo.ClientID%>').value = anticipo;
-                    document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = anticipo;
-                }
-                else {
-                    document.getElementById('<%= txtNroSolicitud.ClientID %>').value = "";
-                    document.getElementById('<%=txtAnticipo.ClientID%>').value = "";
+                document.getElementById('<%=txtAnticipo.ClientID%>').value = anticipo;
+                document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = anticipo;
+            }
+            else {
+                document.getElementById('<%= txtNroSolicitud.ClientID %>').value = "";
+                document.getElementById('<%=txtAnticipo.ClientID%>').value = "";
                 <%--document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = ""--%>;
             }
 
@@ -2234,8 +2185,8 @@
         function openModal(cod, nro, text) {
             $('#modalEnvioSMS').modal('show');
             document.getElementById("<%= this.txtCodArea.ClientID %>").value = cod;
-                document.getElementById("<%= this.txtTelefono.ClientID %>").value = nro;
-                document.getElementById("<%= this.txtMensajeSMS.ClientID %>").value = text;
+            document.getElementById("<%= this.txtTelefono.ClientID %>").value = nro;
+            document.getElementById("<%= this.txtMensajeSMS.ClientID %>").value = text;
         }
         function alertaSMSSaldoMax(text) {
 

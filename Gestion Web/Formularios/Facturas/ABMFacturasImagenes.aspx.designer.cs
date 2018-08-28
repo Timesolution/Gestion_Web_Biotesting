@@ -2209,31 +2209,13 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.Button btnCambiarPorcentajeCantidadFacturar;
         
         /// <summary>
-        /// lbtnAvanzada control.
+        /// updatePanelModoImagen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnAvanzada;
-        
-        /// <summary>
-        /// lbNaftaNumeroFc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbNaftaNumeroFc;
-        
-        /// <summary>
-        /// lbNaftaCliente control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbNaftaCliente;
+        protected global::System.Web.UI.UpdatePanel updatePanelModoImagen;
         
         /// <summary>
         /// phItemsModoImagenes control.
@@ -2254,13 +2236,31 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.PlaceHolder phTotalModoImagen;
         
         /// <summary>
-        /// lblIdGrupo control.
+        /// btnFactImagen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblIdGrupo;
+        protected global::System.Web.UI.WebControls.Button btnFactImagen;
+        
+        /// <summary>
+        /// btnIrAHome control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnIrAHome;
+        
+        /// <summary>
+        /// btnCancelarFactura control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCancelarFactura;
         
         /// <summary>
         /// phImagenCuadroGrupos control.
