@@ -51,6 +51,9 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnEnviarSMS" runat="server" OnClick="lbtnEnviarSMS_Click">Avisar al Cliente</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

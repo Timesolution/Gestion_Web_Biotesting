@@ -20,6 +20,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
         controladorServicioTecnicoEntity contServTecnico = new controladorServicioTecnicoEntity();
         Mensajes m = new Mensajes();
+        controladorCliente contCliente = new controladorCliente();
         int accion = 0;
         int numeroOrden = 0;
         int cliente = 0;
@@ -129,8 +130,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 controladorSucursal contSucursal = new controladorSucursal();
-                controladorFacturacion contFacturacion = new controladorFacturacion();
-                controladorCliente contCliente = new controladorCliente();
+                controladorFacturacion contFacturacion = new controladorFacturacion();                
 
                 //fila
                 TableRow tr = new TableRow();
@@ -1142,7 +1142,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionOrdenReparacion.aspx?a=2&or=" + idtildado + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                    //Response.Redirect("ImpresionOrdenReparacion.aspx?a=2&or=" + idtildado);
                 }
                 else
                 {
@@ -1152,6 +1151,24 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al generar etiqueta. " + ex.Message);
+            }
+        }
+
+        protected void lbtnEnviarSMS_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    string idtildado = ObtenerIdTildadoOrdenReparacion();
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+                    var cliente = contCliente.obtenerClienteID((int)or.Cliente);
+                    contOrdenReparacion.EnviarSMSProductoReparado(or.Celular,"prueba",cliente.razonSocial,(int)Session["Login_IdUser"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al enviar SMS " + ex.Message);
             }
         }
     }
