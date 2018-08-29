@@ -458,12 +458,21 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Remito r = new Remito();                
+                Remito r = new Remito();
                 //this.ListEmpresa.SelectedValue = r.empresa.id.ToString();
                 //this.cargarSucursal(r.empresa.id);
                 //this.cargarPuntoVta(r.sucursal.id);
-                this.cargarCliente(idCliente);
+                //this.cargarCliente(idCliente);
+
                 this.DropListClientes.SelectedValue = idCliente.ToString();
+                if (this.DropListClientes.SelectedValue == "-1")
+                {
+                    this.cargarClienteEnLista(idCliente);
+                }
+
+                this.cargarCliente(idCliente);
+
+                //this.DropListClientes.SelectedValue = idCliente.ToString();
                 //this.DropListVendedor.SelectedValue = r.vendedor.id.ToString();
                 //this.DropListFormaPago.SelectedValue = r.formaPAgo.id.ToString();
                 //this.DropListLista.SelectedValue = r.listaP.id.ToString();

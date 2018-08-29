@@ -652,8 +652,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Servicio tecnico seleccionado con exito!");
                             Session["Login_idcliente"] = or.Cliente;
                             Session["Login_idArticulo"] = or.Producto;
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", "../Facturas/ABMRemitos.aspx?accion=5"));
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", "OrdenReparacionF.aspx"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                         }
                         else if (temp == -1)
                         {
@@ -901,8 +900,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //asi chequeo si previamente se le asigno un servicio tecnico a la orden de reparacion
                 if (or_st != null)
                 {
+                    var servTecnico = contServTecnico.ObtenerServicioTecnicoByID((int)or_st.IdServicioTecnico);
+
                     or_st.Fecha = Convert.ToDateTime(txtFechaReparar.Text, new CultureInfo("es-AR"));
-                    or_st.NumeroOrden = txtNumeroOrden.Text;
+                    or_st.NumeroOrden = txtNumOrdenReparacion.Text;
                     or_st.PlazoReparacion = Convert.ToInt32(txtPlazoEstimadoReparacion.Text);
 
                     temp = contOrdenReparacion.ModificarOrdenReparacion_ServicioTecnico();
@@ -916,7 +917,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al modificar OrdenReparacion_ServicioTecnico.");
                     }
 
-                    contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Producto enviado al servicio tecnico, numero de orden: " + txtNumeroOrden.Text);
+                    contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Producto enviado al servicio tecnico: " + servTecnico.Nombre + " Direccion: " + servTecnico.Direccion + ", numero de orden: " + txtNumOrdenReparacion.Text);
 
                     if (temp > 0)
                     {
