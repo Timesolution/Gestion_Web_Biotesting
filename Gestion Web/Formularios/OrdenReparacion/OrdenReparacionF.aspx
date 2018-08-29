@@ -384,38 +384,43 @@
                     <h4 class="modal-title">Elegir Service Oficial</h4>
                 </div>
                 <div class="modal-body">
+
+
                     <div role="form" class="form-horizontal col-md-12">
                         <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Conditional" runat="server">
                             <ContentTemplate>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-4">Buscar Servicio Tecnico</label>
-                                            <asp:Label runat="server" ID="lblIdServicioTecnico" Visible="false"></asp:Label>
-                                            <asp:Label runat="server" ID="lblIdOrdenReparacion" Visible="false"></asp:Label>
-                                            <div class="col-md-3">
-                                                <asp:TextBox ID="txtServicioTecnico" class="form-control" runat="server"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <asp:LinkButton ID="btnBuscarServicioTecnico" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarServicioTecnico_Click" />
+                                <asp:Panel ID="Panel1" runat="server" DefaultButton="btnBuscarServicioTecnico">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name" class="col-md-4">Buscar Servicio Tecnico</label>
+                                                <asp:Label runat="server" ID="lblIdServicioTecnico" Visible="false"></asp:Label>
+                                                <asp:Label runat="server" ID="lblIdOrdenReparacion" Visible="false"></asp:Label>
+                                                <div class="col-md-3">
+                                                    <asp:TextBox ID="txtServicioTecnico" class="form-control" runat="server"></asp:TextBox>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <asp:LinkButton ID="btnBuscarServicioTecnico" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarServicioTecnico_Click" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <table class="table table-striped table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Direccion</th>
-                                            <th>Observaciones</th>
-                                            <th>Marcas</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <asp:PlaceHolder ID="phServicioTecnico" runat="server"></asp:PlaceHolder>
-                                    </tbody>
-                                </table>
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Direccion</th>
+                                                <th>Observaciones</th>
+                                                <th>Marcas</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <asp:PlaceHolder ID="phServicioTecnico" runat="server"></asp:PlaceHolder>
+                                        </tbody>
+                                    </table>
+
+                                </asp:Panel>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -425,6 +430,7 @@
                         <asp:Button runat="server" ID="btnGuardarServiceOficial" Text="Guardar" class="btn btn-success" OnClick="btnGuardarServiceOficial_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -433,23 +439,25 @@
     <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Busqueda</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <div class="form-group">
-                            <label class="col-md-4">N° de Orden</label>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="txtNumeroOrden" runat="server" class="form-control"></asp:TextBox>
+                <asp:Panel ID="p" runat="server" DefaultButton="btnBuscarNumeros">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Busqueda</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-4">N° de Orden</label>
+                                <div class="col-md-4">
+                                    <asp:TextBox ID="txtNumeroOrden" runat="server" class="form-control"></asp:TextBox>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
-                </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
+                    </div>
+                </asp:Panel>
             </div>
         </div>
     </div>
@@ -592,29 +600,29 @@
             $("#<%= txtFechaReparar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        function validarNro(e) {
-            var key;
-            if (window.event) // IE
-            {
-                key = e.keyCode;
-            }
-            else if (e.which) // Netscape/Firefox/Opera
-            {
-                key = e.which;
-            }
+            function validarNro(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
 
-            if (key < 48 || key > 57) {
-                if (key == 8)// Detectar . (punto) y backspace (retroceso) y , (coma)
-                { return true; }
-                else { return false; }
+                if (key < 48 || key > 57) {
+                    if (key == 8)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                    { return true; }
+                    else { return false; }
+                }
+                return true;
             }
-            return true;
-        }
 
     </script>
 
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-    
+
 </asp:Content>

@@ -494,6 +494,21 @@
                 </Border>
               </Style>
             </Image>
+            <Image Name="Image1">
+              <Source>External</Source>
+              <Value>=Parameters!ParamCodBarra.Value</Value>
+              <Sizing>FitProportional</Sizing>
+              <Top>3.75145cm</Top>
+              <Left>12.09862cm</Left>
+              <Height>1.25088cm</Height>
+              <Width>7.84458cm</Width>
+              <ZIndex>5</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
           </ReportItems>
           <KeepTogether>true</KeepTogether>
           <Top>0.1905cm</Top>
@@ -804,6 +819,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamNroOR">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamCodBarra">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

@@ -126,10 +126,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("EtiquetasOR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                
 
                 ReportDataSource rds = new ReportDataSource("OrdenReparacion", dtOR);
-
-                ReportParameter param = new ReportParameter("ParamCodBarra", generarCodigo((int)or.NumeroOrdenReparacion));
+                
+                string imagen = generarCodigo((int)or.NumeroOrdenReparacion); 
+                ReportParameter param = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -236,20 +238,25 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenReparacionR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
 
                 ReportDataSource rds = new ReportDataSource("DatosOrdenReparacion", dtOrdenReparacion);
+                               
 
                 ReportParameter param = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param2 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param3 = new ReportParameter("ParamCondIva", condIVA);
                 //ReportParameter param4 = new ReportParameter("ParamNroOR", or.NumeroOrdenReparacion.Value.ToString("D8"));
+                string imagen = generarCodigo((int)or.NumeroOrdenReparacion);
+                ReportParameter param4 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
+
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
-                //this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;

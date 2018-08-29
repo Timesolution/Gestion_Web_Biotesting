@@ -400,10 +400,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 phOrdenReparacion.Controls.Clear();
 
-                var desde = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
-                var hasta = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
-                var sucursal = Convert.ToInt32(DropListSucursal.SelectedValue);
-                var cliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                var desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")); //Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                var hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")); //Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
+                var sucursal = this.sucursal; //Convert.ToInt32(DropListSucursal.SelectedValue);
+                var cliente = this.cliente; //Convert.ToInt32(DropListClientes.SelectedValue);
                 //var estado = Convert.ToInt32(DropListEstados.SelectedValue);
 
                 var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado);
@@ -494,6 +494,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var listEstados = contOrdenReparacion.ObtenerEstadosOrdenReparacion();
 
                 listEstados = listEstados.Where(x => x.Id != 6).ToList(); //6 es anuladas
+
+                listEstados.Insert(0, new OrdenReparacion_Estados
+                {
+                    Id = 0,
+                    Descripcion = "TODOS"
+                });
 
                 this.DropListEstados.DataSource = listEstados;
                 this.DropListEstados.DataValueField = "Id";
@@ -794,18 +800,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se envia producto a sucursal de reparacion");
 
-                if (temp > 0)
+                if (temp >= 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a sucursal de reparacion " + or.Id);
-                    Session["Login_idcliente"] = or.Cliente;
-                    Session["Login_idArticulo"] = or.Producto;
-                    stockMovimiento sm = new stockMovimiento();
+                    Session["Login_idcliente"] = or.Cliente;//TODO porque esta info se guarda en la session??
+                    Session["Login_idArticulo"] = or.Producto;//TODO porque esta info se guarda en la session?? para que se usa?
+                    
                     controladorSucursal contSuc = new controladorSucursal();
                     ControladorConfiguracion contConfiguracion = new ControladorConfiguracion();
                     controladorArticulo contArticulo = new controladorArticulo();
 
                     Sucursal sucGarantia = contSuc.obtenerSucursalID(Convert.ToInt32(contConfiguracion.ObtenerConfiguracionId(51)));
 
+                    stockMovimiento sm = new stockMovimiento(); //TODO lo muevo para que quede mas ordenado
                     sm.Articulo = or.Producto;
                     sm.Cantidad = 1;
                     sm.Comentarios = "Aumento stock por producto en reparacion";
@@ -831,10 +838,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     }
                     else
                         Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar movimiento stock en sucursal de reparacion.");
-
+                    //TODO POR MAS QUE QUE FALLE SIEMPRE ME VA A DECIR QUE SE MANDO CON EXITO!! ESTO NO PUEDE PASAR
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "OrdenReparacionF.aspx"));
                 }
-                else if (temp == -1)
+                else if (temp == -2)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación a sucursal de reparacion. " + or.Id);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación a sucursal de reparacion."));
@@ -842,7 +849,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        //este metodo es el boton de la lupita cuando se selecciona el servicio tecnico, al apretar la lupita se vuelve a cargar la pagina y en el page load se guarda la opcion tildada, NO BORRAR ESTE METODO
+        
+        /// <summary>
+        ///este metodo es el boton de la lupita cuando se selecciona el servicio tecnico, 
+        ///al apretar la lupita se vuelve a cargar la pagina y en el page load se guarda la opcion tildada, NO BORRAR ESTE METODO 
+        /// </summary>
         protected void btnBuscarServicioTecnico_Click(object sender, EventArgs e)
         {
             try
@@ -855,6 +866,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
+        
         public void ObtenerServiciosTecnicos(string buscar)
         {
             try
