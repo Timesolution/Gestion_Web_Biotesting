@@ -15,6 +15,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -443,7 +444,7 @@ namespace Gestion_Web.Formularios.Facturas
                     cuadroImagen.Linkbutton1.ID = item.id.ToString();
                     cuadroImagen.Label1.Text = item.descripcion;
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(mostrarArticulosGrupo);
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.mostrarArticulosGrupo);
                     String path = Server.MapPath("../../images/Grupos/" + item.id + "/");
                     if (Directory.Exists(path))
                     {
@@ -518,6 +519,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                reproducirSonido();
                 var idGrupo = (sender as LinkButton).ID;
 
                 foreach (Control item in phImagenCuadroArt.Controls)
@@ -534,7 +536,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
             }
@@ -544,6 +546,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                reproducirSonido();
+
                 var idGrupo = (sender as LinkButton).ID;
 
                 foreach (Control item in phImagenCuadroArt.Controls)
@@ -566,6 +570,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                reproducirSonido();
+
                 var idLinkButton = (sender as LinkButton).ID;
                 int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
                 Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
@@ -620,7 +626,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarTablaArticulosModoImagenes()
+        private void cargarTablaArticulosModoImagenes()//agrega el articulo seleccionado a la tabla de articulos a facturar
         {
             Factura f = Session["Factura"] as Factura;         
 
@@ -638,6 +644,7 @@ namespace Gestion_Web.Formularios.Facturas
             TableCell celTxtTotal = new TableCell();
             celTxtTotal.Text = "<h3><b>Total:</b></h3>";
             celTxtTotal.VerticalAlign = VerticalAlign.Middle;
+            celTxtTotal.HorizontalAlign = HorizontalAlign.Right;
             tr.Cells.Add(celTxtTotal);
 
             TableCell celTotal = new TableCell();
@@ -4294,16 +4301,19 @@ namespace Gestion_Web.Formularios.Facturas
                 TableCell celPrecio = new TableCell();
                 celPrecio.Text = item.precioUnitario.ToString();
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
+                celPrecio.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celPrecio);
 
                 TableCell celCantidad = new TableCell();
                 celCantidad.Text = item.cantidad.ToString();
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
+                celCantidad.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celCantidad);
 
                 TableCell celTotal = new TableCell();
                 celTotal.Text = Decimal.Round(item.precioUnitario * item.cantidad, 2).ToString();
                 celTotal.VerticalAlign = VerticalAlign.Middle;
+                celTotal.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celTotal);
 
                 TableCell celAccion = new TableCell();//botones sumar restar
@@ -4312,7 +4322,6 @@ namespace Gestion_Web.Formularios.Facturas
                 btnRestar.ID = "btnRestar_" + item.articulo.id;
                 btnRestar.CssClass = "btn btn-info";
                 btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
-                //btnEliminar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
                 btnRestar.Click += new EventHandler(this.agregarArticuloAventa);
                 celAccion.Controls.Add(btnRestar);
             
@@ -10598,5 +10607,20 @@ namespace Gestion_Web.Formularios.Facturas
         {
            string t = "hello world";
         }
+
+        protected void reproducirSonido()
+        {
+            try
+            {
+                String path = Server.MapPath("../../content/Sounds/pulsar.wav");
+                SoundPlayer soundPlayer = new SoundPlayer(path);
+                soundPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        
     }
 }
