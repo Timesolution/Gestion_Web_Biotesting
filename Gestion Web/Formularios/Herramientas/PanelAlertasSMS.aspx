@@ -195,8 +195,22 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <asp:Button ID="btnGuardar" runat="server" class="btn btn-success" Text="Guardar" OnClick="btnGuardar_Click" />
+                                            <label class="col-md-2">11. AVISO DE PRODUCTO REPARADO:</label>
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <asp:CheckBox ID="chAlertaProductoReparado" runat="server" class="input-group-addon" onclick="cambioChk(this,11);" />
+                                                    <asp:TextBox ID="txtEnvioProductoReparado" runat="server" class="form-control" TextMode="MultiLine" Rows="4" disabled placeholder="Ingrese aqui el texto del mensaje a enviar..." />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Probar SMS" href="#modalEnvioSMS" onclick="pruebaSMS(11);">
+                                                    Probar
+                                                </a>
+                                            </div>
                                         </div>
+                                        <div class="form-group">
+                                            <asp:Button ID="btnGuardar" runat="server" class="btn btn-success" Text="Guardar" OnClick="btnGuardar_Click" />
+                                        </div>                                        
                                     </asp:Panel>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
@@ -304,6 +318,8 @@
                 document.getElementById("<%= txtEnvioCobro.ClientID %>").value = document.getElementById("<%= txtEnvioCobro.ClientID %>").value;
             if (numero == 10)
                 document.getElementById("<%= txtEnvioMailFC.ClientID %>").value = document.getElementById("<%= txtEnvioMailFC.ClientID %>").value;
+            if (numero == 11)
+                document.getElementById("<%= txtEnvioProductoReparado.ClientID %>").value = document.getElementById("<%= txtEnvioProductoReparado.ClientID %>").value;
         
         }
         function cambioChk(chk, numero) {
@@ -328,6 +344,8 @@
                     $("#<%= txtEnvioCobro.ClientID %>").removeAttr("disabled");
                 if (numero == 10)
                     $("#<%= txtEnvioMailFC.ClientID %>").removeAttr("disabled");
+                if (numero == 11)
+                    $("#<%= txtEnvioProductoReparado.ClientID %>").removeAttr("disabled");
             }
             else {
                 if (numero == 1)
@@ -350,6 +368,8 @@
                     $("#<%= txtEnvioCobro.ClientID %>").attr("disabled", "disabled");
                 if (numero == 10)
                     $("#<%= txtEnvioMailFC.ClientID %>").attr("disabled", "disabled");
+                if (numero == 11)
+                    $("#<%= txtEnvioProductoReparado.ClientID %>").attr("disabled", "disabled");
             }
         }
         function validarNroSinComa(e) {

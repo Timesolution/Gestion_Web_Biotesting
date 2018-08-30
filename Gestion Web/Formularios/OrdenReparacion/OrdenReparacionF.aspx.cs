@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         controladorServicioTecnicoEntity contServTecnico = new controladorServicioTecnicoEntity();
         Mensajes m = new Mensajes();
         controladorCliente contCliente = new controladorCliente();
+        ControladorConfiguracion contConfig = new ControladorConfiguracion();
         int accion = 0;
         int numeroOrden = 0;
         int cliente = 0;
@@ -1107,6 +1108,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
                         }
+                        //AgregarObservacion(or.Id, "Producto enviado a la sucursal de origen");
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(10).Id;
                         temp = contOrdenReparacion.ModificarOrdenReparacion();
@@ -1160,15 +1162,49 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 if (ComprobarOrdenReparacionTildada())
                 {
+                    Configuraciones_SMS configs = this.contConfig.ObtenerConfiguracionesAlertasSMS();
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
                     var cliente = contCliente.obtenerClienteID((int)or.Cliente);
-                    contOrdenReparacion.EnviarSMSProductoReparado(or.Celular,"prueba",cliente.razonSocial,(int)Session["Login_IdUser"]);
+                    var temp = contOrdenReparacion.EnviarSMSProductoReparado(or.Celular, configs.MensajeProductoReparado, cliente.razonSocial,(int)Session["Login_IdUser"]);
+
+                    if (temp > 0)
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje de producto reparado enviado correctamente");
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje de producto reparado enviado correctamente!", "OrdenReparacionF.aspx"));
+                    }
+                    else
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar mensaje de producto reparado.");
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar mensaje de producto reparado."));
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al enviar SMS " + ex.Message);
+            }
+        }
+
+        public void AgregarObservacion(int orID, string mensaje)
+        {
+            try
+            {
+                var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(orID, (int)Session["Login_IdUser"], mensaje);
+
+                if (temp > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Agregue correctamente la observacion a la orden de reparacion");
+                }
+                else if (temp == -1)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al agregar observacion a la orden de reparacion.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al agregar observacion " + ex.Message);
             }
         }
     }
