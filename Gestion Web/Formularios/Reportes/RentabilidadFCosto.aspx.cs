@@ -218,6 +218,8 @@ namespace Gestion_Web.Formularios.Reportes
                     datos =this.cont.Reportes_Rentabilidad_CostosImponible(Desde, Hasta, sucursal,this.cliente);
                 }
 
+                decimal totalVendidoConIva = 0;
+                decimal costoTConIva = 0;
                 decimal costoT = 0;
                 decimal precioT = 0;
 
@@ -226,13 +228,16 @@ namespace Gestion_Web.Formularios.Reportes
                     if (Convert.ToDecimal(dr["Costo"]) <= 0)
                     {
                         costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(0.01);
+                        costoTConIva += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(0.01);
                     }
                     else
                     {
                         costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible"]);
+                        costoTConIva += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible Con Iva"]);
                     }
                     //costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo"]);
                     precioT += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario"]), 4);
+                    totalVendidoConIva += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario Sin Iva"]), 4);
                 }
 
                 //ganancia
@@ -242,6 +247,10 @@ namespace Gestion_Web.Formularios.Reportes
 
                 this.labelTotalVendido.Text = "$ " + decimal.Round(precioT, 4).ToString("N");
                 this.labelTotalCosto.Text = "$ " + decimal.Round(costoT, 4).ToString("N");
+
+                this.labelTotalCostoConIva.Text = "$ " + decimal.Round(costoTConIva, 4).ToString("N");
+
+                this.labelTotalVendidoSinIva.Text = "$ " + decimal.Round(totalVendidoConIva, 4).ToString("N");
 
                 this.labelRentabilidad.Text = "$ " + decimal.Round(ganancia, 4).ToString("N");
                 this.labelPorRentabilidad.Text = decimal.Round(porGanancia, 4).ToString("N") + "%";
