@@ -481,6 +481,24 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnEstadoIniPedidos;
         
         /// <summary>
+        /// DropListEstadoPendienteRefacturar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListEstadoPendienteRefacturar;
+        
+        /// <summary>
+        /// lbtnEstadoPendienteRefacturar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEstadoPendienteRefacturar;
+        
+        /// <summary>
         /// txtMinutosLineas control.
         /// </summary>
         /// <remarks>

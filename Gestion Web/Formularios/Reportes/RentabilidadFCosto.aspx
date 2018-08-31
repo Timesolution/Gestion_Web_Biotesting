@@ -97,7 +97,15 @@
                         </div>
                     </div>
                 </div>
-
+                <br />
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Rentabilidad</h4>
+                            <asp:Label ID="labelRentabilidad" runat="server" Text="" class="value"></asp:Label>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="widget big-stats-container stacked">
                 <div class="widget-content">
@@ -115,8 +123,8 @@
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
-                            <h4>Rentabilidad</h4>
-                            <asp:Label ID="labelRentabilidad" runat="server" Text="" class="value"></asp:Label>
+                            <h4>Total Vendido Sin Iva</h4>
+                            <asp:Label ID="labelTotalVendidoSinIva" runat="server" Text="" class="value"></asp:Label>
                         </div>
                     </div>
                 </div>
@@ -130,11 +138,17 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- /widget-content -->
-
             </div>
-            <!-- /widget -->
+          <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Total Costo Con Iva</h4>
+                            <asp:Label ID="labelTotalCostoConIva" runat="server" Text="" class="value"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <!-- /span12 -->
@@ -171,10 +185,16 @@
                             <asp:BoundField DataField="Costo Imponible" HeaderText="Costo Sin Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                             </asp:BoundField>
+                            <asp:BoundField DataField="Costo Imponible Con Iva" HeaderText="Costo Con Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
+                                <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                            </asp:BoundField>
                             <asp:BoundField DataField="Cantidad" HeaderText="Cantidad" ItemStyle-HorizontalAlign="Right">
                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                             </asp:BoundField>
                             <asp:BoundField DataField="Precio Unitario" HeaderText="Precio Unitario Con Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
+                                <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="Precio Unitario Sin Iva" HeaderText="Precio Unitario Sin Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                             </asp:BoundField>
                             <asp:BoundField DataField="Rentabilidad Costo" HeaderText="Rentabilidad Costo" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
