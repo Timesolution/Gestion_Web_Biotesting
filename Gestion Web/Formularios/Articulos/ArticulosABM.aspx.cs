@@ -859,6 +859,12 @@ namespace Gestion_Web.Formularios.Articulos
                     this.generarCodigoNuevo();
                 }
 
+                if (!verificarIncidenciaMargenObligatorio())
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
+                    return -1;
+                }
+
                 Articulo art = new Articulo();                
                 art.codigo = this.txtCodArticulo.Text;
                 art.descripcion = this.txtDescripcion.Text;
@@ -935,6 +941,12 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                if (!verificarIncidenciaMargenObligatorio())
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
+                    return;
+                }
+
                 Articulo art = new Articulo();
 
                 //Asigno el codigo
@@ -1053,20 +1065,23 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                if (!verificarIncidenciaMargenObligatorio())
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
+                    return;
+                }
+
                 int i = this.controlador.duplicarArticulo(this.id, this.txtCodArticulo.Text, this.txtCodigoBarra.Text,
                     Convert.ToInt64(this.DropListMarca.SelectedValue), 
                     Convert.ToInt32(this.ListTipoDistribucion.SelectedValue));
 
                 if (i > 0)
                 {
-
                     Response.Redirect("ArticulosABM.aspx?accion=2&id=" + i);
-
                 }
 
                 else
                 {
-
                     if (i == -2)
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Para Duplicar el Articulo, debe ingresar otro código en el campo Codigo Articulo. "));
@@ -1078,15 +1093,10 @@ namespace Gestion_Web.Formularios.Articulos
 
                     else
                     {
-
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo duplicar articulo "));
-
                     }
-
                 }
-
             }
-
             catch (Exception ex)
             {
 
@@ -1831,6 +1841,37 @@ namespace Gestion_Web.Formularios.Articulos
                 return true;
             }
         }
+
+        private bool verificarIncidenciaMargenObligatorio()
+        {
+            try
+            {
+                Configuracion configuracion = new Configuracion();
+
+                if (Convert.ToInt32(configuracion.IncidenciaObligatoria) > 0)
+                {
+                    if (Convert.ToDecimal(this.txtIncidencia.Text, CultureInfo.InvariantCulture) <= 0)
+                    {
+                        return false;
+                    }
+                }
+
+                if (Convert.ToInt32(configuracion.MargenObligatorio) > 0)
+                {
+                    if (Convert.ToDecimal(this.txtMargen.Text, CultureInfo.InvariantCulture) <= 0)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
         #endregion
 
         #region Eventos Controles
