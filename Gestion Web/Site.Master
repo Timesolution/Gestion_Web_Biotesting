@@ -140,338 +140,343 @@
 
 
         <div class="subnavbar hidden-print">
+            <asp:PlaceHolder ID="phMenuCompleto" runat="server">
+                <div class="subnavbar-inner">
 
-            <div class="subnavbar-inner">
+                    <div class="container">
+                        <a href="javascript:;" class="subnav-toggle" data-toggle="collapse" data-target=".subnav-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <i class="icon-reorder"></i>
+                        </a>
 
-                <div class="container">
-                    <a href="javascript:;" class="subnav-toggle" data-toggle="collapse" data-target=".subnav-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <i class="icon-reorder"></i>
-                    </a>
 
-                    <div class="collapse subnav-collapse">
-                        <ul class="mainnav">
 
-                            <li class="active">
-                                <a href="/../../../../Default.aspx">
-                                    <i class="icon-home"></i>
-                                    <span>Inicio</span>
-                                </a>
-                            </li>
-                            <asp:PlaceHolder ID="phMenu" Visible="false" runat="server">
-                                <li class="active dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="icon-th"></i>
-                                        <span>Maestros</span>
-                                        <b class="caret"></b>
+                        <div class="collapse subnav-collapse">
+                            <ul class="mainnav">
+
+                                <li class="active">
+                                    <a href="/../../../../Default.aspx">
+                                        <i class="icon-home"></i>
+                                        <span>Inicio</span>
                                     </a>
-
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Articulos</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a tabindex="-1" href="/../../Formularios/Articulos/Articulos.aspx">Articulos</a></li>
-                                                <li class="dropdown-submenu">
-                                                    <a tabindex="-1" href="#">Grupos</a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposArticulos.aspx">Grupos</a></li>
-                                                        <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposComisiones.aspx">Comisiones por Grupo</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
-                                                <li><a href="/../../Formularios/Articulos/ABMMarcas.aspx">Marcas</a></li>
-                                                <li><a href="/../../Formularios/Articulos/ABMTrazabilidad.aspx">Trazabilidad</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href="#">Bancos</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a tabindex="-1" href="/../../Formularios/Valores/CuentasBancariasF.aspx">Cuentas</a></li>
-                                                <li><a tabindex="-1" href="/../../Formularios/Valores/ABMConceptos.aspx">Conceptos</a></li>
-                                                <li><a href="/../../Formularios/Facturas/ABMBancos.aspx">Entidades Bancarias</a></li>
-
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Clientes</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a tabindex="-1" href="/../../Formularios/Clientes/Clientesaspx.aspx">Clientes</a></li>
-                                                <li><a href="/../../Formularios/Clientes/ABMGruposClientes.aspx">Grupos</a></li>
-                                                <li><a href="/../../Formularios/Clientes/ABMCategoriasClientes.aspx">Categorias</a></li>
-                                                <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
-                                                <li><a href="/../../Formularios/Clientes/ABMEstadosClientes.aspx">Estados</a></li>
-
-                                            </ul>
-                                        </li>
-                                        <%--<li><a href="">Contactos</a></li>--%>
-                                        <li><a href="/../../Formularios/Transportes/EntregasF.aspx">Entregas</a></li>
-                                        <li><a href="/../../Formularios/Transportes/TransportesF.aspx">Expresos</a></li>
-                                        <li><a href="/../../Formularios/Formas/FormasPagoF.aspx">Formas Pagos</a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Lista de Precios</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a tabindex="-1" href="/../../Formularios/Listas/AdminListas.aspx">Administrador</a></li>
-                                                <li><a href="/../../Formularios/Listas/ListasABM.aspx">Listas</a></li>
-                                                <li><a href="/../../Formularios/Listas/ABMSubListas.aspx">Categorias</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <asp:Literal Text="" ID="litMillas" runat="server" />
-                                        </li>
-                                        <li><a href="/../../Formularios/Valores/MovimientoCajaF.aspx">Movimientos de Caja</a></li>
-
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Mutuales</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Valores/MutualesPagosF.aspx">Administracion</a></li>
-                                                <li><a href="/../../Formularios/Valores/MutualesF.aspx">Entidades</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Orden de reparacion</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/OrdenReparacion/ServicioTecnicoABM.aspx">Servicio Tecnico</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Personal</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Personal/Empleados.aspx">Personal</a></li>
-                                                <li><a href="/../../Formularios/Personal/CCEmpleados.aspx">Cuenta Corriente</a></li>
-                                                <li><a href="/../../Formularios/Personal/PagosEmpleadosF.aspx">Pagos</a></li>
-                                                <li><a href="/../../Formularios/Personal/PagosEmpleadosRealizadosF.aspx">Pagos Realizados</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Plan de cuentas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/PlanCuentas/CuentasF.aspx">Cuentas</a></li>
-                                            </ul>
-                                        </li>                                        
-
-                                        <li><a href="/../../Formularios/Articulos/ABMProcedencias.aspx">Procedencias</a></li>
-                                        <li><a href="/../../Formularios/Promociones/PromocionesF.aspx">Promociones</a></li>
-                                        <li><a href="/../../Formularios/clientes/ProveedoresF.aspx">Proveedores</a></li>
-                                        <li><a href="/../../Formularios/Stores/StoresF.aspx">Stores</a></li>
-                                        <li><a href="/../../Formularios/Sucursales/ABMSucursales.aspx">Sucursales</a></li>
-
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Surtidores</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Surtidores/SurtidoresF.aspx">Surtidores</a></li>
-                                                <li><a href="/../../Formularios/Surtidores/SurtidoresCierreF.aspx">Cierres</a></li>
-                                            </ul>
-                                        </li>
-
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Tarjetas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Valores/ABMOperadores.aspx">Operadores</a></li>
-                                                <li><a href="/../../Formularios/Valores/ABMTarjetas.aspx">Tarjetas</a></li>
-                                                <li><a href="/../../Formularios/Valores/ABMPosnet.aspx">Posnet</a></li>
-                                            </ul>
-                                        </li>
-
-                                        <li><a href="/../../Formularios/Vendedores/Vendedores.aspx">Vendedores</a></li>
-                                        <li><a href="/../../Formularios/Zonas/ZonasF.aspx">Zonas</a></li>
-                                        <%-- <li><a href="http://138.36.238.80/store/backend/default.aspx">Red Club</a></li>--%>
-                                    </ul>
                                 </li>
+                                <asp:PlaceHolder ID="phMenu" Visible="false" runat="server">
+                                    <li class="active dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-th"></i>
+                                            <span>Maestros</span>
+                                            <b class="caret"></b>
+                                        </a>
 
-                                <li class="active dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="icon-shopping-cart"></i>
-                                        <span>Compras</span>
-                                        <b class="caret"></b>
-                                    </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Articulos</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a tabindex="-1" href="/../../Formularios/Articulos/Articulos.aspx">Articulos</a></li>
+                                                    <li class="dropdown-submenu">
+                                                        <a tabindex="-1" href="#">Grupos</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposArticulos.aspx">Grupos</a></li>
+                                                            <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposComisiones.aspx">Comisiones por Grupo</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
+                                                    <li><a href="/../../Formularios/Articulos/ABMMarcas.aspx">Marcas</a></li>
+                                                    <li><a href="/../../Formularios/Articulos/ABMTrazabilidad.aspx">Trazabilidad</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="-1" href="#">Bancos</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a tabindex="-1" href="/../../Formularios/Valores/CuentasBancariasF.aspx">Cuentas</a></li>
+                                                    <li><a tabindex="-1" href="/../../Formularios/Valores/ABMConceptos.aspx">Conceptos</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/ABMBancos.aspx">Entidades Bancarias</a></li>
 
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/../../Formularios/Compras/OrdenesCompraF.aspx">Ordenes de Compra</a></li>
-                                        <li><a href="/../../Formularios/Compras/ArticulosPedirF.aspx">Articulos a Pedir</a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Importaciones</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Compras/ImportacionesF.aspx">Importaciones</a></li>
-                                                <li><a href="/../../Formularios/Compras/ImportacionesTiposGastosABM.aspx">Tipos Gastos</a></li>
-                                                <li><a href="/../../Formularios/Compras/ImportacionesMonedasABM.aspx">Monedas</a></li>
-                                            </ul>
-                                        </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Clientes</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a tabindex="-1" href="/../../Formularios/Clientes/Clientesaspx.aspx">Clientes</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMGruposClientes.aspx">Grupos</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMCategoriasClientes.aspx">Categorias</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMEstadosClientes.aspx">Estados</a></li>
 
-                                        <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
-                                        <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
-                                        <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
-                                        <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
-                                        <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
-                                        <li><a href="/../../Formularios/Compras/RetencionesF.aspx">Retenciones</a></li>
-                                    </ul>
-                                </li>
+                                                </ul>
+                                            </li>
+                                            <%--<li><a href="">Contactos</a></li>--%>
+                                            <li><a href="/../../Formularios/Transportes/EntregasF.aspx">Entregas</a></li>
+                                            <li><a href="/../../Formularios/Transportes/TransportesF.aspx">Expresos</a></li>
+                                            <li><a href="/../../Formularios/Formas/FormasPagoF.aspx">Formas Pagos</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Lista de Precios</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a tabindex="-1" href="/../../Formularios/Listas/AdminListas.aspx">Administrador</a></li>
+                                                    <li><a href="/../../Formularios/Listas/ListasABM.aspx">Listas</a></li>
+                                                    <li><a href="/../../Formularios/Listas/ABMSubListas.aspx">Categorias</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <asp:Literal Text="" ID="litMillas" runat="server" />
+                                            </li>
+                                            <li><a href="/../../Formularios/Valores/MovimientoCajaF.aspx">Movimientos de Caja</a></li>
 
-                                <li class="active dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="icon-external-link"></i>
-                                        <span>Ventas</span>
-                                        <b class="caret"></b>
-                                    </a>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Mutuales</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Valores/MutualesPagosF.aspx">Administracion</a></li>
+                                                    <li><a href="/../../Formularios/Valores/MutualesF.aspx">Entidades</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Orden de reparacion</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/OrdenReparacion/ServicioTecnicoABM.aspx">Servicio Tecnico</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Personal</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Personal/Empleados.aspx">Personal</a></li>
+                                                    <li><a href="/../../Formularios/Personal/CCEmpleados.aspx">Cuenta Corriente</a></li>
+                                                    <li><a href="/../../Formularios/Personal/PagosEmpleadosF.aspx">Pagos</a></li>
+                                                    <li><a href="/../../Formularios/Personal/PagosEmpleadosRealizadosF.aspx">Pagos Realizados</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Plan de cuentas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/PlanCuentas/CuentasF.aspx">Cuentas</a></li>
+                                                </ul>
+                                            </li>
 
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/../../Formularios/Facturas/CotizacionesC.aspx">Cotizaciones</a></li>
-                                        <li><a href="/../../Formularios/Facturas/PedidosP.aspx">Pedidos</a></li>
-                                        <li><a href="/../../Formularios/Facturas/PedidosModula.aspx">Pedidos Modula</a></li>
-                                        <li><a href="/../../Formularios/Facturas/RemitosR.aspx">Remitos</a></li>
-                                        <li><a href="/../../Formularios/Facturas/DespachosF.aspx">Guias despacho</a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Ventas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
-                                                <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
-                                                <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="/../../Formularios/Facturas/CuentaCorrienteF.aspx">Cuentas Corrientes</a></li>
-                                        <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
-                                        <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
-                                        <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
-                                        <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
-                                        <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
-                                            <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
-                                        </asp:PlaceHolder>
-                                    </ul>
-                                </li>
+                                            <li><a href="/../../Formularios/Articulos/ABMProcedencias.aspx">Procedencias</a></li>
+                                            <li><a href="/../../Formularios/Promociones/PromocionesF.aspx">Promociones</a></li>
+                                            <li><a href="/../../Formularios/clientes/ProveedoresF.aspx">Proveedores</a></li>
+                                            <li><a href="/../../Formularios/Stores/StoresF.aspx">Stores</a></li>
+                                            <li><a href="/../../Formularios/Sucursales/ABMSucursales.aspx">Sucursales</a></li>
 
-                                <li class="active dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="icon-money"></i>
-                                        <span>Valores</span>
-                                        <b class="caret"></b>
-                                    </a>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Surtidores</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Surtidores/SurtidoresF.aspx">Surtidores</a></li>
+                                                    <li><a href="/../../Formularios/Surtidores/SurtidoresCierreF.aspx">Cierres</a></li>
+                                                </ul>
+                                            </li>
 
-                                    <ul class="dropdown-menu">
-                                        <li><a href="">Balance</a></li>
-                                        <li><a href="/../../Formularios/Valores/BancosF.aspx">Bancos</a></li>
-                                        <li><a href="/../../Formularios/Valores/CajaF.aspx">Caja</a></li>
-                                        <li><a href="/../../Formularios/Valores/CajaCierreF.aspx">Cierre Caja</a></li>
-                                        <li><a href="/../../Formularios/Valores/CajaDiferenciasF.aspx">Caja Diferencias</a></li>
-                                        <li><a href="/../../Formularios/Valores/CashFlowF.aspx">Cashflow</a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Cheques</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Valores/ChequesF.aspx">Cheques 1</a></li>
-                                                <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
-                                        <li><a href="">Cuenta Personal</a></li>
-                                        <li><a href="/../../Formularios/Valores/ABMDivisas.aspx">Divisas</a></li>
-                                        <li><a href="/../../Formularios/Valores/PagaresF.aspx">Pagares</a></li>
-                                        <li><a href="/../../Formularios/Valores/RetencionesF.aspx">Retenciones</a></li>
-                                        <li><a href="/../../Formularios/Valores/SolicitudesF.aspx">Solicitudes </a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Tarjetas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Valores/TarjetasF.aspx">Tarjetas</a></li>
-                                                <li><a href="/../../Formularios/Valores/LiquidacionesF.aspx">Liquidaciones</a></li>
-                                                <li><a href="/../../Formularios/Valores/LotesTarjetasF.aspx">Lotes</a></li>
-                                            </ul>
-                                        </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Tarjetas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Valores/ABMOperadores.aspx">Operadores</a></li>
+                                                    <li><a href="/../../Formularios/Valores/ABMTarjetas.aspx">Tarjetas</a></li>
+                                                    <li><a href="/../../Formularios/Valores/ABMPosnet.aspx">Posnet</a></li>
+                                                </ul>
+                                            </li>
 
-                                    </ul>
-                                </li>
+                                            <li><a href="/../../Formularios/Vendedores/Vendedores.aspx">Vendedores</a></li>
+                                            <li><a href="/../../Formularios/Zonas/ZonasF.aspx">Zonas</a></li>
+                                            <%-- <li><a href="http://138.36.238.80/store/backend/default.aspx">Red Club</a></li>--%>
+                                        </ul>
+                                    </li>
 
-                                <li class="active dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="icon-signal"></i>
-                                        <span>Reportes</span>
-                                        <b class="caret"></b>
-                                    </a>
+                                    <li class="active dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-shopping-cart"></i>
+                                            <span>Compras</span>
+                                            <b class="caret"></b>
+                                        </a>
 
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Ventas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Reportes/ReportesArticulos.aspx">Articulos</a></li>
-                                                <li><a href="/../../Formularios/Reportes/ReportesVentas.aspx">Ventas</a></li>
-                                                <li><a href="/../../Formularios/Reportes/VentasUnidadesF.aspx">Unidades</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Impagas</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Reportes/ReportesCobros.aspx">Clientes</a></li>
-                                                <li><a href="/../../Formularios/Reportes/ReportesProveedoresF.aspx">Proveedores</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Stock</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Reportes/StockF.aspx">Unidades</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
-                                        <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
-                                            <li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>
-                                        </asp:PlaceHolder>
-                                        <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
-                                        <li><a href="/../../Formularios/Reportes/ReportesTrazabilidad.aspx">Trazabilidad</a></li>
-                                        <li><a href="/../../Formularios/Reportes/InformesF.aspx">Informes Solicitados</a></li>
-                                    </ul>
-                                </li>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/../../Formularios/Compras/OrdenesCompraF.aspx">Ordenes de Compra</a></li>
+                                            <li><a href="/../../Formularios/Compras/ArticulosPedirF.aspx">Articulos a Pedir</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Importaciones</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Compras/ImportacionesF.aspx">Importaciones</a></li>
+                                                    <li><a href="/../../Formularios/Compras/ImportacionesTiposGastosABM.aspx">Tipos Gastos</a></li>
+                                                    <li><a href="/../../Formularios/Compras/ImportacionesMonedasABM.aspx">Monedas</a></li>
+                                                </ul>
+                                            </li>
 
-                                <li class="active dropdown">
-                                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="icon-wrench"></i>
-                                        <span>Herramientas</span>
-                                        <b class="caret"></b>
-                                    </a>
+                                            <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
+                                            <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
+                                            <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
+                                            <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
+                                            <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
+                                            <li><a href="/../../Formularios/Compras/RetencionesF.aspx">Retenciones</a></li>
+                                        </ul>
+                                    </li>
 
-                                    <ul class="dropdown-menu">
-                                        <li><a href="">Acerca de...</a></li>
+                                    <li class="active dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-external-link"></i>
+                                            <span>Ventas</span>
+                                            <b class="caret"></b>
+                                        </a>
 
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Ayuda</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Herramientas/Soporte.aspx">Soporte</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="/../../Formularios/Herramientas/FormasVenta.aspx">Formas de venta</a></li>
-                                        <li><a href="/../../Formularios/Herramientas/InformeBTBF.aspx">Informe BTB</a></li>
-                                        <li><a href="/../../Formularios/Herramientas/ActPadronF.aspx">Ingresos Brutos</a></li>
-                                        <li><a href="/../../Formularios/Herramientas/NumeracionDocumentos.aspx">Numeracion Documentos</a></li>
-                                        <li><a href="/../../Formularios/Herramientas/PanelControl.aspx">Panel de Control</a></li>
-                                        <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Regimen Informativo</a></li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">Seguridad</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Seguridad/Perfiles.aspx">Perfiles</a></li>
-                                                <li><a href="/../../Formularios/Seguridad/UsuariosF.aspx">Usuarios</a></li>
-                                                <li><a href="/../../Formularios/Seguridad/AdministracionPerfiles.aspx">Administracion</a></li>
-                                                <li><a href="/../../Formularios/Seguridad/AuditoriaF.aspx">Auditoria</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="" href="#">SMS</a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="/../../Formularios/Herramientas/AdminSMS.aspx">SMS Creditos</a></li>
-                                                <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
-                                                <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
-                                                <li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>
-                                            </ul>
-                                        </li>
-                                        <asp:PlaceHolder ID="phTapice" runat="server" Visible="false">
-                                            <li><a href="/../../Formularios/Herramientas/ExportarTapiceF.aspx">Tapice</a></li>
-                                        </asp:PlaceHolder>
-                                    </ul>
-                                </li>
-                            </asp:PlaceHolder>
-                        </ul>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="/../../Formularios/Facturas/CotizacionesC.aspx">Cotizaciones</a></li>
+                                            <li><a href="/../../Formularios/Facturas/PedidosP.aspx">Pedidos</a></li>
+                                            <li><a href="/../../Formularios/Facturas/PedidosModula.aspx">Pedidos Modula</a></li>
+                                            <li><a href="/../../Formularios/Facturas/RemitosR.aspx">Remitos</a></li>
+                                            <li><a href="/../../Formularios/Facturas/DespachosF.aspx">Guias despacho</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Ventas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="/../../Formularios/Facturas/CuentaCorrienteF.aspx">Cuentas Corrientes</a></li>
+                                            <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
+                                            <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
+                                            <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
+                                            <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
+                                            <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
+                                                <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
+                                            </asp:PlaceHolder>
+                                            <asp:PlaceHolder ID="phImagenes" runat="server" Visible="false">
+                                                <li><a href="/../../Formularios/Facturas/ABMFacturasImagenes.aspx">Ventas Imagenes</a></li>
+                                            </asp:PlaceHolder>
+                                        </ul>
+                                    </li>
+
+                                    <li class="active dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-money"></i>
+                                            <span>Valores</span>
+                                            <b class="caret"></b>
+                                        </a>
+
+                                        <ul class="dropdown-menu">
+                                            <li><a href="">Balance</a></li>
+                                            <li><a href="/../../Formularios/Valores/BancosF.aspx">Bancos</a></li>
+                                            <li><a href="/../../Formularios/Valores/CajaF.aspx">Caja</a></li>
+                                            <li><a href="/../../Formularios/Valores/CajaCierreF.aspx">Cierre Caja</a></li>
+                                            <li><a href="/../../Formularios/Valores/CajaDiferenciasF.aspx">Caja Diferencias</a></li>
+                                            <li><a href="/../../Formularios/Valores/CashFlowF.aspx">Cashflow</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Cheques</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Valores/ChequesF.aspx">Cheques 1</a></li>
+                                                    <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques 2</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
+                                            <li><a href="">Cuenta Personal</a></li>
+                                            <li><a href="/../../Formularios/Valores/ABMDivisas.aspx">Divisas</a></li>
+                                            <li><a href="/../../Formularios/Valores/PagaresF.aspx">Pagares</a></li>
+                                            <li><a href="/../../Formularios/Valores/RetencionesF.aspx">Retenciones</a></li>
+                                            <li><a href="/../../Formularios/Valores/SolicitudesF.aspx">Solicitudes </a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Tarjetas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Valores/TarjetasF.aspx">Tarjetas</a></li>
+                                                    <li><a href="/../../Formularios/Valores/LiquidacionesF.aspx">Liquidaciones</a></li>
+                                                    <li><a href="/../../Formularios/Valores/LotesTarjetasF.aspx">Lotes</a></li>
+                                                </ul>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+
+                                    <li class="active dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-signal"></i>
+                                            <span>Reportes</span>
+                                            <b class="caret"></b>
+                                        </a>
+
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Ventas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReportesArticulos.aspx">Articulos</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/ReportesVentas.aspx">Ventas</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/VentasUnidadesF.aspx">Unidades</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Impagas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReportesCobros.aspx">Clientes</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/ReportesProveedoresF.aspx">Proveedores</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Stock</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/StockF.aspx">Unidades</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
+                                            <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
+                                                <li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>
+                                            </asp:PlaceHolder>
+                                            <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
+                                            <li><a href="/../../Formularios/Reportes/ReportesTrazabilidad.aspx">Trazabilidad</a></li>
+                                            <li><a href="/../../Formularios/Reportes/InformesF.aspx">Informes Solicitados</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="active dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-wrench"></i>
+                                            <span>Herramientas</span>
+                                            <b class="caret"></b>
+                                        </a>
+
+                                        <ul class="dropdown-menu">
+                                            <li><a href="">Acerca de...</a></li>
+
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Ayuda</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Herramientas/Soporte.aspx">Soporte</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="/../../Formularios/Herramientas/FormasVenta.aspx">Formas de venta</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/InformeBTBF.aspx">Informe BTB</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/ActPadronF.aspx">Ingresos Brutos</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/NumeracionDocumentos.aspx">Numeracion Documentos</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/PanelControl.aspx">Panel de Control</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Regimen Informativo</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Seguridad</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Seguridad/Perfiles.aspx">Perfiles</a></li>
+                                                    <li><a href="/../../Formularios/Seguridad/UsuariosF.aspx">Usuarios</a></li>
+                                                    <li><a href="/../../Formularios/Seguridad/AdministracionPerfiles.aspx">Administracion</a></li>
+                                                    <li><a href="/../../Formularios/Seguridad/AuditoriaF.aspx">Auditoria</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">SMS</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Herramientas/AdminSMS.aspx">SMS Creditos</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>
+                                                </ul>
+                                            </li>
+                                            <asp:PlaceHolder ID="phTapice" runat="server" Visible="false">
+                                                <li><a href="/../../Formularios/Herramientas/ExportarTapiceF.aspx">Tapice</a></li>
+                                            </asp:PlaceHolder>
+                                        </ul>
+                                    </li>
+                                </asp:PlaceHolder>
+                            </ul>
+                        </div>
+                        <!-- /.subnav-collapse -->
+
                     </div>
-                    <!-- /.subnav-collapse -->
+                    <!-- /container -->
 
                 </div>
-                <!-- /container -->
-
-            </div>
-            <!-- /subnavbar-inner -->
-
+                <!-- /subnavbar-inner -->
+            </asp:PlaceHolder>
         </div>
         <!-- /subnavbar -->
 

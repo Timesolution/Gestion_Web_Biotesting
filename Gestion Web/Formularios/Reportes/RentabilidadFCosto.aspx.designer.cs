@@ -76,15 +76,6 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.Label labelTotalVendido;
         
         /// <summary>
-        /// labelTotalCosto control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelTotalCosto;
-        
-        /// <summary>
         /// labelRentabilidad control.
         /// </summary>
         /// <remarks>
@@ -94,6 +85,24 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.Label labelRentabilidad;
         
         /// <summary>
+        /// labelTotalCosto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotalCosto;
+        
+        /// <summary>
+        /// labelTotalVendidoSinIva control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotalVendidoSinIva;
+        
+        /// <summary>
         /// labelPorRentabilidad control.
         /// </summary>
         /// <remarks>
@@ -101,6 +110,15 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labelPorRentabilidad;
+        
+        /// <summary>
+        /// labelTotalCostoConIva control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotalCostoConIva;
         
         /// <summary>
         /// GridInforme control.
