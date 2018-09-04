@@ -105,7 +105,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //Celdas
 
                 TableCell celFecha = new TableCell();
-                celFecha.Text = or_observaciones.Fecha.Value.ToString("dd/MM/yyyy hh:mm");
+                celFecha.Text = or_observaciones.Fecha.Value.ToString("dd/MM/yyyy H:mm");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);                

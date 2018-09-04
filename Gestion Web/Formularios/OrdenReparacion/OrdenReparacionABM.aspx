@@ -52,15 +52,6 @@
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtNumeroOrden" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
-                                            <%--<div class="form-group">
-                                                <label for="name" class="col-md-4">Fecha</label>
-                                                <div class="col-md-4">
-                                                    <asp:TextBox ID="txtFecha" runat="server" class="form-control"></asp:TextBox>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtFecha" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                </div>
-                                            </div>--%>
                                             <div class="form-group">
                                                 <label for="name" class="col-md-4">Fecha</label>
                                                 <div class="col-md-4">
@@ -151,6 +142,15 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                <label for="name" class="col-md-4">Estado Del Producto</label>
+                                                <div class="col-md-4">
+                                                    <asp:TextBox ID="txtEstadoDelProducto" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDescripcionFalla" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label class="col-md-4">Plazo Limite de Reparacion</label>
                                                 <div class="col-md-4">
                                                     <asp:DropDownList ID="DropListPlazoLimite" runat="server" class="form-control">
@@ -169,11 +169,24 @@
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtAutoriza" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                <asp:LinkButton ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="StoreGroup" Visible="false"></asp:LinkButton>
-                                                <asp:LinkButton ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnGuardar_Click" ValidationGroup="StoreGroup" Visible="false"></asp:LinkButton>
-                                                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="FacturasF.aspx" />
+                                            <div class="form-group">
+                                                <label class="col-md-4">Se Cambia Producto</label>
+                                                <div class="col-md-4">
+                                                    <asp:DropDownList ID="DropListCambiaProducto" runat="server" class="form-control">
+                                                        <asp:ListItem Value="Si">Si</asp:ListItem>
+                                                        <asp:ListItem Value="No">No</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </div>
                                             </div>
+                                            <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
+                                                <ContentTemplate>
+                                                    <div class="col-md-8">
+                                                        <asp:LinkButton ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="StoreGroup" Visible="false"></asp:LinkButton>
+                                                        <asp:LinkButton ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnGuardar_Click" ValidationGroup="StoreGroup" Visible="false"></asp:LinkButton>
+                                                        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="FacturasF.aspx" />
+                                                    </div>
+                                                </ContentTemplate>
+                                            </asp:UpdatePanel>
                                         </fieldset>
                                     </div>
                                 </div>

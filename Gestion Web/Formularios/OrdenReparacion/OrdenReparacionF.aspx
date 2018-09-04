@@ -23,11 +23,12 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnAnular" Visible="false" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnEtiqueta" runat="server" OnClick="lbtnEtiqueta_Click">Imprimir Etiqueta</asp:LinkButton>
                                             </li>
+                                            <asp:PlaceHolder ID="ltbnsServiceOficial" Visible="false" runat="server">
                                             <li class="dropdown-submenu">
                                                 <a tabindex="-1" href="#">A Service Oficial</a>
                                                 <ul class="dropdown-menu">
@@ -37,9 +38,11 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                            </asp:PlaceHolder>
                                             <li>
-                                                <asp:LinkButton ID="lbtnDevolucionProveedor" runat="server" data-toggle="modal" href="#modalDevolucionProveedor">Devolucion a proveedor</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnDevolucionProveedor" Visible="false" runat="server" data-toggle="modal" href="#modalDevolucionProveedor">Devolucion a proveedor</asp:LinkButton>
                                             </li>
+                                            <asp:PlaceHolder ID="lbtnsRepararLocalmente" Visible="false" runat="server">
                                             <li class="dropdown-submenu">
                                                 <a tabindex="-1" href="#">Reparar localmente</a>
                                                 <ul class="dropdown-menu">
@@ -51,8 +54,20 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                            </asp:PlaceHolder>
+                                            <asp:PlaceHolder ID="lbtnsFinalizarOR" Visible="false" runat="server">
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="-1" href="#">Finalizar Orden Reparacion</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <asp:LinkButton ID="lbtnRetiraCliente" runat="server" data-toggle="modal" href="#modalRetiraCliente">Retira Cliente</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnVuelvePuntoVenta" runat="server" data-toggle="modal" href="#modalVuelvePuntoVenta">Vuelve a Punto de Venta</asp:LinkButton>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            </asp:PlaceHolder>
                                             <li>
-                                                <asp:LinkButton ID="lbtnEnviarSMS" runat="server" OnClick="lbtnEnviarSMS_Click">Avisar al Cliente</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnEnviarSMS" Visible="false" runat="server" OnClick="lbtnEnviarSMS_Click">Avisar al Cliente</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -221,6 +236,80 @@
                         </div>
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnSiEnviarAReparacionLocalmente" Text="Enviar" class="btn btn-success" OnClick="btnSiEnviarAReparacionLocalmente_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalRetiraCliente" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion Retira Cliente</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label7" Text="El producto sera retirado por el cliente?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox7" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="modal-footer">
+                                    <asp:Button runat="server" ID="btnRetiraCliente" Text="Si" class="btn btn-success" OnClick="btnRetiraCliente_Click" />
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalVuelvePuntoVenta" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion Vuelve a Punto de Venta</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label8" Text="El producto sera devuelto al punto de venta?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox8" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnVuelvePuntoVenta" Text="Si" class="btn btn-success" OnClick="btnVuelvePuntoVenta_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>

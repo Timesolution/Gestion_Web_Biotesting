@@ -19,7 +19,7 @@
                     <tr>
                         <td style="width: 15%">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" visible="false" runat="server">Accion<span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                 </ul>
                             </div>
@@ -79,7 +79,7 @@
                                                 <fieldset>
                                                     <div class="form-group">
                                                         <label for="name" class="col-md-4">Nombre Servicio Tecnico</label>
-                                                        <div class="col-md-4">
+                                                        <div class="col-lg-3">
                                                             <asp:TextBox ID="txtNombre" runat="server" class="form-control"></asp:TextBox>
                                                         </div>
                                                         <div class="col-md-4">
@@ -97,7 +97,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-md-4">Celular</label>
-                                                        <div class="col-md-2">
+                                                        <div class="col-sm-1">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">0</span>
                                                                 <asp:TextBox ID="txtCodArea" runat="server" class="form-control" placeholder="Cod. Area" MaxLength="4" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
@@ -133,11 +133,7 @@
                                                         <div class="col-md-3">
                                                             <asp:DropDownList ID="ListClientes" class="form-control" runat="server"></asp:DropDownList>
                                                         </div>
-                                                        <%--<div class="col-md-3">
-                                                            <asp:LinkButton ID="btnAgregarClientes" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarClientes_Click" />
-                                                        </div>--%>
                                                     </div>
-
                                                     <asp:UpdatePanel runat="server" ID="updatePanelMarcas" UpdateMode="Always">
                                                         <ContentTemplate>
                                                             <div class="form-group">
@@ -151,17 +147,15 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="name" class="col-md-4">Marcas</label>
-                                                                <div class="col-md-3">
+                                                                <div class="col-sm-3">
                                                                     <asp:DropDownList ID="ListMarcas" class="form-control" runat="server"></asp:DropDownList>
                                                                 </div>
                                                                 <div class="col-md-3">
                                                                     <asp:LinkButton ID="btnAgregarMarcas" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarMarcas_Click" />
                                                                 </div>
                                                             </div>
-
                                                             <div class="form-group">
                                                                 <label for="name" class="col-md-4"></label>
-
                                                                 <div class="col-md-3">
                                                                     <asp:ListBox ID="ListBoxMarcas" runat="server" SelectionMode="Multiple" class="form-control"></asp:ListBox>
                                                                 </div>

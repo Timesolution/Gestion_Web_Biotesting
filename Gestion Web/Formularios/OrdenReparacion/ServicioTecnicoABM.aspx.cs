@@ -85,7 +85,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "57")
+                        if (s == "161")
                         {
                             return 1;
                         }
@@ -159,9 +159,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                var cliente = contCliente.obtenerClientesRazonSocial(txtCliente.Text);
+                var cliente = contCliente.obtenerClientesAlias(txtCliente.Text);
 
-                this.ListClientes.SelectedValue = cliente.id.ToString();
+                this.ListClientes.SelectedValue = cliente.FirstOrDefault().id.ToString();
             }
             catch (Exception ex)
             {

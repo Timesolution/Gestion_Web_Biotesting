@@ -45,6 +45,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
+                this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.idArticulo = Convert.ToInt32(Request.QueryString["articulo"]);
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
@@ -64,8 +66,8 @@ namespace Gestion_Web.Formularios.Facturas
                     idSucursal = (int)Session["Login_SucUser"];
 
                     //orden de reparacion
-                    idCliente = (int)Session["Login_idcliente"];
-                    idArticulo = (int)Session["Login_idArticulo"];
+                    //idCliente = (int)Session["Login_idcliente"];
+                    //idArticulo = (int)Session["Login_idArticulo"];
 
                     Remito rem = new Remito();
                     Session.Add("Remito", rem);
@@ -459,10 +461,6 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Remito r = new Remito();
-                //this.ListEmpresa.SelectedValue = r.empresa.id.ToString();
-                //this.cargarSucursal(r.empresa.id);
-                //this.cargarPuntoVta(r.sucursal.id);
-                //this.cargarCliente(idCliente);
 
                 this.DropListClientes.SelectedValue = idCliente.ToString();
                 if (this.DropListClientes.SelectedValue == "-1")
@@ -472,18 +470,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.cargarCliente(idCliente);
 
-                //this.DropListClientes.SelectedValue = idCliente.ToString();
-                //this.DropListVendedor.SelectedValue = r.vendedor.id.ToString();
-                //this.DropListFormaPago.SelectedValue = r.formaPAgo.id.ToString();
-                //this.DropListLista.SelectedValue = r.listaP.id.ToString();
-                //this.ListSucursal.SelectedValue = r.sucursal.id.ToString();
-                //this.ListPuntoVenta.SelectedValue = r.ptoV.id.ToString();
-                //this.txtComentarios.Text = r.comentario;
-                //if (r.comentario.Length > 0)
-                //{
-                //    this.checkDatos.Checked = true;
-                //    this.phDatosEntrega.Visible = true;
-                //}
                 ItemRemito ir = new ItemRemito();
 
                 var art = contArticulo.obtenerArticuloByID(idArticulo);
@@ -506,7 +492,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.actualizarTotales();
                 this.obtenerNroRemito();
 
-                
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Alerta Cliente: " + c.alerta.descripcion + ". \");", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Alerta Cliente: " + c.alerta.descripcion + "."));
 
             }
             catch (Exception ex)
