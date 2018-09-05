@@ -142,6 +142,12 @@ namespace Gestion_Web.Formularios.Herramientas
                             this.chkAlertaEnvioFC.Checked = true;
                             this.txtEnvioMailFC.Attributes.Remove("disabled");
                         }
+                        if (configs.AlertaProductoReparado.Value == 1)
+                        {
+                            this.chAlertaProductoReparado.Checked = true;
+                            this.txtEnvioProductoReparado.Attributes.Remove("disabled");
+                        }
+
                         this.txtEnvioFact.Text = configs.MensajeFC;
                         this.txtEnvioNC.Text = configs.MensajeNC;
                         this.txtEnvioPRP.Text = configs.MensajePRP;
@@ -152,6 +158,7 @@ namespace Gestion_Web.Formularios.Herramientas
                         this.txtEnvioCumple.Text = configs.MensajeCumpleanios;
                         this.txtEnvioCobro.Text = configs.MensajeCobro;
                         this.txtEnvioMailFC.Text = configs.MensajeFCMail;
+                        this.txtEnvioProductoReparado.Text = configs.MensajeProductoReparado;
 
                         this.PanelConfig.Visible = true;
                         this.PanelCondiciones.Visible = false;
@@ -261,6 +268,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     config.AlertaCumpleanios = Convert.ToInt32(this.chkAlertaCumple.Checked);
                     config.AlertaCobro = Convert.ToInt32(this.chkAlertaCobro.Checked);
                     config.AlertaFCMail = Convert.ToInt32(this.chkAlertaEnvioFC.Checked);
+                    config.AlertaProductoReparado = Convert.ToInt32(this.chAlertaProductoReparado.Checked);
 
                     config.MensajeFC = this.txtEnvioFact.Text;
                     config.MensajeFcVencida = this.txtEnvioFactVencida.Text;
@@ -272,6 +280,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     config.MensajeCumpleanios = this.txtEnvioCumple.Text;
                     config.MensajeCobro = this.txtEnvioCobro.Text;
                     config.MensajeFCMail = this.txtEnvioMailFC.Text;
+                    config.MensajeProductoReparado = this.txtEnvioProductoReparado.Text;
 
                     int i = this.contConfig.guardarConfiguracionesSMS(config);
                     if (i > 0)

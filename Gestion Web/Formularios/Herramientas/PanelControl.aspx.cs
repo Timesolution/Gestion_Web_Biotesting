@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     this.cargarConfiguracion();
                     this.cargarEstados();
+                    this.CargarSucursalesParaGarantia();
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -988,6 +989,45 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
+        protected void lbtnSucGarantia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.SucursalGarantia = this.DropListSucGarantia.SelectedValue;
+                int i = configuracion.ModificarSucursalGarantia();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de sucursal de garantia.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Sucursal garantia modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Sucursal Garantia!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al seleccionar la sucursal de garantia " + ex.Message);
+            }
+        }
+
+        public void CargarSucursalesParaGarantia()
+        {
+            try
+            {
+                DataTable dt = contrSucu.obtenerSucursales();
+
+                this.DropListSucGarantia.DataSource = dt;
+                this.DropListSucGarantia.DataValueField = "id";
+                this.DropListSucGarantia.DataTextField = "nombre";
+
+                this.DropListSucGarantia.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al cargar sucursales para garantia " + ex.Message);
+            }
+        }
         protected void lbtnTiempoLineas_Click(object sender, EventArgs e)
         {
             try

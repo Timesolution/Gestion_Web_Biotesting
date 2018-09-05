@@ -12,6 +12,9 @@ using System.Web.UI.WebControls;
 namespace Gestion_Web.Formularios.OrdenReparacion
 {
     using Gestion_Api.Entitys;
+    using Gestion_Api.Modelo;
+    using iTextSharp.text.pdf;
+    using System.IO;
 
     public partial class ImpresionOrdenReparacion : System.Web.UI.Page
     {
@@ -23,6 +26,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
         controladorFacturacion contFacturacion = new controladorFacturacion();
         ControladorEmpresa contEmpresa = new ControladorEmpresa();
+        controladorArticulo contArt = new controladorArticulo();
+        controladorSucursal contSuc = new controladorSucursal();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -38,7 +43,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 if (accion == 1)
                 {
-                    this.generarImpresion();
+                    this.GenerarImpresion();
+                }
+                else if(accion == 2)
+                {
+                    this.GenerarEtiqueta();
                 }
             }
         }
@@ -91,7 +100,112 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
-        private void generarImpresion()
+        public void GenerarEtiqueta()
+        {
+            try
+            {
+                var or = this.contOrdenReparacion.ObtenerOrdenReparacionPorID(ordenReparacion);
+
+                DataTable dtOR = new DataTable();
+                dtOR.Columns.Add("NumeroSerie");
+                dtOR.Columns.Add("Fecha");
+                dtOR.Columns.Add("Producto");
+                dtOR.Columns.Add("NumeroOrdenReparacion");
+                dtOR.Columns.Add("SucursalOrigen");
+
+                DataRow drItem = dtOR.NewRow();
+
+                drItem[0] = or.NumeroSerie;
+                drItem[1] = or.Fecha.Value.ToString("dd/MM/yyyy");
+                drItem[2] = contArt.obtenerArticuloByID((int)or.Producto);
+                drItem[3] = or.NumeroOrdenReparacion.Value.ToString("D8");
+                drItem[4] = contSuc.obtenerSucursalID((int)or.SucursalOrigen).nombre;
+
+                dtOR.Rows.Add(drItem);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("EtiquetasOR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                
+
+                ReportDataSource rds = new ReportDataSource("OrdenReparacion", dtOR);
+                
+                string imagen = generarCodigo((int)or.NumeroOrdenReparacion); 
+                ReportParameter param = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "EtiquetasOrdenReparacion", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al generar etiqueta. " + ex.Message);
+            }
+        }
+        public string generarCodigo(int idOR)
+        {
+            try
+            {
+                Barcode128 code128 = new Barcode128();
+                code128.CodeType = Barcode.CODE128;
+                code128.ChecksumText = true;
+                code128.GenerateChecksum = true;
+                code128.StartStopText = false;
+
+                code128.Code = idOR.ToString();
+
+                System.Drawing.Bitmap bm = new System.Drawing.Bitmap(code128.CreateDrawingImage(System.Drawing.Color.Black, System.Drawing.Color.White));
+                String path = HttpContext.Current.Server.MapPath("/OrdenesReparacion/" + idOR + "/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                string archivo = path + "Codigo_" + idOR + ".bmp";
+                bm.Save(archivo, System.Drawing.Imaging.ImageFormat.Bmp);
+                return archivo;
+            }
+            catch (Exception ex)
+            {
+                //Log.EscribirSQL(1, "ERROR", "Error generando codigo de barra para pedido. " + ex.Message);
+                return null;
+            }
+        }
+        private void GenerarImpresion()
         {
             try
             {
@@ -124,20 +238,25 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenReparacionR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
 
-                ReportDataSource rds = new ReportDataSource("DatosOrdenReparacion", dtOrdenReparacion);
+                ReportDataSource rds = new ReportDataSource("DatosOrdenReparacion", dtOrdenReparacion);                               
 
                 ReportParameter param = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param2 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param3 = new ReportParameter("ParamCondIva", condIVA);
                 //ReportParameter param4 = new ReportParameter("ParamNroOR", or.NumeroOrdenReparacion.Value.ToString("D8"));
+                string imagen = generarCodigo((int)or.NumeroOrdenReparacion);
+                ReportParameter param4 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
+                ReportParameter param5 = new ReportParameter("ParamEstadoOR", contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID((int)or.Estado).Descripcion);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
-                //this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -177,31 +296,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL(1, "ERROR", "Error al generar impresion. " + ex.Message);
             }
-        }
-
-        public static DataTable ListToDataTable<T>(List<T> list)
-        {
-            DataTable dt = new DataTable();
-
-            foreach (PropertyInfo info in typeof(T).GetProperties())
-            {
-                dt.Columns.Add(new DataColumn(info.Name, GetNullableType(info.PropertyType)));
-            }
-            foreach (T t in list)
-            {
-                DataRow row = dt.NewRow();
-                foreach (PropertyInfo info in typeof(T).GetProperties())
-                {
-                    if (!IsNullableType(info.PropertyType))
-                        row[info.Name] = info.GetValue(t, null);
-                    else
-                        row[info.Name] = (info.GetValue(t, null) ?? DBNull.Value);
-                }
-                dt.Rows.Add(row);
-            }
-            return dt;
         }
 
         private static Type GetNullableType(Type t)

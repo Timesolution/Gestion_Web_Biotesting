@@ -213,6 +213,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (s == "117")
                             this.labelSaldo.Visible = true;
 
+                        //Permiso Generar Orden de Reparacion
+                        if (s == "162")
+                            this.lbtnOrdenReparacion.Visible = true;
+
                         //Permiso boton Nota de Credito seleccionando PRP
                         string permisoNotaCreditoDesdePRP = listPermisos.Where(x => x == "148").FirstOrDefault();
                         if (string.IsNullOrEmpty(permisoNotaCreditoDesdePRP))

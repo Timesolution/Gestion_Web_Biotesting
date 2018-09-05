@@ -50,7 +50,7 @@
                                             <asp:LinkButton ID="lbtnEnviar" runat="server" OnClick="lbtnEnviar_Click">Enviar FC Por Mail</asp:LinkButton>
                                         </li>
                                         <li>
-                                            <asp:LinkButton ID="lbtnOrdenReparacion" runat="server" OnClick="lbtnOrdenReparacion_Click">Orden de Reparacion</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtnOrdenReparacion" runat="server" Visible="false" OnClick="lbtnOrdenReparacion_Click">Orden de Reparacion</asp:LinkButton>
                                         </li>
                                         <li>
                                             <asp:LinkButton ID="lbtnReimprimirFiscal" runat="server" Visible="false" OnClick="lbtnReimprimirFiscal_Click">Reimprimir Fiscal</asp:LinkButton>

@@ -429,7 +429,9 @@
     <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
+    <Content Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx" />
     <Content Include="Formularios\Pagos\ImpresionPago.aspx" />
     <Content Include="Formularios\Pagos\PagosRealizadosF.aspx" />
     <Content Include="Formularios\Pagos\ReportesR.Aspx" />
@@ -1610,12 +1612,26 @@
     <Compile Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx.designer.cs">
       <DependentUpon>OrdenReparacionF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx.cs">
+      <DependentUpon>OrdenReparacionObservacionesABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx.designer.cs">
+      <DependentUpon>OrdenReparacionObservacionesABM.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.cs">
       <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.designer.cs">
       <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx.cs">
+      <DependentUpon>ServicioTecnicoF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx.designer.cs">
+      <DependentUpon>ServicioTecnicoF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Pagos\dsDatosPagos.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2856,6 +2872,9 @@
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\PedidosBultos.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosConsolidado.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosGrupo.rdlc" />
@@ -2894,13 +2913,11 @@
     <EmbeddedResource Include="Formularios\Facturas\RemitoR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Report2.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionR.rdlc" />
+    <EmbeddedResource Include="Formularios\OrdenReparacion\EtiquetasOR.rdlc" />
     <EmbeddedResource Include="Formularios\OrdenReparacion\OrdenReparacionR.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\DetallePagos.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\PagosListado.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\ReciboPagos.rdlc" />
-    <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Articulos\ReporteStock2.rdlc" />
     <EmbeddedResource Include="Formularios\Cobros\DetalleImpagas.rdlc" />
     <EmbeddedResource Include="Formularios\Personal\ReciboPagoRemuneracionR.rdlc" />

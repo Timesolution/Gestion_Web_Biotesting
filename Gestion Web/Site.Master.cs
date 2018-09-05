@@ -139,6 +139,14 @@ namespace Gestion_Web
                     this.phTapice.Visible = true;
                 }
 
+                //Orden Reparacion
+                string ordenReparacion = WebConfigurationManager.AppSettings.Get("OrdenReparacion");
+
+                if (ordenReparacion == "1" && !String.IsNullOrEmpty(ordenReparacion))
+                {
+                    this.phOrdenReparacion.Visible = true;
+                    this.phServicioTecnico.Visible = true;
+                }
 
                 string millas = WebConfigurationManager.AppSettings.Get("Millas");
                 if (!String.IsNullOrEmpty(millas))

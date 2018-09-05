@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         controladorArticulo contArticulo = new controladorArticulo();
         controladorFacturacion contFacturacion = new controladorFacturacion();
         ControladorOrdenReparacionEntity contOrdenReparacion = new ControladorOrdenReparacionEntity();
+        controladorServicioTecnicoEntity contServTecnico = new controladorServicioTecnicoEntity();
         int idPresupuesto;
         int idOrdenReparacion;
         int accion;
@@ -106,14 +107,33 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 or.Estado = 1;
 
-                SetearValoresEnOrdenReparacion(or);
+                SetearValoresEnOrdenReparacion(or);                
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                if(temp > 0)
+                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8"));
+
+                if (temp > 0)
                 {
+                    temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+
+                    if(temp < 1)
+                        Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+
+                    if(or.CambiaProducto == "Si")
+                    {
+                        string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+                        temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
+
+                        if (temp < 1)
+                            Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
+                    }
+
                     Log.EscribirSQL(1, "Info", "Orden de reparacion agregada con exito");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación agregada con exito!.", "OrdenReparacionF.aspx"));
+                    string script = "window.open('ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                    script += " $.msgbox(\"Orden de reparación agregada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación agregada con exito!.", "OrdenReparacionF.aspx"));
                 }                    
                 else if(temp == -1)
                 {
@@ -133,18 +153,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 or.Autoriza = txtAutoriza.Text;
                 or.Celular = txtCodArea.Text + txtCelular.Text;
-                or.Cliente = Convert.ToInt32(ListCliente.SelectedValue);//txtCliente.Text;
+                or.Cliente = Convert.ToInt32(ListCliente.SelectedValue);
                 //or.DatosTrazabilidad = txtDatosTrazabilidad.Text;
                 or.DescripcionFalla = txtDescripcionFalla.Text;
-                //or.Estado = 1;
                 or.Fecha = Convert.ToDateTime(txtFecha.Text, new CultureInfo("es-AR"));
                 or.FechaCompra = Convert.ToDateTime(txtFechaCompra.Text,new CultureInfo("es-AR"));
                 or.NumeroOrdenReparacion = Convert.ToInt32(txtNumeroOrden.Text);
-                or.NumeroPRP = Convert.ToInt32(ListNumeroPRPoFactura.SelectedValue);//txtNumeroPRP.Text;
+                or.NumeroPRP = Convert.ToInt32(ListNumeroPRPoFactura.SelectedValue);
                 or.NumeroSerie = txtNumeroSerie.Text;
                 or.PlazoLimiteReparacion = Convert.ToInt32(DropListPlazoLimite.SelectedValue);
-                or.Producto = Convert.ToInt32(ListProductos.SelectedValue); //ListProductos.SelectedValue;
-                or.SucursalOrigen = Convert.ToInt32(ListSucursal.SelectedValue); //txtSucOrigen.Text;
+                or.Producto = Convert.ToInt32(ListProductos.SelectedValue);
+                or.SucursalOrigen = Convert.ToInt32(ListSucursal.SelectedValue);
+                or.CambiaProducto = DropListCambiaProducto.Text;
+                or.EstadoDelProducto = txtEstadoDelProducto.Text;
             }
             catch (Exception ex)
             {
@@ -282,8 +303,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 txtAutoriza.Text = or.Autoriza;
                 txtDescripcionFalla.Text = or.DescripcionFalla;
+                txtEstadoDelProducto.Text = or.EstadoDelProducto;
                 txtNumeroSerie.Text = or.NumeroSerie;
                 DropListPlazoLimite.Text = or.PlazoLimiteReparacion.ToString();
+                DropListCambiaProducto.Text = or.CambiaProducto.ToString();
 
                 var art = contArticulo.obtenerArticuloByID(Convert.ToInt32(or.Producto));
 
@@ -345,14 +368,16 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
-                if (temp > 0)
+                if (temp >= 0)
                 {
                     Log.EscribirSQL(1, "Info", "Orden de reparacion modificada con exito");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación modificada con exito!.", "OrdenReparacionF.aspx"));
+                    string script = " $.msgbox(\"Orden de reparación modificada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
                 }
-                else if (temp == -1)
+                else if (temp < 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando Orden de Reparación."));
+                    string script = " $.msgbox(\"Error modificando Orden de Reparación. \", {type: \"error\"});";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
                 }
             }
             catch (Exception ex)

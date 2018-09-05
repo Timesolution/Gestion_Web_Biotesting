@@ -35,6 +35,9 @@ namespace Gestion_Web.Formularios.Facturas
         int accion;
         int idEmpresa;
         int idSucursal;
+        //orden de reparacion
+        int idCliente;
+        int idArticulo;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -42,6 +45,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
+                this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.idArticulo = Convert.ToInt32(Request.QueryString["articulo"]);
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
@@ -59,6 +64,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
+
+                    //orden de reparacion
+                    //idCliente = (int)Session["Login_idcliente"];
+                    //idArticulo = (int)Session["Login_idArticulo"];
 
                     Remito rem = new Remito();
                     Session.Add("Remito", rem);
@@ -98,6 +107,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         int idPedido = Convert.ToInt32(Request.QueryString["id_ped"]);
                         GenerarRemitoPedido(idPedido);
+                    }
+                    //cuando viene de una orden de reparacion
+                    if (this.accion == 5)
+                    {
+                        GenerarRemitoOrdenReparacion();
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
@@ -436,6 +450,53 @@ namespace Gestion_Web.Formularios.Facturas
                 this.obtenerNroRemito();
             }
             catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
+
+            }
+        }
+
+        public void GenerarRemitoOrdenReparacion()
+        {
+            try
+            {
+                Remito r = new Remito();
+
+                this.DropListClientes.SelectedValue = idCliente.ToString();
+                if (this.DropListClientes.SelectedValue == "-1")
+                {
+                    this.cargarClienteEnLista(idCliente);
+                }
+
+                this.cargarCliente(idCliente);
+
+                ItemRemito ir = new ItemRemito();
+
+                var art = contArticulo.obtenerArticuloByID(idArticulo);
+
+                ir.articulo = art;
+                ir.cantidad = 1;
+                ir.descuento = 0;
+                ir.descripcion = art.descripcion;
+                ir.precioUnitario = art.precioVenta;
+                ir.total = art.precioVenta;
+
+                this.agregarItemRemito(ir,0);
+
+                r.items.Add(ir);
+                r.cliente = contCliente.obtenerClienteID(idCliente);
+
+                Session.Add("Remito", r);
+
+                this.cargarItems();
+                this.actualizarTotales();
+                this.obtenerNroRemito();
+
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Alerta Cliente: " + c.alerta.descripcion + ". \");", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Alerta Cliente: " + c.alerta.descripcion + "."));
+
+            }
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
 
