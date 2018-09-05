@@ -8,7 +8,7 @@
   <Shapes>
     <Shape ID="DesignTable:DatosCompra" ZOrder="9" X="389" Y="151" Height="257" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="253" />
     <Shape ID="DesignTable:ItemsOrden" ZOrder="8" X="782" Y="217" Height="163" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="159" />
-    <Shape ID="DesignTable:DatosImpagas" ZOrder="7" X="211" Y="317" Height="143" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
+    <Shape ID="DesignTable:DatosImpagas" ZOrder="7" X="211" Y="317" Height="162" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
     <Shape ID="DesignTable:DetalleRemitos" ZOrder="6" X="589" Y="236" Height="181" Width="154" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="177" />
     <Shape ID="DesignTable:DatosCuenta" ZOrder="5" X="210" Y="148" Height="162" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="158" />
     <Shape ID="DesignTable:ItemsRemito" ZOrder="4" X="968" Y="395" Height="162" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="158" />

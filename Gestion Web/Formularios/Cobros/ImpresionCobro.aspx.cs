@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Cobros
         private int excel;
         private int impagasVencidas;
         private string listaCobros;
+        private int soloNotaDebito;
 
         controladorCobranza controlador = new controladorCobranza();
         protected void Page_Load(object sender, EventArgs e)
@@ -52,6 +53,7 @@ namespace Gestion_Web.Formularios.Cobros
                     this.excel = Convert.ToInt32(Request.QueryString["ex"]);
                     this.impagasVencidas = Convert.ToInt32(Request.QueryString["vencida"]);
                     this.listaCobros = Request.QueryString["lc"];
+                    this.soloNotaDebito = Convert.ToInt32(Request.QueryString["nd"]);
 
                     if (!string.IsNullOrEmpty(this.listaCobros))
                     {
@@ -352,6 +354,13 @@ namespace Gestion_Web.Formularios.Cobros
                 controladorVendedor contVendedor = new controladorVendedor();
 
                 DataTable dtImpagas = controlador.obtenerMovimientosImpagas(this.fechaD, this.fechaH, this.idSucursal, this.idCliente, this.idVendedor, this.idTipo);
+
+                // Cuando la variable soloNotaDebito es mayor a 0, llamo al metodo que me obtiene sólo Notas de Debito impagas. 
+                if (soloNotaDebito > 0)
+                {
+                    dtImpagas = controlador.obtenerMovimientosImpagasNotaDebito(this.fechaD, this.fechaH, this.idSucursal, this.idCliente, this.idVendedor, this.idTipo);
+                }
+
                 dtImpagas.Columns.Add("codigoCliente");
                 dtImpagas.Columns.Add("Telefono");
                 decimal saldoAcum = 0;
