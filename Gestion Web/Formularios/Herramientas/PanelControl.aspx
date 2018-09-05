@@ -371,16 +371,24 @@
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Estado pedidos:</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="DropListEstadoPedidos" runat="server" class="form-control">
-                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
-                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
-                                                </asp:DropDownList>
-
+                                                <asp:DropDownList ID="DropListEstadoPedidos" runat="server" class="form-control"></asp:DropDownList>
                                             </div>
                                             <div class="col-md-2">
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnEstadoIniPedidos" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEstadoIniPedidos_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Estado pendiente refacturar:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListEstadoPendienteRefacturar" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnEstadoPendienteRefacturar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEstadoPendienteRefacturar_Click" />
                                             </div>
                                         </div>
 
@@ -450,6 +458,22 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnMargenObligatorio" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnMargenObligatorio_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Actualizar Compuestos:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListActualizarCompuestos" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnActualizarCompuestos" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnActualizarCompuestos_Click" />
                                             </div>
                                         </div>
 

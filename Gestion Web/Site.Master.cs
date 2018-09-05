@@ -91,7 +91,11 @@ namespace Gestion_Web
                     this.Label2.Text = s.nombre;
                     this.Label3.Text = Session["Login_NombrePerfil"] as string;
                     this.cargarIniciales();
-
+                }
+                System.Uri asd = Request.Url;// poner .contains = mi formulario
+                if (asd.AbsolutePath.Contains("ABMFacturasImagenes.aspx"))
+                {
+                    phMenuCompleto.Visible = false;
                 }
             }
             catch { }
@@ -119,6 +123,13 @@ namespace Gestion_Web
                 {
                     this.phCombustible.Visible = true;
                 }
+
+                string facturarImagenes = WebConfigurationManager.AppSettings.Get("FacturarImagenes");
+                if (facturarImagenes == "1" && !String.IsNullOrEmpty(facturarImagenes))
+                {
+                    this.phImagenes.Visible = true;
+                }
+
                 //tapice
                 string tapice = WebConfigurationManager.AppSettings.Get("Tapice");
                

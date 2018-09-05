@@ -48,6 +48,26 @@
                 </div>
                 <!-- /widget -->
             </div>
+
+            <div class="col-md-12 col-xs-12">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <i class="icon-th-large"></i>
+                        <h3>Galeria de Imagenes</h3>
+                    </div>
+                    <div class="widget-content">
+                        <ul class="gallery-container">
+                            <table class="table table-bordered table-striped" id="tbImagenes">
+                                <tbody>
+                                    <asp:PlaceHolder ID="phImagenGrupo" runat="server"></asp:PlaceHolder>
+                                </tbody>
+                            </table>
+                        </ul>
+                    </div>
+                    <!-- /widget-content -->
+                </div>
+            </div>
+
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked widget-table action-table">
 
@@ -137,12 +157,43 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalImagen" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Agregar Imagen</h4>
+                    </div>
+                    <asp:UpdatePanel runat="server" ID="updatePanelAgregarImagen">
+                        <ContentTemplate>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <asp:Label ID="lblIdGrupo" runat="server" Visible="false"></asp:Label>
+                                    <label for="validateSelect" class="col-md-4">Imagen</label>
+                                    <div class="col-md-8">
+                                        <asp:FileUpload ID="FileUpload1" runat="server" />
+                                    </div>
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnAgregarImagen" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarImagen_Click" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
         <%--Fin modalGrupo--%>
     </div>
     <script>
         function abrirdialog(valor) {
             document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
-            }
+        }
     </script>
 
     <!-- Core Scripts - Include with every page -->
@@ -168,7 +219,7 @@
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-    
+
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
 
@@ -182,6 +233,12 @@
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
         function endReq(sender, args) {
             $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function openModalImagen() {
+            $('#modalImagen').modal('show');
         }
     </script>
 
@@ -201,8 +258,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8) // Detectar . (punto) y backspace (retroceso)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

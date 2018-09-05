@@ -67,22 +67,31 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.Label labelSaldo;
         
         /// <summary>
-        /// labelTotalVendido control.
+        /// labelTotalCostoConIva control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelTotalVendido;
+        protected global::System.Web.UI.WebControls.Label labelTotalCostoConIva;
         
         /// <summary>
-        /// labelTotalCosto control.
+        /// phTotalVendidoConIva control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelTotalCosto;
+        protected global::System.Web.UI.WebControls.PlaceHolder phTotalVendidoConIva;
+        
+        /// <summary>
+        /// labelTotalVendidoConIva control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotalVendidoConIva;
         
         /// <summary>
         /// labelRentabilidad control.
@@ -92,6 +101,33 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labelRentabilidad;
+        
+        /// <summary>
+        /// phTotalCostoSinIva control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phTotalCostoSinIva;
+        
+        /// <summary>
+        /// labelTotalCostoSinIva control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotalCostoSinIva;
+        
+        /// <summary>
+        /// labelTotalVendidoSinIva control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotalVendidoSinIva;
         
         /// <summary>
         /// labelPorRentabilidad control.

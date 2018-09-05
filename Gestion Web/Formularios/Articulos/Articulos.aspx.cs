@@ -2183,7 +2183,7 @@ namespace Gestion_Web.Formularios.Articulos
                     nuevo.ultActualizacion = DateTime.Now;
 
                     //guardo
-                    int i = this.controlador.modificarArticulo(nuevo, nuevo.codigo);    
+                    int i = this.controlador.modificarArticulo(nuevo, nuevo.codigo,1);    
                 }
                 
             }

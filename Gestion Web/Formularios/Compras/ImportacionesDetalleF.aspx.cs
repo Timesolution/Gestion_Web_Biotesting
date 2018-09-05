@@ -484,7 +484,7 @@ namespace Gestion_Web.Formularios.Compras
                 Articulo art = this.contArticulos.obtenerArticuloByID(Convert.ToInt32(this.txtIdArticulo.Text));
                 art.costo = Convert.ToDecimal(this.txtCostoNuevo.Text);
                 art = this.contArticulos.obtenerPrecioVentaDesdeCosto(art);
-                int ok = this.contArticulos.modificarArticulo(art, art.codigo);
+                int ok = this.contArticulos.modificarArticulo(art, art.codigo,1);
                 if (ok > 0)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Actualizado con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
@@ -508,7 +508,7 @@ namespace Gestion_Web.Formularios.Compras
                 art.margen = Convert.ToDecimal(this.txtMargenNuevo.Text);
                 art = this.contArticulos.obtenerPrecioVentaDesdeCosto(art);
                 art = this.contArticulos.obtenerPrecioVentaDesdeVenta(art, Convert.ToDecimal(this.txtPrecioVentaActual.Text));
-                int ok = this.contArticulos.modificarArticulo(art, art.codigo);
+                int ok = this.contArticulos.modificarArticulo(art, art.codigo,1);
                 if (ok > 0)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Actualizado con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
