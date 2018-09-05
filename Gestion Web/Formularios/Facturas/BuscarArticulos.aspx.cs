@@ -15,6 +15,7 @@ namespace Gestion_Web.Formularios.Facturas
         private controladorArticulo controlador = new controladorArticulo();
         private Mensajes m = new Mensajes();
         private int accion;
+        private int idSucursal;
         private string buscarText;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,7 +23,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.buscarText = Request.QueryString["b"];
-                
+                this.idSucursal = Convert.ToInt32(Request.QueryString["suc"]);
+
                 this.txtBuscarArticulos.Focus();
 
                 this.buscar();
@@ -120,19 +122,59 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                //cargarHeaderTablaArticulos();
                 //vacio place holder
                 this.phArticulos.Controls.Clear();
 
                 Table table = new Table();
                 table.CssClass = "table table-striped table-bordered";
-                //table.Width = Unit.Percentage(100);
 
-                //para cargar el cliente
-                int i = 0;
+                //Celdas
+                TableCell celCodigoH = new TableCell();
+                celCodigoH.Text = "Codigo";
+                celCodigoH.VerticalAlign = VerticalAlign.Middle;
+                celCodigoH.HorizontalAlign = HorizontalAlign.Left;
+
+                TableCell celDescripcionH = new TableCell();
+                celDescripcionH.Text = "Descripcion";
+                celDescripcionH.VerticalAlign = VerticalAlign.Middle;
+                celDescripcionH.HorizontalAlign = HorizontalAlign.Left;
+
+                TableCell celStockH = new TableCell();
+                celStockH.Text = "Stock";
+                celStockH.VerticalAlign = VerticalAlign.Middle;
+                celStockH.HorizontalAlign = HorizontalAlign.Left;
+
+                TableCell celMonedaH = new TableCell();
+                celMonedaH.Text = "Moneda";
+                celMonedaH.VerticalAlign = VerticalAlign.Middle;
+                celMonedaH.HorizontalAlign = HorizontalAlign.Left;
+
+                TableCell celPrecioH = new TableCell();
+                celPrecioH.Text = "P.Venta";
+                celPrecioH.VerticalAlign = VerticalAlign.Middle;
+                celPrecioH.HorizontalAlign = HorizontalAlign.Left;
+
+                TableCell celAccionH = new TableCell();
+                celAccionH.Text = "";
+                celAccionH.VerticalAlign = VerticalAlign.Middle;
+                celAccionH.HorizontalAlign = HorizontalAlign.Left;
+
+                TableRow trH = new TableRow();
+
+                //arego fila a tabla
+                trH.Cells.Add(celCodigoH);
+                trH.Cells.Add(celDescripcionH);
+                trH.Cells.Add(celStockH);
+                trH.Cells.Add(celMonedaH);
+                trH.Cells.Add(celPrecioH);
+                trH.Cells.Add(celAccionH);
+
+                //arego fila a tabla
+                table.Controls.Add(trH);
 
                 foreach (Articulo art in articulos)
                 {
-
                     //Celdas
                     TableCell celCodigo = new TableCell();
                     celCodigo.Text = art.codigo;
@@ -146,6 +188,10 @@ namespace Gestion_Web.Formularios.Facturas
                     celDescripcion.VerticalAlign = VerticalAlign.Middle;
                     celDescripcion.HorizontalAlign = HorizontalAlign.Left;
 
+                    TableCell celStock = new TableCell();
+                    celStock.Text = this.obtenerStockArticuloBySucursal(art.codigo).ToString();//traer el stock de ese articulo en esa sucursal
+                    celStock.VerticalAlign = VerticalAlign.Middle;
+                    celStock.HorizontalAlign = HorizontalAlign.Right;
 
                     TableCell celMoneda = new TableCell();
                     celMoneda.Text = art.monedaVenta.moneda;
@@ -162,11 +208,11 @@ namespace Gestion_Web.Formularios.Facturas
                     LinkButton btnDetails = new LinkButton();
                     TableCell celAction = new TableCell();
                     btnDetails.ID = "btn_" + art.codigo.ToString();
-                   btnDetails.CssClass = "btn btn-info";
-                   btnDetails.Text = "<span class='shortcut-icon icon-ok'></span>";
-                   //btnDetails.Height = Unit.Pixel(30);
-                   btnDetails.Font.Size = 9;
-                   btnDetails.Click += new EventHandler(this.RedireccionarArticulos);
+                    btnDetails.CssClass = "btn btn-info";
+                    btnDetails.Text = "<span class='shortcut-icon icon-ok'></span>";
+                    //btnDetails.Height = Unit.Pixel(30);
+                    btnDetails.Font.Size = 9;
+                    btnDetails.Click += new EventHandler(this.RedireccionarArticulos);
                     celAction.Controls.Add(btnDetails);
                     //celAction.Width = Unit.Percentage(10);
                     celAction.VerticalAlign = VerticalAlign.Middle;
@@ -178,14 +224,15 @@ namespace Gestion_Web.Formularios.Facturas
                     if (art.apareceLista == 1)
                     {
                         //arego fila a tabla
-                        table.Controls.Add(tr);
+                        //table.Controls.Add(tr);
                         tr.Cells.Add(celCodigo);
                         tr.Cells.Add(celDescripcion);
+                        tr.Cells.Add(celStock);
                         tr.Cells.Add(celMoneda);
                         tr.Cells.Add(celPrecio);
                         tr.Cells.Add(celAction);
                         //arego fila a tabla
-                        //table.Controls.Add(tr);
+                        table.Controls.Add(tr);
                     }
 
                 }
@@ -195,9 +242,105 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Articulo en la Lista. " + ex.Message));
-
             }
         }
+
+        private decimal obtenerStockArticuloBySucursal(string codigoArticulo)//obtenerStockArticuloBySucursal
+        {
+            try
+            {
+                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+                decimal stock = 0;
+                Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(codigoArticulo);
+                if (artEnt != null)
+                {
+                    int idSuc = this.idSucursal;
+                    var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, idSuc);
+                    stock = 0;
+
+                    stock = stocks.stock1.Value;
+                    return stock;
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo stock de articulo por sucursal. " + ex.Message));
+            }
+            return 0;
+        }
+
+        //private void verificarStockMinimo()
+        //{
+        //    try
+        //    {
+        //        ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+        //        decimal cant = 0;
+
+        //        try
+        //        {
+        //            cant = Convert.ToDecimal(this.txtCantidad.Text);
+        //        }
+        //        catch { }
+
+        //        //Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCod(this.txtCodigo.Text);
+        //        Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(this.txtCodigo.Text);
+        //        if (artEnt != null)
+        //        {
+
+        //            //List<Stock> stocks = this.contArticulo.obtenerStockArticulo(artEnt.id);
+        //            var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, Convert.ToInt32(this.ListSucursal.SelectedValue));
+
+
+        //            decimal stock = 0;
+        //            decimal stockDestino = 0;
+        //            try
+        //            {
+        //                stock = stocks.stock1.Value;
+
+        //                //verifico stock, si es cliente interno
+
+        //                if (this.ListSucursalCliente.Visible == true)
+        //                {
+        //                    var StockDestino = contArtEntity.obtenerStockArticuloLocal(artEnt.id, Convert.ToInt32(this.ListSucursalCliente.SelectedValue));
+        //                    if (StockDestino != null)
+        //                    {
+        //                        stockDestino = StockDestino.stock1.Value;
+        //                    }
+        //                }
+        //            }
+        //            catch { }
+
+        //            if (artEnt.stockMinimo > 0)
+        //            {
+        //                if (stock <= artEnt.stockMinimo)
+        //                {
+        //                    this.lbtnStockProd.BackColor = System.Drawing.Color.Red;
+        //                }
+        //                else
+        //                {
+        //                    if (stock - cant <= artEnt.stockMinimo)
+        //                    {
+        //                        this.lbtnStockProd.BackColor = System.Drawing.Color.Red;
+        //                    }
+        //                    else
+        //                    {
+        //                        this.lbtnStockProd.BackColor = System.Drawing.Color.Gray;
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                this.lbtnStockProd.BackColor = System.Drawing.Color.Gray;
+        //            }
+        //            this.lbtnStockProd.Text = decimal.Round(stock, 0).ToString();
+        //            this.lbtnStockDestinoProd.Text = decimal.Round(stockDestino, 0).ToString();
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
 
         private void buscar()
         {
@@ -206,9 +349,9 @@ namespace Gestion_Web.Formularios.Facturas
                 List<Articulo> articulos = new List<Articulo>();
                 if (String.IsNullOrEmpty(this.buscarText))
                 {
-                    
+
                     articulos = this.controlador.obtenerArticulosReduc();
-                    
+
                 }
                 else
                 {
@@ -226,9 +369,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(!String.IsNullOrEmpty(this.txtBuscarArticulos.Text))
+                if (!String.IsNullOrEmpty(this.txtBuscarArticulos.Text))
                 {
-                    Response.Redirect("BuscarArticulos.aspx?accion="+this.accion + "&b=" + this.txtBuscarArticulos.Text );
+                    Response.Redirect("BuscarArticulos.aspx?accion=" + this.accion + "&b=" + this.txtBuscarArticulos.Text + "&suc=" + this.idSucursal);
                 }
             }
             catch (Exception ex)

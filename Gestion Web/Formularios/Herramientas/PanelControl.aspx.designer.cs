@@ -580,6 +580,24 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnMargenObligatorio;
         
         /// <summary>
+        /// DropListActualizarCompuestos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListActualizarCompuestos;
+        
+        /// <summary>
+        /// lbtnActualizarCompuestos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarCompuestos;
+        
+        /// <summary>
         /// lbtnPersonalizar control.
         /// </summary>
         /// <remarks>

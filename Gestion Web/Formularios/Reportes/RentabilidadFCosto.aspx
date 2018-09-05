@@ -26,13 +26,13 @@
                                                 <asp:LinkButton ID="lbtnReporteRentabilidad" runat="server" OnClick="lbtnReporteRentabilidad_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
-                                                                </asp:LinkButton>
+                                                </asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnReporteRentabilidadPDF" runat="server" OnClick="lbtnReporteRentabilidadPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
-                                                                </asp:LinkButton>
+                                                </asp:LinkButton>
                                             </li>
                                         </ul>
                                     </li>
@@ -89,15 +89,33 @@
                         <!-- .stat -->
                     </div>
                 </div>
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Total Vendido</h4>
-                            <asp:Label ID="labelTotalVendido" runat="server" Text="" class="value"></asp:Label>
+
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Costo Con Iva</h4>
+                                <asp:Label ID="labelTotalCostoConIva" runat="server" Text="" class="value"></asp:Label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <br />
+
+                <asp:PlaceHolder runat="server" ID="phTotalVendidoConIva" Visible="false">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Vendido</h4>
+                                <asp:Label ID="labelTotalVendidoConIva" runat="server" Text="" class="value"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+
+
+                </asp:PlaceHolder>
+
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
@@ -107,18 +125,23 @@
                     </div>
                 </div>
             </div>
-            <div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Total Costo</h4>
-                            <asp:Label ID="labelTotalCosto" runat="server" Text="" class="value"></asp:Label>
+
+            <asp:PlaceHolder runat="server" ID="phTotalCostoSinIva" Visible="false">
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Costo Sin Iva</h4>
+                                <asp:Label ID="labelTotalCostoSinIva" runat="server" Text="" class="value"></asp:Label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </asp:PlaceHolder>
         </div>
+
         <div class="col-md-6">
+
             <div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
@@ -129,6 +152,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
@@ -139,16 +163,7 @@
                     </div>
                 </div>
             </div>
-          <div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Total Costo Con Iva</h4>
-                            <asp:Label ID="labelTotalCostoConIva" runat="server" Text="" class="value"></asp:Label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
         </div>
         <!-- /span12 -->

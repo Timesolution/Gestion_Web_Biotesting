@@ -5,7 +5,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
-
+         <audio id="audio1" src="Sound/beep.wav" controls preload="auto" autobuffer HIDDEN="true" ></audio>
         <asp:PlaceHolder ID="phMain" runat="server" Visible="false">
             <div class="container">
 
@@ -2293,6 +2293,13 @@
             }
             return true;
         }
+
+        function EvalSound(soundobj)
+ {
+         var thissound = document.getElementById(soundobj);
+         thissound.play();
+ }
+
     </script>
 </asp:Content>
 

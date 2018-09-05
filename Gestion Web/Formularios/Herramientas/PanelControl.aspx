@@ -450,6 +450,22 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Actualizar Compuestos:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListActualizarCompuestos" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnActualizarCompuestos" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnActualizarCompuestos_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Personalizar tabla Articulos:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnPersonalizar" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalPersonalizacion" class="btn btn-success" />
