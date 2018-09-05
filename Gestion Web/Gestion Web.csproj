@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -473,6 +473,7 @@
     <Content Include="Formularios\Clientes\ProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\RentabilidadFCosto.aspx" />
     <Content Include="Formularios\Reportes\ReportesCobros.aspx" />
+    <Content Include="Formularios\Reportes\ReportesCompras.aspx" />
     <Content Include="Formularios\Reportes\ReportesTrazabilidad.aspx" />
     <Content Include="Formularios\Reportes\ReportesProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\ReportesArticulos.aspx" />
@@ -731,6 +732,17 @@
     </None>
     <Content Include="Formularios\Pagos\dsDatosPagos.xss">
       <DependentUpon>dsDatosPagos.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\Reportes\dsReportesCompras.xsc">
+      <DependentUpon>dsReportesCompras.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Reportes\dsReportesCompras.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReportesCompras.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Reportes\dsReportesCompras.xss">
+      <DependentUpon>dsReportesCompras.xsd</DependentUpon>
     </Content>
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
@@ -1707,6 +1719,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportes.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Reportes\dsReportesCompras.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReportesCompras.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Reportes\dsVentas.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2284,6 +2301,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\ReportesCobros.aspx.designer.cs">
       <DependentUpon>ReportesCobros.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReportesCompras.aspx.cs">
+      <DependentUpon>ReportesCompras.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReportesCompras.aspx.designer.cs">
+      <DependentUpon>ReportesCompras.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\ReportesTrazabilidad.aspx.cs">
       <DependentUpon>ReportesTrazabilidad.aspx</DependentUpon>
@@ -2905,6 +2929,7 @@
     <EmbeddedResource Include="Formularios\Cobros\DetalleImpagas.rdlc" />
     <EmbeddedResource Include="Formularios\Personal\ReciboPagoRemuneracionR.rdlc" />
     <EmbeddedResource Include="Formularios\Promociones\PromocionesR.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\ComprasArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadRCosto.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\TrazabilidadR.rdlc" />

@@ -3401,7 +3401,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     if (fact.formaPAgo.forma == "Mutuales")
                     {
-                        if (!fact.tipo.tipo.Contains("Credito PRP"))
+                        if (!fact.tipo.tipo.Contains("Credito PRP") || accion != 6)
                         {
                             if (fact.pagare == null)
                             {

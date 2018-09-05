@@ -210,6 +210,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorZona controlZona = new controladorZona();
                 controladorCliente controlCliente = new controladorCliente();
                 ControladorEmpresa controlEmpresa = new ControladorEmpresa();
+                Configuracion configuracion = new Configuracion();
 
                 DataTable dtDatos = controlador.obtenerDatosPedido(idPedido);
                 DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
@@ -229,6 +230,18 @@ namespace Gestion_Web.Formularios.Facturas
                         rowDatos["codigoBarra"] = "";
                     }
                 }
+
+                var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                dtDetalle.Columns.Add("TiempoLineasPedido");
+                try
+                {
+                    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * dtDatos.Rows.Count);
+                    dtDetalle.Rows[0]["TiempoLineasPedido"] = tiempoPorLinea.ToString(@"hh\:mm\:ss");
+                }
+                catch { }
+
+
 
                 int suc = Convert.ToInt32(dtDetalle.Rows[0]["Id_suc"]);
 
@@ -611,6 +624,9 @@ namespace Gestion_Web.Formularios.Facturas
                 dt.Columns.Add("Codigo");
                 dt.Columns.Add("Descripcion");
                 dt.Columns.Add("Cantidad",typeof(decimal));
+                dt.Columns.Add("Ubicacion");
+                dt.Columns.Add("Pedido");
+                dt.Columns.Add("Stock");
 
                 string[] pedidos = idPedidos.Split(';');
                 foreach (string ped in pedidos)
@@ -623,10 +639,13 @@ namespace Gestion_Web.Formularios.Facturas
                             foreach (var item in p.items)
                             {
                                 DataRow row = dt.NewRow();
-                                //row["Pedido"] = p.numero;
                                 if (!string.IsNullOrEmpty(item.articulo.codigo))
                                 {
                                     row["Codigo"] = item.articulo.codigo;
+                                }
+                                if (!string.IsNullOrEmpty(item.articulo.ubicacion))
+                                {
+                                    row["Ubicacion"] = item.articulo.ubicacion;
                                 }
                                 if (!string.IsNullOrEmpty(item.descripcion))
                                 {
@@ -645,18 +664,11 @@ namespace Gestion_Web.Formularios.Facturas
                                     row["Cantidad"] = item.cantidad;
                                 }
 
+                                row["Pedido"] = p.numero + ", " + p.cliente.razonSocial;
+                                row["Stock"] = this.contArt.obtenerStockTotalArticulo(item.articulo.id).ToString("G");
+
                                 dt.Rows.Add(row);
                             }
-
-                            //dt = dt.AsEnumerable()
-                            //    .GroupBy(x => x.Field<string>("Codigo"))
-                            //        .Select(r =>
-                            //        {
-                            //            var dr = dt.NewRow();
-                            //            dr["Codigo"] = r.Key;
-                            //            dr["Cantidad"] = r.Sum(x => x.Field<decimal>("Cantidad"));
-                            //            return dr;       
-                            //        }).CopyToDataTable();
                         }
                         
                     }

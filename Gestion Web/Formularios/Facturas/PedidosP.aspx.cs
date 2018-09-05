@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorPedidoEntity contPedEntity = new ControladorPedidoEntity();
         controladorArticulo contArticulos = new controladorArticulo();
         controladorRemitos contRemito = new controladorRemitos();
+        Configuracion configuracion = new Configuracion();
 
         Mensajes m = new Mensajes();
         private int suc;
@@ -866,6 +867,8 @@ namespace Gestion_Web.Formularios.Facturas
                 TableRow tr = new TableRow();
                 tr.ID = p["id"].ToString();
 
+                var pedido = this.controlador.obtenerPedidoId(Convert.ToInt32(p["id"]));
+
                 //Celdas
 
                 TableCell celFecha = new TableCell();
@@ -909,6 +912,31 @@ namespace Gestion_Web.Formularios.Facturas
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celTipo);
+
+                TableCell celLineas = new TableCell();
+                celLineas.Text = pedido.items.Count.ToString();
+                celLineas.HorizontalAlign = HorizontalAlign.Left;
+                celLineas.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celLineas);
+
+                TableCell celBultos = new TableCell();
+                celBultos.Text = pedido.items.Sum(x => x.cantidad).ToString();
+                celBultos.HorizontalAlign = HorizontalAlign.Left;
+                celBultos.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celBultos);
+
+                TableCell celTiempo = new TableCell();
+                var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                try
+                {
+                    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * pedido.items.Count);
+                    celTiempo.Text = tiempoPorLinea.ToString(@"hh\:mm\:ss"); 
+                }
+                catch { }
+                celTiempo.HorizontalAlign = HorizontalAlign.Left;
+                celTiempo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celTiempo);
 
                 //arego fila a tabla
 
@@ -1010,6 +1038,31 @@ namespace Gestion_Web.Formularios.Facturas
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celTipo);
+
+                TableCell celLineas = new TableCell();
+                celLineas.Text = p.items.Count.ToString();
+                celLineas.HorizontalAlign = HorizontalAlign.Left;
+                celLineas.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celLineas);
+
+                TableCell celBultos = new TableCell();
+                celBultos.Text = p.items.Sum(x => x.cantidad).ToString();
+                celBultos.HorizontalAlign = HorizontalAlign.Left;
+                celBultos.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celBultos);
+
+                TableCell celTiempo = new TableCell();
+                var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                try
+                {
+                    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * p.items.Count);
+                    celTiempo.Text = tiempoPorLinea.ToString(@"hh\:mm\:ss");
+                }
+                catch { }
+                celTiempo.HorizontalAlign = HorizontalAlign.Left;
+                celTiempo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celTiempo);
 
                 //arego fila a tabla
 
@@ -1227,7 +1280,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1]+";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1257,7 +1310,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1297,7 +1350,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1422,7 +1475,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1555,7 +1608,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -1627,7 +1680,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1703,7 +1756,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1733,7 +1786,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1832,7 +1885,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1867,7 +1920,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";

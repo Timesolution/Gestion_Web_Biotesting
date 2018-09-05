@@ -26,7 +26,7 @@ namespace Gestion_Web.Formularios.Compras
         private int suc;
         private string fechaD;
         private string fechaH;
-        private string tipoDoc;
+        private string tipoDoc; 
         private int puntoVenta;
         private int accion;
         private int excel;
@@ -43,6 +43,7 @@ namespace Gestion_Web.Formularios.Compras
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
         ControladorCCProveedor controladorCCP = new ControladorCCProveedor();
         controladorArticulo contArticulo = new controladorArticulo();
+        controladorPagos controladorPagos = new controladorPagos();
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -396,6 +397,25 @@ namespace Gestion_Web.Formularios.Compras
             {
                 //DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRango(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
                 DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRangoDetallado(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
+
+                foreach (DataRow dr in dtImpagas.Rows)
+                {
+                    if (dr["documento"].ToString() == "Pago")
+                    {
+                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(dr["id"]));
+                        if (pago != null)
+                        {
+                            if (pago.Ftp == 0)
+                            {
+                                dr["documento"] = "Pago FC";
+                            }
+                            if (pago.Ftp == 1)
+                            {
+                                dr["documento"] = "Pago PRP";
+                            }
+                        }
+                    }
+                }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ImpagasProvR.rdlc");

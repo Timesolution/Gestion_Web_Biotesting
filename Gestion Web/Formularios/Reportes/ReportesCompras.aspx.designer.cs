@@ -10,16 +10,16 @@
 namespace Gestion_Web.Formularios.Reportes {
     
     
-    public partial class ReportesArticulos {
+    public partial class ReportesCompras {
         
         /// <summary>
-        /// phAcciones control.
+        /// phAccion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phAcciones;
+        protected global::System.Web.UI.WebControls.PlaceHolder phAccion;
         
         /// <summary>
         /// btnAccion control.
@@ -31,22 +31,22 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
         
         /// <summary>
-        /// lbtnImprimir control.
+        /// lbtnReporteArticulosPorProveedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorProveedor;
         
         /// <summary>
-        /// lbtnExportar control.
+        /// lbtnReporteArticulosPorProveedorPDF control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnExportar;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorProveedorPDF;
         
         /// <summary>
         /// lblParametros control.
@@ -56,6 +56,15 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblParametros;
+        
+        /// <summary>
+        /// phSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phSucursal;
         
         /// <summary>
         /// lblSucursal control.
@@ -76,22 +85,13 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.PlaceHolder phTopArticulosCantidad;
         
         /// <summary>
-        /// phTopArticulosImporte control.
+        /// UpdatePanelBusqueda control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phTopArticulosImporte;
-        
-        /// <summary>
-        /// UpdatePanel4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel4;
+        protected global::System.Web.UI.UpdatePanel UpdatePanelBusqueda;
         
         /// <summary>
         /// txtFechaDesde control.
@@ -130,58 +130,22 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
         
         /// <summary>
-        /// DropListSucursal control.
+        /// txtProveedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
+        protected global::System.Web.UI.WebControls.TextBox txtProveedor;
         
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// btnBuscarProveedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
-        /// <summary>
-        /// txtDescArticulo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDescArticulo;
-        
-        /// <summary>
-        /// btnBuscarCod control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnBuscarCod;
-        
-        /// <summary>
-        /// DropListArticulos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListArticulos;
-        
-        /// <summary>
-        /// RequiredFieldValidator6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
+        protected global::System.Web.UI.WebControls.LinkButton btnBuscarProveedor;
         
         /// <summary>
         /// DropListProveedor control.
@@ -193,13 +157,13 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.DropDownList DropListProveedor;
         
         /// <summary>
-        /// chkListListas control.
+        /// RequiredFieldValidator6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList chkListListas;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
         
         /// <summary>
         /// lbtnBuscar control.
