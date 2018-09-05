@@ -22,7 +22,6 @@ namespace Gestion_Web.Formularios.Facturas
         Mensajes m = new Mensajes();
         controladorFacturacion controlador = new controladorFacturacion();
         controladorUsuario contUser = new controladorUsuario();
-        //
         controladorArticulo contArticulo = new controladorArticulo();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();

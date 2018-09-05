@@ -120,9 +120,11 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListRedondearPrecioVenta.SelectedValue = configuracion.RedondearPrecioVenta;
                 this.DropListFacturarPRP.SelectedValue = configuracion.FacturarPRP;
                 this.DropListEstadoPedidos.SelectedValue = configuracion.EstadoInicialPedidos;
+                this.DropListEstadoPendienteRefacturar.SelectedValue = configuracion.EstadoPendienteFacturar;
                 this.DropListVerSaldoClienteObservacionesPRP.SelectedValue = configuracion.VerSaldoClienteObservacionesPRP;
                 this.DropListIncidenciaObligatoria.SelectedValue = configuracion.IncidenciaObligatoria;
                 this.DropListMargenObligatorio.SelectedValue = configuracion.MargenObligatorio;
+                this.DropListActualizarCompuestos.SelectedValue = configuracion.ActualizaCompuestos;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -225,6 +227,12 @@ namespace Gestion_Web.Formularios.Herramientas
         //funcion carga DDL
         public void cargarEstados()
         {
+            cargarDDLestadoInicialPedidos();
+            cargarDDLestadoPendienteRefacturar();
+        }
+
+        private void cargarDDLestadoInicialPedidos()
+        {
             try
             {
 
@@ -241,6 +249,31 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListEstadoPedidos.DataTextField = "descripcion";
 
                 this.DropListEstadoPedidos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Estados de Pedidos a la lista. " + ex.Message));
+            }
+        }
+
+        private void cargarDDLestadoPendienteRefacturar()
+        {
+            try
+            {
+
+                DataTable dt = this.contPedido.obtenerEstadosPedidos();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListEstadoPendienteRefacturar.DataSource = dt;
+                this.DropListEstadoPendienteRefacturar.DataValueField = "id";
+                this.DropListEstadoPendienteRefacturar.DataTextField = "descripcion";
+
+                this.DropListEstadoPendienteRefacturar.DataBind();
             }
             catch (Exception ex)
             {
@@ -1019,7 +1052,6 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo modificar el tiempo por linea de pedido. \", {type: \"error\"});", true);
                 }
-
             }
             catch (Exception ex)
             {
@@ -1090,6 +1122,50 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrió un error modificando la configuración de Margen Obligatorio. Excepción: " + ex.Message + ". \", {type: \"error\"});", true);
+            }
+        }
+
+        protected void lbtnEstadoPendienteRefacturar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.EstadoPendienteFacturar = this.DropListEstadoPendienteRefacturar.SelectedValue;
+                int i = configuracion.ModificarEstadoPendienteFacturar();
+                if (i > 0) 
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de estado inicial pedidos.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Estado inicial pedidos modificado con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Estado inicial pedidos!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
+            }
+        }
+
+        protected void lbtnActualizarCompuestos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.ActualizaCompuestos = this.DropListActualizarCompuestos.SelectedValue;
+                int i = configuracion.ModificarActualizaCompuestos();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de .");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Actualizar compuestos modificado con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Actualizar compuestos!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
             }
         }
     }

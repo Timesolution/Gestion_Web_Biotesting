@@ -97,7 +97,6 @@
                                         <span class="input-group-btn">
                                             <asp:LinkButton ID="lbBuscarArticulos" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscarArticulos_Click">
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
-                                            <%--<button class="btn btn-primary" type="button">Buscar!</button>--%>
                                         </span>
                                     </td>
 
@@ -109,16 +108,8 @@
 
                     </div>
                     <div class="widget widget-table">
+
                         <table class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="width: 20%; text-align: left">Codigo</th>
-                                    <th style="width: 40%; text-align: left">Descripcion</th>
-                                    <th style="width: 15%; text-align: left">Moneda</th>
-                                    <th style="width: 15%; text-align: left">P.Venta</th>
-                                    <th class="td-actions" style="width: 10%"></th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 <asp:PlaceHolder ID="phArticulos" runat="server"></asp:PlaceHolder>
                             </tbody>
@@ -127,85 +118,10 @@
                 </div>
             </div>
         </div>
-
-
-
-        <%--                    </div>
-                </div>
-            </div>
-        </div>--%>
-
-        <%--        <div class="container">
-            <div class="col-md-12 col-xs-12 ">
-                <div class="widget widget-table">--%>
-
-        <%--                    <div class="widget-header">
-                        <i class="icon-wrench"></i>
-                        <h3>Actualizar Stock
-
-                        </h3>
-                    </div>--%>
-        <%--<div class="widget-content">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <label class="col-md-4">Codigo</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtCodigo" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Sucursal</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtSucursal" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Articulo</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtArticulo" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Stock Actual</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtStockActual" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Agregar</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtAgregarStock" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <asp:Button ID="btn_Agregar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btn_Agregar_Click"/>
-                                </div>
-                            </div>--%>
-        <%--<div class="form-group">
-                                <label class="col-md-4">Recibo</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtRecibo" runat="server" class="form-control"></asp:TextBox>
-                                </div>
-                            </div>--%>
-        <%--                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>--%>
-
         <br />
         <div class="row">
         </div>
 
-
-        <%--</ContentTemplate>
-                                <Triggers>
-                      
-                                </Triggers>
-                            </asp:UpdatePanel>--%>
-    </div>
     </form>
 
     <script>
@@ -224,8 +140,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44 || key == 45) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

@@ -391,9 +391,11 @@
     <Content Include="Formularios\Cobros\ABMCobros.aspx" />
     <Content Include="Formularios\Facturas\ABMCotizaciones.aspx" />
     <Content Include="Formularios\Facturas\ABMCotizaciones2.aspx" />
+    <Content Include="Formularios\Facturas\ABMFacturasImagenes.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
+    <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
     <Content Include="Formularios\Facturas\FacturasSucursalesF.aspx" />
     <Content Include="Formularios\Facturas\GuiaDespachoF.aspx" />
@@ -543,6 +545,7 @@
     <Content Include="images\Empresa_2\LOGO.JPG" />
     <Content Include="images\Empresa_3\LOGO.JPG" />
     <Content Include="images\LOGO.JPG" />
+    <Content Include="images\no_picture.jpg" />
     <Content Include="images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="images\ui-bg_diagonals-thick_20_666666_40x40.png" />
     <Content Include="images\ui-bg_flat_10_000000_40x100.png" />
@@ -1396,6 +1399,13 @@
     <Compile Include="Formularios\Facturas\ABMCotizaciones2.aspx.designer.cs">
       <DependentUpon>ABMCotizaciones2.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasImagenes.aspx.cs">
+      <DependentUpon>ABMFacturasImagenes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasImagenes.aspx.designer.cs">
+      <DependentUpon>ABMFacturasImagenes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasLargo.aspx.cs">
       <DependentUpon>ABMFacturasLargo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1409,6 +1419,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasRapido.aspx.designer.cs">
       <DependentUpon>ABMFacturasRapido.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CuadroImagen.ascx.cs">
+      <DependentUpon>CuadroImagen.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CuadroImagen.ascx.designer.cs">
+      <DependentUpon>CuadroImagen.ascx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\dsRetenciones.Designer.cs">
       <AutoGen>True</AutoGen>

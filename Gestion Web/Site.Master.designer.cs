@@ -58,6 +58,15 @@ namespace Gestion_Web {
         protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesion;
         
         /// <summary>
+        /// phMenuCompleto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phMenuCompleto;
+        
+        /// <summary>
         /// phMenu control.
         /// </summary>
         /// <remarks>
@@ -101,6 +110,15 @@ namespace Gestion_Web {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phCombustible;
+        
+        /// <summary>
+        /// phImagenes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phImagenes;
         
         /// <summary>
         /// phRentabilidad control.

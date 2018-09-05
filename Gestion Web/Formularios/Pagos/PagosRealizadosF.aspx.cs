@@ -50,8 +50,7 @@ namespace Gestion_Web.Formularios.Pagos
                 this.idEmpresa = Convert.ToInt32(Request.QueryString["e"]);
                 this.idSucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.puntoVenta = Convert.ToInt32(Request.QueryString["pv"]);
-                this.formaPago = Convert.ToInt32(Request.QueryString["fp"]);//TODO r new querystring
-                //this.idTipo = Convert.ToInt32(Request.QueryString["t"]);
+                this.formaPago = Convert.ToInt32(Request.QueryString["fp"]);
                 this.fechaD = Request.QueryString["fd"];
                 this.fechaH = Request.QueryString["fh"];
 
@@ -66,7 +65,7 @@ namespace Gestion_Web.Formularios.Pagos
                         this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         this.idProveedor = -1;
-                        this.formaPago = 0;//TODO r new
+                        this.formaPago = 0;
                         this.DropListEmpresa.SelectedIndex = 0;
                         //this.puntoVenta = this.contCobranza.obtenerPrimerPuntoVenta(idSucursal, idEmpresa);
                         //this.puntoVenta = 1;
@@ -79,7 +78,7 @@ namespace Gestion_Web.Formularios.Pagos
                     this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
                     this.ListPuntoVenta.SelectedValue = this.puntoVenta.ToString();
-                    this.DropListFormaPago.SelectedValue = this.formaPago.ToString(); //TODO r new
+                    this.DropListFormaPago.SelectedValue = this.formaPago.ToString(); 
                     //this.DropListTipo.SelectedValue = this.idTipo.ToString();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
@@ -318,7 +317,7 @@ namespace Gestion_Web.Formularios.Pagos
         {
             try
             {
-                Response.Redirect("PagosRealizadosF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + ListProveedor.SelectedValue + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + this.ListPuntoVenta.SelectedValue + "&fp=" + this.DropListFormaPago.SelectedValue);//TODO r new
+                Response.Redirect("PagosRealizadosF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + ListProveedor.SelectedValue + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + this.ListPuntoVenta.SelectedValue + "&fp=" + this.DropListFormaPago.SelectedValue);
 
             }
             catch (Exception ex)
