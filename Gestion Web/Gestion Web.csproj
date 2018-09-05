@@ -429,6 +429,7 @@
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx" />
     <Content Include="Formularios\Pagos\ImpresionPago.aspx" />
     <Content Include="Formularios\Pagos\PagosRealizadosF.aspx" />
     <Content Include="Formularios\Pagos\ReportesR.Aspx" />
@@ -1607,6 +1608,13 @@
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.designer.cs">
       <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx.cs">
+      <DependentUpon>ServicioTecnicoF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx.designer.cs">
+      <DependentUpon>ServicioTecnicoF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Pagos\dsDatosPagos.Designer.cs">
       <AutoGen>True</AutoGen>

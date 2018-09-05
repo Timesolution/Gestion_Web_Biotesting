@@ -240,8 +240,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenReparacionR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
 
-                ReportDataSource rds = new ReportDataSource("DatosOrdenReparacion", dtOrdenReparacion);
-                               
+                ReportDataSource rds = new ReportDataSource("DatosOrdenReparacion", dtOrdenReparacion);                               
 
                 ReportParameter param = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param2 = new ReportParameter("ParamDomComer", direComer);
@@ -249,7 +248,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //ReportParameter param4 = new ReportParameter("ParamNroOR", or.NumeroOrdenReparacion.Value.ToString("D8"));
                 string imagen = generarCodigo((int)or.NumeroOrdenReparacion);
                 ReportParameter param4 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
-
+                ReportParameter param5 = new ReportParameter("ParamEstadoOR", contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID((int)or.Estado).Descripcion);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -257,6 +256,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
                 this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;

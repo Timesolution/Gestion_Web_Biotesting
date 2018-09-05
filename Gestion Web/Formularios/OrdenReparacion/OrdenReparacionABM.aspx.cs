@@ -111,7 +111,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion);
+                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8"));
 
                 if (temp > 0)
                 {
@@ -122,7 +122,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if(or.CambiaProducto == "Si")
                     {
-                        string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion;
+                        string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
                         temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
 
                         if (temp < 1)
@@ -368,14 +368,16 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
-                if (temp > 0)
+                if (temp >= 0)
                 {
                     Log.EscribirSQL(1, "Info", "Orden de reparacion modificada con exito");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación modificada con exito!.", "OrdenReparacionF.aspx"));
+                    string script = " $.msgbox(\"Orden de reparación modificada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
                 }
-                else if (temp == -1)
+                else if (temp < 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando Orden de Reparación."));
+                    string script = " $.msgbox(\"Error modificando Orden de Reparación. \", {type: \"error\"});";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
                 }
             }
             catch (Exception ex)
