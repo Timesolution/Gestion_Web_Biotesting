@@ -324,14 +324,6 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     catch { }
                 }
-                //cargo el numero de remito
-                //this.obtenerNroFactura();
-
-                //todo r cargo duro los controles
-                //this.DropListClientes.SelectedValue = "7083";
-                //this.DropListVendedor.SelectedIndex = 1;
-                //this.DropListFormaPago.SelectedIndex = 1;
-
                 #endregion
 
             }
@@ -429,14 +421,14 @@ namespace Gestion_Web.Formularios.Facturas
         private void cargasInicialesModoImagen()
         {
             //dibujo los items en la tabla
-            this.cargarGruposPh();//todo r new call          
+            this.cargarGruposPh();        
         }
 
-        private void cargarGruposPh()//todo r new fun
+        private void cargarGruposPh()
         {
             try
             {
-                List<grupo> grupos = contArticulo.obtenerGruposArticulosList().Take(5).ToList();//TODO r sacar el take
+                List<grupo> grupos = contArticulo.obtenerGruposArticulosList().ToList();
                 this.phImagenCuadroGrupos.Controls.Clear();
                 foreach (var item in grupos)
                 {
@@ -467,7 +459,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarArticulosPh(int idGrupo)//todo r new fun
+        private void cargarArticulosPh(int idGrupo)
         {
             try
             {
@@ -483,7 +475,7 @@ namespace Gestion_Web.Formularios.Facturas
                 cuadroImagenVolver.Linkbutton1.Click += new EventHandler(this.ocultarArticulosGrupo);
                 placeHolder.Controls.Add(cuadroImagenVolver);
 
-                var articulos = contArticuloEntity.obtenerArticulosEntityByIdGrupo(Convert.ToInt32(idGrupo)).Take(2).ToList();//TODO r sacar el take
+                var articulos = contArticuloEntity.obtenerArticulosEntityByIdGrupo(Convert.ToInt32(idGrupo)).ToList();
                 foreach (var item in articulos)
                 {
                     CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
@@ -566,7 +558,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void agregarArticuloAventa(object sender, EventArgs e)//todo r agregarArticuloAventa
+        private void agregarArticuloAventa(object sender, EventArgs e)
         {
             try
             {
@@ -614,10 +606,10 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 this.cargarTablaArticulosModoImagenes();
 
-                if (Session["Factura"] != null)
-                {
-                    this.cargarTablaArticulosModoImagenes();
-                }
+                //if (Session["Factura"] != null)
+                //{
+                //    this.cargarTablaArticulosModoImagenes();
+                //}
 
             }
             catch (Exception ex)
@@ -656,7 +648,7 @@ namespace Gestion_Web.Formularios.Facturas
             this.phTotalModoImagen.Controls.Add(tr);
         }
 
-        protected void btnFacturarImagen_Click(object sender, EventArgs e)//TODO r btnFacturarImagen_Click 
+        protected void btnFacturarImagen_Click(object sender, EventArgs e) 
         {
             this.generarFactura(0);
         }
@@ -3633,7 +3625,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //agrego el porcentaje de descuento
                     fact.neto10 = Convert.ToDecimal(this.txtPorcDescuento.Text);
-                    fact.formaPAgo = controlador.obtenerFormaPagoFP(this.DropListFormaPago.SelectedItem.Text);//TODO r verificar q el cliente por defecto en la sucursal tenga contado
+                    fact.formaPAgo = controlador.obtenerFormaPagoFP(this.DropListFormaPago.SelectedItem.Text);
                     fact.listaP.id = Convert.ToInt32(this.DropListLista.SelectedValue);
                     string[] lbl = this.labelNroFactura.Text.Split('°');
                     fact.tipo = this.cargarTiposFactura(lbl[0]);
@@ -4281,7 +4273,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarItemsTablaModoImagenes(ItemFactura item)//todo r new fun cargarArtPh
+        private void cargarItemsTablaModoImagenes(ItemFactura item)
         {
             try
             {
@@ -4347,7 +4339,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void restarCantidadArticulo(object sender, EventArgs e)//todo r restarCantidadArticulo
+        private void restarCantidadArticulo(object sender, EventArgs e)
         {
             try
             {

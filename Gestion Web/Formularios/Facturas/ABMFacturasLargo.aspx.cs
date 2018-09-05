@@ -3482,7 +3482,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
                     if (i > 0)
                     {
-                        #region func post generar
+                        #region func post generarl
                         if (this.accion == 4)
                         {
                             controladorFactEntity contFcEnt = new controladorFactEntity();
@@ -4421,7 +4421,6 @@ namespace Gestion_Web.Formularios.Facturas
                                 stockDestino = StockDestino.stock1.Value;
                             }
                         }
-                        
                     }
                     catch { }  
 
@@ -4456,6 +4455,9 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        
+
         private void totalItem()
         {
             try

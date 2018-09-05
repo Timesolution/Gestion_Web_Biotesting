@@ -179,7 +179,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.txtUltModificacion.Text = UltAct.ToString("dd/MM/yyyy HH:mm");
                     //this.txtModificado.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
                     this.cargarProveedorArticulos(this.id);
-                    this.cargarArticulosCompuestos(this.id);
+                    this.cargarArticulosCompuestos(this.id);    //usar esta funcion para cambiar el precio al art padre
                     this.cargarDescuentos();
                     this.cargarMedidasVentaArticulo(this.id);
                     this.cargarDatosCombustibles();
@@ -822,8 +822,6 @@ namespace Gestion_Web.Formularios.Articulos
 
             if (this.accion == 2)
                 this.modificarArticulo(0);
-            
-           
         }
 
         protected void btnAgregarSig_Click(object sender, EventArgs e)
@@ -1002,7 +1000,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.guardarDatosPresentaciones(art.id);
                 this.guardarHistorialCosto(art);
 
-                int i = this.controlador.modificarArticulo(art,cod);
+                int i = this.controlador.modificarArticulo(art,cod,1);//funcion modificar articulo
                 
                 if (i == 1)
                 {
@@ -1058,8 +1056,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
  
         }
-
-       
         
         private void DuplicarArticulo()
         {
@@ -2114,7 +2110,6 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarArticulosCompuestosPH(ac);
                     costoTotal += Decimal.Round((ac.articulo.costo * ac.cantidad), 2);
                 }
-
                 this.txtCostoTotalComposicion.Text = costoTotal.ToString("0.00");
             }
             catch (Exception ex)
@@ -2122,6 +2117,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando Grupos. " + ex.Message));
             }
         }
+        
         private void cargarArticulosCompuestosPH(ArticulosCompuestos ac)
         {
             try
