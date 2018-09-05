@@ -76,6 +76,15 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnEnviar;
         
         /// <summary>
+        /// lbtnOrdenReparacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnOrdenReparacion;
+        
+        /// <summary>
         /// lbtnReimprimirFiscal control.
         /// </summary>
         /// <remarks>
@@ -137,6 +146,24 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnForm12;
+        
+        /// <summary>
+        /// phNotaDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phNotaDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// lbtnDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnDebitoCreditoDiferenciaCambio;
         
         /// <summary>
         /// lblParametros control.
@@ -632,6 +659,78 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEnviarMail;
+        
+        /// <summary>
+        /// UpdatePanelNotaDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelNotaDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// lblIdFacturaNotaDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblIdFacturaNotaDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// txtNuevoCambioNotaDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNuevoCambioNotaDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// lblMensajeDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensajeDiferenciaCambio;
+        
+        /// <summary>
+        /// lblDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDiferenciaCambio;
+        
+        /// <summary>
+        /// btnCalcularDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCalcularDiferenciaCambio;
+        
+        /// <summary>
+        /// btnGenerarNotaDebitoCreditoDiferenciaCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGenerarNotaDebitoCreditoDiferenciaCambio;
         
         /// <summary>
         /// UpdatePanel3 control.

@@ -35,6 +35,9 @@
                                                         <asp:LinkButton ID="lbtnImprimirDetalle" OnClick="lbtnImprimirDetalle_Click" runat="server">Reporte impagas detallado</asp:LinkButton>
                                                     </li>
                                                     <li>
+                                                        <asp:LinkButton ID="lbtnImprimirDetalleNotaDebito" OnClick="lbtnImprimirDetalleNotaDebito_Click" runat="server">Reporte Notas de Debito impagas detallado</asp:LinkButton>
+                                                    </li>
+                                                    <li>
                                                         <asp:LinkButton ID="lbtnExportar" OnClick="lbtnExportar_Click" runat="server">Exportar reporte detallado</asp:LinkButton>
                                                     </li>
                                                     <li>

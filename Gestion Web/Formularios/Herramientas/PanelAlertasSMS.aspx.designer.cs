@@ -238,6 +238,42 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.TextBox txtEnvioCobro;
         
         /// <summary>
+        /// chkAlertaEnvioFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkAlertaEnvioFC;
+        
+        /// <summary>
+        /// txtEnvioMailFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEnvioMailFC;
+        
+        /// <summary>
+        /// chAlertaProductoReparado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chAlertaProductoReparado;
+        
+        /// <summary>
+        /// txtEnvioProductoReparado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEnvioProductoReparado;
+        
+        /// <summary>
         /// btnGuardar control.
         /// </summary>
         /// <remarks>

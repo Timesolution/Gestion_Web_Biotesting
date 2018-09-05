@@ -625,6 +625,10 @@ namespace Gestion_Web.Formularios.Facturas {
             
             private global::System.Data.DataColumn columnPedido;
             
+            private global::System.Data.DataColumn columnUbicacion;
+            
+            private global::System.Data.DataColumn columnStock;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosPedidosNetoDataTable() {
@@ -692,6 +696,22 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn UbicacionColumn {
+                get {
+                    return this.columnUbicacion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn StockColumn {
+                get {
+                    return this.columnStock;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -727,13 +747,15 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DatosPedidosNetoRow AddDatosPedidosNetoRow(string Codigo, string Descripcion, string Cantidad, string Pedido) {
+            public DatosPedidosNetoRow AddDatosPedidosNetoRow(string Codigo, string Descripcion, string Cantidad, string Pedido, string Ubicacion, string Stock) {
                 DatosPedidosNetoRow rowDatosPedidosNetoRow = ((DatosPedidosNetoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Codigo,
                         Descripcion,
                         Cantidad,
-                        Pedido};
+                        Pedido,
+                        Ubicacion,
+                        Stock};
                 rowDatosPedidosNetoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosPedidosNetoRow);
                 return rowDatosPedidosNetoRow;
@@ -760,6 +782,8 @@ namespace Gestion_Web.Formularios.Facturas {
                 this.columnDescripcion = base.Columns["Descripcion"];
                 this.columnCantidad = base.Columns["Cantidad"];
                 this.columnPedido = base.Columns["Pedido"];
+                this.columnUbicacion = base.Columns["Ubicacion"];
+                this.columnStock = base.Columns["Stock"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -773,6 +797,10 @@ namespace Gestion_Web.Formularios.Facturas {
                 base.Columns.Add(this.columnCantidad);
                 this.columnPedido = new global::System.Data.DataColumn("Pedido", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPedido);
+                this.columnUbicacion = new global::System.Data.DataColumn("Ubicacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUbicacion);
+                this.columnStock = new global::System.Data.DataColumn("Stock", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnStock);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1134,6 +1162,38 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Ubicacion {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosPedidosNeto.UbicacionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Ubicacion\' in table \'DatosPedidosNeto\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosPedidosNeto.UbicacionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Stock {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosPedidosNeto.StockColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Stock\' in table \'DatosPedidosNeto\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosPedidosNeto.StockColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsCodigoNull() {
                 return this.IsNull(this.tableDatosPedidosNeto.CodigoColumn);
             }
@@ -1178,6 +1238,30 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetPedidoNull() {
                 this[this.tableDatosPedidosNeto.PedidoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsUbicacionNull() {
+                return this.IsNull(this.tableDatosPedidosNeto.UbicacionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetUbicacionNull() {
+                this[this.tableDatosPedidosNeto.UbicacionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsStockNull() {
+                return this.IsNull(this.tableDatosPedidosNeto.StockColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetStockNull() {
+                this[this.tableDatosPedidosNeto.StockColumn] = global::System.Convert.DBNull;
             }
         }
         

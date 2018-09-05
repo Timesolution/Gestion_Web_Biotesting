@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -391,9 +391,11 @@
     <Content Include="Formularios\Cobros\ABMCobros.aspx" />
     <Content Include="Formularios\Facturas\ABMCotizaciones.aspx" />
     <Content Include="Formularios\Facturas\ABMCotizaciones2.aspx" />
+    <Content Include="Formularios\Facturas\ABMFacturasImagenes.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
+    <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
     <Content Include="Formularios\Facturas\FacturasSucursalesF.aspx" />
     <Content Include="Formularios\Facturas\GuiaDespachoF.aspx" />
@@ -412,6 +414,7 @@
     <Content Include="Formularios\Formas\FormasPagoF.aspx" />
     <Content Include="Formularios\Herramientas\ABMAsuntosSMS.aspx" />
     <Content Include="Formularios\Herramientas\ExportarTapiceF.aspx" />
+    <Content Include="Formularios\Herramientas\InformeBTBF.aspx" />
     <Content Include="Formularios\Herramientas\PanelAlertasSMS.aspx" />
     <Content Include="Formularios\Herramientas\AsuntosSMS.aspx" />
     <Content Include="Formularios\Herramientas\Soporte.aspx" />
@@ -423,6 +426,12 @@
     <Content Include="Formularios\Herramientas\ActPadronF.aspx" />
     <Content Include="Formularios\Herramientas\NumeracionDocumentos.aspx" />
     <Content Include="Formularios\Herramientas\PanelControl.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
+    <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
+    <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
+    <Content Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx" />
+    <Content Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx" />
     <Content Include="Formularios\Pagos\ImpresionPago.aspx" />
     <Content Include="Formularios\Pagos\PagosRealizadosF.aspx" />
     <Content Include="Formularios\Pagos\ReportesR.Aspx" />
@@ -466,12 +475,14 @@
     <Content Include="Formularios\Clientes\ProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\RentabilidadFCosto.aspx" />
     <Content Include="Formularios\Reportes\ReportesCobros.aspx" />
+    <Content Include="Formularios\Reportes\ReportesCompras.aspx" />
     <Content Include="Formularios\Reportes\ReportesTrazabilidad.aspx" />
     <Content Include="Formularios\Reportes\ReportesProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\ReportesArticulos.aspx" />
     <Content Include="Formularios\Reportes\ReportesVentas.aspx" />
     <Content Include="Formularios\Reportes\StockF.aspx" />
     <Content Include="Formularios\Reportes\VentasUnidadesF.aspx" />
+    <Content Include="Formularios\Seguridad\UsuarioStoreABM.aspx" />
     <Content Include="Formularios\Stores\StoresABM.aspx" />
     <Content Include="Formularios\Stores\StoresBanners.aspx" />
     <Content Include="Formularios\Stores\StoresF.aspx" />
@@ -535,6 +546,7 @@
     <Content Include="images\Empresa_2\LOGO.JPG" />
     <Content Include="images\Empresa_3\LOGO.JPG" />
     <Content Include="images\LOGO.JPG" />
+    <Content Include="images\no_picture.jpg" />
     <Content Include="images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="images\ui-bg_diagonals-thick_20_666666_40x40.png" />
     <Content Include="images\ui-bg_flat_10_000000_40x100.png" />
@@ -704,6 +716,17 @@
     <Content Include="Formularios\Pagos\dsDatosPagos.xsc">
       <DependentUpon>dsDatosPagos.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsc">
+      <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsOrdenReparacion.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\OrdenReparacion\dsOrdenReparacion.xss">
+      <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Pagos\dsDatosPagos.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDatosPagos.Designer.cs</LastGenOutput>
@@ -711,6 +734,17 @@
     </None>
     <Content Include="Formularios\Pagos\dsDatosPagos.xss">
       <DependentUpon>dsDatosPagos.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\Reportes\dsReportesCompras.xsc">
+      <DependentUpon>dsReportesCompras.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Reportes\dsReportesCompras.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReportesCompras.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Reportes\dsReportesCompras.xss">
+      <DependentUpon>dsReportesCompras.xsd</DependentUpon>
     </Content>
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
@@ -1377,6 +1411,13 @@
     <Compile Include="Formularios\Facturas\ABMCotizaciones2.aspx.designer.cs">
       <DependentUpon>ABMCotizaciones2.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasImagenes.aspx.cs">
+      <DependentUpon>ABMFacturasImagenes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasImagenes.aspx.designer.cs">
+      <DependentUpon>ABMFacturasImagenes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasLargo.aspx.cs">
       <DependentUpon>ABMFacturasLargo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1390,6 +1431,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasRapido.aspx.designer.cs">
       <DependentUpon>ABMFacturasRapido.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CuadroImagen.ascx.cs">
+      <DependentUpon>CuadroImagen.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CuadroImagen.ascx.designer.cs">
+      <DependentUpon>CuadroImagen.ascx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\dsRetenciones.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1487,6 +1535,13 @@
     <Compile Include="Formularios\Herramientas\ExportarTapiceF.aspx.designer.cs">
       <DependentUpon>ExportarTapiceF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Herramientas\InformeBTBF.aspx.cs">
+      <DependentUpon>InformeBTBF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\InformeBTBF.aspx.designer.cs">
+      <DependentUpon>InformeBTBF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Herramientas\PanelAlertasSMS.aspx.cs">
       <DependentUpon>PanelAlertasSMS.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1542,6 +1597,53 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\RegimenF.aspx.designer.cs">
       <DependentUpon>RegimenF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\dsOrdenReparacion.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx.cs">
+      <DependentUpon>ImpresionOrdenReparacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx.designer.cs">
+      <DependentUpon>ImpresionOrdenReparacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx.cs">
+      <DependentUpon>OrdenReparacionABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx.designer.cs">
+      <DependentUpon>OrdenReparacionABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx.cs">
+      <DependentUpon>OrdenReparacionF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx.designer.cs">
+      <DependentUpon>OrdenReparacionF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx.cs">
+      <DependentUpon>OrdenReparacionObservacionesABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\OrdenReparacionObservacionesABM.aspx.designer.cs">
+      <DependentUpon>OrdenReparacionObservacionesABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.cs">
+      <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoABM.aspx.designer.cs">
+      <DependentUpon>ServicioTecnicoABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx.cs">
+      <DependentUpon>ServicioTecnicoF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\OrdenReparacion\ServicioTecnicoF.aspx.designer.cs">
+      <DependentUpon>ServicioTecnicoF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Pagos\dsDatosPagos.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1632,6 +1734,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportes.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\dsReportesCompras.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReportesCompras.xsd</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\dsVentas.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2211,6 +2318,13 @@
     <Compile Include="Formularios\Reportes\ReportesCobros.aspx.designer.cs">
       <DependentUpon>ReportesCobros.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Reportes\ReportesCompras.aspx.cs">
+      <DependentUpon>ReportesCompras.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReportesCompras.aspx.designer.cs">
+      <DependentUpon>ReportesCompras.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Reportes\ReportesTrazabilidad.aspx.cs">
       <DependentUpon>ReportesTrazabilidad.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2252,6 +2366,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\VentasUnidadesF.aspx.designer.cs">
       <DependentUpon>VentasUnidadesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Seguridad\UsuarioStoreABM.aspx.cs">
+      <DependentUpon>UsuarioStoreABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Seguridad\UsuarioStoreABM.aspx.designer.cs">
+      <DependentUpon>UsuarioStoreABM.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Stores\StoresABM.aspx.cs">
       <DependentUpon>StoresABM.aspx</DependentUpon>
@@ -2775,6 +2896,9 @@
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\PedidosBultos.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosConsolidado.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosGrupo.rdlc" />
@@ -2813,16 +2937,16 @@
     <EmbeddedResource Include="Formularios\Facturas\RemitoR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Report2.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionR.rdlc" />
+    <EmbeddedResource Include="Formularios\OrdenReparacion\EtiquetasOR.rdlc" />
+    <EmbeddedResource Include="Formularios\OrdenReparacion\OrdenReparacionR.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\DetallePagos.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\PagosListado.rdlc" />
     <EmbeddedResource Include="Formularios\Pagos\ReciboPagos.rdlc" />
-    <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Articulos\ReporteStock2.rdlc" />
     <EmbeddedResource Include="Formularios\Cobros\DetalleImpagas.rdlc" />
     <EmbeddedResource Include="Formularios\Personal\ReciboPagoRemuneracionR.rdlc" />
     <EmbeddedResource Include="Formularios\Promociones\PromocionesR.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\ComprasArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadRCosto.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\TrazabilidadR.rdlc" />

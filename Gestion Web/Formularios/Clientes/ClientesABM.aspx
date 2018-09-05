@@ -34,6 +34,7 @@
                                 <li class=""><a href="#Familia" id="linkFamilia" runat="server" data-toggle="tab" visible="false">Familia</a></li>
                                 <li class=""><a href="#Ganancias" id="linkGanancias" runat="server" data-toggle="tab" visible="false">Ganancias</a></li>
                                 <li class=""><a href="#OrdenesCompra" id="linkOrdenesCompra" runat="server" data-toggle="tab" visible="false">Orden de Compra</a></li>
+                                <li class=""><a href="#CodigoBTB" id="linkCodigoBTB" runat="server" data-toggle="tab" visible="false">Codigo BTB</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade active in" id="home">
@@ -1179,6 +1180,38 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane fade" id="CodigoBTB">
+                                   <%-- <asp:UpdatePanel ID="UpdatePanel17" UpdateMode="Always" runat="server">
+                                        <ContentTemplate>--%>
+                                            <div role="form" class="form-horizontal col-md-12">
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Codigo BTB</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtCodigoBTB1" runat="server" class="form-control" maxLength="5"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <asp:placeholder runat="server" ID="phCodigoBTB2" Visible="false">
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Codigo BTB</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtCodigoBTB2" runat="server" class="form-control" maxLength="5"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                </asp:placeholder>
+                                                <div class="form-group">
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="lbtnCodigoBTB" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <%--</ContentTemplate>
+                                        <Triggers>
+                                        </Triggers>
+                                    </asp:UpdatePanel>--%>
+                                </div>
+
                                 <%-- Fin Ordenes de Compra --%>
                             </div>
 

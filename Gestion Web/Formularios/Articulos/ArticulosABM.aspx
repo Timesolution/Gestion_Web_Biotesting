@@ -395,7 +395,8 @@
 
                                                             <div class="col-md-4">
                                                                 <div class="input-group">
-                                                                    <span class="input-group-addon"><asp:Literal ID="litSimboloPesos" runat="server"></asp:Literal></span>
+                                                                    <span class="input-group-addon">
+                                                                        <asp:Literal ID="litSimboloPesos" runat="server"></asp:Literal></span>
                                                                     <input id="tPrecioVentaMonedaOriginal" runat="server" class="form-control" disabled="" value="0" style="text-align: right" />
 
                                                                 </div>
@@ -933,10 +934,6 @@
                                                     <div class="widget-content">
 
                                                         <ul class="gallery-container">
-
-
-
-
 
                                                             <table class="table table-bordered table-striped" id="tbImagenes">
                                                                 <thead>
@@ -1717,7 +1714,7 @@
 
                                                     <div class="widget-content">
                                                         <table style="width: 100%">
-                                                            
+
                                                             <tr>
                                                                 <td style="width: 90%">
                                                                     <label class="col-md-3">Catalogo</label>
@@ -1759,7 +1756,7 @@
                                                                 <td style="width: 90%">
                                                                     <label class="col-md-3">Aparece en Lista</label>
                                                                     <div class="col-md-4">
-                                                                        <asp:CheckBox  ID="chkApareceLista" runat="server" Checked="true"/>
+                                                                        <asp:CheckBox ID="chkApareceLista" runat="server" Checked="true" />
                                                                     </div>
                                                                 </td>
                                                                 <td style="width: 5%">
@@ -1768,7 +1765,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                            
+
                                                         </table>
                                                     </div>
                                                     <!-- /widget-content -->
@@ -2059,8 +2056,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

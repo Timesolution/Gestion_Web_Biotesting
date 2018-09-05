@@ -137,6 +137,17 @@ namespace Gestion_Web.Formularios.Herramientas
                             this.chkAlertaCobro.Checked = true;
                             this.txtEnvioCobro.Attributes.Remove("disabled");
                         }
+                        if (configs.AlertaFCMail.Value == 1)
+                        {
+                            this.chkAlertaEnvioFC.Checked = true;
+                            this.txtEnvioMailFC.Attributes.Remove("disabled");
+                        }
+                        if (configs.AlertaProductoReparado.Value == 1)
+                        {
+                            this.chAlertaProductoReparado.Checked = true;
+                            this.txtEnvioProductoReparado.Attributes.Remove("disabled");
+                        }
+
                         this.txtEnvioFact.Text = configs.MensajeFC;
                         this.txtEnvioNC.Text = configs.MensajeNC;
                         this.txtEnvioPRP.Text = configs.MensajePRP;
@@ -146,6 +157,8 @@ namespace Gestion_Web.Formularios.Herramientas
                         this.txtEnvioSaldoMax.Text = configs.MensajeSaldoMax;
                         this.txtEnvioCumple.Text = configs.MensajeCumpleanios;
                         this.txtEnvioCobro.Text = configs.MensajeCobro;
+                        this.txtEnvioMailFC.Text = configs.MensajeFCMail;
+                        this.txtEnvioProductoReparado.Text = configs.MensajeProductoReparado;
 
                         this.PanelConfig.Visible = true;
                         this.PanelCondiciones.Visible = false;
@@ -236,6 +249,11 @@ namespace Gestion_Web.Formularios.Herramientas
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@COBRO'. \", {type: \"error\"});", true);
                     txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO ";
                 }
+                else if (!txtEnvioMailFC.Text.Contains("@@FACTURA"))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@FACTURA'. \", {type: \"error\"});", true);
+                    txtEnvioMailFC.Text = "'Ingrese su texto' @@FACTURA ";
+                }
                 else
                 {
                     Configuraciones_SMS config = this.contConfig.ObtenerConfiguracionesAlertasSMS();
@@ -249,6 +267,8 @@ namespace Gestion_Web.Formularios.Herramientas
                     config.AlertaSaldoMax = Convert.ToInt32(this.chkAlertaSaldoMax.Checked);
                     config.AlertaCumpleanios = Convert.ToInt32(this.chkAlertaCumple.Checked);
                     config.AlertaCobro = Convert.ToInt32(this.chkAlertaCobro.Checked);
+                    config.AlertaFCMail = Convert.ToInt32(this.chkAlertaEnvioFC.Checked);
+                    config.AlertaProductoReparado = Convert.ToInt32(this.chAlertaProductoReparado.Checked);
 
                     config.MensajeFC = this.txtEnvioFact.Text;
                     config.MensajeFcVencida = this.txtEnvioFactVencida.Text;
@@ -259,6 +279,8 @@ namespace Gestion_Web.Formularios.Herramientas
                     config.MensajeSaldoMax = this.txtEnvioSaldoMax.Text;
                     config.MensajeCumpleanios = this.txtEnvioCumple.Text;
                     config.MensajeCobro = this.txtEnvioCobro.Text;
+                    config.MensajeFCMail = this.txtEnvioMailFC.Text;
+                    config.MensajeProductoReparado = this.txtEnvioProductoReparado.Text;
 
                     int i = this.contConfig.guardarConfiguracionesSMS(config);
                     if (i > 0)

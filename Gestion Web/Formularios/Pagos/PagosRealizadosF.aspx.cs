@@ -28,6 +28,7 @@ namespace Gestion_Web.Formularios.Pagos
         controladorDocumentos contDocumentos = new controladorDocumentos();
         controladorUsuario contUser = new controladorUsuario();
         controladorPagos contPagos = new controladorPagos();
+        ControladorBanco contBanco = new ControladorBanco();
         Cliente cliente = new Cliente();
         CuentaCorriente cuenta = new CuentaCorriente();
         Mensajes mje = new Mensajes();
@@ -38,6 +39,7 @@ namespace Gestion_Web.Formularios.Pagos
         private int idEmpresa;
         private int idSucursal;
         private int puntoVenta;
+        private int formaPago;
         //private int idTipo;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -48,7 +50,7 @@ namespace Gestion_Web.Formularios.Pagos
                 this.idEmpresa = Convert.ToInt32(Request.QueryString["e"]);
                 this.idSucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.puntoVenta = Convert.ToInt32(Request.QueryString["pv"]);
-                //this.idTipo = Convert.ToInt32(Request.QueryString["t"]);
+                this.formaPago = Convert.ToInt32(Request.QueryString["fp"]);
                 this.fechaD = Request.QueryString["fd"];
                 this.fechaH = Request.QueryString["fh"];
 
@@ -63,6 +65,8 @@ namespace Gestion_Web.Formularios.Pagos
                         this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         this.idProveedor = -1;
+                        this.formaPago = 0;
+                        this.DropListEmpresa.SelectedIndex = 0;
                         //this.puntoVenta = this.contCobranza.obtenerPrimerPuntoVenta(idSucursal, idEmpresa);
                         //this.puntoVenta = 1;
                     }
@@ -74,6 +78,7 @@ namespace Gestion_Web.Formularios.Pagos
                     this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
                     this.ListPuntoVenta.SelectedValue = this.puntoVenta.ToString();
+                    this.DropListFormaPago.SelectedValue = this.formaPago.ToString(); 
                     //this.DropListTipo.SelectedValue = this.idTipo.ToString();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
@@ -150,6 +155,7 @@ namespace Gestion_Web.Formularios.Pagos
                 DataRow dr = dt.NewRow();
                 dr["Razon Social"] = "Seleccione...";
                 dr["Id"] = -1;
+                dr["Cuit"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
 
@@ -157,8 +163,13 @@ namespace Gestion_Web.Formularios.Pagos
                 this.DropListEmpresa.DataValueField = "Id";
                 this.DropListEmpresa.DataTextField = "Razon Social";
 
-                this.DropListEmpresa.DataBind();
+                this.dropListEmpresaModal.DataSource = dt;
+                this.dropListEmpresaModal.DataValueField = "Cuit";
+                this.dropListEmpresaModal.DataTextField = "Razon Social";
 
+                this.DropListEmpresa.DataBind();
+                this.dropListEmpresaModal.DataBind();
+                
             }
             catch (Exception ex)
             {
@@ -179,15 +190,11 @@ namespace Gestion_Web.Formularios.Pagos
                 dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
-
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();
-
-
-
 
             }
             catch (Exception ex)
@@ -300,6 +307,8 @@ namespace Gestion_Web.Formularios.Pagos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
+
+
         #endregion
 
         #region busquedas
@@ -308,7 +317,7 @@ namespace Gestion_Web.Formularios.Pagos
         {
             try
             {
-                Response.Redirect("PagosRealizadosF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + ListProveedor.SelectedValue + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + this.ListPuntoVenta.SelectedValue);
+                Response.Redirect("PagosRealizadosF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + ListProveedor.SelectedValue + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + this.ListPuntoVenta.SelectedValue + "&fp=" + this.DropListFormaPago.SelectedValue);
 
             }
             catch (Exception ex)
@@ -323,7 +332,6 @@ namespace Gestion_Web.Formularios.Pagos
             {
                 controladorPagos contPagos = new controladorPagos();
                 
-                
                 if (idProveedor == 0 && idEmpresa == 0 && idSucursal == 0 )
                 {
                     this.idProveedor = Convert.ToInt32(ListProveedor.SelectedValue);
@@ -334,14 +342,16 @@ namespace Gestion_Web.Formularios.Pagos
                     this.fechaD = this.txtFechaDesde.Text;
                     this.fechaH = this.txtFechaHasta.Text;
 
-
                     var pagos = contPagos.buscarPagos(Convert.ToDateTime(fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(fechaH, new CultureInfo("es-AR")), idProveedor, idEmpresa, idSucursal, puntoVenta);
                     phPagosRealizados.Controls.Clear();
                     decimal saldo = 0;
                     foreach (Gestion_Api.Entitys.PagosCompra p in pagos)
                     {
                         saldo += Convert.ToDecimal(p.Total);
-                        this.cargarEnPh(p);
+                        if (verificarFormaPago(p))
+                        {
+                            this.cargarEnPh(p);
+                        }
                     }
                     this.labelSaldo.Text = "$ " + saldo.ToString("N", CultureInfo.DefaultThreadCurrentUICulture);
                     //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("C");
@@ -356,7 +366,10 @@ namespace Gestion_Web.Formularios.Pagos
                     foreach (Gestion_Api.Entitys.PagosCompra p in pagos)
                     {
                         saldo += Convert.ToDecimal(p.Total);
-                        this.cargarEnPh(p);
+                        if (verificarFormaPago(p))
+                        {
+                            this.cargarEnPh(p);
+                        }
                     }
                     this.labelSaldo.Text = "$ " + saldo.ToString("N", CultureInfo.DefaultThreadCurrentUICulture);
                     //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("C");
@@ -366,6 +379,31 @@ namespace Gestion_Web.Formularios.Pagos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando pagos. " + ex.Message));
+            }
+        }
+
+        private bool verificarFormaPago(Gestion_Api.Entitys.PagosCompra p)
+        {
+            try
+            {
+                if (this.formaPago > 0)
+                {
+                    var pago = this.contPagos.obtenerPagoById(p.Id);
+                    foreach (var item in pago.Pagos_Compras)
+                    {
+                        if (item.TipoPago == formaPago)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return true;
+                throw;
             }
         }
 
@@ -735,6 +773,11 @@ namespace Gestion_Web.Formularios.Pagos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error enviando Recibo de Pago por mail. Excepción: " + Ex.Message));
             }
         }
+
+        protected void lbtnImputarDebitarDeCuentaCorriente_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         #region Funciones Auxiliares
@@ -808,5 +851,160 @@ namespace Gestion_Web.Formularios.Pagos
         }
         #endregion
 
+        protected void dropListEmpresaModal_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.dropListEmpresaModal.SelectedValue != "-1")
+                {
+                    this.cargarCuentas(this.dropListEmpresaModal.SelectedValue);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        private void cargarCuentas(string cuit)
+        {
+            try
+            {
+                this.dropListCuentaBancoModal.Items.Clear();
+                cuit = cuit.Replace("-", "");
+                List<CuentasBancaria> cuentas = this.contBanco.obtenerCuentasBancariasByCuit(cuit);
+
+                foreach (var cta in cuentas)
+                {
+                    string text = cta.Banco1.entidad + " - " + cta.Numero;
+                    this.dropListCuentaBancoModal.Items.Add(new ListItem(text, cta.Id.ToString()));
+                }
+
+                this.dropListCuentaBancoModal.Items.Insert(0, new ListItem("Seleccione...", "0"));
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnImputarTarjetaBanco_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.formaPago != 5)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Debe filtrar forma de pago por tarjeta. \");", true);
+                    return;
+                }
+                if (dropListCuentaBancoModal.SelectedValue == "0" || dropListEmpresaModal.SelectedValue == "-1" || string.IsNullOrEmpty(dropListCuentaBancoModal.SelectedValue))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Debe seleccionar una empresa y cuenta de banco. \");", true);
+                    return;
+                }
+                string idtildado = "";
+                foreach (Control C in phPagosRealizados.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                }
+                if (string.IsNullOrEmpty(idtildado))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Debe seleccionar al menos un pago a imputar. \");", true);
+                    return;
+                }
+
+                imputarTarjetaBanco(idtildado);
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Se ha producido un error en pagosRealizadosF. " + Ex.Message + "\");", true);
+                throw;
+            }
+        }
+
+        private void imputarTarjetaBanco(string pagos)
+        {
+            try
+            {
+                pagos = pagos.Substring(0,(pagos.Length-1));
+                var listPagos = pagos.Split(';');
+                decimal total = 0;
+
+                foreach (var item in listPagos)
+                {
+                    var p = this.contPagos.obtenerPagoById(Convert.ToInt32(item));
+
+                    if (p != null)
+                    {
+                        foreach (var tipoPago in p.Pagos_Compras)
+                        {
+                            if (tipoPago.TipoPago != 5)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Un pago seleccionado no fue hecho con tarjeta. \");", true);
+                                return;
+                            }
+                        }
+                        if (this.contPagos.verificarPagoImputacion((long)p.Id))//verifico si ese pago ya existe en la tabla
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Este pago ya fue imputado. \");", true);
+                            return;
+                        }
+
+                        total += (decimal)p.Total;
+                    }
+                }
+
+                CuentasBancarias_Movimientos mov = new CuentasBancarias_Movimientos();
+                mov.Fecha = DateTime.Now;
+                mov.Monto = total;
+                mov.IdCuenta = Convert.ToInt32(this.dropListCuentaBancoModal.SelectedValue);
+                mov.IdConcepto = 0;
+                mov.Observaciones = "Pago resumen Tarjeta Crédito";
+
+                var concepto = this.contBanco.obtenerConceptosBancariosByDescripcion("Debito Tarjeta Credito");
+
+                if (concepto != null)
+                {
+                    mov.IdConcepto = concepto.Id;
+                }
+
+                int ok = this.contBanco.agregarMovimientoBancos(mov);
+                if (ok > 0)
+                {
+                    //Agrega en tabla Pagos_ImputadosBancos
+                    int okImputar = contPagos.agregarPagos_imputadosBancos(pagos,mov);
+                    if (okImputar > 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Agregado con exito!. \", {type: \"info\"});location.href = 'PagosRealizadosF.aspx';", true);
+                        //ClientScript.RegisterClientScriptBlock(, "alert", mje.mensajeBoxInfo("Agregado con exito!.", "PagosRealizadosF.aspx"));
+                    }
+                    else
+                    {
+                        int a = this.contBanco.anularMovimientoBancos(mov);
+                        if (a < 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Error al agregar imputacion. \");", true);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"Error al agregar imputacion. Se anulo el movimiento del banco. \");", true);
+                        }
+                    }
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelImputarTarjetaBanco, UpdatePanelImputarTarjetaBanco.GetType(), "alert", " $.msgbox(\"No se pudo agregar movimiento. \");", true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Se ha producido un error al imputar tarjeta banco. "));
+                throw;
+            }
+        }
     }
 }

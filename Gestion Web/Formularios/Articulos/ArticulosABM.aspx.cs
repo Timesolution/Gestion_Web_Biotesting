@@ -179,7 +179,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.txtUltModificacion.Text = UltAct.ToString("dd/MM/yyyy HH:mm");
                     //this.txtModificado.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
                     this.cargarProveedorArticulos(this.id);
-                    this.cargarArticulosCompuestos(this.id);
+                    this.cargarArticulosCompuestos(this.id);    //usar esta funcion para cambiar el precio al art padre
                     this.cargarDescuentos();
                     this.cargarMedidasVentaArticulo(this.id);
                     this.cargarDatosCombustibles();
@@ -822,8 +822,6 @@ namespace Gestion_Web.Formularios.Articulos
 
             if (this.accion == 2)
                 this.modificarArticulo(0);
-            
-           
         }
 
         protected void btnAgregarSig_Click(object sender, EventArgs e)
@@ -857,6 +855,12 @@ namespace Gestion_Web.Formularios.Articulos
                 if (c.numeracionArticulos == "1")
                 {
                     this.generarCodigoNuevo();
+                }
+
+                if (!verificarIncidenciaMargenObligatorio())
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
+                    return -1;
                 }
 
                 Articulo art = new Articulo();                
@@ -935,6 +939,12 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                if (!verificarIncidenciaMargenObligatorio())
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
+                    return;
+                }
+
                 Articulo art = new Articulo();
 
                 //Asigno el codigo
@@ -990,7 +1000,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.guardarDatosPresentaciones(art.id);
                 this.guardarHistorialCosto(art);
 
-                int i = this.controlador.modificarArticulo(art,cod);
+                int i = this.controlador.modificarArticulo(art,cod,1);//funcion modificar articulo
                 
                 if (i == 1)
                 {
@@ -1046,27 +1056,28 @@ namespace Gestion_Web.Formularios.Articulos
             }
  
         }
-
-       
         
         private void DuplicarArticulo()
         {
             try
             {
+                if (!verificarIncidenciaMargenObligatorio())
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
+                    return;
+                }
+
                 int i = this.controlador.duplicarArticulo(this.id, this.txtCodArticulo.Text, this.txtCodigoBarra.Text,
                     Convert.ToInt64(this.DropListMarca.SelectedValue), 
                     Convert.ToInt32(this.ListTipoDistribucion.SelectedValue));
 
                 if (i > 0)
                 {
-
                     Response.Redirect("ArticulosABM.aspx?accion=2&id=" + i);
-
                 }
 
                 else
                 {
-
                     if (i == -2)
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Para Duplicar el Articulo, debe ingresar otro código en el campo Codigo Articulo. "));
@@ -1078,15 +1089,10 @@ namespace Gestion_Web.Formularios.Articulos
 
                     else
                     {
-
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo duplicar articulo "));
-
                     }
-
                 }
-
             }
-
             catch (Exception ex)
             {
 
@@ -1618,7 +1624,7 @@ namespace Gestion_Web.Formularios.Articulos
                         String fileExtension =
                             System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
 
-                        String[] allowedExtensions = { ".jpg" };
+                        String[] allowedExtensions = { ".jpg",".png","jpeg" };
 
                         for (int i = 0; i < allowedExtensions.Length; i++)
                         {
@@ -1831,6 +1837,37 @@ namespace Gestion_Web.Formularios.Articulos
                 return true;
             }
         }
+
+        private bool verificarIncidenciaMargenObligatorio()
+        {
+            try
+            {
+                Configuracion configuracion = new Configuracion();
+
+                if (Convert.ToInt32(configuracion.IncidenciaObligatoria) > 0)
+                {
+                    if (Convert.ToDecimal(this.txtIncidencia.Text, CultureInfo.InvariantCulture) <= 0)
+                    {
+                        return false;
+                    }
+                }
+
+                if (Convert.ToInt32(configuracion.MargenObligatorio) > 0)
+                {
+                    if (Convert.ToDecimal(this.txtMargen.Text, CultureInfo.InvariantCulture) <= 0)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
         #endregion
 
         #region Eventos Controles
@@ -2073,7 +2110,6 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarArticulosCompuestosPH(ac);
                     costoTotal += Decimal.Round((ac.articulo.costo * ac.cantidad), 2);
                 }
-
                 this.txtCostoTotalComposicion.Text = costoTotal.ToString("0.00");
             }
             catch (Exception ex)
@@ -2081,6 +2117,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando Grupos. " + ex.Message));
             }
         }
+        
         private void cargarArticulosCompuestosPH(ArticulosCompuestos ac)
         {
             try

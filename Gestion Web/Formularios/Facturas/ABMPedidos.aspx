@@ -754,6 +754,9 @@
             //var d = document.getElementById("TheBody_txtDescripcion").value;
             //              var resource = d.options[d.selectedIndex].value;
 
+            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+            var idSucursal = ddlSucursal.selectedOptions[0].value;
+
             var modal = new DayPilot.Modal();
             modal.closed = function () {
                 if (this.result == "OK") {
@@ -761,7 +764,7 @@
                 }
             };
             //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
-            modal.showUrl("BuscarArticulos.aspx?accion=4");
+            modal.showUrl("BuscarArticulos.aspx?accion=4&suc="+idSucursal);
         }
 
         function edit(id) {

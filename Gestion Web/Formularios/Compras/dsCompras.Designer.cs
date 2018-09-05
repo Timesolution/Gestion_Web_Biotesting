@@ -1630,6 +1630,8 @@ namespace Gestion_Web.Formularios.Compras {
             
             private global::System.Data.DataColumn columnImporte;
             
+            private global::System.Data.DataColumn columnTelefono;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosImpagasDataTable() {
@@ -1713,6 +1715,14 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TelefonoColumn {
+                get {
+                    return this.columnTelefono;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1748,7 +1758,7 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DatosImpagasRow AddDatosImpagasRow(string Fecha, string Proveedor, string Saldo, string Documento, string Numero, string Importe) {
+            public DatosImpagasRow AddDatosImpagasRow(string Fecha, string Proveedor, string Saldo, string Documento, string Numero, string Importe, string Telefono) {
                 DatosImpagasRow rowDatosImpagasRow = ((DatosImpagasRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Fecha,
@@ -1756,7 +1766,8 @@ namespace Gestion_Web.Formularios.Compras {
                         Saldo,
                         Documento,
                         Numero,
-                        Importe};
+                        Importe,
+                        Telefono};
                 rowDatosImpagasRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosImpagasRow);
                 return rowDatosImpagasRow;
@@ -1785,6 +1796,7 @@ namespace Gestion_Web.Formularios.Compras {
                 this.columnDocumento = base.Columns["Documento"];
                 this.columnNumero = base.Columns["Numero"];
                 this.columnImporte = base.Columns["Importe"];
+                this.columnTelefono = base.Columns["Telefono"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1802,6 +1814,8 @@ namespace Gestion_Web.Formularios.Compras {
                 base.Columns.Add(this.columnNumero);
                 this.columnImporte = new global::System.Data.DataColumn("Importe", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnImporte);
+                this.columnTelefono = new global::System.Data.DataColumn("Telefono", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTelefono);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5235,6 +5249,22 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Telefono {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosImpagas.TelefonoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Telefono\' in table \'DatosImpagas\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosImpagas.TelefonoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsFechaNull() {
                 return this.IsNull(this.tableDatosImpagas.FechaColumn);
             }
@@ -5303,6 +5333,18 @@ namespace Gestion_Web.Formularios.Compras {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetImporteNull() {
                 this[this.tableDatosImpagas.ImporteColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTelefonoNull() {
+                return this.IsNull(this.tableDatosImpagas.TelefonoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTelefonoNull() {
+                this[this.tableDatosImpagas.TelefonoColumn] = global::System.Convert.DBNull;
             }
         }
         

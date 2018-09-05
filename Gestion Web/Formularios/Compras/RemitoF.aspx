@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
 
-        <div >
+        <div>
 
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">

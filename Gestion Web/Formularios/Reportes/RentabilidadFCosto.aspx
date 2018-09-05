@@ -26,13 +26,13 @@
                                                 <asp:LinkButton ID="lbtnReporteRentabilidad" runat="server" OnClick="lbtnReporteRentabilidad_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
-                                                                </asp:LinkButton>
+                                                </asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnReporteRentabilidadPDF" runat="server" OnClick="lbtnReporteRentabilidadPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
-                                                                </asp:LinkButton>
+                                                </asp:LinkButton>
                                             </li>
                                         </ul>
                                     </li>
@@ -89,29 +89,33 @@
                         <!-- .stat -->
                     </div>
                 </div>
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Total Vendido</h4>
-                            <asp:Label ID="labelTotalVendido" runat="server" Text="" class="value"></asp:Label>
+
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Costo Con Iva</h4>
+                                <asp:Label ID="labelTotalCostoConIva" runat="server" Text="" class="value"></asp:Label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
-            <div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Total Costo</h4>
-                            <asp:Label ID="labelTotalCosto" runat="server" Text="" class="value"></asp:Label>
+                <asp:PlaceHolder runat="server" ID="phTotalVendidoConIva" Visible="false">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Vendido</h4>
+                                <asp:Label ID="labelTotalVendidoConIva" runat="server" Text="" class="value"></asp:Label>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="widget big-stats-container stacked">
+                    <br />
+
+
+
+                </asp:PlaceHolder>
+
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
@@ -121,6 +125,34 @@
                     </div>
                 </div>
             </div>
+
+            <asp:PlaceHolder runat="server" ID="phTotalCostoSinIva" Visible="false">
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Costo Sin Iva</h4>
+                                <asp:Label ID="labelTotalCostoSinIva" runat="server" Text="" class="value"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Total Vendido Sin Iva</h4>
+                            <asp:Label ID="labelTotalVendidoSinIva" runat="server" Text="" class="value"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
@@ -130,11 +162,8 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- /widget-content -->
-
             </div>
-            <!-- /widget -->
+
 
         </div>
         <!-- /span12 -->
@@ -171,10 +200,16 @@
                             <asp:BoundField DataField="Costo Imponible" HeaderText="Costo Sin Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                             </asp:BoundField>
+                            <asp:BoundField DataField="Costo Imponible Con Iva" HeaderText="Costo Con Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
+                                <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                            </asp:BoundField>
                             <asp:BoundField DataField="Cantidad" HeaderText="Cantidad" ItemStyle-HorizontalAlign="Right">
                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                             </asp:BoundField>
                             <asp:BoundField DataField="Precio Unitario" HeaderText="Precio Unitario Con Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
+                                <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                            </asp:BoundField>
+                            <asp:BoundField DataField="Precio Unitario Sin Iva" HeaderText="Precio Unitario Sin Iva" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">
                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                             </asp:BoundField>
                             <asp:BoundField DataField="Rentabilidad Costo" HeaderText="Rentabilidad Costo" DataFormatString="{0:$#,##0.0000;-$#,##0.0000;0}" ItemStyle-HorizontalAlign="Right">

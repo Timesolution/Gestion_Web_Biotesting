@@ -4,8 +4,8 @@
     <div class="main">
         <div class="col-md-12 col-xs-12">
             <div class="widget stacked">
-                <div class="stat">                        
-                    <h5><i class="icon-map-marker"></i> Compras > Importaciones</h5>
+                <div class="stat">
+                    <h5><i class="icon-map-marker"></i>Compras > Importaciones</h5>
                 </div>
                 <div class="widget-header">
                     <i class="icon-wrench"></i>
@@ -20,7 +20,7 @@
                             <td style="width: 20%">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
-                                    <ul class="dropdown-menu">                                        
+                                    <ul class="dropdown-menu">
                                         <li>
                                             <asp:LinkButton ID="lbtnCargar" runat="server" OnClick="lbtnCargar_Click">Cargar Detalle</asp:LinkButton>
                                         </li>
@@ -28,7 +28,7 @@
                                             <asp:LinkButton ID="lbtnGastos" runat="server" OnClick="lbtnGastos_Click">Cargar Gastos</asp:LinkButton>
                                         </li>
                                         <li>
-                                            <asp:LinkButton ID="lbtnArribos" runat="server" OnClick="lbtnArribos_Click">Arribo Mercaderia</asp:LinkButton>
+                                            <asp:LinkButton ID="btnArriboMercaderia" runat="server" data-toggle="modal" href="#modalArriboMercaderia">Arribo Mercaderia</asp:LinkButton>
                                         </li>
                                     </ul>
                                 </div>
@@ -46,7 +46,7 @@
                                         <asp:Literal ID="Literal1" runat="server"></asp:Literal>
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu" >
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
                                         <li>
                                             <asp:LinkButton ID="btnExportar" runat="server" OnClick="lbtnExportar_Click">
                                                 <i class="fa fa-file-excel-o" aria-hidden="true"></i>
@@ -102,7 +102,7 @@
                 <div class="widget-content">
                     <div class="panel-body">
 
-                        <div class="table-responsive">                                
+                        <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
@@ -111,7 +111,7 @@
                                         <th>Nro Despacho</th>
                                         <th>Nro Factura</th>
                                         <th>Sucursal</th>
-                                        <th>Proveedor</th>                                        
+                                        <th>Proveedor</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -129,46 +129,88 @@
                 </div>
 
             </div>
-        </div>        
+        </div>
     </div>
 
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <div class="col-md-2">
-                                    <h1>
-                                        <i class="icon-warning-sign" style="color: orange"></i>
-                                    </h1>
-                                </div>
-                                <div class="col-md-7">
-                                    <h5>
-                                        <asp:Label runat="server" ID="lblMensaje" Text="Esta seguro que desea eliminar?" Style="text-align: center"></asp:Label>
-                                    </h5>
-                                </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="lblMensaje" Text="Esta seguro que desea eliminar?" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
 
-                                <div class="col-md-3">
-                                    <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
-                                </div>
+                            <div class="col-md-3">
+                                <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                             </div>
                         </div>
-
-
-                        <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click"/>
-                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                        </div>
                     </div>
 
+
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="modalArriboMercaderia" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="btnCerrarModalArriboMercaderia" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Arribo de Mercaderia</h4>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel runat="server" ID="UpdatePanelArriboMercaderia" UpdateMode="Always">
+                        <ContentTemplate>
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+
+                                    <label class="col-md-3">Numero Remito:</label>
+
+                                    <div class="col-md-3">
+                                        <asp:TextBox ID="txtPuntoVenta" MaxLength="4" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" onchange="completar4Ceros(this, this.value)"></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <asp:TextBox ID="txtNumeroRemito" MaxLength="8" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" onchange="completar8Ceros(this, this.value)"></asp:TextBox>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <asp:LinkButton ID="lbtnArriboMercaderia" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="BusquedaGroup" OnClick="lbtnArribos_Click" />
+                            </div>
+                            
+                        </ContentTemplate>
+                        <Triggers></Triggers>
+                    </asp:UpdatePanel>
                 </div>
             </div>
         </div>
+    </div>
+
+
 
     <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -280,6 +322,8 @@
     <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
+    <script src="../../Scripts/JSFunciones1.js"></script>
+
     <script>
         function pageLoad() {
 
@@ -296,8 +340,35 @@
 
         $(function () {
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+        });
+    <%-- 
+        $(function () {
+            $("#<%= txtFechaDespacho.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+    --%>
+</script>
 
+
+
+    <script>
+        function validarNro(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            if (key < 48 || key > 57) {
+                if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                { return true; }
+                else { return false; }
+            }
+            return true;
+        }
     </script>
 
 </asp:Content>

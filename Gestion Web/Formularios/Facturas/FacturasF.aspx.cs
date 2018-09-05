@@ -120,6 +120,9 @@ namespace Gestion_Web.Formularios.Facturas
                     this.chkAnuladas.Checked = Convert.ToBoolean(this.anuladas);
                 }
                 btnAgregarFC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarFC, null) + ";");
+                btnCalcularDiferenciaCambio.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCalcularDiferenciaCambio, null) + ";");
+                btnGenerarNotaDebitoCreditoDiferenciaCambio.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGenerarNotaDebitoCreditoDiferenciaCambio, null) + ";");
+
                 //verifico si el perfil tiene permiso para anular
                 this.verficarPermisoAnular();
                 //verifico si el perfil tiene permiso para editar FC y agregar FC
@@ -209,6 +212,10 @@ namespace Gestion_Web.Formularios.Facturas
                         //Permiso ver saldo
                         if (s == "117")
                             this.labelSaldo.Visible = true;
+
+                        //Permiso Generar Orden de Reparacion
+                        if (s == "162")
+                            this.lbtnOrdenReparacion.Visible = true;
 
                         //Permiso boton Nota de Credito seleccionando PRP
                         string permisoNotaCreditoDesdePRP = listPermisos.Where(x => x == "148").FirstOrDefault();
@@ -3680,6 +3687,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error solicitando Informe de IIBB " + Ex.Message));
             }
         }
+
         public void cargarDatosInformeXML(InformeXML infXML)
         {
             try
@@ -3705,6 +3713,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrió un error cargando datos para InformeXML. Excepción: " + Ex.Message));
             }
         }
+
         public void cargarDatosInformePedido(Informes_Pedidos ip)
         {
             try
@@ -3722,13 +3731,172 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+        #endregion
 
+        #region Nota Debito/Credito por Diferencia de Cambio
 
+        protected void lbtnDebitoCreditoDiferenciaCambio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idTildado = string.Empty;
+                int flag = 0;
+                this.lblMensajeDiferenciaCambio.Text = string.Empty;
+                this.lblDiferenciaCambio.Text = string.Empty;
+                txtNuevoCambioNotaDebitoCreditoDiferenciaCambio.Enabled = true;
 
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idTildado = ch.ID.Split('_')[1];
+                        flag++;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(idTildado))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar alguna factura"));
+                    return;
+                }
+
+                if (flag > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar sólo una factura"));
+                    return;
+                }
+
+                var facturasIvas = this.contFactEntity.obtenerDatosIvasFactura(Convert.ToInt32(idTildado));
+
+                if (facturasIvas != null)
+                {
+                    var cambio = (decimal)facturasIvas.TipoCambio;
+                    lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio.Text = cambio.ToString("N");
+                }
+                else
+                {
+                    lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio.Text = "1.00";
+                }
+
+                lblIdFacturaNotaDebitoCreditoDiferenciaCambio.Text = idTildado;
+
+                ScriptManager.RegisterStartupScript(UpdatePanel4, UpdatePanel4.GetType(), "openModalNotaDebitoCreditoDiferenciaCambio", "openModalNotaDebitoCreditoDiferenciaCambio();", true);
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error abriendo modal para generar nota de debito/credito por diferencia de cambio. Excepción: " + Ex.Message));
+            }
+        }
+
+        private void generarNotaDebitoCreditoDiferenciaCambio()
+        {
+            try
+            {
+                var factura = this.controlador.obtenerFacturaId(Convert.ToInt32(lblIdFacturaNotaDebitoCreditoDiferenciaCambio.Text));
+
+                if (factura != null)
+                {
+                    string tipoNota = "Nota de Debito ";
+
+                    if (lblMensajeDiferenciaCambio.Text.Contains("Credito"))
+                    {
+                        tipoNota = "Nota de Credito ";
+                    }
+
+                    int i = this.controlador.GenerarNotaCreditoDebitoDiferenciaCambio(1, Convert.ToDecimal(lblDiferenciaCambio.Text), factura, tipoNota);
+
+                    if (i > 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelNotaDebitoCreditoDiferenciaCambio, UpdatePanelNotaDebitoCreditoDiferenciaCambio.GetType(), "alert", " $.msgbox(\"La " + tipoNota + " se generó correctamente. \", {type: \"info\"}); location.href = 'FacturasF.aspx';", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelNotaDebitoCreditoDiferenciaCambio, UpdatePanelNotaDebitoCreditoDiferenciaCambio.GetType(), "alert", "$.msgbox(\"Ocurrió un error generando la " + tipoNota + ". \", {type: \"error\"});", true);
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error generando nota debito/credito por diferencia de cambio. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnCalcularDiferenciaCambio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(lblIdFacturaNotaDebitoCreditoDiferenciaCambio.Text))
+                {
+                    var factura = this.controlador.obtenerFacturaId(Convert.ToInt32(lblIdFacturaNotaDebitoCreditoDiferenciaCambio.Text));
+                    if (factura != null)
+                    {
+                        var divMonedaOriginal = factura.total / Convert.ToDecimal(lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio.Text);
+                        var prodMonedaNueva = divMonedaOriginal * Convert.ToDecimal(txtNuevoCambioNotaDebitoCreditoDiferenciaCambio.Text);
+                        var diferencia = prodMonedaNueva - factura.total;
+
+                        if (diferencia > 0)
+                        {
+                            lblMensajeDiferenciaCambio.Text = "Se va a generar una Nota de Debito por ";
+                        }
+                        else
+                        {
+                            lblMensajeDiferenciaCambio.Text = "Se va a generar una Nota de Credito por ";
+                            diferencia = diferencia * -1;
+                        }
+
+                        lblDiferenciaCambio.Text = Decimal.Round(diferencia, 2).ToString();
+                        btnGenerarNotaDebitoCreditoDiferenciaCambio.Attributes.Remove("disabled");
+
+                        txtNuevoCambioNotaDebitoCreditoDiferenciaCambio.Enabled = false;
+                        txtNuevoCambioNotaDebitoCreditoDiferenciaCambio.CssClass = "form-control";
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando diferencia de cambio. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnGenerarNotaDebitoCreditoDiferenciaCambio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                generarNotaDebitoCreditoDiferenciaCambio();
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando a generar nota de debito/credito por diferencia de cambio. Excepción: " + Ex.Message));
+            }
+        }
 
 
         #endregion
-
-       
+        protected void lbtnOrdenReparacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    Response.Redirect("../OrdenReparacion/OrdenReparacionABM.aspx?a=1&presupuesto=" + idtildado);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al generar orden de reparacion " + ex.Message);
+            }
+        }
     }
 } 
