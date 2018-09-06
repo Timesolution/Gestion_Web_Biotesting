@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -27,6 +28,7 @@ namespace Gestion_Web.Formularios.Reportes
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
         controladorUsuario contUser = new controladorUsuario();
+        controladorCompraEntity controladorCompraEntity = new controladorCompraEntity();
         
         private int valor;        
         private int excel;
@@ -105,6 +107,10 @@ namespace Gestion_Web.Formularios.Reportes
                     if (valor == 10)
                     {
                         this.generarReporte10(); //Reporte Articulos por Grupo
+                    }
+                    if (valor == 11)
+                    {
+                        this.generarReporte11(); // Reporte Compras.Articulos agrupado
                     }
 
                 }
@@ -785,6 +791,60 @@ namespace Gestion_Web.Formularios.Reportes
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));
+            }
+        }
+
+        private void generarReporte11()
+        {
+            try
+            {
+                DateTime fechaDesde = Convert.ToDateTime(fechaD, new CultureInfo("es-AR"));
+                DateTime fechaHasta = Convert.ToDateTime(fechaH, new CultureInfo("es-AR"));
+
+                var dtRemitosComprasItems = controladorCompraEntity.obtenerRemitosCompra_Items(fechaDesde, fechaHasta, idProveedor);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ComprasArticulosR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("ReportesCompras", dtRemitosComprasItems);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "Reporte_CompraArticulos", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+                    this.Response.End();
+                }
+                else
+                {
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 

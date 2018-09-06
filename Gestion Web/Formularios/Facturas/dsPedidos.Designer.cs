@@ -583,6 +583,8 @@ namespace Gestion_Web.Formularios.Facturas {
             
             private global::System.Data.DataColumn columnCodCliente;
             
+            private global::System.Data.DataColumn columnTiempoLineasPedido;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosPedido_BairesDataTable() {
@@ -714,6 +716,14 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn TiempoLineasPedidoColumn {
+                get {
+                    return this.columnTiempoLineasPedido;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -749,7 +759,7 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DatosPedido_BairesRow AddDatosPedido_BairesRow(string Numero, string Fecha, string RazonSocial, string CUIT, string IVA, string Observaciones, string FechaEntrega, string HoraEntrega, string DomicilioEntrega, string descripcion, string Vendedor, string CodCliente) {
+            public DatosPedido_BairesRow AddDatosPedido_BairesRow(string Numero, string Fecha, string RazonSocial, string CUIT, string IVA, string Observaciones, string FechaEntrega, string HoraEntrega, string DomicilioEntrega, string descripcion, string Vendedor, string CodCliente, string TiempoLineasPedido) {
                 DatosPedido_BairesRow rowDatosPedido_BairesRow = ((DatosPedido_BairesRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Numero,
@@ -763,7 +773,8 @@ namespace Gestion_Web.Formularios.Facturas {
                         DomicilioEntrega,
                         descripcion,
                         Vendedor,
-                        CodCliente};
+                        CodCliente,
+                        TiempoLineasPedido};
                 rowDatosPedido_BairesRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosPedido_BairesRow);
                 return rowDatosPedido_BairesRow;
@@ -798,6 +809,7 @@ namespace Gestion_Web.Formularios.Facturas {
                 this.columndescripcion = base.Columns["descripcion"];
                 this.columnVendedor = base.Columns["Vendedor"];
                 this.columnCodCliente = base.Columns["CodCliente"];
+                this.columnTiempoLineasPedido = base.Columns["TiempoLineasPedido"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -827,6 +839,8 @@ namespace Gestion_Web.Formularios.Facturas {
                 base.Columns.Add(this.columnVendedor);
                 this.columnCodCliente = new global::System.Data.DataColumn("CodCliente", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCodCliente);
+                this.columnTiempoLineasPedido = new global::System.Data.DataColumn("TiempoLineasPedido", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTiempoLineasPedido);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3701,6 +3715,23 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string TiempoLineasPedido {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosPedido_Baires.TiempoLineasPedidoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'TiempoLineasPedido\' in table \'DatosPedido_Baires\' is DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosPedido_Baires.TiempoLineasPedidoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsNumeroNull() {
                 return this.IsNull(this.tableDatosPedido_Baires.NumeroColumn);
             }
@@ -3841,6 +3872,18 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCodClienteNull() {
                 this[this.tableDatosPedido_Baires.CodClienteColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsTiempoLineasPedidoNull() {
+                return this.IsNull(this.tableDatosPedido_Baires.TiempoLineasPedidoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetTiempoLineasPedidoNull() {
+                this[this.tableDatosPedido_Baires.TiempoLineasPedidoColumn] = global::System.Convert.DBNull;
             }
         }
         

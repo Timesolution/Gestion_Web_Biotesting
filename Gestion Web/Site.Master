@@ -606,6 +606,12 @@
                                                     <li><a href="/../../Formularios/Reportes/StockF.aspx">Unidades</a></li>
                                                 </ul>
                                             </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Compras</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReportesCompras.aspx">Articulos</a></li>
+                                                </ul>
+                                            </li>
                                             <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
                                                 <li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>
