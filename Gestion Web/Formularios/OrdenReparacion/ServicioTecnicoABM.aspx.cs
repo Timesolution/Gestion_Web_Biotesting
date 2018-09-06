@@ -320,7 +320,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("ServicioTecnicoABM.aspx");
+                Response.Redirect("ServicioTecnicoF.aspx");
             }
             catch (Exception)
             {   
