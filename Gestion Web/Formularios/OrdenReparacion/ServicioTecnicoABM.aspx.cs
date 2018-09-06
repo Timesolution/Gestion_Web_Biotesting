@@ -203,13 +203,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 ServicioTecnico st = new ServicioTecnico();
-                List<string> stList = new List<string>();
+                List<int> stList = new List<int>();
 
                 SetearServicioTecnico(st);
 
-                foreach (var item in ListBoxMarcas.Items)
+                foreach (ListItem item in ListBoxMarcas.Items)
                 {
-                    stList.Add(item.ToString());
+                    stList.Add(Convert.ToInt32(item.Value));
                 }
 
                 var temp = contServTecEnt.AgregarServicioTecnico(st,stList);
@@ -257,7 +257,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 foreach (var item in marcas)
                 {
-                    ListBoxMarcas.Items.Add(item.descripcion);
+                    ListBoxMarcas.Items.Add(new ListItem(item.descripcion,item.id.ToString()));
                 }
 
                 ListBoxMarcas.Items[0].Selected = true;
@@ -277,11 +277,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 SetearServicioTecnico(st);
 
-                List<string> marcas = new List<string>();
+                //List<string> marcas = new List<string>();
+                List<int> marcas = new List<int>();
 
-                foreach (var item in ListBoxMarcas.Items)
+                foreach (ListItem item in ListBoxMarcas.Items)
                 {
-                    marcas.Add(item.ToString());
+                    marcas.Add(Convert.ToInt32(item.Value));
                 }
 
                 var temp = contServTecEnt.ModificarServicioTecnico(st,marcas);
@@ -319,7 +320,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("ServicioTecnicoABM.aspx");
+                Response.Redirect("ServicioTecnicoF.aspx");
             }
             catch (Exception)
             {   
