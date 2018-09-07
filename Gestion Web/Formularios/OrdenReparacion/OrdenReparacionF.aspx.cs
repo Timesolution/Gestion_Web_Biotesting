@@ -14,6 +14,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
     using Gestor_Solution.Controladores;
     using System.Globalization;
     using System.Data;
+    using Microsoft.Reporting.WebForms;
 
     public partial class OrdenReparacionF : System.Web.UI.Page
     {
@@ -1138,6 +1139,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 if (ComprobarOrdenReparacionTildada())
                 {
+                    ImpresionOrdenReparacion imprimirOR = new ImpresionOrdenReparacion();
+
                     Configuraciones_SMS configs = this.contConfig.ObtenerConfiguracionesAlertasSMS();
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1152,19 +1155,27 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(11).Id;
                         contOrdenReparacion.ModificarOrdenReparacion();
 
-                        AgregarObservacion(or.Id, "Mensaje enviado al cliente");
+                        AgregarObservacion(or.Id, "Mensaje y mail enviados al cliente");
 
                         var temp = contOrdenReparacion.EnviarSMSProductoReparado(or.Celular, configs.MensajeProductoReparado, cliente.razonSocial, (int)Session["Login_IdUser"]);
 
                         if (temp > 0)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje de producto reparado enviado correctamente");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje de producto reparado enviado correctamente!", "OrdenReparacionF.aspx"));
+                            imprimirOR.enviarPorMail = 1;
+                            imprimirOR.idPresupuesto = (int)or.NumeroPRP;
+                            imprimirOR.ordenReparacion = (int)or.Id;
+                            temp = imprimirOR.GenerarImpresion();
+
+                            if(temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje y mail de producto reparado enviado correctamente");
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje y mail de producto reparado enviado correctamente!", "OrdenReparacionF.aspx"));
+                            }                            
                         }
                         else
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar mensaje de producto reparado.");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar mensaje de producto reparado."));
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar mensaje y mail de producto reparado.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar mensaje y mail de producto reparado."));
                         }
                     }
                         

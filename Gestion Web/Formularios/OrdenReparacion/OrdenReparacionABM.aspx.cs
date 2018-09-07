@@ -36,6 +36,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 idOrdenReparacion = Convert.ToInt32(Request.QueryString["idordenreparacion"]);
                 accion = Convert.ToInt32(Request.QueryString["a"]);
 
+                btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+                btnGuardar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGuardar, null) + ";");
+
                 if (!IsPostBack)
                 {
                     //CargarArticulosDropDownList();
@@ -84,7 +87,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "57")
+                        if (s == "162")
                         {
                             return 1;
                         }
@@ -362,6 +365,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
+                btnGuardar.Enabled = false;
+                btnGuardar.CssClass = "form-control";
+
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(idOrdenReparacion);
 
                 SetearValoresEnOrdenReparacion(or);
