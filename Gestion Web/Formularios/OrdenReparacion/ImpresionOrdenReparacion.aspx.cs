@@ -90,10 +90,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "57")
-                        {
-                            return 1;
-                        }
+                        return 1;
                     }
                 }
 
@@ -296,7 +293,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     {
                         EnviarORMail(pdfContent, or, idEmpresa);
                         return 1;
-                    }                        
+                    }
                     else
                     {
                         this.Response.Clear();
@@ -305,7 +302,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                         this.Response.BinaryWrite(pdfContent);
                         this.Response.End();
-                    }                    
+                    }
                 }
                 return 0;
             }

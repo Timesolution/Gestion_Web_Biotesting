@@ -229,7 +229,7 @@
                                                     <li><a href="/../../Formularios/Valores/MutualesF.aspx">Entidades</a></li>
                                                 </ul>
                                             </li>
-                                            <asp:PlaceHolder ID="phServicioTecnico" runat="server">
+                                            <asp:PlaceHolder ID="phServicioTecnico" Visible="false" runat="server">
                                                 <li class="dropdown-submenu">
                                                     <a tabindex="" href="#">Orden de reparacion</a>
                                                     <ul class="dropdown-menu">
@@ -307,9 +307,6 @@
                                             <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
                                             <li><a href="/../../Formularios/Compras/RetencionesF.aspx">Retenciones</a></li>
-                                            <asp:PlaceHolder ID="phOrdenReparacion" Visible="false" runat="server">
-                                                <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
-                                            </asp:PlaceHolder>
                                         </ul>
                                     </li>
 
@@ -338,7 +335,9 @@
                                             <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
                                             <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
                                             <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
+                                            <asp:PlaceHolder ID="phOrdenReparacion" Visible="false" runat="server">
                                             <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
+                                            </asp:PlaceHolder>
                                             <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
                                                 <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
                                             </asp:PlaceHolder>

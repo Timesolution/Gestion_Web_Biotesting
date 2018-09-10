@@ -668,7 +668,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         //chequeo si estaba en reparacion local para entonces restar el stock de la sucursal de reparacion
                         if (or.Estado == 3 || or.Estado == 7 || or.Estado == 9)
                         {
-                            string comentario = "Descuento stock por envio a servicio tecnico: " + contServTecnico.ObtenerServicioTecnicoByID((int)or_st.IdServicioTecnico).Nombre + ". Orden de reparacion: " + or.NumeroOrdenReparacion;
+                            string comentario = "Descuento stock por envio a servicio tecnico: " + contServTecnico.ObtenerServicioTecnicoByID((int)or_st.IdServicioTecnico).Nombre + ". Orden de reparacion: " + or.NumeroOrdenReparacion.Value.ToString("D8");
                             int r = contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
                             if (r < 1)
                             {

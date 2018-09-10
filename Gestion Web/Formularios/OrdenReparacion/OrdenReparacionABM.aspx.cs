@@ -238,7 +238,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al cargar los datos del prp en la orden de compra " + ex.Message);
+                Log.EscribirSQL(1,"Error","Error al cargar los datos del prp en la orden de reparacion " + ex.Message);
             }
         }
 
@@ -324,7 +324,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "Error", "Error al cargar los datos del prp en la orden de compra " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al modificar de la orden de reparacion " + ex.Message);
             }
         }
 
