@@ -235,6 +235,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 }
 
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(ordenReparacion);
+                var or_st = contOrdenReparacion.ObtenerOrdenReparacion_ServicioTecnicoPorORdenReparacionID(ordenReparacion);
 
                 DataTable dtOrdenReparacion = new DataTable();
 
@@ -252,7 +253,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 //ReportParameter param4 = new ReportParameter("ParamNroOR", or.NumeroOrdenReparacion.Value.ToString("D8"));
                 string imagen = generarCodigo((int)or.NumeroOrdenReparacion);
                 ReportParameter param4 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
-                ReportParameter param5 = new ReportParameter("ParamEstadoOR", contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID((int)or.Estado).Descripcion);
+                ReportParameter param5 = new ReportParameter("ParamEstadoOR", contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID((int)or.Estado).Descripcion);                                    
 
                 rv.LocalReport.DataSources.Clear();
                 rv.LocalReport.DataSources.Add(rds);
@@ -261,6 +262,16 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 rv.LocalReport.SetParameters(param3);
                 rv.LocalReport.SetParameters(param4);
                 rv.LocalReport.SetParameters(param5);
+
+                //si se le asigno un servicio tecnico, entonces muestro el numero de orden de reparacion que nos dio el servicio tecnico                
+                if (or_st != null)
+                {
+                    ReportParameter param6 = new ReportParameter("ParamOrdenReparacionST", or_st.NumeroOrden);
+                    ReportParameter param7 = new ReportParameter("ParamTextOrdenReparacionST", "Numero de Orden de Reparacion de Servicio Tecnico: ");
+                    rv.LocalReport.SetParameters(param6);
+                    rv.LocalReport.SetParameters(param7);
+                }
+
                 rv.LocalReport.Refresh();
 
                 Warning[] warnings;

@@ -803,8 +803,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     if (temp > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a proveedor " + or.Id);
-                        Session["Login_idcliente"] = or.Cliente;
-                        Session["Login_idArticulo"] = or.Producto;
+                        //Session["Login_idcliente"] = or.Cliente;
+                        //Session["Login_idArticulo"] = or.Producto;
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a proveedor con exito!", "../Compras/RemitosABM.aspx?a=1&or=1&orID=" + or.Id));
                     }
                     else if (temp == -1)
