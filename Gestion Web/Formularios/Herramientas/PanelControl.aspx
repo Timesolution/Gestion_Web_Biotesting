@@ -477,6 +477,22 @@
                                             </div>
                                         </div>
 
+                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Filtro Articulos Sucursal:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListFiltroArticulosSucursal" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnFiltroArticulosSucursal" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnFiltroArticulosSucursal_Click" />
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Personalizar tabla Articulos:</label>
                                             <div class="col-md-2">

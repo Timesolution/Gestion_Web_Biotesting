@@ -496,17 +496,18 @@
                                         <div class="col-md-6">
                                             <asp:FileUpload ID="FileUpload1" runat="server" />
                                         </div>
-                                        <div class="col-md-2">
+                                        <%--<div class="col-md-2">
                                             <asp:RegularExpressionValidator ID="uplValidator" runat="server" ControlToValidate="FileUpload1" ValidationGroup="ImportarGroup" ForeColor="Red" ErrorMessage="* .csv" 
                                             ValidationExpression="(.+\.([Cc][Ss][Vv]))" ></asp:RegularExpressionValidator>
-                                        </div>
+                                        </div>--%>
                                     </div>
                                 </ContentTemplate>
                         </asp:UpdatePanel>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button ID="btnImportarPedido" runat="server" Text="Importar" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
+                        <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
+                        <asp:Button ID="btnImportarPedidoExcel" runat="server" Text="Importar Excel" class="btn btn-success" OnClick="btnImportarPedidoExcel_Click" ValidationGroup="ImportarGroup" />
                     </div>
 
                 </div>

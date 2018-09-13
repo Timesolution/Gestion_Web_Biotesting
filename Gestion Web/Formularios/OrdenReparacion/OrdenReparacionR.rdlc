@@ -216,9 +216,9 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>DescripcionFalla</rd:DefaultName>
-            <Top>6.56991cm</Top>
+            <Top>6.72866cm</Top>
             <Left>0.49418cm</Left>
-            <Height>2.58438cm</Height>
+            <Height>0.78521cm</Height>
             <Width>19.0786cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
@@ -307,11 +307,113 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ParamOrdenReparacionST.Value</Value>
+                    <Style>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox4</rd:DefaultName>
+            <Top>8.77654cm</Top>
+            <Left>9.77046cm</Left>
+            <Height>0.6cm</Height>
+            <Width>8.62757cm</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox5">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ParamTextOrdenReparacionST.Value</Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox5</rd:DefaultName>
+            <Top>8.77654cm</Top>
+            <Left>0.49418cm</Left>
+            <Height>0.6cm</Height>
+            <Width>9.19514cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox6">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Estado del producto: </Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!EstadoDelProducto.Value</Value>
+                    <Style>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox6</rd:DefaultName>
+            <Top>7.85579cm</Top>
+            <Left>0.49417cm</Left>
+            <Height>0.6cm</Height>
+            <Width>19.07861cm</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.43087cm</Top>
         <Left>0.33549cm</Left>
-        <Height>9.5679cm</Height>
+        <Height>10.67915cm</Height>
         <Width>20.19343cm</Width>
         <Style>
           <Border>
@@ -402,7 +504,7 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>4.49342in</Height>
+    <Height>4.88925in</Height>
     <Style />
   </Body>
   <Width>8.24705in</Width>
@@ -707,7 +809,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>1.71979cm</Height>
+      <Height>2.30187cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -868,6 +970,10 @@
           <DataField>CambiaProducto</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="EstadoDelProducto">
+          <DataField>EstadoDelProducto</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsOrdenReparacion</rd:DataSetName>
@@ -911,6 +1017,18 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamEstadoOR">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamOrdenReparacionST">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamTextOrdenReparacionST">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
