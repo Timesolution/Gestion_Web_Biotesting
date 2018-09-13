@@ -72,7 +72,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     CargarOrdenesReparacion();                
                 else if(accion == 1)
                     BuscarPorNumeroOrden();
-
             }
             catch
             {
