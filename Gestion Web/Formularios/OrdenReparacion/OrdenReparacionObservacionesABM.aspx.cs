@@ -63,10 +63,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "57")
-                        {
-                            return 1;
-                        }
+                        return 1;
                     }
                 }
 

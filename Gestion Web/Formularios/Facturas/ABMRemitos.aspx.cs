@@ -492,6 +492,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.actualizarTotales();
                 this.obtenerNroRemito();
 
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + r.id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
+                //string script = "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + r.id.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                //script += " $.msgbox(\"Orden de reparación agregada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Alerta Cliente: " + c.alerta.descripcion + ". \");", true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Alerta Cliente: " + c.alerta.descripcion + "."));
 
@@ -1269,8 +1274,9 @@ namespace Gestion_Web.Formularios.Facturas
                     if (i > 0)
                     {
                         Session.Remove("Remito");
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta " + labelNroRemito.Text);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Remito agregado", "ABMRemitos.aspx"));
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta " + labelNroRemito.Text);                        
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + rem.id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMRemitos.aspx';", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Remito agregado", "ABMRemitos.aspx"));
                     }
                     else
                     {

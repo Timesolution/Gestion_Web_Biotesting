@@ -125,6 +125,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListIncidenciaObligatoria.SelectedValue = configuracion.IncidenciaObligatoria;
                 this.DropListMargenObligatorio.SelectedValue = configuracion.MargenObligatorio;
                 this.DropListActualizarCompuestos.SelectedValue = configuracion.ActualizaCompuestos;
+                this.DropListSucGarantia.SelectedValue = configuracion.SucursalGarantia;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
