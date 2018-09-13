@@ -324,7 +324,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>7.82404cm</Top>
+            <Top>8.77654cm</Top>
             <Left>9.77046cm</Left>
             <Height>0.6cm</Height>
             <Width>8.62757cm</Width>
@@ -356,11 +356,49 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>7.82404cm</Top>
+            <Top>8.77654cm</Top>
             <Left>0.49418cm</Left>
             <Height>0.6cm</Height>
             <Width>9.19514cm</Width>
             <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox6">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Estado del producto: </Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!EstadoDelProducto.Value</Value>
+                    <Style>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox6</rd:DefaultName>
+            <Top>7.85579cm</Top>
+            <Left>0.49417cm</Left>
+            <Height>0.6cm</Height>
+            <Width>19.07861cm</Width>
+            <ZIndex>10</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -932,8 +970,8 @@
           <DataField>CambiaProducto</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="NumeroOrdenReparacionST">
-          <DataField>NumeroOrdenReparacionST</DataField>
+        <Field Name="EstadoDelProducto">
+          <DataField>EstadoDelProducto</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

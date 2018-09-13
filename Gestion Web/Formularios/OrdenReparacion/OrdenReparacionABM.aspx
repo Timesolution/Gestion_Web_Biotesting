@@ -152,6 +152,12 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Plazo Limite de Reparacion</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="DropListPlazoLimite" runat="server" class="form-control" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <%--<div class="form-group">
                                                             <label class="col-md-4">Plazo Limite de Reparacion</label>
                                                             <div class="col-md-4">
                                                                 <asp:DropDownList ID="DropListPlazoLimite" runat="server" class="form-control">
@@ -160,7 +166,7 @@
                                                                     <asp:ListItem Value="90">90</asp:ListItem>
                                                                 </asp:DropDownList>
                                                             </div>
-                                                        </div>
+                                                        </div>--%>
                                                         <div class="form-group">
                                                             <label for="name" class="col-md-4">Autoriza</label>
                                                             <div class="col-md-4">
@@ -232,6 +238,26 @@
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
             }
+        }
+
+        function validarNro(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            if (key < 48 || key > 57) {
+                if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                { return true; }
+                else
+                { return false; }
+            }
+            return true;
         }
     </script>
 </asp:Content>

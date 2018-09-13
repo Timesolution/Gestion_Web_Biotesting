@@ -110,7 +110,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 or.Estado = 1;
 
-                SetearValoresEnOrdenReparacion(or);                
+                SetearValoresEnOrdenReparacion(or);
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
@@ -137,7 +137,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     script += " $.msgbox(\"Orden de reparación agregada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación agregada con exito!.", "OrdenReparacionF.aspx"));
-                }                    
+                }
                 else if(temp == -1)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando Orden de Reparación."));
@@ -164,7 +164,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 or.NumeroOrdenReparacion = Convert.ToInt32(txtNumeroOrden.Text);
                 or.NumeroPRP = Convert.ToInt32(ListNumeroPRPoFactura.SelectedValue);
                 or.NumeroSerie = txtNumeroSerie.Text;
-                or.PlazoLimiteReparacion = Convert.ToInt32(DropListPlazoLimite.SelectedValue);
+                or.PlazoLimiteReparacion = Convert.ToInt32(DropListPlazoLimite.Text);
                 or.Producto = Convert.ToInt32(ListProductos.SelectedValue);
                 or.SucursalOrigen = Convert.ToInt32(ListSucursal.SelectedValue);
                 or.CambiaProducto = DropListCambiaProducto.Text;
