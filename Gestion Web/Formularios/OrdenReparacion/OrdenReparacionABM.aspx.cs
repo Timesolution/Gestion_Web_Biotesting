@@ -155,7 +155,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 or.Autoriza = txtAutoriza.Text;
-                or.Celular = txtCodArea.Text + txtCelular.Text;
+                or.Celular = txtCodArea.Text.Replace("-","") + txtCelular.Text.Replace("-", "");
                 or.Cliente = Convert.ToInt32(ListCliente.SelectedValue);
                 //or.DatosTrazabilidad = txtDatosTrazabilidad.Text;
                 or.DescripcionFalla = txtDescripcionFalla.Text;
@@ -218,7 +218,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 #region celular
                 if (f.cliente.contactos.Count > 0 && f.cliente.contactos[0].numero != null)
                 {
-                    string numeroCelular = f.cliente.contactos[0].numero.Trim();
+                    string numeroCelular = f.cliente.contactos[0].numero.Trim().Replace("-", "");
 
                     if (numeroCelular.StartsWith("11"))
                     {
@@ -289,7 +289,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtCelular.Text = or.Celular;
 
                 #region celular
-                string numeroCelular = or.Celular.Trim();
+                string numeroCelular = or.Celular.Trim().Replace("-", "");
 
                 if (numeroCelular.StartsWith("11"))
                 {

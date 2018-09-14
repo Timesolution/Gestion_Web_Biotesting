@@ -84,4 +84,76 @@
             </div>
         </div>
     </div>
+
+    <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Busqueda</h4>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel runat="server" ID="asdasd">
+                        <ContentTemplate>
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-4">Desde</label>
+                                    <div class="col-md-4">
+                                        <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Hasta</label>
+                                    <div class="col-md-4">
+                                        <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">SucursalOrigen</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListSucursalOrigen" runat="server" class="form-control"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursalOrigen" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">SucursalDestino</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursalDestino" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Estado</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListEstados" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnBuscar_Click" class="btn btn-success" ValidationGroup="BusquedaGroup" />
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>
