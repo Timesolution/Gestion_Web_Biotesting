@@ -25,7 +25,8 @@ namespace Gestion_Web.Formularios.Articulos
         //controlador
         controladorArticulo controlador = new controladorArticulo();
         ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
-
+        ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+        controladorSucursal contSucursal = new controladorSucursal();
         controladorListaPrecio contLista = new controladorListaPrecio();
         controladorUsuario contUser = new controladorUsuario();
 
@@ -78,6 +79,8 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarMarcas();
                     this.cargarSucursal();
                     this.cargarStores();
+                    this.cargarDropListSucursales();
+                    cargarSucursalesAlListBoxDeArticulo();
 
                     //cargo fecha de carga
                     //this.txtFechaAlta.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -3877,9 +3880,107 @@ namespace Gestion_Web.Formularios.Articulos
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Ocurrió un error modificando campo ApareceEnLista de Articulos_Catalogo . Excepción: " + Ex.Message);
             }
         }
-        #endregion
 
         #endregion
 
+        #endregion
+
+        /// <summary>
+        /// Carga las sucursales del drop list
+        /// </summary>
+        private void cargarDropListSucursales()
+        {
+            try
+            {
+                var sucursales = this.contSucursal.obtenerSucursales();
+                if (sucursales != null)
+                {
+                    this.ListSucursales.DataSource = sucursales;
+
+                    this.ListSucursales.DataValueField = "id";
+                    this.ListSucursales.DataTextField = "nombre";
+                    this.ListSucursales.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Carga listBox con las sucursales del articulo 
+        /// </summary>
+        private void cargarSucursalesAlListBoxDeArticulo()
+        {
+            try
+            {
+                var sucursalesByArt = this.contArtEnt.obtenerSucursalesByArticulo(this.id);
+                if (sucursalesByArt != null)
+                {
+                    foreach (var item in sucursalesByArt)
+                    {
+                        Sucursal suc = contSucursal.obtenerSucursalID(item.idSucursal);
+                        ListItem listItem = new ListItem(suc.nombre, suc.id.ToString());
+                        this.ListBoxSucursales.Items.Add(listItem);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales listBox. " + ex.Message));
+            }
+        }
+
+        protected void btnAgregarSucursal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Articulos_Sucursales articulos_Sucursales = new Articulos_Sucursales();
+                articulos_Sucursales.idArticulo = this.id;
+                articulos_Sucursales.idSucursal = Convert.ToInt32(this.ListSucursales.SelectedValue);
+
+                //agrego a la DB
+                int i = this.contArtEnt.agregarArticuloASucursal(articulos_Sucursales);
+                if (i > 0)
+                {
+                    ListItem item = new ListItem(this.ListSucursales.SelectedItem.Text, this.ListSucursales.SelectedValue);
+                    this.ListBoxSucursales.Items.Add(item);
+                    this.ListSucursales.SelectedIndex = 0;
+                    this.cargarDropListSucursales();
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo agregar sucursal."));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando sucursal a lista." + ex.Message));
+            }
+        }
+
+        protected void btnQuitarSucursal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //quito de la DB
+                int i = this.contArtEnt.quitarArticuloDeSucursal(id, Convert.ToInt32(ListBoxSucursales.SelectedValue));
+                if (i > 0)
+                {
+                    this.ListBoxSucursales.Items.Remove(this.ListBoxSucursales.SelectedItem);
+                    this.ListSucursales.SelectedIndex = 0;
+                    this.cargarDropListSucursales();
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo quitar articulo de sucursal."));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando sucursal de lista." + ex.Message));
+            }
+        }
     }
 }

@@ -2697,7 +2697,6 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando sucursal a lista." + ex.Message));
             }
-
         }
 
         protected void btnQuitarSucursal_Click(object sender, EventArgs e)

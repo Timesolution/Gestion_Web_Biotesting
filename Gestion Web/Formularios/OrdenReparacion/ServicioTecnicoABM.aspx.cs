@@ -211,7 +211,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     stList.Add(Convert.ToInt32(item.Value));
                 }
-
+                
                 var temp = contServTecEnt.AgregarServicioTecnico(st,stList);
 
                 if(temp > 0)
