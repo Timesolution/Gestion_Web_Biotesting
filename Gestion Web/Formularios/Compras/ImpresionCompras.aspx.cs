@@ -44,6 +44,7 @@ namespace Gestion_Web.Formularios.Compras
         ControladorCCProveedor controladorCCP = new ControladorCCProveedor();
         controladorArticulo contArticulo = new controladorArticulo();
         controladorPagos controladorPagos = new controladorPagos();
+        controladorCliente controladorCliente = new controladorCliente();
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -395,26 +396,28 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                //DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRango(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
                 DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRangoDetallado(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
+                dtImpagas.Columns.Add("Telefono");
 
-                foreach (DataRow dr in dtImpagas.Rows)
+                foreach (DataRow documentoImpago in dtImpagas.Rows)
                 {
-                    if (dr["documento"].ToString() == "Pago")
+                    if (documentoImpago["documento"].ToString() == "Pago")
                     {
-                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(dr["id"]));
+                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(documentoImpago["id"]));
                         if (pago != null)
                         {
                             if (pago.Ftp == 0)
                             {
-                                dr["documento"] = "Pago FC";
+                                documentoImpago["documento"] = "Pago FC";
                             }
                             if (pago.Ftp == 1)
                             {
-                                dr["documento"] = "Pago PRP";
+                                documentoImpago["documento"] = "Pago PRP";
                             }
                         }
                     }
+
+                    ObtenerContactoProveedorDeDocumentoImpago(documentoImpago);
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -1213,6 +1216,25 @@ namespace Gestion_Web.Formularios.Compras
                 return null;
             }
 
+        }
+
+        public void ObtenerContactoProveedorDeDocumentoImpago(DataRow filaProveedor)
+        {
+            try
+            {
+                string numerosTelefonicos = string.Empty;
+                
+                List<contacto> contactosCliente = controladorCliente.obtenerContactos(Convert.ToInt32(filaProveedor["id"]));
+                foreach (var contacto in contactosCliente)
+                {
+                    numerosTelefonicos += contacto.numero + " | ";
+                }
+
+                filaProveedor["Telefono"] = numerosTelefonicos.Substring(0,numerosTelefonicos.Length - 2);
+            }
+            catch
+            {
+            }
         }
 
     }
