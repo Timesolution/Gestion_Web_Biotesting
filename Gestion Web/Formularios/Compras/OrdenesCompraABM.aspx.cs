@@ -843,7 +843,10 @@ namespace Gestion_Web.Formularios.Compras
                 celAccion.Controls.Add(l3);
 
                 //Stock Articulo: stock minimo, stock total (todas las sucursales), stock por sucursal seleccionada en el DropDownList
-                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigo.Remove(codigo.Length - 4));
+                //cortar los parentesis cuando trae el codigo
+                int posParentesis = codigo.IndexOf('(');
+                string codigoSinParentesis = codigo.Substring(0,posParentesis).Trim();
+                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);
                 if (A != null && A.descripcion == Descripcion)
                 {
                     var list = this.contArticulos.obtenerStockArticuloReduc(A.id);

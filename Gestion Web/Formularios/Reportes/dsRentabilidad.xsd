@@ -56,6 +56,8 @@
               <xs:element name="Precio_Unitario" msprop:Generator_ColumnVarNameInTable="columnPrecio_Unitario" msprop:Generator_ColumnPropNameInRow="Precio_Unitario" msprop:Generator_ColumnPropNameInTable="Precio_UnitarioColumn" msprop:Generator_UserColumnName="Precio_Unitario" type="xs:string" minOccurs="0" />
               <xs:element name="Rentabilidad" msprop:Generator_ColumnVarNameInTable="columnRentabilidad" msprop:Generator_ColumnPropNameInRow="Rentabilidad" msprop:Generator_ColumnPropNameInTable="RentabilidadColumn" msprop:Generator_UserColumnName="Rentabilidad" type="xs:string" minOccurs="0" />
               <xs:element name="Porcentaje" msprop:Generator_ColumnVarNameInTable="columnPorcentaje" msprop:Generator_ColumnPropNameInRow="Porcentaje" msprop:Generator_ColumnPropNameInTable="PorcentajeColumn" msprop:Generator_UserColumnName="Porcentaje" type="xs:string" minOccurs="0" />
+              <xs:element name="Costo_Imponible_Con_Iva" msprop:Generator_ColumnVarNameInTable="columnCosto_Imponible_Con_Iva" msprop:Generator_ColumnPropNameInRow="Costo_Imponible_Con_Iva" msprop:Generator_ColumnPropNameInTable="Costo_Imponible_Con_IvaColumn" msprop:Generator_UserColumnName="Costo_Imponible_Con_Iva" type="xs:string" minOccurs="0" />
+              <xs:element name="Precio_Unitario_Sin_Iva" msprop:Generator_ColumnVarNameInTable="columnPrecio_Unitario_Sin_Iva" msprop:Generator_ColumnPropNameInRow="Precio_Unitario_Sin_Iva" msprop:Generator_ColumnPropNameInTable="Precio_Unitario_Sin_IvaColumn" msprop:Generator_UserColumnName="Precio_Unitario_Sin_Iva" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

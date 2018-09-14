@@ -332,7 +332,7 @@ namespace Gestion_Web.Formularios.Valores
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
                 List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
                 
-                 var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));	
+                var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));	
  
 
                 // Si existen solicitudes de créditos, verifico que estén validadas

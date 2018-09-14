@@ -247,9 +247,12 @@ namespace Gestion_Web.Formularios.Reportes
                 var dt = this.contInformes.Reportes_Rentabilidad_CostosImponible(desde, hasta, this.idSuc, this.idCliente);
                 dt.Columns[4].ColumnName = "Costo_Real";
                 dt.Columns[5].ColumnName = "Costo_Imponible";
-                dt.Columns[7].ColumnName = "Precio_Unitario";
-                dt.Columns[9].ColumnName = "Porcentaje";
-                dt.Columns[8].ColumnName = "Rentabilidad";
+                dt.Columns[6].ColumnName = "Costo_Imponible_Con_Iva";
+                dt.Columns[7].ColumnName = "Cantidad";
+                dt.Columns[8].ColumnName = "Precio_Unitario";
+                dt.Columns[9].ColumnName = "Precio_Unitario_Sin_Iva";
+                dt.Columns[10].ColumnName = "Rentabilidad";
+                dt.Columns[11].ColumnName = "Porcentaje";
 
                 string totalVendido = "0";
                 string totalCosto = "0";
@@ -335,9 +338,12 @@ namespace Gestion_Web.Formularios.Reportes
                 var dt = this.contInformes.Reportes_Rentabilidad_CostosImponibleByDesc(this.idSuc, this.nombreArticulo.ToString(), this.idCliente);
                 dt.Columns[4].ColumnName = "Costo_Real";
                 dt.Columns[5].ColumnName = "Costo_Imponible";
-                dt.Columns[7].ColumnName = "Precio_Unitario";
-                dt.Columns[9].ColumnName = "Porcentaje";
-                dt.Columns[8].ColumnName = "Rentabilidad";
+                dt.Columns[6].ColumnName = "Costo_Imponible_Con_Iva";
+                dt.Columns[7].ColumnName = "Cantidad";
+                dt.Columns[8].ColumnName = "Precio_Unitario";
+                dt.Columns[9].ColumnName = "Precio_Unitario_Sin_Iva";
+                dt.Columns[10].ColumnName = "Rentabilidad";
+                dt.Columns[11].ColumnName = "Porcentaje";
 
                 string totalVendido = "0";
                 string totalCosto = "0";

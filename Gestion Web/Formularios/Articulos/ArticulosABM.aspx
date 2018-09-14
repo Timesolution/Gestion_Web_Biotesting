@@ -1766,6 +1766,33 @@
                                                                 </td>
                                                             </tr>
 
+                                                            <tr>
+                                                                <td style="width: 90%">
+                                                                    <label for="name" class="col-md-3">Sucursal</label>
+                                                                    <div class="col-md-7">
+                                                                        <asp:DropDownList ID="ListSucursales" class="form-control" runat="server"></asp:DropDownList>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td style="width: 50%">
+                                                                    <div class="col-md-5">
+                                                                        <asp:LinkButton ID="btnAgregarSucursal" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarSucursal_Click"/>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width: 90%">
+                                                                    <label class="col-md-3"></label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:ListBox ID="ListBoxSucursales" runat="server" class="form-control"></asp:ListBox>
+                                                                    </div>
+                                                                    <div class="col-md-1">
+                                                                        <asp:LinkButton ID="btnQuitarSucursal" runat="server" Text="<span class='shortcut-icon icon-trash'></span>" class="btn btn-danger" OnClick="btnQuitarSucursal_Click"/>
+                                                                    </div>
+
+                                                                <td />
+                                                            </tr>
+
                                                         </table>
                                                     </div>
                                                     <!-- /widget-content -->

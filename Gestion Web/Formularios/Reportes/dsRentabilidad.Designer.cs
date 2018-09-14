@@ -1101,6 +1101,10 @@ namespace Gestion_Web.Formularios.Reportes {
             
             private global::System.Data.DataColumn columnPorcentaje;
             
+            private global::System.Data.DataColumn columnCosto_Imponible_Con_Iva;
+            
+            private global::System.Data.DataColumn columnPrecio_Unitario_Sin_Iva;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public dtRentabilidadCostoDataTable() {
@@ -1216,6 +1220,22 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Costo_Imponible_Con_IvaColumn {
+                get {
+                    return this.columnCosto_Imponible_Con_Iva;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn Precio_Unitario_Sin_IvaColumn {
+                get {
+                    return this.columnPrecio_Unitario_Sin_Iva;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1251,7 +1271,7 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtRentabilidadCostoRow AdddtRentabilidadCostoRow(string Fecha, string Codigo, string Numero, string Descripcion, string Costo_Real, string Costo_Imponible, string Cantidad, string Precio_Unitario, string Rentabilidad, string Porcentaje) {
+            public dtRentabilidadCostoRow AdddtRentabilidadCostoRow(string Fecha, string Codigo, string Numero, string Descripcion, string Costo_Real, string Costo_Imponible, string Cantidad, string Precio_Unitario, string Rentabilidad, string Porcentaje, string Costo_Imponible_Con_Iva, string Precio_Unitario_Sin_Iva) {
                 dtRentabilidadCostoRow rowdtRentabilidadCostoRow = ((dtRentabilidadCostoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Fecha,
@@ -1263,7 +1283,9 @@ namespace Gestion_Web.Formularios.Reportes {
                         Cantidad,
                         Precio_Unitario,
                         Rentabilidad,
-                        Porcentaje};
+                        Porcentaje,
+                        Costo_Imponible_Con_Iva,
+                        Precio_Unitario_Sin_Iva};
                 rowdtRentabilidadCostoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtRentabilidadCostoRow);
                 return rowdtRentabilidadCostoRow;
@@ -1296,6 +1318,8 @@ namespace Gestion_Web.Formularios.Reportes {
                 this.columnPrecio_Unitario = base.Columns["Precio_Unitario"];
                 this.columnRentabilidad = base.Columns["Rentabilidad"];
                 this.columnPorcentaje = base.Columns["Porcentaje"];
+                this.columnCosto_Imponible_Con_Iva = base.Columns["Costo_Imponible_Con_Iva"];
+                this.columnPrecio_Unitario_Sin_Iva = base.Columns["Precio_Unitario_Sin_Iva"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1321,6 +1345,10 @@ namespace Gestion_Web.Formularios.Reportes {
                 base.Columns.Add(this.columnRentabilidad);
                 this.columnPorcentaje = new global::System.Data.DataColumn("Porcentaje", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnPorcentaje);
+                this.columnCosto_Imponible_Con_Iva = new global::System.Data.DataColumn("Costo_Imponible_Con_Iva", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCosto_Imponible_Con_Iva);
+                this.columnPrecio_Unitario_Sin_Iva = new global::System.Data.DataColumn("Precio_Unitario_Sin_Iva", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPrecio_Unitario_Sin_Iva);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2189,6 +2217,40 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Costo_Imponible_Con_Iva {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtRentabilidadCosto.Costo_Imponible_Con_IvaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Costo_Imponible_Con_Iva\' in table \'dtRentabilidadCosto\' is " +
+                                "DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtRentabilidadCosto.Costo_Imponible_Con_IvaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Precio_Unitario_Sin_Iva {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtRentabilidadCosto.Precio_Unitario_Sin_IvaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Precio_Unitario_Sin_Iva\' in table \'dtRentabilidadCosto\' is " +
+                                "DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtRentabilidadCosto.Precio_Unitario_Sin_IvaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsFechaNull() {
                 return this.IsNull(this.tabledtRentabilidadCosto.FechaColumn);
             }
@@ -2305,6 +2367,30 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetPorcentajeNull() {
                 this[this.tabledtRentabilidadCosto.PorcentajeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCosto_Imponible_Con_IvaNull() {
+                return this.IsNull(this.tabledtRentabilidadCosto.Costo_Imponible_Con_IvaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCosto_Imponible_Con_IvaNull() {
+                this[this.tabledtRentabilidadCosto.Costo_Imponible_Con_IvaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPrecio_Unitario_Sin_IvaNull() {
+                return this.IsNull(this.tabledtRentabilidadCosto.Precio_Unitario_Sin_IvaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPrecio_Unitario_Sin_IvaNull() {
+                this[this.tabledtRentabilidadCosto.Precio_Unitario_Sin_IvaColumn] = global::System.Convert.DBNull;
             }
         }
         
