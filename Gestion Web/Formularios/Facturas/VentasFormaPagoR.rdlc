@@ -849,7 +849,7 @@
                                   <Value>=Fields!fecha.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>dd/MM/yyyy</Format>
+                                    <Format>dd/mm/yyyy HH:MM</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -869,6 +869,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

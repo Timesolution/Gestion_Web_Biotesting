@@ -16,7 +16,7 @@
                 </Style>
               </TextRun>
               <TextRun>
-                <Value>Consolidado Pedidos</Value>
+                <Value>Pedidos Consolidados</Value>
                 <Style>
                   <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -48,7 +48,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>11.79656cm</Width>
+              <Width>9.17718cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2.23908cm</Width>
@@ -56,7 +56,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.6cm</Height>
+              <Height>0.99688cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -67,7 +67,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Descripción</Value>
+                              <Value>Detalle Pedido</Value>
                               <Style>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -83,6 +83,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -116,6 +117,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -202,21 +204,21 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Descripcion">
+                    <Textbox Name="Pedido">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Descripcion.Value</Value>
+                              <Value>=Fields!Pedido.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Descripcion</rd:DefaultName>
+                      <rd:DefaultName>Pedido</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -384,7 +386,7 @@
           <TablixMembers>
             <TablixMember>
               <TablixHeader>
-                <Size>3.82186cm</Size>
+                <Size>6.44122cm</Size>
                 <CellContents>
                   <Textbox Name="Textbox150">
                     <CanGrow>true</CanGrow>
@@ -393,7 +395,7 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>Codigo</Value>
+                            <Value>Código / Ubicación / Descripción / Stock Real</Value>
                             <Style>
                               <FontSize>11pt</FontSize>
                               <FontWeight>Bold</FontWeight>
@@ -409,6 +411,7 @@
                         <Color>LightGrey</Color>
                         <Style>Solid</Style>
                       </Border>
+                      <VerticalAlign>Middle</VerticalAlign>
                       <PaddingLeft>2pt</PaddingLeft>
                       <PaddingRight>2pt</PaddingRight>
                       <PaddingTop>2pt</PaddingTop>
@@ -433,7 +436,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>3.82186cm</Size>
+                <Size>6.44122cm</Size>
                 <CellContents>
                   <Textbox Name="Codigo1">
                     <CanGrow>true</CanGrow>
@@ -442,7 +445,7 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>=Fields!Codigo.Value</Value>
+                            <Value>=Fields!Codigo.Value &amp; " / " &amp; Fields!Ubicacion.Value  &amp; " / " &amp; Fields!Descripcion.Value &amp; " / " &amp; Fields!Stock.Value</Value>
                             <Style />
                           </TextRun>
                         </TextRuns>
@@ -461,6 +464,7 @@
                       <PaddingBottom>2pt</PaddingBottom>
                     </Style>
                   </Textbox>
+                  <rd:Selected>true</rd:Selected>
                 </CellContents>
               </TablixHeader>
               <TablixMembers>
@@ -480,7 +484,7 @@
         <DataSetName>dsDatosPedidos</DataSetName>
         <Top>1.84891cm</Top>
         <Left>0.89959cm</Left>
-        <Height>2.4cm</Height>
+        <Height>2.79688cm</Height>
         <Width>17.85749cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
@@ -537,10 +541,18 @@
           <DataField>Pedido</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Ubicacion">
+          <DataField>Ubicacion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Stock">
+          <DataField>Stock</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsListadoPedidos</rd:DataSetName>
-        <rd:SchemaPath>D:\Proyects\Git\Gestion_Web2\Gestion Web\Formularios\Facturas\dsListadoPedidos.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\times\Google Drive\Proyectos\Git_2\Gestion\Gestion_Web\Gestion Web\Formularios\Facturas\dsListadoPedidos.xsd</rd:SchemaPath>
         <rd:TableName>DatosPedidosNeto</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
