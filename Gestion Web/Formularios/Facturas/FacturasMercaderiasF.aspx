@@ -8,7 +8,7 @@
                 <div class="widget stacked">
 
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i>Ventas > Ventas > Facturas Mercaderias</h5>
+                        <h5><i class="icon-map-marker"></i>Ventas > Ventas > Aceptar Mercaderias</h5>
                     </div>
 
                     <div class="widget-header">
@@ -50,7 +50,7 @@
 
                     <div class="widget-header">
                         <i class="icon-th-list" style="width: 2%"></i>
-                        <h3 style="width: 75%">Ordenes de Reparacion</h3>
+                        <h3 style="width: 75%">Facturas</h3>
                     </div>
                     <div class="widget-content">
                         <div class="panel-body">
@@ -60,21 +60,14 @@
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
-                                            <th>Numero Orden</th>
-                                            <th>Numero Serie</th>
-                                            <th>Sucursal</th>
-                                            <th>PRP/Factura</th>
-                                            <th>Fecha Compra</th>
-                                            <th>Cliente</th>
-                                            <th>Plazo</th>
-                                            <th>Tope Reparacion</th>
+                                            <th>Numero Factura</th>
+                                            <th>Sucursal Origen</th>
                                             <th>Estado</th>
-                                            <th>Barra de progreso</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <asp:PlaceHolder ID="phOrdenReparacion" runat="server"></asp:PlaceHolder>
+                                        <asp:PlaceHolder ID="phFacturas" runat="server"></asp:PlaceHolder>
                                     </tbody>
                                 </table>
                             </div>
@@ -116,7 +109,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">SucursalOrigen</label>
+                                    <label class="col-md-4">Sucursal Origen</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListSucursalOrigen" runat="server" class="form-control"></asp:DropDownList>
                                         <!-- /input-group -->
@@ -126,7 +119,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">SucursalDestino</label>
+                                    <label class="col-md-4">Sucursal Destino</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control"></asp:DropDownList>
                                         <!-- /input-group -->
