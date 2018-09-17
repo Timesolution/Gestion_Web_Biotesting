@@ -17,6 +17,11 @@ namespace Gestion_Web.Formularios.Facturas
         protected void Page_Load(object sender, EventArgs e)
         {
             VerificarLogin();
+
+            if (!IsPostBack)
+            {
+                cargarSucursales();
+            }
         }
 
         private void VerificarLogin()
@@ -89,8 +94,6 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListSucursalDestino.DataValueField = "Id";
                 this.DropListSucursalDestino.DataTextField = "nombre";
                 this.DropListSucursalDestino.DataBind();
-
-                this.DropListSucursalDestino.SelectedValue = Session["Login_SucUser"].ToString();
             }
             catch (Exception ex)
             {
