@@ -192,9 +192,9 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.ID = f["id"].ToString();
 
                 //Celdas
-
                 TableCell celFecha = new TableCell();
-                celFecha.Text = f["fecha"].ToString();
+                DateTime date = Convert.ToDateTime(f["fecha"].ToString());
+                celFecha.Text = date.ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
@@ -213,20 +213,20 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celSucursalOrigen);
 
                 TableCell celEstado = new TableCell();
-                celEstado.Text = f["Estado"].ToString();
+                celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID(Convert.ToInt32(f["Estado"].ToString())).Descripcion;
                 celEstado.HorizontalAlign = HorizontalAlign.Left;
                 celEstado.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celEstado);
 
                 TableCell celAccion = new TableCell();
 
-                Literal lReport = new Literal();
-                lReport.ID = "btnFactura_" + f["id"].ToString();
+                Literal lModify = new Literal();
+                lModify.ID = "btnFactura_" + f["id"].ToString();
                 //lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "\"" + "target =\"_blank\"" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                lReport.Text += "<span class=\"shortcut-icon icon-search\"></span>";
-                lReport.Text += "</a>";
+                lModify.Text += "<span class=\"shortcut-icon icon-search\"></span>";
+                lModify.Text += "</a>";
 
-                celAccion.Controls.Add(lReport);
+                celAccion.Controls.Add(lModify);
 
                 tr.Cells.Add(celAccion);
 
