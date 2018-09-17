@@ -423,7 +423,7 @@
                                             </li>
                                             <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
-                                                <li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>
+                                                <%--<li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>--%>
                                             </asp:PlaceHolder>
                                             <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
                                             <li><a href="/../../Formularios/Reportes/ReportesTrazabilidad.aspx">Trazabilidad</a></li>
