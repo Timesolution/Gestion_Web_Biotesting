@@ -403,7 +403,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     if (documentoImpago["documento"].ToString() == "Pago")
                     {
-                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(documentoImpago["id"]));
+                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(documentoImpago["DocumentoId"]));
                         if (pago != null)
                         {
                             if (pago.Ftp == 0)
