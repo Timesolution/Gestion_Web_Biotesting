@@ -152,7 +152,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 controladorSucursal contSucursal = new controladorSucursal();
-                controladorFacturacion contFacturacion = new controladorFacturacion();                
+                controladorFacturacion contFacturacion = new controladorFacturacion();
 
                 //fila
                 TableRow tr = new TableRow();

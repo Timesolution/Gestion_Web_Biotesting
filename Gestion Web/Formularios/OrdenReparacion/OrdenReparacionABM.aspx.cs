@@ -106,6 +106,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
+                if (!Page.IsValid)
+                    return;
+
                 var or = new OrdenReparacion();
 
                 or.Estado = 1;

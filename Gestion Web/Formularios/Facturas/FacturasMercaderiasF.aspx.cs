@@ -117,7 +117,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListSucursalOrigen.DataSource = dt;
                 this.DropListSucursalOrigen.DataValueField = "Id";
                 this.DropListSucursalOrigen.DataTextField = "nombre";
-                this.DropListSucursalOrigen.DataBind();                
+                this.DropListSucursalOrigen.DataBind();
 
                 this.DropListSucursalDestino.DataSource = dt;
                 this.DropListSucursalDestino.DataValueField = "Id";
@@ -222,7 +222,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 Literal lAccept = new Literal();
                 lAccept.ID = "btnFactura_" + f["id"].ToString();
-                lAccept.Text = "<a href=\"AceptarMercaderia.aspx?a=1&fc=" + f["numero"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lAccept.Text = "<a href=\"AceptarMercaderia.aspx?fc=" + f["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
                 lAccept.Text += "<span class=\"shortcut-icon icon-search\"></span>";
                 lAccept.Text += "</a>";
 
