@@ -395,6 +395,7 @@
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
+    <Content Include="Formularios\Facturas\AceptarMercaderia.aspx" />
     <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
     <Content Include="Formularios\Facturas\FacturasMercaderiasF.aspx" />
@@ -1432,6 +1433,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasRapido.aspx.designer.cs">
       <DependentUpon>ABMFacturasRapido.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\AceptarMercaderia.aspx.cs">
+      <DependentUpon>AceptarMercaderia.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\AceptarMercaderia.aspx.designer.cs">
+      <DependentUpon>AceptarMercaderia.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\CuadroImagen.ascx.cs">
       <DependentUpon>CuadroImagen.ascx</DependentUpon>

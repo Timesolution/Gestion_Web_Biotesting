@@ -220,13 +220,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                 TableCell celAccion = new TableCell();
 
-                Literal lModify = new Literal();
-                lModify.ID = "btnFactura_" + f["id"].ToString();
-                //lReport.Text = "<a href=\"ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "\"" + "target =\"_blank\"" + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                lModify.Text += "<span class=\"shortcut-icon icon-search\"></span>";
-                lModify.Text += "</a>";
+                Literal lAccept = new Literal();
+                lAccept.ID = "btnFactura_" + f["id"].ToString();
+                lAccept.Text = "<a href=\"AceptarMercaderia.aspx?a=1&fc=" + f["numero"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                lAccept.Text += "<span class=\"shortcut-icon icon-search\"></span>";
+                lAccept.Text += "</a>";
 
-                celAccion.Controls.Add(lModify);
+                celAccion.Controls.Add(lAccept);
 
                 tr.Cells.Add(celAccion);
 
