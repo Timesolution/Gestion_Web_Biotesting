@@ -59,7 +59,7 @@
                                 <br />
                                 <div class="btn-toolbar">
                                     <div class="btn-group">
-                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success"  />
+                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" OnClick="btnAgregar_Click" class="btn btn-success"  />
                                     </div>
                                 </div>
                             </div>

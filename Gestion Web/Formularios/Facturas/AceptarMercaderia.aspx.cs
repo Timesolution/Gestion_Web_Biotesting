@@ -14,6 +14,7 @@ namespace Gestion_Web.Formularios.Facturas
     {
         Mensajes m = new Mensajes();
         controladorFacturacion contFacturacion = new controladorFacturacion();
+        controladorFactEntity contFactEntity = new controladorFactEntity();
         int fc = 0;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -24,9 +25,10 @@ namespace Gestion_Web.Formularios.Facturas
 
             if (!IsPostBack)
             {
-                CargarDatosDeFactura();
-                CargarItemsFacturaEnPH();
-            }            
+                CargarDatosDeFactura();                
+            }
+
+            CargarItemsFacturaEnPH();
         }
 
         private void VerificarLogin()
@@ -141,7 +143,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //fila
                 TableRow tr = new TableRow();
-                tr.ID = fi.articulo.id.ToString();
+                tr.ID = fi.Id.ToString();
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
@@ -157,7 +159,8 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celDescripcion);
 
                 TableCell celCantidad = new TableCell();
-                celCantidad.Text = fi.cantidad.ToString();
+                int cantidad = Convert.ToInt32(fi.cantidad);
+                celCantidad.Text = cantidad.ToString();
                 celCantidad.HorizontalAlign = HorizontalAlign.Left;
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCantidad);
@@ -167,7 +170,7 @@ namespace Gestion_Web.Formularios.Facturas
                 TextBox celCantidadRecibida = new TextBox();
                 celCantidadRecibida.TextMode = TextBoxMode.Number;
                 celCantidadRecibida.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
-                celCantidadRecibida.Text = fi.cantidad.ToString();
+                celCantidadRecibida.Text = cantidad.ToString();
 
                 celAccion.Controls.Add(celCantidadRecibida);
 
@@ -179,6 +182,43 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+            }
+        }
+
+        protected void btnAgregar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (var item in phProductos.Controls)
+                {
+                    TableRow tr = item as TableRow;
+                    TextBox txtCantidadRecibidaTB = tr.Cells[3].Controls[0] as TextBox;
+                    int cantidadEnviada = Convert.ToInt32(tr.Cells[2].Text);
+                    int cantidadRecibida = Convert.ToInt32(txtCantidadRecibidaTB.Text);
+
+                    if (cantidadEnviada == cantidadRecibida)
+                    {
+                        contFactEntity.AgregarFacturasMercaderiasDetalles(Convert.ToInt32(tr.ID), cantidadEnviada, cantidadRecibida);
+                    }
+                }
+
+                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles();
+
+                if(temp > 0)
+                {
+                    Log.EscribirSQL(1, "Info", "Se guardaron los detalles de la mercaderia con exito");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mercaderia aceptada con exito!", "FacturasMercaderiasF.aspx"));
+                }
+                else
+                {
+                    Log.EscribirSQL(1, "Error", "Error al guardar los detalles de la mercaderia con exito");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al guardar los detalles de la mercaderia!"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al aceptar la mercaderia " + ex.Message);
             }
         }
     }
