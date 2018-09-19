@@ -207,12 +207,14 @@ namespace Gestion_Web.Formularios.Facturas
                 if(temp > 0)
                 {
                     Log.EscribirSQL(1, "Info", "Se guardaron los detalles de la mercaderia con exito");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mercaderia aceptada con exito!", "FacturasMercaderiasF.aspx"));
+                    string script = " $.msgbox(\"Mercaderia aceptada con exito! \", {type: \"info\"}); location.href = 'FacturasMercaderiasF.aspx'";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);                    
                 }
                 else
                 {
                     Log.EscribirSQL(1, "Error", "Error al guardar los detalles de la mercaderia con exito");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al guardar los detalles de la mercaderia!"));
+                    string script = " $.msgbox(\"Error al guardar los detalles de la mercaderia! \", {type: \"error\"});";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                 }
 
             }
