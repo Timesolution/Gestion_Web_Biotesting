@@ -89,11 +89,25 @@ namespace Gestion_Web.Formularios.Facturas
                 var sucursalOrigen = contSucu.obtenerSucursalID(factura.sucursal.id);
                 var sucursalDestino = contSucu.obtenerSucursalID(factura.sucursalFacturada);
 
-                //agrego todos
-                //DataRow dr = dt.NewRow();
-                //dr["nombre"] = "Seleccione...";
-                //dr["id"] = -1;
-                //dt.Rows.InsertAt(dr, 0);
+                ListSucursalOrigen.Items.Add(new ListItem
+                {
+                    Value = sucursalOrigen.id.ToString(),
+                    Text = sucursalOrigen.nombre
+                });
+                ListSucursalOrigen.CssClass = "form-control";
+
+                ListSucursalDestino.Items.Add(new ListItem
+                {
+                    Value = sucursalDestino.id.ToString(),
+                    Text = sucursalDestino.nombre
+                });
+                ListSucursalDestino.CssClass = "form-control";
+
+                string[] numero = factura.numero.Split('-');
+                numero[0] = numero[0].Replace("-", string.Empty);
+
+                txtPVenta.Text = numero[0];
+                txtNumero.Text = numero[1];
             }
             catch (Exception ex)
             {
@@ -105,8 +119,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                
-
                 var items = contFacturacion.obtenerItemsFact(fc);
 
                 foreach (var item in items)

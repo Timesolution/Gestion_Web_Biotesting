@@ -21,23 +21,23 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Sucursal Origen</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="ListSucursalOrigen" class="form-control" runat="server" AutoPostBack="True"></asp:DropDownList>
+                                                <asp:DropDownList ID="ListSucursalOrigen" class="form-control" runat="server" disabled="true" AutoPostBack="True"></asp:DropDownList>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Sucursal Destino</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="ListSucursalDestino" class="form-control" runat="server" AutoPostBack="True"></asp:DropDownList>
+                                                <asp:DropDownList ID="ListSucursalDestino" class="form-control" runat="server" disabled="true" AutoPostBack="True"></asp:DropDownList>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Numero</label>
                                             <div class="col-md-2">
-                                                <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" disabled onchange="completar4Ceros(this, this.value)"></asp:TextBox>
+                                                <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" disabled="true" onchange="completar4Ceros(this, this.value)"></asp:TextBox>
                                             </div>
 
                                             <div class="col-md-3">
-                                                <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled onchange="completar8Ceros(this, this.value)"></asp:TextBox>
+                                                <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled="true" onchange="completar8Ceros(this, this.value)"></asp:TextBox>
                                             </div>
                                         </div>                                                                                
                                     </fieldset>
