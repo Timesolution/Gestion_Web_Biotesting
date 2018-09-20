@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
@@ -138,12 +139,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                controladorSucursal contSucursal = new controladorSucursal();
-                controladorFacturacion contFacturacion = new controladorFacturacion();
-
                 //fila
                 TableRow tr = new TableRow();
-                tr.ID = fi.Id.ToString();
+                tr.ID = fi.Id.ToString() + "_" + fi.articulo.id;
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
@@ -196,9 +194,20 @@ namespace Gestion_Web.Formularios.Facturas
                     int cantidadEnviada = Convert.ToInt32(tr.Cells[2].Text);
                     int cantidadRecibida = Convert.ToInt32(txtCantidadRecibidaTB.Text);
 
+                    string[] tempTexts = tr.ID.Split('_');
+                    int idItemFactura = Convert.ToInt32(tempTexts[0]);
+                    int idArticulo = Convert.ToInt32(tempTexts[1]);
+
                     if (cantidadEnviada == cantidadRecibida)
                     {
-                        contFactEntity.AgregarFacturasMercaderiasDetalles(Convert.ToInt32(tr.ID), cantidadEnviada, cantidadRecibida);
+                        FacturasMercaderias_Detalle fcmDetalle = new FacturasMercaderias_Detalle();
+
+                        fcmDetalle.IdItemFactura = Convert.ToInt32(idItemFactura);
+                        fcmDetalle.CantidadEnviada = cantidadEnviada;
+                        fcmDetalle.CantidadRecibida = cantidadRecibida;
+                        fcmDetalle.Articulo = idArticulo;
+
+                        contFactEntity.AgregarFacturasMercaderiasDetallesYSubirStock((int)Session["Login_IdUser"], fcmDetalle,fc);
                     }
                 }
 
