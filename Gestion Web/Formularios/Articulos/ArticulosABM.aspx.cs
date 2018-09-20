@@ -129,6 +129,7 @@ namespace Gestion_Web.Formularios.Articulos
                         this.linkMedidas.Visible = true;
                         this.linkBeneficios.Visible = true;
                         this.linkCatalogo.Visible = true;
+                        this.linkArticulosSucursales.Visible = true;
 
                         this.txtPrecio.Text = "0";
                         this.txtDescuento.Text = "0";

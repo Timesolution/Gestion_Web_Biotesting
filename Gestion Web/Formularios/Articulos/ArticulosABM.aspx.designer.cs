@@ -112,6 +112,15 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkBeneficios;
         
         /// <summary>
+        /// linkArticulosSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor linkArticulosSucursales;
+        
+        /// <summary>
         /// linkCatalogo control.
         /// </summary>
         /// <remarks>
@@ -1975,6 +1984,51 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarBeneficios;
         
         /// <summary>
+        /// UpdatePanelArticulos_Sucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelArticulos_Sucursales;
+        
+        /// <summary>
+        /// ListSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListSucursales;
+        
+        /// <summary>
+        /// btnAgregarSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnAgregarSucursal;
+        
+        /// <summary>
+        /// ListBoxSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox ListBoxSucursales;
+        
+        /// <summary>
+        /// btnQuitarSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnQuitarSucursal;
+        
+        /// <summary>
         /// UpdatePanelCatalogo control.
         /// </summary>
         /// <remarks>
@@ -2063,42 +2117,6 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnApareceLista;
-        
-        /// <summary>
-        /// ListSucursales control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ListSucursales;
-        
-        /// <summary>
-        /// btnAgregarSucursal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnAgregarSucursal;
-        
-        /// <summary>
-        /// ListBoxSucursales control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox ListBoxSucursales;
-        
-        /// <summary>
-        /// btnQuitarSucursal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnQuitarSucursal;
         
         /// <summary>
         /// txtGrupo control.

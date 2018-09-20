@@ -104,8 +104,12 @@
                                                             <asp:ListItem>Factura M</asp:ListItem>
                                                             <asp:ListItem>Nota de Crédito A</asp:ListItem>
                                                             <asp:ListItem>Nota de Crédito B</asp:ListItem>
+                                                            <asp:ListItem>Nota de Crédito C</asp:ListItem>
+                                                            <asp:ListItem>Nota de Crédito E</asp:ListItem>
                                                             <asp:ListItem>Nota de Débito A</asp:ListItem>
                                                             <asp:ListItem>Nota de Débito B</asp:ListItem>
+                                                            <asp:ListItem>Nota de Débito C</asp:ListItem>
+                                                            <asp:ListItem>Nota de Débito E</asp:ListItem>
                                                             <asp:ListItem>Presupuesto</asp:ListItem>
                                                             <asp:ListItem>Nota de Crédito - PRP</asp:ListItem>
                                                             <asp:ListItem>Nota de Débito - PRP</asp:ListItem>
