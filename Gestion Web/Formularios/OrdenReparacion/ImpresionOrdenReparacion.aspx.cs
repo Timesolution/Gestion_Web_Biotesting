@@ -189,7 +189,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 code128.GenerateChecksum = true;
                 code128.StartStopText = false;
 
-                code128.Code = idOR.ToString();
+                code128.Code = idOR.ToString("D8");
 
                 System.Drawing.Bitmap bm = new System.Drawing.Bitmap(code128.CreateDrawingImage(System.Drawing.Color.Black, System.Drawing.Color.White));
                 String path = HttpContext.Current.Server.MapPath("/OrdenesReparacion/" + idOR + "/");

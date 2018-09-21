@@ -604,7 +604,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=1&n=" + this.txtNumeroOrden.Text);
+                //hago esto para sacarle los 0 que tiene a la izquierda
+                int numeroOrden = Convert.ToInt32(this.txtNumeroOrden.Text);
+                Response.Redirect("OrdenReparacionF.aspx?a=1&n=" + numeroOrden.ToString());
             }
             catch (Exception ex)
             {

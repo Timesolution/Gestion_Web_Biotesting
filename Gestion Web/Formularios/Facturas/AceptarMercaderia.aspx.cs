@@ -24,6 +24,8 @@ namespace Gestion_Web.Formularios.Facturas
 
             fc = Convert.ToInt32(Request.QueryString["fc"]);
 
+            btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+
             if (!IsPostBack)
             {
                 CargarDatosDeFactura();                
@@ -187,6 +189,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                if (!Page.IsValid)
+                    return;
+
                 foreach (var item in phProductos.Controls)
                 {
                     TableRow tr = item as TableRow;
@@ -198,17 +203,16 @@ namespace Gestion_Web.Formularios.Facturas
                     int idItemFactura = Convert.ToInt32(tempTexts[0]);
                     int idArticulo = Convert.ToInt32(tempTexts[1]);
 
-                    if (cantidadEnviada == cantidadRecibida)
-                    {
-                        FacturasMercaderias_Detalle fcmDetalle = new FacturasMercaderias_Detalle();
 
-                        fcmDetalle.IdItemFactura = Convert.ToInt32(idItemFactura);
-                        fcmDetalle.CantidadEnviada = cantidadEnviada;
-                        fcmDetalle.CantidadRecibida = cantidadRecibida;
-                        fcmDetalle.Articulo = idArticulo;
+                    FacturasMercaderias_Detalle fcmDetalle = new FacturasMercaderias_Detalle();
 
-                        contFactEntity.AgregarFacturasMercaderiasDetallesYSubirStock((int)Session["Login_IdUser"], fcmDetalle,fc);
-                    }
+                    fcmDetalle.IdItemFactura = Convert.ToInt32(idItemFactura);
+                    fcmDetalle.CantidadEnviada = cantidadEnviada;
+                    fcmDetalle.CantidadRecibida = cantidadRecibida;
+                    fcmDetalle.Diferencia = cantidadEnviada - cantidadRecibida;
+                    fcmDetalle.Articulo = idArticulo;
+
+                    contFactEntity.AgregarFacturasMercaderiasDetallesYSubirStock((int)Session["Login_IdUser"], fcmDetalle, fc);
                 }
 
                 int temp = contFactEntity.GuardarFacturasMercaderiasDetalles();
