@@ -28,7 +28,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             if (!IsPostBack)
             {
-                CargarDatosDeFactura();                
+                CargarDatosDeFactura();
             }
 
             CargarItemsFacturaEnPH();
@@ -192,6 +192,8 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!Page.IsValid)
                     return;
 
+                List<FacturasMercaderias_Detalle> fcmDetallelista = new List<FacturasMercaderias_Detalle>();
+
                 foreach (var item in phProductos.Controls)
                 {
                     TableRow tr = item as TableRow;
@@ -203,7 +205,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int idItemFactura = Convert.ToInt32(tempTexts[0]);
                     int idArticulo = Convert.ToInt32(tempTexts[1]);
 
-
+                    
                     FacturasMercaderias_Detalle fcmDetalle = new FacturasMercaderias_Detalle();
 
                     fcmDetalle.IdItemFactura = Convert.ToInt32(idItemFactura);
@@ -212,10 +214,10 @@ namespace Gestion_Web.Formularios.Facturas
                     fcmDetalle.Diferencia = cantidadEnviada - cantidadRecibida;
                     fcmDetalle.Articulo = idArticulo;
 
-                    contFactEntity.AgregarFacturasMercaderiasDetallesYSubirStock((int)Session["Login_IdUser"], fcmDetalle, fc);
+                    fcmDetallelista.Add(fcmDetalle);                    
                 }
 
-                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles();
+                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles((int)Session["Login_IdUser"], fcmDetallelista, fc);
 
                 if(temp > 0)
                 {
