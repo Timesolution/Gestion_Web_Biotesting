@@ -172,6 +172,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 or.SucursalOrigen = Convert.ToInt32(ListSucursal.SelectedValue);
                 or.CambiaProducto = DropListCambiaProducto.Text;
                 or.EstadoDelProducto = txtEstadoDelProducto.Text;
+                or.Observacion = txtObservacion.Text;
             }
             catch (Exception ex)
             {
@@ -311,6 +312,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtDescripcionFalla.Text = or.DescripcionFalla;
                 txtEstadoDelProducto.Text = or.EstadoDelProducto;
                 txtNumeroSerie.Text = or.NumeroSerie;
+                txtObservacion.Text = or.Observacion;
                 DropListPlazoLimite.Text = or.PlazoLimiteReparacion.ToString();
                 DropListCambiaProducto.Text = or.CambiaProducto.ToString();
 

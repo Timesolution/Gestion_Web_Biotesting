@@ -156,6 +156,15 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label for="name" class="col-md-4">Observacion</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtObservacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtObservacion" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label for="validateSelect" class="col-md-4">Plazo Limite de Reparacion</label>
                                                             <div class="col-md-4">
                                                                 <asp:TextBox ID="DropListPlazoLimite" runat="server" class="form-control" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
