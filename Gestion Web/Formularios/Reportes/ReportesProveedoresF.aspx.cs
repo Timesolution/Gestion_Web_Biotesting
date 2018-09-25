@@ -16,7 +16,7 @@ namespace Gestion_Web.Formularios.Reportes
 {
     public partial class ReportesProveedoresF : System.Web.UI.Page
     {
-        ControladorCCProveedor controlador = new ControladorCCProveedor();
+        ControladorCCProveedor contCCProveedor = new ControladorCCProveedor();
         controladorSucursal contSucu = new controladorSucursal();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
@@ -194,7 +194,7 @@ namespace Gestion_Web.Formularios.Reportes
             {
                 if (hasta != null && proveedor >= 0 && sucursal >= 0)
                 {
-                    DataTable dtImpagas = this.controlador.obtenerMovimientosProveedorRango(hasta, proveedor, sucursal, tipo);
+                    DataTable dtImpagas = this.contCCProveedor.obtenerMovimientosProveedorRango(hasta, proveedor, sucursal, tipo);
                     Decimal saldo = 0;
 
                     if (dtImpagas.Rows.Count > 0)
@@ -215,7 +215,7 @@ namespace Gestion_Web.Formularios.Reportes
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando movimientos impagas proveedores."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando movimientos impagas proveedores. Ex: "+ex.Message));
             }
         }
 
@@ -288,7 +288,6 @@ namespace Gestion_Web.Formularios.Reportes
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado de impagas. " + ex.Message));
-
             }
         }
 
@@ -314,7 +313,7 @@ namespace Gestion_Web.Formularios.Reportes
             }
             catch (Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en btnBuscarCod_Click(). Ex: " + ex.Message));
             }
         }
 

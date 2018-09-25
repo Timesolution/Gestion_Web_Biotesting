@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
@@ -2032,6 +2033,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             Response.Redirect("ImpresionMovStock.aspx?a=3&ex=1&costo=" + this.permisoStockValorizado + "&s=" + this.DropListSucursal_St2.SelectedValue);
         }
+
         protected void lbtnStockDiasPDF_Click(object sender, EventArgs e)
         {
             try
@@ -2403,5 +2405,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
 
         }
+
+        
     }
 }

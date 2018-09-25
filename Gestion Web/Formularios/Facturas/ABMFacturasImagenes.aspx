@@ -3,9 +3,11 @@
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 <%@ Register Assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" Namespace="CrystalDecisions.Web" TagPrefix="CR" %>
 
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
-         <audio id="audio1" src="Sound/beep.wav" controls preload="auto" autobuffer HIDDEN="true" ></audio>
+        <audio id="audio1" src="Sound/beep.wav" controls preload="auto" autobuffer hidden="true"></audio>
         <asp:PlaceHolder ID="phMain" runat="server" Visible="false">
             <div class="container">
 
@@ -1847,6 +1849,9 @@
                 </div>
             </div>
             <%--Fin modalGrupo--%>
+
+           
+
         </asp:PlaceHolder>
 
         <div class="main">
@@ -1908,6 +1913,20 @@
                                         </div>
                                         <!-- /table -->
 
+
+                                        <div class="shortcuts">
+
+                                            <div class="col-md-6 col-xs-12">
+                                                <a class="shortcut" onclick="createC();" style="width: 100%;">
+                                                    <i class="h4 icon-search"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-1" style="padding-top: 1%;">
+                                                <a class="btn btn-info" data-toggle="modal" href="#modalAltaRapida" runat="server" id="btnModalAltaRapida" visible="true">
+                                                    <i class="shortcut-icon icon-bolt"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                         <div>
                                             <asp:Button ID="btnFactImagen" class="btn btn-success" OnClick="btnFacturarImagen_Click" runat="server" Text="Facturar" />
                                             &nbsp
@@ -1951,6 +1970,116 @@
         </div>
         <!-- /main modo imagenes-->
 
+         <div id="modalAltaRapida" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Alta Rapida</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <asp:UpdatePanel ID="UpdatePanel15" UpdateMode="Always" runat="server">
+                                    <ContentTemplate>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Codigo</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtCodigoAR" runat="server" class="form-control"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ErrorMessage="*" ControlToValidate="txtCodigoAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Razon Social</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtRazonAR" runat="server" class="form-control"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ErrorMessage="*" ControlToValidate="txtRazonAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Tipo</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="DropListTipoAR" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ErrorMessage="*" ControlToValidate="DropListTipoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">IVA</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="DropListIvaAR" runat="server" class="form-control">
+                                                    <asp:ListItem Text="Seleccione..." Value="-1"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ErrorMessage="*" ControlToValidate="DropListIvaAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Grupo</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="DropListGrupoAR" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="*" ControlToValidate="DropListGrupoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">CUIT</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtCuitAR" runat="server" class="form-control" MaxLength="11" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="*" ControlToValidate="txtCuitAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Lista Precio</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="ListListaPreciosAR" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ErrorMessage="*" ControlToValidate="ListListaPreciosAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Forma Pago</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="DropListFormaPagoAR" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ErrorMessage="*" ControlToValidate="DropListFormaPagoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">Vendedor</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="ListVendedoresAR" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ErrorMessage="*" ControlToValidate="ListVendedoresAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                    </Triggers>
+                                </asp:UpdatePanel>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <asp:LinkButton ID="btnAltaRapida" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAltaRapida_Click" ValidationGroup="ClienteARGroup" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
     </div>
     <!-- /main principal-->
@@ -2294,11 +2423,10 @@
             return true;
         }
 
-        function EvalSound(soundobj)
- {
-         var thissound = document.getElementById(soundobj);
-         thissound.play();
- }
+        function EvalSound(soundobj) {
+            var thissound = document.getElementById(soundobj);
+            thissound.play();
+        }
 
     </script>
 </asp:Content>

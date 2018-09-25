@@ -167,9 +167,9 @@ namespace Gestion_Web.Formularios.Herramientas
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar cambios. Ex: "+ex.Message+" \";", true);
             }
         }
 
