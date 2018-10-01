@@ -55,8 +55,8 @@
                                             <th>Fecha</th>
                                             <th>Numero Factura</th>
                                             <th>Sucursal Origen</th>
-                                            <th>Estado</th>
-                                            <th></th>
+                                            <th>Sucursal Destino</th>
+                                            <%--<th></th>--%>
                                         </tr>
                                     </thead>
                                     <tbody>

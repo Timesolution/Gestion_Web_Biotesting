@@ -140,7 +140,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 controladorSucursal contSucursal = new controladorSucursal();
                 controladorFacturacion contFacturacion = new controladorFacturacion();
-                
+                var factura = contFacturacion.obtenerFacturaId((int)f.FacturasMercaderias_Detalle.Facturas_Mercaderias.Factura);
                 //fila
                 TableRow tr = new TableRow();
                 //tr.ID = f["id"].ToString();
@@ -154,42 +154,47 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celFecha);
 
                 TableCell celNumeroFactura = new TableCell();
-                celNumeroFactura.Text = f.FacturasMercaderias_Detalle.Facturas_Mercaderias;
+                celNumeroFactura.Text = factura.numero;
                 celNumeroFactura.HorizontalAlign = HorizontalAlign.Left;
                 celNumeroFactura.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumeroFactura);
 
                 TableCell celSucursalOrigen = new TableCell();
-                var idSuc = Convert.ToInt32(f["Id_Suc"].ToString());
-                celSucursalOrigen.Text = contSucursal.obtenerSucursalID(idSuc).nombre;
+                celSucursalOrigen.Text = contSucursal.obtenerSucursalID(factura.sucursal.id).nombre;
                 celSucursalOrigen.HorizontalAlign = HorizontalAlign.Left;
                 celSucursalOrigen.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celSucursalOrigen);
 
-                TableCell celEstado = new TableCell();
-                celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID(Convert.ToInt32(f["Estado"].ToString())).Descripcion;
-                celEstado.HorizontalAlign = HorizontalAlign.Left;
-                celEstado.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celEstado);
+                TableCell celSucursalDestino = new TableCell();
+                celSucursalDestino.Text = contSucursal.obtenerSucursalID(factura.sucursalFacturada).nombre;
+                celSucursalDestino.HorizontalAlign = HorizontalAlign.Left;
+                celSucursalDestino.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucursalDestino);
 
-                TableCell celAccion = new TableCell();
+                //TableCell celEstado = new TableCell();
+                //celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID(Convert.ToInt32(f["Estado"].ToString())).Descripcion;
+                //celEstado.HorizontalAlign = HorizontalAlign.Left;
+                //celEstado.VerticalAlign = VerticalAlign.Middle;
+                //tr.Cells.Add(celEstado);
 
-                Literal lAccept = new Literal();
-                lAccept.ID = "btnFactura_" + f["id"].ToString();
-                lAccept.Text = "<a href=\"AceptarMercaderia.aspx?fc=" + f["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                lAccept.Text += "<span class=\"shortcut-icon icon-search\"></span>";
-                lAccept.Text += "</a>";
+                //TableCell celAccion = new TableCell();
 
-                celAccion.Controls.Add(lAccept);
+                //Literal lAccept = new Literal();
+                //lAccept.ID = "btnFactura_" + f["id"].ToString();
+                //lAccept.Text = "<a href=\"AceptarMercaderia.aspx?fc=" + f["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
+                //lAccept.Text += "<span class=\"shortcut-icon icon-search\"></span>";
+                //lAccept.Text += "</a>";
 
-                tr.Cells.Add(celAccion);
+                //celAccion.Controls.Add(lAccept);
+
+                //tr.Cells.Add(celAccion);
 
                 phFacturas.Controls.Add(tr);
 
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando diferencias de mercaderia en el PH. " + ex.Message));
             }
         }
     }
