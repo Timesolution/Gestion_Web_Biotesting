@@ -192,7 +192,9 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!Page.IsValid)
                     return;
 
-                List<FacturasMercaderias_Detalle> fcmDetallelista = new List<FacturasMercaderias_Detalle>();
+                bool hayDiferencia = false;
+
+                List<FacturasMercaderias_Detalle> fcmDetallelista = new List<FacturasMercaderias_Detalle>();                
 
                 foreach (var item in phProductos.Controls)
                 {
@@ -214,10 +216,13 @@ namespace Gestion_Web.Formularios.Facturas
                     fcmDetalle.Diferencia = cantidadEnviada - cantidadRecibida;
                     fcmDetalle.Articulo = idArticulo;
 
-                    fcmDetallelista.Add(fcmDetalle);                    
+                    if (fcmDetalle.Diferencia > 0)
+                        hayDiferencia = true;
+
+                    fcmDetallelista.Add(fcmDetalle);
                 }
 
-                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles((int)Session["Login_IdUser"], fcmDetallelista, fc);
+                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles((int)Session["Login_IdUser"], fcmDetallelista, fc,hayDiferencia);
 
                 if(temp > 0)
                 {

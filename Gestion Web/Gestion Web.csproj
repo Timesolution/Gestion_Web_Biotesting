@@ -397,6 +397,7 @@
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
     <Content Include="Formularios\Facturas\AceptarMercaderia.aspx" />
     <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
+    <Content Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
     <Content Include="Formularios\Facturas\FacturasMercaderiasF.aspx" />
     <Content Include="Formularios\Facturas\FacturasSucursalesF.aspx" />
@@ -1447,6 +1448,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\CuadroImagen.ascx.designer.cs">
       <DependentUpon>CuadroImagen.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx.cs">
+      <DependentUpon>DiferenciasMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx.designer.cs">
+      <DependentUpon>DiferenciasMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\dsRetenciones.Designer.cs">
       <AutoGen>True</AutoGen>
