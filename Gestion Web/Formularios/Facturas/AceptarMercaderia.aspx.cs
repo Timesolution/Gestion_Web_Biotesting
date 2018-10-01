@@ -194,7 +194,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 bool hayDiferencia = false;
 
-                List<FacturasMercaderias_Detalle> fcmDetallelista = new List<FacturasMercaderias_Detalle>();                
+                List<FacturasMercaderias_Detalle> fcmDetallelista = new List<FacturasMercaderias_Detalle>();
 
                 foreach (var item in phProductos.Controls)
                 {
@@ -206,7 +206,6 @@ namespace Gestion_Web.Formularios.Facturas
                     string[] tempTexts = tr.ID.Split('_');
                     int idItemFactura = Convert.ToInt32(tempTexts[0]);
                     int idArticulo = Convert.ToInt32(tempTexts[1]);
-
                     
                     FacturasMercaderias_Detalle fcmDetalle = new FacturasMercaderias_Detalle();
 

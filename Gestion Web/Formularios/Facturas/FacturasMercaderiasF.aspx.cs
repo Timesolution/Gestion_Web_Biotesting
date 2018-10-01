@@ -176,8 +176,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar ordenes de reparacion por filtro. " + ex.Message));
-                Log.EscribirSQL(1, "ERROR", "Error al cargar ordenes de reparacion por filtro. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar facturas mercaderias por filtro. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al cargar facturas mercaderias por filtro. " + ex.Message);
             }
         }
         private void cargarEnPh(DataRow f)

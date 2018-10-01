@@ -25,14 +25,7 @@
                                         </ul>
                                     </div>
                                 </td>
-                                <td style="width: 65%"></td>
-                                <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
-                                        <a class="btn btn-primary" data-toggle="modal" href="#modalNro" style="width: 100%">
-                                            <i class="shortcut-icon icon-search"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                <td style="width: 65%"></td>                                
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
@@ -128,7 +121,7 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursalDestino" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <%--<div class="form-group">
                                     <label class="col-md-4">Estado</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListEstados" runat="server" class="form-control"></asp:DropDownList>
@@ -136,7 +129,7 @@
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
-                                </div>
+                                </div>--%>
                             </div>
                         </ContentTemplate>
                         <Triggers>
