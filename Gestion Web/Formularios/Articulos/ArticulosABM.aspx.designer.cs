@@ -121,6 +121,15 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkArticulosSucursales;
         
         /// <summary>
+        /// linkStockMinimoSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor linkStockMinimoSucursales;
+        
+        /// <summary>
         /// linkCatalogo control.
         /// </summary>
         /// <remarks>
@@ -2027,6 +2036,60 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnQuitarSucursal;
+        
+        /// <summary>
+        /// UpdatePanelStockMinimoSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelStockMinimoSucursales;
+        
+        /// <summary>
+        /// ListSucursalesStockMinimo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListSucursalesStockMinimo;
+        
+        /// <summary>
+        /// txtStockMinimoSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtStockMinimoSucursal;
+        
+        /// <summary>
+        /// lbtnAgregarStockMinimoSuc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarStockMinimoSuc;
+        
+        /// <summary>
+        /// RequiredFieldValidator56 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator56;
+        
+        /// <summary>
+        /// phStockMinimoSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phStockMinimoSucursal;
         
         /// <summary>
         /// UpdatePanelCatalogo control.
