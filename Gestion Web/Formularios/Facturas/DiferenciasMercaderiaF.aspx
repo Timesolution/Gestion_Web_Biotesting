@@ -8,7 +8,7 @@
                 <div class="widget stacked">
 
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i>Ventas > Ventas > Aceptar Mercaderias</h5>
+                        <h5><i class="icon-map-marker"></i>Ventas > Ventas > Diferencias Mercaderias</h5>
                     </div>
 
                     <div class="widget-header">
@@ -18,13 +18,13 @@
                     <div class="widget-content">
                         <table style="width: 100%">
                             <tr>
-                                <td style="width: 20%">
+                                <%--<td style="width: 20%">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                         </ul>
                                     </div>
-                                </td>
+                                </td>--%>
                                 <td style="width: 65%"></td>                                
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
@@ -56,6 +56,10 @@
                                             <th>Numero Factura</th>
                                             <th>Sucursal Origen</th>
                                             <th>Sucursal Destino</th>
+                                            <th>Articulo</th>
+                                            <th>Cantidad Enviada</th>
+                                            <th>Cantidad Recibida</th>
+                                            <th>Diferencia</th>
                                             <%--<th></th>--%>
                                         </tr>
                                     </thead>
@@ -114,7 +118,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4">Sucursal Destino</label>
                                     <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control" Enabled="false"></asp:DropDownList>
                                         <!-- /input-group -->
                                     </div>
                                     <div class="col-md-2">

@@ -13,15 +13,6 @@ namespace Gestion_Web.Formularios.Facturas {
     public partial class DiferenciasMercaderiaF {
         
         /// <summary>
-        /// btnAccion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
-        
-        /// <summary>
         /// phFacturas control.
         /// </summary>
         /// <remarks>

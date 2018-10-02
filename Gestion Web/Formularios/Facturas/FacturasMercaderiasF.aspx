@@ -18,21 +18,14 @@
                     <div class="widget-content">
                         <table style="width: 100%">
                             <tr>
-                                <td style="width: 20%">
+                                <%--<td style="width: 20%">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                         </ul>
                                     </div>
-                                </td>
-                                <td style="width: 65%"></td>
-                                <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
-                                        <a class="btn btn-primary" data-toggle="modal" href="#modalNro" style="width: 100%">
-                                            <i class="shortcut-icon icon-search"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                </td>--%>
+                                <td style="width: 65%"></td>                                
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
@@ -121,7 +114,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4">Sucursal Destino</label>
                                     <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control" Enabled="false"></asp:DropDownList>
                                         <!-- /input-group -->
                                     </div>
                                     <div class="col-md-2">

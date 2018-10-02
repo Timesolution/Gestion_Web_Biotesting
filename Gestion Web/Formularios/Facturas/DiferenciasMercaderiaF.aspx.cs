@@ -62,21 +62,28 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+                int tienePermiso = 0;
+                foreach (string s in listPermisos)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        if (s == "164")
+                            tienePermiso = 1;
 
-                return 1;
+                        if (tienePermiso == 1)
+                        {
+                            if (s == "166")
+                            {
+                                this.DropListSucursalDestino.Enabled = true;
+                            }
+                        }
+                    }
+                }
 
-                //foreach (string s in listPermisos)
-                //{
-                //    if (!String.IsNullOrEmpty(s))
-                //    {
-                //        if (s == "28")
-                //        {
-                //            return 1;
-                //        }
-                //    }
-                //}
-
-                //return 0;
+                if (tienePermiso == 1)
+                    return 1;
+                else
+                    return 0;
             }
             catch
             {
@@ -170,6 +177,30 @@ namespace Gestion_Web.Formularios.Facturas
                 celSucursalDestino.HorizontalAlign = HorizontalAlign.Left;
                 celSucursalDestino.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celSucursalDestino);
+
+                TableCell celArticulo = new TableCell();
+                celArticulo.Text = f.FacturasMercaderias_Detalle.itemsFactura.articulo1.descripcion;
+                celArticulo.HorizontalAlign = HorizontalAlign.Left;
+                celArticulo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celArticulo);
+
+                TableCell celEnviado = new TableCell();
+                celEnviado.Text = f.FacturasMercaderias_Detalle.CantidadEnviada.ToString();
+                celEnviado.HorizontalAlign = HorizontalAlign.Left;
+                celEnviado.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celEnviado);
+
+                TableCell celRecibido = new TableCell();
+                celRecibido.Text = f.FacturasMercaderias_Detalle.CantidadRecibida.ToString();
+                celRecibido.HorizontalAlign = HorizontalAlign.Left;
+                celRecibido.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celRecibido);
+
+                TableCell celDiferencia = new TableCell();
+                celDiferencia.Text = f.FacturasMercaderias_Detalle.Diferencia.ToString();
+                celDiferencia.HorizontalAlign = HorizontalAlign.Left;
+                celDiferencia.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celDiferencia);
 
                 //TableCell celEstado = new TableCell();
                 //celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID(Convert.ToInt32(f["Estado"].ToString())).Descripcion;

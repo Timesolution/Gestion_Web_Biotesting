@@ -38,17 +38,27 @@ namespace Gestion_Web.Formularios.Facturas
             if (!IsPostBack)
             {
                 if (string.IsNullOrEmpty(fechaD))
+                {
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaD = txtFechaDesde.Text;
+                }                    
                 else
                     txtFechaDesde.Text = fechaD.ToString(new CultureInfo("es-AR"));
 
                 if (string.IsNullOrEmpty(fechaH))
+                {
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaH = txtFechaHasta.Text;
+                }                    
                 else
                     txtFechaHasta.Text = fechaH.ToString(new CultureInfo("es-AR"));
 
+                sucursalDestino = Convert.ToInt32(Session["Login_SucUser"]);
+                estado = 1;
+
                 cargarSucursales();
                 cargarEstados();
+                CargarFacturasMercaderias();
             }
 
             if (accion == 1)
@@ -84,17 +94,28 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
-
-                return 1;
-
-                //foreach (string s in listPermisos)
-                //{
-
-                //    if (!String.IsNullOrEmpty(s))
-                //    {
+                int tienePermiso = 0;
+                foreach (string s in listPermisos)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        if (s == "163")
+                            tienePermiso = 1;
                         
-                //    }
-                //}
+                        if(tienePermiso == 1)
+                        {
+                            if(s == "165")
+                            {
+                                this.DropListSucursalDestino.Enabled = true;
+                            }
+                        }
+                    }
+                }
+
+                if(tienePermiso == 1)
+                    return 1;
+                else
+                    return 0;
             }
             catch
             {
