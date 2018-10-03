@@ -141,7 +141,7 @@
                     </asp:UpdatePanel>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="BusquedaGroup" />
+                    <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnBuscar_Click" class="btn btn-success" ValidationGroup="BusquedaGroup" />
                 </div>
             </div>
         </div>

@@ -17,20 +17,37 @@ namespace Gestion_Web.Formularios.Facturas
         Mensajes m = new Mensajes();
         controladorFactEntity contFactEntity = new controladorFactEntity();
 
+        int accion = 0;
+        int sucursalDestino = 0;
+        int sucursalOrigen = 0;
+        string fechaD = "";
+        string fechaH = "";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             this.VerificarLogin();
 
+            accion = Convert.ToInt32(Request.QueryString["a"]);
+            sucursalDestino = Convert.ToInt32(Request.QueryString["sd"]);
+            sucursalOrigen = Convert.ToInt32(Request.QueryString["so"]);
+            fechaD = Request.QueryString["fd"];
+            fechaH = Request.QueryString["fh"];
+
+            if (accion == 0)
+            {
+                PrimeraCarga();
+            }
+
             if (!IsPostBack)
             {
-                txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                this.txtFechaDesde.Text = fechaD;
+                this.txtFechaHasta.Text = fechaH;
 
                 cargarSucursales();
             }
 
-            //CargarItemsFacturaEnPH();
-            CargarFacturasMercaderiasDiferencias();
+            if (accion == 1)
+                CargarFacturasMercaderiasDiferencias();
         }
 
         private void VerificarLogin()
@@ -88,6 +105,34 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
                 return -1;
+            }
+        }
+
+        protected void PrimeraCarga()
+        {
+            try
+            {
+                fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                sucursalDestino = Convert.ToInt32(Session["Login_SucUser"]);
+
+                FiltrarDiferenciaMercaderia();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al hacer la primera carga de diferencias mercaderias. " + ex.Message);
+            }
+        }
+
+        protected void FiltrarDiferenciaMercaderia()
+        {
+            try
+            {
+                Response.Redirect("DiferenciasMercaderiaF.aspx?a=1&sd=" + sucursalDestino + "&so=" + sucursalOrigen + "&fd=" + fechaD + "&fh=" + fechaH);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al filtrar. " + ex.Message);
             }
         }
 
@@ -226,6 +271,26 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando diferencias de mercaderia en el PH. " + ex.Message));
+            }
+        }
+
+        protected void lbtnBuscar_Click(object sender, EventArgs e)
+        {
+            CargarVariableConValoresDeFiltro();
+            FiltrarDiferenciaMercaderia();
+        }
+        protected void CargarVariableConValoresDeFiltro()
+        {
+            try
+            {
+                fechaD = txtFechaDesde.Text;
+                fechaH = txtFechaHasta.Text;
+                sucursalOrigen = Convert.ToInt32(DropListSucursalDestino.SelectedValue);
+                sucursalDestino = Convert.ToInt32(DropListSucursalDestino.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al hacer la primera carga de diferencias mercaderias. " + ex.Message);
             }
         }
     }

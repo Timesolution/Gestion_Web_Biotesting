@@ -35,30 +35,18 @@ namespace Gestion_Web.Formularios.Facturas
             fechaD = Request.QueryString["fd"];
             fechaH = Request.QueryString["fh"];
 
+            if (accion == 0)
+            {
+                PrimeraCarga();               
+            }
+
             if (!IsPostBack)
             {
-                if (string.IsNullOrEmpty(fechaD))
-                {
-                    txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    fechaD = txtFechaDesde.Text;
-                }                    
-                else
-                    txtFechaDesde.Text = fechaD.ToString(new CultureInfo("es-AR"));
-
-                if (string.IsNullOrEmpty(fechaH))
-                {
-                    txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    fechaH = txtFechaHasta.Text;
-                }                    
-                else
-                    txtFechaHasta.Text = fechaH.ToString(new CultureInfo("es-AR"));
-
-                sucursalDestino = Convert.ToInt32(Session["Login_SucUser"]);
-                estado = 1;
+                this.txtFechaDesde.Text = fechaD;
+                this.txtFechaHasta.Text = fechaH;
 
                 cargarSucursales();
                 cargarEstados();
-                CargarFacturasMercaderias();
             }
 
             if (accion == 1)
@@ -159,6 +147,12 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 var dt = contFactEntity.ObtenerFacturasMercaderias_Estados();
 
+                dt.Insert(0, new Gestion_Api.Entitys.FacturasMercaderias_Estados
+                {
+                    Id = 0,
+                    Descripcion = "TODOS"
+                });
+
                 this.DropListEstados.DataSource = dt;
                 this.DropListEstados.DataValueField = "Id";
                 this.DropListEstados.DataTextField = "Descripcion";
@@ -172,9 +166,48 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void lbtnBuscar_Click(object sender, EventArgs e)
         {
+            CargarVariableConValoresDeFiltro();
+            FiltrarAceptarMercaderia();
+        }
+
+        protected void CargarVariableConValoresDeFiltro()
+        {
             try
             {
-                Response.Redirect("FacturasMercaderiasF.aspx?a=1&sd=" + this.DropListSucursalDestino.SelectedValue + "&so=" + DropListSucursalOrigen.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue);
+                fechaD = txtFechaDesde.Text;
+                fechaH = txtFechaHasta.Text;
+                sucursalOrigen = Convert.ToInt32(DropListSucursalOrigen.SelectedValue);
+                sucursalDestino = Convert.ToInt32(DropListSucursalDestino.SelectedValue);
+                estado = Convert.ToInt32(DropListEstados.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al hacer la primera carga de facturas_mercaderias. " + ex.Message);
+            }
+        }
+
+        protected void PrimeraCarga()
+        {
+            try
+            {
+                fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                sucursalDestino = Convert.ToInt32(Session["Login_SucUser"]);
+                estado = 1;
+
+                FiltrarAceptarMercaderia();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al hacer la primera carga de facturas_mercaderias. " + ex.Message);
+            }
+        }
+
+        protected void FiltrarAceptarMercaderia()
+        {
+            try
+            {
+                Response.Redirect("FacturasMercaderiasF.aspx?a=1&sd=" + sucursalDestino + "&so=" + sucursalOrigen + "&fd=" + fechaD + "&fh=" + fechaH + "&e=" + estado);
             }
             catch (Exception ex)
             {
@@ -227,11 +260,18 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celNumeroFactura);
 
                 TableCell celSucursalOrigen = new TableCell();
-                var idSuc = Convert.ToInt32(f["Id_Suc"].ToString());
-                celSucursalOrigen.Text = contSucursal.obtenerSucursalID(idSuc).nombre;
+                var idSucO = Convert.ToInt32(f["Id_Suc"].ToString());
+                celSucursalOrigen.Text = contSucursal.obtenerSucursalID(idSucO).nombre;
                 celSucursalOrigen.HorizontalAlign = HorizontalAlign.Left;
                 celSucursalOrigen.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celSucursalOrigen);
+
+                TableCell celSucursalDestino = new TableCell();
+                var idSucD = Convert.ToInt32(f["SucursalFacturada"].ToString());
+                celSucursalDestino.Text = contSucursal.obtenerSucursalID(idSucD).nombre;
+                celSucursalDestino.HorizontalAlign = HorizontalAlign.Left;
+                celSucursalDestino.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucursalDestino);
 
                 TableCell celEstado = new TableCell();
                 celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID(Convert.ToInt32(f["Estado"].ToString())).Descripcion;
@@ -256,7 +296,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando order de reparacion. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando facturas mercaderias PH. " + ex.Message));
             }
         }
     }
