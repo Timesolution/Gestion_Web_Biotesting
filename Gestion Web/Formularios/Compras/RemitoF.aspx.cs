@@ -574,7 +574,46 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        
+        protected void lbtnGenerarCompra_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                int cantidadTildada = 0;
+                foreach (Control C in phRemitos.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        cantidadTildada++;
+                    }
+                    
+                }
+                if (!String.IsNullOrEmpty(idtildado) && cantidadTildada == 1)
+                {
+                    foreach (String idRemito in idtildado.Split(';'))
+                    {
+                        if (!String.IsNullOrEmpty(idRemito))
+                        {
+                            Response.Redirect("ComprasABM.aspx?a=3&r=" + idRemito);
+                        }
+                    }
+                }
+                else if(!String.IsNullOrEmpty(idtildado) && cantidadTildada > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un Documento"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar un Documento"));
+                }                
+            }
+            catch
+            {
 
+            }
+        }
     }
 }

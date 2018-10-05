@@ -18,8 +18,6 @@ namespace Gestion_Web.Formularios.Compras
         controladorCompraEntity contCompraEntity = new controladorCompraEntity();
         controladorArticulo contArticulos = new controladorArticulo();
         controladorCliente contCliente = new controladorCliente();
-        
-
 
         Mensajes m = new Mensajes();
         
