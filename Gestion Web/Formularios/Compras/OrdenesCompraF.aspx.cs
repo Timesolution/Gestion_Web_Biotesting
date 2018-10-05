@@ -56,7 +56,7 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH; 
                 }
-
+                this.cargarEstados();
                 this.cargarSucursal();
                 //txtFechaDesde.Text = fechaD;
                 //txtFechaHasta.Text = fechaH;                
@@ -157,6 +157,28 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+
+        public void cargarEstados()
+        {
+            try
+            {
+                var estados = contCompraEntity.obtenerOrdenesCompra_Estados();
+
+                //agrego todos
+
+                this.DropListEstado.DataSource = estados;
+                this.DropListEstado.DataValueField = "Id";
+                this.DropListEstado.DataTextField = "TipoEstado";
+                this.DropListEstado.DataBind();
+
+                //this.DropListEstado.SelectedValue = this..ToString();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
         public void cargarProveedores()
         {
             try
@@ -193,7 +215,8 @@ namespace Gestion_Web.Formularios.Compras
             {
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
                 DateTime Hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR"));
-                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, Hasta, proveedor, idSucursal);
+                int estado = Convert.ToInt32(DropListEstado.SelectedValue);
+                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, Hasta, proveedor, idSucursal, estado);
 
                 this.cargarOrdenes(ordenes);
             }
