@@ -36,7 +36,7 @@ namespace Gestion_Web.Formularios.Compras
             
             if (!IsPostBack)
             {
-                this.cargarProveedores();                
+                this.cargarProveedores();
 
                 if (fechaD == null && fechaH == null)
                 {
@@ -54,8 +54,12 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     this.btnAccion.Visible = true;
                     txtFechaDesde.Text = fechaD;
-                    txtFechaHasta.Text = fechaH; 
-                }
+                    txtFechaHasta.Text = fechaH;
+                }                
+
+                if(proveedor > 0)
+                    lbtnEntregas.Visible = true;
+
                 this.cargarEstados();
                 this.cargarSucursal();
                 //txtFechaDesde.Text = fechaD;
@@ -383,7 +387,7 @@ namespace Gestion_Web.Formularios.Compras
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar una proveedor"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar un proveedor"));
                     }
                 }
                 else
@@ -560,6 +564,31 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando el estado de una Orden de Compra. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnEntregas_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    Response.Redirect("EntregasMercaderiaF.aspx?oc="+idtildado);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
             }
         }
     }

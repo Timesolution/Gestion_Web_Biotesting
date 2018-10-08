@@ -373,6 +373,7 @@
     <Content Include="Formularios\Compras\CCCompraF.aspx" />
     <Content Include="Formularios\Compras\ComprasABM.aspx" />
     <Content Include="Formularios\Compras\ComprasF.aspx" />
+    <Content Include="Formularios\Compras\EntregasMercaderiaF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesGastosF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesMonedasABM.aspx" />
     <Content Include="Formularios\Compras\ImportacionesTiposGastosABM.aspx" />
@@ -1322,6 +1323,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsCompras.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.cs">
+      <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.designer.cs">
+      <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Compras\ImportacionesGastosF.aspx.cs">
       <DependentUpon>ImportacionesGastosF.aspx</DependentUpon>

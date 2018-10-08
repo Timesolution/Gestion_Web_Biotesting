@@ -22,7 +22,7 @@
                             <tr>
                                 <td style="width: 20%">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" Enabled="false" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
@@ -51,7 +51,9 @@
                                                     </ul>
                                                 </li>
                                             </asp:PlaceHolder>
-
+                                            <li>
+                                                <asp:LinkButton ID="lbtnEntregas" runat="server" Visible="false" OnClick="lbtnEntregas_Click">Entregas</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                     <!-- /btn-group -->
