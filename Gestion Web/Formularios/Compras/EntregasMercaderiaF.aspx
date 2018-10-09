@@ -105,7 +105,7 @@
                                             <th>Codigo</th>
                                             <th>Descripcion</th>
                                             <th>Cantidad Pedida</th>
-                                            <th>Cantidad Entregada</th>
+                                            <th>Cantidad Recibida</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -134,4 +134,169 @@
             </asp:UpdatePanel>
         </div>
     </div>
+
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+    <script src="../../Scripts/Application.js"></script>
+    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+
+    <script src="../../Scripts/JSFunciones1.js"></script>
+
+    <script>
+        $(function () {
+            $("#<%= txtFecha.ClientID %>").datepicker(
+                {
+                    dateFormat: 'dd/mm/yy'
+                }
+                );
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+                {
+                    dateFormat: 'dd/mm/yy'
+                }
+                );
+        });
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $(function () {
+                $("#<%= txtFecha.ClientID %>").datepicker(
+                    {
+                        dateFormat: 'dd/mm/yy'
+                    }
+                    );
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $(function () {
+                $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+                    {
+                        dateFormat: 'dd/mm/yy'
+                    }
+                    );
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataTables-example').dataTable({
+                "paging": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $('#dataTables-example').dataTable({
+
+                "paging": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+
+
+            });
+        }
+    </script>
+
+    <script>
+        //valida los campos solo numeros
+        function validarNro(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+            if (key < 48 || key > 57) {
+                if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+
 </asp:Content>

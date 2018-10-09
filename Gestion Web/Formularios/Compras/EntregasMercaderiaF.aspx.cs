@@ -30,14 +30,15 @@ namespace Gestion_Web.Formularios.Compras
 
             this.VerificarLogin();
 
+            btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+
             if (!IsPostBack)
             {
                 cargarProveedores();
                 cargarSucursal();
-                CargarDatosDesdeOrdenCompra();
-                CargarItemsFacturaEnPH();
+                CargarDatosDesdeOrdenCompra();                
             }
-            
+            CargarItemsFacturaEnPH();
         }
 
         private void VerificarLogin()
@@ -67,7 +68,6 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                int valor = 0;
                 int cambiarSucursal = 0;
                 int cambiarPuntovta = 0;
                 string permisos = Session["Login_Permisos"] as string;
@@ -118,6 +118,8 @@ namespace Gestion_Web.Formularios.Compras
 
                 txtFecha.Text = oc.Fecha.Value.ToString("dd/MM/yyyy");
                 txtFechaEntrega.Text = oc.FechaEntrega.Value.ToString("dd/MM/yyyy");
+
+                //this.txtNumero.Text = oc.Numero.ToString().PadLeft(8, '0');
             }
             catch (Exception ex)
             {
@@ -205,24 +207,6 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void obtenerNroOrden(int idPtoVta, string tipoDoc)
-        {
-            try
-            {
-                int ptoVenta = Convert.ToInt32(this.ListPtoVenta.SelectedValue);
-                PuntoVenta pv = this.contSuc.obtenerPtoVentaId(Convert.ToInt32(ListPtoVenta.SelectedValue));
-                //como estoy en cotizacion pido el ultimo numero de este documento
-                int nro = this.contFact.obtenerFacturaNumero(ptoVenta, "Orden de Compra");
-                this.txtPVenta.Text = pv.puntoVenta;
-                this.txtNumero.Text = nro.ToString().PadLeft(8, '0');
-                //this.labelNroRemito.Text = "Remito N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo numero de Orden de compra. " + ex.Message));
-            }
-        }
-
         public void CargarItemsFacturaEnPH()
         {
             try
@@ -246,7 +230,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 //fila
                 TableRow tr = new TableRow();
-                tr.ID = ocItem.Id.ToString();
+                //tr.ID = ocItem.Id.ToString();
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
@@ -262,7 +246,7 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celDescripcion);
 
                 TableCell celCantidad = new TableCell();
-                int cantidad = Convert.ToInt32(ocItem.Cantidad);
+                decimal cantidad = Convert.ToDecimal(ocItem.Cantidad);
                 celCantidad.Text = cantidad.ToString();
                 celCantidad.HorizontalAlign = HorizontalAlign.Left;
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
@@ -303,7 +287,7 @@ namespace Gestion_Web.Formularios.Compras
                 rc.Tipo = 1;
                 rc.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
                 rc.RemitosCompras_Comentarios.Observacion = this.txtObservaciones.Text;
-                rc.Devolucion = 1;
+                rc.Devolucion = 0;
 
                 rc.RemitosCompras_Items = obtenerItems();
 
@@ -312,7 +296,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (i > 0)
                 {
                     Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Remito nro " + rc.Numero + " generado con exito.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Remito Guardado con exito\", {type: \"info\"}); location.href='RemitosABM.aspx?a=1';", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=8&rc=" + rc.Id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); $.msgbox(\"Remito Generado con exito\", {type: \"info\"}); location.href='RemitoF.aspx';", true);
                 }
             }
             catch (Exception ex)
@@ -326,47 +310,22 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
-                //int devolucion = Convert.ToInt32(this.ListDevolucion.SelectedValue);
 
                 foreach (var c in this.phProductos.Controls)
                 {
                     TableRow tr = c as TableRow;
-                    TextBox txt = tr.Cells[3].Controls[0] as TextBox;
-                    TextBox txtLote = tr.Cells[4].Controls[0] as TextBox;
-                    TextBox txtVencimiento = tr.Cells[5].Controls[0] as TextBox;
-                    if (!String.IsNullOrEmpty(txt.Text))
+                    string txt = tr.Cells[0].Text;
+                    decimal cantidadPedida = Convert.ToDecimal(tr.Cells[2].Text);
+                    TextBox cantidadRecibida = tr.Cells[3].Controls[0] as TextBox;
+                    if (!String.IsNullOrEmpty(txt))
                     {
-                        //if (Convert.ToDecimal(txt.Text) > 0)
-                        if (Convert.ToDecimal(txt.Text) != 0)
+                        if (Convert.ToDecimal(txt) != 0)
                         {
                             var item = new RemitosCompras_Items();
-                            string idArt = txt.ID.Split('_')[1];
-                            //Articulo A = contArticulos.obtenerArticuloCodigo((tr.Cells[0]).Text);
+                            string idArt = txt;
                             Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
                             item.Codigo = A.id;
-
-                            //decimal cantidad = Convert.ToDecimal(txt.Text);
-                            //if (devolucion > 0)
-                            //{
-                            //    item.Cantidad = Math.Abs(cantidad) * -1;
-                            //}
-                            //else
-                            //{
-                            //    item.Cantidad = cantidad;
-                            //}
-
-                            //datos despacho
-                            //item.Lote = txtLote.Text;
-                            //item.Vencimiento = txtVencimiento.Text;
-                            //item.NumeroDespacho = this.txtNumeroDespacho.Text;
-                            //try
-                            //{
-                            //    if (!String.IsNullOrEmpty(this.txtFechaDespacho.Text))
-                            //        item.FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
-                            //    else
-                            //        item.FechaDespacho = DateTime.Now;
-                            //}
-                            //catch { }
+                            item.Cantidad = Convert.ToDecimal(cantidadRecibida.Text);
 
                             items.Add(item);
                             int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
@@ -378,10 +337,20 @@ namespace Gestion_Web.Formularios.Compras
                             {
                                 item.Trazabilidad = 0;
                             }
-                        }
 
+                            if(cantidadPedida != Convert.ToDecimal(cantidadRecibida.Text))
+                            {
+                                contComprasEnt.AgregarRemitoCompraOrdenCompraDiferencias((long)item.IdRemito, ordenCompra, cantidadPedida, Convert.ToDecimal(cantidadRecibida.Text));
+                            }
+                        }
                     }
                 }
+
+                int temp = contComprasEnt.GuardarRemitoCompraOrdenCompraDiferencias();
+
+                if(temp < 0)
+                    Log.EscribirSQL(1, "ERROR", "Error guardando diferencias entre remitos y ordenes de compra");
+
                 return items;
             }
             catch (Exception ex)

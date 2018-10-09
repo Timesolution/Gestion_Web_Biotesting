@@ -373,6 +373,7 @@
     <Content Include="Formularios\Compras\CCCompraF.aspx" />
     <Content Include="Formularios\Compras\ComprasABM.aspx" />
     <Content Include="Formularios\Compras\ComprasF.aspx" />
+    <Content Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx" />
     <Content Include="Formularios\Compras\EntregasMercaderiaF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesGastosF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesMonedasABM.aspx" />
@@ -1318,6 +1319,13 @@
     </Compile>
     <Compile Include="Formularios\Compras\ArticulosPedirF.aspx.designer.cs">
       <DependentUpon>ArticulosPedirF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx.cs">
+      <DependentUpon>DiferenciaCompraMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx.designer.cs">
+      <DependentUpon>DiferenciaCompraMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Compras\dsCompras.Designer.cs">
       <AutoGen>True</AutoGen>
