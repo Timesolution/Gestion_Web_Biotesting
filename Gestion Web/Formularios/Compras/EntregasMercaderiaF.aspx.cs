@@ -319,30 +319,29 @@ namespace Gestion_Web.Formularios.Compras
                     TextBox cantidadRecibida = tr.Cells[3].Controls[0] as TextBox;
                     if (!String.IsNullOrEmpty(txt))
                     {
-                        if (Convert.ToDecimal(txt) != 0)
+
+                        var item = new RemitosCompras_Items();
+                        string idArt = txt;
+                        Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
+                        item.Codigo = A.id;
+                        item.Cantidad = Convert.ToDecimal(cantidadRecibida.Text);
+
+                        items.Add(item);
+                        int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
+                        if (trazable > 0)
                         {
-                            var item = new RemitosCompras_Items();
-                            string idArt = txt;
-                            Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
-                            item.Codigo = A.id;
-                            item.Cantidad = Convert.ToDecimal(cantidadRecibida.Text);
-
-                            items.Add(item);
-                            int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
-                            if (trazable > 0)
-                            {
-                                item.Trazabilidad = 1;
-                            }
-                            else
-                            {
-                                item.Trazabilidad = 0;
-                            }
-
-                            if(cantidadPedida != Convert.ToDecimal(cantidadRecibida.Text))
-                            {
-                                contComprasEnt.AgregarRemitoCompraOrdenCompraDiferencias((long)item.IdRemito, ordenCompra, cantidadPedida, Convert.ToDecimal(cantidadRecibida.Text));
-                            }
+                            item.Trazabilidad = 1;
                         }
+                        else
+                        {
+                            item.Trazabilidad = 0;
+                        }
+
+                        if (cantidadPedida != Convert.ToDecimal(cantidadRecibida.Text))
+                        {
+                            contComprasEnt.AgregarRemitoCompraOrdenCompraDiferencias((long)item.IdRemito, ordenCompra, cantidadPedida, Convert.ToDecimal(cantidadRecibida.Text));
+                        }
+
                     }
                 }
 
