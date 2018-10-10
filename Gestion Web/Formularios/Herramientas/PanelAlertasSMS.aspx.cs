@@ -247,12 +247,18 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (!txtEnvioCobro.Text.Contains("@@COBRO"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@COBRO'. \", {type: \"error\"});", true);
-                    txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO ";
+                    txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO";
                 }
-                else if (!txtEnvioMailFC.Text.Contains("@@FACTURA"))
+                else if (!txtEnvioFact.Text.Contains("@@MONTO"))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@MONTO'. \", {type: \"error\"});", true);
+                    txtEnvioFact.Text = "'Ingrese su texto' @@FACTURA @@MONTO";
+                }
+                else if (!txtEnvioMailFC.Text.Contains("@@FACTURA") || !txtEnvioFact.Text.Contains("@@FACTURA"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@FACTURA'. \", {type: \"error\"});", true);
                     txtEnvioMailFC.Text = "'Ingrese su texto' @@FACTURA ";
+                    txtEnvioFact.Text = "'Ingrese su texto' @@MONTO @@FACTURA ";
                 }
                 else
                 {
@@ -283,7 +289,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     config.MensajeProductoReparado = this.txtEnvioProductoReparado.Text;
 
                     int i = this.contConfig.guardarConfiguracionesSMS(config);
-                    if (i > 0)
+                    if (i >= 0)
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Guardado con exito!.\", {type: \"info\"});location.href='PanelAlertasSMS.aspx';", true);
                     }

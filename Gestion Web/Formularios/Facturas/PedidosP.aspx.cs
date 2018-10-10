@@ -114,6 +114,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListVendedor.SelectedValue = Vendedor.ToString();
                     this.DropListEstado.SelectedValue = idEstado.ToString();
                     this.DropListEstadoFamilia.SelectedValue = idEstado.ToString();
+                    this.DropListEstadoPendientes.SelectedValue = idEstado.ToString();
                     this.ListTipoEntrega.SelectedValue = this.tipoEntrega.ToString();
                     this.RadioFechaPedido.Checked = Convert.ToBoolean(this.tipoFecha);
                     this.RadioFechaEntrega.Checked = Convert.ToBoolean(this.tipoFecha2);
@@ -481,6 +482,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListEstadoFamilia.DataBind();
 
+                this.DropListEstadoPendientes.DataSource = dt;
+                this.DropListEstadoPendientes.DataValueField = "id";
+                this.DropListEstadoPendientes.DataTextField = "descripcion";
+
+                this.DropListEstadoPendientes.DataBind();
             }
             catch (Exception ex)
             {
@@ -1582,7 +1588,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=3&fd=" + this.txtFechaDesdeCantidad.Text + "&fh=" + this.txtFechaHastaCantidad.Text + "&suc=" + this.ListSucursalCantidad.SelectedValue + "&c=" + this.ListClientesCantidad.SelectedValue + "&g=" + this.ListGruposCantidad.SelectedValue + "&art=" + this.DropListArticulosCantidad.SelectedValue + "&p=" + this.ListProveedoresCantidad.SelectedValue + "&ze=" + this.DropListZonaEntregaCantidad.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=3&fd=" + this.txtFechaDesdeCantidad.Text + "&fh=" + this.txtFechaHastaCantidad.Text + "&suc=" + this.ListSucursalCantidad.SelectedValue + "&c=" + this.ListClientesCantidad.SelectedValue + "&g=" + this.ListGruposCantidad.SelectedValue + "&art=" + this.DropListArticulosCantidad.SelectedValue + "&p=" + this.ListProveedoresCantidad.SelectedValue + "&ze=" + this.DropListZonaEntregaCantidad.SelectedValue + "&ep=" + this.DropListEstadoPendientes.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch (Exception ex)
             {
