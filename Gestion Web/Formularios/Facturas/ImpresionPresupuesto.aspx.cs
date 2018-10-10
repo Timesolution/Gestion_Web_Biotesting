@@ -145,7 +145,10 @@ namespace Gestion_Web.Formularios.Facturas
                     DataTable dt = this.contCobranza.obtenerTablaTopClientes(DateTime.Today.ToString("dd/MM/yyyy"), fact.fecha.AddHours(23).ToString("dd/MM/yyyy"), fact.cliente.id, 0, fact.sucursal.id, 1,0);
                     saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
                 }
-                catch { }
+                catch(Exception ex)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en generarReporte2. " + ex.Message);
+                }
 
                 String cotizacionFecha = String.Empty;
 
@@ -532,7 +535,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 //Comentario factura
-                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);                
+                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
 
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
