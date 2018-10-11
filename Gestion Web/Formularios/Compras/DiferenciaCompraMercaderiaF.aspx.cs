@@ -181,7 +181,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void cargarEnPh(remitosCompraordenCompra_Diferencias f)
+        private void cargarEnPh(RemitoCompraOrdenCompra_Diferencias f)
         {
             try
             {

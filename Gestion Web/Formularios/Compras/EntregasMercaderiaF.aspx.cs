@@ -276,7 +276,12 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                if (!Page.IsValid)
+                    return;
+
                 var items = contComprasEnt.obtenerOrden(ordenCompra);
+
+                List<RemitoCompraOrdenCompra_Diferencias> diferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
 
                 RemitosCompra rc = new RemitosCompra();
 
@@ -289,9 +294,12 @@ namespace Gestion_Web.Formularios.Compras
                 rc.RemitosCompras_Comentarios.Observacion = this.txtObservaciones.Text;
                 rc.Devolucion = 0;
 
-                rc.RemitosCompras_Items = obtenerItems();
+                rc.RemitosCompras_Items = obtenerItems(rc).Item1;
 
-                int i = this.contComprasEnt.agregarRemito(rc, (int)rc.IdSucursal);
+                diferencias = obtenerItems(rc).Item2;
+
+                //int i = this.contComprasEnt.agregarRemito(rc, (int)rc.IdSucursal);
+                int i = contComprasEnt.ProcesarEntregas(diferencias, rc, ordenCompra);
 
                 if (i > 0)
                 {
@@ -305,26 +313,29 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private List<RemitosCompras_Items> obtenerItems()
+        private Tuple<List<RemitosCompras_Items>, List<RemitoCompraOrdenCompra_Diferencias>> obtenerItems(RemitosCompra remitoCompra)
         {
             try
             {
                 List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
+
+                List<RemitoCompraOrdenCompra_Diferencias> diferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
 
                 foreach (var c in this.phProductos.Controls)
                 {
                     TableRow tr = c as TableRow;
                     string txt = tr.Cells[0].Text;
                     decimal cantidadPedida = Convert.ToDecimal(tr.Cells[2].Text);
-                    TextBox cantidadRecibida = tr.Cells[3].Controls[0] as TextBox;
+                    TextBox cantidadRecibidaTB = tr.Cells[3].Controls[0] as TextBox;
+                    decimal cantidadRecibida = Convert.ToDecimal(cantidadRecibidaTB.Text);
+
                     if (!String.IsNullOrEmpty(txt))
                     {
-
                         var item = new RemitosCompras_Items();
                         string idArt = txt;
                         Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
                         item.Codigo = A.id;
-                        item.Cantidad = Convert.ToDecimal(cantidadRecibida.Text);
+                        item.Cantidad = cantidadRecibida;
 
                         items.Add(item);
                         int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
@@ -337,20 +348,30 @@ namespace Gestion_Web.Formularios.Compras
                             item.Trazabilidad = 0;
                         }
 
-                        if (cantidadPedida != Convert.ToDecimal(cantidadRecibida.Text))
+                        if (cantidadPedida != cantidadRecibida)
                         {
-                            contComprasEnt.AgregarRemitoCompraOrdenCompraDiferencias((long)item.IdRemito, ordenCompra, cantidadPedida, Convert.ToDecimal(cantidadRecibida.Text));
+                            RemitoCompraOrdenCompra_Diferencias diferencia = new RemitoCompraOrdenCompra_Diferencias();
+
+                            diferencia.RemitosCompra = remitoCompra;
+                            diferencia.OrdenCompra = ordenCompra;
+                            diferencia.CantidadPedida = cantidadPedida;
+                            diferencia.CantidadRecibida = cantidadRecibida;
+                            diferencia.Diferencia = cantidadPedida - cantidadRecibida;
+                            diferencia.Articulo = A.id;
+
+                            diferencias.Add(diferencia);
+                            //contComprasEnt.AgregarRemitoCompraOrdenCompraDiferencias(remitoCompra, ordenCompra, cantidadPedida, cantidadRecibida,A.id);
                         }
 
                     }
                 }
 
-                int temp = contComprasEnt.GuardarRemitoCompraOrdenCompraDiferencias();
+                //int temp = contComprasEnt.GuardarRemitoCompraOrdenCompraDiferencias();
 
-                if(temp < 0)
-                    Log.EscribirSQL(1, "ERROR", "Error guardando diferencias entre remitos y ordenes de compra");
+                //if(temp < 0)
+                //    Log.EscribirSQL(1, "ERROR", "Error guardando diferencias entre remitos y ordenes de compra");
 
-                return items;
+                return new Tuple<List<RemitosCompras_Items>, List<RemitoCompraOrdenCompra_Diferencias>>(items,diferencias);
             }
             catch (Exception ex)
             {
