@@ -25,6 +25,8 @@ namespace Gestion_Web.Formularios.Compras
         private string fechaH;
         private int sucursal;
         private int proveedor;
+        private int estado;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             this.VerificarLogin();
@@ -33,7 +35,8 @@ namespace Gestion_Web.Formularios.Compras
             fechaH = Request.QueryString["fh"];
             sucursal = Convert.ToInt32(Request.QueryString["suc"]);
             proveedor = Convert.ToInt32(Request.QueryString["p"]);
-            
+            estado = Convert.ToInt32(Request.QueryString["e"]);
+
             if (!IsPostBack)
             {
                 this.cargarProveedores();
@@ -48,7 +51,7 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.btnAccion.Visible = false;
-                    
+                    estado = 0;
                 }
                 else
                 {
@@ -68,7 +71,7 @@ namespace Gestion_Web.Formularios.Compras
 
             if (fechaD != null && fechaH != null)
             {
-                this.buscar(fechaD, fechaH, proveedor, sucursal);
+                this.buscar(fechaD, fechaH, proveedor, sucursal,estado);
             }   
             
         }
@@ -168,12 +171,19 @@ namespace Gestion_Web.Formularios.Compras
             {
                 var estados = contCompraEntity.obtenerOrdenesCompra_Estados();
 
+                estados.Insert(0, new Gestion_Api.Entitys.OrdenesCompra_Estados
+                {
+                    Id = 0,
+                    TipoEstado = "Todos"
+                });
+
                 //agrego todos
 
                 this.DropListEstado.DataSource = estados;
                 this.DropListEstado.DataValueField = "Id";
                 this.DropListEstado.DataTextField = "TipoEstado";
                 this.DropListEstado.DataBind();
+                                
 
                 //this.DropListEstado.SelectedValue = this..ToString();
 
@@ -213,13 +223,13 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal)
+        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado)
         {
             try
             {
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
                 DateTime Hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR"));
-                int estado = Convert.ToInt32(DropListEstado.SelectedValue);
+                //int estado = Convert.ToInt32(DropListEstado.SelectedValue);
                 List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, Hasta, proveedor, idSucursal, estado);
 
                 this.cargarOrdenes(ordenes);
@@ -383,7 +393,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (DropListProveedor.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue);
+                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstado.SelectedValue);
                     }
                     else
                     {

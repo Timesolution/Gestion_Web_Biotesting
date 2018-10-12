@@ -230,11 +230,11 @@ namespace Gestion_Web.Formularios.Compras
             {
                 //fila
                 TableRow tr = new TableRow();
-                //tr.ID = ocItem.Id.ToString();
+                tr.ID = ocItem.Codigo.ToString();
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
-                celCodigo.Text = ocItem.Codigo;
+                celCodigo.Text = contArticulos.obtenerArticuloByID(Convert.ToInt32(ocItem.Codigo)).codigo;
                 celCodigo.HorizontalAlign = HorizontalAlign.Left;
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
@@ -324,7 +324,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (var c in this.phProductos.Controls)
                 {
                     TableRow tr = c as TableRow;
-                    string txt = tr.Cells[0].Text;
+                    string txt = tr.ID;
                     decimal cantidadPedida = Convert.ToDecimal(tr.Cells[2].Text);
                     TextBox cantidadRecibidaTB = tr.Cells[3].Controls[0] as TextBox;
                     decimal cantidadRecibida = Convert.ToDecimal(cantidadRecibidaTB.Text);
