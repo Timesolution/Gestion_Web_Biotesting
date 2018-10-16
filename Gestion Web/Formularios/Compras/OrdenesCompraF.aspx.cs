@@ -23,6 +23,10 @@ namespace Gestion_Web.Formularios.Compras
         
         private string fechaD;
         private string fechaH;
+        private string fechaEntregaD;
+        private string fechaEntregaH;
+        private int filtroPorFecha;
+        private int filtroPorFechaEntrega;
         private int sucursal;
         private int proveedor;
         private int estado;
@@ -33,9 +37,13 @@ namespace Gestion_Web.Formularios.Compras
             //datos de filtro
             fechaD = Request.QueryString["fd"];
             fechaH = Request.QueryString["fh"];
+            fechaEntregaD = Request.QueryString["fed"];
+            fechaEntregaH = Request.QueryString["feh"];
             sucursal = Convert.ToInt32(Request.QueryString["suc"]);
             proveedor = Convert.ToInt32(Request.QueryString["p"]);
             estado = Convert.ToInt32(Request.QueryString["e"]);
+            filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
+            filtroPorFechaEntrega = Convert.ToInt32(Request.QueryString["fpfe"]);
 
             if (!IsPostBack)
             {
@@ -50,14 +58,20 @@ namespace Gestion_Web.Formularios.Compras
                     //tipo de documento??
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaEntregaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaEntregaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.btnAccion.Visible = false;
                     estado = 0;
+                    filtroPorFecha = 1;
+                    filtroPorFechaEntrega = 0;
                 }
                 else
                 {
                     this.btnAccion.Visible = true;
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
+                    txtFechaEntregaDesde.Text = fechaEntregaD;
+                    txtFechaEntregaHasta.Text = fechaEntregaH;
                 }                
 
                 if(proveedor > 0)
@@ -71,8 +85,8 @@ namespace Gestion_Web.Formularios.Compras
 
             if (fechaD != null && fechaH != null)
             {
-                this.buscar(fechaD, fechaH, proveedor, sucursal,estado);
-            }   
+                this.buscar(fechaD, fechaH, proveedor, sucursal,estado,fechaEntregaD,fechaEntregaH,filtroPorFecha,filtroPorFechaEntrega);
+            }
             
         }
         private void VerificarLogin()
@@ -223,14 +237,17 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado)
+        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado, string fEntregaD,string fEntregaH,int filtroPorFecha, int filtroPorFechaEntrega)
         {
             try
             {
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
-                DateTime Hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR"));
+                DateTime hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR"));
+                DateTime entregaD = Convert.ToDateTime(fEntregaD, new CultureInfo("es-AR"));
+                DateTime entregaH = Convert.ToDateTime(fEntregaH, new CultureInfo("es-AR"));
                 //int estado = Convert.ToInt32(DropListEstado.SelectedValue);
-                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, Hasta, proveedor, idSucursal, estado);
+
+                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, hasta, proveedor, idSucursal, estado, entregaD, entregaH, filtroPorFecha, filtroPorFechaEntrega);
 
                 this.cargarOrdenes(ordenes);
             }
@@ -322,7 +339,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 Literal l2 = new Literal();
                 l2.Text = "&nbsp";
-                celAccion.Controls.Add(l2);
+                celAccion.Controls.Add(l2);                
 
                 CheckBox cbSeleccion = new CheckBox();
                 //cbSeleccion.Text = "&nbsp;Imputar";
@@ -350,6 +367,16 @@ namespace Gestion_Web.Formularios.Compras
                 l4.Text = "&nbsp";
                 celAccion.Controls.Add(l4);
 
+                LinkButton btnDetallesExcel = new LinkButton();
+                btnDetallesExcel.CssClass = "btn btn-info ui-tooltip";
+                btnDetallesExcel.Attributes.Add("data-toggle", "tooltip");
+                btnDetallesExcel.Attributes.Add("title data-original-title", "DetallesExcel");
+                btnDetallesExcel.ID = "btnSelecEx_" + oc.Id;
+                btnDetallesExcel.Text = "<span class='fa fa-file-text-o'></span>";
+                btnDetallesExcel.Font.Size = 12;
+                btnDetallesExcel.PostBackUrl = "ImpresionCompras.aspx?a=3&ex=1&oc=" + oc.Id;
+                celAccion.Controls.Add(btnDetallesExcel);
+                
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celAccion);
@@ -383,7 +410,6 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "ERROR", "Error cargando detalle orden desde la interfaz. " + ex.Message);
             }
         }
-
         protected void lbtnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -393,7 +419,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (DropListProveedor.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstado.SelectedValue);
+                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstado.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked));
                     }
                     else
                     {

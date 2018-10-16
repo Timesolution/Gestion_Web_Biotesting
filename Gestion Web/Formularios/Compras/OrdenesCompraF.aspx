@@ -112,12 +112,12 @@
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                            <th>Fecha</th>
-                                            <th>Numero</th>
-                                            <th>Proveedor</th>
-                                            <th>Sucursal</th>
-                                            <th>Estado</th>
-                                            <th></th>
+                                            <th style="width:10%">Fecha</th>
+                                            <th style="width:20%">Numero</th>
+                                            <th style="width:20%">Proveedor</th>
+                                            <th style="width:20%">Sucursal</th>
+                                            <th style="width:15%">Estado</th>
+                                            <th style="width:15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -200,40 +200,51 @@
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
-                            <label class="col-md-4">Desde</label>
-                            <div class="col-md-4">
-
-                                <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
-
-                                <!-- /input-group -->
+                            <label class="col-md-3">Fecha Orden Compra</label>
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaDesde" placeholder="Desde" runat="server" class="form-control"></asp:TextBox>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaHasta" placeholder="Hasta" runat="server" class="form-control"></asp:TextBox>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RadioButton ID="RadioFechaOrdenCompra" Checked="true" runat="server" GroupName="fecha" />
+                            </div>
+                            <div class="col-md-1">
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4">Hasta</label>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
+                            <label class="col-md-3">Fecha Entrega</label>
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaEntregaDesde" placeholder="Desde" runat="server" class="form-control"></asp:TextBox>
                             </div>
-                            <div class="col-md-4">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaEntregaHasta" placeholder="Hasta" runat="server" class="form-control"></asp:TextBox>
                             </div>
-                            <!-- /input-group -->
-
+                            <div class="col-md-1">
+                                <asp:RadioButton ID="RadioFechaEntrega" runat="server" GroupName="fecha" />
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaEntregaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaEntregaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4">Sucursal</label>
                             <div class="col-md-6">
                                 <asp:DropDownList ID="DropListSucursal" disabled runat="server" class="form-control"></asp:DropDownList>
-                                <!-- /input-group -->
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4">Proveedor</label>
                             <div class="col-md-6">
                                 <asp:DropDownList ID="DropListProveedor" runat="server" class="form-control"></asp:DropDownList>
-                                <!-- /input-group -->
                             </div>
                             <div class="col-md-2">
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -243,7 +254,6 @@
                             <label class="col-md-4">Estado</label>
                             <div class="col-md-6">
                                 <asp:DropDownList ID="DropListEstado" runat="server" class="form-control"></asp:DropDownList>
-                                <!-- /input-group -->
                             </div>
                             <div class="col-md-2">
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstado" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -294,6 +304,10 @@
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
     </script>
 
@@ -304,6 +318,14 @@
 
         $(function () {
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(function () {
+            $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(function () {
+            $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
     </script>
