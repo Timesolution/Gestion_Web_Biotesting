@@ -239,7 +239,8 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("Pedido", p);
                 this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
                 this.cargarSucursal(p.empresa.id);
-                this.cargarPuntoVta(p.sucursal.id);
+                //TODO r hacer mejor esto
+                //this.cargarPuntoVta(p.sucursal.id);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
@@ -424,6 +425,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                this.ListPuntoVenta.Items.Clear();
+                this.ListPuntoVenta.SelectedIndex = 0;
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
@@ -438,12 +441,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.DataTextField = "NombreFantasia";
 
                 this.ListPuntoVenta.DataBind();
-
-
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando puntos de venta. " + ex.Message));
             }
         }
 
@@ -2828,6 +2829,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Inicio procesar pedido excel");
                 Boolean fileOK = false;
 
                 String path = Server.MapPath("../../content/excelFiles/pedidos");
@@ -2861,7 +2863,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //lo subo
                     FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
 
-
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Voy a traer pedidos desde el excel " + path + FileUpload1.FileName);
                     var pedidoExcel = new PedidoExcel();
                     var pedidos = pedidoExcel.traerDatos(path + FileUpload1.FileName);
 
@@ -2908,7 +2910,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch(Exception ex)
             {
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Error procesando excel " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error procesando excel " + ex.Message));
+                
             }
         }
         private int AgregarItemImportadoAPedido(string codigo, decimal cantidad)

@@ -638,7 +638,6 @@ namespace Gestion_Web.Formularios.Reportes
             {
 
             }
-
         }
 
         protected void lbtnExportar2_Click(object sender, EventArgs e)
@@ -738,9 +737,6 @@ namespace Gestion_Web.Formularios.Reportes
             }
         }
 
-
-        #endregion
-
         protected void btnExpImpagasVendedor_Click(object sender, EventArgs e)
         {
             try
@@ -774,5 +770,26 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
+
+        protected void lbtnExportarImpagasDetallado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fechaD == null && fechaH == null)
+                {
+                    fechaD = txtFechaDesde.Text;
+                    fechaH = txtFechaHasta.Text;
+                }
+                Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=4&ex=1");
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en lbtnExportarImpagasDetallado_Click. Ex: " + ex.Message));
+            }
+        }
+
+        #endregion
+
+
     }
 }

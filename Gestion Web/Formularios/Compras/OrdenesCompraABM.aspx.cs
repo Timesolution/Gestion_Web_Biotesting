@@ -133,13 +133,17 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                Log.EscribirSQL(1, "ERROR", "Inicio evento index change de provedor");
                 this.cargarAlertaProveedor();
+
+                Log.EscribirSQL(1, "ERROR", "Voy a cargar articulos");
                 this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+                Log.EscribirSQL(1, "ERROR", "Cargue articulos");
                 this.cargarProveedor_OC();
             }
             catch (Exception Ex)
             {
-
+                Log.EscribirSQL(1, "ERROR", "Error ejecutando eventos del list change de proveedores " + Ex.Message);
             }
 
         }
@@ -645,23 +649,26 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                //List<Articulo> articulos = this.contArticulos.obtenerArticulosByProveedor(idPRoveedor);
-                //List<Articulo> articulos = this.contArticulos.obtenerArticulosByProveedorReduc(idPRoveedor);
+                Log.EscribirSQL(1, "INFO", "Voy a iniciar cargar articulos del proveedor" + idPRoveedor);
                 DataTable dtArticulos = this.contArticulos.obtenerArticulosByProveedorDT(idPRoveedor);
                 //limpio el dt
                 this.dtItems.Rows.Clear();
+                Log.EscribirSQL(1, "INFO", "obtuve articulos del proveedor los voy a cargar");
                 foreach (DataRow a in dtArticulos.Rows)
                 {
+                    Log.EscribirSQL(1, "INFO", "entre al foreach (DataRow a in dtArticulos.Rows)");
                     DataTable dt = this.dtItems;
 
                     DataRow drFila = dt.NewRow();
 
                     //cargo otros proveedores, si lo tiene configuraco
                     string codProveedor = WebConfigurationManager.AppSettings.Get("CodProveedorCompras");
+                    Log.EscribirSQL(1, "INFO", "obtuve el codigo de provedor webConfig = "+codProveedor);
                     if (codProveedor == "1" && !String.IsNullOrEmpty(codProveedor))
                     {
                         List<ProveedorArticulo> ProvArticulo = this.contArticulos.obtenerProveedorArticulosByArticulo(Convert.ToInt32(a["id"]));
                         string codArtProveedor = "";
+                        Log.EscribirSQL(1, "INFO", "Obtuve articulos de ese proveedor");
                         foreach (var p in ProvArticulo)
                         {
                             codArtProveedor += p.codigoProveedor + " - ";
@@ -677,6 +684,7 @@ namespace Gestion_Web.Formularios.Compras
                     else
                     {
                         drFila["Codigo"] = a["codigo"].ToString();
+                        Log.EscribirSQL(1, "INFO", "Obtuve un codigo= "+ a["codigo"].ToString());
                     }
 
 
@@ -685,15 +693,20 @@ namespace Gestion_Web.Formularios.Compras
                     drFila["Descripcion"] = a["descripcion"];
                     drFila["Cant"] = 0;
                     drFila["Costo"] = Convert.ToDecimal(a["costo"].ToString());
+                    Log.EscribirSQL(1, "INFO", "Obtuve una descripcion= " + a["descripcion"].ToString());
 
                     dt.Rows.Add(drFila);
 
                     this.dtItems = dt;
+                    Log.EscribirSQL(1, "INFO", "Agregue el dt.Rows.Add(drFila)");
                 }
+
+                Log.EscribirSQL(1, "INFO", "Termine de obtener articulos y los cargue en el DT, voy a cargarlos en pantalla");
                 this.CargarItems();
             }
             catch (Exception ex)
             {
+                Log.EscribirSQL(1, "ERROR", "Error cargando articulos (cargarArticulosProveedor)"+ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos del proveedor. " + ex.Message));
             }
         }
@@ -761,6 +774,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                Log.EscribirSQL(1, "INFO", "TODO agregarItemATabla()");
                 //fila
                 TableRow tr = new TableRow();
 
@@ -845,15 +859,20 @@ namespace Gestion_Web.Formularios.Compras
                 //Stock Articulo: stock minimo, stock total (todas las sucursales), stock por sucursal seleccionada en el DropDownList
                 //cortar los parentesis cuando trae el codigo
                 int posParentesis = codigo.IndexOf('(');
-                string codigoSinParentesis = codigo.Substring(0,posParentesis).Trim();
+                string codigoSinParentesis = codigo;
+                if (posParentesis > 0)
+                {
+                    codigoSinParentesis = codigo.Substring(0, posParentesis).Trim();
+                }
+                
                 Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);
+            
                 if (A != null && A.descripcion == Descripcion)
                 {
                     var list = this.contArticulos.obtenerStockArticuloReduc(A.id);
                     celStockMinimo.Text = A.stockMinimo.ToString();
                     celStockTotal.Text = list.Sum(x => x.cantidad).ToString();
                     celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
-
                     //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono
 
                     if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text))
@@ -869,9 +888,11 @@ namespace Gestion_Web.Formularios.Compras
 
                 this.phProductos.Controls.Add(tr);
 
+                Log.EscribirSQL(1, "INFO", "cargue el item al ph");
             }
             catch (Exception ex)
             {
+                Log.EscribirSQL(1, "ERROR", "Error cargando al ph " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando item a tabla. " + ex.Message));
             }
         }
@@ -879,6 +900,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                Log.EscribirSQL(1, "INFO", "Inicio cargar items en pantalla");
                 int verCargados = Convert.ToInt32(this.lblVerCargados.Text);
                 this.phProductos.Controls.Clear();
                 if (this.dtItems != null)
@@ -898,10 +920,12 @@ namespace Gestion_Web.Formularios.Compras
                         }
                     }
                 }
+                Log.EscribirSQL(1, "INFO", "Finalizo cargar items en pantalla");
                 //this.UpdatePanel1.Update();
             }
             catch (Exception ex)
             {
+                Log.EscribirSQL(1, "ERROR", "Error cargando items en pantalla " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
             }
         }

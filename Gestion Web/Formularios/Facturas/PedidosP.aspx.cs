@@ -85,7 +85,7 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                     if (fechaD == null && fechaH == null && suc == 0)
-                    {                        
+                    {
                         idEstado = est.id;
                         string perfil2 = Session["Login_NombrePerfil"] as string;
                         if (perfil2 == "Cliente")
@@ -100,24 +100,24 @@ namespace Gestion_Web.Formularios.Facturas
                         this.tipoFecha = 1;
                     }
 
-                    txtFechaDesde.Text = fechaD;
-                    txtFechaHasta.Text = fechaH;
-                    txtFechaDesdeCantidad.Text = fechaD;
-                    txtFechaHastaCantidad.Text = fechaH;
-                    txtFechaEntregaDesde.Text = fechaD;
-                    txtFechaEntregaHasta.Text = fechaH;
-                    txtFechaDesdeFamilia.Text = fechaD;
-                    txtFechaHastaFamilia.Text = fechaH;
-                    DropListSucursal.SelectedValue = suc.ToString();
-                    DropListClientes.SelectedValue = idCliente.ToString();
-                    DropListClientesFamilia.SelectedValue = idCliente.ToString();
-                    ListVendedor.SelectedValue = Vendedor.ToString();
-                    DropListEstado.SelectedValue = idEstado.ToString();
-                    DropListEstadoFamilia.SelectedValue = idEstado.ToString();
-                    ListTipoEntrega.SelectedValue = this.tipoEntrega.ToString();
+                    this.txtFechaDesde.Text = fechaD;
+                    this.txtFechaHasta.Text = fechaH;
+                    this.txtFechaDesdeCantidad.Text = fechaD;
+                    this.txtFechaHastaCantidad.Text = fechaH;
+                    this.txtFechaEntregaDesde.Text = fechaD;
+                    this.txtFechaEntregaHasta.Text = fechaH;
+                    this.txtFechaDesdeFamilia.Text = fechaD;
+                    this.txtFechaHastaFamilia.Text = fechaH;
+                    this.DropListSucursal.SelectedValue = suc.ToString();
+                    this.DropListClientes.SelectedValue = idCliente.ToString();
+                    this.DropListClientesFamilia.SelectedValue = idCliente.ToString();
+                    this.ListVendedor.SelectedValue = Vendedor.ToString();
+                    this.DropListEstado.SelectedValue = idEstado.ToString();
+                    this.DropListEstadoFamilia.SelectedValue = idEstado.ToString();
+                    this.DropListEstadoPendientes.SelectedValue = idEstado.ToString();
+                    this.ListTipoEntrega.SelectedValue = this.tipoEntrega.ToString();
                     this.RadioFechaPedido.Checked = Convert.ToBoolean(this.tipoFecha);
                     this.RadioFechaEntrega.Checked = Convert.ToBoolean(this.tipoFecha2);
-                    
                 }
                 string perfil = Session["Login_NombrePerfil"] as string;
                 //por defecto
@@ -130,14 +130,14 @@ namespace Gestion_Web.Formularios.Facturas
                         this.ListVendedor.SelectedValue = this.idVendedor.ToString();
                         this.Vendedor = idVendedor;
                     }
-                    if (perfil == "Cliente")
+                    else if (perfil == "Cliente")
                     {
                         //deshabilito el list de vendedor
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         //para asegurarme de cargar por defecto los pedidos del cliente
                         this.cargarPedidosRango(fechaD, fechaH, suc, this.idVendedor, idEstado, this.Vendedor);
                     }
-                    if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
+                    else if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
                     {
                         this.cargarPedidosPorPadre(fechaD, fechaH, idVendedor, idEstado);
                         this.iconoBusqueda.Attributes.Add("disabled", "disabled");
@@ -171,14 +171,14 @@ namespace Gestion_Web.Formularios.Facturas
                 if (accion == 3)
                 {
                     this.cargarPedidosPorPadre(fechaD, fechaH, idCliente, idEstado);
-                    if(idCliente > 0)
+                    if (idCliente > 0)
                     {
                         lbtnFacturarFamilia.Visible = true;
                         this.iconoBusqueda.Attributes.Add("disabled", "disabled");
                     }
                 }
                 //busco por observacion
-                if(accion == 4)
+                if (accion == 4)
                 {
                     this.buscarPorObservacion();
                     this.lbtnFacturar.Visible = true;
@@ -229,7 +229,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                             string perfil = Session["Login_NombrePerfil"] as string;
                             if (perfil == "Cliente")
-                            {                                
+                            {
                                 //desactivo acciones
                                 this.phAcciones.Visible = false;
                             }
@@ -305,7 +305,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dr2["id"] = 0;
                     dt.Rows.InsertAt(dr2, 1);
                 }
-                if(perfil == "Cliente")
+                if (perfil == "Cliente")
                 {
                     auxiliar = true;
                     dt = contCliente.obtenerClientesByClienteDT(this.idVendedor);
@@ -314,21 +314,21 @@ namespace Gestion_Web.Formularios.Facturas
                     //Oculto el Saldo en caso de que el logueado sea un Cliente
                     this.phSaldo.Visible = false;
                 }
-                if(perfil == "Distribuidor" || perfil=="Lider" || perfil=="Experta")
+                if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
                 {
                     auxiliar = true;
                     dt = contClienteEnt.obtenerReferidosDeCliente(this.idVendedor);
                     DataRow dr = dt.NewRow();
                     Gestor_Solution.Modelo.Cliente c = contCliente.obtenerClienteID(this.idVendedor);
-                    if (c!= null)
+                    if (c != null)
                     {
                         dr["alias"] = c.razonSocial;
                     }
-                    
+
                     dr["id"] = this.idVendedor;
                     dt.Rows.InsertAt(dr, 0);
                 }
-                if(auxiliar == false)
+                if (auxiliar == false)
                 {
                     dt = contCliente.obtenerClientesDT();
 
@@ -350,10 +350,10 @@ namespace Gestion_Web.Formularios.Facturas
                     dr2["id"] = 0;
                     dt.Rows.InsertAt(dr2, 1);
                 }
-                       
+
                 //DataTable dt = contCliente.obtenerClientesDT();
 
-                
+
 
                 this.DropListClientes.DataSource = dt;
                 this.DropListClientes.DataValueField = "id";
@@ -482,6 +482,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListEstadoFamilia.DataBind();
 
+                this.DropListEstadoPendientes.DataSource = dt;
+                this.DropListEstadoPendientes.DataValueField = "id";
+                this.DropListEstadoPendientes.DataTextField = "descripcion";
+
+                this.DropListEstadoPendientes.DataBind();
             }
             catch (Exception ex)
             {
@@ -516,15 +521,53 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.ListTipoEntrega.DataBind();
                 }
-                
-                
-                //cargo fecha ho
-                
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista entregas. " + ex.Message));
             }
+
+            #region new r
+            //try
+            //{
+            //    var contExpreso = new ControladorExpreso();
+            //    List<Gestion_Api.Entitys.TiposEntrega> listaEntregas = new List<Gestion_Api.Entitys.TiposEntrega>();
+            //    listaEntregas.Insert(0, (new Gestion_Api.Entitys.TiposEntrega { Id = -1, Descripcion = "Seleccione..." }));
+            //    listaEntregas.Insert(1, (new Gestion_Api.Entitys.TiposEntrega { Id = 0, Descripcion = "Todas" }));
+
+            //    List<Gestion_Api.Entitys.TiposEntrega> listaAux = contExpreso.obtenerTiposEntrega();
+            //    listaAux = contExpreso.obtenerTiposEntrega();
+            //    foreach (var item in listaAux)
+            //    {
+            //        listaEntregas.Add(item);
+            //    }
+
+            //    if (listaAux != null)
+            //    {//TODO r descomentar esto aca esta el error
+            //        //listaEntregas.Insert(0, (new Gestion_Api.Entitys.TiposEntrega { Id = -1, Descripcion = "Seleccione..." }));
+            //        //listaEntregas.Insert(1, (new Gestion_Api.Entitys.TiposEntrega { Id = 0, Descripcion = "Todas" }));
+            //        this.ListTipoEntrega.DataSource = listaEntregas;
+            //        this.ListTipoEntrega.DataValueField = "Id";
+            //        this.ListTipoEntrega.DataTextField = "Descripcion";
+            //        this.ListTipoEntrega.DataBind();
+            //    }
+            //    else
+            //    {
+            //        listaEntregas = new List<Gestion_Api.Entitys.TiposEntrega>();
+            //        listaEntregas.Insert(0, (new Gestion_Api.Entitys.TiposEntrega { Id = -1, Descripcion = "Seleccione..." }));
+            //        listaEntregas.Insert(1, (new Gestion_Api.Entitys.TiposEntrega { Id = 0, Descripcion = "Todas" }));
+            //        this.ListTipoEntrega.DataSource = listaEntregas;
+            //        this.ListTipoEntrega.DataValueField = "Id";
+            //        this.ListTipoEntrega.DataTextField = "Descripcion";
+
+            //        this.ListTipoEntrega.DataBind();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista entregas. " + ex.Message));
+            //}
+            #endregion
         }
 
         public void cargarZonaEntrega()
@@ -600,8 +643,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
-                DataTable dt = this.contArticulos.obtenerGruposArticulos();                
+                DataTable dt = this.contArticulos.obtenerGruposArticulos();
 
                 this.ListGruposCantidad.DataSource = dt;
                 this.ListGruposCantidad.DataValueField = "id";
@@ -668,7 +710,7 @@ namespace Gestion_Web.Formularios.Facturas
         #endregion
 
         #region funciones busquedas
-        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc,int idCliente,int idEstado, int vendedor)
+        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor)
         {
             try
             {
@@ -701,9 +743,9 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     DataTable dt = this.controlador.obtenerPedidosRangoDT(this.txtFechaDesde.Text, this.txtFechaHasta.Text, this.txtFechaEntregaDesde.Text, this.txtFechaEntregaHasta.Text,
-                        Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue),
-                        Convert.ToInt32(this.DropListEstado.SelectedValue), Convert.ToInt32(this.ListVendedor.SelectedValue), Convert.ToInt32(this.ListTipoEntrega.SelectedValue),
-                        Convert.ToInt32(this.RadioFechaPedido.Checked), Convert.ToInt32(this.RadioFechaEntrega.Checked));
+                    Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue),
+                    Convert.ToInt32(this.DropListEstado.SelectedValue), Convert.ToInt32(this.ListVendedor.SelectedValue), Convert.ToInt32(this.ListTipoEntrega.SelectedValue),
+                    Convert.ToInt32(this.RadioFechaPedido.Checked), Convert.ToInt32(this.RadioFechaEntrega.Checked));
                     this.cargarPedidos(dt);
                     this.cargarLabel(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListEstado.SelectedValue));
                 }
@@ -735,7 +777,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //Pedido p = this.controlador.obtenerPedidoPorCliente(this.cliente);
                 var pedidos = this.controlador.obtenerListaPedidosPorCliente(this.cliente);
-                if(pedidos != null)
+                if (pedidos != null)
                 {
                     this.phPedidos.Controls.Clear();
                     foreach (var p in pedidos)
@@ -753,7 +795,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                var pedidos = this.controlador.obtenerListaPedidosPorObservacion(this.observacion,13); //13 es el tipo de documento pedido
+                var pedidos = this.controlador.obtenerListaPedidosPorObservacion(this.observacion, 13); //13 es el tipo de documento pedido
                 if (pedidos != null)
                 {
                     this.phPedidos.Controls.Clear();
@@ -826,7 +868,7 @@ namespace Gestion_Web.Formularios.Facturas
                     lblSaldo.Text = saldo.ToString("C");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de Pedidos. " + ex.Message));
 
@@ -846,7 +888,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string perfil2 = Session["Login_NombrePerfil"] as string;
                 if (perfil2 == "Cliente")
                 {
-                    lblSaldo.Text = decimal.Round((saldo/(decimal)1.21),2).ToString("C");
+                    lblSaldo.Text = decimal.Round((saldo / (decimal)1.21), 2).ToString("C");
                 }
                 else
                 {
@@ -931,7 +973,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
                     tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * pedido.items.Count);
-                    celTiempo.Text = tiempoPorLinea.ToString(@"hh\:mm\:ss"); 
+                    celTiempo.Text = tiempoPorLinea.ToString(@"hh\:mm\:ss");
                 }
                 catch { }
                 celTiempo.HorizontalAlign = HorizontalAlign.Left;
@@ -1023,7 +1065,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string perfil2 = Session["Login_NombrePerfil"] as string;
                 if (perfil2 == "Cliente")
                 {
-                    celTotal.Text = "$" + Decimal.Round((p.total/(decimal)1.21),2).ToString();
+                    celTotal.Text = "$" + Decimal.Round((p.total / (decimal)1.21), 2).ToString();
                 }
                 else
                 {
@@ -1107,7 +1149,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 tr.Cells.Add(celAccion);
-                                
+
                 phPedidos.Controls.Add(tr);
 
             }
@@ -1134,7 +1176,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Pedido ped = this.controlador.obtenerPedidoId(Convert.ToInt32(idPedido));
                     if (ped.estado.id == 5)
                     {
-                        int i =this.contPedEntity.cambiarEstadoPedido(ped.id, 1);
+                        int i = this.contPedEntity.cambiarEstadoPedido(ped.id, 1);
                         if (i > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Cambio estado pendiente vendedor a pendiente pedido id: " + ped.id);
@@ -1143,7 +1185,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 catch { }
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + idPedido + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + idPedido + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog(" + idPedido + ")", true);
 
             }
@@ -1283,7 +1325,7 @@ namespace Gestion_Web.Formularios.Facturas
                     CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
-                        idtildado += ch.ID.Split('_')[1]+";";// .Substring(12, ch.ID.Length - 12) + ";";
+                        idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
@@ -1320,7 +1362,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!String.IsNullOrEmpty(idtildado))
                 {
                     int i = this.controlador.anularPedidos(idtildado);
-                    if(i > 0)
+                    if (i > 0)
                     {
                         Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ANULACION Pedido id: " + idtildado);
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Pedidos anulados con exito. ", "PedidosP.aspx"));
@@ -1404,8 +1446,8 @@ namespace Gestion_Web.Formularios.Facturas
                     dtDatos.Rows.Add(drDatos);
                 }
 
-                Session.Add("dtDatosPedidos",dtDatos);
-                    
+                Session.Add("dtDatosPedidos", dtDatos);
+
 
                 Response.Redirect("ImpresionPedido.aspx?a=2");
             }
@@ -1414,7 +1456,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        
+
         //boton buscar en el cliente
         protected void btnBuscarCod_Click(object sender, EventArgs e)
         {
@@ -1452,7 +1494,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
             }
-        }        
+        }
 
         //buscar
         protected void DropListClientes_SelectedIndexChanged(object sender, EventArgs e)
@@ -1463,9 +1505,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch
             {
-                
+
             }
-        }        
+        }
 
         protected void lbtnRemitir_Click(object sender, EventArgs e)
         {
@@ -1522,7 +1564,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-            
+
         }
 
         protected void ListVendedor_SelectedIndexChanged(object sender, EventArgs e)
@@ -1534,7 +1576,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerClientesVendedor(Convert.ToInt32(ListVendedor.SelectedValue));
                 }
-                
+
             }
             catch
             {
@@ -1546,7 +1588,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=3&fd=" + this.txtFechaDesdeCantidad.Text + "&fh=" + this.txtFechaHastaCantidad.Text + "&suc=" + this.ListSucursalCantidad.SelectedValue + "&c=" + this.ListClientesCantidad.SelectedValue + "&g=" + this.ListGruposCantidad.SelectedValue + "&art=" + this.DropListArticulosCantidad.SelectedValue + "&p=" + this.ListProveedoresCantidad.SelectedValue + "&ze=" + this.DropListZonaEntregaCantidad.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=3&fd=" + this.txtFechaDesdeCantidad.Text + "&fh=" + this.txtFechaHastaCantidad.Text + "&suc=" + this.ListSucursalCantidad.SelectedValue + "&c=" + this.ListClientesCantidad.SelectedValue + "&g=" + this.ListGruposCantidad.SelectedValue + "&art=" + this.DropListArticulosCantidad.SelectedValue + "&p=" + this.ListProveedoresCantidad.SelectedValue + "&ze=" + this.DropListZonaEntregaCantidad.SelectedValue + "&ep=" + this.DropListEstadoPendientes.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch (Exception ex)
             {
@@ -1560,7 +1602,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Response.Redirect("ImpresionPedido.aspx?a=3&ex=1&fd=" + this.txtFechaDesdeCantidad.Text + "&fh=" + this.txtFechaHastaCantidad.Text + "&suc=" + this.ListSucursalCantidad.SelectedValue + "&c=" + this.ListClientesCantidad.SelectedValue + "&g=" + this.ListGruposCantidad.SelectedValue + "&art=" + this.DropListArticulosCantidad.SelectedValue + "&p=" + this.ListProveedoresCantidad.SelectedValue + "&ze=" + this.DropListZonaEntregaCantidad.SelectedValue);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -1721,7 +1763,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListClientesCantidad.DataValueField = "id";
                 this.ListClientesCantidad.DataTextField = "alias";
                 this.ListClientesCantidad.DataBind();
-                
+
             }
             catch (Exception ex)
             {
@@ -1836,7 +1878,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (DropListClientesFamilia.SelectedValue != "-1" && DropListClientesFamilia.SelectedValue != "0")
                     {
-                            Response.Redirect("PedidosP.aspx?a=3&fechadesde=" + txtFechaDesdeFamilia.Text + "&fechaHasta=" + txtFechaHastaFamilia.Text + "&Cliente=" + DropListClientesFamilia.SelectedValue + "&estado=" + DropListEstadoFamilia.SelectedValue);
+                        Response.Redirect("PedidosP.aspx?a=3&fechadesde=" + txtFechaDesdeFamilia.Text + "&fechaHasta=" + txtFechaHastaFamilia.Text + "&Cliente=" + DropListClientesFamilia.SelectedValue + "&estado=" + DropListEstadoFamilia.SelectedValue);
                     }
                     else
                     {
@@ -1858,7 +1900,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (fechaD != null && fechaD != null && idCliente != 0 &&  idEstado != 0)
+                if (fechaD != null && fechaD != null && idCliente != 0 && idEstado != 0)
                 {
                     DataTable dt = this.controlador.obtenerPedidosPorPadre(fechaD, fechaH, idCliente, idEstado);
                     this.cargarPedidos(dt);
@@ -1893,7 +1935,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 //Verifico si el cliente padre tiene un padre
                 int idPadre = this.contPedEntity.verificarAbuelo(this.idCliente);
-                if(idPadre > 0)
+                if (idPadre > 0)
                 {
                     this.idCliente = idPadre;
                 }
@@ -1943,6 +1985,6 @@ namespace Gestion_Web.Formularios.Facturas
 
         #endregion
 
-       
+
     }
 }
