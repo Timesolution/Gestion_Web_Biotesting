@@ -62,9 +62,6 @@
     <Reference Include="itextsharp">
       <HintPath>Auxiliar\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
-    </Reference>
     <Reference Include="Mascotas Api">
       <HintPath>Auxiliar\Mascotas Api.dll</HintPath>
     </Reference>
@@ -118,15 +115,6 @@
     </Reference>
     <Reference Include="printButtonDLL">
       <HintPath>Auxiliar\printButtonDLL.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Data.Linq, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Data.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Interfaces, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Store_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -710,7 +698,9 @@
     <Content Include="js\plugins\msgGrowl\js\msgGrowl.pack.js" />
     <Content Include="js\plugins\uiToTop\jquery.ui.totop.js" />
     <Content Include="js\plugins\validate\jquery.validate.js" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />

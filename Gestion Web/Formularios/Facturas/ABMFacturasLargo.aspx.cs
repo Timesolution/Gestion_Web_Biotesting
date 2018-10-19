@@ -8924,9 +8924,9 @@ namespace Gestion_Web.Formularios.Facturas
                 string info = "";
 
                 if (f.totalITC > 0)
-                    info += " ITC: $" + f.totalITC.ToString();
+                    info += " ICL $" + f.totalITC.ToString();
                 if (f.totalHidrica > 0)
-                    info += "\nTasa Hidrica: $" + f.totalHidrica.ToString();
+                    info += "\nIDC: $" + f.totalHidrica.ToString();
                 if (f.totalVial > 0)
                     info += "\nTasa Vial: $" + f.totalVial.ToString();
                 if (f.totalMunicipal > 0)
