@@ -345,7 +345,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                Response.Redirect("ImpresionCompras.aspx?a=6&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ex=1&prov=" + this.idProveedor + "&s=" + this.sucursal + "&t=" + this.tipo);
+                Response.Redirect("ImpresionCompras.aspx?a=6&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ex=1&prov=" + this.idProveedor + "&s=" + this.sucursal + "&t=" + this.tipo + "&td=" + this.tipoDocumento);
             }
             catch
             {

@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Facturas
         private int proveedor;
         private int monedaOriginal = 0;
         private long zonaEntrega;
+        private int estadoPedido;
 
         DataTable dtPedidosTemp;
 
@@ -64,6 +65,7 @@ namespace Gestion_Web.Formularios.Facturas
                     idPedidos = Request.QueryString["pedidos"];
                     cotizacion = Convert.ToInt32(Request.QueryString["co"]);
                     zonaEntrega = Convert.ToInt64(Request.QueryString["ze"]);
+                    estadoPedido = Convert.ToInt32(Request.QueryString["ep"]);
 
                     //Obtengo la configuracion para ver los pedidos en moneda original o no.
                     string pmo = WebConfigurationManager.AppSettings.Get("PedidosMonedaOriginal");
@@ -459,7 +461,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                DataTable dt = this.controlador.obtenerCantidadArticulosEnPedidos(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente,this.articulo,this.proveedor,this.zonaEntrega);
+                DataTable dt = this.controlador.obtenerCantidadArticulosEnPedidos(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente,this.articulo,this.proveedor,this.zonaEntrega, this.estadoPedido);
 
                 //Sucursal s = this.contSucursal.obtenerSucursalID(this.sucursal);
                 Sucursal s = new Sucursal();

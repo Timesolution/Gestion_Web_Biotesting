@@ -32,6 +32,8 @@
                                 <li class=""><a href="#Costos" runat="server" id="linkCostos" visible="false" data-toggle="tab">Historial Costos</a></li>
                                 <li class=""><a href="#Medidas" runat="server" id="linkMedidas" visible="false" data-toggle="tab">Cant. de venta</a></li>
                                 <li class=""><a href="#Beneficios" runat="server" id="linkBeneficios" visible="false" data-toggle="tab">Sist. Beneficios</a></li>
+                                <li class=""><a href="#ArticulosSucursales" runat="server" id="linkArticulosSucursales" visible="false" data-toggle="tab">Articulos Sucursales</a></li>
+                                <li class=""><a href="#StockMinimoSucursales" runat="server" id="linkStockMinimoSucursales" visible="false" data-toggle="tab">Stock Minimo Sucursales</a></li>
                                 <li class=""><a href="#Catalogo" runat="server" id="linkCatalogo" visible="false" data-toggle="tab">Otros </a></li>
                             </ul>
                             <div class="tab-content">
@@ -962,7 +964,6 @@
                                     <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
                                         <ContentTemplate>
 
-
                                             <div class="widget-content">
                                                 <div role="form" class="form-horizontal col-md-10">
 
@@ -1698,6 +1699,135 @@
                                 </div>
                                 <%--Fin Beneficios--%>
 
+                                <%-- Articulos sucursales --%>
+                                <div class="tab-pane fade" id="ArticulosSucursales">
+                                    <asp:UpdatePanel ID="UpdatePanelArticulos_Sucursales" UpdateMode="Always" runat="server">
+                                        <ContentTemplate>
+
+                                            <div class="col-md-12 col-xs-12">
+                                                <div class="widget stacked">
+
+                                                    <div class="widget-header">
+                                                        <i class="icon-wrench"></i>
+                                                        <h3>Articulos Sucursales</h3>
+                                                    </div>
+                                                    <!-- /widget-header -->
+
+                                                    <div class="widget-content">
+                                                        <table style="width: 100%">
+                                                            <tr>
+                                                                <td style="width: 90%">
+                                                                    <label for="name" class="col-md-3">Sucursal</label>
+                                                                    <div class="col-md-5">
+                                                                        <asp:DropDownList ID="ListSucursales" class="form-control" runat="server"></asp:DropDownList>
+                                                                    </div>
+
+                                                                    <asp:LinkButton ID="btnAgregarSucursal" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarSucursal_Click" />
+
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width: 90%">
+                                                                    <label class="col-md-3"></label>
+                                                                    <div class="col-md-5">
+                                                                        <asp:ListBox ID="ListBoxSucursales" runat="server" class="form-control"></asp:ListBox>
+                                                                    </div>
+
+                                                                    <asp:LinkButton ID="btnQuitarSucursal" runat="server" Text="<span class='shortcut-icon icon-trash'></span>" class="btn btn-danger" OnClick="btnQuitarSucursal_Click" />
+
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <!-- /widget-content -->
+                                                </div>
+                                                <!-- /widget -->
+                                            </div>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <%-- Fin Articulos sucursales --%>
+
+                                <%-- Stock minimo sucursales --%>
+                                <div class="tab-pane fade" id="StockMinimoSucursales">
+                                    <asp:UpdatePanel ID="UpdatePanelStockMinimoSucursales" UpdateMode="Always" runat="server">
+                                        <ContentTemplate>
+
+                                            <div class="widget-content">
+                                                <div role="form" class="form-horizontal col-md-10">
+
+                                                    <br />
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Sucursales</label>
+                                                            <div class="col-md-5">
+                                                                <asp:DropDownList ID="ListSucursalesStockMinimo" class="form-control" runat="server"></asp:DropDownList>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Stock Minimo</label>
+
+                                                            <div class="col-md-3">
+                                                                <asp:TextBox ID="txtStockMinimoSucursal" runat="server" class="form-control" TextMode="Number"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <asp:LinkButton ID="lbtnAgregarStockMinimoSuc" runat="server" Text="Buscar" class="btn btn-success" OnClick="lbtnAgregarStockMinimoSuc_Click" ValidationGroup="StockMinimo">
+                                                                <i class="shortcut-icon icon-ok"></i></asp:LinkButton>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator56" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtStockMinimoSucursal" ValidationGroup="StockMinimo" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+
+                                            <div class="widget-content">
+                                                <div class="col-md-12">
+                                                    <div class="widget stacked widget-table">
+
+                                                        <div class="widget-header">
+                                                            <span class="icon-bookmark"></span>
+                                                            <h3>Stock minimo por sucursales</h3>
+                                                        </div>
+                                                        <!-- .widget-header -->
+
+                                                        <div class="widget-content">
+                                                            <table class="table table-bordered table-striped">
+
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Codigo Articulo</th>
+                                                                        <th>Sucursal</th>
+                                                                        <th>Stock Minimo</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <asp:PlaceHolder ID="phStockMinimoSucursal" runat="server"></asp:PlaceHolder>
+                                                                </tbody>
+
+                                                            </table>
+
+                                                        </div>
+                                                        <!-- .widget-content -->
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </ContentTemplate>
+                                        <Triggers>
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <%-- Fin Stock minimo sucursales --%>
+
                                 <%-- Catalogo --%>
                                 <div class="tab-pane fade" id="Catalogo">
                                     <asp:UpdatePanel ID="UpdatePanelCatalogo" UpdateMode="Always" runat="server">
@@ -1765,11 +1895,9 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-
                                                         </table>
                                                     </div>
                                                     <!-- /widget-content -->
-
                                                 </div>
                                                 <!-- /widget -->
                                             </div>

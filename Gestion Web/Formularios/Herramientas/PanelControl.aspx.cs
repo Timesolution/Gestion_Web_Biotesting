@@ -125,6 +125,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListIncidenciaObligatoria.SelectedValue = configuracion.IncidenciaObligatoria;
                 this.DropListMargenObligatorio.SelectedValue = configuracion.MargenObligatorio;
                 this.DropListActualizarCompuestos.SelectedValue = configuracion.ActualizaCompuestos;
+                this.DropListFiltroArticulosSucursal.SelectedValue = configuracion.FiltroArticulosSucursal;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1133,7 +1134,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarEstadoPendienteFacturar();
                 if (i > 0) 
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de estado inicial pedidos.");
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de estado pendiente refacturar.");
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Estado inicial pedidos modificado con exito!. \", {type: \"info\"});", true);
                 }
                 else
@@ -1155,12 +1156,34 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarActualizaCompuestos();
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de .");
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de actualiza compuestos.");
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Actualizar compuestos modificado con exito!. \", {type: \"info\"});", true);
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Actualizar compuestos!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
+            }
+        }
+
+        protected void lbtnFiltroArticulosSucursal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.FiltroArticulosSucursal = this.DropListFiltroArticulosSucursal.SelectedValue;
+                int i = configuracion.ModificarFiltroArticulosSucursal();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de filtro articulos sucursal.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: filtro articulos sucursal modificado con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: filtro articulos sucursal!. \", {type: \"info\"});", true);
                 }
             }
             catch (Exception Ex)

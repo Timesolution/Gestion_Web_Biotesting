@@ -14,6 +14,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
     using Gestor_Solution.Controladores;
     using System.Globalization;
     using System.Data;
+    using Microsoft.Reporting.WebForms;
 
     public partial class OrdenReparacionF : System.Web.UI.Page
     {
@@ -667,7 +668,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         //chequeo si estaba en reparacion local para entonces restar el stock de la sucursal de reparacion
                         if (or.Estado == 3 || or.Estado == 7 || or.Estado == 9)
                         {
-                            string comentario = "Descuento stock por envio a servicio tecnico: " + contServTecnico.ObtenerServicioTecnicoByID((int)or_st.IdServicioTecnico).Nombre + ". Orden de reparacion: " + or.NumeroOrdenReparacion;
+                            string comentario = "Descuento stock por envio a servicio tecnico: " + contServTecnico.ObtenerServicioTecnicoByID((int)or_st.IdServicioTecnico).Nombre + ". Orden de reparacion: " + or.NumeroOrdenReparacion.Value.ToString("D8");
                             int r = contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
                             if (r < 1)
                             {
@@ -802,8 +803,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     if (temp > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a proveedor " + or.Id);
-                        Session["Login_idcliente"] = or.Cliente;
-                        Session["Login_idArticulo"] = or.Producto;
+                        //Session["Login_idcliente"] = or.Cliente;
+                        //Session["Login_idArticulo"] = or.Producto;
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada a proveedor con exito!", "../Compras/RemitosABM.aspx?a=1&or=1&orID=" + or.Id));
                     }
                     else if (temp == -1)
@@ -1138,6 +1139,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 if (ComprobarOrdenReparacionTildada())
                 {
+                    ImpresionOrdenReparacion imprimirOR = new ImpresionOrdenReparacion();
+
                     Configuraciones_SMS configs = this.contConfig.ObtenerConfiguracionesAlertasSMS();
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1152,19 +1155,27 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(11).Id;
                         contOrdenReparacion.ModificarOrdenReparacion();
 
-                        AgregarObservacion(or.Id, "Mensaje enviado al cliente");
+                        AgregarObservacion(or.Id, "Mensaje y mail enviados al cliente");
 
                         var temp = contOrdenReparacion.EnviarSMSProductoReparado(or.Celular, configs.MensajeProductoReparado, cliente.razonSocial, (int)Session["Login_IdUser"]);
 
                         if (temp > 0)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje de producto reparado enviado correctamente");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje de producto reparado enviado correctamente!", "OrdenReparacionF.aspx"));
+                            imprimirOR.enviarPorMail = 1;
+                            imprimirOR.idPresupuesto = (int)or.NumeroPRP;
+                            imprimirOR.ordenReparacion = (int)or.Id;
+                            temp = imprimirOR.GenerarImpresion();
+
+                            if(temp > 0)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje y mail de producto reparado enviado correctamente");
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje y mail de producto reparado enviado correctamente!", "OrdenReparacionF.aspx"));
+                            }                            
                         }
                         else
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar mensaje de producto reparado.");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar mensaje de producto reparado."));
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar mensaje y mail de producto reparado.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar mensaje y mail de producto reparado."));
                         }
                     }
                         

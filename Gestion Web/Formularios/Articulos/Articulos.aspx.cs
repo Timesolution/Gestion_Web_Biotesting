@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
@@ -108,16 +109,25 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                 }
                 //cargo defecto
+                Configuracion c = new Configuracion();
                 if (this.accion == 0)
                 {
                     //List<Articulo> articulos = this.controlador.obtenerArticulosReduc();
-                    DataTable articulos = this.controlador.obtenerArticulosReducDT();
+                    DataTable articulos;
+                    if (c.FiltroArticulosSucursal == "1")
+                    {
+                        int idSucursal = (int)Session["Login_SucUser"];
+                        articulos = this.controlador.obtenerArticulosReducDT_Sucursales(idSucursal);
+                    }
+                    else
+                    {
+                        articulos = this.controlador.obtenerArticulosReducDT();
+                    }
                     this.cargarArticulosTablaDT(articulos);
                 }
                 this.txtBusqueda.Focus();
                 Page.Form.DefaultButton = this.lbBuscar.UniqueID;
-
-                Configuracion c = new Configuracion();
+                
                 this.lblConfigCSV.Text = "*Archivo .CSV delimitado por ";
                 if (c.separadorListas == "0")
                     this.lblConfigCSV.Text += "PuntoComa(;)";
@@ -1316,9 +1326,18 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 //List<Articulo> articulos = new List<Articulo>();
                 //articulos = this.controlador.buscarArticuloList(art);
-
-                this.LitFiltro.Text = "Articulo " + busqueda;                
-                DataTable articulos = this.controlador.buscarArticulosDT(busqueda.Replace(' ', '%'));
+                int idSucursal = (int)Session["Login_SucUser"];
+                this.LitFiltro.Text = "Articulo " + busqueda;
+                DataTable articulos;
+                Configuracion configuracion = new Configuracion();
+                if (configuracion.FiltroArticulosSucursal == "1")
+                {
+                    articulos = this.controlador.buscarArticulosDT_Sucursales(busqueda.Replace(' ', '%'), idSucursal);
+                }
+                else
+                {
+                    articulos = this.controlador.buscarArticulosDT(busqueda.Replace(' ', '%'));
+                }
                 this.cargarArticulosTablaDT(articulos);
             }
             catch (Exception ex)
@@ -1331,7 +1350,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                controladorCliente contCli = new controladorCliente();                
+                controladorCliente contCli = new controladorCliente();
                 string Sgrupo = this.ListGrupo.Items.FindByValue(grupo.ToString()).Text;
                 string SSubgrupo = "";
                 try
@@ -1339,7 +1358,7 @@ namespace Gestion_Web.Formularios.Articulos
                     SSubgrupo = this.controlador.obtenerSubGrupoID(subgrupo).descripcion;
                 }
                 catch { }
-                
+
 
                 string Sproveedor = "";
                 try
@@ -1358,9 +1377,14 @@ namespace Gestion_Web.Formularios.Articulos
 
                 //List<Articulo> articulos = this.controlador.filtrarArticulosGrupoSubGrupo(grupo, subgrupo, proveedor, sdias);
                 //this.cargarArticulosTabla(articulos);
+                Configuracion configuracion = new Configuracion();
                 DataTable dt = this.controlador.filtrarArticulosGrupoSubGrupoDT(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo);
+                if (configuracion.FiltroArticulosSucursal == "1")
+                {
+                    int idSucursal = (int)Session["Login_SucUser"];
+                    dt = this.controlador.filtrarArticulosGrupoSubGrupoDT_Sucursales(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo,idSucursal);
+                }
                 this.cargarArticulosTablaDT(dt);
-
             }
             catch (Exception ex)
             {
@@ -2009,6 +2033,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             Response.Redirect("ImpresionMovStock.aspx?a=3&ex=1&costo=" + this.permisoStockValorizado + "&s=" + this.DropListSucursal_St2.SelectedValue);
         }
+
         protected void lbtnStockDiasPDF_Click(object sender, EventArgs e)
         {
             try
@@ -2380,5 +2405,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
 
         }
+
+        
     }
 }

@@ -38,12 +38,14 @@ namespace Gestion_Web.Formularios.Compras
         private int idGrupo;
         private int tipo;//Remito compra
         private string idsRemitos;
+        private int tipoDocumento;
 
         controladorCompraEntity contCompraEntity = new controladorCompraEntity();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
         ControladorCCProveedor controladorCCP = new ControladorCCProveedor();
         controladorArticulo contArticulo = new controladorArticulo();
         controladorPagos controladorPagos = new controladorPagos();
+        controladorCliente controladorCliente = new controladorCliente();
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -66,6 +68,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.idsRemitos = Request.QueryString["ids"];
                     this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
                     this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
+                    this.tipoDocumento = Convert.ToInt32(Request.QueryString["td"]);
 
                     if (accion == 1)
                     {
@@ -395,26 +398,28 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                //DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRango(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
                 DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRangoDetallado(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
+                dtImpagas.Columns.Add("Telefono");
 
-                foreach (DataRow dr in dtImpagas.Rows)
+                foreach (DataRow documentoImpago in dtImpagas.Rows)
                 {
-                    if (dr["documento"].ToString() == "Pago")
+                    if (documentoImpago["documento"].ToString() == "Pago")
                     {
-                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(dr["id"]));
+                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(documentoImpago["DocumentoId"]));
                         if (pago != null)
                         {
                             if (pago.Ftp == 0)
                             {
-                                dr["documento"] = "Pago FC";
+                                documentoImpago["documento"] = "Pago FC";
                             }
                             if (pago.Ftp == 1)
                             {
-                                dr["documento"] = "Pago PRP";
+                                documentoImpago["documento"] = "Pago PRP";
                             }
                         }
                     }
+
+                    ObtenerContactoProveedorDeDocumentoImpago(documentoImpago);
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -550,7 +555,7 @@ namespace Gestion_Web.Formularios.Compras
                 DateTime fdesde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                List<MovimientosCCP> listCuentaProv = this.controladorCCP.obtenerMovimientosProveedor(this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc),fdesde,fhasta);
+                List<MovimientosCCP> listCuentaProv = this.controladorCCP.obtenerMovimientosProveedorByBN(this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc), fdesde, fhasta, Convert.ToInt32(this.tipoDocumento));
                 listCuentaProv = listCuentaProv.OrderBy(x => x.Fecha).ToList();
                 DataTable dtDetalleCuenta = new DataTable();
 
@@ -564,10 +569,23 @@ namespace Gestion_Web.Formularios.Compras
                 decimal saldoAcumulado = 0;
                 foreach (DataRow row in dtDetalleCuenta.Rows)
                 {
-                    if(row["TipoDocumento"].ToString() == "19")
-                        row["Tipo"] = listCuentaProv.Where(x => x.Id == Convert.ToInt32(row["Id"])).FirstOrDefault().Compra.TipoDocumento + " Nº";
+                    string tipoDocumento = " FC ";
+                    int idFact = Convert.ToInt32(row["Id"]);
+                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();
+                    
+                    if (m.Ftp == 1)
+                        tipoDocumento = " PRP ";
+                    if (m.Ftp == 2)
+                        tipoDocumento = " ";
+
+                    if (row["TipoDocumento"].ToString() == "19")
+                    {
+                        row["Tipo"] = tipoDocumento + "  Nº";
+                    }
                     if (row["TipoDocumento"].ToString() == "21")
-                        row["Tipo"] = "Pago Nº";
+                    {
+                        row["Tipo"] = tipoDocumento + "Pago Nº";
+                    }
                     if (Convert.ToDecimal(row["Debe"]) > 0)
                     {
                         saldoAcumulado += Convert.ToDecimal(row["Debe"]);                        
@@ -732,7 +750,6 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-
         private void generarReporte8()
         {
             try
@@ -977,7 +994,6 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-
         private void generarReporte10()
         {
             try
@@ -1089,7 +1105,6 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-
         public string generarCodigo(int idRemito)
         {
             try
@@ -1213,6 +1228,24 @@ namespace Gestion_Web.Formularios.Compras
                 return null;
             }
 
+        }
+        public void ObtenerContactoProveedorDeDocumentoImpago(DataRow filaProveedor)
+        {
+            try
+            {
+                string numerosTelefonicos = string.Empty;
+                
+                List<contacto> contactosCliente = controladorCliente.obtenerContactos(Convert.ToInt32(filaProveedor["id"]));
+                foreach (var contacto in contactosCliente)
+                {
+                    numerosTelefonicos += contacto.numero + " | ";
+                }
+
+                filaProveedor["Telefono"] = numerosTelefonicos.Substring(0,numerosTelefonicos.Length - 2);
+            }
+            catch
+            {
+            }
         }
 
     }

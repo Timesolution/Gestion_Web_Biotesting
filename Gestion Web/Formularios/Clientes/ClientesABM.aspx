@@ -630,7 +630,6 @@
 
                                                     <div class="col-md-4">
                                                         <asp:DropDownList ID="ListSucursales" class="form-control" runat="server"></asp:DropDownList>
-
                                                     </div>
                                                     <div class="col-md-4">
                                                         <asp:LinkButton ID="btnAgregarSucursal" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarSucursal_Click" />

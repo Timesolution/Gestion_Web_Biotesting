@@ -25,7 +25,8 @@ namespace Gestion_Web.Formularios.Articulos
         //controlador
         controladorArticulo controlador = new controladorArticulo();
         ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
-
+        ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+        controladorSucursal contSucursal = new controladorSucursal();
         controladorListaPrecio contLista = new controladorListaPrecio();
         controladorUsuario contUser = new controladorUsuario();
 
@@ -78,6 +79,8 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarMarcas();
                     this.cargarSucursal();
                     this.cargarStores();
+                    this.cargarDropListSucursales();
+                    cargarSucursalesAlListBoxDeArticulo();
 
                     //cargo fecha de carga
                     //this.txtFechaAlta.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -126,6 +129,8 @@ namespace Gestion_Web.Formularios.Articulos
                         this.linkMedidas.Visible = true;
                         this.linkBeneficios.Visible = true;
                         this.linkCatalogo.Visible = true;
+                        this.linkArticulosSucursales.Visible = true;
+                        this.linkStockMinimoSucursales.Visible = true;
 
                         this.txtPrecio.Text = "0";
                         this.txtDescuento.Text = "0";
@@ -135,17 +140,13 @@ namespace Gestion_Web.Formularios.Articulos
                         this.txtFechaAct.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
                         //Pongo el botón de código de articulo en disabled, salvo que sea administrador
-                        string perfil = Session["Login_NombrePerfil"] as string;
-                        if (perfil != "SuperAdministrador")
-                        {
-                            this.txtCodArticulo.Enabled = false;
-                            this.txtCodArticulo.CssClass = "form-control";
-                        }
-                            
-
+                        //string perfil = Session["Login_NombrePerfil"] as string;
+                        //if (perfil != "SuperAdministrador")
+                        //{
+                        //    this.txtCodArticulo.Enabled = false;
+                        //    this.txtCodArticulo.CssClass = "form-control";
+                        //}
                     }
-
-                    
                 }
                 //if (!String.IsNullOrEmpty(this.txtCodArticulo.Text))
                 if (this.id > 0)
@@ -184,6 +185,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarMedidasVentaArticulo(this.id);
                     this.cargarDatosCombustibles();
                     this.cargarHistorialCostos();
+                    this.cargarStockMinimosSucursales();
                 }
 
 
@@ -559,6 +561,12 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListSucursalesExtra.Items.Insert(0, new ListItem("Seleccione...", "-1"));
                 this.ListSucursalesExtra.SelectedValue = Session["Login_SucUser"].ToString();
 
+                this.ListSucursalesStockMinimo.DataSource = dt;
+                this.ListSucursalesStockMinimo.DataValueField = "Id";
+                this.ListSucursalesStockMinimo.DataTextField = "nombre";
+                this.ListSucursalesStockMinimo.DataBind();
+                this.ListSucursalesStockMinimo.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                this.ListSucursalesStockMinimo.SelectedValue = Session["Login_SucUser"].ToString();
             }
             catch (Exception ex)
             {
@@ -1837,7 +1845,6 @@ namespace Gestion_Web.Formularios.Articulos
                 return true;
             }
         }
-
         private bool verificarIncidenciaMargenObligatorio()
         {
             try
@@ -1981,7 +1988,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
 
         }
-
         protected void ListApareceStore_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.ListApareceStore.SelectedValue == "SI")
@@ -3744,6 +3750,163 @@ namespace Gestion_Web.Formularios.Articulos
 
         #endregion
 
+        #region stock minimo sucursales
+        protected void lbtnAgregarStockMinimoSuc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Articulos_StockMinimo articulos_StockMinimo = new Articulos_StockMinimo();
+                articulos_StockMinimo.articulo = this.id;
+                articulos_StockMinimo.sucursal = Convert.ToInt32(this.ListSucursalesStockMinimo.SelectedValue);
+                articulos_StockMinimo.stockMinimo = Convert.ToDecimal(this.txtStockMinimoSucursal.Text);
+                int i = contArtEnt.agregarStockMinimoArticuloASucursalOModificarloSiExiste(articulos_StockMinimo);
+                if(i > 0)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Articulo actualizado con exito.\", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"No se pudo actualizar el articulo.\", {type: \"info\"});", true);
+                }
+                cargarStockMinimosSucursales();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Error en lbtnAgregarStockMinimoSuc_Click. Ex: " + ex.Message + "\", {type: \"info\"});", true);
+            }
+        }
+        protected void lbtnEditarStockMinimoSuc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] datos = (sender as LinkButton).ID.Split('_');
+                int sucursal = Convert.ToInt32(datos[1]);
+                var lista_articulos_stockMinimo = contArtEnt.getAllStockMinimoSucursalesByArticulo(this.id);
+                Articulos_StockMinimo articulos_StockMinimo = new Articulos_StockMinimo();
+                foreach (var item in lista_articulos_stockMinimo)
+                {
+                    if(item.sucursal == sucursal)
+                    {
+                        this.txtStockMinimoSucursal.Text = item.stockMinimo.ToString();
+                        this.ListSucursalesStockMinimo.SelectedValue = item.sucursal.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Error en lbtnEditarStockMinimoSuc_Click. Ex: " + ex.Message + "\", {type: \"info\"});", true);
+            }
+        }
+        protected void lbtnEliminarStockMinimoSuc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] datos = (sender as LinkButton).ID.Split('_');
+                int sucursal = Convert.ToInt32(datos[1]);
+                Articulos_StockMinimo articulos_StockMinimo = this.contArtEnt.getOneStockMinimoSucursalesByArticuloYsucursal(this.id, sucursal);
+                int i = contArtEnt.eliminarStockMinimoSucursalById(this.id, articulos_StockMinimo.sucursal);
+                if (i > 0)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Stock minimo eliminado con exito.\", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"No se pudo eliminado stock minimo.\", {type: \"info\"});", true);
+                }
+                cargarStockMinimosSucursales();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Error en lbtnEliminarStockMinimoSuc_Click. Ex: " + ex.Message + "\", {type: \"info\"});", true);
+            }
+        }
+        private void cargarStockMinimosSucursales()
+        {
+            try
+            {
+                phStockMinimoSucursal.Controls.Clear();
+                List<Articulos_StockMinimo> stockMinimo = this.contArtEnt.getAllStockMinimoSucursalesByArticulo(this.id);
+                foreach (var item in stockMinimo)
+                {
+                    this.cargarPHStockMinimosSucursales(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en cargarStockMinimosSucursales. " + ex.Message));
+            }
+        }
+        private void cargarPHStockMinimosSucursales(Articulos_StockMinimo art_StockMinimo)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+
+                TableRow tr = new TableRow();
+
+                tr.ID = "tr_" + art_StockMinimo.id.ToString();
+
+                Articulo articulo = controlador.obtenerArticuloByID(this.id);
+                Sucursal sucursal = contSucu.obtenerSucursalID(art_StockMinimo.sucursal); 
+
+                TableCell celArticulo = new TableCell();
+                celArticulo.Text = articulo.codigo;
+                celArticulo.Width = Unit.Percentage(5);
+                celArticulo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celArticulo);
+
+                TableCell celSucursal = new TableCell();
+                celSucursal.Text = sucursal.nombre;
+                celSucursal.Width = Unit.Percentage(25);
+                celSucursal.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucursal);
+
+                TableCell celStockMinimo = new TableCell();
+                celStockMinimo.Text = art_StockMinimo.stockMinimo.ToString();
+                celStockMinimo.Width = Unit.Percentage(5);
+                celStockMinimo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celStockMinimo);
+
+                TableCell celAction = new TableCell();
+                LinkButton btnEditar = new LinkButton();
+                btnEditar.ID = "btnEditarST_" + art_StockMinimo.sucursal.ToString();
+                btnEditar.CssClass = "btn btn-info ui-tooltip";
+                btnEditar.Attributes.Add("data-toggle", "tooltip");
+                btnEditar.Attributes.Add("title data-original-title", "Editar");
+                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                btnEditar.Click += new EventHandler(this.lbtnEditarStockMinimoSuc_Click);
+                celAction.Controls.Add(btnEditar);
+
+                Literal l = new Literal();
+                l.Text = "&nbsp";
+                celAction.Controls.Add(l);
+
+
+                LinkButton btnEliminar = new LinkButton();
+                btnEliminar.ID = "btnEliminarST_" + art_StockMinimo.sucursal.ToString();
+                btnEliminar.CssClass = "btn btn-info";
+                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                btnEliminar.Click += new EventHandler(this.lbtnEliminarStockMinimoSuc_Click);
+                celAction.Controls.Add(btnEliminar);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAction.Controls.Add(l2);
+
+                celAction.Width = Unit.Percentage(5);
+                celAction.VerticalAlign = VerticalAlign.Middle;
+                celAction.HorizontalAlign = HorizontalAlign.Center;
+                tr.Cells.Add(celAction);
+
+                phStockMinimoSucursal.Controls.Add(tr);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en cargarPHStockMinimosSucursales. Ex: " + ex.Message));
+            }
+        }
+        #endregion
+
         #region Otros
 
         #region Catalogo
@@ -3877,9 +4040,109 @@ namespace Gestion_Web.Formularios.Articulos
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Ocurrió un error modificando campo ApareceEnLista de Articulos_Catalogo . Excepción: " + Ex.Message);
             }
         }
-        #endregion
 
         #endregion
 
+        #endregion
+
+        /// <summary>
+        /// Carga las sucursales del drop list
+        /// </summary>
+        private void cargarDropListSucursales()
+        {
+            try
+            {
+                var sucursales = this.contSucursal.obtenerSucursales();
+                if (sucursales != null)
+                {
+                    this.ListSucursales.DataSource = sucursales;
+
+                    this.ListSucursales.DataValueField = "id";
+                    this.ListSucursales.DataTextField = "nombre";
+                    this.ListSucursales.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Carga listBox con las sucursales del articulo 
+        /// </summary>
+        private void cargarSucursalesAlListBoxDeArticulo()
+        {
+            try
+            {
+                var sucursalesByArt = this.contArtEnt.obtenerSucursalesByArticulo(this.id);
+                if (sucursalesByArt != null)
+                {
+                    foreach (var item in sucursalesByArt)
+                    {
+                        Sucursal suc = contSucursal.obtenerSucursalID(item.idSucursal);
+                        ListItem listItem = new ListItem(suc.nombre, suc.id.ToString());
+                        this.ListBoxSucursales.Items.Add(listItem);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales listBox. " + ex.Message));
+            }
+        }
+
+        protected void btnAgregarSucursal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Articulos_Sucursales articulos_Sucursales = new Articulos_Sucursales();
+                articulos_Sucursales.idArticulo = this.id;
+                articulos_Sucursales.idSucursal = Convert.ToInt32(this.ListSucursales.SelectedValue);
+
+                //agrego a la DB
+                int i = this.contArtEnt.agregarArticuloASucursal(articulos_Sucursales);
+                if (i > 0)
+                {
+                    ListItem item = new ListItem(this.ListSucursales.SelectedItem.Text, this.ListSucursales.SelectedValue);
+                    this.ListBoxSucursales.Items.Add(item);
+                    this.ListSucursales.SelectedIndex = 0;
+                    this.cargarDropListSucursales();
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo agregar sucursal."));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando sucursal a lista." + ex.Message));
+            }
+        }
+
+        protected void btnQuitarSucursal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //quito de la DB
+                int i = this.contArtEnt.quitarArticuloDeSucursal(id, Convert.ToInt32(ListBoxSucursales.SelectedValue));
+                if (i > 0)
+                {
+                    this.ListBoxSucursales.Items.Remove(this.ListBoxSucursales.SelectedItem);
+                    this.ListSucursales.SelectedIndex = 0;
+                    this.cargarDropListSucursales();
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo quitar articulo de sucursal."));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando sucursal de lista." + ex.Message));
+            }
+        }
+
+        
     }
 }

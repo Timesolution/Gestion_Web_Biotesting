@@ -32,7 +32,7 @@ namespace Gestion_Web.Formularios.Cobros
         private int impagasVencidas;
         private string listaCobros;
         private int soloNotaDebito;
-
+        Mensajes mje = new Mensajes();
         controladorCobranza controlador = new controladorCobranza();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -354,7 +354,6 @@ namespace Gestion_Web.Formularios.Cobros
                 controladorVendedor contVendedor = new controladorVendedor();
 
                 DataTable dtImpagas = controlador.obtenerMovimientosImpagas(this.fechaD, this.fechaH, this.idSucursal, this.idCliente, this.idVendedor, this.idTipo);
-
                 // Cuando la variable soloNotaDebito es mayor a 0, llamo al metodo que me obtiene sólo Notas de Debito impagas. 
                 if (soloNotaDebito > 0)
                 {
@@ -383,9 +382,15 @@ namespace Gestion_Web.Formularios.Cobros
                         {
                             row["Telefono"] = dtTelefono.Rows[0].ItemArray[1].ToString();
                         }
+
+                        var dtDireccion = contCliente.obtenerDireccionCliente(Convert.ToInt32(row["cliente"]), 1);
+                        if(dtDireccion.Rows.Count != 0)
+                        {
+                            row["Telefono"] += " / " + dtDireccion.Rows[0].ItemArray[2].ToString();
+                        }
                         ////saldo acum saldoAcumulado
                         //var saldo = Convert.ToDecimal(row["saldo"]);
-
+                        //row["Telefono"] = dtDireccion.Columns[]
                         //saldoAcum = saldoAcum + saldo;
                         //row["saldoAcumulado"] = saldoAcum; 
 
@@ -417,22 +422,39 @@ namespace Gestion_Web.Formularios.Cobros
 
                 string[] streams;
 
-                //get pdf content
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
-                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "Impagas", "xls");
 
-                this.Response.Clear();
-                this.Response.Buffer = true;
-                this.Response.ContentType = "application/pdf";
-                this.Response.AddHeader("content-length", pdfContent.Length.ToString());
-                this.Response.BinaryWrite(pdfContent);
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
 
-                this.Response.End();
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
 
             }
             catch (Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Se produjo un error en generarReporte5(). Ex: " + ex.Message));
             }
         }
         //Exportar excel

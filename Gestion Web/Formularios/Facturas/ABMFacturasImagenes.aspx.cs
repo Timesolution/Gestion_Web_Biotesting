@@ -325,7 +325,12 @@ namespace Gestion_Web.Formularios.Facturas
                     catch { }
                 }
                 #endregion
-
+                //alta rapida cliente
+                this.cargarIvaClientes();
+                this.cargarTipoClientes();
+                this.cargarGrupoClientes();
+                this.generarCodigo();
+                //fin alta rapida
             }
             catch (Exception ex)
             {
@@ -1488,8 +1493,13 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListFormaPago.DataSource = dt;
                 this.DropListFormaPago.DataValueField = "id";
                 this.DropListFormaPago.DataTextField = "forma";
-
                 this.DropListFormaPago.DataBind();
+
+                this.DropListFormaPagoAR.DataSource = dt;
+                this.DropListFormaPagoAR.DataValueField = "id";
+                this.DropListFormaPagoAR.DataTextField = "forma";
+                this.DropListFormaPagoAR.DataBind();
+                this.DropListFormaPagoAR.SelectedValue = "1";
             }
             catch (Exception ex)
             {
@@ -10613,6 +10623,125 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        #region alta rapida clientes
+        protected void btnAltaRapida_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cliente cRapido = new Cliente();
+                cRapido.codigo = this.txtCodigoAR.Text;
+                cRapido.razonSocial = this.txtRazonAR.Text;
+                cRapido.alias = this.txtRazonAR.Text;
+                cRapido.tipoCliente.id = Convert.ToInt32(this.DropListTipoAR.SelectedValue);
+                cRapido.tipoCliente.descripcion = this.DropListTipoAR.SelectedItem.Text;
+                cRapido.grupo.id = Convert.ToInt32(this.DropListGrupoAR.SelectedValue);
+                cRapido.categoria.id = 1;
+                cRapido.cuit = this.txtCuitAR.Text;
+                cRapido.iva = this.DropListIvaAR.SelectedValue.ToString();
+                cRapido.formaPago.id = Convert.ToInt32(this.DropListFormaPagoAR.SelectedValue);
+                cRapido.vendedor.id = Convert.ToInt32(this.ListVendedoresAR.SelectedValue);
+                cRapido.lisPrecio.id = Convert.ToInt32(this.ListListaPreciosAR.SelectedValue);
+                cRapido.saldoMax = 0;
+                cRapido.vencFC = 0;
+                cRapido.descFC = 0;
+                cRapido.observaciones = "";
+                cRapido.hijoDe = 0;
+                cRapido.sucursal.id = (int)Session["Login_SucUser"];
+                cRapido.origen = 1;
+                cRapido.alerta.descripcion = "";
+                cRapido.alerta.idCliente = cRapido.id;
+                cRapido.estado.id = 1;
+                cRapido.pais.id = 1;
+
+                if (this.contCliente.validateCuit(this.txtCuitAR.Text, this.DropListTipoAR.SelectedItem.Text))
+                {
+                    int i = this.contCliente.agregarCliente(cRapido);
+                    cRapido.id = i;
+                    if (i > 0)
+                    {
+                        this.cargarClienteEnLista(cRapido.id);
+                        this.cargarCliente(cRapido.id);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel7, UpdatePanel7.GetType(), "alert", "$.msgbox(\"No se pudo agregar cliente. \");", true);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        private void generarCodigo()
+        {
+            try
+            {
+                string p = this.contCliente.obtenerLastCodigoCliente();
+                int newp = Convert.ToInt32(p);
+                this.txtCodigoAR.Text = newp.ToString().PadLeft(6, '0');
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error generarCodigo. Ex: " + ex.Message));
+            }
+        }
+        private void cargarTipoClientes()
+        {
+            try
+            {
+                controladorTipoCliente contTipoCliente = new controladorTipoCliente();
+                this.DropListTipoAR.DataSource = contTipoCliente.obtenerTiposClientes();
+                this.DropListTipoAR.DataValueField = "id";
+                this.DropListTipoAR.DataTextField = "tipo";
+
+                this.DropListTipoAR.DataBind();
+                //this.DropListTipoAR.SelectedValue = this.DropListTipoAR.Items.FindByText("Empresa").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista tipo cliente. " + ex.Message));
+            }
+        }
+        private void cargarIvaClientes()
+        {
+            try
+            {
+                this.DropListIvaAR.DataSource = this.contCliente.obtenerIvaClientes();
+                this.DropListIvaAR.DataValueField = "id";
+                this.DropListIvaAR.DataTextField = "descripcion";
+
+                this.DropListIvaAR.DataBind();
+                ListItem ls = new ListItem();
+                ls.Text = "Seleccione...";
+                ls.Value = "-1";
+
+                this.DropListIvaAR.Items.Insert(0, ls);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de tipos de IVA. " + ex.Message));
+            }
+        }
+        private void cargarGrupoClientes()
+        {
+            try
+            {
+                controladorGrupoCliente contGrupoCliente = new controladorGrupoCliente();
+                this.DropListGrupoAR.DataSource = contGrupoCliente.obtenerGruposClientes();
+                this.DropListGrupoAR.DataValueField = "id";
+                this.DropListGrupoAR.DataTextField = "descripcion";
+
+                this.DropListGrupoAR.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando fun: cargarGrupoClientes. Ex: " + ex.Message));
+            }
+        }
         
+        #endregion
+
     }
 }

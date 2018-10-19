@@ -15,7 +15,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Configuration;
-
+using System.Data.OleDb;
+using Gestion_Api.Auxiliares;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -238,7 +239,8 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("Pedido", p);
                 this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
                 this.cargarSucursal(p.empresa.id);
-                this.cargarPuntoVta(p.sucursal.id);
+                //TODO r hacer mejor esto
+                //this.cargarPuntoVta(p.sucursal.id);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
@@ -423,6 +425,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                this.ListPuntoVenta.Items.Clear();
+                this.ListPuntoVenta.SelectedIndex = 0;
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
@@ -437,12 +441,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.DataTextField = "NombreFantasia";
 
                 this.ListPuntoVenta.DataBind();
-
-
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando puntos de venta. " + ex.Message));
             }
         }
 
@@ -2708,6 +2710,211 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+        private void importarPedido2()
+        {
+            try
+            {
+                Boolean fileOK = false;
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension =
+                        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    StreamReader sr = new StreamReader(FileUpload1.FileContent);
+                    Configuracion config = new Configuracion();
+                    string linea;
+                    int comienzoArticulos = 0;
+                    int contador = 0;
+
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        if (comienzoArticulos > 0)
+                        {
+                            string[] datos = linea.Split(',');//obtengo datos del registro
+                            if (config.separadorListas == "0")// punto y coma
+                            {
+                                datos = linea.Split(';');
+                            }
+
+                            if (datos.Count() > 3)
+                            {
+                                if (!String.IsNullOrEmpty(datos[4]))
+                                {
+                                    decimal d;//para verificar que sea decimal
+                                    if (Decimal.TryParse(datos[4], out d))
+                                    {
+                                        if (Convert.ToDecimal(datos[4]) > 0)
+                                        {
+                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]));
+                                            if (i < 0)
+                                            {
+                                                contador++;
+                                                //Session.Add("Pedido", null);
+                                                this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
+                                                this.phDatosEntrega.Visible = true;
+                                                this.CheckBox1.Checked = true;
+                                                //return;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            contador++;
+                                            //Session.Add("Pedido", null);
+                                            this.txtComentarios.Text += "\n Codigo: " + datos[0] + " con cantidad negativa o cero.";
+                                            this.phDatosEntrega.Visible = true;
+                                            this.CheckBox1.Checked = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        contador++;
+                                        //Session.Add("Pedido", null);
+                                        this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
+                                        this.phDatosEntrega.Visible = true;
+                                        this.CheckBox1.Checked = true;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string[] datos = linea.Split(',');//obtengo datos del registro
+                            foreach (string col in datos)
+                            {
+                                if (col.Contains("*BOF*"))//si encuentro la marca de inicio
+                                {
+                                    comienzoArticulos = 1;//en la linea que sigue empiezan los articulos
+                                }
+                            }
+                        }
+                    }
+
+                    this.cargarItems();
+                    this.actualizarTotales();
+
+                    if (contador > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron importar " + contador + " codigo(s). Revise las observaciones del pedido."));
+                        this.txtComentarios.Focus();
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito.", ""));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .csv"));
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        private void importarPedidoExcel()
+        {
+            try
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Inicio procesar pedido excel");
+                Boolean fileOK = false;
+
+                String path = Server.MapPath("../../content/excelFiles/pedidos");
+                String fileExtension = "";
+                if (FileUpload1.HasFile)
+                {
+                    fileExtension = Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".xlsx" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "No existe directorio. " + path + ". lo creo");
+
+                        Directory.CreateDirectory(path);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "directorio creado");
+                    }
+                    //guardo nombre archivo
+                    string nombreArchivoExcel = FileUpload1.FileName;
+
+                    //lo subo
+                    FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
+
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Voy a traer pedidos desde el excel " + path + FileUpload1.FileName);
+                    var pedidoExcel = new PedidoExcel();
+                    var pedidos = pedidoExcel.traerDatos(path + FileUpload1.FileName);
+
+                    if(pedidos != null)
+                    {
+                        int contador = 0;
+                        foreach (var item in pedidos)
+                        {
+                            if (Convert.ToDecimal(item.Cantidad) > 0)
+                            {
+                                int i = this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad));
+                                if (i < 0)
+                                {
+                                    contador++;
+                                    this.txtComentarios.Text += "\n Codigo: " + item.Codigo + " no encontrado.";
+                                    this.phDatosEntrega.Visible = true;
+                                    this.CheckBox1.Checked = true;
+                                }
+                            }
+                        }
+
+                        this.cargarItems();
+                        this.actualizarTotales();
+
+                        if (contador > 0)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron importar " + contador + " codigo(s). Revise las observaciones del pedido."));
+                            this.txtComentarios.Focus();
+                        }
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito.", ""));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Verificar codigos y cantidades del excel."));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .xlsx"));
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Error procesando excel " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error procesando excel " + ex.Message));
+                
+            }
+        }
         private int AgregarItemImportadoAPedido(string codigo, decimal cantidad)
         {
             try
@@ -2755,5 +2962,17 @@ namespace Gestion_Web.Formularios.Facturas
 
         #endregion
 
+        protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.importarPedidoExcel();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

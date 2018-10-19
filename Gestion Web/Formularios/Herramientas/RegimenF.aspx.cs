@@ -123,9 +123,9 @@ namespace Gestion_Web.Formularios.Herramientas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar empresa. "));
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error en lbtnGenerar_Click ex: "+ex.Message));
             }
         }
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
@@ -309,7 +309,7 @@ namespace Gestion_Web.Formularios.Herramientas
             }
             catch (Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se ha producido un error en fun: generarArchivos. Exception: "+ex.Message));
             }
         }
         #endregion

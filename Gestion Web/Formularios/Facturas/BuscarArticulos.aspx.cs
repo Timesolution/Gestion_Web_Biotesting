@@ -13,6 +13,7 @@ namespace Gestion_Web.Formularios.Facturas
     public partial class BuscarArticulos : System.Web.UI.Page
     {
         private controladorArticulo controlador = new controladorArticulo();
+        private ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
         private Mensajes m = new Mensajes();
         private int accion;
         private int idSucursal;
@@ -346,16 +347,28 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                Configuracion configuracion = new Configuracion();
                 List<Articulo> articulos = new List<Articulo>();
                 if (String.IsNullOrEmpty(this.buscarText))
                 {
-
                     articulos = this.controlador.obtenerArticulosReduc();
-
+                    //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                    if (configuracion.FiltroArticulosSucursal == "1")
+                    {
+                        articulos = this.controlador.obtenerArticulosReduc_Sucursales(this.idSucursal);
+                    }
                 }
                 else
                 {
-                    articulos = this.controlador.buscarArticuloList(this.buscarText);
+                    //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                    if (configuracion.FiltroArticulosSucursal == "1")
+                    {
+                        articulos = this.controlador.buscarArticuloListReduc_Sucursales(this.buscarText, this.idSucursal);
+                    }
+                    else
+                    {
+                        articulos = this.controlador.buscarArticuloList(this.buscarText);
+                    }
                 }
                 this.cargarArticulosTabla(articulos);
             }
@@ -379,7 +392,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando articulo. " + ex.Message));
             }
         }
-
 
         protected void RedireccionarArticulos(object sender, EventArgs e)
         {

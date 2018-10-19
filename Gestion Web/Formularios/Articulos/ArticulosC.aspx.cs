@@ -266,7 +266,10 @@ namespace Gestion_Web.Formularios.Articulos
 
                 TableCell celPrecio = new TableCell();
                 //celPrecio.Text = art.precioVenta.ToString("C");
-                celPrecio.Text = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id).precioSinIva.ToString("C");
+                //celPrecio.Text = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id).precioSinIva.ToString("C");
+                Articulo articulo = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id);
+                decimal totalSIva = (articulo.precioVenta/ (1 + (articulo.porcentajeIva / 100)));
+                celPrecio.Text = totalSIva.ToString("C");
                 celPrecio.Width = Unit.Percentage(5);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
