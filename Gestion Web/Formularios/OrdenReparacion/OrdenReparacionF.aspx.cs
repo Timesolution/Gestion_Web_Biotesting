@@ -973,10 +973,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if (or.Estado == 9)
                     {
+                        var temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+
+                        if (temp < 1)
+                                Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+
                         AgregarObservacion(or.Id, "Producto en reparacion");
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
-                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
+                        temp = contOrdenReparacion.ModificarOrdenReparacion();
 
                         if (temp > 0)
                         {

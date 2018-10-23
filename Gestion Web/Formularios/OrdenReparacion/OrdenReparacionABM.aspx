@@ -185,7 +185,7 @@
                                                         <div class="form-group">
                                                             <label class="col-md-4">Se Cambia Producto</label>
                                                             <div class="col-md-4">
-                                                                <asp:DropDownList ID="DropListCambiaProducto" runat="server" class="form-control">
+                                                                <asp:DropDownList ID="DropListCambiaProducto" Enabled="false" runat="server" class="form-control">
                                                                     <asp:ListItem Value="No">No</asp:ListItem>
                                                                     <asp:ListItem Value="Si">Si</asp:ListItem>                                                                    
                                                                 </asp:DropDownList>

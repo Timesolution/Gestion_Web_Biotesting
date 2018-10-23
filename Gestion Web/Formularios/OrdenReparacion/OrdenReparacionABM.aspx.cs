@@ -121,19 +121,19 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 if (temp > 0)
                 {
-                    temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+                    //temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
 
-                    if(temp < 1)
-                        Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+                    //if(temp < 1)
+                    //    Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
 
-                    if(or.CambiaProducto == "Si")
-                    {
-                        string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
-                        temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
+                    //if(or.CambiaProducto == "Si")
+                    //{
+                    //    string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+                    //    temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
 
-                        if (temp < 1)
-                            Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
-                    }
+                    //    if (temp < 1)
+                    //        Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
+                    //}
 
                     Log.EscribirSQL(1, "Info", "Orden de reparacion agregada con exito");
                     string script = "window.open('ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
@@ -194,6 +194,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtNumeroOrden.CssClass = "form-control";
                 txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 txtFecha.CssClass = "form-control";
+
+                if (f.tipo.id == 7 || f.tipo.id == 8 || f.tipo.id == 9 || f.tipo.id == 11)
+                    DropListCambiaProducto.SelectedValue = "Si";
+                else
+                    DropListCambiaProducto.SelectedValue = "No";
+
+                DropListCambiaProducto.CssClass = "form-control";
 
                 ListSucursal.Items.Add(new ListItem
                 {

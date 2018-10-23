@@ -201,23 +201,23 @@ namespace Gestion_Web.Formularios.Compras
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
 
-                //TableCell celNumeroFactura = new TableCell();
-                //celNumeroFactura.Text = factura.numero;
-                //celNumeroFactura.HorizontalAlign = HorizontalAlign.Left;
-                //celNumeroFactura.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celNumeroFactura);
-
-                //TableCell celSucursalOrigen = new TableCell();
-                //celSucursalOrigen.Text = contSucursal.obtenerSucursalID(factura.sucursal.id).nombre;
-                //celSucursalOrigen.HorizontalAlign = HorizontalAlign.Left;
-                //celSucursalOrigen.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celSucursalOrigen);
-
                 TableCell celSucursalDestino = new TableCell();
                 celSucursalDestino.Text = contSucursal.obtenerSucursalID((int)f.OrdenesCompra.IdSucursal).nombre;
                 celSucursalDestino.HorizontalAlign = HorizontalAlign.Left;
                 celSucursalDestino.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celSucursalDestino);
+
+                TableCell celNumeroRemito = new TableCell();
+                celNumeroRemito.Text = f.RemitosCompra.Numero;
+                celNumeroRemito.HorizontalAlign = HorizontalAlign.Left;
+                celNumeroRemito.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celNumeroRemito);
+
+                TableCell celOrdenCompra = new TableCell();
+                celOrdenCompra.Text = f.OrdenesCompra.Numero;
+                celOrdenCompra.HorizontalAlign = HorizontalAlign.Left;
+                celOrdenCompra.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celOrdenCompra);
 
                 TableCell celArticulo = new TableCell();
                 celArticulo.Text = contArt.obtenerArticuloByID((int)f.Articulo).descripcion;
@@ -249,17 +249,18 @@ namespace Gestion_Web.Formularios.Compras
                 //celEstado.VerticalAlign = VerticalAlign.Middle;
                 //tr.Cells.Add(celEstado);
 
-                //TableCell celAccion = new TableCell();
+                TableCell celAccion = new TableCell();
+                LinkButton btnDetalles = new LinkButton();
+                btnDetalles.CssClass = "btn btn-info ui-tooltip";
+                btnDetalles.Attributes.Add("data-toggle", "tooltip");
+                btnDetalles.Attributes.Add("title data-original-title", "Detalles");
+                btnDetalles.ID = "btnSelec_" + f.OrdenesCompra.Id + "_" + f.RemitosCompra.Id + "_" + f.Id;
+                btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
+                btnDetalles.Font.Size = 12;
+                btnDetalles.Click += new EventHandler(this.detalleFactura);
+                celAccion.Controls.Add(btnDetalles);
 
-                //Literal lAccept = new Literal();
-                //lAccept.ID = "btnFactura_" + f["id"].ToString();
-                //lAccept.Text = "<a href=\"AceptarMercaderia.aspx?fc=" + f["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                //lAccept.Text += "<span class=\"shortcut-icon icon-search\"></span>";
-                //lAccept.Text += "</a>";
-
-                //celAccion.Controls.Add(lAccept);
-
-                //tr.Cells.Add(celAccion);
+                tr.Cells.Add(celAccion);
 
                 phFacturas.Controls.Add(tr);
 
@@ -267,6 +268,29 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando diferencias de mercaderia en el PH. " + ex.Message));
+            }
+        }
+
+        private void detalleFactura(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtengo numero factura
+                string idBoton = (sender as LinkButton).ID;
+
+                string[] atributos = idBoton.Split('_');
+                string idOrdenCompra = atributos[1];
+                string idRemitoCompra = atributos[2];
+                //window.open('ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "', '_blank');
+                string script = "window.open('ImpresionCompras.aspx?a=3&oc=" + idOrdenCompra + "', '_blank');";
+                script += " window.open('ImpresionCompras.aspx?a=8&rc=" + idRemitoCompra + "', '_blank');";
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script, true);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
             }
         }
     }
