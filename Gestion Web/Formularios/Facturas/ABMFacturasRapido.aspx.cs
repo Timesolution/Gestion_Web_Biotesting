@@ -211,6 +211,10 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if (!listPermisos.Contains("173"))
+                    return 0;
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))

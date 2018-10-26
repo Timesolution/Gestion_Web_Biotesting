@@ -269,6 +269,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtFecha.Text = or.Fecha.Value.ToString("dd/MM/yyyy");
                 txtFecha.CssClass = "form-control";
 
+                DropListCambiaProducto.CssClass = "form-control";
+
                 var suc = contSucursal.obtenerSucursalID((int)or.SucursalOrigen);
 
                 ListSucursal.Items.Add(new ListItem

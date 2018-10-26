@@ -221,6 +221,12 @@ namespace Gestion_Web.Formularios.Facturas
                         string permisoNotaCreditoDesdePRP = listPermisos.Where(x => x == "148").FirstOrDefault();
                         if (string.IsNullOrEmpty(permisoNotaCreditoDesdePRP))
                             this.lbtnNotaCredito.Visible = false;
+
+                        if (s == "174")
+                            lbtnRefacturar.Visible = true;
+
+                        if (s == "175")
+                            lbtnRemitir.Visible = true;
                     }
                 }
 

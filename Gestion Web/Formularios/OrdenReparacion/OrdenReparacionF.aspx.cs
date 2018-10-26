@@ -69,7 +69,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     ObtenerServiciosTecnicos(txtServicioTecnico.Text);
 
                 if (accion == 0)
-                    CargarOrdenesReparacion();                
+                    CargarOrdenesReparacion();
                 else if(accion == 1)
                     BuscarPorNumeroOrden();
             }
