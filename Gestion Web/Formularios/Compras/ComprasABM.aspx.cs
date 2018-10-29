@@ -29,7 +29,8 @@ namespace Gestion_Web.Formularios.Compras
         private int accion;
         //private string cuit;
         private long idCompra;
-        
+        private long idRemito;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -37,6 +38,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
                 this.idCompra = Convert.ToInt32(Request.QueryString["c"]);
+                this.idRemito = Convert.ToInt64(Request.QueryString["r"]);
 
                 if (!IsPostBack)
                 {
@@ -49,9 +51,12 @@ namespace Gestion_Web.Formularios.Compras
                     this.txtVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtImputacionCont.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     if (this.accion == 2)
-                    {
-                        
+                    {                        
                         this.cargarCompra();
+                    }
+                    if(this.accion == 3)
+                    {
+                        CargarCompraDesdeRemito();
                     }
                     //cargo sucursal
                     this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
@@ -405,7 +410,7 @@ namespace Gestion_Web.Formularios.Compras
         #region Eventos Controles
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (this.accion == 1)
+            if (this.accion == 1 || this.accion == 3)
             {
                 this.agregarCompra(0);
             }
@@ -413,6 +418,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 this.modificarCompra(0);
             }
+            
         }
         #endregion
 
@@ -438,6 +444,17 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (i > 0)
                         {
+                            if(accion == 3)
+                            {
+                                contEntity.AgregarCompra_Remito(c.Id, idRemito);
+
+                                i = contEntity.GuardarCompra_Remito();
+
+                                if (i < 0)
+                                    Log.EscribirSQL(1, "Error", "Error al guardar compra_remito");
+
+                            }
+
                             this.agregarPlanCtaCompra(c);
 
                             if (pagar == 1)
@@ -1093,7 +1110,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                if (this.accion == 1)
+                if (this.accion == 1 || this.accion == 3)
                     this.agregarCompra(1);
 
                 if (this.accion == 2)
@@ -1102,6 +1119,27 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception Ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Error enviando a procesar compra. Excepción: " + Ex.Message + "\", {type: \"error\"});", true);
+            }
+        }
+
+        public void CargarCompraDesdeRemito()
+        {
+            try
+            {
+                var remito = contEntity.obtenerRemito(idRemito);
+
+                this.ListEmpresa.SelectedValue = Session["Login_EmpUser"].ToString();
+                this.cargarSucursal(Convert.ToInt32(Session["Login_EmpUser"]));
+                this.ListSucursal.SelectedValue = remito.IdSucursal.ToString();
+                this.cargarPuntoVta((int)remito.IdSucursal);
+                this.txtFecha.Text = Convert.ToDateTime(remito.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
+                this.ListProveedor.SelectedValue = remito.IdProveedor.ToString();
+                this.ListTipoCompra.SelectedValue = 2.ToString(); //compra mercaderia
+                this.txtObservaciones.Text = "Compra generada desde el remito numero " + remito.Numero;
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Error al cargar compra desde remito. Excepción: " + Ex.Message + "\", {type: \"error\"});", true);
             }
         }
     }

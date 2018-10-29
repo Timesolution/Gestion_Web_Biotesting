@@ -69,10 +69,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     ObtenerServiciosTecnicos(txtServicioTecnico.Text);
 
                 if (accion == 0)
-                    CargarOrdenesReparacion();                
+                    CargarOrdenesReparacion();
                 else if(accion == 1)
                     BuscarPorNumeroOrden();
-
             }
             catch
             {
@@ -153,7 +152,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 controladorSucursal contSucursal = new controladorSucursal();
-                controladorFacturacion contFacturacion = new controladorFacturacion();                
+                controladorFacturacion contFacturacion = new controladorFacturacion();
 
                 //fila
                 TableRow tr = new TableRow();
@@ -605,7 +604,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=1&n=" + this.txtNumeroOrden.Text);
+                //hago esto para sacarle los 0 que tiene a la izquierda
+                int numeroOrden = Convert.ToInt32(this.txtNumeroOrden.Text);
+                Response.Redirect("OrdenReparacionF.aspx?a=1&n=" + numeroOrden.ToString());
             }
             catch (Exception ex)
             {
@@ -972,10 +973,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if (or.Estado == 9)
                     {
+                        var temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+
+                        if (temp < 1)
+                                Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+
                         AgregarObservacion(or.Id, "Producto en reparacion");
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
-                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
+                        temp = contOrdenReparacion.ModificarOrdenReparacion();
 
                         if (temp > 0)
                         {

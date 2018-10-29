@@ -33,6 +33,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnImprimirEtiquetas" runat="server" OnClick="lbtnImprimirEtiquetas_Click" >Imprimir Etiquetas</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnGenerarCompra" runat="server" OnClick="lbtnGenerarCompra_Click" >Generar Compra</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                     <!-- /btn-group -->

@@ -35,7 +35,7 @@
                                             <asp:LinkButton ID="lbtnAnular" runat="server" Visible="False" Enabled="false" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                         </li>
                                         <li>
-                                            <asp:LinkButton ID="lbtnRemitir" runat="server" OnClick="lbtnRemitir_Click">Remitir</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtnRemitir" runat="server" Visible="false" OnClick="lbtnRemitir_Click">Remitir</asp:LinkButton>
                                         </li>
                                         <li>
                                             <asp:LinkButton ID="lbtnNotaCredito" runat="server" OnClick="lbtnNotaCredito_Click">Nota de Credito</asp:LinkButton>
@@ -44,7 +44,7 @@
                                             <asp:LinkButton ID="lbtnGuiaDespacho" runat="server" OnClick="lbtnGuiaDespacho_Click">Guia de Despacho</asp:LinkButton>
                                         </li>
                                         <li>
-                                            <asp:LinkButton ID="lbtnRefacturar" runat="server" OnClick="lbtnRefacturar_Click">Facturar PRP</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtnRefacturar" runat="server" Visible="false" OnClick="lbtnRefacturar_Click">Facturar PRP</asp:LinkButton>
                                         </li>
                                         <li>
                                             <asp:LinkButton ID="lbtnEnviar" runat="server" OnClick="lbtnEnviar_Click">Enviar FC Por Mail</asp:LinkButton>

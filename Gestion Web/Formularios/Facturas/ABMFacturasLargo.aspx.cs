@@ -357,6 +357,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if(!listPermisos.Contains("173"))
+                    return 0;
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -944,9 +948,9 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 if (script != "" || okSMS > 0)
-                {                    
+                {
                     if (this.flag_clienteModal > 0 || (!IsPostBack && this.flag_clienteModal  == 0))//si vienen desde modal uso un script sino uso el otro.
-                    {                        
+                    {
                         this.abrirModalEnvioSMS(0);
                         if ((alerta1 + alerta2 + alerta3) != "")
                         {
@@ -954,7 +958,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     else
-                    {                        
+                    {
                         this.abrirModalEnvioSMS(1);
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", script, true);                        
                     }
@@ -1677,7 +1681,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //verifico si tiene permitido facturar entre sucursales
                     if (this.verficarPermisoFactSucursal() == 1)
                     {
-                        //verifico si tiene sucursales 
+                        //verifico si tiene sucursales
                         var sucu = this.contClienteEntity.obtenerSucursalesCliente(idCliente);
                         if (sucu != null)
                         {

@@ -121,6 +121,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
                 controladorCliente cont = new controladorCliente();
 
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
@@ -134,6 +135,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
                 dtCompras.Columns.Add("razonSocial", typeof(string));
+                dtCompras.Columns.Add("PlanDeCuentas", typeof(string));
 
                 decimal saldoTotal = 0;
 
@@ -156,11 +158,18 @@ namespace Gestion_Web.Formularios.Compras
                         row["PIva"] = Convert.ToDecimal(row["PIva"]) * -1;
                         row["ImpuestosInternos"] = Convert.ToDecimal(row["ImpuestosInternos"]) * -1;
                         row["Otros"] = Convert.ToDecimal(row["Otros"]) * -1;
-                        row["Total"] = Convert.ToDecimal(row["Total"]) * -1;
+                        row["Total"] = Convert.ToDecimal(row["Total"]) * -1;                        
                     }
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
                     row["razonSocial"] = p.razonSocial;
+                    long temp = Convert.ToInt64(row["Id"].ToString());
+
+                    try
+                    {
+                        row["PlanDeCuentas"] = contPlanCuentas.obtenerCuentaContableCompra(temp).Cuentas_Contables.Codigo + " - " + contPlanCuentas.obtenerCuentaContableCompra(temp).Cuentas_Contables.Descripcion;
+                    }
+                    catch { };
                 }   
 
 

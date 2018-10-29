@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -373,6 +373,8 @@
     <Content Include="Formularios\Compras\CCCompraF.aspx" />
     <Content Include="Formularios\Compras\ComprasABM.aspx" />
     <Content Include="Formularios\Compras\ComprasF.aspx" />
+    <Content Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx" />
+    <Content Include="Formularios\Compras\EntregasMercaderiaF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesGastosF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesMonedasABM.aspx" />
     <Content Include="Formularios\Compras\ImportacionesTiposGastosABM.aspx" />
@@ -395,7 +397,9 @@
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
+    <Content Include="Formularios\Facturas\AceptarMercaderia.aspx" />
     <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
+    <Content Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
     <Content Include="Formularios\Facturas\FacturasMercaderiasF.aspx" />
     <Content Include="Formularios\Facturas\FacturasSucursalesF.aspx" />
@@ -1319,10 +1323,24 @@
     <Compile Include="Formularios\Compras\ArticulosPedirF.aspx.designer.cs">
       <DependentUpon>ArticulosPedirF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx.cs">
+      <DependentUpon>DiferenciaCompraMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx.designer.cs">
+      <DependentUpon>DiferenciaCompraMercaderiaF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Compras\dsCompras.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsCompras.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.cs">
+      <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.designer.cs">
+      <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Compras\ImportacionesGastosF.aspx.cs">
       <DependentUpon>ImportacionesGastosF.aspx</DependentUpon>
@@ -1436,12 +1454,26 @@
     <Compile Include="Formularios\Facturas\ABMFacturasRapido.aspx.designer.cs">
       <DependentUpon>ABMFacturasRapido.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\AceptarMercaderia.aspx.cs">
+      <DependentUpon>AceptarMercaderia.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\AceptarMercaderia.aspx.designer.cs">
+      <DependentUpon>AceptarMercaderia.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Facturas\CuadroImagen.ascx.cs">
       <DependentUpon>CuadroImagen.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\Facturas\CuadroImagen.ascx.designer.cs">
       <DependentUpon>CuadroImagen.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx.cs">
+      <DependentUpon>DiferenciasMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx.designer.cs">
+      <DependentUpon>DiferenciasMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\dsRetenciones.Designer.cs">
       <AutoGen>True</AutoGen>

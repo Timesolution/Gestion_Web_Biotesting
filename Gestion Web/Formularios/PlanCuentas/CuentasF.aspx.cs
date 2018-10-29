@@ -75,18 +75,31 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+                int tienePermiso = 0;
+                int tienePermisoParaEditarCodigo = 0;
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "51")
+                        if (s == "171")
+                            tienePermiso = 1;
+
+                        if (tienePermiso == 1)
                         {
-                            return 1;
+                            if (s == "172")
+                                tienePermisoParaEditarCodigo = 1;
                         }
                     }
                 }
 
-                return 0;
+                if (tienePermisoParaEditarCodigo == 0)
+                {
+                    txtCodigo.Enabled = false;
+                    txtCodigo.CssClass = "form-control";
+                }                    
+
+                return tienePermiso;
             }
             catch
             {
@@ -97,7 +110,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
         {
             try
             {
-                this.phCuentas.Controls.Clear();
+                this.phCuentas.Controls.Clear();                
 
                 List<Cuentas_Contables> cuentas = this.contPlanCta.obtenerCuentasContables();
 
@@ -259,7 +272,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
                 Cuentas_Contables cta = this.contPlanCta.obtenerCuentaById(this.id);
                 this.txtCodigo.Text = cta.Codigo;
-                this.txtDescripcion.Text = cta.Descripcion;
+                this.txtDescripcion.Text = cta.Descripcion;                
             }
             catch
             {
