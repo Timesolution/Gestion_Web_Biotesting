@@ -112,6 +112,10 @@ namespace Gestion_Web.Formularios.Reportes
                     {
                         this.generarReporte11(); // Reporte Compras.Articulos agrupado
                     }
+                    if (valor == 12)
+                    {
+                        this.generarReporte12(); // Reporte Ventas.Articulos agrupado fecha
+                    }
 
                 }
             }
@@ -848,6 +852,87 @@ namespace Gestion_Web.Formularios.Reportes
             }
         }
 
+        private void generarReporte12()
+        {
+            try
+            {
+                controladorListaPrecio contListas = new controladorListaPrecio();
+
+                string nombreLista = "";
+                string listasElegidas = "";
+                if (listas != "")
+                {
+                    listasElegidas = this.listas.Remove(listas.Length - 1);
+
+                    foreach (string nombre in listasElegidas.Split(','))
+                    {
+                        listaPrecio ls = contListas.obtenerlistaPrecioID(Convert.ToInt32(nombre));
+
+                        if (ls != null)
+                        {
+                            nombreLista += ls.nombre + ",";
+                        }
+
+                    }
+                }
+
+                DataTable dtArticulosFecha = contFacturacion.obtenerTopArticulosListaByFecha(fechaD, fechaH, idSuc, idArticulo, listasElegidas, this.idProveedor);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosListaXFecha.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("CantArtGroupByFecha", dtArticulosFecha);           
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Reporte_Articulos_Cantidad_Ventas_Por_Fecha", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas articulos x cliente. " + ex.Message));
+            }
+
+        }
 
     }
 }

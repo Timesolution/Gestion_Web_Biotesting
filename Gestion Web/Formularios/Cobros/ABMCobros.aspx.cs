@@ -1277,7 +1277,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int okNroCheque = contCobranza.validarChequeManualExiste(this.txtNumeroCh.Text, Convert.ToInt32(DropListBancoCh.SelectedValue), this.txtCuentaCh.Text);
                 if (okNroCheque <= 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El nro de cheque ya fue ingresado previamente!."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"El nro de cheque ya fue ingresado previamente! \", {type: \"error\"});", true);
                     return;
                 }
                 if (contCobranza.validateCuit(this.txtCuitCh.Text))//&& 

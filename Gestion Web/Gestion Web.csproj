@@ -749,6 +749,7 @@
     <Content Include="Formularios\Reportes\dsReportesCompras.xss">
       <DependentUpon>dsReportesCompras.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
