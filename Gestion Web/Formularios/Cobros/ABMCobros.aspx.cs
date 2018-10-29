@@ -1277,7 +1277,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int okNroCheque = contCobranza.validarChequeManualExiste(this.txtNumeroCh.Text, Convert.ToInt32(DropListBancoCh.SelectedValue), this.txtCuentaCh.Text);
                 if (okNroCheque <= 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El nro de cheque ya fue ingresado previamente!."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"El nro de cheque ya fue ingresado previamente! \", {type: \"error\"});", true);
                     return;
                 }
                 if (contCobranza.validateCuit(this.txtCuitCh.Text))//&& 
@@ -2207,7 +2207,6 @@ namespace Gestion_Web.Formularios.Facturas
             catch(Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error actualizando totales. " + ex.Message));
-
             }
         }
 
@@ -2351,6 +2350,11 @@ namespace Gestion_Web.Formularios.Facturas
                 
         protected void txtCuentaCh_Disposed(object sender, EventArgs e)
         {
+            obtenerCuitYCuenta();
+        }
+
+        protected void obtenerCuitYCuenta()
+        {
             try
             {
                 if (this.DropListBancoCh.SelectedValue != "-1")
@@ -2365,14 +2369,13 @@ namespace Gestion_Web.Formularios.Facturas
                             this.txtCuitCh.Text = chq.cuit;
                             this.txtLibradorCh.Text = chq.librador;
                         }
-
                     }
                 }
                 //this.txtCuitCh.Focus();
             }
-            catch
+            catch(Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error en obtenerCuitYCuenta. " + ex.Message));
             }
         }
 
@@ -2456,11 +2459,12 @@ namespace Gestion_Web.Formularios.Facturas
                     List<Banco> listBcos = this.contCobranza.obtenerBancosList();
                     var bco = listBcos.Where(x => x.codigo == Convert.ToInt32(codBanco).ToString()).FirstOrDefault();
                     this.DropListBancoCh.SelectedValue = bco.id.ToString();
+                    obtenerCuitYCuenta();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error en txtCodBarraCh_TextChanged. " + ex.Message));
             }
         }
 

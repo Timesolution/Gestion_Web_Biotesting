@@ -538,7 +538,17 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
-                
-                
+
+        protected void lbtnExportarFecha_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.listas))
+            {
+                Response.Redirect("ImpresionReporte.aspx?valor=12&ex=1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&s=" + this.DropListSucursal.SelectedValue + "&a=" + this.idArticulo + "&l=" + this.listas + "&prov=" + this.DropListProveedor.SelectedValue);
+            }
+            else
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una lista"));
+            }
+        }
     }
 }

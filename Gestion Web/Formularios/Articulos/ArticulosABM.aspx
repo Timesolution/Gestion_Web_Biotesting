@@ -1328,8 +1328,8 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th style="width: 25%">Proveedor</th>
-                                                                    <th style="width: 10%; text-align: right;">ITC</th>
-                                                                    <th style="width: 10%; text-align: right;">Impuesto al CO2</th>
+                                                                    <th style="width: 10%; text-align: right;">ICL</th>
+                                                                    <th style="width: 10%; text-align: right;">IDC</th>
                                                                     <th style="width: 10%; text-align: right;">Tasa Vial</th>
                                                                     <th style="width: 10%; text-align: right;">Tasa Municipal</th>
                                                                     <th style="width: 15%;">Fecha alta</th>
@@ -1356,7 +1356,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="col-md-4">ITC ($ x Lt.)</label>
+                                                            <label class="col-md-4">ICL ($ x Lt.)</label>
                                                             <div class="col-md-3">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon">$</span>
@@ -1368,7 +1368,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="col-md-4">Impuesto al CO2 ($ x Lt.)</label>
+                                                            <label class="col-md-4">IDC ($ x Lt.)</label>
                                                             <div class="col-md-3">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon">$</span>

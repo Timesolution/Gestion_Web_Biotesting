@@ -458,7 +458,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <label class="col-md-3">ITC: </label>
+                                                                                <label class="col-md-3">ICL: </label>
                                                                                 <%--<div class="col-md-3">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
@@ -473,7 +473,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <label class="col-md-3">Impuesto al CO2: </label>
+                                                                                <label class="col-md-3">IDC: </label>
                                                                                 <%--<div class="col-md-3">
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon">$</span>
