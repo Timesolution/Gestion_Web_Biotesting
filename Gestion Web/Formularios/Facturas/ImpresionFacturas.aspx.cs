@@ -129,8 +129,30 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
                 DataTable dtFechas = this.controlador.obtenerFechasFactura(fechaD, fechaH);
 
-                dtDetalles.DefaultView.Sort = "fecha asc";
-                dtDetalles = dtDetalles.DefaultView.ToTable();
+                //dtDetalles.DefaultView.Sort = "fecha ASC, numero ASC";
+                //dtDetalles = dtDetalles.DefaultView.ToTable();
+
+                //List<string> a = dtDetalles.AsEnumerable().Select(x => x.Field<string>("numero").Replace("-", "")).ToList();
+                //a.Sort();
+
+                //DataColumn tempNumeros = new DataColumn("numeroOrdenado");
+
+                //tempNumeros.
+
+                //dtDetalles = dtDetalles.AsEnumerable()
+                //   .OrderBy(r => r.Field<DateTime>("fecha"))
+                //   .ThenBy(r => r.Field<string>("numero"))
+                //   .CopyToDataTable();
+
+                //dtDetalles.Columns.AddRange(tempNumeros);
+
+                //foreach (DataRow item in dtDetalles.Rows)
+                //{
+                //    item["numero"] = item["numero"].ToString().Replace("-", "");
+                //}
+
+                //dtDetalles.DefaultView.Sort = "fecha ASC,numero ASC";
+                //dtDetalles = dtDetalles.DefaultView.ToTable();
 
                 Decimal total = 0;
 
@@ -168,7 +190,7 @@ namespace Gestion_Web.Formularios.Facturas
                             }
                             row["razonSocial"] = clienteR;
                         }
-                       
+                        
 
 
                         //row["fecha"] = row["fechaFormateada"];
@@ -259,9 +281,9 @@ namespace Gestion_Web.Formularios.Facturas
 
 
             }
-            catch
+            catch(Exception ex)
             {
-
+                Log.EscribirSQL(1,"Error","Error al generar informe de iva ventas. " + ex.Message);
             }
         }
         private void generarReporte3(string fechaD, string fechaH, int idSuc, int tipo, int cliente)

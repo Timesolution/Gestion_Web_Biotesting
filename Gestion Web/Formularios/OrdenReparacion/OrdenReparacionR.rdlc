@@ -324,7 +324,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>8.77654cm</Top>
+            <Top>9.66554cm</Top>
             <Left>9.77046cm</Left>
             <Height>0.6cm</Height>
             <Width>8.62757cm</Width>
@@ -356,7 +356,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>8.77654cm</Top>
+            <Top>9.66554cm</Top>
             <Left>0.49418cm</Left>
             <Height>0.6cm</Height>
             <Width>9.19514cm</Width>
@@ -399,6 +399,44 @@
             <Height>0.6cm</Height>
             <Width>19.07861cm</Width>
             <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox7">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Observacion: </Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Fields!Observacion.Value</Value>
+                    <Style>
+                      <FontWeight>Normal</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox7</rd:DefaultName>
+            <Top>8.73949cm</Top>
+            <Left>0.49417cm</Left>
+            <Height>0.6cm</Height>
+            <Width>19.07862cm</Width>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -503,8 +541,23 @@
           </Border>
         </Style>
       </Rectangle>
+      <Image Name="Image1">
+        <Source>External</Source>
+        <Value>=Parameters!ParamCodBarra.Value</Value>
+        <Sizing>FitProportional</Sizing>
+        <Top>12.28641cm</Top>
+        <Left>0.82966cm</Left>
+        <Height>3.02359cm</Height>
+        <Width>12.36896cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
     </ReportItems>
-    <Height>4.88925in</Height>
+    <Height>6.16008in</Height>
     <Style />
   </Body>
   <Width>8.24705in</Width>
@@ -666,21 +719,6 @@
               <Height>2.20673cm</Height>
               <Width>8.20847cm</Width>
               <ZIndex>4</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-            <Image Name="Image1">
-              <Source>External</Source>
-              <Value>=Parameters!ParamCodBarra.Value</Value>
-              <Sizing>FitProportional</Sizing>
-              <Top>3.75145cm</Top>
-              <Left>12.09862cm</Left>
-              <Height>1.25088cm</Height>
-              <Width>7.84458cm</Width>
-              <ZIndex>5</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -972,6 +1010,10 @@
         </Field>
         <Field Name="EstadoDelProducto">
           <DataField>EstadoDelProducto</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Observacion">
+          <DataField>Observacion</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

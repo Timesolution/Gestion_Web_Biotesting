@@ -118,6 +118,11 @@
                                                             <asp:ListItem>Tiquet Factura B</asp:ListItem>
                                                             <asp:ListItem>Comprobante no fiscal</asp:ListItem>
                                                             <asp:ListItem>Liquidacion tarjeta</asp:ListItem>
+                                                            <asp:ListItem>Comprobantes de retencion</asp:ListItem>
+                                                            <asp:ListItem>Recibo A</asp:ListItem>
+                                                            <asp:ListItem>Recibo B</asp:ListItem>
+                                                            <asp:ListItem>Recibo C</asp:ListItem>
+                                                            <asp:ListItem>Otros comprobantes</asp:ListItem>
                                                         </asp:DropDownList>
                                                     </div>
                                                     <div class="col-md-3">

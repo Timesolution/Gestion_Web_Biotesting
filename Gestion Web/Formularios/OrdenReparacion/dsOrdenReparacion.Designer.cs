@@ -307,6 +307,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
             
             private global::System.Data.DataColumn columnEstadoDelProducto;
             
+            private global::System.Data.DataColumn columnObservacion;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosOrdenReparacionDataTable() {
@@ -454,6 +456,14 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ObservacionColumn {
+                get {
+                    return this.columnObservacion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -489,7 +499,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DatosOrdenReparacionRow AddDatosOrdenReparacionRow(string NumeroSerie, string SucursalOrigen, string NumeroPRP, string Producto, string FechaCompra, string Cliente, string Celular, string DescripcionFalla, string PlazoLimiteReparacion, string Autoriza, string Fecha, string NumeroOrdenReparacion, string CambiaProducto, string EstadoDelProducto) {
+            public DatosOrdenReparacionRow AddDatosOrdenReparacionRow(string NumeroSerie, string SucursalOrigen, string NumeroPRP, string Producto, string FechaCompra, string Cliente, string Celular, string DescripcionFalla, string PlazoLimiteReparacion, string Autoriza, string Fecha, string NumeroOrdenReparacion, string CambiaProducto, string EstadoDelProducto, string Observacion) {
                 DatosOrdenReparacionRow rowDatosOrdenReparacionRow = ((DatosOrdenReparacionRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         NumeroSerie,
@@ -505,7 +515,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
                         Fecha,
                         NumeroOrdenReparacion,
                         CambiaProducto,
-                        EstadoDelProducto};
+                        EstadoDelProducto,
+                        Observacion};
                 rowDatosOrdenReparacionRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosOrdenReparacionRow);
                 return rowDatosOrdenReparacionRow;
@@ -542,6 +553,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
                 this.columnNumeroOrdenReparacion = base.Columns["NumeroOrdenReparacion"];
                 this.columnCambiaProducto = base.Columns["CambiaProducto"];
                 this.columnEstadoDelProducto = base.Columns["EstadoDelProducto"];
+                this.columnObservacion = base.Columns["Observacion"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -575,6 +587,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
                 base.Columns.Add(this.columnCambiaProducto);
                 this.columnEstadoDelProducto = new global::System.Data.DataColumn("EstadoDelProducto", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEstadoDelProducto);
+                this.columnObservacion = new global::System.Data.DataColumn("Observacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnObservacion);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -945,6 +959,22 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Observacion {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosOrdenReparacion.ObservacionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Observacion\' in table \'DatosOrdenReparacion\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosOrdenReparacion.ObservacionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsNumeroSerieNull() {
                 return this.IsNull(this.tableDatosOrdenReparacion.NumeroSerieColumn);
             }
@@ -1109,6 +1139,18 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetEstadoDelProductoNull() {
                 this[this.tableDatosOrdenReparacion.EstadoDelProductoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsObservacionNull() {
+                return this.IsNull(this.tableDatosOrdenReparacion.ObservacionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetObservacionNull() {
+                this[this.tableDatosOrdenReparacion.ObservacionColumn] = global::System.Convert.DBNull;
             }
         }
         

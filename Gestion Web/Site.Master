@@ -303,6 +303,7 @@
 
                                             <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
                                             <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
+                                            <li><a href="/../../Formularios/Compras/DiferenciaCompraMercaderiaF.aspx">Diferencias Mercaderia</a></li>
                                             <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
@@ -328,6 +329,8 @@
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
                                                 </ul>
                                             </li>

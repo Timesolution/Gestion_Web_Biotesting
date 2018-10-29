@@ -356,6 +356,20 @@ namespace Gestion_Web.Formularios.Compras
                 celAccion.Controls.Add(cbSeleccion);
                 //celAccion.Controls.Add(btnEliminar);
 
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
+
+                LinkButton btnDetallesExcel = new LinkButton();
+                btnDetallesExcel.CssClass = "btn btn-info ui-tooltip";
+                btnDetallesExcel.Attributes.Add("data-toggle", "tooltip");
+                btnDetallesExcel.Attributes.Add("title data-original-title", "DetallesExcel");
+                btnDetallesExcel.ID = "btnSelecEx_" + rc.Id;
+                btnDetallesExcel.Text = "<span class='fa fa-file-text-o'></span>";
+                btnDetallesExcel.Font.Size = 12;
+                btnDetallesExcel.PostBackUrl = "ImpresionCompras.aspx?a=8&ex=1&rc=" + rc.Id;
+                celAccion.Controls.Add(btnDetallesExcel);
+
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celAccion);
@@ -574,7 +588,46 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        
+        protected void lbtnGenerarCompra_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                int cantidadTildada = 0;
+                foreach (Control C in phRemitos.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        cantidadTildada++;
+                    }
+                    
+                }
+                if (!String.IsNullOrEmpty(idtildado) && cantidadTildada == 1)
+                {
+                    foreach (String idRemito in idtildado.Split(';'))
+                    {
+                        if (!String.IsNullOrEmpty(idRemito))
+                        {
+                            Response.Redirect("ComprasABM.aspx?a=3&r=" + idRemito);
+                        }
+                    }
+                }
+                else if(!String.IsNullOrEmpty(idtildado) && cantidadTildada > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un Documento"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar un Documento"));
+                }                
+            }
+            catch
+            {
 
+            }
+        }
     }
 }
