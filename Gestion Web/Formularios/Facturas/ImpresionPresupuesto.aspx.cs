@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -330,8 +331,17 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
-                //obtengo detalle de items
-                DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);                
+                DataTable dtDatos;
+                string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
+                if (!string.IsNullOrEmpty(combustible) && combustible == "1")
+                {   //si es combustibles traer los datos de la tabla 'itemsFacturas_Datos' 
+                    dtDatos = controlador.obtenerDatosPresupuestoCombustibles(idPresupuesto);
+                }
+                else
+                {
+                    //obtengo detalle de items
+                    dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
+                }
                 //datos de encabezado y pie
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
                 //nro remito factura
@@ -459,7 +469,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
                 }
-                catch { }
+                catch(Exception ex)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error buscando saldoCtaCte. " + ex.Message);
+                }
 
                 //neto no grabado
                 decimal subtotal = Convert.ToDecimal(dr[4]);

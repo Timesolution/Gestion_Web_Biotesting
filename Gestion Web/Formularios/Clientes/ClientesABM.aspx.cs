@@ -59,6 +59,8 @@ namespace Gestion_Web.Formularios.Clientes
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
                 string perfil = Session["Login_NombrePerfil"] as string;
 
+                this.verificarPermisos();
+
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
                 if (!IsPostBack)
@@ -270,6 +272,35 @@ namespace Gestion_Web.Formularios.Clientes
             catch
             {
 
+            }
+        }
+        private void verificarPermisos()
+        {
+            try
+            {
+                this.verificarPermisoModificarEstadoCliente();
+            }
+            catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en verificarPermisoModificarEstadoCliente. ex: " + ex.Message));
+            }
+        }
+        private void verificarPermisoModificarEstadoCliente()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                string permiso = listPermisos.Where(x => x == "170").FirstOrDefault();
+                if (permiso == null)
+                {
+                    DropListEstado.Enabled = false;
+                    DropListEstado.CssClass = "form-control";
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando verificarPermisoModificarEstadoCliente. Ex: " + ex.Message));
             }
         }
         private void asignarNombreLabel(int accion)

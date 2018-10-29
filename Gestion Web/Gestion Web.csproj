@@ -702,7 +702,9 @@
     <Content Include="js\plugins\msgGrowl\js\msgGrowl.pack.js" />
     <Content Include="js\plugins\uiToTop\jquery.ui.totop.js" />
     <Content Include="js\plugins\validate\jquery.validate.js" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -751,6 +753,7 @@
     <Content Include="Formularios\Reportes\dsReportesCompras.xss">
       <DependentUpon>dsReportesCompras.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>

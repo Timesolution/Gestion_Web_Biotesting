@@ -713,7 +713,7 @@ namespace Gestion_Web.Formularios.Pagos
                 foreach (var c in cuentas)
                 {
                     DataRow dr2 = dt.NewRow();
-                    dr2["entidad"] = c.Banco1.entidad +" - " + c.Descripcion + " - " + c.Numero + " - " + c.Cuit + " - " + c.Librador + "|" + c.Id;
+                    dr2["entidad"] = c.Banco1.entidad +" - " + c.Descripcion + " - " + c.Numero + " - " + c.Cuit + " - " + c.Librador + "|" + c.Banco1.id;
                     dr2["id"] = c.Id;
                     dt.Rows.Add(dr2);
                 }
@@ -2200,12 +2200,12 @@ namespace Gestion_Web.Formularios.Pagos
                     DataRow drTransferencia = dtTransferencia.NewRow();
                     drTransferencia["Fecha"] = Convert.ToDateTime(txtFechaTransf.Text, new CultureInfo("es-AR"));
                     drTransferencia["Importe"] = decimal.Round(monto, 2);
-                    drTransferencia["Banco"] = Convert.ToInt32(DropListBancoTransf.SelectedValue);
+                    drTransferencia["Banco"] = DropListBancoTransf.SelectedItem.Text.Split('|')[1];
                     drTransferencia["Banco Entidad"] = DropListBancoTransf.SelectedItem.Text;
                     drTransferencia["Cuenta"] = txtCuentaTransf.Text;
                     //drTransferencia["CBU"] = txtCbu.Text;
                     drTransferencia["Monto"] = decimal.Round(monto, 2);
-                    drTransferencia["IdCuentaBanc"] = DropListBancoTransf.SelectedItem.Text.Split('|')[1];
+                    drTransferencia["IdCuentaBanc"] = Convert.ToInt32(DropListBancoTransf.SelectedValue);
 
                     dtTransferencia.Rows.Add(drTransferencia);
                     lstTransferencia = dtTransferencia;

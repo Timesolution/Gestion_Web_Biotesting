@@ -46,7 +46,7 @@
                 </div>
             </div>
 
-            
+
         </div>
         <div class="row">
             <div class="col-md-12 col-xs-12 ">
@@ -166,6 +166,13 @@
                                                                     <div class="col-md-4">
                                                                         <asp:TextBox ID="txtCodBarraCh" runat="server" class="form-control" OnTextChanged="txtCodBarraCh_TextChanged" AutoPostBack="true"></asp:TextBox>
                                                                     </div>
+                                                                    <div class="col-md-4">
+                                                                        <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel4">
+                                                                            <ProgressTemplate>
+                                                                                <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;</span>
+                                                                            </ProgressTemplate>
+                                                                        </asp:UpdateProgress>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="name" class="col-md-4">Fecha </label>
@@ -215,8 +222,8 @@
                                                                 <div class="form-group">
                                                                     <label for="validateSelect" class="col-md-4">Cuenta</label>
                                                                     <div class="col-md-4">
-                                                                        <asp:TextBox ID="txtCuentaCh" runat="server" class="form-control" OnTextChanged="txtCuentaCh_Disposed"  AutoPostBack="true"></asp:TextBox>
-                                                                    </div>                                                                    
+                                                                        <asp:TextBox ID="txtCuentaCh" runat="server" class="form-control" OnTextChanged="txtCuentaCh_Disposed" AutoPostBack="true"></asp:TextBox>
+                                                                    </div>
                                                                     <div class="col-md-2">
                                                                         <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel4">
                                                                             <ProgressTemplate>
@@ -371,12 +378,12 @@
                                                                     </asp:DropDownList>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server"  ErrorMessage="Seleccione un banco" ControlToValidate="DropListBancoTransf" InitialValue="0" ValidationGroup="TransferGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="Seleccione un banco" ControlToValidate="DropListBancoTransf" InitialValue="0" ValidationGroup="TransferGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="validateSelect" class="col-md-4">Cuenta</label>
-                                                                <div class="col-md-4">                                                                    
+                                                                <div class="col-md-4">
                                                                     <asp:TextBox ID="txtCuentaTransf" runat="server" disabled class="form-control"></asp:TextBox>
                                                                 </div>
                                                                 <div class="col-md-4">
@@ -427,7 +434,7 @@
                                                             <div class="form-group">
                                                                 <label for="validateSelect" class="col-md-4">Operador</label>
                                                                 <div class="col-md-4">
-                                                                    <asp:DropDownList ID="ListOperadores" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListOperadores_SelectedIndexChanged" ></asp:DropDownList>
+                                                                    <asp:DropDownList ID="ListOperadores" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListOperadores_SelectedIndexChanged"></asp:DropDownList>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ErrorMessage="*" ControlToValidate="ListOperadores" InitialValue="-1" ValidationGroup="TarjetaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -442,10 +449,10 @@
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ErrorMessage="*" ControlToValidate="ListTarjetas2" InitialValue="-1" ValidationGroup="TarjetaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group" style="display:none;">
+                                                            <div class="form-group" style="display: none;">
                                                                 <label for="validateSelect" class="col-md-4">Tipo</label>
                                                                 <div class="col-md-4">
-                                                                    <asp:DropDownList ID="ListTarjetas" runat="server" class="form-control" ></asp:DropDownList>
+                                                                    <asp:DropDownList ID="ListTarjetas" runat="server" class="form-control"></asp:DropDownList>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="Seleccione una Tarjeta" ControlToValidate="ListTarjetas" InitialValue="Seleccione..." ValidationGroup="TarjetaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -653,8 +660,8 @@
                         </asp:UpdatePanel>
                         <div class="form-group">
                             <label class="col-md-2">Observaciones:</label>
-                            <div class="col-md-12">                                        
-                                <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" PlaceHolder="Escriba aqui comentarios..." TextMode="MultiLine" Rows="6" ></asp:TextBox> 
+                            <div class="col-md-12">
+                                <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" PlaceHolder="Escriba aqui comentarios..." TextMode="MultiLine" Rows="6"></asp:TextBox>
                             </div>
                         </div>
                         <div class="form-group">
@@ -685,14 +692,14 @@
                                 <div class="form-group">
                                     <label class="col-md-4">Fecha</label>
                                     <div class="col-md-4">
-                                        <asp:TextBox ID="txtFechaCobro" runat="server" class="form-control" ></asp:TextBox>
+                                        <asp:TextBox ID="txtFechaCobro" runat="server" class="form-control"></asp:TextBox>
                                     </div>
 
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Numero</label>
                                     <div class="col-md-4">
-                                        <asp:TextBox ID="txtNumeroCobro" runat="server" class="form-control" Text="0000" disabled ></asp:TextBox>
+                                        <asp:TextBox ID="txtNumeroCobro" runat="server" class="form-control" Text="0000" disabled></asp:TextBox>
                                     </div>
                                     <div class="col-md-1">
                                         <asp:RequiredFieldValidator ErrorMessage="*" ForeColor="Red" Font-Bold="true" ControlToValidate="txtNumeroCobro" runat="server" />
@@ -727,10 +734,10 @@
                     <asp:UpdatePanel ID="UpdatePanelAgregar" runat="server" UpdateMode="Always">
                         <ContentTemplate>
                             <asp:Button ID="lbtnAgregarPago" runat="server" Text="Agregar" class="btn btn-success" OnClick="btnAgregarPago_Click" />
-                            <%--<asp:LinkButton ID="lbtnAgregarPago" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarPago_Click" />--%>                    
+                            <%--<asp:LinkButton ID="lbtnAgregarPago" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarPago_Click" />--%>
                         </ContentTemplate>
                     </asp:UpdatePanel>
-                    
+
                 </div>
 
             </div>
@@ -751,7 +758,7 @@
             $("#<%= txtFechaRetencion.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
             $("#<%= txtFechaCobro.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-         }
+        }
     </script>
 
     <script>
@@ -772,11 +779,11 @@
         });
     </script>
 
-     <script type="text/javascript">
-         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-         function endReq(sender, args) {
-             $(function () {
-                 $("#<%= txtFechaCh.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $(function () {
+                $("#<%= txtFechaCh.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
              });
 
              $(function () {
@@ -789,9 +796,9 @@
 
              $(function () {
                  $("#<%= txtFechaCobro.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-             });
+            });
         }
-    </script>        
+    </script>
 
     <script>
         //valida los campos solo numeros
@@ -807,10 +814,9 @@
             }
 
             if (key < 48 || key > 57) {
-                if (key == 46 || key == 8 || key == 44 ) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                if (key == 46 || key == 8 || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
@@ -832,8 +838,7 @@
             if (key < 48 || key > 57) {
                 if (key == 45) // Detectar  guion medio (-)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
@@ -958,7 +963,7 @@
 
             return false;
 
-        }        
+        }
     </script>
 
     <%--<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>

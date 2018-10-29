@@ -130,7 +130,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Si es perfil vendedor bloqueo los droplist, dejo que solo pueda elegir el cliente
                 this.verificarVendedor();
-                //this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy"); //Juan
+                this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy"); //Juan
 
                 //si viene de la pantalla de busqueda cliente
                 if (Session["PedidosABM_ClienteModal"] != null)
@@ -898,7 +898,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "Error en verificar alerta. Ex: "+ ex.Message, true);
             }
         }
         private void verificarAlertaArticulo(Articulo art)
