@@ -956,6 +956,7 @@ namespace Gestion_Web.Formularios.Compras
                         item.Descripcion = tr.Cells[1].Text;
                         item.Precio = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[1]);
                         item.Cantidad = Convert.ToDecimal(txt.Text);
+                        item.PrecioConIVA = decimal.Round(A.costo * (1 + (A.porcentajeIva / 100)),2);
                         items.Add(item);
                     }
                 }
