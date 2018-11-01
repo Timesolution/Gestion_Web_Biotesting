@@ -176,6 +176,12 @@
                                                     <asp:Label ID="lblRequiereAnticipoOC" Text="" runat="server" />
                                                 </div>
                                             </div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Observaciones:</label>
+                                                <div class="col-md-7">
+                                                    <asp:Label ID="lblObservacion" Text="" runat="server" />
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </fieldset>

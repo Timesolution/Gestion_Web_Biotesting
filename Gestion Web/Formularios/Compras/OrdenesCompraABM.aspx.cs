@@ -293,7 +293,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "28")
+                        if (s == "176")
                         {
                             return 1;
                         }
@@ -436,6 +436,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.lblRequiereAnticipoOC.Text = string.Empty;
                 this.lblMontoAutorizacionOC.Text = string.Empty;
                 this.lblRequiereAutorizacionOC.Text = string.Empty;
+                this.lblObservacion.Text = string.Empty;
             }
             catch (Exception Ex)
             {
@@ -502,6 +503,8 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+
                 OrdenesCompra oc = null;
                 if (this.accion == 2)
                 {
@@ -514,6 +517,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 oc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
 
+                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);                
 
                 oc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
                 oc.FechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
@@ -526,9 +530,24 @@ namespace Gestion_Web.Formularios.Compras
 
                 //obengo items
                 oc.OrdenesCompra_Items = this.obtenerItems();
+                decimal tempTotal = 0;
+                foreach (var item in oc.OrdenesCompra_Items)
+                {
+                    tempTotal += (decimal)item.Precio * (decimal)item.Cantidad;
+                }
+
+                oc.Total = tempTotal;
+
+                //TODO chequear si esta bien lo de los estados y el chequeo al enviar el mail
 
                 //Agrego Estado
-                oc.Estado = 1;
+                if (prov.RequiereAutorizacion < 1)
+                    oc.Estado = 1;
+                else
+                    if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
+                    oc.Estado = 1;
+                    else
+                    oc.Estado = 8;
 
                 if (oc.OrdenesCompra_Items.Count > 0)
                 {
@@ -546,7 +565,15 @@ namespace Gestion_Web.Formularios.Compras
                         if (this.accion == 2)
                             i = Convert.ToInt32(oc.Id);
 
-                        this.enviarMail(oc);
+                        if(prov.RequiereAutorizacion < 1)
+                        {
+                            this.enviarMail(oc);
+                        }
+                        else
+                        {
+                            if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
+                                this.enviarMail(oc);
+                        }
 
                         string script = string.Empty;
                         script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
@@ -634,6 +661,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.lblRequiereAnticipoOC.Text = "Si";
                     this.lblRequiereAutorizacionOC.Text = "Si";
                     this.lblMontoAutorizacionOC.Text = "$" + poc.MontoAutorizacion.ToString();
+                    this.lblObservacion.Text = poc.cliente.observaciones;
                     if (poc.RequiereAnticipo == 0)
                         this.lblRequiereAnticipoOC.Text = "No";
                     if (poc.RequiereAutorizacion == 0)

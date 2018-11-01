@@ -28,7 +28,10 @@
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" Enabled="false" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
                                             <asp:PlaceHolder runat="server" ID="phCambiarEstadoOC" Visible="false">
-                                                <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cambiar Estado</a>
+                                                <li>
+                                                    <asp:LinkButton ID="ltbnCambiarEstado" runat="server" Visible="false" Enabled="false" data-toggle="modal" href="#modalCambiarEstado">Cambiar estado</asp:LinkButton>
+                                                </li>
+                                                <%--<li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#modalCambiarEstado">Cambiar Estado</a>
                                                     <ul class="dropdown-menu">
                                                         <li>
                                                             <asp:LinkButton ID="lbtnPendienteOC" OnClick="lbtnPendienteOC_Click" runat="server">Pendiente</asp:LinkButton>
@@ -49,7 +52,7 @@
                                                             <asp:LinkButton ID="lbtnEntregaParcial" OnClick="lbtnEntregaParcial_Click" runat="server">Entrega Parcial</asp:LinkButton>
                                                         </li>
                                                     </ul>
-                                                </li>
+                                                </li>--%>
                                             </asp:PlaceHolder>
                                             <li>
                                                 <asp:LinkButton ID="lbtnEntregas" runat="server" Visible="false" OnClick="lbtnEntregas_Click">Entregas</asp:LinkButton>
@@ -253,10 +256,10 @@
                         <div class="form-group">
                             <label class="col-md-4">Estado</label>
                             <div class="col-md-6">
-                                <asp:DropDownList ID="DropListEstado" runat="server" class="form-control"></asp:DropDownList>
+                                <asp:DropDownList ID="DropListEstadoFiltro" runat="server" class="form-control"></asp:DropDownList>
                             </div>
                             <div class="col-md-2">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstado" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstadoFiltro" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                             </div>
                         </div>
                     </div>
@@ -270,6 +273,43 @@
 
         </div>
     </div>
+
+    <div id="modalCambiarEstado" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Cambiar estado</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3">Estados</label>
+                                <div class="col-md-6">
+                                    <asp:DropDownList ID="DropListEstados" runat="server" class="form-control"></asp:DropDownList>
+                                </div>
+                                <div class="col-md-2">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="ImputarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3">Observaciones</label>
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnCambiarEstado" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="btnCambiarEstado_Click" class="btn btn-success"  ValidationGroup="ImputarGroup" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>

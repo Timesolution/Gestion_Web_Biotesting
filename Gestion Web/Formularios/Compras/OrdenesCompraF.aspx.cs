@@ -77,6 +77,7 @@ namespace Gestion_Web.Formularios.Compras
                 if(proveedor > 0)
                     lbtnEntregas.Visible = true;
 
+                this.cargarEstadosFiltro();
                 this.cargarEstados();
                 this.cargarSucursal();
                 //txtFechaDesde.Text = fechaD;
@@ -116,7 +117,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                int valor = 0;
+                int tienePermiso = 0;
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
                 foreach (string s in listPermisos)
@@ -132,18 +133,22 @@ namespace Gestion_Web.Formularios.Compras
                         if (s == "28")
                         {
                             //verifico si es super admin
-                            string perfil = Session["Login_NombrePerfil"] as string;
-                            if (perfil == "SuperAdministrador")
-                            {
-                                this.DropListSucursal.Attributes.Remove("disabled");
-                            }
-
-                            valor = 1;
+                            //string perfil = Session["Login_NombrePerfil"] as string;
+                            //if (perfil == "SuperAdministrador")
+                            //{
+                            //}
+                            tienePermiso = 1;
                         }
+
+                        if (s == "177")
+                            this.DropListSucursal.Attributes.Remove("disabled");
+
+                        if (s == "178")
+                            ltbnCambiarEstado.Visible = true;
                     }
                 }
 
-                return valor;
+                return tienePermiso;
             }
             catch
             {
@@ -179,7 +184,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public void cargarEstados()
+        public void cargarEstadosFiltro()
         {
             try
             {
@@ -193,13 +198,28 @@ namespace Gestion_Web.Formularios.Compras
 
                 //agrego todos
 
-                this.DropListEstado.DataSource = estados;
-                this.DropListEstado.DataValueField = "Id";
-                this.DropListEstado.DataTextField = "TipoEstado";
-                this.DropListEstado.DataBind();
-                                
+                this.DropListEstadoFiltro.DataSource = estados;
+                this.DropListEstadoFiltro.DataValueField = "Id";
+                this.DropListEstadoFiltro.DataTextField = "TipoEstado";
+                this.DropListEstadoFiltro.DataBind();
 
-                //this.DropListEstado.SelectedValue = this..ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        public void cargarEstados()
+        {
+            try
+            {
+                var estados = contCompraEntity.obtenerOrdenesCompra_Estados();                
+
+                //agrego todos
+                this.DropListEstados.DataSource = estados;
+                this.DropListEstados.DataValueField = "Id";
+                this.DropListEstados.DataTextField = "TipoEstado";
+                this.DropListEstados.DataBind();
 
             }
             catch (Exception ex)
@@ -419,7 +439,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (DropListProveedor.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstado.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked));
+                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked));
                     }
                     else
                     {
@@ -625,6 +645,41 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
+            }
+        }
+
+        protected void btnCambiarEstado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    var or = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
+
+                    int estadoNuevo = Convert.ToInt32(DropListEstados.SelectedValue);
+                    string observacion = txtObservaciones.Text;
+
+                    int temp = contCompraEntity.AgregarYGuardarOrdenesCompra_Observaciones(or.Id,(int)or.Estado, estadoNuevo, observacion);
+
+                    if(temp < 0)
+                        Log.EscribirSQL(1, "ERROR", "Error agregando ordenCompra_observacion.");
+                }
+                
+                modificarEstadoOrdenCompra(Convert.ToInt32(DropListEstados.SelectedValue));
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cambiando estado orden de compra. " + ex.Message);
             }
         }
     }

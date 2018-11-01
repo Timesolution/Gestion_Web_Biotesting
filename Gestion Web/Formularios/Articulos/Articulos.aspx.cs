@@ -192,8 +192,7 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         this.DropListSucursal_St2.Attributes.Remove("disabled");
                         this.DropListSucursalRef.Attributes.Remove("disabled");
-                        this.DropListSucNoVendido.Attributes.Remove("disabled");
-                        this.permisoStockValorizado = 1;
+                        this.DropListSucNoVendido.Attributes.Remove("disabled");                        
                     }
                     else
                     {
@@ -201,6 +200,10 @@ namespace Gestion_Web.Formularios.Articulos
                         this.DropListSucursalRef.SelectedValue = Session["Login_SucUser"].ToString();
                         this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
                     }
+
+                    if(listPermisos.Contains("179"))
+                        this.permisoStockValorizado = 1;
+
                     return 1;
                 }
 
