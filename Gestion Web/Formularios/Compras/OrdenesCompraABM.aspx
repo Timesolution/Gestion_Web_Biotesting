@@ -217,6 +217,7 @@
                                             <th>Precio</th>
                                             <th>Cantidad</th>
                                             <th>Stock Sucursal</th>
+                                            <th>Stock Minimo Sucursal</th>
                                             <th>Stock Total</th>
                                             <th>Stock Minimo</th>
                                             <th></th>

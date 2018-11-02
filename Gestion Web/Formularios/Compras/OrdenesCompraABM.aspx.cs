@@ -517,7 +517,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 oc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
 
-                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);                
+                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
 
                 oc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
                 oc.FechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
@@ -537,8 +537,6 @@ namespace Gestion_Web.Formularios.Compras
                 }
 
                 oc.Total = tempTotal;
-
-                //TODO chequear si esta bien lo de los estados y el chequeo al enviar el mail
 
                 //Agrego Estado
                 if (prov.RequiereAutorizacion < 1)
@@ -851,6 +849,12 @@ namespace Gestion_Web.Formularios.Compras
                 celStockSucursal.VerticalAlign = VerticalAlign.Middle;
                 celStockSucursal.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celStockSucursal);
+
+                TableCell celStockMinimoSucursal = new TableCell();
+                celStockMinimoSucursal.Text = "0.00";
+                celStockMinimoSucursal.VerticalAlign = VerticalAlign.Middle;
+                celStockMinimoSucursal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celStockMinimoSucursal);
 
                 TableCell celStockTotal = new TableCell();
                 celStockTotal.Text = "0.00";
