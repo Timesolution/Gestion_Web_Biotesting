@@ -24,6 +24,7 @@ namespace Gestion_Web.Formularios.Compras
     {
         controladorCompraEntity controlador = new controladorCompraEntity();
         controladorArticulo contArticulos = new controladorArticulo();
+        ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
         controladorFacturacion contFact = new controladorFacturacion();
         controladorSucursal contSuc = new controladorSucursal();
         controladorCliente contCliente = new controladorCliente();
@@ -897,17 +898,30 @@ namespace Gestion_Web.Formularios.Compras
                     codigoSinParentesis = codigo.Substring(0, posParentesis).Trim();
                 }
                 
-                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);
-            
+                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);                
+
                 if (A != null && A.descripcion == Descripcion)
                 {
+                    var stockMinimoSucursalByArticulo = contArticulosEntity.getAllStockMinimoSucursalesByArticulo(A.id);
                     var list = this.contArticulos.obtenerStockArticuloReduc(A.id);
+
                     celStockMinimo.Text = A.stockMinimo.ToString();
                     celStockTotal.Text = list.Sum(x => x.cantidad).ToString();
-                    celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
-                    //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono
 
-                    if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text))
+                    var stockMinimoSucursal = stockMinimoSucursalByArticulo.Where(x => x.sucursal == Convert.ToInt32(ListSucursal.SelectedValue)).Select(x => x.stockMinimo).FirstOrDefault().ToString();
+
+                    if (!String.IsNullOrEmpty(stockMinimoSucursal))
+                        celStockMinimoSucursal.Text = stockMinimoSucursal;
+                    else
+                    {
+                        stockMinimoSucursal = "0";
+                        celStockMinimoSucursal.Text = "-";
+                    }                        
+
+                    celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
+                    //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono                    
+
+                    if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text) || Convert.ToDecimal(stockMinimoSucursal) > Convert.ToDecimal(celStockTotal.Text))
                     {
                         Literal ltAviso = new Literal();
                         ltAviso.Text = "<span>   <span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
