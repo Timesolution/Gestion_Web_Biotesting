@@ -367,8 +367,7 @@
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Cheques</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Valores/ChequesF.aspx">Cheques 1</a></li>
-                                                    <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques 2</a></li>
+                                                    <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
