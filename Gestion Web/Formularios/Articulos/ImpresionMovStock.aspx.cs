@@ -314,11 +314,11 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (this.costoValorizado == 1)
                 {
-                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoR.rdlc");
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoImponibleR.rdlc");                    
                 }
                 else
                 {
-                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoImponibleR.rdlc");
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoR.rdlc");
                 }
 
                 ReportDataSource rds = new ReportDataSource("DatosValorizado", dtStockValorizado);

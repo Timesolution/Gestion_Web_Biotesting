@@ -176,6 +176,12 @@
                                                     <asp:Label ID="lblRequiereAnticipoOC" Text="" runat="server" />
                                                 </div>
                                             </div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Observaciones:</label>
+                                                <div class="col-md-7">
+                                                    <asp:Label ID="lblObservacion" Text="" runat="server" />
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </fieldset>
@@ -211,6 +217,7 @@
                                             <th>Precio</th>
                                             <th>Cantidad</th>
                                             <th>Stock Sucursal</th>
+                                            <th>Stock Minimo Sucursal</th>
                                             <th>Stock Total</th>
                                             <th>Stock Minimo</th>
                                             <th></th>

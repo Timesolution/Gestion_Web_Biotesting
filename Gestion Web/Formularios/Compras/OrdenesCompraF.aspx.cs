@@ -1,12 +1,17 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -77,6 +82,7 @@ namespace Gestion_Web.Formularios.Compras
                 if(proveedor > 0)
                     lbtnEntregas.Visible = true;
 
+                this.cargarEstadosFiltro();
                 this.cargarEstados();
                 this.cargarSucursal();
                 //txtFechaDesde.Text = fechaD;
@@ -116,7 +122,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                int valor = 0;
+                int tienePermiso = 0;
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
                 foreach (string s in listPermisos)
@@ -132,18 +138,22 @@ namespace Gestion_Web.Formularios.Compras
                         if (s == "28")
                         {
                             //verifico si es super admin
-                            string perfil = Session["Login_NombrePerfil"] as string;
-                            if (perfil == "SuperAdministrador")
-                            {
-                                this.DropListSucursal.Attributes.Remove("disabled");
-                            }
-
-                            valor = 1;
+                            //string perfil = Session["Login_NombrePerfil"] as string;
+                            //if (perfil == "SuperAdministrador")
+                            //{
+                            //}
+                            tienePermiso = 1;
                         }
+
+                        if (s == "177")
+                            this.DropListSucursal.Attributes.Remove("disabled");
+
+                        if (s == "178")
+                            ltbnCambiarEstado.Visible = true;
                     }
                 }
 
-                return valor;
+                return tienePermiso;
             }
             catch
             {
@@ -179,7 +189,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public void cargarEstados()
+        public void cargarEstadosFiltro()
         {
             try
             {
@@ -193,13 +203,28 @@ namespace Gestion_Web.Formularios.Compras
 
                 //agrego todos
 
-                this.DropListEstado.DataSource = estados;
-                this.DropListEstado.DataValueField = "Id";
-                this.DropListEstado.DataTextField = "TipoEstado";
-                this.DropListEstado.DataBind();
-                                
+                this.DropListEstadoFiltro.DataSource = estados;
+                this.DropListEstadoFiltro.DataValueField = "Id";
+                this.DropListEstadoFiltro.DataTextField = "TipoEstado";
+                this.DropListEstadoFiltro.DataBind();
 
-                //this.DropListEstado.SelectedValue = this..ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        public void cargarEstados()
+        {
+            try
+            {
+                var estados = contCompraEntity.obtenerOrdenesCompra_Estados();                
+
+                //agrego todos
+                this.DropListEstados.DataSource = estados;
+                this.DropListEstados.DataValueField = "Id";
+                this.DropListEstados.DataTextField = "TipoEstado";
+                this.DropListEstados.DataBind();
 
             }
             catch (Exception ex)
@@ -419,7 +444,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (DropListProveedor.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstado.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked));
+                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked));
                     }
                     else
                     {
@@ -584,7 +609,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     if (i > 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Estado de la Orden de Compra modificado con éxito. ", "OrdenesCompraF.aspx?fd="+ txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Estado de la Orden de Compra modificado con éxito. ", "OrdenesCompraF.aspx?fd="+ txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked)));
                     }
                     else
                     {
@@ -619,13 +644,268 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Response.Redirect("EntregasMercaderiaF.aspx?oc="+idtildado);
+                    var oc = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
+
+                    if(oc.Estado != 7)
+                        Response.Redirect("EntregasMercaderiaF.aspx?oc="+idtildado);
+                    else
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra se encuentra entregada completamente!"));
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
             }
+        }
+
+        protected void btnCambiarEstado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    var oc = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
+
+                    int estadoNuevo = Convert.ToInt32(DropListEstados.SelectedValue);
+                    string observacion = txtObservaciones.Text;
+
+                    if ((int)oc.Estado == 8 && estadoNuevo == 1)
+                        enviarMail(oc);
+
+                    int temp = contCompraEntity.AgregarYGuardarOrdenesCompra_Observaciones(oc.Id,(int)oc.Estado, estadoNuevo, observacion);
+
+                    if(temp < 0)
+                        Log.EscribirSQL(1, "ERROR", "Error agregando ordenCompra_observacion.");
+                }
+                
+                modificarEstadoOrdenCompra(Convert.ToInt32(DropListEstados.SelectedValue));
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cambiando estado orden de compra. " + ex.Message);
+            }
+        }
+
+        private void enviarMail(OrdenesCompra oc) 
+        {
+            try
+            {
+                controladorFunciones contFunciones = new controladorFunciones();
+                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+                //string destinatarios = this.lblMailOC.Text;
+
+                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
+                
+                if (!String.IsNullOrEmpty(prov.Mail))
+                {
+                    String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
+                    string pathDirectorio = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/");
+
+                    //Si el directorio no existe, lo creo
+                    if (!Directory.Exists(pathDirectorio))
+                    {
+                        Directory.CreateDirectory(pathDirectorio);
+                    }
+
+                    int i = this.generarOrdenCompraPDF(oc, pathArchivoGenerar);
+                    if (i > 0)
+                    {
+                        Attachment adjunto = new Attachment(pathArchivoGenerar);
+
+                        int ok = contFunciones.enviarMailOrdenesCompra(adjunto, oc, prov.Mail);
+                        if (ok > 0)
+                        {
+                            adjunto.Dispose();
+                            File.Delete(pathArchivoGenerar);
+                            Directory.Delete(pathDirectorio);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de Compra enviada correctamente!", ""));
+                        }
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar la Orden de Compra por mail. "));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar impresion Orden de Compra a enviar. "));
+                    }
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando mail. Excepción: " + Ex.Message));
+            }
+        }
+
+        private int generarOrdenCompraPDF(OrdenesCompra ordenCompra, string pathGenerar)
+        {
+            try
+            { 
+                controladorCliente cont = new controladorCliente();
+                controladorSucursal contSuc = new controladorSucursal();
+                ControladorEmpresa controlEmpresa = new ControladorEmpresa();
+
+
+                //Gestion_Api.Entitys.OrdenesCompra ordenCompra = this.contCompraEntity.obtenerOrden(this.ordenCompra);
+                Gestor_Solution.Modelo.Cliente p = cont.obtenerProveedorID(ordenCompra.IdProveedor.Value);
+
+                Sucursal s = contSuc.obtenerSucursalID(ordenCompra.IdSucursal.Value);
+
+                //datos empresa emisora
+                DataTable dtEmpresa = controlEmpresa.obtenerEmpresaById(s.empresa.id);
+
+                String razonSoc = String.Empty;
+                String direComer = String.Empty;
+                String condIVA = String.Empty;
+
+                String Fecha = " ";
+                String FechaEntrega = " ";
+                String Numero = " ";
+                String Proveedor = " ";
+                String Observacion = "-";
+
+                foreach (DataRow row in dtEmpresa.Rows)//Datos empresa 
+                {
+                    razonSoc = row["Razon Social"].ToString();
+                    condIVA = row["Condicion IVA"].ToString();
+                    direComer = row["Direccion"].ToString();
+                }
+
+                if (ordenCompra != null && p != null)
+                {
+                    Fecha = ordenCompra.Fecha.Value.ToString("dd/MM/yyyy");
+                    FechaEntrega = ordenCompra.FechaEntrega.Value.ToString("dd/MM/yyyy");
+                    Numero = "Nº " + ordenCompra.Numero;
+                    Proveedor = p.razonSocial;
+                    Observacion = ordenCompra.Observaciones;
+                }
+
+                string logo = Server.MapPath("../../Facturas/" + s.empresa.id + "/Logo.jpg");
+
+                List<Gestion_Api.Entitys.OrdenesCompra_Items> itemsOrdenes = ordenCompra.OrdenesCompra_Items.ToList();//obtengo los items de la OC
+                DataTable dtItems = ListToDataTable(itemsOrdenes);//Paso la list a datatable para pasarlo al report.
+                dtItems.Columns.Add("CodProv");
+
+                foreach (DataRow row in dtItems.Rows)
+                {
+                    ProveedorArticulo codProv = this.contArticulos.obtenerProveedorArticuloByArticulo(Convert.ToInt32(row["Codigo"]));
+
+                    Articulo art = this.contArticulos.obtenerArticuloByID(Convert.ToInt32(Convert.ToInt32(row["Codigo"])));
+
+                    if (art != null)
+                    {
+                        row["Codigo"] = art.codigo;
+                    }
+                    if (codProv != null)
+                    {
+                        row["CodProv"] = codProv.codigoProveedor;
+                    }
+                }
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenesCompraR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+
+                ReportDataSource rds = new ReportDataSource("ItemsOrden", dtItems);
+                ReportParameter param1 = new ReportParameter("ParamFecha", Fecha);
+                ReportParameter param2 = new ReportParameter("ParamFechaEntrega", FechaEntrega);
+                ReportParameter param3 = new ReportParameter("ParamNumero", Numero);
+                ReportParameter param4 = new ReportParameter("ParamProveedor", Proveedor);
+                ReportParameter param5 = new ReportParameter("ParamObservacion", Observacion);
+
+                ReportParameter param12 = new ReportParameter("ParamRazonSoc", razonSoc);
+                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer);
+                ReportParameter param14 = new ReportParameter("ParamCondIva", condIVA);
+
+                ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param1);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+
+                this.ReportViewer1.LocalReport.SetParameters(param12);//datos empresa
+                this.ReportViewer1.LocalReport.SetParameters(param13);
+                this.ReportViewer1.LocalReport.SetParameters(param14);
+
+                this.ReportViewer1.LocalReport.SetParameters(param32);//logo
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                FileStream stream = File.Create(pathGenerar, pdfContent.Length);
+                stream.Write(pdfContent, 0, pdfContent.Length);
+                stream.Close();
+
+                return 1;
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al intentar guardar la Orden de Compra. Excepción: " + Ex.Message));
+                return -1;
+            }
+        }
+
+        public static DataTable ListToDataTable<T>(List<T> list)
+        {
+            DataTable dt = new DataTable();
+
+            foreach (PropertyInfo info in typeof(T).GetProperties())
+            {
+                dt.Columns.Add(new DataColumn(info.Name, GetNullableType(info.PropertyType)));
+            }
+            foreach (T t in list)
+            {
+                DataRow row = dt.NewRow();
+                foreach (PropertyInfo info in typeof(T).GetProperties())
+                {
+                    if (!IsNullableType(info.PropertyType))
+                        row[info.Name] = info.GetValue(t, null);
+                    else
+                        row[info.Name] = (info.GetValue(t, null) ?? DBNull.Value);
+                }
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
+
+        private static Type GetNullableType(Type t)
+        {
+            Type returnType = t;
+            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                returnType = Nullable.GetUnderlyingType(t);
+            }
+            return returnType;
+        }
+        private static bool IsNullableType(Type type)
+        {
+            return (type == typeof(string) ||
+                    type.IsArray ||
+                    (type.IsGenericType &&
+                     type.GetGenericTypeDefinition().Equals(typeof(Nullable<>))));
         }
     }
 }

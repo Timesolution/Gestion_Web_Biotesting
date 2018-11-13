@@ -325,7 +325,6 @@ namespace Gestion_Web.Formularios.Compras
                         row["CodProv"] = codProv.codigoProveedor;
                     }
                 }
-                
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenesCompraR.rdlc");
