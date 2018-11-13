@@ -183,6 +183,7 @@
                                                     <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
                                                     <li><a href="/../../Formularios/Articulos/ABMMarcas.aspx">Marcas</a></li>
                                                     <li><a href="/../../Formularios/Articulos/ABMTrazabilidad.aspx">Trazabilidad</a></li>
+                                                    <li><a href="/../../Formularios/Articulos/ArticulosDiferenciasStock.aspx">Diferencias Stock por Excel</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">

@@ -279,22 +279,24 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 var perfilesStore = contStoreUsuario.obtenerPerfilesStore();
 
-                perfilesStore.Insert(0, new Store_Api.Entidades.Perfile
+                if (perfilesStore != null)
                 {
-                    @int = 0,
-                    Perfil = "Seleccione..."
-                }
+                    perfilesStore.Insert(0, new Store_Api.Entidades.Perfile
+                    {
+                        @int = 0,
+                        Perfil = "Seleccione..."
+                    }
                 );
 
-                this.DropPerfilStore.DataSource = perfilesStore;
-                this.DropPerfilStore.DataValueField = "int";
-                this.DropPerfilStore.DataTextField = "Perfil";
-                this.DropPerfilStore.DataBind();
-
+                    this.DropPerfilStore.DataSource = perfilesStore;
+                    this.DropPerfilStore.DataValueField = "int";
+                    this.DropPerfilStore.DataTextField = "Perfil";
+                    this.DropPerfilStore.DataBind();
+                }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Perfiles. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Perfiles Store. " + ex.Message));
             }
         }
         public void cargarStores()
