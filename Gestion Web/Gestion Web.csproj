@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -349,6 +349,7 @@
     <Content Include="Formularios\Articulos\ArticulosC.aspx" />
     <Content Include="Formularios\Articulos\Articulos.aspx" />
     <Content Include="Formularios\Articulos\ArticulosABM.aspx" />
+    <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
@@ -753,7 +754,6 @@
     <Content Include="Formularios\Reportes\dsReportesCompras.xss">
       <DependentUpon>dsReportesCompras.xsd</DependentUpon>
     </Content>
-    <Content Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1296,6 +1296,13 @@
     </Compile>
     <Compile Include="Formularios\Articulos\ArticulosC.aspx.designer.cs">
       <DependentUpon>ArticulosC.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.cs">
+      <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
+      <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\ImpresionMovStock.aspx.cs">
       <DependentUpon>ImpresionMovStock.aspx</DependentUpon>
