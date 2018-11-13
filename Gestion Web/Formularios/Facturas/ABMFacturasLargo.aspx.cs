@@ -2476,7 +2476,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                         {
-                            this.txtPUnitario.Text = decimal.Round((art.precioVenta / ((1 + (art.porcentajeIva / 100)))), 2).ToString();
+                            //TODO ramiro se cambio por esta linea de precio sin iva
+                            this.txtPUnitario.Text = art.precioSinIva.ToString();
+                            //this.txtPUnitario.Text = decimal.Round((art.precioVenta / ((1 + (art.porcentajeIva / 100)))), 2).ToString();
                         }
                     }
 
@@ -3688,7 +3690,7 @@ namespace Gestion_Web.Formularios.Facturas
                             motivo = fact.respuestaFE.Split('_')[2];
                         }
                         catch { }
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura." + motivo + ". \", {type: \"error\"});", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura 2." + motivo + ". \", {type: \"error\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar factura "));
                     }
 
@@ -5301,7 +5303,8 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal total = f.total;
                     String cuit = f.cliente.cuit;
 
-                    if ((cuit == "00000000000" || cuit == "00-00000000-0") && (total > 1000) && (f.formaPAgo.id == 1))
+                    //if ((cuit == "00000000000" || cuit == "00-00000000-0") && (total > 1000) && (f.formaPAgo.id == 1))                    
+                    if ((cuit == "00000000000" || cuit == "00-00000000-0") && (total > f.ptoV.tope) && (f.formaPAgo.id == 1))
                     {
                         i = -1;
                     }
@@ -8875,6 +8878,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
                     this.actualizarPrecioItemsCombustible();
 
+
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "clickTab(); ", true);                
             }
             catch
@@ -8954,19 +8958,34 @@ namespace Gestion_Web.Formularios.Facturas
                 this.factura.tipo = this.cargarTiposFactura(lbl[0]);
                 decimal iva = 0;
 
+                #region impuestos combustibles
                 //Calculo los impuestos correspondiente a la venta de combustibles (ITC,CO2)
                 this.factura.totalImpuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
-
+                #endregion
+               
+                
+                #region obtener el neto de la factura
                 //obtengo total de suma de item
-                //decimal totalC = contArtEnt.obtenerTotalNetoCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
                 decimal totalC = 0;
                 foreach (var item in factura.items)
                 {
                     totalC += item.total;
-                }
+                }//el total va a ser el neto cuando es factura A, y va a ser el total final cuando es factura B
                 decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
-                this.factura.neto = total;
-
+                //this.factura.neto = total;
+                if (lbl[0].Contains("Factura A") || lbl[0].Contains("Nota de Credito A") || lbl[0].Contains("Nota de Debito A"))
+                {
+                    this.factura.neto = total;
+                }
+                else
+                {
+                    this.factura.total = total;
+                    this.factura.neto = contArtEnt.obtenerNetoFacturaBVentaCombustible(this.factura);
+                }
+                #endregion
+               
+                
+                #region obtener subtotal
                 if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                 {
                     this.txtPorcDescuento.Text = decimal.Round(this.factura.neto10, 2).ToString();
@@ -8975,7 +8994,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //Subtotal = neto menos el descuento
                 this.factura.descuento = decimal.Round((this.factura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
                 this.factura.subTotal = decimal.Round((this.factura.neto - this.factura.descuento), 2, MidpointRounding.AwayFromZero);
-
+                #endregion
+                
+                
+                #region obtener el iva
                 if (lbl[0].Contains("Presupuesto") || lbl[0].Contains("PRP"))
                 {
                     Configuracion c = new Configuracion();
@@ -9014,17 +9036,42 @@ namespace Gestion_Web.Formularios.Facturas
                         this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                     }
                 }
-
-                //this.factura.totalSinDescuento = decimal.Round(this.factura.neto + contArtEnt.obtenerTotalIvaCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue)), 2);
+                #endregion
+                
                 this.factura.totalSinDescuento = decimal.Round(this.factura.neto + iva);
-
+               
+                #region calculo de persepciones
                 //Las percepciones se hacen sobre el neto de la factura + impuestos de combustible
                 this.factura.retencion = decimal.Round(((this.factura.subTotal + this.factura.totalImpuestosCombustible) * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
                 //total NetosNoGravados cuando es venta combustible los guardo en .iva21
-
-                //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
-                this.factura.total = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-
+                #endregion
+                
+                #region calculo del total
+                if ((lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B")))//TODO r para q no recalcule el total 
+                {
+                    //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
+                    decimal totalAux = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
+                    if(this.factura.total != totalAux)
+                    {
+                        if(this.factura.total > totalAux)//ajuste redondeo
+                        {
+                            decimal diferencia = this.factura.total - totalAux;
+                            this.factura.totalImpuestosCombustible += diferencia;
+                        }
+                        else
+                        {
+                            decimal diferencia = totalAux - this.factura.total;
+                            this.factura.totalImpuestosCombustible -= diferencia;
+                        }
+                    }
+                    //this.factura.total = this.factura.subTotal;
+                }
+                else
+                {
+                    //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
+                    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
+                }
+                #endregion
             }
             catch
             {
@@ -9038,37 +9085,41 @@ namespace Gestion_Web.Formularios.Facturas
                 Factura factura = Session["Factura"] as Factura;
                 ControladorArticulosEntity contArticulosEnt = new ControladorArticulosEntity();
 
-                //Recorro items de la factura y actualizo el precio sin iva y el precio unitario
-                foreach (var item in factura.items)
+                if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                 {
-                    //Verifico si el item pertenece al grupo de combustibles
-                    if (item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
+                    //Recorro items de la factura y actualizo el precio sin iva y el precio unitario
+                    foreach (var item in factura.items)
                     {
-                        decimal totalItc = 0;
-                        decimal totalHidrica = 0;
-                        decimal totalVial = 0;
-                        decimal totalMunicipal = 0;
-
-                        //Obtengo datos del proveedor de combustible
-                        var datos = contArticulosEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
-                        if (datos != null)
+                        //Verifico si el item pertenece al grupo de combustibles
+                        if (item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
                         {
-                            totalItc += decimal.Round((datos.ITC.Value), 2);
-                            totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
-                            totalVial += decimal.Round((datos.TasaVial.Value), 2);
-                            totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
+                            decimal totalItc = 0;
+                            decimal totalHidrica = 0;
+                            decimal totalVial = 0;
+                            decimal totalMunicipal = 0;
+
+                            //Obtengo datos del proveedor de combustible
+                            var datos = contArticulosEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
+                            if (datos != null)
+                            {
+                                totalItc += decimal.Round((datos.ITC.Value), 2);
+                                totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
+                                totalVial += decimal.Round((datos.TasaVial.Value), 2);
+                                totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
+                            }
+
+                            //Le agrego el iva al precio unitario del item
+                            decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
+
+
+                            item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
+                            item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal; //Sumo al precio del item el importe de impuestos
+
+                            //Genero un nuevo item, le seteo los valores del item que estoy modificando, remuevo el item y agrego este nuevo item
+                            ItemFactura nuevoItem = item;
+                            factura.items.Remove(item);
+                            factura.items.Add(nuevoItem);
                         }
-
-                        //Le agrego el iva al precio unitario del item
-                        decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                        item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
-                        item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal; //Sumo al precio del item el importe de impuestos
-
-                        //Genero un nuevo item, le seteo los valores del item que estoy modificando, remuevo el item y agrego este nuevo item
-                        ItemFactura nuevoItem = item;
-                        factura.items.Remove(item);
-                        factura.items.Add(nuevoItem);
                     }
                 }
             }
