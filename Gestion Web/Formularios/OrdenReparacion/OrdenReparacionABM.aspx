@@ -132,6 +132,10 @@
                                                             <div class="col-md-2">
                                                                 <asp:TextBox ID="txtCelular" runat="server" class="form-control" placeholder="Ej.: 1111 2222" MaxLength="8"></asp:TextBox>
                                                             </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="*" ControlToValidate="txtCodArea" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="*" ControlToValidate="txtCelular" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="name" class="col-md-4">Descripcion de la Falla</label>
@@ -148,7 +152,16 @@
                                                                 <asp:TextBox ID="txtEstadoDelProducto" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDescripcionFalla" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtEstadoDelProducto" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Observacion</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtObservacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtObservacion" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -156,17 +169,10 @@
                                                             <div class="col-md-4">
                                                                 <asp:TextBox ID="DropListPlazoLimite" runat="server" class="form-control" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                                             </div>
-                                                        </div>
-                                                        <%--<div class="form-group">
-                                                            <label class="col-md-4">Plazo Limite de Reparacion</label>
                                                             <div class="col-md-4">
-                                                                <asp:DropDownList ID="DropListPlazoLimite" runat="server" class="form-control">
-                                                                    <asp:ListItem Value="30">30</asp:ListItem>
-                                                                    <asp:ListItem Value="60">60</asp:ListItem>
-                                                                    <asp:ListItem Value="90">90</asp:ListItem>
-                                                                </asp:DropDownList>
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="DropListPlazoLimite" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                             </div>
-                                                        </div>--%>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label for="name" class="col-md-4">Autoriza</label>
                                                             <div class="col-md-4">
@@ -179,9 +185,9 @@
                                                         <div class="form-group">
                                                             <label class="col-md-4">Se Cambia Producto</label>
                                                             <div class="col-md-4">
-                                                                <asp:DropDownList ID="DropListCambiaProducto" runat="server" class="form-control">
-                                                                    <asp:ListItem Value="Si">Si</asp:ListItem>
+                                                                <asp:DropDownList ID="DropListCambiaProducto" Enabled="false" runat="server" class="form-control">
                                                                     <asp:ListItem Value="No">No</asp:ListItem>
+                                                                    <asp:ListItem Value="Si">Si</asp:ListItem>                                                                    
                                                                 </asp:DropDownList>
                                                             </div>
                                                         </div>

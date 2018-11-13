@@ -183,6 +183,7 @@
                                                     <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
                                                     <li><a href="/../../Formularios/Articulos/ABMMarcas.aspx">Marcas</a></li>
                                                     <li><a href="/../../Formularios/Articulos/ABMTrazabilidad.aspx">Trazabilidad</a></li>
+                                                    <li><a href="/../../Formularios/Articulos/ArticulosDiferenciasStock.aspx">Diferencias Stock por Excel</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
@@ -303,6 +304,7 @@
 
                                             <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
                                             <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
+                                            <li><a href="/../../Formularios/Compras/DiferenciaCompraMercaderiaF.aspx">Diferencias Mercaderia</a></li>
                                             <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
@@ -328,6 +330,8 @@
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
                                                 </ul>
                                             </li>
@@ -364,8 +368,7 @@
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Cheques</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Valores/ChequesF.aspx">Cheques 1</a></li>
-                                                    <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques 2</a></li>
+                                                    <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>

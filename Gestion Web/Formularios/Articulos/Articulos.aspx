@@ -67,7 +67,7 @@
                                         <a href="#modalStockDias" data-toggle="modal" style="width: 90%">Stock a dias</a>
                                     </li>
                                     <li>
-                                        <a href="#modalStockNoVendido" data-toggle="modal" style="width: 90%">Stock no vendido</a>
+                                        <a href="#modalStockNoVendido" data-toggle="modal" style="width: 90%">Stock sin movimiento</a>
                                     </li>
                                     <li>
                                         <a href="#modalUnicoSucursal" data-toggle="modal" style="width: 90%">Stock unico sucursal</a>

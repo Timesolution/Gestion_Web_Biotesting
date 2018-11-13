@@ -328,12 +328,12 @@ namespace Gestion_Web.Formularios.Valores
             {
                 controladorFacturacion contFact = new controladorFacturacion();
                 ControladorPlenario contPlenario = new ControladorPlenario();
+                controladorFactEntity contFactEntity = new controladorFactEntity();
                 string fechaD = this.txtFecha.Text;
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
                 List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
                 
-                var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));	
- 
+                var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));
 
                 // Si existen solicitudes de créditos, verifico que estén validadas
                 //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
@@ -354,7 +354,14 @@ namespace Gestion_Web.Formularios.Valores
 
                     if (chequearMercaderia == 0)
                     {
-                        ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                        //ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+
+                        var temp = contFactEntity.AceptarMercaderiaAntes48Horas(this.sucursal);
+
+                        if (temp == null)
+                            ok = 1;
+                        else
+                            ok = -1;
                     }
                     else
                     {
@@ -734,6 +741,27 @@ namespace Gestion_Web.Formularios.Valores
         }
 
         #region mercaderia entre sucursales
+        //protected void lbtnAceptarMercaderia_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        Caja_Cierre_Mercaderia cierre = new Caja_Cierre_Mercaderia();
+        //        cierre.Estado = 1;
+        //        cierre.Fecha = DateTime.Now;
+        //        cierre.Sucursal = this.sucursal;
+        //        cierre.PtoVenta = this.puntoVenta;
+
+        //        int i = this.contCaja.agregarValidacionMercaderiaCaja(cierre);
+        //        if (i > 0)
+        //        {
+        //            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Aceptado con exito. \", {type: \"info\"});", true);
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
         protected void lbtnAceptarMercaderia_Click(object sender, EventArgs e)
         {
             try
@@ -755,6 +783,7 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
+
         private void cargarFacturasRango()
         {
             try

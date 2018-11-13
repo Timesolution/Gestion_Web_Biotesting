@@ -62,9 +62,6 @@
     <Reference Include="itextsharp">
       <HintPath>Auxiliar\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
-    </Reference>
     <Reference Include="Mascotas Api">
       <HintPath>Auxiliar\Mascotas Api.dll</HintPath>
     </Reference>
@@ -118,15 +115,6 @@
     </Reference>
     <Reference Include="printButtonDLL">
       <HintPath>Auxiliar\printButtonDLL.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Data.Linq, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Data.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Interfaces, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Store_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -361,6 +349,7 @@
     <Content Include="Formularios\Articulos\ArticulosC.aspx" />
     <Content Include="Formularios\Articulos\Articulos.aspx" />
     <Content Include="Formularios\Articulos\ArticulosABM.aspx" />
+    <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
@@ -385,6 +374,8 @@
     <Content Include="Formularios\Compras\CCCompraF.aspx" />
     <Content Include="Formularios\Compras\ComprasABM.aspx" />
     <Content Include="Formularios\Compras\ComprasF.aspx" />
+    <Content Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx" />
+    <Content Include="Formularios\Compras\EntregasMercaderiaF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesGastosF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesMonedasABM.aspx" />
     <Content Include="Formularios\Compras\ImportacionesTiposGastosABM.aspx" />
@@ -407,7 +398,9 @@
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
+    <Content Include="Formularios\Facturas\AceptarMercaderia.aspx" />
     <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
+    <Content Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
     <Content Include="Formularios\Facturas\FacturasMercaderiasF.aspx" />
     <Content Include="Formularios\Facturas\FacturasSucursalesF.aspx" />
@@ -710,7 +703,9 @@
     <Content Include="js\plugins\msgGrowl\js\msgGrowl.pack.js" />
     <Content Include="js\plugins\uiToTop\jquery.ui.totop.js" />
     <Content Include="js\plugins\validate\jquery.validate.js" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -1302,6 +1297,13 @@
     <Compile Include="Formularios\Articulos\ArticulosC.aspx.designer.cs">
       <DependentUpon>ArticulosC.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.cs">
+      <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
+      <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Articulos\ImpresionMovStock.aspx.cs">
       <DependentUpon>ImpresionMovStock.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1328,10 +1330,24 @@
     <Compile Include="Formularios\Compras\ArticulosPedirF.aspx.designer.cs">
       <DependentUpon>ArticulosPedirF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx.cs">
+      <DependentUpon>DiferenciaCompraMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx.designer.cs">
+      <DependentUpon>DiferenciaCompraMercaderiaF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Compras\dsCompras.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsCompras.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.cs">
+      <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.designer.cs">
+      <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Compras\ImportacionesGastosF.aspx.cs">
       <DependentUpon>ImportacionesGastosF.aspx</DependentUpon>
@@ -1445,12 +1461,26 @@
     <Compile Include="Formularios\Facturas\ABMFacturasRapido.aspx.designer.cs">
       <DependentUpon>ABMFacturasRapido.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\AceptarMercaderia.aspx.cs">
+      <DependentUpon>AceptarMercaderia.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\AceptarMercaderia.aspx.designer.cs">
+      <DependentUpon>AceptarMercaderia.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Facturas\CuadroImagen.ascx.cs">
       <DependentUpon>CuadroImagen.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\Facturas\CuadroImagen.ascx.designer.cs">
       <DependentUpon>CuadroImagen.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx.cs">
+      <DependentUpon>DiferenciasMercaderiaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx.designer.cs">
+      <DependentUpon>DiferenciasMercaderiaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\dsRetenciones.Designer.cs">
       <AutoGen>True</AutoGen>

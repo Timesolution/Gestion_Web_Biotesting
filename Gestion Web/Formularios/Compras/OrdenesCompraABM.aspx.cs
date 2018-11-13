@@ -24,6 +24,7 @@ namespace Gestion_Web.Formularios.Compras
     {
         controladorCompraEntity controlador = new controladorCompraEntity();
         controladorArticulo contArticulos = new controladorArticulo();
+        ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
         controladorFacturacion contFact = new controladorFacturacion();
         controladorSucursal contSuc = new controladorSucursal();
         controladorCliente contCliente = new controladorCliente();
@@ -293,7 +294,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "28")
+                        if (s == "176")
                         {
                             return 1;
                         }
@@ -436,6 +437,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.lblRequiereAnticipoOC.Text = string.Empty;
                 this.lblMontoAutorizacionOC.Text = string.Empty;
                 this.lblRequiereAutorizacionOC.Text = string.Empty;
+                this.lblObservacion.Text = string.Empty;
             }
             catch (Exception Ex)
             {
@@ -502,6 +504,8 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+
                 OrdenesCompra oc = null;
                 if (this.accion == 2)
                 {
@@ -514,6 +518,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 oc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
 
+                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
 
                 oc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
                 oc.FechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
@@ -526,9 +531,22 @@ namespace Gestion_Web.Formularios.Compras
 
                 //obengo items
                 oc.OrdenesCompra_Items = this.obtenerItems();
+                decimal tempTotal = 0;
+                foreach (var item in oc.OrdenesCompra_Items)
+                {
+                    tempTotal += (decimal)item.Precio * (decimal)item.Cantidad;
+                }
+
+                oc.Total = tempTotal;
 
                 //Agrego Estado
-                oc.Estado = 1;
+                if (prov.RequiereAutorizacion < 1)
+                    oc.Estado = 1;
+                else
+                    if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
+                    oc.Estado = 1;
+                    else
+                    oc.Estado = 8;
 
                 if (oc.OrdenesCompra_Items.Count > 0)
                 {
@@ -546,7 +564,15 @@ namespace Gestion_Web.Formularios.Compras
                         if (this.accion == 2)
                             i = Convert.ToInt32(oc.Id);
 
-                        this.enviarMail(oc);
+                        if(prov.RequiereAutorizacion < 1)
+                        {
+                            this.enviarMail(oc);
+                        }
+                        else
+                        {
+                            if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
+                                this.enviarMail(oc);
+                        }
 
                         string script = string.Empty;
                         script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
@@ -634,6 +660,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.lblRequiereAnticipoOC.Text = "Si";
                     this.lblRequiereAutorizacionOC.Text = "Si";
                     this.lblMontoAutorizacionOC.Text = "$" + poc.MontoAutorizacion.ToString();
+                    this.lblObservacion.Text = poc.cliente.observaciones;
                     if (poc.RequiereAnticipo == 0)
                         this.lblRequiereAnticipoOC.Text = "No";
                     if (poc.RequiereAutorizacion == 0)
@@ -824,6 +851,12 @@ namespace Gestion_Web.Formularios.Compras
                 celStockSucursal.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celStockSucursal);
 
+                TableCell celStockMinimoSucursal = new TableCell();
+                celStockMinimoSucursal.Text = "0.00";
+                celStockMinimoSucursal.VerticalAlign = VerticalAlign.Middle;
+                celStockMinimoSucursal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celStockMinimoSucursal);
+
                 TableCell celStockTotal = new TableCell();
                 celStockTotal.Text = "0.00";
                 celStockTotal.VerticalAlign = VerticalAlign.Middle;
@@ -865,17 +898,30 @@ namespace Gestion_Web.Formularios.Compras
                     codigoSinParentesis = codigo.Substring(0, posParentesis).Trim();
                 }
                 
-                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);
-            
+                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);                
+
                 if (A != null && A.descripcion == Descripcion)
                 {
+                    var stockMinimoSucursalByArticulo = contArticulosEntity.getAllStockMinimoSucursalesByArticulo(A.id);
                     var list = this.contArticulos.obtenerStockArticuloReduc(A.id);
+
                     celStockMinimo.Text = A.stockMinimo.ToString();
                     celStockTotal.Text = list.Sum(x => x.cantidad).ToString();
-                    celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
-                    //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono
 
-                    if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text))
+                    var stockMinimoSucursal = stockMinimoSucursalByArticulo.Where(x => x.sucursal == Convert.ToInt32(ListSucursal.SelectedValue)).Select(x => x.stockMinimo).FirstOrDefault().ToString();
+
+                    if (!String.IsNullOrEmpty(stockMinimoSucursal))
+                        celStockMinimoSucursal.Text = stockMinimoSucursal;
+                    else
+                    {
+                        stockMinimoSucursal = "0";
+                        celStockMinimoSucursal.Text = "-";
+                    }                        
+
+                    celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
+                    //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono                    
+
+                    if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text) || Convert.ToDecimal(stockMinimoSucursal) > Convert.ToDecimal(celStockTotal.Text))
                     {
                         Literal ltAviso = new Literal();
                         ltAviso.Text = "<span>   <span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
@@ -956,6 +1002,7 @@ namespace Gestion_Web.Formularios.Compras
                         item.Descripcion = tr.Cells[1].Text;
                         item.Precio = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[1]);
                         item.Cantidad = Convert.ToDecimal(txt.Text);
+                        item.PrecioConIVA = decimal.Round(A.costo * (1 + (A.porcentajeIva / 100)),2);
                         items.Add(item);
                     }
                 }

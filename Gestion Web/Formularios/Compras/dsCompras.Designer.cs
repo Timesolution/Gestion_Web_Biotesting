@@ -625,6 +625,8 @@ namespace Gestion_Web.Formularios.Compras {
             
             private global::System.Data.DataColumn columnRetencionSuss;
             
+            private global::System.Data.DataColumn columnPlanDeCuentas;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DatosCompraDataTable() {
@@ -924,6 +926,14 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PlanDeCuentasColumn {
+                get {
+                    return this.columnPlanDeCuentas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -992,7 +1002,8 @@ namespace Gestion_Web.Formularios.Compras {
                         string ITC, 
                         string TasaNafta, 
                         string TasaGasoil, 
-                        string RetencionSuss) {
+                        string RetencionSuss, 
+                        string PlanDeCuentas) {
                 DatosCompraRow rowDatosCompraRow = ((DatosCompraRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
@@ -1027,7 +1038,8 @@ namespace Gestion_Web.Formularios.Compras {
                         ITC,
                         TasaNafta,
                         TasaGasoil,
-                        RetencionSuss};
+                        RetencionSuss,
+                        PlanDeCuentas};
                 rowDatosCompraRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDatosCompraRow);
                 return rowDatosCompraRow;
@@ -1083,6 +1095,7 @@ namespace Gestion_Web.Formularios.Compras {
                 this.columnTasaNafta = base.Columns["TasaNafta"];
                 this.columnTasaGasoil = base.Columns["TasaGasoil"];
                 this.columnRetencionSuss = base.Columns["RetencionSuss"];
+                this.columnPlanDeCuentas = base.Columns["PlanDeCuentas"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1154,6 +1167,8 @@ namespace Gestion_Web.Formularios.Compras {
                 base.Columns.Add(this.columnTasaGasoil);
                 this.columnRetencionSuss = new global::System.Data.DataColumn("RetencionSuss", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnRetencionSuss);
+                this.columnPlanDeCuentas = new global::System.Data.DataColumn("PlanDeCuentas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPlanDeCuentas);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1301,6 +1316,8 @@ namespace Gestion_Web.Formularios.Compras {
             
             private global::System.Data.DataColumn columnCodProv;
             
+            private global::System.Data.DataColumn columnPrecioConIVA;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ItemsOrdenDataTable() {
@@ -1392,6 +1409,14 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PrecioConIVAColumn {
+                get {
+                    return this.columnPrecioConIVA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1427,7 +1452,7 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ItemsOrdenRow AddItemsOrdenRow(string Id, string IdOrden, string Codigo, string Descripcion, string Cantidad, string Precio, string CodProv) {
+            public ItemsOrdenRow AddItemsOrdenRow(string Id, string IdOrden, string Codigo, string Descripcion, string Cantidad, string Precio, string CodProv, string PrecioConIVA) {
                 ItemsOrdenRow rowItemsOrdenRow = ((ItemsOrdenRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
@@ -1436,7 +1461,8 @@ namespace Gestion_Web.Formularios.Compras {
                         Descripcion,
                         Cantidad,
                         Precio,
-                        CodProv};
+                        CodProv,
+                        PrecioConIVA};
                 rowItemsOrdenRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowItemsOrdenRow);
                 return rowItemsOrdenRow;
@@ -1466,6 +1492,7 @@ namespace Gestion_Web.Formularios.Compras {
                 this.columnCantidad = base.Columns["Cantidad"];
                 this.columnPrecio = base.Columns["Precio"];
                 this.columnCodProv = base.Columns["CodProv"];
+                this.columnPrecioConIVA = base.Columns["PrecioConIVA"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1485,6 +1512,8 @@ namespace Gestion_Web.Formularios.Compras {
                 base.Columns.Add(this.columnPrecio);
                 this.columnCodProv = new global::System.Data.DataColumn("CodProv", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCodProv);
+                this.columnPrecioConIVA = new global::System.Data.DataColumn("PrecioConIVA", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPrecioConIVA);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4531,6 +4560,22 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PlanDeCuentas {
+                get {
+                    try {
+                        return ((string)(this[this.tableDatosCompra.PlanDeCuentasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PlanDeCuentas\' in table \'DatosCompra\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDatosCompra.PlanDeCuentasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsIdNull() {
                 return this.IsNull(this.tableDatosCompra.IdColumn);
             }
@@ -4924,6 +4969,18 @@ namespace Gestion_Web.Formularios.Compras {
             public void SetRetencionSussNull() {
                 this[this.tableDatosCompra.RetencionSussColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPlanDeCuentasNull() {
+                return this.IsNull(this.tableDatosCompra.PlanDeCuentasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPlanDeCuentasNull() {
+                this[this.tableDatosCompra.PlanDeCuentasColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -5054,6 +5111,22 @@ namespace Gestion_Web.Formularios.Compras {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PrecioConIVA {
+                get {
+                    try {
+                        return ((string)(this[this.tableItemsOrden.PrecioConIVAColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PrecioConIVA\' in table \'ItemsOrden\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableItemsOrden.PrecioConIVAColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsIdNull() {
                 return this.IsNull(this.tableItemsOrden.IdColumn);
             }
@@ -5134,6 +5207,18 @@ namespace Gestion_Web.Formularios.Compras {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCodProvNull() {
                 this[this.tableItemsOrden.CodProvColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPrecioConIVANull() {
+                return this.IsNull(this.tableItemsOrden.PrecioConIVAColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPrecioConIVANull() {
+                this[this.tableItemsOrden.PrecioConIVAColumn] = global::System.Convert.DBNull;
             }
         }
         

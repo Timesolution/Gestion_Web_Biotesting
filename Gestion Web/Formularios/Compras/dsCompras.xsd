@@ -48,6 +48,7 @@
               <xs:element name="TasaNafta" msprop:Generator_ColumnVarNameInTable="columnTasaNafta" msprop:Generator_ColumnPropNameInRow="TasaNafta" msprop:Generator_ColumnPropNameInTable="TasaNaftaColumn" msprop:Generator_UserColumnName="TasaNafta" type="xs:string" minOccurs="0" />
               <xs:element name="TasaGasoil" msprop:Generator_ColumnVarNameInTable="columnTasaGasoil" msprop:Generator_ColumnPropNameInRow="TasaGasoil" msprop:Generator_ColumnPropNameInTable="TasaGasoilColumn" msprop:Generator_UserColumnName="TasaGasoil" type="xs:string" minOccurs="0" />
               <xs:element name="RetencionSuss" msprop:Generator_ColumnVarNameInTable="columnRetencionSuss" msprop:Generator_ColumnPropNameInRow="RetencionSuss" msprop:Generator_ColumnPropNameInTable="RetencionSussColumn" msprop:Generator_UserColumnName="RetencionSuss" type="xs:string" minOccurs="0" />
+              <xs:element name="PlanDeCuentas" msprop:Generator_ColumnVarNameInTable="columnPlanDeCuentas" msprop:Generator_ColumnPropNameInRow="PlanDeCuentas" msprop:Generator_ColumnPropNameInTable="PlanDeCuentasColumn" msprop:Generator_UserColumnName="PlanDeCuentas" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -61,6 +62,7 @@
               <xs:element name="Cantidad" msprop:Generator_ColumnVarNameInTable="columnCantidad" msprop:Generator_ColumnPropNameInRow="Cantidad" msprop:Generator_ColumnPropNameInTable="CantidadColumn" msprop:Generator_UserColumnName="Cantidad" type="xs:string" minOccurs="0" />
               <xs:element name="Precio" msprop:Generator_ColumnVarNameInTable="columnPrecio" msprop:Generator_ColumnPropNameInRow="Precio" msprop:Generator_ColumnPropNameInTable="PrecioColumn" msprop:Generator_UserColumnName="Precio" type="xs:string" minOccurs="0" />
               <xs:element name="CodProv" msprop:Generator_ColumnVarNameInTable="columnCodProv" msprop:Generator_ColumnPropNameInRow="CodProv" msprop:Generator_ColumnPropNameInTable="CodProvColumn" msprop:Generator_UserColumnName="CodProv" type="xs:string" minOccurs="0" />
+              <xs:element name="PrecioConIVA" msprop:Generator_ColumnVarNameInTable="columnPrecioConIVA" msprop:Generator_ColumnPropNameInRow="PrecioConIVA" msprop:Generator_ColumnPropNameInTable="PrecioConIVAColumn" msprop:Generator_UserColumnName="PrecioConIVA" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraF.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraF" %>
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
@@ -22,13 +23,16 @@
                             <tr>
                                 <td style="width: 20%">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" Enabled="false" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
                                             <asp:PlaceHolder runat="server" ID="phCambiarEstadoOC" Visible="false">
-                                                <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cambiar Estado</a>
+                                                <li>
+                                                    <asp:LinkButton ID="ltbnCambiarEstado" runat="server" Visible="false" Enabled="false" data-toggle="modal" href="#modalCambiarEstado">Cambiar estado</asp:LinkButton>
+                                                </li>
+                                                <%--<li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#modalCambiarEstado">Cambiar Estado</a>
                                                     <ul class="dropdown-menu">
                                                         <li>
                                                             <asp:LinkButton ID="lbtnPendienteOC" OnClick="lbtnPendienteOC_Click" runat="server">Pendiente</asp:LinkButton>
@@ -49,9 +53,11 @@
                                                             <asp:LinkButton ID="lbtnEntregaParcial" OnClick="lbtnEntregaParcial_Click" runat="server">Entrega Parcial</asp:LinkButton>
                                                         </li>
                                                     </ul>
-                                                </li>
+                                                </li>--%>
                                             </asp:PlaceHolder>
-
+                                            <li>
+                                                <asp:LinkButton ID="lbtnEntregas" runat="server" Visible="false" OnClick="lbtnEntregas_Click">Entregas</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                     <!-- /btn-group -->
@@ -110,12 +116,12 @@
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                            <th>Fecha</th>
-                                            <th>Numero</th>
-                                            <th>Proveedor</th>
-                                            <th>Sucursal</th>
-                                            <th>Estado</th>
-                                            <th></th>
+                                            <th style="width:10%">Fecha</th>
+                                            <th style="width:20%">Numero</th>
+                                            <th style="width:20%">Proveedor</th>
+                                            <th style="width:20%">Sucursal</th>
+                                            <th style="width:15%">Estado</th>
+                                            <th style="width:15%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -198,43 +204,63 @@
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
-                            <label class="col-md-4">Desde</label>
-                            <div class="col-md-4">
-
-                                <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
-
-                                <!-- /input-group -->
+                            <label class="col-md-3">Fecha Orden Compra</label>
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaDesde" placeholder="Desde" runat="server" class="form-control"></asp:TextBox>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaHasta" placeholder="Hasta" runat="server" class="form-control"></asp:TextBox>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RadioButton ID="RadioFechaOrdenCompra" Checked="true" runat="server" GroupName="fecha" />
+                            </div>
+                            <div class="col-md-1">
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4">Hasta</label>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
+                            <label class="col-md-3">Fecha Entrega</label>
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaEntregaDesde" placeholder="Desde" runat="server" class="form-control"></asp:TextBox>
                             </div>
-                            <div class="col-md-4">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtFechaEntregaHasta" placeholder="Hasta" runat="server" class="form-control"></asp:TextBox>
                             </div>
-                            <!-- /input-group -->
-
+                            <div class="col-md-1">
+                                <asp:RadioButton ID="RadioFechaEntrega" runat="server" GroupName="fecha" />
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaEntregaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaEntregaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4">Sucursal</label>
                             <div class="col-md-6">
                                 <asp:DropDownList ID="DropListSucursal" disabled runat="server" class="form-control"></asp:DropDownList>
-                                <!-- /input-group -->
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4">Proveedor</label>
                             <div class="col-md-6">
                                 <asp:DropDownList ID="DropListProveedor" runat="server" class="form-control"></asp:DropDownList>
-                                <!-- /input-group -->
                             </div>
                             <div class="col-md-2">
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4">Estado</label>
+                            <div class="col-md-6">
+                                <asp:DropDownList ID="DropListEstadoFiltro" runat="server" class="form-control"></asp:DropDownList>
+                            </div>
+                            <div class="col-md-2">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstadoFiltro" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                             </div>
                         </div>
                     </div>
@@ -248,6 +274,46 @@
 
         </div>
     </div>
+
+    <div id="modalCambiarEstado" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Cambiar estado</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-3">Estados</label>
+                                <div class="col-md-6">
+                                    <asp:DropDownList ID="DropListEstados" runat="server" class="form-control"></asp:DropDownList>
+                                </div>
+                                <div class="col-md-2">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="ImputarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3">Observaciones</label>
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnCambiarEstado" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="btnCambiarEstado_Click" class="btn btn-success"  ValidationGroup="ImputarGroup" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
+    </rsweb:ReportViewer>
+
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
@@ -282,6 +348,10 @@
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
     </script>
 
@@ -292,6 +362,14 @@
 
         $(function () {
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(function () {
+            $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(function () {
+            $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
     </script>
