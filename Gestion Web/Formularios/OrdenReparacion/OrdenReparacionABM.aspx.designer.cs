@@ -310,6 +310,24 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.DropDownList DropListCambiaProducto;
         
         /// <summary>
+        /// DropDownSucursalOR control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownSucursalOR;
+        
+        /// <summary>
+        /// RequiredFieldValidator16 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator16;
+        
+        /// <summary>
         /// btnAgregar control.
         /// </summary>
         /// <remarks>

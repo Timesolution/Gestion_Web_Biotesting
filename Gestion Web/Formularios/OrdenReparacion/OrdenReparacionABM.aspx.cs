@@ -173,6 +173,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 or.CambiaProducto = DropListCambiaProducto.Text;
                 or.EstadoDelProducto = txtEstadoDelProducto.Text;
                 or.Observacion = txtObservacion.Text;
+                or.SucursalOR = Convert.ToInt32(DropDownSucursalOR.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -193,7 +194,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtNumeroOrden.Text = (contOrdenReparacion.ObtenerUltimaNumeracionOrdenReparacion() + 1).ToString("D8");
                 txtNumeroOrden.CssClass = "form-control";
                 txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                txtFecha.CssClass = "form-control";
+                txtFecha.CssClass = "form-control";                
 
                 if (f.tipo.id == 7 || f.tipo.id == 8 || f.tipo.id == 9 || f.tipo.id == 11)
                     DropListCambiaProducto.SelectedValue = "Si";
@@ -201,6 +202,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     DropListCambiaProducto.SelectedValue = "No";
 
                 DropListCambiaProducto.CssClass = "form-control";
+
+                DropDownSucursalOR.Items.Add(new ListItem
+                {
+                    Value = f.sucursal.id.ToString(),
+                    Text = f.sucursal.nombre
+                });
+                DropDownSucursalOR.CssClass = "form-control";
 
                 ListSucursal.Items.Add(new ListItem
                 {
@@ -268,8 +276,17 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtNumeroOrden.CssClass = "form-control";
                 txtFecha.Text = or.Fecha.Value.ToString("dd/MM/yyyy");
                 txtFecha.CssClass = "form-control";
-
+                
                 DropListCambiaProducto.CssClass = "form-control";
+
+                var sucOR = contSucursal.obtenerSucursalID((int)or.SucursalOR);
+
+                DropDownSucursalOR.Items.Add(new ListItem
+                {
+                    Value = sucOR.id.ToString(),
+                    Text = sucOR.nombre
+                });
+                DropDownSucursalOR.CssClass = "form-control";
 
                 var suc = contSucursal.obtenerSucursalID((int)or.SucursalOrigen);
 
