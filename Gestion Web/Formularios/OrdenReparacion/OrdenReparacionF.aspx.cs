@@ -833,6 +833,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
                 or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(9).Id;
+                or.SucursalOR = contSucursal.obtenerSucursalID(Convert.ToInt32(contConfig.ObtenerConfiguracionId(51))).id;
 
                 var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -1277,6 +1278,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(12).Id;
                     or.FechaFinalizacion = DateTime.Now;
                     or.LapsoFinalizacion = CalcularProgressBar((DateTime)or.Fecha, (int)or.PlazoLimiteReparacion);
+                    or.SucursalOR = or.SucursalOrigen;
                     var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
                     if (temp >= 0)
