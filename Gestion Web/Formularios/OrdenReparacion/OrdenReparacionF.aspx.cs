@@ -28,6 +28,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         int numeroOrden = 0;
         int cliente = 0;
         int sucursal = 0;
+        int sucursalOR = 0;
         int estado = 0;
         string fechaD = "";
         string fechaH = "";
@@ -42,6 +43,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 numeroOrden = Convert.ToInt32(Request.QueryString["n"]);
                 cliente = Convert.ToInt32(Request.QueryString["c"]);
                 sucursal = Convert.ToInt32(Request.QueryString["s"]);
+                sucursalOR = Convert.ToInt32(Request.QueryString["sor"]);
 
                 estado = Convert.ToInt32(Request.QueryString["e"]);
                 fechaD = Request.QueryString["fd"];
@@ -62,6 +64,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     this.cargarSucursal();
                     this.cargarClientes();
                     this.cargarEstados();
+                    this.cargarSucursalOR();
                 }
 
                 //esto lo hacemos para que se mantengan los servicios tecnicos tildados cuando vas a accion > seleccionar servicio tecnico y buscas servicios tecnicos
@@ -259,6 +262,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celProgressBar.Controls.Add(lProgressBar);
                 tr.Cells.Add(celProgressBar);
 
+                TableCell celSucursalOR = new TableCell();
+                celSucursalOR.Text = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+                celSucursalOR.HorizontalAlign = HorizontalAlign.Left;
+                celSucursalOR.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucursalOR);
+
                 TableCell celAccion = new TableCell();
 
                 Literal lDetail = new Literal();
@@ -431,10 +440,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")); //Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
                 var hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")); //Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
                 var sucursal = this.sucursal; //Convert.ToInt32(DropListSucursal.SelectedValue);
+                var sucursalOR = this.sucursalOR; //Convert.ToInt32(DropListSucursal.SelectedValue);
                 var cliente = this.cliente; //Convert.ToInt32(DropListClientes.SelectedValue);
                 //var estado = Convert.ToInt32(DropListEstados.SelectedValue);
 
-                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado);
+                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado, sucursalOR);
 
                 foreach (var item in ordenesReparacion)
                 {
@@ -482,7 +492,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue);
+                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue + "&sor=" + DropListSucursalOR.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -515,6 +525,33 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+
+        public void cargarSucursalOR()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursales();
+
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todas";
+                dr["id"] = 0;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListSucursalOR.DataSource = dt;
+                this.DropListSucursalOR.DataValueField = "Id";
+                this.DropListSucursalOR.DataTextField = "nombre";
+                this.DropListSucursalOR.DataBind();
+
+                this.DropListSucursalOR.SelectedValue = Session["Login_SucUser"].ToString();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales OR. " + ex.Message));
+            }
+        }
+
         public void cargarEstados()
         {
             try

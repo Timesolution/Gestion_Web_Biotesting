@@ -124,6 +124,7 @@
                                             <th>Tope Reparacion</th>
                                             <th>Estado</th>
                                             <th>Barra de progreso</th>
+                                            <th>Sucursal OR</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -597,6 +598,16 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Sucursal OR</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListSucursalOR" runat="server" class="form-control"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursalOR" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                 <div class="form-group">
