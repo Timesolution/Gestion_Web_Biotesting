@@ -1127,9 +1127,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     {
                         AgregarObservacion(or.Id, "Producto enviado a la sucursal de origen");
 
-                        string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
+                        //string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
 
-                        contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
+                        //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(10).Id;
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
@@ -1339,6 +1339,53 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al cambiar al estado vuelve a punto de venta " + ex.Message);
+            }
+        }
+
+        protected void btnSucOrigenRecibeMercaderia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+
+                    if (or.Estado == 10)
+                    {
+                        AgregarObservacion(or.Id, "Producto recibido en la sucursal de origen");
+
+                        //string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
+
+                        //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
+
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(13).Id;
+                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto fue recibido en la sucursal de origen");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx"));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al recibir el producto en la sucursal de origen.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al recibir el producto en la sucursal de origen."));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El producto debe haberse enviado a la sucursal de origen previamente!"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al recibir el producto en la sucursal de origen. " + ex.Message);
             }
         }
     }
