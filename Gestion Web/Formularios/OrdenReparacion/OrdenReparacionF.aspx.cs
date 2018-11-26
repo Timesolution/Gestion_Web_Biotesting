@@ -754,7 +754,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
+                    CheckBox ch = tr.Cells[12].Controls[6] as CheckBox;
 
                     if (ch.Checked == true)
                         tildados++;
@@ -1051,7 +1051,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
+                    CheckBox ch = tr.Cells[12].Controls[6] as CheckBox;
                     if (ch.Checked == true)
                     {
                         return ch.ID.Split('_')[1];
@@ -1235,7 +1235,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(orID, (int)Session["Login_IdUser"], mensaje);
+                var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(orID));
+
+                string sucursalOR = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+
+                var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(orID, (int)Session["Login_IdUser"], mensaje + ". Sucursal OR: " + sucursalOR);
 
                 if (temp > 0)
                 {
@@ -1269,6 +1273,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     else
                     {
                         AgregarObservacion(or.Id, "El producto fue retirado por el cliente");
+
+                        string comentario = "Resto stock por entregar producto reparado al cliente. " + "OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+
+                        contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(2).Id;
                         or.FechaFinalizacion = DateTime.Now;
@@ -1357,7 +1365,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if (or.Estado == 10)
                     {
-                        AgregarObservacion(or.Id, "Producto recibido en la sucursal de origen");
+                        AgregarObservacion(or.Id, "Producto reparado recibido en la sucursal de origen");
 
                         //string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
 
@@ -1368,13 +1376,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                         if (temp > 0)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto fue recibido en la sucursal de origen");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx"));
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto reparado fue recibido en la sucursal de origen");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx"));
                         }
                         else if (temp == -1)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al recibir el producto en la sucursal de origen.");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al recibir el producto en la sucursal de origen."));
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al recibir el producto reparado en la sucursal de origen.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al recibir el producto reparado en la sucursal de origen."));
                         }
                     }
                     else

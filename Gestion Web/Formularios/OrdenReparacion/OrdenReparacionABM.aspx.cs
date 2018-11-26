@@ -109,6 +109,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (!Page.IsValid)
                     return;
 
+                controladorSucursal contSucursal = new controladorSucursal();
+
                 var or = new OrdenReparacion();
 
                 or.Estado = 1;
@@ -117,7 +119,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8"));
+                string sucursalOR = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+
+                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8") + ". Sucursal OR: " + sucursalOR);
 
                 if (temp > 0)
                 {
