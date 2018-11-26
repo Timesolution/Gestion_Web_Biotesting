@@ -109,6 +109,8 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (!Page.IsValid)
                     return;
 
+                controladorSucursal contSucursal = new controladorSucursal();
+
                 var or = new OrdenReparacion();
 
                 or.Estado = 1;
@@ -117,23 +119,25 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8"));
+                string sucursalOR = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+
+                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8") + ". Sucursal OR: " + sucursalOR);
 
                 if (temp > 0)
                 {
-                    //temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+                    temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
 
-                    //if(temp < 1)
-                    //    Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+                    if(temp < 1)
+                        Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
 
-                    //if(or.CambiaProducto == "Si")
-                    //{
-                    //    string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
-                    //    temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
+                    if (or.CambiaProducto == "Si")
+                    {
+                        string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+                        temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
 
-                    //    if (temp < 1)
-                    //        Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
-                    //}
+                        if (temp < 1)
+                            Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
+                    }
 
                     Log.EscribirSQL(1, "Info", "Orden de reparacion agregada con exito");
                     string script = "window.open('ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
@@ -173,6 +177,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 or.CambiaProducto = DropListCambiaProducto.Text;
                 or.EstadoDelProducto = txtEstadoDelProducto.Text;
                 or.Observacion = txtObservacion.Text;
+                or.SucursalOR = Convert.ToInt32(DropDownSucursalOR.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -193,7 +198,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtNumeroOrden.Text = (contOrdenReparacion.ObtenerUltimaNumeracionOrdenReparacion() + 1).ToString("D8");
                 txtNumeroOrden.CssClass = "form-control";
                 txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                txtFecha.CssClass = "form-control";
+                txtFecha.CssClass = "form-control";                
 
                 if (f.tipo.id == 7 || f.tipo.id == 8 || f.tipo.id == 9 || f.tipo.id == 11)
                     DropListCambiaProducto.SelectedValue = "Si";
@@ -201,6 +206,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     DropListCambiaProducto.SelectedValue = "No";
 
                 DropListCambiaProducto.CssClass = "form-control";
+
+                DropDownSucursalOR.Items.Add(new ListItem
+                {
+                    Value = f.sucursal.id.ToString(),
+                    Text = f.sucursal.nombre
+                });
+                DropDownSucursalOR.CssClass = "form-control";
 
                 ListSucursal.Items.Add(new ListItem
                 {
@@ -268,8 +280,17 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 txtNumeroOrden.CssClass = "form-control";
                 txtFecha.Text = or.Fecha.Value.ToString("dd/MM/yyyy");
                 txtFecha.CssClass = "form-control";
-
+                
                 DropListCambiaProducto.CssClass = "form-control";
+
+                var sucOR = contSucursal.obtenerSucursalID((int)or.SucursalOR);
+
+                DropDownSucursalOR.Items.Add(new ListItem
+                {
+                    Value = sucOR.id.ToString(),
+                    Text = sucOR.nombre
+                });
+                DropDownSucursalOR.CssClass = "form-control";
 
                 var suc = contSucursal.obtenerSucursalID((int)or.SucursalOrigen);
 

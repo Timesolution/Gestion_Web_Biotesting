@@ -28,6 +28,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         int numeroOrden = 0;
         int cliente = 0;
         int sucursal = 0;
+        int sucursalOR = 0;
         int estado = 0;
         string fechaD = "";
         string fechaH = "";
@@ -42,6 +43,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 numeroOrden = Convert.ToInt32(Request.QueryString["n"]);
                 cliente = Convert.ToInt32(Request.QueryString["c"]);
                 sucursal = Convert.ToInt32(Request.QueryString["s"]);
+                sucursalOR = Convert.ToInt32(Request.QueryString["sor"]);
 
                 estado = Convert.ToInt32(Request.QueryString["e"]);
                 fechaD = Request.QueryString["fd"];
@@ -62,6 +64,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     this.cargarSucursal();
                     this.cargarClientes();
                     this.cargarEstados();
+                    this.cargarSucursalOR();
                 }
 
                 //esto lo hacemos para que se mantengan los servicios tecnicos tildados cuando vas a accion > seleccionar servicio tecnico y buscas servicios tecnicos
@@ -259,6 +262,12 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 celProgressBar.Controls.Add(lProgressBar);
                 tr.Cells.Add(celProgressBar);
 
+                TableCell celSucursalOR = new TableCell();
+                celSucursalOR.Text = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+                celSucursalOR.HorizontalAlign = HorizontalAlign.Left;
+                celSucursalOR.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucursalOR);
+
                 TableCell celAccion = new TableCell();
 
                 Literal lDetail = new Literal();
@@ -431,10 +440,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")); //Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
                 var hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")); //Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
                 var sucursal = this.sucursal; //Convert.ToInt32(DropListSucursal.SelectedValue);
+                var sucursalOR = this.sucursalOR; //Convert.ToInt32(DropListSucursal.SelectedValue);
                 var cliente = this.cliente; //Convert.ToInt32(DropListClientes.SelectedValue);
                 //var estado = Convert.ToInt32(DropListEstados.SelectedValue);
 
-                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado);
+                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado, sucursalOR);
 
                 foreach (var item in ordenesReparacion)
                 {
@@ -482,7 +492,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue);
+                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue + "&sor=" + DropListSucursalOR.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -515,6 +525,33 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+
+        public void cargarSucursalOR()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursales();
+
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todas";
+                dr["id"] = 0;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListSucursalOR.DataSource = dt;
+                this.DropListSucursalOR.DataValueField = "Id";
+                this.DropListSucursalOR.DataTextField = "nombre";
+                this.DropListSucursalOR.DataBind();
+
+                this.DropListSucursalOR.SelectedValue = Session["Login_SucUser"].ToString();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales OR. " + ex.Message));
+            }
+        }
+
         public void cargarEstados()
         {
             try
@@ -717,7 +754,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
+                    CheckBox ch = tr.Cells[12].Controls[6] as CheckBox;
 
                     if (ch.Checked == true)
                         tildados++;
@@ -833,6 +870,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
                 or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(9).Id;
+                or.SucursalOR = contSucursal.obtenerSucursalID(Convert.ToInt32(contConfig.ObtenerConfiguracionId(51))).id;
 
                 var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -1013,7 +1051,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 foreach (Control C in phOrdenReparacion.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[11].Controls[6] as CheckBox;
+                    CheckBox ch = tr.Cells[12].Controls[6] as CheckBox;
                     if (ch.Checked == true)
                     {
                         return ch.ID.Split('_')[1];
@@ -1089,9 +1127,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     {
                         AgregarObservacion(or.Id, "Producto enviado a la sucursal de origen");
 
-                        string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
+                        //string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
 
-                        contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
+                        //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(10).Id;
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
@@ -1197,7 +1235,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(orID, (int)Session["Login_IdUser"], mensaje);
+                var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(orID));
+
+                string sucursalOR = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+
+                var temp = contOrdenReparacion.AgregarObservacionOrdenReparacion(orID, (int)Session["Login_IdUser"], mensaje + ". Sucursal OR: " + sucursalOR);
 
                 if (temp > 0)
                 {
@@ -1231,6 +1273,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     else
                     {
                         AgregarObservacion(or.Id, "El producto fue retirado por el cliente");
+
+                        string comentario = "Resto stock por entregar producto reparado al cliente. " + "OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+
+                        contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(2).Id;
                         or.FechaFinalizacion = DateTime.Now;
@@ -1277,6 +1323,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(12).Id;
                     or.FechaFinalizacion = DateTime.Now;
                     or.LapsoFinalizacion = CalcularProgressBar((DateTime)or.Fecha, (int)or.PlazoLimiteReparacion);
+                    or.SucursalOR = or.SucursalOrigen;
                     var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
                     if (temp >= 0)
@@ -1300,6 +1347,53 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al cambiar al estado vuelve a punto de venta " + ex.Message);
+            }
+        }
+
+        protected void btnSucOrigenRecibeMercaderia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+
+                //compruebo si hay una sola orden de reparacion tildada
+                if (ComprobarOrdenReparacionTildada())
+                {
+                    idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
+
+                    if (or.Estado == 10)
+                    {
+                        AgregarObservacion(or.Id, "Producto reparado recibido en la sucursal de origen");
+
+                        //string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
+
+                        //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
+
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(13).Id;
+                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        if (temp > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto reparado fue recibido en la sucursal de origen");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx"));
+                        }
+                        else if (temp == -1)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al recibir el producto reparado en la sucursal de origen.");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al recibir el producto reparado en la sucursal de origen."));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El producto debe haberse enviado a la sucursal de origen previamente!"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al recibir el producto en la sucursal de origen. " + ex.Message);
             }
         }
     }
