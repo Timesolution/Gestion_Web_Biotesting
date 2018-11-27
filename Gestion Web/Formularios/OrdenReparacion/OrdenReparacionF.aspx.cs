@@ -966,11 +966,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al modificar OrdenReparacion_ServicioTecnico.");
                     }
 
-                    AgregarObservacion(or.Id, "Producto enviado al servicio tecnico: " + servTecnico.Nombre + " Direccion: " + servTecnico.Direccion + ", numero de orden: " + txtNumOrdenReparacion.Text);
+                    or.SucursalOR = contSucursal.obtenerSucursalID(Convert.ToInt32(contConfig.ObtenerConfiguracionId(56))).id;                    
 
                     or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(8).Id;
 
                     temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                    AgregarObservacion(or.Id, "Producto enviado al servicio tecnico: " + servTecnico.Nombre + " Direccion: " + servTecnico.Direccion + ", numero de orden: " + txtNumOrdenReparacion.Text);
 
                     if (temp > 0)
                     {
@@ -1395,6 +1397,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 Log.EscribirSQL(1, "ERROR", "Error al recibir el producto en la sucursal de origen. " + ex.Message);
             }
+        }
+
+        protected void btnEnviarASucursalGarantias_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
