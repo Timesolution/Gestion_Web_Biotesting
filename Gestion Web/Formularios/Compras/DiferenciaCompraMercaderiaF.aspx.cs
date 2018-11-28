@@ -105,6 +105,7 @@ namespace Gestion_Web.Formularios.Compras
                 return -1;
             }
         }
+
         public void cargarSucursales()
         {
             try
@@ -134,6 +135,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+
         protected void PrimeraCarga()
         {
             try
@@ -161,6 +163,7 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "ERROR", "Error al filtrar. " + ex.Message);
             }
         }
+
         public void CargarFacturasMercaderiasDiferencias()
         {
             try

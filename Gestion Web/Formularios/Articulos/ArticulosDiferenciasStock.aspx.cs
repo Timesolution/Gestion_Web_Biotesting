@@ -168,7 +168,8 @@ namespace Gestion_Web.Formularios.Articulos
         {
             string path = ObtenerPathArchivoDeDiferenciasStock();
             GuardarArchivoEnFileSystem(path);
-            var resultado = controladorArticulo.GenerarDiferenciasStockEnSucursalDesdeExcel(path + FileUpload.FileName, Convert.ToInt32(ListSucursal.SelectedValue));
+            int idUsuario = (int)Session["Login_IdUser"];
+            var resultado = controladorArticulo.GenerarDiferenciasStockEnSucursalDesdeExcel(path + FileUpload.FileName, Convert.ToInt32(ListSucursal.SelectedValue), idUsuario);
         }
 
         private string ObtenerPathArchivoDeDiferenciasStock()

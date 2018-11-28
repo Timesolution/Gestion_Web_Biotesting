@@ -132,7 +132,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));
                     this.ListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
-
+                    this.cargarIvaClientes();
                     if (accion != 6 && accion != 7 && accion != 9)
                     {
                         //si el usuario tiene pto vta selecciono la del user
@@ -326,7 +326,6 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 #endregion
                 //alta rapida cliente
-                this.cargarIvaClientes();
                 this.cargarTipoClientes();
                 this.cargarGrupoClientes();
                 this.generarCodigo();
@@ -565,61 +564,126 @@ namespace Gestion_Web.Formularios.Facturas
 
         private void agregarArticuloAventa(object sender, EventArgs e)
         {
+            var idLinkButton = (sender as LinkButton).ID;
+            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
+            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+
+            this.guardarArticuloEnFactura(articulo, 1);
+        }
+
+        #region FACTURAR IMAGENES PANADERIA
+        private void agregarArticuloAventa_TextChanged(object sender, EventArgs e)
+        {
+            var idLinkButton = (sender as TextBox).ID;
+            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
+            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+            decimal cantidad = 0;
+            
+            TableRow tr;
+            foreach (Control cr in this.phItemsModoImagenes.Controls)
+            {
+                tr = cr as TableRow;
+                TextBox txtBoxCantidad = tr.Cells[3].Controls[0] as TextBox;
+                int idArtPh = Convert.ToInt32(txtBoxCantidad.ID.Split('_')[1]);
+
+                if (idArt == idArtPh)
+                {
+                    txtBoxCantidad.Text = txtBoxCantidad.Text.Replace(',', '.');
+                    cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
+                }
+            }
+
+            this.guardarArticuloEnFactura(articulo, cantidad);
+        }
+
+        private void sumarArticuloImagenes(object sender, EventArgs e)
+        {
+            var idLinkButton = (sender as LinkButton).ID;
+            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
+            bool restar = (sender as LinkButton).ID.Contains("Restar");
+            decimal cantidad = 0;
+            TableRow tr;
+
+            foreach (Control cr in this.phItemsModoImagenes.Controls)
+            {
+                tr = cr as TableRow;
+                TextBox txtBoxCantidad = tr.Cells[3].Controls[0] as TextBox;
+                int idArtPh = Convert.ToInt32(txtBoxCantidad.ID.Split('_')[1]);
+
+                if (idArt == idArtPh)
+                {
+                    cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
+                }
+            }
+            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+            if (restar)
+            {
+                cantidad -= 1;
+            }
+            else
+            {
+                cantidad += 1;
+            }
+            guardarArticuloEnFactura(articulo,cantidad);
+        }
+        
+        private void guardarArticuloEnFactura(Articulo articulo, decimal cantidad)
+        {
             try
             {
                 reproducirSonido();
 
-                var idLinkButton = (sender as LinkButton).ID;
-                int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
-                Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+                string cant = cantidad.ToString();                
 
                 this.txtCodigo.Text = articulo.codigo;
-                this.txtCantidad.Text = "1";
+                this.txtCantidad.Text = cant.ToString();
                 this.txtDescripcion.Text = articulo.descripcion;
                 this.txtPUnitario.Text = articulo.precioVenta.ToString();
 
                 Factura f = Session["Factura"] as Factura;
 
                 //verifico si el articulo ya existe lo borro le sumo 1 y lo agrega a la session
-                var articuloDeFactura = f.items.Where(x => x.articulo.id == Convert.ToInt32(idArt)).FirstOrDefault();
-                if (articuloDeFactura != null) 
+                var articuloDeFactura = f.items.Where(x => x.articulo.id == Convert.ToInt32(articulo.id)).FirstOrDefault();
+                int posArtEnLaSessionFactura = f.items.IndexOf(articuloDeFactura);
+                if (articuloDeFactura != null)
                 {
-                    bool restar = (sender as LinkButton).ID.Contains("Restar");
-
                     f.items.Remove(articuloDeFactura);
-                    if (restar)
-                    {
-                        articuloDeFactura.cantidad -= 1;
-                    }
-                    else
-                    {
-                        articuloDeFactura.cantidad += 1;
-                    }
-                    this.txtCantidad.Text = articuloDeFactura.cantidad.ToString();
-                    if (articuloDeFactura.cantidad <= 0)
+                    if (cantidad <= 0)
                     {
                         this.QuitarItem(articuloDeFactura);
                     }
                     else
                     {
-                        this.cargarProductoAFactura();
+                        this.cargarProductoAFactura(posArtEnLaSessionFactura);
                     }
                 }
                 else
                 {
-                    this.cargarProductoAFactura();
+                    //if(f.items.Count > 0){
+                    //    this.cargarProductoAFactura(f.items.Count - 1);
+                    //}
+                    //else
+                    //{
+                        this.cargarProductoAFactura(-1);
+                    //}
                 }
                 this.cargarTablaArticulosModoImagenes();
-
-                //if (Session["Factura"] != null)
-                //{
-                //    this.cargarTablaArticulosModoImagenes();
-                //}
-
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en agregarArticuloAventa. Excepcion: " + ex.Message));
+            }
+        }
+
+        protected void txtCantidadImagenes_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                this.agregarArticuloAventa(sender, e);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total. Verifique que ingreso numeros en cantidad imagenes" + ex.Message));
             }
         }
 
@@ -657,6 +721,22 @@ namespace Gestion_Web.Formularios.Facturas
         {
             this.generarFactura(0);
         }
+
+        protected void btnAbrirModalTarjeta_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.btnSetearFormaDePagoPorTarjeta();
+
+                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "openModalTarjeta();", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelModoImagen, updatePanelModoImagen.GetType(), "alert", "$.msgbox(\"No se pudo agregar cliente. Ex: "+ex.Message+" \");", true);
+            }
+        }
+        
+        #endregion
 
         #region original
 
@@ -1384,6 +1464,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (DropListVendedor.Items.Count > 0)
                 {
                     DropListVendedor.Items.Clear();
+                    ListVendedoresAR.Items.Clear();
                 }
 
                 controladorVendedor contVendedor = new controladorVendedor();
@@ -1411,15 +1492,9 @@ namespace Gestion_Web.Formularios.Facturas
                     item.Value = dr["id"].ToString();
                     item.Text = dr["nombre"].ToString() + " " + dr["apellido"].ToString();
                     DropListVendedor.Items.Add(item);
+                    ListVendedoresAR.Items.Add(item);
                 }
-
-
-
-                //this.DropListVendedor.DataSource = dt;
-                //this.DropListVendedor.DataValueField = "id";
-                //this.DropListVendedor.DataTextField = "nombre" + "apellido";
-
-                //this.DropListVendedor.DataBind();
+                ListVendedoresAR.Items.Insert(0, new ListItem("Seleccione...", "-1"));
             }
             catch (Exception ex)
             {
@@ -1564,6 +1639,11 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListLista.DataValueField = "id";
                     this.DropListLista.DataTextField = "nombre";
                     this.DropListLista.DataBind();
+
+                    this.ListListaPreciosAR.DataSource = listas;
+                    this.ListListaPreciosAR.DataValueField = "id";
+                    this.ListListaPreciosAR.DataTextField = "nombre";
+                    this.ListListaPreciosAR.DataBind();
                 }
                 else
                 {
@@ -1578,6 +1658,12 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListLista.DataValueField = "id";
                     this.DropListLista.DataTextField = "nombre";
                     this.DropListLista.DataBind();
+
+
+                    this.ListListaPreciosAR.DataSource = dt;
+                    this.ListListaPreciosAR.DataValueField = "id";
+                    this.ListListaPreciosAR.DataTextField = "nombre";
+                    this.ListListaPreciosAR.DataBind();
                 }
 
 
@@ -1800,10 +1886,12 @@ namespace Gestion_Web.Formularios.Facturas
                     if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
                         this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit;
+                        this.lbNombreClienteImagenes.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit;
                     }
                     else
                     {
                         this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit;
+                        this.lbNombreClienteImagenes.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     }
                     if (this.cliente.cuit.Length == 11)
                     {
@@ -2776,7 +2864,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 this.TxtDescuentoArri.Text = "0";
                             }
-                            this.cargarProductoAFactura();
+                            this.cargarProductoAFactura(0);
                             this.txtCodigo.Text = "";
                         }
                     }
@@ -4104,10 +4192,10 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnAgregarArt_Click(object sender, EventArgs e)
         {
-            this.cargarProductoAFactura();
+            this.cargarProductoAFactura(0);
         }
 
-        private void cargarProductoAFactura()
+        private void cargarProductoAFactura(int posArtEnLaSessionFactura)
         {
             try
             {
@@ -4240,8 +4328,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ////si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
-
                 this.factura.items.Add(item);
+                
                 //lo agrego al session
                 if (Session["Factura"] == null)
                 {
@@ -4255,7 +4343,15 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                     item.nroRenglon = f.items.Count() + 1;
 
-                f.items.Add(item);
+                if (posArtEnLaSessionFactura != -1)
+                {
+                    f.items.Insert(posArtEnLaSessionFactura, item);
+                }
+                else
+                {
+                    f.items.Add(item);
+                }
+                
                 Session.Add("Factura", f);
 
                 //lo dibujo en pantalla
@@ -4307,7 +4403,14 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celPrecio);
 
                 TableCell celCantidad = new TableCell();
-                celCantidad.Text = item.cantidad.ToString();
+                TextBox txtCantidadImagenes = new TextBox();
+                txtCantidadImagenes.ID = "_" + item.articulo.id;
+                txtCantidadImagenes.Text = item.cantidad.ToString();
+                txtCantidadImagenes.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
+                txtCantidadImagenes.CssClass = "form-control";
+                txtCantidadImagenes.TextChanged += new EventHandler(this.agregarArticuloAventa_TextChanged);
+                txtCantidadImagenes.AutoPostBack = true;
+                celCantidad.Controls.Add(txtCantidadImagenes);
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
                 celCantidad.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celCantidad);
@@ -4324,7 +4427,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnRestar.ID = "btnRestar_" + item.articulo.id;
                 btnRestar.CssClass = "btn btn-info";
                 btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
-                btnRestar.Click += new EventHandler(this.agregarArticuloAventa);
+                btnRestar.Click += new EventHandler(this.sumarArticuloImagenes);
                 celAccion.Controls.Add(btnRestar);
             
                 Literal l = new Literal();
@@ -4336,7 +4439,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnSumar.CssClass = "btn btn-info";
                 btnSumar.Text = "<span class='shortcut-icon icon-plus'></span>";
                 //btnEliminar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
-                btnSumar.Click += new EventHandler(this.agregarArticuloAventa);
+                btnSumar.Click += new EventHandler(this.sumarArticuloImagenes);
                 celAccion.Controls.Add(btnSumar);
 
                 tr.Cells.Add(celAccion);
@@ -5406,6 +5509,30 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+        private void calcularTotalItemsImagenes()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(this.txtCantidad.Text))
+                {
+                    decimal cantidad = Convert.ToDecimal(this.txtCantidad.Text);
+                    decimal precio = Convert.ToDecimal(this.txtPUnitario.Text);
+                    decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text);
+
+                    decimal total = decimal.Round((cantidad * precio), 2);
+
+                    total = total - (total * (desc / 100));
+
+                    total = decimal.Round(total, 2);
+
+                    this.txtTotalArri.Text = decimal.Round(total, 2).ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total " + ex.Message));
+            }
+        }
         #endregion
 
         #region validaciones fin
@@ -6029,6 +6156,8 @@ namespace Gestion_Web.Formularios.Facturas
                             lstPago = dt;
 
                             this.lblAvisoTarjeta.Visible = false;
+
+                            this.lbFormaDePago.Text = "Forma de pago: Tarjeta";
                         }
                         else
                         {
@@ -6082,7 +6211,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura "));
+                    ScriptManager.RegisterClientScriptBlock(this.updatePanelModoImagen, updatePanelModoImagen.GetType(), "alert", "$.msgbox(\"Debe agregar articulos a la factura. \", {type: \"info\"});cerrarModalTarjeta();", true);
                 }
             }
             catch
@@ -10602,6 +10731,32 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception)
             {
 
+            }
+        }
+
+        protected void btnSetearFormaDePagoPorTarjeta()
+        {
+            try
+            {
+                this.lbFormaDePago.Text = "Forma de pago: Tarjeta";
+                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Tarjeta").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorTarjeta. Ex:" + ex.Message));
+            }
+        }
+
+        protected void btnSetearFormaDePagoPorContado(object sender, EventArgs e)
+        {
+            try
+            {
+                this.lbFormaDePago.Text = "Forma de pago: Contado";
+                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Contado").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorContado. Ex:" + ex.Message));
             }
         }
 

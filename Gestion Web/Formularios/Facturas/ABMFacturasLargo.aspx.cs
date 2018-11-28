@@ -2879,7 +2879,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.txtPercepcionCF.Text = decimal.Round(this.factura.iva10, 2).ToString();
 
-                this.txtRetencion.Text = decimal.Round(this.factura.retencion, 2).ToString();
+                this.txtRetencion.Text = decimal.Round(this.factura.retencion, 2).ToString();//PERCERPCION
 
                 //string Stotal = .ToString();
                 this.txtTotal.Text = decimal.Round(this.factura.total, 2).ToString();
@@ -9051,7 +9051,9 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
                     decimal totalAux = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                    if(this.factura.total != totalAux)
+                    //this.factura.total += this.factura.retencion;
+                    this.factura.total = totalAux;
+                    if (this.factura.total != totalAux)
                     {
                         if(this.factura.total > totalAux)//ajuste redondeo
                         {

@@ -553,21 +553,21 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="form-group" style="text-align: left">
-                                                                    <label class="col-md-3">Descuento %: </label>
-                                                                    <div class="col-md-4">
-
-                                                                        <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
-
-
-                                                                    </div>
-                                                                    <div class="col-md-5">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">$</span>
-                                                                            <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
+                                                                <asp:PlaceHolder ID="phDescuentoSobreElTotal" runat="server" Visible="true">
+                                                                    <div class="form-group" style="text-align: left">
+                                                                        <label class="col-md-3">Descuento %: </label>
+                                                                        <div class="col-md-4">
+                                                                            <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-addon">$</span>
+                                                                                <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                </asp:PlaceHolder>
+
                                                                 <div class="form-group" style="text-align: left">
                                                                     <label class="col-md-3">SubTotal: </label>
                                                                     <div class="col-md-9">
@@ -2118,7 +2118,7 @@
                 }
             };
             //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
-            modal.showUrl("BuscarArticulos.aspx?accion=1&suc="+idSucursal);
+            modal.showUrl("BuscarArticulos.aspx?accion=1&suc=" + idSucursal);
         }
 
         function edit(id) {
@@ -2152,8 +2152,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
@@ -2172,8 +2171,7 @@
             if (key < 48 || key > 57) {
                 if (key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

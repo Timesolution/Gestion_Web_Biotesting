@@ -535,6 +535,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (var item in oc.OrdenesCompra_Items)
                 {
                     tempTotal += (decimal)item.Precio * (decimal)item.Cantidad;
+                    item.CantidadYaRecibida = 0;
                 }
 
                 oc.Total = tempTotal;
@@ -570,7 +571,7 @@ namespace Gestion_Web.Formularios.Compras
                         }
                         else
                         {
-                            if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
+                            if(prov.MontoAutorizacion > 0 && prov.MontoAutorizacion > oc.Total)
                                 this.enviarMail(oc);
                         }
 

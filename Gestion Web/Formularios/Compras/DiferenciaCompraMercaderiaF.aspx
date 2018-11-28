@@ -56,7 +56,7 @@
                                             <th>Sucursal Destino</th>
                                             <th>Remito</th>
                                             <th>Orden de Compra</th>
-                                            <th>Estado</th>
+                                            <%--<th>Estado</th>--%>
                                             <th>Articulo</th>
                                             <th>Cantidad Pedida</th>
                                             <th>Cantidad Recibida</th>
