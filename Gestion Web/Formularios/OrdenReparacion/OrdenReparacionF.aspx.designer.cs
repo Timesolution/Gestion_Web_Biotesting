@@ -157,13 +157,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.LinkButton lbtnRetiraCliente;
         
         /// <summary>
-        /// lbtnVuelvePuntoVenta control.
+        /// lbtnFinalizada control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnVuelvePuntoVenta;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnFinalizada;
         
         /// <summary>
         /// lbtnEnviarSMS control.
@@ -346,13 +346,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion {
         protected global::System.Web.UI.WebControls.TextBox TextBox8;
         
         /// <summary>
-        /// btnVuelvePuntoVenta control.
+        /// btnFinalizada control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVuelvePuntoVenta;
+        protected global::System.Web.UI.WebControls.Button btnFinalizada;
         
         /// <summary>
         /// Label4 control.

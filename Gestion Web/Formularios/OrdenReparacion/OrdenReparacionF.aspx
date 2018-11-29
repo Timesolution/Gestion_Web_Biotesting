@@ -63,7 +63,7 @@
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <asp:LinkButton ID="lbtnRetiraCliente" runat="server" data-toggle="modal" href="#modalRetiraCliente">Retira Cliente</asp:LinkButton>
-                                                        <asp:LinkButton ID="lbtnVuelvePuntoVenta" runat="server" data-toggle="modal" href="#modalVuelvePuntoVenta">Vuelve a Punto de Venta</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnFinalizada" runat="server" data-toggle="modal" href="#modalFinalizada">Finalizada</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -320,12 +320,12 @@
             </div>
         </div>
 
-        <div id="modalVuelvePuntoVenta" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modalFinalizada" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirmacion Vuelve a Punto de Venta</h4>
+                        <h4 class="modal-title">Confirmacion Finalizada</h4>
                     </div>
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
@@ -337,7 +337,7 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h5>
-                                        <asp:Label runat="server" ID="Label8" Text="El producto sera devuelto al punto de venta?" Style="text-align: center"></asp:Label>
+                                        <asp:Label runat="server" ID="Label8" Text="Finalizar orden de reparacion?" Style="text-align: center"></asp:Label>
                                     </h5>
                                 </div>
 
@@ -347,7 +347,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnVuelvePuntoVenta" Text="Si" class="btn btn-success" OnClick="btnVuelvePuntoVenta_Click" />
+                            <asp:Button runat="server" ID="btnFinalizada" Text="Si" class="btn btn-success" OnClick="btnFinalizada_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
