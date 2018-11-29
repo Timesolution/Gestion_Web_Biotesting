@@ -474,7 +474,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (temp > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Anulo orden de reparacion " + or.Id);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!", "OrdenReparacionF.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                 }
                 else if (temp == -1)
                 {
@@ -879,7 +879,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (temp >= 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a sucursal de reparacion " + or.Id);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "OrdenReparacionF.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                     //Session["Login_idcliente"] = or.Cliente;//TODO porque esta info se guarda en la session??
                     //Session["Login_idArticulo"] = or.Producto;//TODO porque esta info se guarda en la session?? para que se usa?
 
@@ -1026,7 +1026,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra en reparacion");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra en reparacion!", "OrdenReparacionF.aspx"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra en reparacion!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                         }
                         else if (temp == -1)
                         {
@@ -1091,7 +1091,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra reparado");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra reparado!", "OrdenReparacionF.aspx"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra reparado!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                         }
                         else if (temp == -1)
                         {
@@ -1139,7 +1139,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto fue devuelto a la sucursal de origen");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue devuelto a la sucursal de origen!", "OrdenReparacionF.aspx"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue devuelto a la sucursal de origen!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                         }
                         else if (temp == -1)
                         {
@@ -1215,7 +1215,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             if(temp > 0)
                             {
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje y mail de producto reparado enviado correctamente");
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje y mail de producto reparado enviado correctamente!", "OrdenReparacionF.aspx"));
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje y mail de producto reparado enviado correctamente!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                             }                            
                         }
                         else
@@ -1322,7 +1322,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     AgregarObservacion(or.Id, "Orden de reparacion finalizada");
 
-                    string comentario = "Resto stock por entregar producto reparado al cliente. " + "OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+                    string comentario = "Resto stock por orden de reparacion finalizada. " + "OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
 
                     contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
@@ -1335,7 +1335,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     if (temp >= 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion finalizada " + or.Id);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación finalizada con exito!", "OrdenReparacionF.aspx"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación finalizada con exito!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                     }
                     else if (temp == -2)
                     {
@@ -1377,7 +1377,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto reparado fue recibido en la sucursal de origen");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
                         }
                         else if (temp == -1)
                         {
