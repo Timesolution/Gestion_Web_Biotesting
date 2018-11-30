@@ -1013,15 +1013,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if (or.Estado == 9)
                     {
-                        var temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+                        //var temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
 
-                        if (temp < 1)
-                                Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+                        //if (temp < 1)
+                        //        Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
 
                         AgregarObservacion(or.Id, "Producto en reparacion");
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(7).Id;
-                        temp = contOrdenReparacion.ModificarOrdenReparacion();
+                        var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
                         if (temp > 0)
                         {
@@ -1127,14 +1127,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if (or.Estado == 3)
                     {
-                        AgregarObservacion(or.Id, "Producto enviado a la sucursal de origen");
-
                         //string comentario = "Resto stock por producto reparado, se envia a sucursal: " + contSucursal.obtenerSucursalID((int)or.SucursalOrigen).nombre + ". OR: " + or.NumeroOrdenReparacion;
 
                         //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(10).Id;
+                        or.SucursalOR = or.SucursalOrigen;
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        AgregarObservacion(or.Id, "Producto enviado a la sucursal de origen");
 
                         if (temp > 0)
                         {
@@ -1274,8 +1275,6 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     }
                     else
                     {
-                        AgregarObservacion(or.Id, "El producto fue retirado por el cliente");
-
                         string comentario = "Resto stock por entregar producto reparado al cliente. " + "OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
 
                         contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
@@ -1283,8 +1282,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(2).Id;
                         or.FechaFinalizacion = DateTime.Now;
                         or.LapsoFinalizacion = CalcularProgressBar((DateTime)or.Fecha, (int)or.PlazoLimiteReparacion);
-
+                        or.SucursalOR = or.SucursalOrigen;
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
+
+                        AgregarObservacion(or.Id, "El producto fue retirado por el cliente");
 
                         if (temp > 0)
                         {
@@ -1372,6 +1373,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
                         or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(13).Id;
+                        or.SucursalOR = or.SucursalOrigen;
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
                         if (temp > 0)

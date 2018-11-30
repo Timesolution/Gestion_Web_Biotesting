@@ -51,7 +51,7 @@
                                                         <asp:LinkButton ID="lbtnEnviarARepararLocalmente" runat="server" data-toggle="modal" href="#modalEnviarARepararLocalmente">Enviar a sucursal de reparacion</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnRepararLocalmente" runat="server" data-toggle="modal" href="#modalEnReparacion">En Reparacion</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnReparado" runat="server" data-toggle="modal" href="#modalReparado">Reparado</asp:LinkButton>
-                                                        <asp:LinkButton ID="lbtnDevolverASucursal" runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnDevolverASucursal" runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal Origen</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnSucOrigenRecibeProducto" runat="server" data-toggle="modal" href="#modalSucOrigenRecibeMercaderia">Recibido en sucursal origen</asp:LinkButton>
                                                     </li>
                                                 </ul>
