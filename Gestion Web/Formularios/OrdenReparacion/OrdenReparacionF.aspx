@@ -306,11 +306,20 @@
                                     <asp:TextBox runat="server" ID="TextBox7" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="name" class="col-md-4">Observacion Articulo</label>
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtObservacionRetiraCliente" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtObservacionRetiraCliente" ValidationGroup="ObservacionGrupoRetiraCliente" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
                         </div>
                         <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
                             <ContentTemplate>
                                 <div class="modal-footer">
-                                    <asp:Button runat="server" ID="btnRetiraCliente" Text="Si" class="btn btn-success" OnClick="btnRetiraCliente_Click" />
+                                    <asp:Button runat="server" ID="btnRetiraCliente" Text="Si" class="btn btn-success" ValidationGroup="ObservacionGrupoRetiraCliente" OnClick="btnRetiraCliente_Click" />
                                     <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                                 </div>
                             </ContentTemplate>
@@ -345,9 +354,18 @@
                                     <asp:TextBox runat="server" ID="TextBox8" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="name" class="col-md-4">Observacion Articulo</label>
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtObservacionFinalizada" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtObservacionFinalizada" ValidationGroup="ObservacionGrupoFinalizada" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnFinalizada" Text="Si" class="btn btn-success" OnClick="btnFinalizada_Click" />
+                            <asp:Button runat="server" ID="btnFinalizada" Text="Si" class="btn btn-success" ValidationGroup="ObservacionGrupoFinalizada" OnClick="btnFinalizada_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -708,6 +726,24 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>                                
+                                <div class="form-group">
+                                    <label class="col-md-4">Desc Articulo</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtDescArticulo" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="btnBuscarCodArt" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodArt_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Articulo</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListArticulo" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListArticulo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                             </div>

@@ -30,6 +30,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         int sucursal = 0;
         int sucursalOR = 0;
         int estado = 0;
+        int articulo = 0;
         string fechaD = "";
         string fechaH = "";
 
@@ -44,6 +45,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 cliente = Convert.ToInt32(Request.QueryString["c"]);
                 sucursal = Convert.ToInt32(Request.QueryString["s"]);
                 sucursalOR = Convert.ToInt32(Request.QueryString["sor"]);
+                articulo = Convert.ToInt32(Request.QueryString["art"]);
 
                 estado = Convert.ToInt32(Request.QueryString["e"]);
                 fechaD = Request.QueryString["fd"];
@@ -65,6 +67,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     this.cargarClientes();
                     this.cargarEstados();
                     this.cargarSucursalOR();
+                    this.cargarArticulos();
                 }
 
                 //esto lo hacemos para que se mantengan los servicios tecnicos tildados cuando vas a accion > seleccionar servicio tecnico y buscas servicios tecnicos
@@ -76,9 +79,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 else if(accion == 1)
                     BuscarPorNumeroOrden();
             }
-            catch
+            catch(Exception ex)
             {
-
+                Log.EscribirSQL(1, "ERROR", "Error en pageload orden de reparacion. " + ex.Message);
             }
         }
 
@@ -442,9 +445,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 var sucursal = this.sucursal; //Convert.ToInt32(DropListSucursal.SelectedValue);
                 var sucursalOR = this.sucursalOR; //Convert.ToInt32(DropListSucursal.SelectedValue);
                 var cliente = this.cliente; //Convert.ToInt32(DropListClientes.SelectedValue);
+                var articulo = this.articulo; //Convert.ToInt32(DropListClientes.SelectedValue);
                 //var estado = Convert.ToInt32(DropListEstados.SelectedValue);
 
-                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado, sucursalOR);
+                var ordenesReparacion = contOrdenReparacion.ObtenerOrdenesReparacionFiltro(desde,hasta,sucursal,cliente, estado, sucursalOR,articulo);
 
                 foreach (var item in ordenesReparacion)
                 {
@@ -466,6 +470,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    return;
+
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
                 or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(6).Id;
 
@@ -474,7 +481,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (temp > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Anulo orden de reparacion " + or.Id);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación anulada con exito!", ParametrosFiltrar()));
                 }
                 else if (temp == -1)
                 {
@@ -492,7 +499,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
-                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&e=" + DropListEstados.SelectedValue + "&sor=" + DropListSucursalOR.SelectedValue);
+                Response.Redirect("OrdenReparacionF.aspx?a=0&c=" + this.DropListClientes.Text + "&s=" + this.DropListSucursal.Text + "&e=" + this.DropListEstados.Text + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&art=" + this.DropListArticulo.Text);
             }
             catch (Exception ex)
             {
@@ -552,6 +559,31 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             }
         }
 
+        public void cargarArticulos()
+        {
+            try
+            {
+                controladorArticulo contArticulo = new controladorArticulo();
+                DataTable dt = contArticulo.obtenerArticulos2();
+
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Todos";
+                dr["id"] = 0;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListArticulo.DataSource = dt;
+                this.DropListArticulo.DataValueField = "id";
+                this.DropListArticulo.DataTextField = "descripcion";
+                this.DropListArticulo.DataBind();
+
+                this.DropListArticulo.SelectedValue = Session["Login_SucUser"].ToString();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Articulos. " + ex.Message));
+            }
+        }
         public void cargarEstados()
         {
             try
@@ -563,7 +595,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 listEstados.Insert(0, new OrdenReparacion_Estados
                 {
                     Id = 0,
-                    Descripcion = "TODOS"
+                    Descripcion = "Todos"
                 });
 
                 listEstados.Insert(1, new OrdenReparacion_Estados
@@ -681,6 +713,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     {
                         idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                        if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                            return;
+
                         int temp;
 
                         //obtengo la orden de reparacion
@@ -728,7 +763,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Servicio tecnico seleccionado con exito!");
                             //Session["Login_idcliente"] = or.Cliente;
                             //Session["Login_idArticulo"] = or.Producto;
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Servicio tecnico seleccionado con exito!", ParametrosFiltrar()));
                         }
                         else if (temp == -1)
                         {
@@ -831,6 +866,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
                     or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(5).Id;
 
@@ -868,6 +906,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    return;
+
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
                 or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(9).Id;
                 or.SucursalOR = contSucursal.obtenerSucursalID(Convert.ToInt32(contConfig.ObtenerConfiguracionId(51))).id;
@@ -879,7 +920,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (temp >= 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a sucursal de reparacion " + or.Id);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación enviada con exito a sucursal de reparacion!", ParametrosFiltrar()));
                     //Session["Login_idcliente"] = or.Cliente;//TODO porque esta info se guarda en la session??
                     //Session["Login_idArticulo"] = or.Producto;//TODO porque esta info se guarda en la session?? para que se usa?
 
@@ -939,6 +980,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             try
             {
                 string idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    return;
 
                 int temp;
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1009,6 +1053,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
                     if (or.Estado == 9)
@@ -1026,7 +1073,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra en reparacion");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra en reparacion!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra en reparacion!", ParametrosFiltrar()));
                         }
                         else if (temp == -1)
                         {
@@ -1079,6 +1126,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
                     if (or.Estado == 7)
@@ -1091,7 +1141,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto se encuentra reparado");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra reparado!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto se encuentra reparado!", ParametrosFiltrar()));
                         }
                         else if (temp == -1)
                         {
@@ -1123,6 +1173,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
                     if (or.Estado == 3)
@@ -1140,7 +1193,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto fue devuelto a la sucursal de origen");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue devuelto a la sucursal de origen!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue devuelto a la sucursal de origen!", ParametrosFiltrar()));
                         }
                         else if (temp == -1)
                         {
@@ -1216,7 +1269,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             if(temp > 0)
                             {
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Mensaje y mail de producto reparado enviado correctamente");
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje y mail de producto reparado enviado correctamente!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensaje y mail de producto reparado enviado correctamente!", ParametrosFiltrar()));
                             }                            
                         }
                         else
@@ -1266,6 +1319,10 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (ComprobarOrdenReparacionTildada())
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));     
                                    
                     if(or.CambiaProducto == "Si")
@@ -1287,11 +1344,13 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                         AgregarObservacion(or.Id, "El producto fue retirado por el cliente");
 
+                        AgregarObservacion(or.Id, txtObservacionRetiraCliente.Text);
+
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto fue retirado por el cliente");
                             string script = "window.open('ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
-                            script += " $.msgbox(\"El producto fue retirado por el cliente. \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx?c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "';";
+                            script += " $.msgbox(\"El producto fue retirado por el cliente. \", {type: \"info\"}); location.href = '" + ParametrosFiltrar() + "';";
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
                             //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script, true);
                             //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto fue retirado por el cliente!", "OrdenReparacionF.aspx"));
@@ -1319,9 +1378,15 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (ComprobarOrdenReparacionTildada())
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
+
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
                     AgregarObservacion(or.Id, "Orden de reparacion finalizada");
+
+                    AgregarObservacion(or.Id, txtObservacionFinalizada.Text);
 
                     string comentario = "Resto stock por orden de reparacion finalizada. " + "OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
 
@@ -1336,7 +1401,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     if (temp >= 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion finalizada " + or.Id);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación finalizada con exito!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación finalizada con exito!", ParametrosFiltrar()));
                     }
                     else if (temp == -2)
                     {
@@ -1362,6 +1427,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
                     if (or.Estado == 10)
@@ -1379,7 +1447,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El producto reparado fue recibido en la sucursal de origen");
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado fue recibido en la sucursal de origen!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado fue recibido en la sucursal de origen!", ParametrosFiltrar()));
                         }
                         else if (temp == -1)
                         {
@@ -1406,7 +1474,11 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 if (ComprobarOrdenReparacionTildada())
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
-                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));                    
+
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        return;
+
+                    var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
                     or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(14).Id;
                     or.FechaFinalizacion = DateTime.Now;
@@ -1419,7 +1491,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     if (temp >= 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a la sucursal de garantias " + or.Id);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado por el service oficial fue recibido en la sucursal de garantias!", "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado por el service oficial fue recibido en la sucursal de garantias!", ParametrosFiltrar()));
                     }
                     else if (temp == -2)
                     {
@@ -1431,6 +1503,64 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al cambiar al estado: Reparado por Service Oficial - Enviado a Garantias " + ex.Message);
+            }
+        }
+
+        public bool ChequearSiORFinalizo(int idOR)
+        {
+            try
+            {
+                var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(idOR);
+
+                if (or.Estado == 2 || or.Estado == 12)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de reparacion ya se encuentra finalizada!"));
+                    return true;
+                }                    
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error chequeando si la OR finalizo " + ex.Message);
+                return false;
+            }
+        }
+
+        public string ParametrosFiltrar()
+        {
+            try
+            {
+                string filtro = "OrdenReparacionF.aspx?a=0&c=" + this.cliente + "&s=" + this.sucursal + "&e=" + this.estado + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&art=" + this.articulo;
+
+                return filtro;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error al filtrar por parametros. " + ex.Message);
+                return string.Empty;
+            }
+        }
+
+        protected void btnBuscarCodArt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorArticulo contArticulo = new controladorArticulo();
+
+                String buscar = this.txtDescArticulo.Text.Replace(' ', '%');
+                DataTable dt = contArticulo.obtenerArticulosByDescDT(buscar);
+
+                //cargo la lista
+                this.DropListArticulo.DataSource = dt;
+                this.DropListArticulo.DataValueField = "id";
+                this.DropListArticulo.DataTextField = "descripcion";
+                this.DropListArticulo.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
             }
         }
     }
