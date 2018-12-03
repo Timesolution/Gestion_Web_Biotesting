@@ -36,6 +36,8 @@
                                                         <asp:LinkButton ID="lbtnSeleccionarServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">Seleccionar Service Oficial</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnAsignarServiceOficial" runat="server" data-toggle="modal" href="#modalAsignarServiceOficial">Asignar OR a Service Oficial</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnEnviarASucursalGarantias" runat="server" data-toggle="modal" href="#modalEnviarASucursalGarantias">Reparado - Enviar a Garantias</asp:LinkButton>
+                                                        <asp:LinkButton runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal Origen</asp:LinkButton>
+                                                        <asp:LinkButton runat="server" data-toggle="modal" href="#modalSucOrigenRecibeMercaderia">Recibido en sucursal origen</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </li>
