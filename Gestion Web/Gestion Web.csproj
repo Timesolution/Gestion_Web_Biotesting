@@ -773,6 +773,7 @@
       <DependentUpon>dsVendedores.xsd</DependentUpon>
     </Content>
     <Content Include="Properties\DataSources\Gestion_Web.Formularios.Facturas.dsPresupuesto.datasource" />
+    <None Include="Properties\PublishProfiles\publicacion gestion web.pubxml" />
     <None Include="Properties\PublishProfiles\Publicacion.pubxml" />
     <None Include="Properties\PublishProfiles\Publicación.pubxml" />
     <None Include="Service References\SmsMasivoService\configuration91.svcinfo" />

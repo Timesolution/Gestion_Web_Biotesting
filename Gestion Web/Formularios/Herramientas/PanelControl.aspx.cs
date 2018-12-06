@@ -31,7 +31,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     this.cargarConfiguracion();
                     this.cargarEstados();
-                    this.CargarSucursalesParaGarantia();
+                    this.CargarSucursalesParaGarantiaYServiceOficial();
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -127,6 +127,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListActualizarCompuestos.SelectedValue = configuracion.ActualizaCompuestos;
                 this.DropListFiltroArticulosSucursal.SelectedValue = configuracion.FiltroArticulosSucursal;
                 this.DropListSucGarantia.SelectedValue = configuracion.SucursalGarantia;
+                this.DropListSucServiceOficial.SelectedValue = configuracion.SucursalServiceOficial;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1013,7 +1014,7 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
-        public void CargarSucursalesParaGarantia()
+        public void CargarSucursalesParaGarantiaYServiceOficial()
         {
             try
             {
@@ -1024,12 +1025,19 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListSucGarantia.DataTextField = "nombre";
 
                 this.DropListSucGarantia.DataBind();
+
+                this.DropListSucServiceOficial.DataSource = dt;
+                this.DropListSucServiceOficial.DataValueField = "id";
+                this.DropListSucServiceOficial.DataTextField = "nombre";
+
+                this.DropListSucServiceOficial.DataBind();
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "Error", "Error al cargar sucursales para garantia " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al cargar sucursales para garantia y service oficial " + ex.Message);
             }
         }
+
         protected void lbtnTiempoLineas_Click(object sender, EventArgs e)
         {
             try
@@ -1190,6 +1198,28 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception Ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
+            }
+        }
+
+        protected void lbtnSucServiceOficial_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.SucursalServiceOficial = this.DropListSucServiceOficial.SelectedValue;
+                int i = configuracion.ModificarSucursalServiceOficial();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de sucursal de service oficial.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Sucursal service oficial modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Sucursal Service Oficial!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al seleccionar la sucursal de service oficial " + ex.Message);
             }
         }
     }

@@ -125,7 +125,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 if (temp > 0)
                 {
-                    temp = contOrdenReparacion.AgregarStockSucursalReparacion((int)Session["Login_IdUser"], or);
+                    temp = contOrdenReparacion.AgregarStockSucursal((int)Session["Login_IdUser"], or,51);
 
                     if(temp < 1)
                         Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");

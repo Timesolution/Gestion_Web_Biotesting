@@ -369,6 +369,18 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Sucursal Service Oficial</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListSucServiceOficial" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnSucServiceOficial" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnSucServiceOficial_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Estado pedidos:</label>
                                             <div class="col-md-4">
                                                 <asp:DropDownList ID="DropListEstadoPedidos" runat="server" class="form-control"></asp:DropDownList>
