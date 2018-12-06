@@ -343,6 +343,7 @@ namespace Gestion_Web.Formularios.Facturas
                         Response.Redirect("/Default.aspx?m=1", false);
                     }
                 }
+                bloquearPHDescuentoEnFactura();
             }
             catch
             {
@@ -664,7 +665,6 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
-
             }
         }
         
@@ -1092,7 +1092,21 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        #endregion 
+        private void bloquearPHDescuentoEnFactura()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["bloquearRealizarDescuentoEnFacturacion"]) && WebConfigurationManager.AppSettings["bloquearRealizarDescuentoEnFacturacion"] == "1")
+                {
+                    phDescuentoSobreElTotal.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: habilitarPHDescuentoEnFactura. Ex: " + ex.Message));
+            }
+        }
+        #endregion
 
         #region cargar Datos iniciales
 

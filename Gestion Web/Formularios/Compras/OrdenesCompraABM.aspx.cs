@@ -40,11 +40,13 @@ namespace Gestion_Web.Formularios.Compras
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
                 this.orden = Convert.ToInt32(Request.QueryString["oc"]);
 
+                #region btnAguarde
                 btnVerStockMinimo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimo, null) + ";");
                 btnVerStockMinimoSucursal.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimoSucursal, null) + ";");
                 btnVerOC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerOC, null) + ";");
                 btnVerTodos.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerTodos, null) + ";");
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+                #endregion
 
                 this.VerificarLogin();
                 this.CargarItems();
@@ -59,12 +61,14 @@ namespace Gestion_Web.Formularios.Compras
                     this.cargarSucursal();
                     this.dtItemsTemp = new DataTable();
                     this.CrearTablaItems();
+
+                    if (this.accion == 2)
+                    {
+                        //cargar orden
+                        this.cargarOrdenCompra();
+                    }
                 }
-                if (this.accion == 2)
-                {
-                    //cargar orden
-                    this.cargarOrdenCompra();
-                }
+                
 
                 this.actualizarTotales();
             }
@@ -104,7 +108,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 this.dtItems = dt;
 
-                this.agregarItemATabla(drFila["Codigo"].ToString(), drFila["Descripcion"].ToString(), Convert.ToDecimal(drFila["Cant"]), Convert.ToDecimal(drFila["Costo"]));
+                this.agregarItemATabla(drFila["Codigo"].ToString(), drFila["Descripcion"].ToString(), Convert.ToDecimal(drFila["Cant"]), Convert.ToDecimal(drFila["Costo"]), 0);
                 //this.CargarItems();
                 //limpio los campos
                 this.txtCodigo.Text = "";
@@ -400,6 +404,7 @@ namespace Gestion_Web.Formularios.Compras
                 dtItemsTemp.Columns.Add("Codigo");
                 dtItemsTemp.Columns.Add("Descripcion");
                 dtItemsTemp.Columns.Add("Costo");
+                dtItemsTemp.Columns.Add("CostoMasIva");
                 dtItemsTemp.Columns.Add("Cant");
 
 
@@ -489,7 +494,10 @@ namespace Gestion_Web.Formularios.Compras
                 //como estoy en cotizacion pido el ultimo numero de este documento
                 int nro = this.contFact.obtenerFacturaNumero(ptoVenta, "Orden de Compra");
                 this.txtPVenta.Text = pv.puntoVenta;
-                this.txtNumero.Text = nro.ToString().PadLeft(8, '0');
+                if (accion != 2)
+                {
+                    this.txtNumero.Text = nro.ToString().PadLeft(8, '0');
+                }
                 //this.labelNroRemito.Text = "Remito N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
             }
             catch (Exception ex)
@@ -529,7 +537,8 @@ namespace Gestion_Web.Formularios.Compras
                 this.obtenerNroOrden(Convert.ToInt32(this.ListPtoVenta.SelectedValue), "Orden de Compra");
                 oc.Numero = this.txtPVenta.Text + "-" + this.txtNumero.Text;
 
-                //obengo items
+                //obtengo items los borro y los leo de la pagina
+                oc.OrdenesCompra_Items.Clear();
                 oc.OrdenesCompra_Items = this.obtenerItems();
                 decimal tempTotal = 0;
                 foreach (var item in oc.OrdenesCompra_Items)
@@ -677,14 +686,10 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                Log.EscribirSQL(1, "INFO", "Voy a iniciar cargar articulos del proveedor" + idPRoveedor);
                 DataTable dtArticulos = this.contArticulos.obtenerArticulosByProveedorDT(idPRoveedor);
-                //limpio el dt
                 this.dtItems.Rows.Clear();
-                Log.EscribirSQL(1, "INFO", "obtuve articulos del proveedor los voy a cargar");
                 foreach (DataRow a in dtArticulos.Rows)
                 {
-                    Log.EscribirSQL(1, "INFO", "entre al foreach (DataRow a in dtArticulos.Rows)");
                     DataTable dt = this.dtItems;
 
                     DataRow drFila = dt.NewRow();
@@ -715,21 +720,16 @@ namespace Gestion_Web.Formularios.Compras
                         Log.EscribirSQL(1, "INFO", "Obtuve un codigo= "+ a["codigo"].ToString());
                     }
 
-
-
-
                     drFila["Descripcion"] = a["descripcion"];
                     drFila["Cant"] = 0;
                     drFila["Costo"] = Convert.ToDecimal(a["costo"].ToString());
-                    Log.EscribirSQL(1, "INFO", "Obtuve una descripcion= " + a["descripcion"].ToString());
+                    drFila["CostoMasIva"] = Decimal.Round(Convert.ToDecimal(a["costoImponible"]) * ObtenerIvaArticulo(a), 2);
 
                     dt.Rows.Add(drFila);
 
                     this.dtItems = dt;
-                    Log.EscribirSQL(1, "INFO", "Agregue el dt.Rows.Add(drFila)");
                 }
 
-                Log.EscribirSQL(1, "INFO", "Termine de obtener articulos y los cargue en el DT, voy a cargarlos en pantalla");
                 this.CargarItems();
             }
             catch (Exception ex)
@@ -738,6 +738,26 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos del proveedor. " + ex.Message));
             }
         }
+
+        private decimal ObtenerIvaArticulo(DataRow articulo)
+        {
+            try
+            {
+                decimal ivaArticulo = Convert.ToDecimal(articulo["porcentajeIva"]);
+
+                if (ivaArticulo > 0)
+                {
+                    return (ivaArticulo / 100) + 1;
+                }
+
+                return 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         private void cargarAlertaProveedor()
         {
             try
@@ -785,7 +805,7 @@ namespace Gestion_Web.Formularios.Compras
                         string codigo = this.obtenerCodigo((tr.Cells[0]).Text);
                         var art = contArticulos.obtenerArticuloCodigoAparece(codigo);
 
-                        TextBox txt = tr.Cells[3].Controls[0] as TextBox;
+                        TextBox txt = tr.Cells[4].Controls[0] as TextBox;
                         if (art.id == Convert.ToInt32(item.Codigo))
                         {
                             txt.Text = item.Cantidad.ToString();
@@ -798,10 +818,15 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio)
+        private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio, decimal costoMasIva)
         {
             try
             {
+
+                Articulo articulo = new Articulo();
+                //articulo = contArticulosEntity.(codigo);
+
+
                 Log.EscribirSQL(1, "INFO", "TODO agregarItemATabla()");
                 //fila
                 TableRow tr = new TableRow();
@@ -824,6 +849,12 @@ namespace Gestion_Web.Formularios.Compras
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celPrecio);
+
+                TableCell celPrecioMasIva = new TableCell();
+                celPrecioMasIva.Text = "$ " + costoMasIva;
+                celPrecioMasIva.VerticalAlign = VerticalAlign.Middle;
+                celPrecioMasIva.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celPrecioMasIva);
 
                 TableCell celCantidad = new TableCell();
                 celCantidad.HorizontalAlign = HorizontalAlign.Right;
@@ -958,12 +989,12 @@ namespace Gestion_Web.Formularios.Compras
                         {
                             if (item["Cant"].ToString() != "0" && !String.IsNullOrEmpty(item["Cant"].ToString()))
                             {
-                                this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]));
+                                this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
                             }
                         }
                         else
                         {
-                            this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]));
+                            this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
                         }
                     }
                 }
@@ -985,7 +1016,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (var c in this.phProductos.Controls)
                 {
                     TableRow tr = c as TableRow;
-                    TextBox txt = tr.Cells[3].Controls[0] as TextBox;
+                    TextBox txt = tr.Cells[4].Controls[0] as TextBox;
                     if (txt.Text != "0" && !String.IsNullOrEmpty(txt.Text))
                     {
                         var item = new OrdenesCompra_Items();
