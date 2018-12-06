@@ -979,6 +979,9 @@ namespace Gestion_Web.Formularios.OrdenReparacion
         {
             try
             {
+                if (!Page.IsValid)
+                    return;
+
                 string idtildado = ObtenerIdTildadoOrdenReparacion();
 
                 if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
@@ -1026,11 +1029,16 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                         if (temp > 0)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se envio la orden de reparacion al service oficial correctamente!");
+                            //string script = "window.open('ABMRemitos.aspx?accion=5&cliente=" + or.Cliente + "&articulo=" + or.Producto + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                            //script += " $.msgbox(\"Se envio la orden de reparacion al service oficial correctamente!. \", {type: \"info\"}); location.href = '" + ParametrosFiltrar() + "';";
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se envio la orden de reparacion al service oficial correctamente!", "../Facturas/ABMRemitos.aspx?accion=5&cliente=" + or.Cliente + "&articulo=" + or.Producto));
                         }
                         else if (temp == -1)
                         {
                             Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparacion al servicio tecnico.");
+                            //string script = " $.msgbox(\"Error al enviar orden de reparacion al servicio tecnico. \", {type: \"error\"});";
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "error", script, true);
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparacion al servicio tecnico."));
                         }
                     }                    

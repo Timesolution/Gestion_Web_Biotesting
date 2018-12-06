@@ -556,6 +556,11 @@
                             <asp:Button runat="server" ID="btnAgregarOrdenReparacionServicioTecnico" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnAgregarOrdenReparacionServicioTecnico_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
+                        <%--<asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                
+                            </ContentTemplate>
+                        </asp:UpdatePanel>--%>
                     </div>
                 </div>
             </div>
