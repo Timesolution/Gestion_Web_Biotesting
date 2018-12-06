@@ -309,6 +309,13 @@ namespace Gestion_Web.Formularios.Compras
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if (!listPermisos.Contains("181"))
+                {
+                    ListSucursal.Enabled = false;
+                    ListSucursal.CssClass = "form-control";
+                }
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -318,7 +325,7 @@ namespace Gestion_Web.Formularios.Compras
                             return 1;
                         }
                     }
-                }
+                }                
 
                 return 0;
             }
