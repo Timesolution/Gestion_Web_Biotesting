@@ -85,13 +85,13 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
         
         /// <summary>
-        /// txtFecha control.
+        /// txtFechaMercaderiaArribo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFecha;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaMercaderiaArribo;
         
         /// <summary>
         /// RequiredFieldValidator42 control.
@@ -103,13 +103,31 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator42;
         
         /// <summary>
-        /// txtFechaEntrega control.
+        /// txtFechaOC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFechaEntrega;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaOC;
+        
+        /// <summary>
+        /// RequiredFieldValidator2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+        
+        /// <summary>
+        /// txtFechaMercaderiaIngresada control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaMercaderiaIngresada;
         
         /// <summary>
         /// RequiredFieldValidator1 control.

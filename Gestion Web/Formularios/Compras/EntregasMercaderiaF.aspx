@@ -62,32 +62,48 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha</label>
+                                            <label for="name" class="col-md-2">Fecha Mercaderia Arribada</label>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                                    <asp:TextBox ID="txtFecha" runat="server" class="form-control"></asp:TextBox>
+                                                    <asp:TextBox ID="txtFechaMercaderiaArribo" runat="server" class="form-control"></asp:TextBox>
                                                 </div>
 
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:RequiredFieldValidator ControlToValidate="txtFecha" ID="RequiredFieldValidator42" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                <asp:RequiredFieldValidator ControlToValidate="txtFechaMercaderiaArribo" ID="RequiredFieldValidator42" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-2">Fecha OC</label>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                                    <asp:TextBox ID="txtFechaOC" runat="server" class="form-control" Disabled></asp:TextBox>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:RequiredFieldValidator ControlToValidate="txtFechaOC" ID="RequiredFieldValidator2" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
 
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha Entrega</label>
+                                            <label for="name" class="col-md-2">Fecha de Ingreso de mercaderia</label>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                                    <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                                                    <asp:TextBox ID="txtFechaMercaderiaIngresada" runat="server" class="form-control"></asp:TextBox>
                                                 </div>
 
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:RequiredFieldValidator ControlToValidate="txtFechaEntrega" ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                <asp:RequiredFieldValidator ControlToValidate="txtFechaMercaderiaIngresada" ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
 
                                             </div>
                                         </div>
@@ -105,6 +121,7 @@
                                             <th>Codigo</th>
                                             <th>Descripcion</th>
                                             <th>Cantidad Pedida</th>
+                                            <th>Cantidad ya Recibida</th>
                                             <th>Cantidad Recibida</th>
                                         </tr>
                                     </thead>
@@ -157,7 +174,7 @@
 
     <script>
         $(function () {
-            $("#<%= txtFecha.ClientID %>").datepicker(
+            $("#<%= txtFechaMercaderiaArribo.ClientID %>").datepicker(
                 {
                     dateFormat: 'dd/mm/yy'
                 }
@@ -167,7 +184,17 @@
 
     <script>
         $(function () {
-            $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+            $("#<%= txtFechaMercaderiaIngresada.ClientID %>").datepicker(
+                {
+                    dateFormat: 'dd/mm/yy'
+                }
+                );
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $("#<%= txtFechaOC.ClientID %>").datepicker(
                 {
                     dateFormat: 'dd/mm/yy'
                 }
@@ -179,7 +206,7 @@
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
         function endReq(sender, args) {
             $(function () {
-                $("#<%= txtFecha.ClientID %>").datepicker(
+                $("#<%= txtFechaMercaderiaArribo.ClientID %>").datepicker(
                     {
                         dateFormat: 'dd/mm/yy'
                     }
@@ -192,7 +219,20 @@
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
         function endReq(sender, args) {
             $(function () {
-                $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+                $("#<%= txtFechaMercaderiaIngresada.ClientID %>").datepicker(
+                    {
+                        dateFormat: 'dd/mm/yy'
+                    }
+                    );
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $(function () {
+                $("#<%= txtFechaOC.ClientID %>").datepicker(
                     {
                         dateFormat: 'dd/mm/yy'
                     }

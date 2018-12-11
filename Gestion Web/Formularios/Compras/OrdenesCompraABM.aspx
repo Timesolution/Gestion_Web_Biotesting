@@ -215,6 +215,7 @@
                                             <th>Codigo</th>
                                             <th>Descripcion</th>
                                             <th>Precio</th>
+                                            <th>Precio Mas IVA</th>
                                             <th>Cantidad</th>
                                             <th>Stock Sucursal</th>
                                             <th>Stock Minimo Sucursal</th>
