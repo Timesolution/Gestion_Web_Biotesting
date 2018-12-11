@@ -141,6 +141,36 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                             if (s == "160")
                                 lbtnEnviarSMS.Visible = true;
+
+                            if (s == "182")
+                                lbtnEnviarARepararLocalmente.Visible = true;
+
+                            if (s == "183")
+                                lbtnRepararLocalmente.Visible = true;
+
+                            if (s == "184")
+                                lbtnReparado.Visible = true;
+
+                            if (s == "185")
+                                lbtnDevolverASucursal.Visible = true;
+
+                            if (s == "186")
+                                lbtnSucOrigenRecibeProducto.Visible = true;
+
+                            if (s == "187")
+                                lbtnSeleccionarServiceOficial.Visible = true;
+
+                            if (s == "188")
+                                lbtnAsignarServiceOficial.Visible = true;
+
+                            if (s == "189")
+                                lbtnEnviarASucursalGarantias.Visible = true;
+
+                            if (s == "190")
+                                lbtnDevolverSucOrigen.Visible = true;
+
+                            if (s == "191")
+                                lbtnRecibidoSucOrigen.Visible = true;
                         }                        
                     }
                 }
@@ -1492,7 +1522,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
 
-                    contOrdenReparacion.EliminarStockSucursal((int)Session["Login_IdUser"], or, "Descuento stock por envio a sucursal de garantias", 56);
+                    contOrdenReparacion.EliminarStockSucursal((int)Session["Login_IdUser"], or, "Descuento stock por envio a sucursal de servicio tecnico", 56);
                     var temp = contOrdenReparacion.AgregarStockSucursal((int)Session["Login_IdUser"], or, 51);
 
                     if(temp > 0)
@@ -1504,17 +1534,17 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                         temp = contOrdenReparacion.ModificarOrdenReparacion();
 
-                        AgregarObservacion(or.Id, "El producto fue reparado por el service oficial y fue enviado a la sucursal de garantias");
+                        AgregarObservacion(or.Id, "El producto fue reparado por el service oficial y fue enviado a la sucursal de servicio tecnico");
 
                         if (temp >= 0)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a la sucursal de garantias " + or.Id);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado por el service oficial fue recibido en la sucursal de garantias!", ParametrosFiltrar()));
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Orden de reparacion enviada a la sucursal de servicio tecnico " + or.Id);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El producto reparado por el service oficial fue recibido en la sucursal de servicio tecnico!", ParametrosFiltrar()));
                         }
                         else if (temp == -2)
                         {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación a la sucursal de garantias. " + or.Id);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación a la sucursal de garantias."));
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "Error", "Error al enviar orden de reparación a la sucursal de servicio tecnico. " + or.Id);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar orden de reparación a la sucursal de servicio tecnico."));
                         }
                     }                    
                 }
