@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -726,6 +726,17 @@
     <Content Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsc">
       <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\dsNominaArticulos.xsc">
+      <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Articulos\dsNominaArticulos.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsNominaArticulos.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Articulos\dsNominaArticulos.xss">
+      <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1303,6 +1314,11 @@
     </Compile>
     <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
       <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Articulos\dsNominaArticulos.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\ImpresionMovStock.aspx.cs">
       <DependentUpon>ImpresionMovStock.aspx</DependentUpon>
@@ -2905,6 +2921,7 @@
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\MovStockSucursalR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\MovimientoStockR.rdlc" />
+    <EmbeddedResource Include="Formularios\Articulos\NominaArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ReporteStockR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasChicas.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasGrandes.rdlc" />
