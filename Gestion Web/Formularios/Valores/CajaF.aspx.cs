@@ -1699,5 +1699,69 @@ namespace Gestion_Web.Formularios.Valores
         }
         #endregion
 
-    }
+        protected void lbtnRemesa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ComprobarUnicoTraspasoTildado())
+                {
+                    string idtildado = "";
+                    foreach (Control C in phCaja.Controls)
+                    {
+                        TableRow tr = C as TableRow;
+                        CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+                        if (ch.Checked == true)
+                        {
+                            idtildado += ch.ID.Substring(12, ch.ID.Length - 12);
+                        }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al redireccionar a la pagina de creacion de remesa " + ex.Message);
+            }
+        }
+
+        public bool ComprobarUnicoTraspasoTildado()
+        {
+            try
+            {
+                int tildados = 0;
+
+                foreach (Control C in phCaja.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+
+                    string descripcion = tr.Cells[1].Text;
+
+                    if (ch.Checked == true)
+                    {
+                        if(descripcion.Contains("Traspaso de Caja") || descripcion.Contains("Traspaso Caja"))
+                            tildados++;
+                    }
+                }
+
+                if (tildados <= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar un traspaso de caja!"));
+                    return false;
+                }
+                if (tildados > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un traspaso de caja!"));
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error comprobando si hay un solo traspaso de caja seleccionado. " + ex.Message);
+                return false;
+            }
+        }
+    }    
 }

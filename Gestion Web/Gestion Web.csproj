@@ -501,6 +501,7 @@
     <Content Include="Formularios\Transportes\TransportesF.aspx" />
     <Content Include="Formularios\Valores\ABMConceptos.aspx" />
     <Content Include="Formularios\Valores\ABMMutualesPagos.aspx" />
+    <Content Include="Formularios\Valores\ABMRemesa.aspx" />
     <Content Include="Formularios\Valores\CajaDiferenciasF.aspx" />
     <Content Include="Formularios\Valores\ChequesF_2.aspx" />
     <Content Include="Formularios\Valores\CreditosABM.aspx" />
@@ -2535,6 +2536,13 @@
     </Compile>
     <Compile Include="Formularios\Valores\ABMMutualesPagos.aspx.designer.cs">
       <DependentUpon>ABMMutualesPagos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Valores\ABMRemesa.aspx.cs">
+      <DependentUpon>ABMRemesa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Valores\ABMRemesa.aspx.designer.cs">
+      <DependentUpon>ABMRemesa.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Valores\CajaDiferenciasF.aspx.cs">
       <DependentUpon>CajaDiferenciasF.aspx</DependentUpon>
