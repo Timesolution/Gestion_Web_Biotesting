@@ -1711,12 +1711,19 @@ namespace Gestion_Web.Formularios.Valores
                         TableRow tr = C as TableRow;
                         CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
 
-                        string descripcion = tr.Cells[1].Text;
-
                         if (ch.Checked == true)
                         {
+                            string descripcion = tr.Cells[1].Text;
                             idtildado += ch.ID.Substring(12, ch.ID.Length - 12);
-                            Response.Redirect("ABMRemesa.aspx?movCaja=" + idtildado.ToString());
+                            var sucursalDestino = descripcion.Split(new string[] { " A " },StringSplitOptions.None)[1];
+
+                            if (sucursalDestino.Contains("|"))
+                                sucursalDestino = sucursalDestino.Split('|')[0];
+                            else if(sucursalDestino.Contains("."))
+                                sucursalDestino = sucursalDestino.Split('.')[0];
+
+                            //Response.Redirect("ABMRemesa.aspx?movCaja=" + idtildado.ToString() + "?sd=" + sucursalDestino);
+                            Response.Redirect("ABMRemesa.aspx?sd=" + sucursalDestino);
                         }
                     }
                 }

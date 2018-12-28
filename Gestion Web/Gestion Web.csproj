@@ -776,6 +776,17 @@
     <Content Include="Formularios\Vendedores\dsVendedores.xsc">
       <DependentUpon>dsVendedores.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Valores\dsRemesa.xsc">
+      <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Valores\dsRemesa.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsRemesa.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Valores\dsRemesa.xss">
+      <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Vendedores\dsVendedores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -2565,6 +2576,11 @@
     <Compile Include="Formularios\Valores\CreditosABM.aspx.designer.cs">
       <DependentUpon>CreditosABM.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Valores\dsRemesa.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Valores\MutualesPagosF.aspx.cs">
       <DependentUpon>MutualesPagosF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3045,6 +3061,7 @@
     <EmbeddedResource Include="Formularios\Valores\GastosR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\InformeCierresR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\PagaresR.rdlc" />
+    <EmbeddedResource Include="Formularios\Valores\RemesaR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ResumenTurnoR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\TarjetasR.rdlc" />
     <EmbeddedResource Include="Formularios\Vendedores\VendedoresR.rdlc" />

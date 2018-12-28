@@ -285,7 +285,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="Debe cargar billetes." InitialValue="0.00" ControlToValidate="txtTotal" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="Debe cargar billetes." InitialValue="0" ControlToValidate="txtTotal" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                         </div>
                                                         <div class="col-md-4">
                                                         </div>

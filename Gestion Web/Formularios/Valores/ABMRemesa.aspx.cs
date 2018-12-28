@@ -15,22 +15,71 @@ namespace Gestion_Web.Formularios.Valores
     public partial class ABMRemesa : System.Web.UI.Page
     {
         ControladorRemesaEntity contRemesa = new ControladorRemesaEntity();
-        ControladorCaja contCaja = new ControladorCaja();
-        int idMovCaja;
-                
+        controladorSucursal contSucursal = new controladorSucursal();
+
+        string sucursalDestino;
+        string totalLetras;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            idMovCaja = Convert.ToInt32(Request.QueryString["movCaja"]);
+            VerificarLogin();
+
+            sucursalDestino = Request.QueryString["sd"];
+
+            btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
             if (!IsPostBack)
             {
                 CargarDatosEnRemesa();
                 calcularTotal();
-                //CargarArticulosDropDownList();
-                //if (accion == 1)
-                //    
-                //else if (accion == 2)
-                //    ModificarOrdenReparacion();
+            }
+        }
+
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.verificarAcceso() != 1)
+                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../Account/Login.aspx");
+            }
+        }
+
+        private int verificarAcceso()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                foreach (string s in listPermisos)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        //if (s == "162")
+                        //{
+                        //    return 1;
+                        //}
+                    }
+                }
+
+                return 1;
+            }
+            catch
+            {
+                return -1;
             }
         }
 
@@ -44,7 +93,7 @@ namespace Gestion_Web.Formularios.Valores
                 }
 
                 txtNumeroRemesa.CssClass = "form-control";
-                txtNumeroRemesa.Text = contRemesa.ObtenerNumeracionUltimaRemesa()+1.ToString("D8");
+                txtNumeroRemesa.Text = (contRemesa.ObtenerNumeracionUltimaRemesa()+1).ToString("D8");
             }
             catch (Exception ex)
             {
@@ -58,37 +107,38 @@ namespace Gestion_Web.Formularios.Valores
             {
                 //billetes 1000
                 int tMil = Convert.ToInt32(this.txt1000Cant.Text) * 1000;
-                this.txt1000Total.Text = tMil.ToString("N");
+                this.txt1000Total.Text = tMil.ToString();
                 //billetes 500
                 int tQuin = Convert.ToInt32(this.txt500Cant.Text) * 500;
-                this.txt500Total.Text = tQuin.ToString("N");
+                this.txt500Total.Text = tQuin.ToString();
                 //billetes 200
                 int tDoscien = Convert.ToInt32(this.txt200Cant.Text) * 200;
-                this.txt200Total.Text = tDoscien.ToString("N");
+                this.txt200Total.Text = tDoscien.ToString();
                 //billetes 100
                 int tCien = Convert.ToInt32(this.txt100Cant.Text) * 100;
-                this.txt100Total.Text = tCien.ToString("N");
+                this.txt100Total.Text = tCien.ToString();
                 //billetes 50
                 int tCincuenta = Convert.ToInt32(this.txt50Cant.Text) * 50;
-                this.txt50Total.Text = tCincuenta.ToString("N");
+                this.txt50Total.Text = tCincuenta.ToString();
                 //billetes 20
                 int tVeinte = Convert.ToInt32(this.txt20Cant.Text) * 20;
-                this.txt20Total.Text = tVeinte.ToString("N");
+                this.txt20Total.Text = tVeinte.ToString();
                 //billetes 10
                 int tDiez = Convert.ToInt32(this.txt10Cant.Text) * 10;
-                this.txt10Total.Text = tDiez.ToString("N");
+                this.txt10Total.Text = tDiez.ToString();
                 //billetes 5
                 int tCinco = Convert.ToInt32(this.txt5Cant.Text) * 5;
-                this.txt5Total.Text = tCinco.ToString("N");
+                this.txt5Total.Text = tCinco.ToString();
                 //Cambio
                 int tCincoM = Convert.ToInt32(this.txt1Cant.Text);
-                this.txt1Total.Text = tCincoM.ToString("N");
+                this.txt1Total.Text = tCincoM.ToString();
 
                 //total cargado
                 int totalCargado = tMil + tQuin + tDoscien + tCien + tCincuenta + tVeinte + tDiez + tCinco + tCincoM;
-                this.txtTotal.Text = totalCargado.ToString("N");
+                this.txtTotal.Text = totalCargado.ToString();
+                string totalTemp = totalCargado.ToString();
 
-                string totalS = Numalet.ToCardinal(totalCargado.ToString().Replace(',', '.'));
+                totalLetras = Numalet.ToCardinal(totalTemp.ToString());
 
             }
             catch (Exception ex)
@@ -146,7 +196,24 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                AgregarRemesaYDetalle();                
+                if (!Page.IsValid)
+                    return;
+
+                int idRemesa = AgregarRemesaYDetalle();
+                string script;
+
+                if (idRemesa >= 0)
+                {
+                    script = "window.open('ImpresionValores.aspx?a=11&remesa=" + idRemesa + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                    script += " $.msgbox(\"Remesa generada con exito! \", {type: \"info\"}); location.href = 'Default.aspx'";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
+                }
+                else
+                {
+                    script = " $.msgbox(\"Error generando remesa! \", {type: \"info\"}); location.href = 'Default.aspx'";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -154,17 +221,22 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
 
-        public void AgregarRemesaYDetalle()
+        public int AgregarRemesaYDetalle()
         {
             try
             {
                 var remesa = ConfigurarRemesa();
 
-                ConfigurarRemesaDetalle(remesa);
+                List<Remesa_Moneda_Detalle> rmd = new List<Remesa_Moneda_Detalle>();
+
+                ConfigurarRemesaDetalle(remesa, rmd);
+
+                return contRemesa.AgregarYGuardarRemesa(remesa, rmd);
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1,"Error","Error al agregar remesa y su detalle " + ex.Message);
+                return -1;
             }
         }
 
@@ -179,9 +251,9 @@ namespace Gestion_Web.Formularios.Valores
                 remesa.Entrega = txtEntrega.Text;
                 remesa.Recibe = txtRecibe.Text;
                 remesa.SucursalOrigen = (int)Session["Login_SucUser"];
-                remesa.SucursalDestino = contCaja.obtenerCajaID(idMovCaja).suc.id;
+                remesa.SucursalDestino = contSucursal.obtenerSucursalNombre(sucursalDestino).id;
                 remesa.Observaciones = txtObservacion.Text;
-                remesa.SonPesos = Numalet.ToCardinal(txtTotal.Text.Replace(',', '.'));
+                remesa.SonPesos = totalLetras;
                 remesa.Estado = 1;
 
                 return remesa;
@@ -189,11 +261,11 @@ namespace Gestion_Web.Formularios.Valores
             catch (Exception ex)
             {
                 Log.EscribirSQL(1,"Error","Error al configurar remesa " + ex.Message);
-                return null;
+                return new Remesa();
             }            
         }
 
-        public void ConfigurarRemesaDetalle(Remesa remesa)
+        public void ConfigurarRemesaDetalle(Remesa remesa, List<Remesa_Moneda_Detalle> rmd)
         {
             try
             {
@@ -202,7 +274,63 @@ namespace Gestion_Web.Formularios.Valores
                 rmd1000.Cantidad = Convert.ToInt32(this.txt1000Cant.Text);
                 rmd1000.Total = (int)Convert.ToInt32(this.txt1000Total.Text);
                 rmd1000.Remesa1 = remesa;
-                
+                rmd.Add(rmd1000);
+
+                Remesa_Moneda_Detalle rmd500 = new Remesa_Moneda_Detalle();
+                rmd500.Denominacion = "$500.00 Pesos";
+                rmd500.Cantidad = Convert.ToInt32(this.txt500Cant.Text);
+                rmd500.Total = (int)Convert.ToInt32(this.txt500Total.Text);
+                rmd500.Remesa1 = remesa;
+                rmd.Add(rmd500);
+
+                Remesa_Moneda_Detalle rmd200 = new Remesa_Moneda_Detalle();
+                rmd200.Denominacion = "$200.00 Pesos";
+                rmd200.Cantidad = Convert.ToInt32(this.txt200Cant.Text);
+                rmd200.Total = (int)Convert.ToInt32(this.txt200Total.Text);
+                rmd200.Remesa1 = remesa;
+                rmd.Add(rmd200);
+
+                Remesa_Moneda_Detalle rmd100 = new Remesa_Moneda_Detalle();
+                rmd100.Denominacion = "$100.00 Pesos";
+                rmd100.Cantidad = Convert.ToInt32(this.txt100Cant.Text);
+                rmd100.Total = (int)Convert.ToInt32(this.txt100Total.Text);
+                rmd100.Remesa1 = remesa;
+                rmd.Add(rmd100);
+
+                Remesa_Moneda_Detalle rmd50 = new Remesa_Moneda_Detalle();
+                rmd50.Denominacion = "$50.00 Pesos";
+                rmd50.Cantidad = Convert.ToInt32(this.txt50Cant.Text);
+                rmd50.Total = (int)Convert.ToInt32(this.txt50Total.Text);
+                rmd50.Remesa1 = remesa;
+                rmd.Add(rmd50);
+
+                Remesa_Moneda_Detalle rmd20 = new Remesa_Moneda_Detalle();
+                rmd20.Denominacion = "$20.00 Pesos";
+                rmd20.Cantidad = Convert.ToInt32(this.txt20Cant.Text);
+                rmd20.Total = (int)Convert.ToInt32(this.txt20Total.Text);
+                rmd20.Remesa1 = remesa;
+                rmd.Add(rmd20);
+
+                Remesa_Moneda_Detalle rmd10 = new Remesa_Moneda_Detalle();
+                rmd10.Denominacion = "$10.00 Pesos";
+                rmd10.Cantidad = Convert.ToInt32(this.txt10Cant.Text);
+                rmd10.Total = (int)Convert.ToInt32(this.txt10Total.Text);
+                rmd10.Remesa1 = remesa;
+                rmd.Add(rmd10);
+
+                Remesa_Moneda_Detalle rmd5 = new Remesa_Moneda_Detalle();
+                rmd5.Denominacion = "$5.00 Pesos";
+                rmd5.Cantidad = Convert.ToInt32(this.txt5Cant.Text);
+                rmd5.Total = (int)Convert.ToInt32(this.txt5Total.Text);
+                rmd5.Remesa1 = remesa;
+                rmd.Add(rmd5);
+
+                Remesa_Moneda_Detalle rmdCambio = new Remesa_Moneda_Detalle();
+                rmdCambio.Denominacion = "$1.00 Pesos";
+                rmdCambio.Cantidad = Convert.ToInt32(this.txt1Cant.Text);
+                rmdCambio.Total = (int)Convert.ToInt32(this.txt1Total.Text);
+                rmdCambio.Remesa1 = remesa;
+                rmd.Add(rmdCambio);
             }
             catch (Exception ex)
             {
