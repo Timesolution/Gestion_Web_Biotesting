@@ -1710,9 +1710,13 @@ namespace Gestion_Web.Formularios.Valores
                     {
                         TableRow tr = C as TableRow;
                         CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+
+                        string descripcion = tr.Cells[1].Text;
+
                         if (ch.Checked == true)
                         {
                             idtildado += ch.ID.Substring(12, ch.ID.Length - 12);
+                            Response.Redirect("ABMRemesa.aspx?movCaja=" + idtildado.ToString());
                         }
                     }
                 }
@@ -1763,5 +1767,5 @@ namespace Gestion_Web.Formularios.Valores
                 return false;
             }
         }
-    }    
+    }
 }
