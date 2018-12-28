@@ -235,15 +235,16 @@ namespace Gestion_Web.Formularios.Reportes
                         costoTotalSinIVA += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible"]);
                         costoTotalConIVA += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible Con Iva"]);
                     }
-                    //costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo"]);
+
                     totalVendidoConIva += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario"]), 4);//es sin iva
                     totalVendidoSinIVA += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario Sin Iva"]), 4);
                 }
 
-                //ganancia esto es para la quimica que calcula la ganancia en base a totalVendidoSinIVA - costoTotalConIVA
-                decimal ganancia = decimal.Round(totalVendidoSinIVA - costoTotalConIVA, 4);
-                //porcentaje
-                decimal porGanancia = decimal.Round((((totalVendidoSinIVA / costoTotalConIVA) - 1) * 100), 4);
+                decimal markUp = decimal.Round(totalVendidoSinIVA - costoTotalSinIVA, 4);
+                decimal porcentajeMarkUp = decimal.Round(((totalVendidoSinIVA / costoTotalSinIVA) - 1) * 100, 4);
+
+                decimal utilidad = decimal.Round(totalVendidoConIva - costoTotalConIVA, 4);
+                decimal porcentajeUtilidad = decimal.Round(((costoTotalConIVA / totalVendidoConIva) - 1) * 100, 4);
 
                 this.labelTotalVendidoConIva.Text = "$ " + decimal.Round(totalVendidoConIva, 4).ToString("N");
                 this.labelTotalCostoSinIva.Text = "$ " + decimal.Round(costoTotalSinIVA, 4).ToString("N");
@@ -252,15 +253,16 @@ namespace Gestion_Web.Formularios.Reportes
 
                 this.labelTotalVendidoSinIva.Text = "$ " + decimal.Round(totalVendidoSinIVA, 4).ToString("N");
 
-                this.labelRentabilidad.Text = "$ " + decimal.Round(ganancia, 4).ToString("N");
-                this.labelPorRentabilidad.Text = decimal.Round(porGanancia, 4).ToString("N") + "%";
+                this.lblMarkUp.Text = "$ " + decimal.Round(markUp, 4).ToString("N");
+                this.lblPorcentajeMarkUp.Text = decimal.Round(porcentajeMarkUp, 4).ToString("N") + "%";
+
+                this.lblUtilidad.Text = "$ " + decimal.Round(utilidad, 4).ToString("N");
+                this.lblPorcentajeUtilidad.Text = decimal.Round(porcentajeUtilidad * -1, 4).ToString("N") + "%";
 
                 this.GridInforme.DataSource = datos;
                 
-                //sumo saldos
                 var sum = datos.Compute("Sum([Rentabilidad Costo])", "");
                 this.labelSaldo.Text = "$ " + decimal.Round(Convert.ToDecimal(sum),2).ToString("N");
-                //GridView2.DataSource = dtVictimario;
                 this.GridInforme.DataBind();
             }
             catch (Exception ex)
@@ -336,7 +338,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                string parametros = this.labelPorRentabilidad.Text + ";" + this.labelRentabilidad.Text + ";" + this.labelTotalCostoConIva.Text + ";" + this.labelTotalVendidoSinIva.Text;
+                string parametros = this.lblPorcentajeMarkUp.Text + ";" + this.lblMarkUp.Text + ";" + this.labelTotalCostoConIva.Text + ";" + this.labelTotalVendidoSinIva.Text;
                 if (this.accion == 2)
                     Response.Redirect("ImpresionRentabilidadD.aspx?a=3&fd=" + this.desde + "&fh=" + this.hasta + "&suc=" + this.sucursal + "&c=" + this.cliente + "&ex=1" + "&p=" + parametros);
 
@@ -357,7 +359,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                string parametros = this.labelPorRentabilidad.Text + ";" + this.labelRentabilidad.Text + ";" + this.labelTotalCostoConIva.Text + ";" + this.labelTotalVendidoSinIva.Text;
+                string parametros = this.lblPorcentajeMarkUp.Text + ";" + this.lblMarkUp.Text + ";" + this.labelTotalCostoConIva.Text + ";" + this.labelTotalVendidoSinIva.Text;
                 
                 if (this.accion == 2)
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionRentabilidadD.aspx?a=3&fd=" + this.desde + "&fh=" + this.hasta + "&suc=" + this.sucursal + "&c=" + this.cliente + "&ex=0" + "&p=" + parametros + "','_blank');", true);
