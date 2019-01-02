@@ -56,7 +56,7 @@
                                                 <asp:LinkButton ID="lbtnInformeCierres" runat="server" OnClick="lbtnInformeCierres_Click">Informe cierres de caja</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnRemesa" runat="server" OnClientClick="aspnetForm.target ='_blank';" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnRemesa" Visible ="false" runat="server" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>

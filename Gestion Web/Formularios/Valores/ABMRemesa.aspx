@@ -27,7 +27,7 @@
                                                 <div id="validation-form" role="form" class="form-horizontal col-md-10">
                                                     <fieldset>
                                                         <div class="form-group">
-                                                            <label for="name" class="col-md-4">Numero de Remesa</label>
+                                                            <label for="name" class="col-md-3">Numero de Remesa</label>
                                                             <div class="col-md-4">
                                                                 <asp:TextBox ID="txtNumeroRemesa" runat="server" Enabled="false"></asp:TextBox>
                                                             </div>
@@ -36,7 +36,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="name" class="col-md-4">Fecha de entrega</label>
+                                                            <label for="name" class="col-md-3">Fecha de entrega</label>
                                                             <div class="col-md-4">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
@@ -47,7 +47,7 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label for="name" class="col-md-4">Entrega</label>
+                                                            <label for="name" class="col-md-3">Entrega</label>
                                                             <div class="col-md-4">
                                                                 <asp:TextBox ID="txtEntrega" runat="server" class="form-control"></asp:TextBox>
                                                             </div>
@@ -56,7 +56,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="name" class="col-md-4">Recibe</label>
+                                                            <label for="name" class="col-md-3">Recibe</label>
                                                             <div class="col-md-4">
                                                                 <asp:TextBox ID="txtRecibe" runat="server" class="form-control"></asp:TextBox>
                                                             </div>
@@ -66,7 +66,7 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label for="name" class="col-md-4">Observacion</label>
+                                                            <label for="name" class="col-md-3">Observacion</label>
                                                             <div class="col-md-4">
                                                                 <asp:TextBox ID="txtObservacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                             </div>

@@ -187,6 +187,9 @@ namespace Gestion_Web.Formularios.Valores
                             }
                             valor = 1;
                         }
+
+                        if (s == "183")
+                            lbtnRemesa.Visible = true;
                     }
                 }
 
@@ -1713,17 +1716,26 @@ namespace Gestion_Web.Formularios.Valores
 
                         if (ch.Checked == true)
                         {
-                            string descripcion = tr.Cells[1].Text;
-                            idtildado += ch.ID.Substring(12, ch.ID.Length - 12);
-                            var sucursalDestino = descripcion.Split(new string[] { " A " },StringSplitOptions.None)[1];
+                            string importe = tr.Cells[2].Text;
+                            if (importe.Contains("-"))
+                            {
+                                string descripcion = tr.Cells[1].Text;
+                                idtildado += ch.ID.Substring(12, ch.ID.Length - 12);
+                                var sucursalDestino = descripcion.Split(new string[] { " A " }, StringSplitOptions.None)[1];
 
-                            if (sucursalDestino.Contains("|"))
-                                sucursalDestino = sucursalDestino.Split('|')[0];
-                            else if(sucursalDestino.Contains("."))
-                                sucursalDestino = sucursalDestino.Split('.')[0];
+                                if (sucursalDestino.Contains("|"))
+                                    sucursalDestino = sucursalDestino.Split('|')[0];
+                                else if (sucursalDestino.Contains("."))
+                                    sucursalDestino = sucursalDestino.Split('.')[0];
 
-                            //Response.Redirect("ABMRemesa.aspx?movCaja=" + idtildado.ToString() + "?sd=" + sucursalDestino);
-                            Response.Redirect("ABMRemesa.aspx?sd=" + sucursalDestino);
+                                //Response.Write("<script>window.open ('ABMRemesa.aspx?sd=" + sucursalDestino + "','_blank');</script>");
+                                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "window.open('ABMRemesa.aspx?sd=" + sucursalDestino + "', '_newtab')"/*"window.open('ABMRemesa.aspx?sd=" + sucursalDestino + "', '_blank');"*/, true);
+                                //Response.Redirect("ABMRemesa.aspx?sd=" + sucursalDestino);
+                            }
+                            else
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La remesa debe ser generada desde la sucursal de origen!"));
+                            }
                         }
                     }
                 }

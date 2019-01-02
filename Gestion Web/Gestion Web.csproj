@@ -507,6 +507,7 @@
     <Content Include="Formularios\Valores\CreditosABM.aspx" />
     <Content Include="Formularios\Valores\MutualesPagosF.aspx" />
     <Content Include="Formularios\Valores\BancosF.aspx" />
+    <Content Include="Formularios\Valores\RemesasF.aspx" />
     <Content Include="Formularios\Valores\SolicitudesF.aspx" />
     <Content Include="Formularios\Valores\CreditosF.aspx" />
     <Content Include="Formularios\Valores\MutualesF.aspx" />
@@ -2594,6 +2595,13 @@
     </Compile>
     <Compile Include="Formularios\Valores\BancosF.aspx.designer.cs">
       <DependentUpon>BancosF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Valores\RemesasF.aspx.cs">
+      <DependentUpon>RemesasF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Valores\RemesasF.aspx.designer.cs">
+      <DependentUpon>RemesasF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Valores\SolicitudesF.aspx.cs">
       <DependentUpon>SolicitudesF.aspx</DependentUpon>
