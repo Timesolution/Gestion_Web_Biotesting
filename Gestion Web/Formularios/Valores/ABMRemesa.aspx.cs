@@ -199,6 +199,7 @@ namespace Gestion_Web.Formularios.Valores
                 if (!Page.IsValid)
                     return;
 
+                calcularTotal();
                 int idRemesa = AgregarRemesaYDetalle();
                 string script;
 
@@ -274,6 +275,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd1000.Cantidad = Convert.ToInt32(this.txt1000Cant.Text);
                 rmd1000.Total = (int)Convert.ToInt32(this.txt1000Total.Text);
                 rmd1000.Remesa1 = remesa;
+                rmd1000.Valor = 1000;
                 rmd.Add(rmd1000);
 
                 Remesa_Moneda_Detalle rmd500 = new Remesa_Moneda_Detalle();
@@ -281,6 +283,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd500.Cantidad = Convert.ToInt32(this.txt500Cant.Text);
                 rmd500.Total = (int)Convert.ToInt32(this.txt500Total.Text);
                 rmd500.Remesa1 = remesa;
+                rmd500.Valor = 500;
                 rmd.Add(rmd500);
 
                 Remesa_Moneda_Detalle rmd200 = new Remesa_Moneda_Detalle();
@@ -288,6 +291,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd200.Cantidad = Convert.ToInt32(this.txt200Cant.Text);
                 rmd200.Total = (int)Convert.ToInt32(this.txt200Total.Text);
                 rmd200.Remesa1 = remesa;
+                rmd200.Valor = 200;
                 rmd.Add(rmd200);
 
                 Remesa_Moneda_Detalle rmd100 = new Remesa_Moneda_Detalle();
@@ -295,6 +299,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd100.Cantidad = Convert.ToInt32(this.txt100Cant.Text);
                 rmd100.Total = (int)Convert.ToInt32(this.txt100Total.Text);
                 rmd100.Remesa1 = remesa;
+                rmd100.Valor = 100;
                 rmd.Add(rmd100);
 
                 Remesa_Moneda_Detalle rmd50 = new Remesa_Moneda_Detalle();
@@ -302,6 +307,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd50.Cantidad = Convert.ToInt32(this.txt50Cant.Text);
                 rmd50.Total = (int)Convert.ToInt32(this.txt50Total.Text);
                 rmd50.Remesa1 = remesa;
+                rmd50.Valor = 50;
                 rmd.Add(rmd50);
 
                 Remesa_Moneda_Detalle rmd20 = new Remesa_Moneda_Detalle();
@@ -309,6 +315,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd20.Cantidad = Convert.ToInt32(this.txt20Cant.Text);
                 rmd20.Total = (int)Convert.ToInt32(this.txt20Total.Text);
                 rmd20.Remesa1 = remesa;
+                rmd20.Valor = 20;
                 rmd.Add(rmd20);
 
                 Remesa_Moneda_Detalle rmd10 = new Remesa_Moneda_Detalle();
@@ -316,6 +323,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd10.Cantidad = Convert.ToInt32(this.txt10Cant.Text);
                 rmd10.Total = (int)Convert.ToInt32(this.txt10Total.Text);
                 rmd10.Remesa1 = remesa;
+                rmd10.Valor = 10;
                 rmd.Add(rmd10);
 
                 Remesa_Moneda_Detalle rmd5 = new Remesa_Moneda_Detalle();
@@ -323,6 +331,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmd5.Cantidad = Convert.ToInt32(this.txt5Cant.Text);
                 rmd5.Total = (int)Convert.ToInt32(this.txt5Total.Text);
                 rmd5.Remesa1 = remesa;
+                rmd5.Valor = 5;
                 rmd.Add(rmd5);
 
                 Remesa_Moneda_Detalle rmdCambio = new Remesa_Moneda_Detalle();
@@ -330,6 +339,7 @@ namespace Gestion_Web.Formularios.Valores
                 rmdCambio.Cantidad = Convert.ToInt32(this.txt1Cant.Text);
                 rmdCambio.Total = (int)Convert.ToInt32(this.txt1Total.Text);
                 rmdCambio.Remesa1 = remesa;
+                rmdCambio.Valor = 1;
                 rmd.Add(rmdCambio);
             }
             catch (Exception ex)

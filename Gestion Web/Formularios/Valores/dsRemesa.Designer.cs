@@ -330,6 +330,10 @@ namespace Gestion_Web.Formularios.Valores {
             
             private global::System.Data.DataColumn columnSonPesos;
             
+            private global::System.Data.DataColumn columnDomicilioDestino;
+            
+            private global::System.Data.DataColumn columnDomicilioOrigen;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public RemesaDataTable() {
@@ -429,6 +433,22 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DomicilioDestinoColumn {
+                get {
+                    return this.columnDomicilioDestino;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DomicilioOrigenColumn {
+                get {
+                    return this.columnDomicilioOrigen;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -464,7 +484,7 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RemesaRow AddRemesaRow(string NumeroRemesa, string Fecha, string Entrega, string Recibe, string SucursalOrigen, string SucursalDestino, string Observaciones, string SonPesos) {
+            public RemesaRow AddRemesaRow(string NumeroRemesa, string Fecha, string Entrega, string Recibe, string SucursalOrigen, string SucursalDestino, string Observaciones, string SonPesos, string DomicilioDestino, string DomicilioOrigen) {
                 RemesaRow rowRemesaRow = ((RemesaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         NumeroRemesa,
@@ -474,7 +494,9 @@ namespace Gestion_Web.Formularios.Valores {
                         SucursalOrigen,
                         SucursalDestino,
                         Observaciones,
-                        SonPesos};
+                        SonPesos,
+                        DomicilioDestino,
+                        DomicilioOrigen};
                 rowRemesaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRemesaRow);
                 return rowRemesaRow;
@@ -505,6 +527,8 @@ namespace Gestion_Web.Formularios.Valores {
                 this.columnSucursalDestino = base.Columns["SucursalDestino"];
                 this.columnObservaciones = base.Columns["Observaciones"];
                 this.columnSonPesos = base.Columns["SonPesos"];
+                this.columnDomicilioDestino = base.Columns["DomicilioDestino"];
+                this.columnDomicilioOrigen = base.Columns["DomicilioOrigen"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -526,6 +550,10 @@ namespace Gestion_Web.Formularios.Valores {
                 base.Columns.Add(this.columnObservaciones);
                 this.columnSonPesos = new global::System.Data.DataColumn("SonPesos", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSonPesos);
+                this.columnDomicilioDestino = new global::System.Data.DataColumn("DomicilioDestino", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDomicilioDestino);
+                this.columnDomicilioOrigen = new global::System.Data.DataColumn("DomicilioOrigen", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDomicilioOrigen);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -659,23 +687,11 @@ namespace Gestion_Web.Formularios.Valores {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class RemesaDetalleDataTable : global::System.Data.TypedTableBase<RemesaDetalleRow> {
             
-            private global::System.Data.DataColumn column1000;
+            private global::System.Data.DataColumn columnCantidad;
             
-            private global::System.Data.DataColumn column500;
+            private global::System.Data.DataColumn columnDenominacion;
             
-            private global::System.Data.DataColumn column200;
-            
-            private global::System.Data.DataColumn column100;
-            
-            private global::System.Data.DataColumn column50;
-            
-            private global::System.Data.DataColumn column20;
-            
-            private global::System.Data.DataColumn column10;
-            
-            private global::System.Data.DataColumn column5;
-            
-            private global::System.Data.DataColumn column1;
+            private global::System.Data.DataColumn columnTotal;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -712,73 +728,25 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _1000Column {
+            public global::System.Data.DataColumn CantidadColumn {
                 get {
-                    return this.column1000;
+                    return this.columnCantidad;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _500Column {
+            public global::System.Data.DataColumn DenominacionColumn {
                 get {
-                    return this.column500;
+                    return this.columnDenominacion;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _200Column {
+            public global::System.Data.DataColumn TotalColumn {
                 get {
-                    return this.column200;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _100Column {
-                get {
-                    return this.column100;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _50Column {
-                get {
-                    return this.column50;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _20Column {
-                get {
-                    return this.column20;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _10Column {
-                get {
-                    return this.column10;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _5Column {
-                get {
-                    return this.column5;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn _1Column {
-                get {
-                    return this.column1;
+                    return this.columnTotal;
                 }
             }
             
@@ -819,18 +787,12 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RemesaDetalleRow AddRemesaDetalleRow(string _1000, string _500, string _200, string _100, string _50, string _20, string _10, string _5, string _1) {
+            public RemesaDetalleRow AddRemesaDetalleRow(string Cantidad, string Denominacion, string Total) {
                 RemesaDetalleRow rowRemesaDetalleRow = ((RemesaDetalleRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        _1000,
-                        _500,
-                        _200,
-                        _100,
-                        _50,
-                        _20,
-                        _10,
-                        _5,
-                        _1};
+                        Cantidad,
+                        Denominacion,
+                        Total};
                 rowRemesaDetalleRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRemesaDetalleRow);
                 return rowRemesaDetalleRow;
@@ -853,56 +815,20 @@ namespace Gestion_Web.Formularios.Valores {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.column1000 = base.Columns["1000"];
-                this.column500 = base.Columns["500"];
-                this.column200 = base.Columns["200"];
-                this.column100 = base.Columns["100"];
-                this.column50 = base.Columns["50"];
-                this.column20 = base.Columns["20"];
-                this.column10 = base.Columns["10"];
-                this.column5 = base.Columns["5"];
-                this.column1 = base.Columns["1"];
+                this.columnCantidad = base.Columns["Cantidad"];
+                this.columnDenominacion = base.Columns["Denominacion"];
+                this.columnTotal = base.Columns["Total"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.column1000 = new global::System.Data.DataColumn("1000", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column1000.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column1000");
-                this.column1000.ExtendedProperties.Add("Generator_UserColumnName", "1000");
-                base.Columns.Add(this.column1000);
-                this.column500 = new global::System.Data.DataColumn("500", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column500.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column500");
-                this.column500.ExtendedProperties.Add("Generator_UserColumnName", "500");
-                base.Columns.Add(this.column500);
-                this.column200 = new global::System.Data.DataColumn("200", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column200.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column200");
-                this.column200.ExtendedProperties.Add("Generator_UserColumnName", "200");
-                base.Columns.Add(this.column200);
-                this.column100 = new global::System.Data.DataColumn("100", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column100.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column100");
-                this.column100.ExtendedProperties.Add("Generator_UserColumnName", "100");
-                base.Columns.Add(this.column100);
-                this.column50 = new global::System.Data.DataColumn("50", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column50.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column50");
-                this.column50.ExtendedProperties.Add("Generator_UserColumnName", "50");
-                base.Columns.Add(this.column50);
-                this.column20 = new global::System.Data.DataColumn("20", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column20.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column20");
-                this.column20.ExtendedProperties.Add("Generator_UserColumnName", "20");
-                base.Columns.Add(this.column20);
-                this.column10 = new global::System.Data.DataColumn("10", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column10.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column10");
-                this.column10.ExtendedProperties.Add("Generator_UserColumnName", "10");
-                base.Columns.Add(this.column10);
-                this.column5 = new global::System.Data.DataColumn("5", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column5.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column5");
-                this.column5.ExtendedProperties.Add("Generator_UserColumnName", "5");
-                base.Columns.Add(this.column5);
-                this.column1 = new global::System.Data.DataColumn("1", typeof(string), null, global::System.Data.MappingType.Element);
-                this.column1.ExtendedProperties.Add("Generator_ColumnVarNameInTable", "column1");
-                this.column1.ExtendedProperties.Add("Generator_UserColumnName", "1");
-                base.Columns.Add(this.column1);
+                this.columnCantidad = new global::System.Data.DataColumn("Cantidad", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCantidad);
+                this.columnDenominacion = new global::System.Data.DataColumn("Denominacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDenominacion);
+                this.columnTotal = new global::System.Data.DataColumn("Total", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotal);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1173,6 +1099,38 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DomicilioDestino {
+                get {
+                    try {
+                        return ((string)(this[this.tableRemesa.DomicilioDestinoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DomicilioDestino\' in table \'Remesa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRemesa.DomicilioDestinoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DomicilioOrigen {
+                get {
+                    try {
+                        return ((string)(this[this.tableRemesa.DomicilioOrigenColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DomicilioOrigen\' in table \'Remesa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRemesa.DomicilioOrigenColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsNumeroRemesaNull() {
                 return this.IsNull(this.tableRemesa.NumeroRemesaColumn);
             }
@@ -1266,6 +1224,30 @@ namespace Gestion_Web.Formularios.Valores {
             public void SetSonPesosNull() {
                 this[this.tableRemesa.SonPesosColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDomicilioDestinoNull() {
+                return this.IsNull(this.tableRemesa.DomicilioDestinoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDomicilioDestinoNull() {
+                this[this.tableRemesa.DomicilioDestinoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDomicilioOrigenNull() {
+                return this.IsNull(this.tableRemesa.DomicilioOrigenColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDomicilioOrigenNull() {
+                this[this.tableRemesa.DomicilioOrigenColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -1284,254 +1266,86 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _1000 {
+            public string Cantidad {
                 get {
                     try {
-                        return ((string)(this[this.tableRemesaDetalle._1000Column]));
+                        return ((string)(this[this.tableRemesaDetalle.CantidadColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'1000\' in table \'RemesaDetalle\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Cantidad\' in table \'RemesaDetalle\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableRemesaDetalle._1000Column] = value;
+                    this[this.tableRemesaDetalle.CantidadColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _500 {
+            public string Denominacion {
                 get {
                     try {
-                        return ((string)(this[this.tableRemesaDetalle._500Column]));
+                        return ((string)(this[this.tableRemesaDetalle.DenominacionColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'500\' in table \'RemesaDetalle\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Denominacion\' in table \'RemesaDetalle\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableRemesaDetalle._500Column] = value;
+                    this[this.tableRemesaDetalle.DenominacionColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _200 {
+            public string Total {
                 get {
                     try {
-                        return ((string)(this[this.tableRemesaDetalle._200Column]));
+                        return ((string)(this[this.tableRemesaDetalle.TotalColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'200\' in table \'RemesaDetalle\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Total\' in table \'RemesaDetalle\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableRemesaDetalle._200Column] = value;
+                    this[this.tableRemesaDetalle.TotalColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _100 {
-                get {
-                    try {
-                        return ((string)(this[this.tableRemesaDetalle._100Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'100\' in table \'RemesaDetalle\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRemesaDetalle._100Column] = value;
-                }
+            public bool IsCantidadNull() {
+                return this.IsNull(this.tableRemesaDetalle.CantidadColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _50 {
-                get {
-                    try {
-                        return ((string)(this[this.tableRemesaDetalle._50Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'50\' in table \'RemesaDetalle\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRemesaDetalle._50Column] = value;
-                }
+            public void SetCantidadNull() {
+                this[this.tableRemesaDetalle.CantidadColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _20 {
-                get {
-                    try {
-                        return ((string)(this[this.tableRemesaDetalle._20Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'20\' in table \'RemesaDetalle\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRemesaDetalle._20Column] = value;
-                }
+            public bool IsDenominacionNull() {
+                return this.IsNull(this.tableRemesaDetalle.DenominacionColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _10 {
-                get {
-                    try {
-                        return ((string)(this[this.tableRemesaDetalle._10Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'10\' in table \'RemesaDetalle\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRemesaDetalle._10Column] = value;
-                }
+            public void SetDenominacionNull() {
+                this[this.tableRemesaDetalle.DenominacionColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _5 {
-                get {
-                    try {
-                        return ((string)(this[this.tableRemesaDetalle._5Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'5\' in table \'RemesaDetalle\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRemesaDetalle._5Column] = value;
-                }
+            public bool IsTotalNull() {
+                return this.IsNull(this.tableRemesaDetalle.TotalColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string _1 {
-                get {
-                    try {
-                        return ((string)(this[this.tableRemesaDetalle._1Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'1\' in table \'RemesaDetalle\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableRemesaDetalle._1Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_1000Null() {
-                return this.IsNull(this.tableRemesaDetalle._1000Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_1000Null() {
-                this[this.tableRemesaDetalle._1000Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_500Null() {
-                return this.IsNull(this.tableRemesaDetalle._500Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_500Null() {
-                this[this.tableRemesaDetalle._500Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_200Null() {
-                return this.IsNull(this.tableRemesaDetalle._200Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_200Null() {
-                this[this.tableRemesaDetalle._200Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_100Null() {
-                return this.IsNull(this.tableRemesaDetalle._100Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_100Null() {
-                this[this.tableRemesaDetalle._100Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_50Null() {
-                return this.IsNull(this.tableRemesaDetalle._50Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_50Null() {
-                this[this.tableRemesaDetalle._50Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_20Null() {
-                return this.IsNull(this.tableRemesaDetalle._20Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_20Null() {
-                this[this.tableRemesaDetalle._20Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_10Null() {
-                return this.IsNull(this.tableRemesaDetalle._10Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_10Null() {
-                this[this.tableRemesaDetalle._10Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_5Null() {
-                return this.IsNull(this.tableRemesaDetalle._5Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_5Null() {
-                this[this.tableRemesaDetalle._5Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Is_1Null() {
-                return this.IsNull(this.tableRemesaDetalle._1Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void Set_1Null() {
-                this[this.tableRemesaDetalle._1Column] = global::System.Convert.DBNull;
+            public void SetTotalNull() {
+                this[this.tableRemesaDetalle.TotalColumn] = global::System.Convert.DBNull;
             }
         }
         

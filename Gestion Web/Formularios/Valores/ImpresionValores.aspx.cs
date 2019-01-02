@@ -1353,54 +1353,69 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 ControladorRemesaEntity contRemesa = new ControladorRemesaEntity();
+                controladorSucursal contSuc = new controladorSucursal();
 
                 //DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 //DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
                 Remesa remesa = contRemesa.ObtenerRemesaPorID(idRemesa);
-                Remesa_Moneda_Detalle remesaDetalle = contRemesa.ObtenerDetalleDeRemesaPorIDRemesa(idRemesa);
+                List<Remesa_Moneda_Detalle> remesaDetalle = contRemesa.ObtenerDetalleDeRemesaPorIDRemesa(idRemesa);
 
                 DataTable dtRemesa = new DataTable();
                 dtRemesa.Columns.Add("NumeroRemesa");
                 dtRemesa.Columns.Add("Fecha", typeof(DateTime));
-                //dt.Columns.Add("Documento");
-                //dt.Columns.Add("Mutual");
-                //dt.Columns.Add("Socio");
-                //dt.Columns.Add("Autorizacion");
-                //dt.Columns.Add("Numero");
-                //dt.Columns.Add("Importe", typeof(decimal));
-                //dt.Columns.Add("Vencimiento", typeof(DateTime));
-                //dt.Columns.Add("Cuota");
-                //dt.Columns.Add("Estado");
+                dtRemesa.Columns.Add("Entrega");
+                dtRemesa.Columns.Add("Observaciones");
+                dtRemesa.Columns.Add("Recibe");
+                dtRemesa.Columns.Add("SonPesos");
+                dtRemesa.Columns.Add("SucursalDestino");
+                dtRemesa.Columns.Add("SucursalOrigen");
+                dtRemesa.Columns.Add("DomicilioDestino");
+                dtRemesa.Columns.Add("DomicilioOrigen");
 
                 DataTable dtRemesaDetalle = new DataTable();
-                dtRemesaDetalle.Columns.Add("1000");
-                dtRemesaDetalle.Columns.Add("500");
-                dtRemesaDetalle.Columns.Add("200");
-                dtRemesaDetalle.Columns.Add("100");
-                dtRemesaDetalle.Columns.Add("50");
-                dtRemesaDetalle.Columns.Add("20");
-                dtRemesaDetalle.Columns.Add("10");
-                dtRemesaDetalle.Columns.Add("5");
-                dtRemesaDetalle.Columns.Add("1");
+                dtRemesaDetalle.Columns.Add("Cantidad");
+                dtRemesaDetalle.Columns.Add("Denominacion");
+                dtRemesaDetalle.Columns.Add("Total");
 
                 DataRow drRemesa = dtRemesa.NewRow();
 
                 drRemesa["NumeroRemesa"] = remesa.NumeroRemesa.Value.ToString("D8");
                 drRemesa["Fecha"] = remesa.Fecha;
+                drRemesa["Entrega"] = remesa.Entrega;
+                drRemesa["Observaciones"] = remesa.Observaciones;
+                drRemesa["Recibe"] = remesa.Recibe;
+                drRemesa["SonPesos"] = remesa.SonPesos;
+                drRemesa["SucursalDestino"] = contSuc.obtenerSucursalID((int)remesa.SucursalDestino).nombre;
+                drRemesa["SucursalOrigen"] = contSuc.obtenerSucursalID((int)remesa.SucursalOrigen).nombre;
+                drRemesa["DomicilioDestino"] = contSuc.obtenerSucursalID((int)remesa.SucursalDestino).direccion;
+                drRemesa["DomicilioOrigen"] = contSuc.obtenerSucursalID((int)remesa.SucursalOrigen).direccion;
 
-                dtRemesa.Rows.Add(drRemesa);
+                dtRemesa.Rows.Add(drRemesa);                
+                int totalFinal = 0;
 
-                DataRow drRemesaDetalle = dtRemesaDetalle.NewRow();
-                drRemesaDetalle["1000"] = remesaDetalle.Denominacion;
+                foreach (var item in remesaDetalle)
+                {
+                    DataRow drRemesaDetalle = dtRemesaDetalle.NewRow();
+
+                    drRemesaDetalle["Cantidad"] = item.Cantidad;
+                    drRemesaDetalle["Denominacion"] = item.Denominacion;
+                    drRemesaDetalle["total"] = item.Cantidad * item.Valor;
+                    totalFinal += (int)item.Cantidad * (int)item.Valor;
+
+                    dtRemesaDetalle.Rows.Add(drRemesaDetalle);
+                }                
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("RemesaR.rdlc");
 
                 ReportDataSource rds = new ReportDataSource("Remesa", dtRemesa);
                 ReportDataSource rds2 = new ReportDataSource("RemesaDetalle", dtRemesaDetalle);
+                ReportParameter param = new ReportParameter("ParamTotal", totalFinal.ToString());
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.SetParameters(param);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
