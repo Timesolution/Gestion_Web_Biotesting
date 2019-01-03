@@ -594,6 +594,10 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         row["Tipo"] = tipoDocumento + "Pago Nº";
                     }
+                    if (row["TipoDocumento"].ToString() == "7" || row["TipoDocumento"].ToString() == "8" || row["TipoDocumento"].ToString() == "9" || row["TipoDocumento"].ToString() == "25")
+                    {
+                        row["Tipo"] = tipoDocumento = " NC ";
+                    }
                     if (Convert.ToDecimal(row["Debe"]) > 0)
                     {
                         saldoAcumulado += Convert.ToDecimal(row["Debe"]);                        

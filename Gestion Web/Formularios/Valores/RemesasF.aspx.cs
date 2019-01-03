@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Disipar.Models;
 
 namespace Gestion_Web.Formularios.Valores
 {
@@ -16,6 +17,7 @@ namespace Gestion_Web.Formularios.Valores
     {
         ControladorRemesaEntity contRemesaEnt = new ControladorRemesaEntity();
         controladorSucursal contSucu = new controladorSucursal();
+        Mensajes m = new Mensajes();
 
         private string fechaD;
         private string fechaH;
@@ -44,9 +46,10 @@ namespace Gestion_Web.Formularios.Valores
                 this.CargarSucursales();
 
                 this.txtFechaDesde.Text = fechaD;
-                this.txtFechaHasta.Text = fechaH;
-                ObtenerYCargarRemesas();
+                this.txtFechaHasta.Text = fechaH;                
             }
+
+            ObtenerYCargarRemesas();
         }
 
         private void VerificarLogin()
@@ -79,13 +82,13 @@ namespace Gestion_Web.Formularios.Valores
                 string[] listPermisos = permisos.Split(';');
                 foreach (string s in listPermisos)
                 {
-                    //if (!String.IsNullOrEmpty(s))
-                    //{
-                    //    if (s == "44")
-                    //    {
-                    //        return 1;
-                    //    }
-                    //}
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        if (s == "192")
+                        {
+                            lbtnEliminar.Visible = true;
+                        }
+                    }
                 }
 
                 return 1;
@@ -166,22 +169,27 @@ namespace Gestion_Web.Formularios.Valores
 
                 TableCell celFecha = new TableCell();
                 celFecha.Text = remesa.Fecha.Value.ToString("dd/MM/yyyy");
-                tr.Controls.Add(celFecha);
+                celFecha.HorizontalAlign = HorizontalAlign.Left;
+                celFecha.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celFecha);
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = remesa.NumeroRemesa.Value.ToString("D8");
-                celNumero.HorizontalAlign = HorizontalAlign.Right;
-                tr.Controls.Add(celNumero);
+                celNumero.HorizontalAlign = HorizontalAlign.Left;
+                celNumero.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celNumero);
 
                 TableCell celSucOrigen = new TableCell();
                 celSucOrigen.Text = contSucu.obtenerSucursalID((int)remesa.SucursalOrigen).nombre;
-                celSucOrigen.HorizontalAlign = HorizontalAlign.Right;
-                tr.Controls.Add(celSucOrigen);
+                celSucOrigen.HorizontalAlign = HorizontalAlign.Left;
+                celSucOrigen.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucOrigen);
 
                 TableCell celSucDestino = new TableCell();
                 celSucDestino.Text = contSucu.obtenerSucursalID((int)remesa.SucursalDestino).nombre;
-                celSucDestino.HorizontalAlign = HorizontalAlign.Right;
-                tr.Controls.Add(celSucDestino);
+                celSucDestino.HorizontalAlign = HorizontalAlign.Left;
+                celSucDestino.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celSucDestino);
 
                 TableCell celAccion = new TableCell();
 
@@ -201,13 +209,14 @@ namespace Gestion_Web.Formularios.Valores
                 cbSeleccion.ID = "cbSeleccion_" + remesa.Id;
                 cbSeleccion.CssClass = "btn btn-info";
                 cbSeleccion.Font.Size = 12;
+
                 celAccion.Controls.Add(cbSeleccion);
+                celAccion.Width = Unit.Percentage(10);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
 
                 tr.Cells.Add(celAccion);
 
-                tr.Controls.Add(celAccion);
-
-                this.phRemesas.Controls.Add(tr);
+                phRemesas.Controls.Add(tr);
             }
             catch (Exception ex)
             {
@@ -219,6 +228,8 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
+                List<int> idsRemesas = new List<int>();
+
                 foreach (Control C in phRemesas.Controls)
                 {
                     TableRow tr = C as TableRow;
@@ -228,9 +239,16 @@ namespace Gestion_Web.Formularios.Valores
 
                     if (ch.Checked == true)
                     {
-                        contRemesaEnt.EliminarRemesa(Convert.ToInt32(id));
+                        idsRemesas.Add(Convert.ToInt32(id));
                     }
                 }
+
+                int i = contRemesaEnt.EliminarRemesa(idsRemesas);
+
+                if (i < 1)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar remesas!"));
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Remesas eliminadas con exito!", "RemesasF.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&so=" + this.sucursalOrigen + "&sd=" + this.sucursalDestino));
             }
             catch (Exception ex)
             {

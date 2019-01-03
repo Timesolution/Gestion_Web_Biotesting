@@ -16,6 +16,7 @@ namespace Gestion_Web.Formularios.Valores
     {
         ControladorRemesaEntity contRemesa = new ControladorRemesaEntity();
         controladorSucursal contSucursal = new controladorSucursal();
+        
 
         string sucursalDestino;
         string totalLetras;
@@ -64,18 +65,20 @@ namespace Gestion_Web.Formularios.Valores
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
-                foreach (string s in listPermisos)
-                {
-                    if (!String.IsNullOrEmpty(s))
-                    {
-                        //if (s == "162")
-                        //{
-                        //    return 1;
-                        //}
-                    }
-                }
-
-                return 1;
+                //foreach (string s in listPermisos)
+                //{
+                //    if (!String.IsNullOrEmpty(s))
+                //    {
+                //        if (s == "162")
+                //        {
+                //            return 1;
+                //        }
+                //    }
+                //}
+                if (!listPermisos.Contains("193"))
+                    return 0;
+                else
+                    return 1;
             }
             catch
             {
@@ -255,6 +258,7 @@ namespace Gestion_Web.Formularios.Valores
                 remesa.SucursalDestino = contSucursal.obtenerSucursalNombre(sucursalDestino).id;
                 remesa.Observaciones = txtObservacion.Text;
                 remesa.SonPesos = totalLetras;
+                remesa.OtrosValores = txtOtrosValores.Text;
                 remesa.Estado = 1;
 
                 return remesa;

@@ -290,6 +290,17 @@
                                                         <div class="col-md-4">
                                                         </div>
                                                     </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-3">Otros valores</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtOtrosValores" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtOtrosValores" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="col-md-8">
                                                             <asp:Button ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="StoreGroup"/>
                                                             <%--<asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnGuardar_Click" ValidationGroup="StoreGroup" Visible="false" />--%>

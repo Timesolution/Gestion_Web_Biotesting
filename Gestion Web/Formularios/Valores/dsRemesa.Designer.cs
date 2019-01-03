@@ -334,6 +334,8 @@ namespace Gestion_Web.Formularios.Valores {
             
             private global::System.Data.DataColumn columnDomicilioOrigen;
             
+            private global::System.Data.DataColumn columnOtrosValores;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public RemesaDataTable() {
@@ -449,6 +451,14 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OtrosValoresColumn {
+                get {
+                    return this.columnOtrosValores;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -484,7 +494,7 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RemesaRow AddRemesaRow(string NumeroRemesa, string Fecha, string Entrega, string Recibe, string SucursalOrigen, string SucursalDestino, string Observaciones, string SonPesos, string DomicilioDestino, string DomicilioOrigen) {
+            public RemesaRow AddRemesaRow(string NumeroRemesa, string Fecha, string Entrega, string Recibe, string SucursalOrigen, string SucursalDestino, string Observaciones, string SonPesos, string DomicilioDestino, string DomicilioOrigen, string OtrosValores) {
                 RemesaRow rowRemesaRow = ((RemesaRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         NumeroRemesa,
@@ -496,7 +506,8 @@ namespace Gestion_Web.Formularios.Valores {
                         Observaciones,
                         SonPesos,
                         DomicilioDestino,
-                        DomicilioOrigen};
+                        DomicilioOrigen,
+                        OtrosValores};
                 rowRemesaRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRemesaRow);
                 return rowRemesaRow;
@@ -529,6 +540,7 @@ namespace Gestion_Web.Formularios.Valores {
                 this.columnSonPesos = base.Columns["SonPesos"];
                 this.columnDomicilioDestino = base.Columns["DomicilioDestino"];
                 this.columnDomicilioOrigen = base.Columns["DomicilioOrigen"];
+                this.columnOtrosValores = base.Columns["OtrosValores"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -554,6 +566,8 @@ namespace Gestion_Web.Formularios.Valores {
                 base.Columns.Add(this.columnDomicilioDestino);
                 this.columnDomicilioOrigen = new global::System.Data.DataColumn("DomicilioOrigen", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDomicilioOrigen);
+                this.columnOtrosValores = new global::System.Data.DataColumn("OtrosValores", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOtrosValores);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1131,6 +1145,22 @@ namespace Gestion_Web.Formularios.Valores {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string OtrosValores {
+                get {
+                    try {
+                        return ((string)(this[this.tableRemesa.OtrosValoresColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'OtrosValores\' in table \'Remesa\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRemesa.OtrosValoresColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsNumeroRemesaNull() {
                 return this.IsNull(this.tableRemesa.NumeroRemesaColumn);
             }
@@ -1247,6 +1277,18 @@ namespace Gestion_Web.Formularios.Valores {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetDomicilioOrigenNull() {
                 this[this.tableRemesa.DomicilioOrigenColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsOtrosValoresNull() {
+                return this.IsNull(this.tableRemesa.OtrosValoresColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetOtrosValoresNull() {
+                this[this.tableRemesa.OtrosValoresColumn] = global::System.Convert.DBNull;
             }
         }
         

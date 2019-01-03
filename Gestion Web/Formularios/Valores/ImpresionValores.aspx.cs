@@ -1371,6 +1371,7 @@ namespace Gestion_Web.Formularios.Valores
                 dtRemesa.Columns.Add("SucursalOrigen");
                 dtRemesa.Columns.Add("DomicilioDestino");
                 dtRemesa.Columns.Add("DomicilioOrigen");
+                dtRemesa.Columns.Add("OtrosValores");
 
                 DataTable dtRemesaDetalle = new DataTable();
                 dtRemesaDetalle.Columns.Add("Cantidad");
@@ -1389,6 +1390,7 @@ namespace Gestion_Web.Formularios.Valores
                 drRemesa["SucursalOrigen"] = contSuc.obtenerSucursalID((int)remesa.SucursalOrigen).nombre;
                 drRemesa["DomicilioDestino"] = contSuc.obtenerSucursalID((int)remesa.SucursalDestino).direccion;
                 drRemesa["DomicilioOrigen"] = contSuc.obtenerSucursalID((int)remesa.SucursalOrigen).direccion;
+                drRemesa["OtrosValores"] = remesa.OtrosValores;
 
                 dtRemesa.Rows.Add(drRemesa);                
                 int totalFinal = 0;

@@ -23,7 +23,7 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnEliminar" Visible ="false" runat="server" OnClick="lbtnEliminar_Click">Nota de Remesa</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnEliminar" Visible ="false" data-toggle="modal" runat="server" href="#modalConfirmacion">Eliminar</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -38,13 +38,6 @@
                                     <div class="shortcuts" style="height: 100%">
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                             <i class="shortcut-icon icon-filter"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
-                                        <a class="btn btn-primary" data-toggle="modal" href="#modalAgregar" style="width: 100%">
-                                            <i class="shortcut-icon icon-plus"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -150,6 +143,40 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label1" Text="Esta seguro que desea eliminar las remesas seleccionadas?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox1" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" Text="Eliminar" class="btn btn-danger" OnClick="lbtnEliminar_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
