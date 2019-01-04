@@ -1375,12 +1375,10 @@ namespace Gestion_Web.Formularios.Articulos
                         {
                             if (!String.IsNullOrEmpty(this.txtIngBrutos.Text))
                             {
-
                                 if (!String.IsNullOrEmpty(this.txtMargen.Text))
                                 {
                                     if (DropListPorcentajeIVA.SelectedValue != "-1")
                                     {
-
                                         Articulo art = new Articulo();
                                         art.costo = Convert.ToDecimal(txtCosto.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                                         art.incidencia = Convert.ToDecimal(txtIncidencia.Text.Replace(',', '.'), CultureInfo.InvariantCulture);

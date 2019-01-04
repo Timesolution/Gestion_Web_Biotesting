@@ -41,6 +41,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         int permisoEliminar = 0;
         int permisoStockValorizado = 0;//1 muestra costo, 0 muestra costo imponible
+        int permisoMostrarBotonAgregarMateriasPrimas = 0;
 
         public Dictionary<string, string> camposArticulos = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -203,6 +204,13 @@ namespace Gestion_Web.Formularios.Articulos
 
                     if(listPermisos.Contains("179"))
                         this.permisoStockValorizado = 1;
+
+                    //verifico si muestro el boton de agregar materias primas de los articulos
+                    string permiso195 = listPermisos.Where(x => x == "195").FirstOrDefault();
+                    if (permiso195 != null)
+                    {
+                        this.permisoMostrarBotonAgregarMateriasPrimas = 1;
+                    }
 
                     return 1;
                 }
@@ -1183,18 +1191,22 @@ namespace Gestion_Web.Formularios.Articulos
                 btnStock.PostBackUrl = "StockF.aspx?articulo=" + row["id"].ToString();
                 celAction.Controls.Add(btnStock);
 
-                Literal l2 = new Literal();
-                l2.Text = "&nbsp";
-                celAction.Controls.Add(l2);
+                //para que muestre el boton de agregar materia prima
+                if (this.permisoMostrarBotonAgregarMateriasPrimas == 1)
+                {
+                    Literal l2 = new Literal();
+                    l2.Text = "&nbsp";
+                    celAction.Controls.Add(l2);
 
-                LinkButton btnComposicionMateriasPrimas = new LinkButton();
-                btnComposicionMateriasPrimas.ID = "btnComposicionMateriasPrimas_" + row["id"].ToString();
-                btnComposicionMateriasPrimas.CssClass = "btn btn-info ui-tooltip";
-                btnComposicionMateriasPrimas.Attributes.Add("data-toggle", "tooltip");
-                btnComposicionMateriasPrimas.Attributes.Add("title data-original-title", "Composicion");
-                btnComposicionMateriasPrimas.Text = "<span class='shortcut-icon icon-dropbox'></span>";
-                btnComposicionMateriasPrimas.PostBackUrl = "../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + row["id"].ToString();
-                celAction.Controls.Add(btnComposicionMateriasPrimas);
+                    LinkButton btnComposicionMateriasPrimas = new LinkButton();
+                    btnComposicionMateriasPrimas.ID = "btnComposicionMateriasPrimas_" + row["id"].ToString();
+                    btnComposicionMateriasPrimas.CssClass = "btn btn-info ui-tooltip";
+                    btnComposicionMateriasPrimas.Attributes.Add("data-toggle", "tooltip");
+                    btnComposicionMateriasPrimas.Attributes.Add("title data-original-title", "Composicion");
+                    btnComposicionMateriasPrimas.Text = "<span class='shortcut-icon icon-dropbox'></span>";
+                    btnComposicionMateriasPrimas.PostBackUrl = "../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + row["id"].ToString();
+                    celAction.Controls.Add(btnComposicionMateriasPrimas);
+                }
 
                 Literal l3 = new Literal();
                 l3.Text = "&nbsp";
