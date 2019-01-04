@@ -579,24 +579,23 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     string tipoDocumento = " FC ";
                     int idFact = Convert.ToInt32(row["Id"]);
-                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();
-                    
+                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();                    
+
                     if (m.Ftp == 1)
                         tipoDocumento = " PRP ";
                     if (m.Ftp == 2)
                         tipoDocumento = " ";
-
+                    
                     if (row["TipoDocumento"].ToString() == "19")
                     {
-                        row["Tipo"] = tipoDocumento + "  Nº";
+                        if (m.Compra.TipoDocumento.ToLower().Contains("credito") || m.Compra.TipoDocumento.ToLower().Contains("crédito"))
+                            tipoDocumento = " NC ";
+
+                        row["Tipo"] =  tipoDocumento + "  Nº";
                     }
                     if (row["TipoDocumento"].ToString() == "21")
                     {
                         row["Tipo"] = tipoDocumento + "Pago Nº";
-                    }
-                    if (row["TipoDocumento"].ToString() == "7" || row["TipoDocumento"].ToString() == "8" || row["TipoDocumento"].ToString() == "9" || row["TipoDocumento"].ToString() == "25")
-                    {
-                        row["Tipo"] = tipoDocumento = " NC ";
                     }
                     if (Convert.ToDecimal(row["Debe"]) > 0)
                     {
