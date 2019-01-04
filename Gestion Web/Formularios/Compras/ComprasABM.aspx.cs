@@ -62,8 +62,8 @@ namespace Gestion_Web.Formularios.Compras
                     this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                     if (this.ListSucursal.SelectedValue != "")
                     {
+                        this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                         this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
-                        this.ListSucursal.SelectedValue = Session["Login_PtoUser"].ToString();
                     }
                     this.cargarCuentas();
                 }

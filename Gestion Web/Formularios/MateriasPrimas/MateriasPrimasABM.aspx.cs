@@ -1,0 +1,175 @@
+﻿using Disipar.Models;
+using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
+using Gestion_Api.Modelo;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Gestion_Web.Formularios.MateriasPrimas
+{
+    public partial class MateriasPrimasABM : System.Web.UI.Page
+    {
+        Mensajes m = new Mensajes();
+        controladorMateriaPrima contMateriaPrima = new controladorMateriaPrima();
+        controladorArticulo contArticulo = new controladorArticulo();
+        MateriaPrima materiaPrima = new MateriaPrima();
+
+        //para saber si es alta(1) o modificacion(2)
+        private int accion;
+        private int id;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            this.accion = Convert.ToInt32(Request.QueryString["a"]);
+            this.id = Convert.ToInt32(Request.QueryString["id"]);
+
+            if (!IsPostBack)
+            {
+                //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
+                this.cargarDDLs();
+                if (accion == 2)
+                {
+                    this.llenarCampos();
+                }
+            }
+        }
+
+        #region funcionesIniciales
+        private void cargarDDLs()
+        {
+            cargarMonedasVenta();
+        }
+        /// <summary>
+        /// lleno los campos porque se va a editar la materia prima
+        /// </summary>
+        private void llenarCampos()
+        {
+            materiaPrima = contMateriaPrima.obtenerMateriaPrima(id);
+            txtCodMateriaPrima.Text = materiaPrima.Codigo;
+            txtDescripcion.Text = materiaPrima.Descripcion;
+            txtImporte.Text = materiaPrima.Importe.ToString();
+            txtStockMinimo.Text = materiaPrima.StockMinimo.ToString();
+            ddlEstado.SelectedValue = materiaPrima.Estado.ToString();
+            ddlMonedaVenta.SelectedIndex = (int)materiaPrima.Moneda;
+            ddlUnidadDeMedida.SelectedValue = materiaPrima.UnidadMedida;
+        }
+        #endregion
+
+        #region cargaDDLs
+        private void cargarMonedasVenta()
+        {
+            try
+            {
+                DataTable dt = contArticulo.obtenerMonedas();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["moneda"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.ddlMonedaVenta.DataSource = dt;
+                this.ddlMonedaVenta.DataValueField = "id";
+                this.ddlMonedaVenta.DataTextField = "moneda";
+
+                this.ddlMonedaVenta.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando monedas de venta a la lista. " + ex.Message));
+            }
+        }
+        #endregion
+
+        protected void ddlUnidadDeMedida_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        #region Acciones Botones
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.materiaPrima.Id = id;
+                this.materiaPrima.Codigo = txtCodMateriaPrima.Text;
+                this.materiaPrima.Descripcion = txtDescripcion.Text;
+                this.materiaPrima.Estado = Convert.ToInt32(ddlEstado.SelectedValue);
+                this.materiaPrima.Importe = Convert.ToDecimal(txtImporte.Text);
+                this.materiaPrima.Moneda = ddlMonedaVenta.SelectedIndex;
+                this.materiaPrima.UnidadMedida = ddlUnidadDeMedida.SelectedValue;
+                this.materiaPrima.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
+                
+                if (accion == 1)//crea
+                {
+                    int i = contMateriaPrima.agregarMateriaPrima(materiaPrima);
+                    if (i > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Materia prima agregada correctamente."));
+                        Response.Redirect("MateriasPrimasF.aspx");
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando materia prima."));
+                    }
+                }
+                else//modifica
+                {
+                    MateriaPrima mp = this.contMateriaPrima.obtenerMateriaPrima(id);
+                    mp.Codigo = txtCodMateriaPrima.Text;
+                    mp.Descripcion = txtDescripcion.Text;
+                    mp.Estado = Convert.ToInt32(ddlEstado.SelectedValue);
+                    mp.Importe = Convert.ToDecimal(txtImporte.Text);
+                    mp.Moneda = ddlMonedaVenta.SelectedIndex;
+                    mp.UnidadMedida = ddlUnidadDeMedida.SelectedValue;
+                    mp.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
+
+                    int i = contMateriaPrima.modificarMateriaPrima(mp);
+                    if (i > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Materia prima modificada correctamente."));
+                        Response.Redirect("MateriasPrimasF.aspx");
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando materia prima."));
+                    }
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnAgregar_Click. " + ex.Message));
+            }
+        }
+
+        protected void ddlMonedaVenta_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #endregion
+
+
+
+    }
+}

@@ -1187,6 +1187,19 @@ namespace Gestion_Web.Formularios.Articulos
                 l2.Text = "&nbsp";
                 celAction.Controls.Add(l2);
 
+                LinkButton btnComposicionMateriasPrimas = new LinkButton();
+                btnComposicionMateriasPrimas.ID = "btnComposicionMateriasPrimas_" + row["id"].ToString();
+                btnComposicionMateriasPrimas.CssClass = "btn btn-info ui-tooltip";
+                btnComposicionMateriasPrimas.Attributes.Add("data-toggle", "tooltip");
+                btnComposicionMateriasPrimas.Attributes.Add("title data-original-title", "Composicion");
+                btnComposicionMateriasPrimas.Text = "<span class='shortcut-icon icon-dropbox'></span>";
+                btnComposicionMateriasPrimas.PostBackUrl = "../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + row["id"].ToString();
+                celAction.Controls.Add(btnComposicionMateriasPrimas);
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAction.Controls.Add(l3);
+
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.ID = "btnEliminar_" + row["id"].ToString();
                 btnEliminar.CssClass = "btn btn-info";

@@ -9061,7 +9061,7 @@ namespace Gestion_Web.Formularios.Facturas
                 #endregion
                 
                 #region calculo del total
-                if ((lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B")))//TODO r para q no recalcule el total 
+                if ((lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B")))//para q no recalcule el total 
                 {
                     //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
                     decimal totalAux = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);

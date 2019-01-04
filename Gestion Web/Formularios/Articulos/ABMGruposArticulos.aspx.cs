@@ -389,7 +389,6 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe ingresar el Codigo de Articulo para poder Subir Imagenes"));
             }
-
         }
 
         private string modificarNombre(string pathFile, string id)

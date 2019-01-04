@@ -301,6 +301,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
                 this.txtComentarios.Text = "ORDEN DE COMPRA Nº: ";
+                this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroPedido();

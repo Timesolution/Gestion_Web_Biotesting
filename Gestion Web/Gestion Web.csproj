@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -431,6 +431,9 @@
     <Content Include="Formularios\Herramientas\ActPadronF.aspx" />
     <Content Include="Formularios\Herramientas\NumeracionDocumentos.aspx" />
     <Content Include="Formularios\Herramientas\PanelControl.aspx" />
+    <Content Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx" />
+    <Content Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx" />
+    <Content Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx" />
     <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
@@ -1647,6 +1650,27 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\RegimenF.aspx.designer.cs">
       <DependentUpon>RegimenF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.cs">
+      <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.designer.cs">
+      <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx.cs">
+      <DependentUpon>MateriasPrimasABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx.designer.cs">
+      <DependentUpon>MateriasPrimasABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx.cs">
+      <DependentUpon>MateriasPrimasF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx.designer.cs">
+      <DependentUpon>MateriasPrimasF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\dsOrdenReparacion.Designer.cs">
       <AutoGen>True</AutoGen>
