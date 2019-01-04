@@ -228,7 +228,7 @@
                     <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
                             <div class="col-md-12">
-                                <asp:TextBox ID="txtComentario" runat="server" disabled class="form-control" TextMode="MultiLine" Rows="8" Columns="6"></asp:TextBox>
+                                <asp:TextBox ID="txtComentario2" runat="server" disabled class="form-control" TextMode="MultiLine" Rows="8" Columns="6"></asp:TextBox>
                             </div>
                         </div>
                     </div>
@@ -306,8 +306,18 @@
                     <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnBuscar_Click" class="btn btn-success" ValidationGroup="BusquedaGroup" />
                 </div>
             </div>
+
+            <script>
+                function abrirdialog(comentario) {
+                    document.getElementById('<%= txtComentario2.ClientID %>').value = comentario;
+                    document.getElementById('abreDialog').click();
+                }
+            </script>
+
         </div>
     </div>
+
+                
 
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
