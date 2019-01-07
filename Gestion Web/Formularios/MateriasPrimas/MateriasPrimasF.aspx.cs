@@ -20,6 +20,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
         {
             try
             {
+                this.VerificarLogin();
                 this.cargarMateriasPrimasAlPH();
             }
             catch (Exception ex)
@@ -28,7 +29,49 @@ namespace Gestion_Web.Formularios.MateriasPrimas
             }
         }
 
-        #region funciones del load
+        #region funciones pageLoad
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.verificarAcceso() != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../Account/Login.aspx");
+            }
+        }
+
+        private int verificarAcceso()
+        {
+            try
+            {
+                int valor = 0;
+
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                if (listPermisos.Contains("194"))
+                    return 1;
+
+                return valor;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
         private void cargarMateriasPrimasAlPH()
         {
             try

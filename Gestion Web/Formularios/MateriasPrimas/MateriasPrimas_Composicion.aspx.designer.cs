@@ -22,6 +22,15 @@ namespace Gestion_Web.Formularios.MateriasPrimas {
         protected global::System.Web.UI.UpdatePanel updatePanel1;
         
         /// <summary>
+        /// lbNombreArticulo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbNombreArticulo;
+        
+        /// <summary>
         /// txtMPBusqueda control.
         /// </summary>
         /// <remarks>
@@ -110,6 +119,24 @@ namespace Gestion_Web.Formularios.MateriasPrimas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phComposiciones;
+        
+        /// <summary>
+        /// lbCostoTotalComposicion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCostoTotalComposicion;
+        
+        /// <summary>
+        /// lbtnActualizarCostoComposicion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarCostoComposicion;
         
         /// <summary>
         /// lblMensaje control.

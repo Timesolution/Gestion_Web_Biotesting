@@ -17,6 +17,8 @@ namespace Gestion_Web.Formularios.MateriasPrimas
         controladorArticulo contArticulo = new controladorArticulo();
         ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
         controladorMateriaPrima contMateriaPrima = new controladorMateriaPrima();
+        controladorCobranza contCobranza = new controladorCobranza();
+        ControladorCobranzaEntity contCobranzaEntity = new ControladorCobranzaEntity();
         Mensajes m = new Mensajes();
         int idArt;
         List<MateriaPrima_Composiciones> listaComposiciones = new List<MateriaPrima_Composiciones>();
@@ -25,7 +27,9 @@ namespace Gestion_Web.Formularios.MateriasPrimas
         {
             try
             {
+                this.VerificarLogin();
                 this.idArt = Convert.ToInt32(Request.QueryString["idArt"]);
+                this.lbNombreArticulo.Text = this.contArticulosEntity.obtenerArticuloEntity(idArt).descripcion;
                 if (!IsPostBack)
                 {
                     this.cargarDDLMateriasPrimas(null);
@@ -37,6 +41,50 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 ScriptManager.RegisterClientScriptBlock(this.updatePanel1, updatePanel1.GetType(), "alert", "$.msgbox(\"Error en fun: Page_Load de MateriaPrima_Composicion" + ex.Message + "\", {type: \"error\"});", true);
             }
         }
+
+        #region funciones pageLoad
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.verificarAcceso() != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../Account/Login.aspx");
+            }
+        }
+
+        private int verificarAcceso()
+        {
+            try
+            {
+                int valor = 0;
+
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                if (listPermisos.Contains("195"))
+                    return 1;
+
+                return valor;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        #endregion
 
         #region funciones botones
         protected void lbtnBuscarMP_Click(object sender, EventArgs e)
@@ -136,6 +184,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
         {
             try
             {
+                decimal totalCosto = 0;
                 this.listaComposiciones = this.contMateriaPrima.obtenerComposicionesByArticulo(this.idArt);
                 this.phComposiciones.Controls.Clear();
                 foreach (var item in this.listaComposiciones)
@@ -167,15 +216,20 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                     tr.Cells.Add(celUnidad);
 
                     TableCell celImporte = new TableCell();
-                    celImporte.Text = "$ " + item.MateriaPrima.Importe.ToString();
+                    decimal importe = this.obtenerImporteEnPesos((decimal)item.MateriaPrima.Importe, (int)item.MateriaPrima.Moneda);
+                    importe = Math.Round(importe, 2);
+                    celImporte.Text = "$ " + importe;
                     celImporte.Width = Unit.Percentage(3);
                     celImporte.VerticalAlign = VerticalAlign.Middle;
+                    celImporte.HorizontalAlign = HorizontalAlign.Right;
                     tr.Cells.Add(celImporte);
 
                     TableCell celTotal = new TableCell();
-                    celTotal.Text = "$ " + (item.Cantidad * item.MateriaPrima.Importe).ToString();
+                    decimal total = (decimal)item.Cantidad * importe;
+                    celTotal.Text = "$ " + Math.Round(total, 2);
                     celTotal.Width = Unit.Percentage(5);
                     celTotal.VerticalAlign = VerticalAlign.Middle;
+                    celTotal.HorizontalAlign = HorizontalAlign.Right;
                     tr.Cells.Add(celTotal);
 
                     TableCell celAction = new TableCell();
@@ -195,15 +249,48 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                     tr.Cells.Add(celAction);
 
                     this.phComposiciones.Controls.Add(tr); //agrego la fila a la tabla
+
+                    totalCosto += (decimal)item.Cantidad * (decimal)importe;
                 }
+                this.lbCostoTotalComposicion.Text = Math.Round((decimal)totalCosto,2).ToString();
             }
             catch (Exception ex)
             {
 
             }
         }
+
+        private decimal obtenerImporteEnPesos(decimal importe, int idMoneda)
+        {
+            if (idMoneda != 1)
+            {
+                importe = Math.Round(this.contCobranza.obtenerCotizacion(idMoneda) * importe, 2);
+            }
+            return importe;
+        }
         #endregion
 
+        protected void lbtnActualizarCostoComposicion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Articulo art = this.contArticulo.obtenerArticuloByID(this.idArt);
 
+                art.costo = Math.Round(Convert.ToDecimal(lbCostoTotalComposicion.Text) /
+                this.contCobranzaEntity.obtenerCotizacionPorNombreMoneda(art.monedaVenta.moneda), 2);
+
+                Articulo a = this.contArticulo.obtenerPrecioVentaDesdeCosto(art);
+
+                int i = this.contArticulo.modificarArticulo(a, a.codigo, 0);
+                if (i > 0)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.updatePanel1, updatePanel1.GetType(), "alert", "$.msgbox(\"Costo recalculado con exito\", {type: \"info\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

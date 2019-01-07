@@ -20,6 +20,13 @@
                             <fieldset>
 
                                 <div class="form-group">
+                                    <div class="col-md-12">
+                                        <h2>
+                                            <asp:Label ID="lbNombreArticulo" runat="server" Text="" Style="text-align: left;"></asp:Label></h2>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label for="name" class="col-md-3">Busqueda de materia prima:</label>
                                     <div class="col-md-5">
                                         <div class="input-group">
@@ -34,7 +41,6 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Ingrese un Codigo" ControlToValidate="txtMPBusqueda" ValidationGroup="BusquedaMateriaPrima" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="name" class="col-md-3">Materias Primas:</label>
                                     <div class="col-md-5">
@@ -75,7 +81,7 @@
                 <div class="widget stacked widget-table action-table">
                     <div class="widget-header">
                         <i class="icon-bookmark"></i>
-                        <h3>Materias Primas</h3>
+                        <h3>Composicion</h3>
                     </div>
                     <div class="widget-content">
                         <asp:UpdatePanel ID="UpdatePanel2" runat="server">
@@ -102,6 +108,20 @@
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
+
+                        <div class="form-group">
+                            <label for="name" class="col-md-1">Costo Total:</label>
+                            <div class="col-md-2">
+                                <asp:Label ID="lbCostoTotalComposicion" runat="server" Text="Label" class="form-control" Style="text-align: right;"></asp:Label>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:LinkButton ID="lbtnActualizarCostoComposicion" runat="server" Text="Actualizar costo" class="btn btn-success ui-tooltip" title data-original-title="Asignar Costo" OnClick="lbtnActualizarCostoComposicion_Click">
+                                     <%--<i class="shortcut-icon icon-ok"></i>--%>
+                                </asp:LinkButton>
+                            </div>
+                            &nbsp
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -150,6 +170,26 @@
     </div>
     <%--FIN MODAL CONFIRMACION--%>
 
+    <!-- Core Scripts - Include with every page -->
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <%--<script src="../../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
+
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+
+    <script src="../../Scripts/Application.js"></script>
+
+    <script src="../../Scripts/demo/gallery.js"></script>
+
+    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
 
     <script>
         function abrirdialog(valor) {
