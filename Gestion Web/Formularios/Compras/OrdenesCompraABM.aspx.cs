@@ -528,6 +528,12 @@ namespace Gestion_Web.Formularios.Compras
 
                 var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
 
+                if (prov == null)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
+                    return;
+                }
+
                 oc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
                 oc.FechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
                 oc.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
