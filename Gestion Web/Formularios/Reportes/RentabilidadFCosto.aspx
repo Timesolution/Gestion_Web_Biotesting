@@ -10,12 +10,10 @@
                 <i class="icon-wrench"></i>
                 <h3>Herramientas</h3>
             </div>
-            <!-- /widget-header -->
 
             <div class="widget-content">
                 <table style="width: 100%">
                     <tr>
-
                         <td style="width: 5%">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
@@ -38,7 +36,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!-- /btn-group -->
                         </td>
 
                         <td style="width: 30%">
@@ -49,9 +46,7 @@
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
                                     </span>
                                     <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Articulo"></asp:TextBox>
-
                                 </div>
-                                <!-- /input-group -->
                             </div>
                         </td>
 
@@ -69,70 +64,19 @@
                             <div class="shortcuts" style="height: 100%">
                             </div>
                         </td>
-
-
                     </tr>
-
                 </table>
             </div>
-            <!-- /widget-content -->
-
         </div>
-        <div class="col-md-6">
-            <div class="widget big-stats-container stacked">
-                <div class="widget-content" style="display: none">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Saldo</h4>
-                            <asp:Label ID="labelSaldo" runat="server" Text="" class="value"></asp:Label>
-                        </div>
-                        <!-- .stat -->
-                    </div>
-                </div>
 
-                <div class="widget big-stats-container stacked">
-                    <div class="widget-content">
-                        <div id="big_stats" class="cf">
-                            <div class="stat">
-                                <h4>Total Costo Con Iva</h4>
-                                <asp:Label ID="labelTotalCostoConIva" runat="server" Text="" class="value"></asp:Label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <asp:PlaceHolder runat="server" ID="phTotalVendidoConIva" Visible="false">
-                    <div class="widget-content">
-                        <div id="big_stats" class="cf">
-                            <div class="stat">
-                                <h4>Total Vendido</h4>
-                                <asp:Label ID="labelTotalVendidoConIva" runat="server" Text="" class="value"></asp:Label>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-
-
-
-                </asp:PlaceHolder>
-
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Rentabilidad</h4>
-                            <asp:Label ID="labelRentabilidad" runat="server" Text="" class="value"></asp:Label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <asp:PlaceHolder runat="server" ID="phTotalCostoSinIva" Visible="false">
+        <div class="col-md-3">
+            <asp:PlaceHolder runat="server" ID="phTotalCostoSinIva" Visible="true">
                 <div class="widget big-stats-container stacked">
                     <div class="widget-content">
                         <div id="big_stats" class="cf">
                             <div class="stat">
                                 <h4>Total Costo Sin Iva</h4>
-                                <asp:Label ID="labelTotalCostoSinIva" runat="server" Text="" class="value"></asp:Label>
+                                <asp:Label ID="labelTotalCostoSinIva" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
                             </div>
                         </div>
                     </div>
@@ -140,35 +84,114 @@
             </asp:PlaceHolder>
         </div>
 
-        <div class="col-md-6">
-
+        <div class="col-md-3">
             <div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
                             <h4>Total Vendido Sin Iva</h4>
-                            <asp:Label ID="labelTotalVendidoSinIva" runat="server" Text="" class="value"></asp:Label>
+                            <asp:Label ID="labelTotalVendidoSinIva" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="col-md-3">
             <div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
-                            <h4>Rentabilidad Porcentaje</h4>
-                            <asp:Label ID="labelPorRentabilidad" runat="server" Text="" class="value"></asp:Label>
+                            <h4>Mark Up</h4>
+                            <asp:Label ID="lblMarkUp" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
-        <!-- /span12 -->
 
-        <!-- /widget -->
+        <div class="col-md-3">
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Mark Up Porcentaje</h4>
+                            <asp:Label ID="lblPorcentajeMarkUp" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Total Costo Con Iva</h4>
+                            <asp:Label ID="labelTotalCostoConIva" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <asp:PlaceHolder runat="server" ID="phTotalVendidoConIva" Visible="true">
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total Vendido Con Iva</h4>
+                                <asp:Label ID="labelTotalVendidoConIva" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
+        </div>
+
+        <div class="col-md-3">
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Utilidad</h4>
+                            <asp:Label ID="lblUtilidad" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Utilidad Porcentaje</h4>
+                            <asp:Label ID="lblPorcentajeUtilidad" runat="server" Text="" class="value" Font-Size="XX-Large"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <asp:PlaceHolder runat="server" ID="phSaldo" Visible="false">
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Saldo</h4>
+                                <asp:Label ID="labelSaldo" runat="server" Text="" class="value"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
+        </div>
+
         <div class="widget stacked">
             <div class="widget-header">
                 <i class="icon-user"></i>
@@ -221,9 +244,7 @@
                     </asp:GridView>
                 </div>
             </div>
-            <!-- /.widget-content -->
         </div>
-        <!-- /.widget -->
     </div>
     <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -243,7 +264,6 @@
 
                                         <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
 
-                                        <!-- /input-group -->
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -257,7 +277,6 @@
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
-                                    <!-- /input-group -->
 
                                 </div>
 

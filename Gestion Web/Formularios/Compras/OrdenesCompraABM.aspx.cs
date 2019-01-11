@@ -103,12 +103,13 @@ namespace Gestion_Web.Formularios.Compras
                 drFila["Descripcion"] = this.txtDescripcion.Text;
                 drFila["Costo"] = this.txtPrecio.Text;
                 drFila["Cant"] = this.txtCantidad.Text;
+                drFila["CostoMasIva"] = "0.00";
 
                 dt.Rows.Add(drFila);
 
                 this.dtItems = dt;
 
-                this.agregarItemATabla(drFila["Codigo"].ToString(), drFila["Descripcion"].ToString(), Convert.ToDecimal(drFila["Cant"]), Convert.ToDecimal(drFila["Costo"]), 0);
+                this.agregarItemATabla(drFila["Codigo"].ToString(), drFila["Descripcion"].ToString(), Convert.ToDecimal(drFila["Cant"]), Convert.ToDecimal(drFila["Costo"]), Convert.ToDecimal(drFila["CostoMasIva"]));
                 //this.CargarItems();
                 //limpio los campos
                 this.txtCodigo.Text = "";
@@ -527,6 +528,12 @@ namespace Gestion_Web.Formularios.Compras
                 oc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
 
                 var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
+
+                if (prov == null)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
+                    return;
+                }
 
                 oc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
                 oc.FechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
@@ -1025,16 +1032,18 @@ namespace Gestion_Web.Formularios.Compras
                         if (A == null)
                         {
                             item.Codigo = codigo;
+                            item.PrecioConIVA = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[3]);
                         }
                         else
                         {
+                            item.PrecioConIVA = decimal.Round(A.costo * (1 + (A.porcentajeIva / 100)), 2);
                             item.Codigo = A.id.ToString();
                         }
 
                         item.Descripcion = tr.Cells[1].Text;
                         item.Precio = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[1]);
                         item.Cantidad = Convert.ToDecimal(txt.Text);
-                        item.PrecioConIVA = decimal.Round(A.costo * (1 + (A.porcentajeIva / 100)),2);
+                        
                         items.Add(item);
                     }
                 }
