@@ -312,6 +312,8 @@ namespace Gestion_Web.Formularios.Articulos
                     sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
                 }
 
+                Log.EscribirSQL(1, "Info", "Voy a obtener los articulos para hacer las etiquetas");
+
                 if (this.accion == 3)
                 {
                     articulos = this.contArticulos.filtrarArticulosEtiquetas(grupo, subgrupo, proveedor, sdias, this.sucursal, marca);
@@ -326,6 +328,8 @@ namespace Gestion_Web.Formularios.Articulos
                     articulos = this.contArticulos.obtenerArticuloByFechaActualizacion(fecha);
                 }
 
+                Log.EscribirSQL(1,"Info","Obtuve la lista de articulos para hacer las etiquetas, voy a agregar las columnas al datatable");
+
                 DataTable dt = new DataTable();
                 dt.Columns.Add("Descripcion");
                 dt.Columns.Add("Precio");
@@ -335,13 +339,20 @@ namespace Gestion_Web.Formularios.Articulos
                 dt.Columns.Add("CodigoBarra");
                 dt.Columns.Add("Imagen");
 
+                Log.EscribirSQL(1, "Info", "voy a obtener la sucursal");
                 Sucursal sucu = this.contSucursal.obtenerSucursalID(this.sucursal);
+
                 foreach (var item in articulos)//Si el stock es 0, no lo agrego.
                 {
+                    Log.EscribirSQL(1, "Info", "voy a obtener los stocks de los articulos");
                     List<Stock> sList = this.contArticulos.obtenerStockArticulo(item.id);//busco los stock del articulo
+
+                    Log.EscribirSQL(1, "Info", "voy a obtener el stock del articulo de la sucursal seleccionada");
                     Stock s = sList.Where(x => x.articulo.id == item.id && x.sucursal.nombre == sucu.nombre).FirstOrDefault();// Tomo de la list el stock de la sucursal seleccionada.
+
                     if (s != null)
                     {
+                        Log.EscribirSQL(1, "Info", "voy a obtener el precio de la lista de precios");
                         item.precioVenta = contArticulos.obtenerPrecioLista(item, lista);
 
                         DataRow dr = dt.NewRow();
@@ -350,6 +361,7 @@ namespace Gestion_Web.Formularios.Articulos
                         dr["Codigo"] = item.codigo;
                         dr["CodigoBarra"] = item.codigoBarra ;
                         //
+                        Log.EscribirSQL(1, "Info", "voy a obtener a generar el codigo");
                         string imagen = this.generarCodigo(dr["CodigoBarra"].ToString(), item.id);
                         dr["Imagen"] = @"file:///" + imagen;
 
@@ -440,7 +452,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL(1, "Error", "Error al imprimir etiquetas " + ex.Message);
             }
         }
 
