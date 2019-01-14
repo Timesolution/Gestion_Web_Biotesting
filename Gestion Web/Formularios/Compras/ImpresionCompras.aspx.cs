@@ -312,18 +312,22 @@ namespace Gestion_Web.Formularios.Compras
 
                 foreach (DataRow row in dtItems.Rows)
                 {
-                    ProveedorArticulo codProv = this.contArticulo.obtenerProveedorArticuloByArticulo(Convert.ToInt32(row["Codigo"]));
-
-                    Articulo art = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(Convert.ToInt32(row["Codigo"])));
-
-                    if (art != null)
+                    try
                     {
-                        row["Codigo"] = art.codigo;
+                        ProveedorArticulo codProv = this.contArticulo.obtenerProveedorArticuloByArticulo(Convert.ToInt32(row["Codigo"]));
+
+                        Articulo art = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(Convert.ToInt32(row["Codigo"])));
+
+                        if (art != null)
+                        {
+                            row["Codigo"] = art.codigo;
+                        }
+                        if (codProv != null)
+                        {
+                            row["CodProv"] = codProv.codigoProveedor;
+                        }
                     }
-                    if (codProv != null)
-                    {
-                        row["CodProv"] = codProv.codigoProveedor;
-                    }
+                    catch { }
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
