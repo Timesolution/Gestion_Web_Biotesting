@@ -1032,7 +1032,7 @@ namespace Gestion_Web.Formularios.Compras
                         if (A == null)
                         {
                             item.Codigo = codigo;
-                            item.PrecioConIVA = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[3]);
+                            item.PrecioConIVA = 0.00m;
                         }
                         else
                         {

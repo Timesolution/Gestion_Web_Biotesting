@@ -307,9 +307,9 @@
                                                                     <a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>
-                                                                    <button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
-                                                                        <i class="btn-icon-only icon-check-sign"></i>
-                                                                    </button>
+                                                                    <asp:Button runat="server" style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();"  class="btn btn-info" title="Search"/>
+                                                                    <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
+                                                                        <%--<i class="btn-icon-only icon-check-sign"></i>--%>
                                                                 </span>
                                                             </div>
                                                             <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtCodigo" ErrorMessage="El campo es obligatorio" SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
