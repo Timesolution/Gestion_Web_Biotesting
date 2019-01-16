@@ -35,9 +35,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCotizaciones ct = new controladorCotizaciones();
         controladorFacturacion cf = new controladorFacturacion();
         Configuracion confEstados = new Configuracion();
-
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-
         controladorCotizaciones contCot = new controladorCotizaciones();
         //Pedido
         Pedido Pedido = new Pedido();
@@ -2583,8 +2581,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #region importacion
-
-
         protected void btnImportarPedido_Click(object sender, EventArgs e)
         {
             try
@@ -2959,10 +2955,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-
-
-        #endregion
-
         protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)
         {
             try
@@ -2975,5 +2967,7 @@ namespace Gestion_Web.Formularios.Facturas
                 throw;
             }
         }
+        #endregion
+
     }
 }

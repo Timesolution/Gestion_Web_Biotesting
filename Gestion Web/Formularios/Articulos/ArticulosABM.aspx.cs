@@ -1459,7 +1459,6 @@ namespace Gestion_Web.Formularios.Articulos
                         {
                             if (!String.IsNullOrEmpty(this.txtIngBrutos.Text))
                             {
-
                                 if (!String.IsNullOrEmpty(this.txtMargen.Text))
                                 {
                                     if (DropListPorcentajeIVA.SelectedValue != "-1")
@@ -2982,7 +2981,7 @@ namespace Gestion_Web.Formularios.Articulos
                     if (!this.DropListPais.SelectedItem.Text.Contains("Argentina") && !this.DropListPais.SelectedItem.Text.Contains("NACIONAL"))
                     {
                         //ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
-                        Gestion_Api.Entitys.articulo artEntity = contArtEnt.obtenerArticuloEntity(idArticulo);
+                        Gestion_Api.Entitys.articulo artEntity = this.contArtEnt.obtenerArticuloEntity(idArticulo);
                         if (artEntity.Articulos_Despachos.Count > 0)
                         {
                             artEntity.Articulos_Despachos.FirstOrDefault().FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
@@ -2999,7 +2998,7 @@ namespace Gestion_Web.Formularios.Articulos
                             datosDespacho.Vencimiento = this.txtVencimiento.Text;
                             artEntity.Articulos_Despachos.Add(datosDespacho);                            
                         }
-                        contArtEnt.guardarDatosDespacho(artEntity);
+                        this.contArtEnt.guardarDatosDespacho(artEntity);
                     }
                 }
             }

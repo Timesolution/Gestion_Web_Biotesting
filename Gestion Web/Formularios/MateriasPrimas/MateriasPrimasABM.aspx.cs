@@ -129,18 +129,6 @@ namespace Gestion_Web.Formularios.MateriasPrimas
         }
         #endregion
 
-        protected void ddlUnidadDeMedida_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
         #region Acciones Botones
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
@@ -196,18 +184,6 @@ namespace Gestion_Web.Formularios.MateriasPrimas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnAgregar_Click. " + ex.Message));
-            }
-        }
-
-        protected void ddlMonedaVenta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
             }
         }
         #endregion
