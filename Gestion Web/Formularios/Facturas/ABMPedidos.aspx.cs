@@ -192,10 +192,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (perIngresaPantalla == "37")
                 {
-                    var perBloqueoListaPrecios = listPermisos.Where(x => x == "151").FirstOrDefault();
-
-                    //Permiso para bloquear la lista de precios
-                    if (perBloqueoListaPrecios == "151")
+                    if (!listPermisos.Contains("151"))
                         this.DropListLista.Attributes.Add("disabled", "disabled");
 
                     return 1;
