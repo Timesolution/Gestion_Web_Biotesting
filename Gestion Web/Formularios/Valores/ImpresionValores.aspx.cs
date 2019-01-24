@@ -49,6 +49,7 @@ namespace Gestion_Web.Formularios.Valores
         private int group;
         private int accion;
         private int idCaja;
+        private int idRemesa;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -86,6 +87,7 @@ namespace Gestion_Web.Formularios.Valores
                     this.origenPago = Convert.ToInt32(Request.QueryString["origenP"]);
 
                     this.idMutual = Convert.ToInt32(Request.QueryString["Mutual"]);
+                    this.idRemesa = Convert.ToInt32(Request.QueryString["remesa"]);
 
                     if (accion == 1)
                     {
@@ -126,6 +128,10 @@ namespace Gestion_Web.Formularios.Valores
                     if (accion == 10)
                     {
                         generarReporte10(); //Pagarés
+                    }
+                    if (accion == 11)
+                    {
+                        generarReporte11(); //Remesa
                     }
                 }
 
@@ -1297,6 +1303,121 @@ namespace Gestion_Web.Formularios.Valores
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.valor == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Pagares", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception Ex)
+            {
+
+            }
+        }
+        private void generarReporte11()
+        {
+            try
+            {
+                ControladorRemesaEntity contRemesa = new ControladorRemesaEntity();
+                controladorSucursal contSuc = new controladorSucursal();
+
+                //DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
+                //DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+                Remesa remesa = contRemesa.ObtenerRemesaPorID(idRemesa);
+                List<Remesa_Moneda_Detalle> remesaDetalle = contRemesa.ObtenerDetalleDeRemesaPorIDRemesa(idRemesa);
+
+                DataTable dtRemesa = new DataTable();
+                dtRemesa.Columns.Add("NumeroRemesa");
+                dtRemesa.Columns.Add("Fecha", typeof(DateTime));
+                dtRemesa.Columns.Add("Entrega");
+                dtRemesa.Columns.Add("Observaciones");
+                dtRemesa.Columns.Add("Recibe");
+                dtRemesa.Columns.Add("SonPesos");
+                dtRemesa.Columns.Add("SucursalDestino");
+                dtRemesa.Columns.Add("SucursalOrigen");
+                dtRemesa.Columns.Add("DomicilioDestino");
+                dtRemesa.Columns.Add("DomicilioOrigen");
+                dtRemesa.Columns.Add("OtrosValores");
+
+                DataTable dtRemesaDetalle = new DataTable();
+                dtRemesaDetalle.Columns.Add("Cantidad");
+                dtRemesaDetalle.Columns.Add("Denominacion");
+                dtRemesaDetalle.Columns.Add("Total");
+
+                DataRow drRemesa = dtRemesa.NewRow();
+
+                drRemesa["NumeroRemesa"] = remesa.NumeroRemesa.Value.ToString("D8");
+                drRemesa["Fecha"] = remesa.Fecha;
+                drRemesa["Entrega"] = remesa.Entrega;
+                drRemesa["Observaciones"] = remesa.Observaciones;
+                drRemesa["Recibe"] = remesa.Recibe;
+                drRemesa["SonPesos"] = remesa.SonPesos;
+                drRemesa["SucursalDestino"] = contSuc.obtenerSucursalID((int)remesa.SucursalDestino).nombre;
+                drRemesa["SucursalOrigen"] = contSuc.obtenerSucursalID((int)remesa.SucursalOrigen).nombre;
+                drRemesa["DomicilioDestino"] = contSuc.obtenerSucursalID((int)remesa.SucursalDestino).direccion;
+                drRemesa["DomicilioOrigen"] = contSuc.obtenerSucursalID((int)remesa.SucursalOrigen).direccion;
+                drRemesa["OtrosValores"] = remesa.OtrosValores;
+
+                dtRemesa.Rows.Add(drRemesa);                
+                int totalFinal = 0;
+
+                foreach (var item in remesaDetalle)
+                {
+                    DataRow drRemesaDetalle = dtRemesaDetalle.NewRow();
+
+                    drRemesaDetalle["Cantidad"] = item.Cantidad;
+                    drRemesaDetalle["Denominacion"] = item.Denominacion;
+                    drRemesaDetalle["total"] = item.Cantidad * item.Valor;
+                    totalFinal += (int)item.Cantidad * (int)item.Valor;
+
+                    dtRemesaDetalle.Rows.Add(drRemesaDetalle);
+                }                
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("RemesaR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("Remesa", dtRemesa);
+                ReportDataSource rds2 = new ReportDataSource("RemesaDetalle", dtRemesaDetalle);
+                ReportParameter param = new ReportParameter("ParamTotal", totalFinal.ToString());
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.SetParameters(param);
 
                 this.ReportViewer1.LocalReport.Refresh();
 

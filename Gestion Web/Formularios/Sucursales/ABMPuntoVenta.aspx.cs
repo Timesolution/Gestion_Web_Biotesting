@@ -243,6 +243,13 @@ namespace Gestion_Web.Formularios.Sucursales
                 int idPerfil = Convert.ToInt32(this.txtMovimiento.Text);
                 PuntoVenta pv = this.controlador.obtenerPtoVentaId(idPerfil);
                 pv.estado = 0;
+
+                if (String.IsNullOrEmpty(pv.caiRemito))
+                    pv.caiRemito = DateTime.Today.ToString("yyyy/MM/dd");
+
+                if (pv.caiVencimiento == Convert.ToDateTime("1/1/0001 12:00:00 AM"))
+                    pv.caiVencimiento = DateTime.Today;
+
                 int i = this.controlador.editarPtoVenta(pv);
                 if (i > 0)
                 {
