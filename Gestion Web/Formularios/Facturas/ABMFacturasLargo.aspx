@@ -1768,8 +1768,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <asp:Label ID="lbMovTrazaNueva" runat="server"></asp:Label>
-                                <asp:LinkButton ID="lbtnConfirmarTrazas" Text="<i class='shortcut-icon icon-ok'></i>" runat="server" class="btn btn-success" OnClick="lbtnConfirmarTrazas_Click" />
+                                <asp:Label ID="lbMovTrazaNueva" runat="server" Visible="false"></asp:Label>
+                                <asp:LinkButton ID="lbtnConfirmarTrazas" Text="<i class='shortcut-icon icon-ok'> Aceptar</i>" runat="server" class="btn btn-success" OnClick="lbtnConfirmarTrazas_Click" />
                             </div>
                         </ContentTemplate>
                     </asp:UpdatePanel>

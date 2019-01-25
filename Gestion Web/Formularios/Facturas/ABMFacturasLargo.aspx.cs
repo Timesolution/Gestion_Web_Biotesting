@@ -4293,7 +4293,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
-                if (esTrazable == 1 && item.cantidad>0)
+                if (esTrazable == 1)
                 {
                     int cantTrazas = 0;
                     int trazaActual = -1;
@@ -5217,7 +5217,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (ItemFactura item in f.items)
                 {
                     int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
-                    if (esTrazable == 1 && item.cantidad>0)
+                    if (esTrazable == 1)
                     {
                         int cantTrazas = 0;
                         int trazaActual = -1;
