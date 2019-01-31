@@ -52,9 +52,8 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+    <Reference Include="Gestion Api">
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -401,6 +400,7 @@
     <Content Include="Formularios\Facturas\CuadroImagen.ascx" />
     <Content Include="Formularios\Facturas\DiferenciasMercaderiaF.aspx" />
     <Content Include="Formularios\Facturas\FacturasImportacion.aspx" />
+    <Content Include="Formularios\Facturas\FacturasImportacion2.aspx" />
     <Content Include="Formularios\Facturas\FacturasMercaderiasF.aspx" />
     <Content Include="Formularios\Facturas\FacturasSucursalesF.aspx" />
     <Content Include="Formularios\Facturas\GuiaDespachoF.aspx" />
@@ -797,6 +797,7 @@
       <DependentUpon>dsVendedores.xsd</DependentUpon>
     </Content>
     <Content Include="Properties\DataSources\Gestion_Web.Formularios.Facturas.dsPresupuesto.datasource" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\publicacion gestion web.pubxml" />
     <None Include="Properties\PublishProfiles\Publicacion.pubxml" />
     <None Include="Properties\PublishProfiles\Publicación.pubxml" />
@@ -1536,6 +1537,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\FacturasImportacion.aspx.designer.cs">
       <DependentUpon>FacturasImportacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\FacturasImportacion2.aspx.cs">
+      <DependentUpon>FacturasImportacion2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\FacturasImportacion2.aspx.designer.cs">
+      <DependentUpon>FacturasImportacion2.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\FacturasMercaderiasF.aspx.cs">
       <DependentUpon>FacturasMercaderiasF.aspx</DependentUpon>
