@@ -674,6 +674,7 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 controladorCliente cont = new controladorCliente();
+                ControladorPlanCuentas contPlanCtas = new ControladorPlanCuentas();
 
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime Hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));
@@ -686,6 +687,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
                 dtCompras.Columns.Add("razonSocial", typeof(string));
+                dtCompras.Columns.Add("PlanDeCuentas", typeof(string));
 
                 decimal saldoTotal = 0;
 
@@ -706,12 +708,16 @@ namespace Gestion_Web.Formularios.Compras
                         row["Otros"] = Convert.ToDecimal(row["Otros"]) * -1;
                         row["Total"] = Convert.ToDecimal(row["Total"]) * -1;
                     }
+
+                    var cuentaContable = contPlanCtas.obtenerCuentaContableCompra(Convert.ToInt64(row["Id"]));
+
+                    if (cuentaContable != null)
+                        row["PlanDeCuentas"] = cuentaContable.Cuentas_Contables.Codigo;
+                    
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
                     row["razonSocial"] = p.razonSocial;
                 }
-
-
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleComprasR.rdlc");
