@@ -712,7 +712,7 @@ namespace Gestion_Web.Formularios.Compras
                     var cuentaContable = contPlanCtas.obtenerCuentaContableCompra(Convert.ToInt64(row["Id"]));
 
                     if (cuentaContable != null)
-                        row["PlanDeCuentas"] = cuentaContable.Cuentas_Contables.Codigo;
+                        row["PlanDeCuentas"] = cuentaContable.Cuentas_Contables.Codigo + " " + cuentaContable.Cuentas_Contables.Descripcion;
                     
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
