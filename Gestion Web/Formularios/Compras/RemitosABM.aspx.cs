@@ -18,24 +18,32 @@ using System.Web.UI.WebControls;
 namespace Gestion_Web.Formularios.Compras
 {
     using Gestion_Api.Entitys;
+    using System.Reflection;
+    using System.Web.Providers.Entities;
+
     public partial class RemitosABM : System.Web.UI.Page
     {
         controladorCompraEntity controlador = new controladorCompraEntity();
         controladorArticulo contArticulos = new controladorArticulo();
         controladorCliente contCliente = new controladorCliente();
+        ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
 
         DataTable dtItemsTemp;
+
+        DataTable dtItemsTemp2;
+
+        List<Trazabilidad> trazabilidadTmp;
         Mensajes m = new Mensajes();
         int accion;
-        int or;
-        int orID;
+        int ordenReparacion;
+        int ordenReparacionId;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
-                this.or = Convert.ToInt32(Request.QueryString["or"]);
-                this.orID = Convert.ToInt32(Request.QueryString["orID"]);
+                this.ordenReparacion = Convert.ToInt32(Request.QueryString["or"]);
+                this.ordenReparacionId = Convert.ToInt32(Request.QueryString["orID"]);
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 this.VerificarLogin();
                 this.CargarItems();
@@ -47,17 +55,27 @@ namespace Gestion_Web.Formularios.Compras
                     this.cargarProveedores();
                     this.cargarSucursal();
                     this.dtItemsTemp = new DataTable();
+                    this.dtItemsTemp2 = new DataTable();
+                    this.trazabilidadTmp = new List<Trazabilidad>();
                     this.CrearTablaItems();
+                    this.CrearTablaItems2();
+                    this.CrearListaTrazabilidad();
                 }
 
-                if (or == 1)
+                if (ordenReparacion == 1)
                     GenerarRemitoDesdeOrdenReparacion();
 
-
+                //verifico si es postback y tengo que llenar la tabla de las trazas para poder obtener el estado de los chkbox
+                if (this.lblMovTraza.Text != "")
+                {
+                    string idTraza = this.lblMovTraza.Text;
+                    int idArticulo = Convert.ToInt32(idTraza.Split('_')[1]);
+                    this.CargarTrazasPH(idArticulo);
+                }
             }
             catch (Exception ex)
             {
- 
+
             }
 
         }
@@ -158,12 +176,41 @@ namespace Gestion_Web.Formularios.Compras
                 dtItemsTemp.Columns.Add("Descripcion");
                 dtItemsTemp.Columns.Add("Costo");
                 dtItemsTemp.Columns.Add("IdArticulos");
-                
+
                 dtItems = dtItemsTemp;
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error creando tabla de item. " + ex.Message));
+            }
+
+        }
+        private void CrearTablaItems2()
+        {
+            try
+            {
+                dtItemsTemp2.Columns.Add("Codigo");
+                
+
+                dtItems2 = dtItemsTemp2;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error creando tabla de item. " + ex.Message));
+            }
+
+        }
+
+        private void CrearListaTrazabilidad()
+        {
+            try
+            {
+
+                vsTraza = trazabilidadTmp;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error creando lista de trazabilidad. " + ex.Message));
             }
 
         }
@@ -185,6 +232,107 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ViewState["dtItems"] = value;
             }
+        }
+
+        protected DataTable dtItems2
+        {
+            get
+            {
+                if (ViewState["dtItems2"] != null)
+                {
+                    return (DataTable)ViewState["dtItems2"];
+                }
+                else
+                {
+                    return dtItemsTemp2;
+                }
+            }
+            set
+            {
+                ViewState["dtItems2"] = value;
+            }
+        }
+
+        protected List<Trazabilidad> vsTraza
+        {
+            get
+            {
+                if (ViewState["vsTraza"] != null)
+                {
+                    return (List<Trazabilidad>)ViewState["vsTraza"];
+                    //var dt
+                }
+                else
+                {
+                    return new List<Trazabilidad>();
+                }
+            }
+            set
+            {
+                var dt = ListToDataTable(value);
+                ViewState["vsTraza"] = dt;
+            }
+        }
+
+        //public List<T> ToListof<T>(this DataTable dt)
+        //{
+        //    const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+        //    var columnNames = dt.Columns.Cast<DataColumn>()
+        //        .Select(c => c.ColumnName)
+        //        .ToList();
+        //    var objectProperties = typeof(T).GetProperties(flags);
+        //    var targetList = dt.AsEnumerable().Select(dataRow =>
+        //    {
+        //        var instanceOfT = Activator.CreateInstance<T>();
+
+        //        foreach (var properties in objectProperties.Where(properties => columnNames.Contains(properties.Name) && dataRow[properties.Name] != DBNull.Value))
+        //        {
+        //            properties.SetValue(instanceOfT, dataRow[properties.Name], null);
+        //        }
+        //        return instanceOfT;
+        //    }).ToList();
+
+        //    return targetList;
+        //}
+
+        public static DataTable ListToDataTable<T>(List<T> list)
+        {
+            DataTable dt = new DataTable();
+
+            foreach (PropertyInfo info in typeof(T).GetProperties())
+            {
+                dt.Columns.Add(new DataColumn(info.Name, GetNullableType(info.PropertyType)));
+            }
+            foreach (T t in list)
+            {
+                DataRow row = dt.NewRow();
+                foreach (PropertyInfo info in typeof(T).GetProperties())
+                {
+                    if (!IsNullableType(info.PropertyType))
+                        row[info.Name] = info.GetValue(t, null);
+                    else
+                        row[info.Name] = (info.GetValue(t, null) ?? DBNull.Value);
+                }
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
+
+        private static Type GetNullableType(Type t)
+        {
+            Type returnType = t;
+            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                returnType = Nullable.GetUnderlyingType(t);
+            }
+            return returnType;
+        }
+        private static bool IsNullableType(Type type)
+        {
+            return (type == typeof(string) ||
+                    type.IsArray ||
+                    (type.IsGenericType &&
+                     type.GetGenericTypeDefinition().Equals(typeof(Nullable<>))));
         }
 
         public void cargarProveedores()
@@ -262,14 +410,14 @@ namespace Gestion_Web.Formularios.Compras
                 celCant.VerticalAlign = VerticalAlign.Middle;
                 celCant.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celCant);
-                celCant.Width = Unit.Percentage(35);
+                celCant.Width = Unit.Percentage(30);
 
                 TableCell celPrecio = new TableCell();
                 celPrecio.Text = "$ " + precio;
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celPrecio);
-                celPrecio.Width = Unit.Percentage(15);
+                celPrecio.Width = Unit.Percentage(10);
 
                 TableCell celCantidad = new TableCell();
                 celCantidad.HorizontalAlign = HorizontalAlign.Right;
@@ -298,7 +446,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 TextBox txtLote = new TextBox();
                 txtLote.ID = "txtLote_" + idArticulo;
-                txtLote.Attributes.Add("Style", "text-align: right;");                
+                txtLote.Attributes.Add("Style", "text-align: right;");
                 celLote.Controls.Add(txtLote);
                 tr.Cells.Add(celLote);
 
@@ -306,15 +454,14 @@ namespace Gestion_Web.Formularios.Compras
                 celVencimiento.HorizontalAlign = HorizontalAlign.Right;
                 celVencimiento.Width = Unit.Percentage(15);
 
-                TextBox txtVencimiento = new TextBox();                
+                TextBox txtVencimiento = new TextBox();
                 txtVencimiento.ID = "txtVencimiento_" + idArticulo;
                 txtVencimiento.Attributes.Add("Style", "text-align: right;");
                 celVencimiento.Controls.Add(txtVencimiento);
                 tr.Cells.Add(celVencimiento);
 
-
                 TableCell celAccion = new TableCell();
-                celAccion.Width = Unit.Percentage(5);
+                celAccion.Width = Unit.Percentage(15);
 
                 LinkButton btnDetails = new LinkButton();
                 //btnDetails.ID = art.id.ToString();
@@ -322,20 +469,38 @@ namespace Gestion_Web.Formularios.Compras
                 btnDetails.Attributes.Add("data-toggle", "tooltip");
                 btnDetails.Attributes.Add("title data-original-title", "Ver y/o Editar");
                 btnDetails.Text = "<span class='shortcut-icon icon-search'></span>";
-                btnDetails.Attributes.Add("onclick", "window.open('../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo+"')");
-
-                //btnDetails.Attributes.Add("target", "_blank");
-                //btnDetails.PostBackUrl = "../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo;
-
+                btnDetails.Attributes.Add("onclick", "window.open('../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo + "')");
                 celAccion.Controls.Add(btnDetails);
-                
+
+                articulo articulo = this.contArticulosEntity.obtenerArticuloEntity(idArticulo);
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAccion.Controls.Add(l2);
+
+                LinkButton lbtnTraza = new LinkButton();
+                if (accion == 5)//viene de un pedido
+                {
+                    lbtnTraza.Visible = false;
+                    lbtnTraza.CssClass = "btn btn-default";
+                }
+                lbtnTraza.ID = "btnTraza_" + idArticulo;
+                lbtnTraza.CssClass = "btn btn-info ui-tooltip";
+                lbtnTraza.Text = "<span class='shortcut-icon icon-road'></span>";
+                lbtnTraza.Click += new EventHandler(this.TrazabilidadItem);
+                celAccion.Controls.Add(lbtnTraza);
+
+                int trazable = this.contArticulos.verificarGrupoTrazableByID((int)articulo.grupo);
+                if (trazable <= 0)
+                {
+                    lbtnTraza.Visible = false;
+                }
+
                 celAccion.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celAccion);
 
                 this.phProductos.Controls.Add(tr);
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando item a tabla. " + ex.Message));
             }
@@ -354,12 +519,12 @@ namespace Gestion_Web.Formularios.Compras
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
             }
         }
-        
+
         protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e)
         {
             try
@@ -369,7 +534,7 @@ namespace Gestion_Web.Formularios.Compras
                 //verifico que no este agregado a la grilla
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if(dr["Codigo"].ToString() == this.txtCodigo.Text)
+                    if (dr["Codigo"].ToString() == this.txtCodigo.Text)
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El articulo con codigo " + this.txtCodigo.Text + " ya se encuentra en la grilla"));
                         return;
@@ -383,7 +548,7 @@ namespace Gestion_Web.Formularios.Compras
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No exite articulo registrado con el codigo " + this.txtCodigo.Text + ". "));
                     return;
                 }
-                
+
                 DataRow drFila = dt.NewRow();
 
                 drFila["Codigo"] = this.txtCodigo.Text;
@@ -395,7 +560,7 @@ namespace Gestion_Web.Formularios.Compras
                 dt.Rows.Add(drFila);
 
                 this.dtItems = dt;
-                
+
                 this.CargarItems();
                 //limpio los campos
                 this.txtCodigo.Text = "";
@@ -412,7 +577,7 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 RemitosCompra rc = new RemitosCompra();
-                
+
                 rc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
                 rc.Numero = this.txtPVenta.Text + this.txtNumero.Text;
                 rc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
@@ -454,7 +619,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (i > 0)
                     {
                         Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Remito nro " + rc.Numero + " generado con exito.");
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Remito Guardado con exito\", {type: \"info\"}); location.href='RemitosABM.aspx?a=1';", true);                        
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Remito Guardado con exito\", {type: \"info\"}); location.href='RemitosABM.aspx?a=1';", true);
                     }
                     else
                     {
@@ -468,7 +633,7 @@ namespace Gestion_Web.Formularios.Compras
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encontro stock para uno o mas articulos. Reintente\", {type: \"warning\"});", true);
                             //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo guardar remito. Reintente"));
                         }
-                        
+
                     }
                 }
                 else
@@ -491,7 +656,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.txtNumero.Text = "";
                 this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 this.txtCodigo.Text = "";
-                this.txtCantidad.Text = ""; 
+                this.txtCantidad.Text = "";
             }
             catch (Exception ex)
             {
@@ -517,7 +682,7 @@ namespace Gestion_Web.Formularios.Compras
                         //if (Convert.ToDecimal(txt.Text) > 0)
                         if (Convert.ToDecimal(txt.Text) != 0)
                         {
-                            var item = new RemitosCompras_Items();                            
+                            var item = new RemitosCompras_Items();
                             string idArt = txt.ID.Split('_')[1];
                             //Articulo A = contArticulos.obtenerArticuloCodigo((tr.Cells[0]).Text);
                             Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
@@ -532,6 +697,7 @@ namespace Gestion_Web.Formularios.Compras
                             {
                                 item.Cantidad = cantidad;
                             }
+                            //this.sumarCantAlArticuloSiHabiaTrazasSeleccionadas();
 
                             //datos despacho
                             item.Lote = txtLote.Text;
@@ -540,11 +706,11 @@ namespace Gestion_Web.Formularios.Compras
                             try
                             {
                                 if (!String.IsNullOrEmpty(this.txtFechaDespacho.Text))
-                                    item.FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text,new CultureInfo("es-AR"));
+                                    item.FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
                                 else
                                     item.FechaDespacho = DateTime.Now;
                             }
-                            catch{}
+                            catch { }
 
                             items.Add(item);
                             int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
@@ -562,7 +728,7 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 return items;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error cargando items a remito" + ex.Message);
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error cargando items a remito. " + ex.Message + ". \", {type: \"error\"});", true);
@@ -620,14 +786,12 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                if (this.accion == 1)
-                    this.guardarRemito();
+                if (this.accion == 1) this.guardarRemito();
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando remito. " + ex.Message));
             }
-
         }
 
         private void cargarArticulosProveedor(int idPRoveedor)
@@ -639,8 +803,8 @@ namespace Gestion_Web.Formularios.Compras
                 this.dtItems.Rows.Clear();
                 //this.GridProductos.AutoGenerateColumns = false;
                 //this.GridProductos.DataSource = this.dtItems;
-                
-               
+
+
                 foreach (var a in articulos)
                 {
                     DataTable dt = this.dtItems;
@@ -659,7 +823,7 @@ namespace Gestion_Web.Formularios.Compras
                             codArtProveedor += p.codigoProveedor + " - ";
                         }
 
-                        if(codArtProveedor.Length>0)//saco el ultimo guion
+                        if (codArtProveedor.Length > 0)//saco el ultimo guion
                         {
                             codArtProveedor = codArtProveedor.Substring(0, codArtProveedor.Length - 3);
                         }
@@ -670,12 +834,12 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         drFila["Codigo"] = a.codigo;
                     }
-                    
+
                     drFila["Descripcion"] = a.descripcion;
                     drFila["Cant"] = 0;
                     drFila["Costo"] = a.costo;
                     drFila["IdArticulos"] = a.id;
-                    
+
                     dt.Rows.Add(drFila);
 
                     this.dtItems = dt;
@@ -690,7 +854,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos del proveedor. " + ex.Message));
             }
         }
-     
+
         protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e)
         {
             Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
@@ -698,7 +862,7 @@ namespace Gestion_Web.Formularios.Compras
             if (!String.IsNullOrEmpty(c.alerta.descripcion))
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
-            }            
+            }
 
             this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
 
@@ -724,7 +888,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ControladorOrdenReparacionEntity contOrdenReparacionEnt = new ControladorOrdenReparacionEntity();
 
-                var or = contOrdenReparacionEnt.ObtenerOrdenReparacionPorID(orID);
+                var or = contOrdenReparacionEnt.ObtenerOrdenReparacionPorID(ordenReparacionId);
 
                 ListTipoRemito.SelectedIndex = 1;
 
@@ -808,34 +972,283 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        //protected void GridProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        //{
-        //    try
-        //    {
-        //        this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+        #region devolucionTrazas
+        private void TrazabilidadItem(object sender, EventArgs e)
+        {
+            try
+            {
+                string idBoton = (sender as LinkButton).ID;
+                int idArticulo = Convert.ToInt32(idBoton.Split('_')[1]);
 
-        //        this.GridProductos.PageIndex = e.NewPageIndex;
-        //        this.GridProductos.DataBind();
-        //    }
-        //    catch
-        //    {
+                this.lblMovTraza.Text = idBoton;
 
-        //    }
-        //}
+                this.CargarTrazasPH(idArticulo);
 
-        //protected void btnVerEditar_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        LinkButton btn = sender as LinkButton;
-        //        string movimiento = btn.CommandArgument;
-        //        //Response.Redirect("../Articulos/ArticulosABM.aspx?accion=2&id=" + movimiento);
-        //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Articulos/ArticulosABM.aspx?accion=2&id=" + movimiento + "');", true);
-        //    }
-        //    catch { }
-        //}
+                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog('')", true);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar trazabilidad item factura. " + ex.Message));
+            }
+        }
+
+        private void CargarTrazasPH(int idArt)
+        {
+            try
+            {
+                Articulo a = this.contArticulos.obtenerArticuloByID(idArt);
+                this.cargarCamposGrupoTrazabilidad(a);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void cargarCamposGrupoTrazabilidad(Articulo art)
+        {
+            try
+            {
+                phCamposTrazabilidad.Controls.Clear();
+                List<Gestion_Api.Entitys.Trazabilidad_Campos> lstCampos = this.contArticulos.obtenerCamposTrazabilidadByGrupo(art.grupo.id);
+
+                foreach (Gestion_Api.Entitys.Trazabilidad_Campos campos in lstCampos)
+                {
+                    TableHeaderCell th = new TableHeaderCell();
+                    th.Text = campos.nombre;
+                    phCamposTrazabilidad.Controls.Add(th);
+                }
+                this.CargarTrazasArticulo(art.id, lstCampos.Count);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void CargarTrazasArticulo(int idArticulo, int cantCampos)
+        {
+            try
+            {
+                controladorCompraEntity contCompra = new controladorCompraEntity();
+                this.phItemsTrazabilidad.Controls.Clear();
+
+                int suc = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                DataTable dt = new DataTable();
+                dt = contCompra.obtenerTrazabilidadItemByArticulo(idArticulo, suc);
+
+                int pos = 0;
+                int columnas = 0;
+                TableRow tr = new TableRow();
+                string idTrazas = "";
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (columnas == 0)
+                    {
+                        tr = new TableRow();
+
+                        TableCell celIndice = new TableCell();
+                        celIndice.Text = (pos + 1).ToString();
+                        celIndice.VerticalAlign = VerticalAlign.Middle;
+                        tr.Cells.Add(celIndice);
+                    }
+                    if (columnas < cantCampos)
+                    {
+                        TableCell celCampo1 = new TableCell();
+                        celCampo1.Text = row["valor"].ToString();
+                        celCampo1.VerticalAlign = VerticalAlign.Middle;
+                        tr.Cells.Add(celCampo1);
+                        columnas++;
+                        idTrazas += row["Id"].ToString() + "-";
+                    }
+                    if (columnas == (cantCampos))
+                    {
+                        TableCell celAccion = new TableCell();
+                        CheckBox chkSeleccionT = new CheckBox();
+                        chkSeleccionT.ID = "chkSeleccionT_" + idTrazas;
+                        this.activarChkBox(chkSeleccionT, idTrazas);
+                        chkSeleccionT.ClientIDMode = System.Web.UI.ClientIDMode.Static;
+                        chkSeleccionT.Attributes.Add("onchange", "javascript:return updatebox(" + 1 + ",'" + chkSeleccionT.ID + "');");
+                        celAccion.Controls.Add(chkSeleccionT);
+                        celAccion.Width = Unit.Percentage(5);
+                        celAccion.VerticalAlign = VerticalAlign.Middle;
+                        tr.Cells.Add(celAccion);
+
+                        columnas = 0;
+                        pos++;
+                        idTrazas = "";
+                        phItemsTrazabilidad.Controls.Add(tr);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
+            }
+        }
+
+        protected void AgregarTraza_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.agregarOQuitarTrazasDeLaSesion();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void agregarOQuitarTrazasDeLaSesion()
+        {
+            try
+            {
+                string idArtBtnAceptarTraza = this.lblMovTraza.Text;
+                int idArticulo = Convert.ToInt32(idArtBtnAceptarTraza.Split('_')[1]);
+                List<Trazabilidad> trazasADevolver = new List<Trazabilidad>();
+
+                //borro si es q ya habia trazas guardadas en el viewstate de ese articulo
+                List<Trazabilidad> trazasAEliminar = new List<Trazabilidad>();
+
+                //List<Trazabilidad> vsTrazabilidad = (List<Trazabilidad>)ViewState["vsTraza"];
 
 
 
+                if (vsTraza != null)
+                {
+                    if (vsTraza.Count > 0)
+                    {
+                        trazasADevolver = vsTraza;
+                        trazasAEliminar = trazasADevolver.Where(x => x.idArticulo == idArticulo).ToList();
+                        trazasADevolver = trazasADevolver.Except(trazasAEliminar).ToList();
+                    }
+                }
+
+                //recorro todos los items traza tildados y los agrego a una lista
+                decimal cantidadXArticulo = 0;
+                foreach (Control control in phItemsTrazabilidad.Controls)
+                {
+                    String idTildado = "";
+                    TableRow tr = control as TableRow;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true)
+                    {
+                        idTildado += ch.ID.Split('_')[1];
+                        idTildado = idTildado.Substring(0, idTildado.Length - 1);
+                        var idsTrazas = idTildado.Split('-');
+                        cantidadXArticulo++;
+                        foreach (var item in idsTrazas)
+                        {
+                            Trazabilidad trazaItem = new Trazabilidad();
+                            trazaItem.Id = Convert.ToInt64(item);
+                            trazaItem.idArticulo = idArticulo;
+
+                            trazasADevolver.Add(trazaItem);
+                        }
+                        //seteo la cantidad en el txtbox del articulo por las trazas seleccionadas
+                        this.setearCantidadAlTxtBoxDelArticulo(cantidadXArticulo, idArticulo);
+                    }
+                }
+
+                //y agrego las trazas seleccionadas de ese articulo al viewstate y la reemplazo
+                //ViewState.Add("table", new DataTable());
+                //ViewState.Add("vsTrazabilidad", trazasADevolver);
+
+                DataRow dr = dtItems2.NewRow();
+                dr[0] = trazasADevolver.Count();
+
+                dtItems2.Rows.Add(dr);
+
+                vsTraza = trazasADevolver;
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel8, UpdatePanel8.GetType(), "alert", "$.msgbox(\"Traza seleccionada con exito!. \", {type: \"info\"}); cerrarModal(); ", true);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void setearCantidadAlTxtBoxDelArticulo(decimal cantidadXArticulo, int idArt)
+        {
+            try
+            {
+                foreach (Control control in phProductos.Controls)
+                {
+                    TableRow tr = control as TableRow;
+                    LinkButton btn = tr.Cells[6].Controls[2] as LinkButton;
+                    string idArticuloBtn = btn.ID.Split('_')[1];
+                    if (idArticuloBtn.Contains(idArt.ToString()))
+                    {
+                        (tr.Cells[3].Controls[0] as TextBox).Text = cantidadXArticulo.ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// activa si se habia apretado antes el checkbox
+        /// </summary>
+        /// <returns></returns>
+        private void activarChkBox(CheckBox checkBox, string idTraza)
+        {
+            try
+            {
+                long traza = Convert.ToInt64(idTraza.Split('-')[0]);
+                List<Trazabilidad> trazasADevolver = new List<Trazabilidad>();
+
+                List<Trazabilidad> vsTrazabilidad = vsTraza;
+                if (vsTrazabilidad != null)
+                {
+                    if (vsTrazabilidad.Count > 0)
+                    {
+                        trazasADevolver = vsTrazabilidad;
+                        var existe = trazasADevolver.Where(x => x.Id == traza).FirstOrDefault();
+                        if (existe != null)
+                        {
+                            checkBox.Checked = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// cambia el estado a 4 de las trazas seleccionada y crea registros en la tabla Trazabilidad_Movimientos
+        /// </summary>
+        /// <param name="trazasADevolver"></param>
+        private void devolverTrazasSeleccionadas()
+        {
+            try
+            {
+                int i = 0;
+                if (vsTraza != null)
+                {
+                    foreach (var item in vsTraza)
+                    {
+                        i += this.contArticulos.CambiarEstadoTrazabilidadByID((int)item.Id, 4);
+                    }
+                    if (i == vsTraza.Count)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        #endregion
     }
 }

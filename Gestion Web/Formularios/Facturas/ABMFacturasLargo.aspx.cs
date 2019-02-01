@@ -2703,7 +2703,6 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                         btnTraza.Click += new EventHandler(this.TrazabilidadItem);
                     celAccion.Controls.Add(btnTraza);
-
                 }
                 else
                 {
@@ -7660,10 +7659,8 @@ namespace Gestion_Web.Formularios.Facturas
                         pos++;
                         idTrazas = "";
                         phStockTrazabilidad.Controls.Add(tr);
-
                     }
                 }
-
             }
             catch (Exception ex)
             {
