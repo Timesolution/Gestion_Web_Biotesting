@@ -23,13 +23,13 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnCorregirOrigen" runat="server" data-toggle="modal" href="#modalConfirmacionOrigen">Subir dif. stock suc. origen</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnCorregirOrigen" runat="server" data-toggle="modal" Visible="false" href="#modalConfirmacionOrigen">Subir dif. stock suc. origen</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnCorregirDestino" runat="server" data-toggle="modal" href="#modalConfirmacionDestino">Subir dif. stock suc. destino</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnCorregirDestino" runat="server" data-toggle="modal" Visible="true" href="#modalConfirmacionDestino">Subir dif. stock suc. destino</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnResolucionAdministrativa" runat="server" data-toggle="modal" href="#modalResolucionAdministrativa">Resolucion administrativa</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnResolucionAdministrativa" runat="server" data-toggle="modal" Visible="false" href="#modalResolucionAdministrativa">Resolucion administrativa</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
