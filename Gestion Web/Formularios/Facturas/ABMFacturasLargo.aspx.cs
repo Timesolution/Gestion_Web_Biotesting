@@ -2843,7 +2843,7 @@ namespace Gestion_Web.Formularios.Facturas
                             this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                         }
                     }
-
+                    //TODO sumarle el neto21 y sacar el obtener total iva
                     this.factura.totalSinDescuento = decimal.Round(this.factura.neto + this.factura.obtenerTotalIva(), 2);
 
                     //retencion sobre el sub total
