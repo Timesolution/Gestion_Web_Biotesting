@@ -33,7 +33,6 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-
                 this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
                 this.idSucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
@@ -112,7 +111,6 @@ namespace Gestion_Web.Formularios.Reportes
                         }
                     }
                 }
-
                 return 0;
             }
             catch
@@ -163,7 +161,6 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListSucursal.DataBind();
 
                 this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
-
             }
             catch (Exception ex)
             {
@@ -174,7 +171,6 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-
                 DataTable dt = this.contArticulos.obtenerGruposArticulos();
 
                 //agrego todos
@@ -188,9 +184,6 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListGrupo.DataTextField = "descripcion";
 
                 this.DropListGrupo.DataBind();
-
-
-
             }
             catch (Exception ex)
             {
@@ -215,10 +208,7 @@ namespace Gestion_Web.Formularios.Reportes
                         ListItem item = new ListItem(art.descripcion, art.id.ToString());
                         DropListArticulos.Items.Add(item);
                     }
-
-                    
                 }
-
             }
             catch (Exception ex)
             {
@@ -364,6 +354,10 @@ namespace Gestion_Web.Formularios.Reportes
                         if (row["estado"].ToString() == "3")
                         {
                             celEstado.Text = "TOMADA PEDIDO";
+                        }
+                        if (row["estado"].ToString() == "4")
+                        {
+                            celEstado.Text = "DEVUELTO";
                         }
                         tr.Cells.Add(celEstado);
 

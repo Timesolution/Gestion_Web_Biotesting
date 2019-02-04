@@ -95,6 +95,18 @@ namespace Gestion_Web.Formularios.Facturas
                                 this.DropListSucursalDestino.Enabled = true;
                             }
                         }
+                        if (s == "197")
+                        {
+                            this.lbtnCorregirOrigen.Visible = true;
+                        }
+                        if (s == "198")
+                        {
+                            this.lbtnCorregirDestino.Visible = true;
+                        }
+                        if (s == "199")
+                        {
+                            this.lbtnResolucionAdministrativa.Visible = true;
+                        }
                     }
                 }
 

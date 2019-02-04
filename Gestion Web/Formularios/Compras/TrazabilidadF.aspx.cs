@@ -526,7 +526,6 @@ namespace Gestion_Web.Formularios.Compras
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando traza nº " + indiceRow + 1));
                                 return;
                             }
-
                             indiceRow++;
                         }
                     }

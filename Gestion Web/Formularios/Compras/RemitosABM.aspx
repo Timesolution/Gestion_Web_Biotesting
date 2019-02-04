@@ -167,6 +167,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalTrazabilidad"></a>
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -225,6 +227,74 @@
         </div>
     </div>
 
+     <div id="modalTrazabilidad" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" style="width: 80%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="btnCerrarTraza" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
+                        <h4 class="modal-title">Trazabilidad</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel6" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="widget big-stats-container stacked">
+
+                                        <div class="widget-content">
+
+                                            <div id="big_stats" class="cf">
+                                                <div class="stat">
+                                                    <h4>Cantidad</h4>
+                                                    <asp:Label ID="lblTrazaActual" runat="server" Text="0" class="value"></asp:Label>
+                                                    <label class="value">/</label>
+                                                    <asp:Label ID="lblTrazaTotal" runat="server" Text="0" class="value"></asp:Label>
+                                                </div>
+                                                <!-- .stat -->
+                                            </div>
+
+                                        </div>
+                                        <!-- /widget-content -->
+
+                                    </div>
+                                    <!-- /widget -->
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
+                                    <ContentTemplate>
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <asp:PlaceHolder ID="phCamposTrazabilidad" runat="server"></asp:PlaceHolder>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <asp:PlaceHolder ID="phItemsTrazabilidad" runat="server"></asp:PlaceHolder>
+                                            </tbody>
+                                        </table>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:UpdatePanel ID="UpdatePanel8" runat="server" UpdateMode="Always">
+                            <ContentTemplate>
+                                <asp:Label ID="lblMovTraza" runat="server" Style="display: none;"></asp:Label>
+                                <asp:LinkButton ID="AgregarTraza" runat="server" class="btn btn-success" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="AgregarTraza_Click"></asp:LinkButton>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     
     <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
@@ -268,6 +338,12 @@
                 }
                 );
         });
+    </script>
+
+    <script>
+        function cerrarModal() {
+            document.getElementById('btnCerrarTraza').click();
+        }
     </script>
 
     <script type="text/javascript">
@@ -358,6 +434,9 @@
     </script>
 
     <script>
+        function abrirdialog() {
+            document.getElementById('abreDialog').click();
+        }
         //valida los campos solo numeros
         function validarNro(e) {
             var key;
