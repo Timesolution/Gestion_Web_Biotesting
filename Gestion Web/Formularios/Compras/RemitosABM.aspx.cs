@@ -259,6 +259,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 if (ViewState["vsTraza"] != null)
                 {
+                    var temp = ViewState["vsTraza"];
                     return (List<Trazabilidad>)ViewState["vsTraza"];
                     //var dt
                 }
@@ -1078,6 +1079,7 @@ namespace Gestion_Web.Formularios.Compras
                         columnas = 0;
                         pos++;
                         idTrazas = "";
+                        lblTrazaTotal.Text = pos.ToString();
                         phItemsTrazabilidad.Controls.Add(tr);
                     }
                 }
