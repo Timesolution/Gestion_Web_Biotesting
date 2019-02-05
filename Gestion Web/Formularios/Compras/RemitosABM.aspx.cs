@@ -4,7 +4,6 @@ using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using Gestor_Solution.Modelo;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -32,7 +31,7 @@ namespace Gestion_Web.Formularios.Compras
 
         DataTable dtItemsTemp2;
 
-        List<Trazabilidad> trazabilidadTmp;
+        List<TrazaTemp> trazabilidadTmp;
         Mensajes m = new Mensajes();
         int accion;
         int ordenReparacion;
@@ -56,7 +55,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.cargarSucursal();
                     this.dtItemsTemp = new DataTable();
                     this.dtItemsTemp2 = new DataTable();
-                    this.trazabilidadTmp = new List<Trazabilidad>();
+                    this.trazabilidadTmp = new List<TrazaTemp>();
                     this.CrearTablaItems();
                     this.CrearTablaItems2();
                     this.CrearListaTrazabilidad();
@@ -205,7 +204,6 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-
                 vsTraza = trazabilidadTmp;
             }
             catch (Exception ex)
@@ -253,87 +251,29 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected List<Trazabilidad> vsTraza
+        protected List<TrazaTemp> vsTraza
         {
             get
             {
                 if (ViewState["vsTraza"] != null)
                 {
-                    var temp = ViewState["vsTraza"];
-                    return (List<Trazabilidad>)ViewState["vsTraza"];
+                    //var temp = ViewState["vsTraza"];
+                    //return (List<Trazabilidad>)ViewState["vsTraza"];
                     //var dt
+                    DataTable table = (DataTable)ViewState["vsTraza"];
+                    List<TrazaTemp> lista = Helpers.ToListof<TrazaTemp>(table);
+                    return lista;
                 }
                 else
                 {
-                    return new List<Trazabilidad>();
+                    return new List<TrazaTemp>();
                 }
             }
             set
             {
-                var dt = ListToDataTable(value);
+                var dt = Helpers.ListToDataTable(value);
                 ViewState["vsTraza"] = dt;
             }
-        }
-
-        //public List<T> ToListof<T>(this DataTable dt)
-        //{
-        //    const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
-        //    var columnNames = dt.Columns.Cast<DataColumn>()
-        //        .Select(c => c.ColumnName)
-        //        .ToList();
-        //    var objectProperties = typeof(T).GetProperties(flags);
-        //    var targetList = dt.AsEnumerable().Select(dataRow =>
-        //    {
-        //        var instanceOfT = Activator.CreateInstance<T>();
-
-        //        foreach (var properties in objectProperties.Where(properties => columnNames.Contains(properties.Name) && dataRow[properties.Name] != DBNull.Value))
-        //        {
-        //            properties.SetValue(instanceOfT, dataRow[properties.Name], null);
-        //        }
-        //        return instanceOfT;
-        //    }).ToList();
-
-        //    return targetList;
-        //}
-
-        public static DataTable ListToDataTable<T>(List<T> list)
-        {
-            DataTable dt = new DataTable();
-
-            foreach (PropertyInfo info in typeof(T).GetProperties())
-            {
-                dt.Columns.Add(new DataColumn(info.Name, GetNullableType(info.PropertyType)));
-            }
-            foreach (T t in list)
-            {
-                DataRow row = dt.NewRow();
-                foreach (PropertyInfo info in typeof(T).GetProperties())
-                {
-                    if (!IsNullableType(info.PropertyType))
-                        row[info.Name] = info.GetValue(t, null);
-                    else
-                        row[info.Name] = (info.GetValue(t, null) ?? DBNull.Value);
-                }
-                dt.Rows.Add(row);
-            }
-            return dt;
-        }
-
-        private static Type GetNullableType(Type t)
-        {
-            Type returnType = t;
-            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-            {
-                returnType = Nullable.GetUnderlyingType(t);
-            }
-            return returnType;
-        }
-        private static bool IsNullableType(Type type)
-        {
-            return (type == typeof(string) ||
-                    type.IsArray ||
-                    (type.IsGenericType &&
-                     type.GetGenericTypeDefinition().Equals(typeof(Nullable<>))));
         }
 
         public void cargarProveedores()
@@ -619,6 +559,7 @@ namespace Gestion_Web.Formularios.Compras
                     int i = this.controlador.agregarRemito(rc, (int)rc.IdSucursal);
                     if (i > 0)
                     {
+                        this.devolverTrazasSeleccionadas();
                         Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Remito nro " + rc.Numero + " generado con exito.");
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Remito Guardado con exito\", {type: \"info\"}); location.href='RemitosABM.aspx?a=1';", true);
                     }
@@ -1010,6 +951,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                lblTrazaActual.Text = 0.ToString();
                 phCamposTrazabilidad.Controls.Clear();
                 List<Gestion_Api.Entitys.Trazabilidad_Campos> lstCampos = this.contArticulos.obtenerCamposTrazabilidadByGrupo(art.grupo.id);
 
@@ -1108,21 +1050,17 @@ namespace Gestion_Web.Formularios.Compras
             {
                 string idArtBtnAceptarTraza = this.lblMovTraza.Text;
                 int idArticulo = Convert.ToInt32(idArtBtnAceptarTraza.Split('_')[1]);
-                List<Trazabilidad> trazasADevolver = new List<Trazabilidad>();
+                List<TrazaTemp> trazasADevolver = new List<TrazaTemp>();
 
                 //borro si es q ya habia trazas guardadas en el viewstate de ese articulo
-                List<Trazabilidad> trazasAEliminar = new List<Trazabilidad>();
-
-                //List<Trazabilidad> vsTrazabilidad = (List<Trazabilidad>)ViewState["vsTraza"];
-
-
+                List<TrazaTemp> trazasAEliminar = new List<TrazaTemp>();
 
                 if (vsTraza != null)
                 {
                     if (vsTraza.Count > 0)
                     {
                         trazasADevolver = vsTraza;
-                        trazasAEliminar = trazasADevolver.Where(x => x.idArticulo == idArticulo).ToList();
+                        trazasAEliminar = trazasADevolver.Where(x => x.IdArticulo == idArticulo).ToList();
                         trazasADevolver = trazasADevolver.Except(trazasAEliminar).ToList();
                     }
                 }
@@ -1143,20 +1081,16 @@ namespace Gestion_Web.Formularios.Compras
                         cantidadXArticulo++;
                         foreach (var item in idsTrazas)
                         {
-                            Trazabilidad trazaItem = new Trazabilidad();
-                            trazaItem.Id = Convert.ToInt64(item);
-                            trazaItem.idArticulo = idArticulo;
+                            TrazaTemp trazaItem = new TrazaTemp();
+                            trazaItem.IdTraza = Convert.ToInt32(item);
+                            trazaItem.IdArticulo = idArticulo;
 
                             trazasADevolver.Add(trazaItem);
                         }
-                        //seteo la cantidad en el txtbox del articulo por las trazas seleccionadas
-                        this.setearCantidadAlTxtBoxDelArticulo(cantidadXArticulo, idArticulo);
                     }
                 }
-
-                //y agrego las trazas seleccionadas de ese articulo al viewstate y la reemplazo
-                //ViewState.Add("table", new DataTable());
-                //ViewState.Add("vsTrazabilidad", trazasADevolver);
+                //seteo la cantidad en el txtbox del articulo por las trazas seleccionadas
+                this.setearCantidadAlTxtBoxDelArticulo(cantidadXArticulo, idArticulo);
 
                 DataRow dr = dtItems2.NewRow();
                 dr[0] = trazasADevolver.Count();
@@ -1164,7 +1098,7 @@ namespace Gestion_Web.Formularios.Compras
                 dtItems2.Rows.Add(dr);
 
                 vsTraza = trazasADevolver;
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel8, UpdatePanel8.GetType(), "alert", "$.msgbox(\"Traza seleccionada con exito!. \", {type: \"info\"}); cerrarModal(); ", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel8, UpdatePanel8.GetType(), "alert", "$.msgbox(\"Trazas seleccionadas correctamente. \", {type: \"info\"}); cerrarModal(); ", true);
 
             }
             catch (Exception ex)
@@ -1182,10 +1116,16 @@ namespace Gestion_Web.Formularios.Compras
                     TableRow tr = control as TableRow;
                     LinkButton btn = tr.Cells[6].Controls[2] as LinkButton;
                     string idArticuloBtn = btn.ID.Split('_')[1];
+
                     if (idArticuloBtn.Contains(idArt.ToString()))
                     {
                         (tr.Cells[3].Controls[0] as TextBox).Text = cantidadXArticulo.ToString();
+                        if (cantidadXArticulo == 0)
+                        {
+                            (tr.Cells[3].Controls[0] as TextBox).Text = "";
+                        }
                     }
+                    
                 }
             }
             catch (Exception ex)
@@ -1205,16 +1145,25 @@ namespace Gestion_Web.Formularios.Compras
                 long traza = Convert.ToInt64(idTraza.Split('-')[0]);
                 List<Trazabilidad> trazasADevolver = new List<Trazabilidad>();
 
-                List<Trazabilidad> vsTrazabilidad = vsTraza;
+                List<TrazaTemp> vsTrazabilidad = vsTraza;
                 if (vsTrazabilidad != null)
                 {
                     if (vsTrazabilidad.Count > 0)
                     {
-                        trazasADevolver = vsTrazabilidad;
+                        foreach (TrazaTemp item in vsTrazabilidad)
+                        {
+                            trazasADevolver.Add(new Trazabilidad()
+                            {
+                                Id = item.IdTraza,
+                                idArticulo = item.IdArticulo
+                            });
+                        }
+                        
                         var existe = trazasADevolver.Where(x => x.Id == traza).FirstOrDefault();
                         if (existe != null)
                         {
                             checkBox.Checked = true;
+                            lblTrazaActual.Text = (Convert.ToInt32(lblTrazaActual.Text) + 1).ToString();
                         }
                     }
                 }
@@ -1238,7 +1187,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     foreach (var item in vsTraza)
                     {
-                        i += this.contArticulos.CambiarEstadoTrazabilidadByID((int)item.Id, 4);
+                        i += this.contArticulos.CambiarEstadoTrazabilidadByID((int)item.IdTraza, 4);
                     }
                     if (i == vsTraza.Count)
                     {
