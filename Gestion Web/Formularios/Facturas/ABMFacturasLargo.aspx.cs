@@ -2703,7 +2703,6 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                         btnTraza.Click += new EventHandler(this.TrazabilidadItem);
                     celAccion.Controls.Add(btnTraza);
-
                 }
                 else
                 {
@@ -2843,7 +2842,7 @@ namespace Gestion_Web.Formularios.Facturas
                             this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                         }
                     }
-
+                    //TODO sumarle el neto21 y sacar el obtener total iva
                     this.factura.totalSinDescuento = decimal.Round(this.factura.neto + this.factura.obtenerTotalIva(), 2);
 
                     //retencion sobre el sub total
@@ -3495,6 +3494,12 @@ namespace Gestion_Web.Formularios.Facturas
                     if (porcenOK == 1 && idForma > 0)
                     {
                         this.procesoFacturarPorcentual(fact, dtPago, user, generaRemito);
+                        return;
+                    }
+
+                    //por si es venta entre sucursales y selecciono un cliente interno q no pueda ingresar cantidades en negativo
+                    if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(factura) == 0)
+                    {
                         return;
                     }
 
@@ -4287,7 +4292,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
-                if (esTrazable == 1 && item.cantidad>0)
+                if (esTrazable == 1)
                 {
                     int cantTrazas = 0;
                     int trazaActual = -1;
@@ -5211,7 +5216,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (ItemFactura item in f.items)
                 {
                     int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
-                    if (esTrazable == 1 && item.cantidad>0)
+                    if (esTrazable == 1)
                     {
                         int cantTrazas = 0;
                         int trazaActual = -1;
@@ -5582,6 +5587,30 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error validando facturas para realizar Nota de Crédito. Excepción:" + Ex.Message + " \", {type: \"error\"});", true);
                 return false;
+            }
+        }
+
+        private int verificarSiLaCantidadIngresadaPorItemEsPositiva(Factura f)
+        {
+            try
+            {
+                if (this.ListSucursalCliente.SelectedIndex != -1)
+                {
+                    foreach (var item in f.items)
+                    {
+                        if (item.cantidad <= 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe ingresar cantidades en los articulos mayores a '0' \", {type: \"error\"});", true);
+                            return 0;
+                        }
+                    }
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarSiLaCantidadIngresadaPorItemEsPositiva. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
             }
         }
         #endregion
@@ -7630,10 +7659,8 @@ namespace Gestion_Web.Formularios.Facturas
                         pos++;
                         idTrazas = "";
                         phStockTrazabilidad.Controls.Add(tr);
-
                     }
                 }
-
             }
             catch (Exception ex)
             {
