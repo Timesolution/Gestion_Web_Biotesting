@@ -996,6 +996,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //si esta concateno la alerta
                     script += "$.msgbox(\"Este articulo ya fue cargado previamente a la factura: Cod.: " + art.codigo + " \");";
                     alerta += "Este articulo fue cargado previamente a la factura: Articulo: " + art.codigo;
+                    ActualizarStockAlAgregarItem(art.codigo);
                 }
 
                 //miro si esta en alguna promocion 
@@ -2429,12 +2430,12 @@ namespace Gestion_Web.Formularios.Facturas
                             return;
                         }
                     }
-
+                    //TODO Aca se calcula la promocion
                     decimal cantPromo = 0;
                     if (this.txtCantidad.Text != "")
                         cantPromo = Convert.ToDecimal(this.txtCantidad.Text);
                     Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(art.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), cantPromo);
-                    if (p != null)
+                    if (p != null && p.FormaPago != 8)
                     {
                         if (p.PrecioFijo > 0)
                         {
@@ -2445,7 +2446,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             this.TxtDescuentoArri.Text = p.Descuento.ToString();
                             this.TxtDescuentoArri.Attributes.Add("disabled", "disabled");
-                        }                        
+                        }
                     }
                     else
                     {
@@ -2622,7 +2623,7 @@ namespace Gestion_Web.Formularios.Facturas
                 TableCell celCantidad = new TableCell();
                 TextBox txtCant = new TextBox();
                 txtCant.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
-                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad;
+                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad + "_" + item.articulo.codigo;
                 txtCant.CssClass = "form-control";
                 txtCant.Style.Add("text-align", "Right");
                 //txtCant.TextMode = TextBoxMode.Number;
@@ -2631,6 +2632,10 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
+                if(ListSucursalCliente.SelectedIndex > 0)
+                    txtCant.Enabled = false;
+                else
+                    txtCant.Enabled = true;
                 tr.Cells.Add(celCantidad);
 
                 TableCell celDescripcion = new TableCell();
@@ -3882,21 +3887,26 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtTotalArri.Text = "0";
                 }
 
+                ActualizarStockAlAgregarItem(this.txtCodigo.Text);
+
+                if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
+                    return;
 
                 Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
 
-                if (artVerPromo != null)
-                {
+                //if (artVerPromo != null)
+                //{
                     //Verifico si ya existen o no articulos en promocion en la fc, para controlar que estos articulos sean todos del mismo tipo (con promocion / sin promocion)
                     //if (!verificarArticulosEnPromocion(artVerPromo))
                     //{
                     //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los articulos a facturar deben tener la misma condición (todos en Promoción o todos sin Promoción). \", {type: \"error\"});", true);
                     //    return;
                     //}
-                }
-                
+                //}
+
+                //TODO Aca calculo la promocion
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-                if (p != null)
+                if (p != null && p.FormaPago != 8)
                 {
                     if (p.PrecioFijo > 0)
                         this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
@@ -5613,6 +5623,43 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
+
+        public void ActualizarStockAlAgregarItem(string codigo)
+        {
+
+            Factura fc = Session["Factura"] as Factura;
+
+            var cantidadARestar = fc.items.Where(x => x.articulo.codigo == codigo).ToList().Sum(x => x.cantidad);
+
+            lbtnStockProd.Text = (Convert.ToDecimal(lbtnStockProd.Text) - Convert.ToDecimal(cantidadARestar)).ToString();
+        }
+
+        private int verificarNoEnviarMercaderiaSiNoHayStock()
+        {
+            try
+            {
+                if (this.ListSucursalCliente.SelectedIndex > 0)
+                {
+                    int stock = Convert.ToInt32(lbtnStockProd.Text);
+                    int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                    int total = stock - cantidad;
+
+                    if(total < 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita es mayor al stock que posee la sucursal \", {type: \"alert\"});", true);
+                        return 0;
+                    }
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarSiLaCantidadIngresadaPorItemEsPositiva. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
+
         #endregion
 
         #region pagos tarjeta
