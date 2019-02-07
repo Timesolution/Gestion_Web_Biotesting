@@ -6231,8 +6231,9 @@ namespace Gestion_Web.Formularios.Facturas
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToInt32(ListTarjetas.SelectedValue));
                 if (p != null)
                 {
+                    ValidarExisteArticuloEnPromoTarjeta(p);
                     this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");                    
-                    this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
+                    //this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
                     this.actualizarTotales();
                     this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
@@ -6260,6 +6261,68 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        public void ValidarExisteArticuloEnPromoTarjeta(Gestion_Api.Entitys.Promocione promo)
+        {
+            try
+            {
+                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
+
+                Factura f = Session["Factura"] as Factura;
+
+                foreach (var item in f.items)
+                {
+                    Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(item.articulo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(item.cantidad));
+
+                    //TODO si es true que calcule el descuento
+                    if (p != null && p.Id == promo.Id)
+                    {
+                        totalItemPromocionArticulo(p,item);
+                    }                        
+                }
+
+                Session["Factura"] = f;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al validar si existe un articulo en la promocion de tarjeta " + ex.Message);
+            }
+        }
+
+        private void totalItemPromocionArticulo(Gestion_Api.Entitys.Promocione p, ItemFactura fi)
+        {
+            try
+            {
+                decimal desc = 0;
+
+                if (p.PrecioFijo > 0)
+                    fi.precioUnitario = p.PrecioFijo.Value;
+                else                
+                    desc = Convert.ToDecimal(p.Descuento);                
+
+                //recalculo los totales del item
+                decimal cantidad = Convert.ToDecimal(fi.cantidad);
+                decimal precio = Convert.ToDecimal(fi.precioUnitario);                
+
+                decimal total = decimal.Round((cantidad * precio), 2);
+
+                total = decimal.Round(total, 2);
+
+                decimal totalConDescuento = decimal.Round(total - (total * (desc / 100)), 2);
+
+                decimal descuentoEnPesos = decimal.Round(total - totalConDescuento, 2);
+
+                fi.total = totalConDescuento;
+                fi.porcentajeDescuento = desc;
+                fi.descuento = descuentoEnPesos;
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total " + ex.Message));
+            }
+        }
+
         #endregion
 
         #region Funciones cambio documento
