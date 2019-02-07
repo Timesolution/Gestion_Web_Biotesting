@@ -583,16 +583,19 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     string tipoDocumento = " FC ";
                     int idFact = Convert.ToInt32(row["Id"]);
-                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();
-                    
+                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();                    
+
                     if (m.Ftp == 1)
                         tipoDocumento = " PRP ";
                     if (m.Ftp == 2)
                         tipoDocumento = " ";
-
+                    
                     if (row["TipoDocumento"].ToString() == "19")
                     {
-                        row["Tipo"] = tipoDocumento + "  Nº";
+                        if (m.Compra.TipoDocumento.ToLower().Contains("credito") || m.Compra.TipoDocumento.ToLower().Contains("crédito"))
+                            tipoDocumento = " NC ";
+
+                        row["Tipo"] =  tipoDocumento + "  Nº";
                     }
                     if (row["TipoDocumento"].ToString() == "21")
                     {
@@ -671,6 +674,7 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 controladorCliente cont = new controladorCliente();
+                ControladorPlanCuentas contPlanCtas = new ControladorPlanCuentas();
 
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime Hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));
@@ -683,6 +687,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
                 dtCompras.Columns.Add("razonSocial", typeof(string));
+                dtCompras.Columns.Add("PlanDeCuentas", typeof(string));
 
                 decimal saldoTotal = 0;
 
@@ -703,12 +708,16 @@ namespace Gestion_Web.Formularios.Compras
                         row["Otros"] = Convert.ToDecimal(row["Otros"]) * -1;
                         row["Total"] = Convert.ToDecimal(row["Total"]) * -1;
                     }
+
+                    var cuentaContable = contPlanCtas.obtenerCuentaContableCompra(Convert.ToInt64(row["Id"]));
+
+                    if (cuentaContable != null)
+                        row["PlanDeCuentas"] = cuentaContable.Cuentas_Contables.Codigo + " " + cuentaContable.Cuentas_Contables.Descripcion;
+                    
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
                     row["razonSocial"] = p.razonSocial;
                 }
-
-
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleComprasR.rdlc");

@@ -78,6 +78,9 @@
                                     <li>
                                         <a href="#modalIngresosEgresosArticulos" data-toggle="modal" style="width: 90%">Ingresos/Egresos</a>
                                     </li>
+                                    <li>
+                                        <a href="#modalNominaDeArticulos" data-toggle="modal" style="width: 90%">Nomina de Articulos</a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -1033,6 +1036,31 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <div id="modalNominaDeArticulos" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Nomina de Articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-4">Incluir Art. Inactivos</label>
+                            <div class="col-md-1">
+                                <asp:CheckBox ID="chArtInactivos" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnNominaArticulosImprimir" runat="server" Text="Generar PDF" class="btn btn-success" OnClick="lbtnNominaArticulosImprimir_Click" />
+                    <asp:LinkButton ID="lbtnNominaArticulosExportar" runat="server" Text="Generar Excel" class="btn btn-success" OnClick="lbtnNominaArticulosExportar_Click" />
+                </div>
             </div>
         </div>
     </div>

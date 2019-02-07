@@ -7,19 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Reportes {
+namespace Gestion_Web.Formularios.Valores {
     
     
-    public partial class ReportesTrazabilidad {
-        
-        /// <summary>
-        /// phAcciones control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phAcciones;
+    public partial class RemesasF {
         
         /// <summary>
         /// btnAccion control.
@@ -31,13 +22,13 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
         
         /// <summary>
-        /// lbtnImprimir control.
+        /// lbtnEliminar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEliminar;
         
         /// <summary>
         /// lblParametros control.
@@ -49,49 +40,58 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.Label lblParametros;
         
         /// <summary>
-        /// phTabla control.
+        /// lblDatosCuenta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phTabla;
+        protected global::System.Web.UI.WebControls.Label lblDatosCuenta;
         
         /// <summary>
-        /// phTrazabilidad control.
+        /// UpdatePanel1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phTrazabilidad;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
-        /// UpdatePanel4 control.
+        /// phRemesas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel4;
+        protected global::System.Web.UI.WebControls.PlaceHolder phRemesas;
         
         /// <summary>
-        /// DropListGrupo control.
+        /// txtFechaDesde control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListGrupo;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaDesde;
         
         /// <summary>
-        /// UpdateProgress1 control.
+        /// RequiredFieldValidator3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdateProgress UpdateProgress1;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
+        
+        /// <summary>
+        /// txtFechaHasta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
         
         /// <summary>
         /// RequiredFieldValidator1 control.
@@ -103,58 +103,22 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
         
         /// <summary>
-        /// DropListSucursal control.
+        /// ListSucOrigen control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
+        protected global::System.Web.UI.WebControls.DropDownList ListSucOrigen;
         
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// ListSucDestino control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
-        /// <summary>
-        /// txtDescArticulo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDescArticulo;
-        
-        /// <summary>
-        /// btnBuscarCod control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnBuscarCod;
-        
-        /// <summary>
-        /// DropListArticulos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListArticulos;
-        
-        /// <summary>
-        /// DropListEstado control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListEstado;
+        protected global::System.Web.UI.WebControls.DropDownList ListSucDestino;
         
         /// <summary>
         /// lbtnBuscar control.
@@ -164,5 +128,23 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
+        
+        /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
+        /// TextBox1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox1;
     }
 }

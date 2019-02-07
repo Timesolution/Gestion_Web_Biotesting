@@ -2438,6 +2438,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         }
 
+
         #region despacho
         protected void lbtnActualizarArticulosDespacho_Click(object sender, EventArgs e)
         {
@@ -2582,5 +2583,30 @@ namespace Gestion_Web.Formularios.Articulos
         //    }
         //}
         #endregion
+        
+        protected void lbtnNominaArticulosImprimir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=9&ex=0&ai=" + Convert.ToInt32(this.chArtInactivos.Checked) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch
+            {
+
+            }
         }
+
+        protected void lbtnNominaArticulosExportar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=9&ex=1&ai=" + Convert.ToInt32(this.chArtInactivos.Checked) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch
+            {
+
+            }
+        }
+    }
+
 }

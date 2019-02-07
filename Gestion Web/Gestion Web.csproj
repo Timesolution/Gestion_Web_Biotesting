@@ -52,9 +52,8 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+    <Reference Include="Gestion Api">
+      <HintPath>..\..\gestion_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -431,9 +430,6 @@
     <Content Include="Formularios\Herramientas\ActPadronF.aspx" />
     <Content Include="Formularios\Herramientas\NumeracionDocumentos.aspx" />
     <Content Include="Formularios\Herramientas\PanelControl.aspx" />
-    <Content Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx" />
-    <Content Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx" />
-    <Content Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx" />
     <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
@@ -504,11 +500,13 @@
     <Content Include="Formularios\Transportes\TransportesF.aspx" />
     <Content Include="Formularios\Valores\ABMConceptos.aspx" />
     <Content Include="Formularios\Valores\ABMMutualesPagos.aspx" />
+    <Content Include="Formularios\Valores\ABMRemesa.aspx" />
     <Content Include="Formularios\Valores\CajaDiferenciasF.aspx" />
     <Content Include="Formularios\Valores\ChequesF_2.aspx" />
     <Content Include="Formularios\Valores\CreditosABM.aspx" />
     <Content Include="Formularios\Valores\MutualesPagosF.aspx" />
     <Content Include="Formularios\Valores\BancosF.aspx" />
+    <Content Include="Formularios\Valores\RemesasF.aspx" />
     <Content Include="Formularios\Valores\SolicitudesF.aspx" />
     <Content Include="Formularios\Valores\CreditosF.aspx" />
     <Content Include="Formularios\Valores\MutualesF.aspx" />
@@ -729,6 +727,17 @@
     <Content Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsc">
       <DependentUpon>dsOrdenReparacion.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\dsNominaArticulos.xsc">
+      <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Articulos\dsNominaArticulos.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsNominaArticulos.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Articulos\dsNominaArticulos.xss">
+      <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -767,6 +776,17 @@
     <Content Include="Formularios\Vendedores\dsVendedores.xsc">
       <DependentUpon>dsVendedores.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Valores\dsRemesa.xsc">
+      <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Valores\dsRemesa.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsRemesa.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Valores\dsRemesa.xss">
+      <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Vendedores\dsVendedores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -776,6 +796,7 @@
       <DependentUpon>dsVendedores.xsd</DependentUpon>
     </Content>
     <Content Include="Properties\DataSources\Gestion_Web.Formularios.Facturas.dsPresupuesto.datasource" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\publicacion gestion web.pubxml" />
     <None Include="Properties\PublishProfiles\Publicacion.pubxml" />
     <None Include="Properties\PublishProfiles\Publicación.pubxml" />
@@ -1307,6 +1328,11 @@
     <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
       <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Articulos\dsNominaArticulos.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Articulos\ImpresionMovStock.aspx.cs">
       <DependentUpon>ImpresionMovStock.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1650,27 +1676,6 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\RegimenF.aspx.designer.cs">
       <DependentUpon>RegimenF.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.cs">
-      <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.designer.cs">
-      <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx.cs">
-      <DependentUpon>MateriasPrimasABM.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx.designer.cs">
-      <DependentUpon>MateriasPrimasABM.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx.cs">
-      <DependentUpon>MateriasPrimasF.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx.designer.cs">
-      <DependentUpon>MateriasPrimasF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\dsOrdenReparacion.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2544,6 +2549,13 @@
     <Compile Include="Formularios\Valores\ABMMutualesPagos.aspx.designer.cs">
       <DependentUpon>ABMMutualesPagos.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Valores\ABMRemesa.aspx.cs">
+      <DependentUpon>ABMRemesa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Valores\ABMRemesa.aspx.designer.cs">
+      <DependentUpon>ABMRemesa.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Valores\CajaDiferenciasF.aspx.cs">
       <DependentUpon>CajaDiferenciasF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2565,6 +2577,11 @@
     <Compile Include="Formularios\Valores\CreditosABM.aspx.designer.cs">
       <DependentUpon>CreditosABM.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Valores\dsRemesa.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Valores\MutualesPagosF.aspx.cs">
       <DependentUpon>MutualesPagosF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2578,6 +2595,13 @@
     </Compile>
     <Compile Include="Formularios\Valores\BancosF.aspx.designer.cs">
       <DependentUpon>BancosF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Valores\RemesasF.aspx.cs">
+      <DependentUpon>RemesasF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Valores\RemesasF.aspx.designer.cs">
+      <DependentUpon>RemesasF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Valores\SolicitudesF.aspx.cs">
       <DependentUpon>SolicitudesF.aspx</DependentUpon>
@@ -2929,6 +2953,7 @@
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\MovStockSucursalR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\MovimientoStockR.rdlc" />
+    <EmbeddedResource Include="Formularios\Articulos\NominaArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ReporteStockR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasChicas.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasGrandes.rdlc" />
@@ -3044,6 +3069,7 @@
     <EmbeddedResource Include="Formularios\Valores\GastosR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\InformeCierresR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\PagaresR.rdlc" />
+    <EmbeddedResource Include="Formularios\Valores\RemesaR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ResumenTurnoR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\TarjetasR.rdlc" />
     <EmbeddedResource Include="Formularios\Vendedores\VendedoresR.rdlc" />
