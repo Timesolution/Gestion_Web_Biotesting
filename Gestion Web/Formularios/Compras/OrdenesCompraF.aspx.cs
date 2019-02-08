@@ -321,6 +321,12 @@ namespace Gestion_Web.Formularios.Compras
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celFecha);
 
+                TableCell celFechaEntrega = new TableCell();
+                celFechaEntrega.Text = Convert.ToDateTime(oc.FechaEntrega, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
+                celFechaEntrega.VerticalAlign = VerticalAlign.Middle;
+                celFechaEntrega.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celFechaEntrega);
+
                 TableCell celNumero = new TableCell();
                 celNumero.Text = oc.Numero;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
@@ -471,7 +477,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[1] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -589,6 +595,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
             }
         }
+
         private void modificarEstadoOrdenCompra(int estado)
         {
             try
@@ -597,7 +604,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -636,7 +643,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -666,7 +673,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];

@@ -46,6 +46,9 @@ namespace Gestion_Web.Formularios.Articulos
         private int movStock;
         int marca;
         string descSubGrupo;
+
+        private int artInactivos;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -76,8 +79,9 @@ namespace Gestion_Web.Formularios.Articulos
                     this.sucCentral = Convert.ToInt32(Request.QueryString["sCentral"]);
                     this.sucCompara = Convert.ToInt32(Request.QueryString["sCompara"]);
 
-
                     this.listas = Request.QueryString["listas"];
+
+                    this.artInactivos = Convert.ToInt32(Request.QueryString["ai"]);
 
                     if (accion == 1)
                     {
@@ -112,6 +116,10 @@ namespace Gestion_Web.Formularios.Articulos
                     if(accion == 8)
                     {
                         generarReporte8();//Ingresos egresos por articulo
+                    }
+                    if (accion == 9)
+                    {
+                        generarReporte9();//Nomina de Articulos
                     }
                 }
             }
@@ -787,6 +795,63 @@ namespace Gestion_Web.Formularios.Articulos
             catch
             {
 
+            }
+        }
+
+        private void generarReporte9()
+        {
+            try
+            {
+                DataTable dt = this.controlador.obtenerNominaDeArticulos(artInactivos);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("NominaArticulosR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("NominaArticulos", dt);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Nomina_Articulos", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al generar reporte de nomina de articulos. Error: " + ex.Message);
             }
         }
 

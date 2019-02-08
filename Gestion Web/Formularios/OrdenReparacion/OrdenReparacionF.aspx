@@ -35,6 +35,9 @@
                                                     <li>
                                                         <asp:LinkButton ID="lbtnSeleccionarServiceOficial" runat="server" data-toggle="modal" href="#modalServiceOficial">Seleccionar Service Oficial</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnAsignarServiceOficial" runat="server" data-toggle="modal" href="#modalAsignarServiceOficial">Asignar OR a Service Oficial</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnEnviarASucursalGarantias" runat="server" data-toggle="modal" href="#modalEnviarASucursalGarantias">Reparado - Enviar a Garantias</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnDevolverSucOrigen" runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal Origen</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnRecibidoSucOrigen" runat="server" data-toggle="modal" href="#modalSucOrigenRecibeMercaderia">Recibido en sucursal origen</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -50,7 +53,8 @@
                                                         <asp:LinkButton ID="lbtnEnviarARepararLocalmente" runat="server" data-toggle="modal" href="#modalEnviarARepararLocalmente">Enviar a sucursal de reparacion</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnRepararLocalmente" runat="server" data-toggle="modal" href="#modalEnReparacion">En Reparacion</asp:LinkButton>
                                                         <asp:LinkButton ID="lbtnReparado" runat="server" data-toggle="modal" href="#modalReparado">Reparado</asp:LinkButton>
-                                                        <asp:LinkButton ID="lbtnDevolverASucursal" runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnDevolverASucursal" runat="server" data-toggle="modal" href="#modalDevolucionASucursal">Devolver a Sucursal Origen</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnSucOrigenRecibeProducto" runat="server" data-toggle="modal" href="#modalSucOrigenRecibeMercaderia">Recibido en sucursal origen</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -61,7 +65,7 @@
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <asp:LinkButton ID="lbtnRetiraCliente" runat="server" data-toggle="modal" href="#modalRetiraCliente">Retira Cliente</asp:LinkButton>
-                                                        <asp:LinkButton ID="lbtnVuelvePuntoVenta" runat="server" data-toggle="modal" href="#modalVuelvePuntoVenta">Vuelve a Punto de Venta</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnFinalizada" runat="server" data-toggle="modal" href="#modalFinalizada">Finalizada</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -124,6 +128,7 @@
                                             <th>Tope Reparacion</th>
                                             <th>Estado</th>
                                             <th>Barra de progreso</th>
+                                            <th>Sucursal OR</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -243,6 +248,41 @@
             </div>
         </div>
 
+        <div id="modalEnviarASucursalGarantias" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Envio a Sucursal Garantias</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label10" Text="Esta seguro que desea enviar el articulo a la sucursal de garantias?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox10" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnEnviarASucursalGarantias" Text="Enviar" class="btn btn-success" OnClick="btnEnviarASucursalGarantias_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="modalRetiraCliente" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -268,11 +308,20 @@
                                     <asp:TextBox runat="server" ID="TextBox7" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="name" class="col-md-4">Observacion Articulo</label>
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtObservacionRetiraCliente" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtObservacionRetiraCliente" ValidationGroup="ObservacionGrupoRetiraCliente" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
                         </div>
                         <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
                             <ContentTemplate>
                                 <div class="modal-footer">
-                                    <asp:Button runat="server" ID="btnRetiraCliente" Text="Si" class="btn btn-success" OnClick="btnRetiraCliente_Click" />
+                                    <asp:Button runat="server" ID="btnRetiraCliente" Text="Si" class="btn btn-success" ValidationGroup="ObservacionGrupoRetiraCliente" OnClick="btnRetiraCliente_Click" />
                                     <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                                 </div>
                             </ContentTemplate>
@@ -282,12 +331,12 @@
             </div>
         </div>
 
-        <div id="modalVuelvePuntoVenta" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modalFinalizada" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirmacion Vuelve a Punto de Venta</h4>
+                        <h4 class="modal-title">Confirmacion Finalizada</h4>
                     </div>
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
@@ -299,7 +348,7 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h5>
-                                        <asp:Label runat="server" ID="Label8" Text="El producto sera devuelto al punto de venta?" Style="text-align: center"></asp:Label>
+                                        <asp:Label runat="server" ID="Label8" Text="Finalizar orden de reparacion?" Style="text-align: center"></asp:Label>
                                     </h5>
                                 </div>
 
@@ -307,9 +356,18 @@
                                     <asp:TextBox runat="server" ID="TextBox8" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="name" class="col-md-4">Observacion Articulo</label>
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtObservacionFinalizada" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtObservacionFinalizada" ValidationGroup="ObservacionGrupoFinalizada" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnVuelvePuntoVenta" Text="Si" class="btn btn-success" OnClick="btnVuelvePuntoVenta_Click" />
+                            <asp:Button runat="server" ID="btnFinalizada" Text="Si" class="btn btn-success" ValidationGroup="ObservacionGrupoFinalizada" OnClick="btnFinalizada_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -380,6 +438,41 @@
                         </div>
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnReparado" Text="Enviar" class="btn btn-success" OnClick="btnReparado_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalSucOrigenRecibeMercaderia" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label9" Text="Producto recibido en la sucursal de origen?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="TextBox9" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnSucOrigenRecibeMercaderia" Text="Si" class="btn btn-success" OnClick="btnSucOrigenRecibeMercaderia_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -463,6 +556,11 @@
                             <asp:Button runat="server" ID="btnAgregarOrdenReparacionServicioTecnico" Text="Guardar" class="btn btn-success" ValidationGroup="ServiceOficial" OnClick="btnAgregarOrdenReparacionServicioTecnico_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
+                        <%--<asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                
+                            </ContentTemplate>
+                        </asp:UpdatePanel>--%>
                     </div>
                 </div>
             </div>
@@ -600,6 +698,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-4">Sucursal OR</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListSucursalOR" runat="server" class="form-control"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursalOR" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-4">Cod Cliente</label>
                                     <div class="col-md-6">
                                         <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
@@ -625,6 +733,24 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>                                
+                                <div class="form-group">
+                                    <label class="col-md-4">Desc Articulo</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtDescArticulo" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="btnBuscarCodArt" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodArt_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Articulo</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListArticulo" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListArticulo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                             </div>

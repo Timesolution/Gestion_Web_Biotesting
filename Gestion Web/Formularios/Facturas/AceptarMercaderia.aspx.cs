@@ -17,12 +17,14 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFacturacion contFacturacion = new controladorFacturacion();
         controladorFactEntity contFactEntity = new controladorFactEntity();
         int fc = 0;
+        int fm = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             this.VerificarLogin();
 
             fc = Convert.ToInt32(Request.QueryString["fc"]);
+            fm = Convert.ToInt32(Request.QueryString["fm"]);
 
             btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
@@ -93,6 +95,10 @@ namespace Gestion_Web.Formularios.Facturas
                 var factura = contFacturacion.obtenerFacturaId(fc);
                 var sucursalOrigen = contSucu.obtenerSucursalID(factura.sucursal.id);
                 var sucursalDestino = contSucu.obtenerSucursalID(factura.sucursalFacturada);
+                var fm = contFactEntity.ObtenerFacturas_MercaderiasByFacturaID(fc);
+
+                if (fm.Estado > 1)
+                    btnAgregar.Visible = false;
 
                 ListSucursalOrigen.Items.Add(new ListItem
                 {
@@ -141,6 +147,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                var fm = contFactEntity.ObtenerFacturas_MercaderiasByFacturaID(fc);
+
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = fi.Id.ToString() + "_" + fi.articulo.id;
@@ -169,6 +177,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 TextBox celCantidadRecibida = new TextBox();
                 celCantidadRecibida.TextMode = TextBoxMode.Number;
+                if (fm.Estado > 1)
+                    celCantidadRecibida.Enabled = false;
                 celCantidadRecibida.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
                 celCantidadRecibida.Text = cantidad.ToString();
 

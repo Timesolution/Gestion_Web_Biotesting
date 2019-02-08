@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -94,8 +95,23 @@ namespace Gestion_Web.Formularios.Facturas
                                 this.DropListSucursalDestino.Enabled = true;
                             }
                         }
+                        if (s == "197")
+                        {
+                            this.lbtnCorregirOrigen.Visible = true;
+                        }
+                        if (s == "198")
+                        {
+                            this.lbtnCorregirDestino.Visible = true;
+                        }
+                        if (s == "199")
+                        {
+                            this.lbtnResolucionAdministrativa.Visible = true;
+                        }
                     }
                 }
+
+                if (!listPermisos.Contains("196"))
+                    btnAccion.Visible = false;
 
                 if (tienePermiso == 1)
                     return 1;
@@ -247,23 +263,38 @@ namespace Gestion_Web.Formularios.Facturas
                 celDiferencia.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDiferencia);
 
-                //TableCell celEstado = new TableCell();
-                //celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID(Convert.ToInt32(f["Estado"].ToString())).Descripcion;
-                //celEstado.HorizontalAlign = HorizontalAlign.Left;
-                //celEstado.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celEstado);
+                TableCell celEstado = new TableCell();
+                celEstado.Text = contFactEntity.ObtenerFacturasMercaderias_EstadoByID((int)f.Estado).Descripcion;
+                celEstado.HorizontalAlign = HorizontalAlign.Left;
+                celEstado.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celEstado);
 
-                //TableCell celAccion = new TableCell();
+                TableCell celAccion = new TableCell();
 
-                //Literal lAccept = new Literal();
-                //lAccept.ID = "btnFactura_" + f["id"].ToString();
-                //lAccept.Text = "<a href=\"AceptarMercaderia.aspx?fc=" + f["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style =\"font-size:12pt\"> ";
-                //lAccept.Text += "<span class=\"shortcut-icon icon-search\"></span>";
-                //lAccept.Text += "</a>";
+                CheckBox cbSeleccion = new CheckBox();
+                cbSeleccion.ID = "cbSeleccion_" + f.FacturasMercaderias_Detalle.Id;
+                cbSeleccion.CssClass = "btn btn-info";
+                cbSeleccion.Font.Size = 12;
+                celAccion.Controls.Add(cbSeleccion);
+
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+                celAccion.Controls.Add(l1);
+
+                LinkButton btnDetalles = new LinkButton();
+                btnDetalles.CssClass = "btn btn-info ui-tooltip";
+                btnDetalles.Attributes.Add("data-toggle", "tooltip");
+                btnDetalles.Attributes.Add("title data-original-title", "Comentarios");
+                btnDetalles.ID = "btnComent_" + f.Observaciones + "_" + f.Id;
+                btnDetalles.Text = "<span class='shortcut-icon icon-comment'></span>";
+                btnDetalles.Font.Size = 12;
+                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                btnDetalles.Click += new EventHandler(this.ComentariosCaja);
+                celAccion.Controls.Add(btnDetalles);
 
                 //celAccion.Controls.Add(lAccept);
 
-                //tr.Cells.Add(celAccion);
+                tr.Cells.Add(celAccion);
 
                 phFacturas.Controls.Add(tr);
 
@@ -273,7 +304,32 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando diferencias de mercaderia en el PH. " + ex.Message));
             }
         }
+        private void ComentariosCaja(object sender, EventArgs e)
+        {
+            try
+            {
+                string idBoton = (sender as LinkButton).ID;
 
+                string[] atributos = idBoton.Split('_');
+                string observacion = atributos[1];
+
+                if (String.IsNullOrEmpty(observacion))
+                {
+                    observacion = "";
+                }
+                else
+                {
+                    observacion = Regex.Replace(observacion, @"\t|\n|\r", "");
+                }
+
+                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog('" + observacion + "')", true);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar comentario. " + ex.Message));
+            }
+        }
         protected void lbtnBuscar_Click(object sender, EventArgs e)
         {
             CargarVariableConValoresDeFiltro();
@@ -291,6 +347,174 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error al hacer la primera carga de diferencias mercaderias. " + ex.Message);
+            }
+        }
+
+        protected void btnSubirStockOrigen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!FacturaMercaderiaDetalleTildada())
+                    return;
+
+                List<int> idsFacturasMercaderias = ObtenerFacturasMercaderiasTildadas();
+
+                if (!ComprobarFacturaMercaderiaSoloPendientesSeleccionadas(idsFacturasMercaderias))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Hay un articulo seleccionado que ya se encuentra resuelto."));
+                }
+                else
+                {
+                    string observacion = "Agrego stock en sucursal origen por diferencia al aceptar mercaderia. ";
+
+                    observacion += txtConfirmacionOrigen.Text;
+
+                    int i = contFactEntity.ProcesarSubirStockOrigen(idsFacturasMercaderias, "Agrego stock en sucursal origen por diferencia al aceptar mercaderia", (int)Session["Login_IdUser"], observacion, 5);
+
+                    if (i > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Stock agregado correctamente en sucursal origen.", "DiferenciasMercaderiaF.aspx?a=1&sd=" + sucursalDestino + "&so=" + sucursalOrigen + "&fd=" + fechaD + "&fh=" + fechaH));
+                    else
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al subir stock en sucursal origen."));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al subir stock en la sucursal de origen " + ex.Message);
+            }
+        }
+
+        protected void btnSubirStockDestino_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!FacturaMercaderiaDetalleTildada())
+                    return;
+
+                List <int> idsFacturasMercaderias = ObtenerFacturasMercaderiasTildadas();
+
+                if (!ComprobarFacturaMercaderiaSoloPendientesSeleccionadas(idsFacturasMercaderias))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Hay un articulo seleccionado que ya se encuentra resuelto."));
+                }
+                else
+                {
+                    string observacion = "Agrego stock en sucursal destino por diferencia al aceptar mercaderia. ";
+
+                    observacion += txtConfirmacionDestino.Text;
+
+                    int i = contFactEntity.ProcesarSubirStockDestino(idsFacturasMercaderias, "Agrego stock en sucursal destino por diferencia al aceptar mercaderia", (int)Session["Login_IdUser"], observacion, 5);
+
+                    if (i > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Stock agregado correctamente en sucursal destino.", "DiferenciasMercaderiaF.aspx?a=1&sd=" + sucursalDestino + "&so=" + sucursalOrigen + "&fd=" + fechaD + "&fh=" + fechaH));
+                    else
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al subir stock en sucursal destino."));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al subir stock en la sucursal de destino " + ex.Message);
+            }
+        }
+
+        protected void btnResolucionAdministrativa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!FacturaMercaderiaDetalleTildada())
+                    return;
+                               
+                List<int> idsFacturasMercaderias = ObtenerFacturasMercaderiasTildadas();
+
+                if (!ComprobarFacturaMercaderiaSoloPendientesSeleccionadas(idsFacturasMercaderias))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Hay un articulo seleccionado que ya se encuentra resuelto."));
+                }
+                else
+                {
+                    string observacion = "La diferencia de mercaderia fue corregida por una resolucion administrativa. ";
+
+                    observacion += txtConfirmacionAdministrativa.Text;
+
+                    int i = contFactEntity.ProcesarResolucionAdministrativaFacturaMercaderia_Diferencias(idsFacturasMercaderias, observacion, 5);
+
+                    if (i > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Resolucion administrativa ejecutada correctamente.", "DiferenciasMercaderiaF.aspx?a=1&sd=" + sucursalDestino + "&so=" + sucursalOrigen + "&fd=" + fechaD + "&fh=" + fechaH));
+                    else
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al generar una resolucion administrativa."));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al realizar una resolucion administrativa " + ex.Message);
+            }
+        }
+
+        public bool ComprobarFacturaMercaderiaSoloPendientesSeleccionadas(List<int> idsFacturaMercaderaDetalle)
+        {
+            try
+            {
+                return contFactEntity.ComprobarFacturaMercaderiaSoloPendientesSeleccionadas(idsFacturaMercaderaDetalle);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al comprobar si la factura_mercaderia no esta resuelta " + ex.Message);
+                return true;
+            }
+        }
+
+        public bool FacturaMercaderiaDetalleTildada()
+        {
+            try
+            {
+                int tildados = 0;
+
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true)
+                        tildados++;
+                }
+
+                if (tildados <= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No hay diferencias seleccionadas!"));
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error comprobando si hay una sola orden de reparacion seleccionada. " + ex.Message);
+                return false;
+            }
+        }
+
+        public List<int> ObtenerFacturasMercaderiasTildadas()
+        {
+            try
+            {
+                List<int> idsFacturasMercaderias = new List<int>();
+
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true)
+                    {
+                        idsFacturasMercaderias.Add(Convert.ToInt32(ch.ID.Split('_')[1]));
+                    }
+                }
+
+                return idsFacturasMercaderias;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al obtener facturas diferencias tildadas " + ex.Message);
+                return null;
             }
         }
     }

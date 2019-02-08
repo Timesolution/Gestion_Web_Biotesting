@@ -187,6 +187,9 @@ namespace Gestion_Web.Formularios.Valores
                             }
                             valor = 1;
                         }
+
+                        if (s == "183")
+                            lbtnRemesa.Visible = true;
                     }
                 }
 
@@ -1699,5 +1702,89 @@ namespace Gestion_Web.Formularios.Valores
         }
         #endregion
 
+        protected void lbtnRemesa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ComprobarUnicoTraspasoTildado())
+                {
+                    string idtildado = "";
+                    foreach (Control C in phCaja.Controls)
+                    {
+                        TableRow tr = C as TableRow;
+                        CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+
+                        if (ch.Checked == true)
+                        {
+                            string importe = tr.Cells[2].Text;
+                            if (importe.Contains("-"))
+                            {
+                                string descripcion = tr.Cells[1].Text;
+                                idtildado += ch.ID.Substring(12, ch.ID.Length - 12);
+                                var sucursalDestino = descripcion.Split(new string[] { " A " }, StringSplitOptions.None)[1];
+
+                                if (sucursalDestino.Contains("|"))
+                                    sucursalDestino = sucursalDestino.Split('|')[0];
+                                else if (sucursalDestino.Contains("."))
+                                    sucursalDestino = sucursalDestino.Split('.')[0];
+
+                                //Response.Write("<script>window.open ('ABMRemesa.aspx?sd=" + sucursalDestino + "','_blank');</script>");
+                                Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "window.open('ABMRemesa.aspx?sd=" + sucursalDestino + "', '_newtab')"/*"window.open('ABMRemesa.aspx?sd=" + sucursalDestino + "', '_blank');"*/, true);
+                                //Response.Redirect("ABMRemesa.aspx?sd=" + sucursalDestino);
+                            }
+                            else
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La remesa debe ser generada desde la sucursal de origen!"));
+                            }
+                        }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al redireccionar a la pagina de creacion de remesa " + ex.Message);
+            }
+        }
+
+        public bool ComprobarUnicoTraspasoTildado()
+        {
+            try
+            {
+                int tildados = 0;
+
+                foreach (Control C in phCaja.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[4].Controls[4] as CheckBox;
+
+                    string descripcion = tr.Cells[1].Text;
+
+                    if (ch.Checked == true)
+                    {
+                        if(descripcion.Contains("Traspaso de Caja") || descripcion.Contains("Traspaso Caja"))
+                            tildados++;
+                    }
+                }
+
+                if (tildados <= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar un traspaso de caja!"));
+                    return false;
+                }
+                if (tildados > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un traspaso de caja!"));
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error comprobando si hay un solo traspaso de caja seleccionado. " + ex.Message);
+                return false;
+            }
+        }
     }
 }

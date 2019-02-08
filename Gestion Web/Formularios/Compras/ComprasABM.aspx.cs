@@ -254,6 +254,30 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error inicializando formulario. " + ex.Message));
             }
         }
+
+        private void cargarCuit()
+        {
+            try
+            {
+                controladorCliente contCliente = new controladorCliente();
+                Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
+                c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
+                if (!String.IsNullOrEmpty(c.alerta.descripcion))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
+                }
+                this.txtCuit.Text = c.cuit;
+                this.txtIva.Text = c.iva;
+
+                this.verificarNroCompra();
+                this.cargarDatosCuentaProveedor();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de proveedor. " + ex.Message));
+            }
+        }
         #endregion
 
         #region Funciones Auxiliares
@@ -285,6 +309,13 @@ namespace Gestion_Web.Formularios.Compras
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if (!listPermisos.Contains("181"))
+                {
+                    ListSucursal.Enabled = false;
+                    ListSucursal.CssClass = "form-control";
+                }
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -294,7 +325,7 @@ namespace Gestion_Web.Formularios.Compras
                             return 1;
                         }
                     }
-                }
+                }                
 
                 return 0;
             }
@@ -624,26 +655,7 @@ namespace Gestion_Web.Formularios.Compras
 
         protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            try
-            {
-                controladorCliente contCliente = new controladorCliente();
-                Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
-                c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
-                if (!String.IsNullOrEmpty(c.alerta.descripcion))
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
-                }
-                this.txtCuit.Text = c.cuit;
-                this.txtIva.Text = c.iva;
-
-                this.verificarNroCompra();
-                this.cargarDatosCuentaProveedor();
-                
-            }
-            catch(Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de proveedor. " + ex.Message));
-            }
+            cargarCuit();
         }
 
         protected void txtNeto2_TextChanged(object sender, EventArgs e)
@@ -1134,6 +1146,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.cargarPuntoVta((int)remito.IdSucursal);
                 this.txtFecha.Text = Convert.ToDateTime(remito.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 this.ListProveedor.SelectedValue = remito.IdProveedor.ToString();
+                this.cargarCuit();
                 this.ListTipoCompra.SelectedValue = 2.ToString(); //compra mercaderia
                 this.txtObservaciones.Text = "Compra generada desde el remito numero " + remito.Numero;
             }

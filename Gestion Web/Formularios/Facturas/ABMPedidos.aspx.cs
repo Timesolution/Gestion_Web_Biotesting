@@ -192,10 +192,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (perIngresaPantalla == "37")
                 {
-                    var perBloqueoListaPrecios = listPermisos.Where(x => x == "151").FirstOrDefault();
-
-                    //Permiso para bloquear la lista de precios
-                    if (perBloqueoListaPrecios == "151")
+                    if (!listPermisos.Contains("151"))
                         this.DropListLista.Attributes.Add("disabled", "disabled");
 
                     return 1;
@@ -2643,7 +2640,7 @@ namespace Gestion_Web.Formularios.Facturas
                                     {
                                         if (Convert.ToDecimal(datos[4]) > 0)
                                         {
-                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]));
+                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]),0);
                                             if (i < 0)
                                             {
                                                 contador++;
@@ -2758,7 +2755,7 @@ namespace Gestion_Web.Formularios.Facturas
                                     {
                                         if (Convert.ToDecimal(datos[4]) > 0)
                                         {
-                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]));
+                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]),0);
                                             if (i < 0)
                                             {
                                                 contador++;
@@ -2874,7 +2871,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             if (Convert.ToDecimal(item.Cantidad) > 0)
                             {
-                                int i = this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad));
+                                int i = this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad),item.Precio);
                                 if (i < 0)
                                 {
                                     contador++;
@@ -2915,7 +2912,7 @@ namespace Gestion_Web.Formularios.Facturas
                 
             }
         }
-        private int AgregarItemImportadoAPedido(string codigo, decimal cantidad)
+        private int AgregarItemImportadoAPedido(string codigo, decimal cantidad, decimal precio)
         {
             try
             {
@@ -2923,6 +2920,9 @@ namespace Gestion_Web.Formularios.Facturas
                 Articulo a = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
                 if (a != null)
                 {
+                    if (precio > 0)
+                        a.precioVenta = precio;
+
                     ItemPedido item = new ItemPedido();
 
                     item.articulo = a;

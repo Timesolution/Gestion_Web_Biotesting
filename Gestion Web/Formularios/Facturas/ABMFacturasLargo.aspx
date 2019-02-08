@@ -307,9 +307,9 @@
                                                                     <a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>
-                                                                    <button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
-                                                                        <i class="btn-icon-only icon-check-sign"></i>
-                                                                    </button>
+                                                                    <asp:Button runat="server" style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();"  class="btn btn-info" title="Search"/>
+                                                                    <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
+                                                                        <%--<i class="btn-icon-only icon-check-sign"></i>--%>
                                                                 </span>
                                                             </div>
                                                             <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtCodigo" ErrorMessage="El campo es obligatorio" SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
@@ -553,21 +553,21 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="form-group" style="text-align: left">
-                                                                    <label class="col-md-3">Descuento %: </label>
-                                                                    <div class="col-md-4">
-
-                                                                        <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
-
-
-                                                                    </div>
-                                                                    <div class="col-md-5">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">$</span>
-                                                                            <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
+                                                                <asp:PlaceHolder ID="phDescuentoSobreElTotal" runat="server" Visible="true">
+                                                                    <div class="form-group" style="text-align: left">
+                                                                        <label class="col-md-3">Descuento %: </label>
+                                                                        <div class="col-md-4">
+                                                                            <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-addon">$</span>
+                                                                                <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                </asp:PlaceHolder>
+
                                                                 <div class="form-group" style="text-align: left">
                                                                     <label class="col-md-3">SubTotal: </label>
                                                                     <div class="col-md-9">
@@ -1768,8 +1768,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <asp:Label ID="lbMovTrazaNueva" runat="server"></asp:Label>
-                                <asp:LinkButton ID="lbtnConfirmarTrazas" Text="<i class='shortcut-icon icon-ok'></i>" runat="server" class="btn btn-success" OnClick="lbtnConfirmarTrazas_Click" />
+                                <asp:Label ID="lbMovTrazaNueva" runat="server" Visible="false"></asp:Label>
+                                <asp:LinkButton ID="lbtnConfirmarTrazas" Text="<i class='shortcut-icon icon-ok'> Aceptar</i>" runat="server" class="btn btn-success" OnClick="lbtnConfirmarTrazas_Click" />
                             </div>
                         </ContentTemplate>
                     </asp:UpdatePanel>
@@ -1809,7 +1809,6 @@
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -2118,7 +2117,7 @@
                 }
             };
             //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
-            modal.showUrl("BuscarArticulos.aspx?accion=1&suc="+idSucursal);
+            modal.showUrl("BuscarArticulos.aspx?accion=1&suc=" + idSucursal);
         }
 
         function edit(id) {
@@ -2152,8 +2151,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
@@ -2172,8 +2170,7 @@
             if (key < 48 || key > 57) {
                 if (key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

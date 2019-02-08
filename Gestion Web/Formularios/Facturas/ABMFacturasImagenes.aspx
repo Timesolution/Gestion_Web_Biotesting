@@ -8,6 +8,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
         <audio id="audio1" src="Sound/beep.wav" controls preload="auto" autobuffer hidden="true"></audio>
+        <%--PH MAIL FACTURAS VIEJO--%>
         <asp:PlaceHolder ID="phMain" runat="server" Visible="false">
             <div class="container">
 
@@ -870,124 +871,6 @@
                 </div>
             </div>
             <%--Fin modalGrupo--%>
-
-            <div id="modalTarjeta" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button id="btnCerrarTarjetas" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Pagos con Tarjeta</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div role="form" class="form-horizontal col-md-12">
-                                <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
-                                    <ContentTemplate>
-                                        <div class="form-group">
-                                            <div class="col-md-5">
-                                                <asp:DropDownList ID="ListOperadores" runat="server" class="form-control" OnSelectedIndexChanged="ListOperadores_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ErrorMessage="<h3>*</h3>" InitialValue="-1" ControlToValidate="ListOperadores" ValidationGroup="TarjetaGroup"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-5">
-                                                <asp:DropDownList ID="ListTarjetas" runat="server" class="form-control" OnSelectedIndexChanged="ListTarjetas_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" InitialValue="-1" ControlToValidate="ListTarjetas" ValidationGroup="TarjetaGroup"></asp:RequiredFieldValidator>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">$</span>
-                                                    <asp:TextBox ID="txtImporteT" runat="server" class="form-control" Text="0" AutoPostBack="true" OnTextChanged="txtImporteT_TextChanged" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImporteT" ValidationGroup="TarjetaGroup"></asp:RequiredFieldValidator>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:LinkButton ID="lbtnAgregarPago" class="btn btn-info" ValidationGroup="TarjetaGroup" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarPago_Click" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-6">Restan / Efectivo</label>
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">$</span>
-                                                    <asp:TextBox ID="txtImporteEfectivo" runat="server" class="form-control" ViewStateMode="Disabled" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImporteEfectivo" ValidationGroup="EfectivoGroup"></asp:RequiredFieldValidator>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:LinkButton ID="lbtnAgregarEfectivo" class="btn btn-info" ValidationGroup="EfectivoGroup" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarEfectivo_Click" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <asp:Label runat="server" Text="" Visible="false" ID="lblAvisoTarjeta" ForeColor="Red" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <div class="form-group">
-                                            <asp:Label ID="lblMontoCuotas" runat="server" class="alert alert-info alert-dismissable"></asp:Label>
-                                        </div>
-                                        <div class="form-group">
-                                            <asp:Label ID="lblAvisoPromocion" runat="server" class="alert alert-warning alert-dismissable" Visible="false"></asp:Label>
-                                        </div>
-                                    </ContentTemplate>
-                                    <Triggers>
-                                    </Triggers>
-                                </asp:UpdatePanel>
-                            </div>
-                            <div role="form" class="form-horizontal col-md-12">
-                                <asp:UpdatePanel ID="UpdatePanel3" UpdateMode="Always" runat="server">
-                                    <ContentTemplate>
-                                        <div class="form-group">
-                                            <table class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tipo</th>
-                                                        <th>Importe</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <asp:PlaceHolder ID="phPagosTarjeta" runat="server"></asp:PlaceHolder>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-4">
-                                                <asp:LinkButton ID="lbtnConfirmarPago" class="btn btn-success" runat="server" Visible="false" Text="Confirmar pagos" OnClick="lbtnConfirmarPago_Click" />
-                                            </div>
-                                            <div class="col-md-4">
-                                                <asp:LinkButton ID="lbtnCancelarPago" class="btn btn-default" runat="server" Visible="false" Text="Limpiar pagos" OnClick="lbtnCancelarPago_Click" />
-                                            </div>
-                                        </div>
-                                    </ContentTemplate>
-                                    <Triggers>
-                                    </Triggers>
-                                </asp:UpdatePanel>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <asp:UpdatePanel ID="UpdatePanelTarjeta" runat="server">
-                                <ContentTemplate>
-                                    <asp:Label ID="Label2" runat="server" class="col-md-3" ForeColor="Gray" Font-Bold="true" Style="padding-right: 0%;">Sin Recargo: $</asp:Label>
-                                    <div class="col-md-3" style="padding-left: 0%; text-align: left;">
-                                        <asp:Label ID="lblMontoOriginal" runat="server" ForeColor="Gray" Font-Bold="true"></asp:Label>
-                                    </div>
-                                    <asp:Label ID="Label1" runat="server" class="col-md-3" ForeColor="Blue" Font-Bold="true" Style="padding-right: 0%;">Con Recargo: $</asp:Label>
-                                    <div class="col-md-3" style="padding-left: 0%; text-align: left;">
-                                        <asp:Label ID="lblSaldoTarjeta" runat="server" ForeColor="Blue" Font-Bold="true"></asp:Label>
-                                    </div>
-                                </ContentTemplate>
-                            </asp:UpdatePanel>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
             <div id="modalBuscarArticulo" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
@@ -1883,9 +1766,9 @@
                                                             <th style="width: 10%">Codigo</th>
                                                             <th style="width: 40%">Descripcion</th>
                                                             <th style="width: 10%">precio</th>
-                                                            <th style="width: 10%">Cant.</th>
+                                                            <th style="width: 13%">Cant.</th>
                                                             <th style="width: 10%">Total</th>
-                                                            <th style="width: 20%"></th>
+                                                            <th style="width: 17%"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -1912,20 +1795,90 @@
                                             <!-- /widget-header -->
                                         </div>
                                         <!-- /table -->
+                                        <br />
 
+                                        <div class="widget stacked widget-table action-table">
+                                            <div class="widget-header">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>
+                                                                &nbsp<asp:Label ID="lbNombreClienteImagenes" runat="server" Text="" Font-Bold="true" ForeColor="Black"></asp:Label>
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <!-- /widget-header -->
+                                        </div>
+
+
+                                        <div class="widget stacked widget-table action-table">
+
+                                            <div class="widget-content">
+
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 25%">
+                                                                <div class="col-md-6 col-xs-12">
+                                                                    <a class="btn btn-info" onclick="createC();" style="width: 100%;">
+                                                                        <i class="shortcut-icon icon-search"></i>
+                                                                    </a>
+
+                                                                </div>
+                                                                <div>Buscar</div>
+                                                            </th>
+                                                            <th style="width: 25%">
+                                                                <div class="col-md-6 col-xs-12">
+                                                                    <a class="btn btn-info" data-toggle="modal" href="#modalAltaRapida" runat="server" id="btnModalAltaRapida" visible="true">
+                                                                        <i class="shortcut-icon icon-bolt"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div>Alta Rapida</div>
+                                                            </th>
+                                                            <th style="width: 25%">
+                                                                <div class="col-md-6 col-xs-12">
+                                                                    <asp:LinkButton ID="lbtnAbrirModalTarjeta" runat="server" class="btn btn-info" Text="Cancelar" OnClick="btnAbrirModalTarjeta_Click">
+                                                                         <i class="shortcut-icon icon-credit-card"></i>
+                                                                    </asp:LinkButton>
+                                                                </div>
+                                                                <div>Tarjeta</div>
+                                                            </th>
+                                                            <th style="width: 25%">
+                                                                <div class="col-md-6 col-xs-12">
+                                                                    <asp:LinkButton ID="lbtnFormaDePagoContado" runat="server" class="btn btn-info" Text="Cancelar" OnClick="btnSetearFormaDePagoPorContado">
+                                                                         <i class="shortcut-icon icon-money"></i>
+                                                                    </asp:LinkButton>
+                                                                </div>
+                                                                <div>Contado</div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                         
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- /widget-content -->
+
+                                        </div>
+
+                                        <div class="widget stacked widget-table action-table">
+                                            <div class="widget-header">
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>
+                                                                &nbsp<asp:Label ID="lbFormaDePago" Text="Forma de pago: Contado" runat="server" Font-Bold="true" ForeColor="Black"/>
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
 
                                         <div class="shortcuts">
-
-                                            <div class="col-md-6 col-xs-12">
-                                                <a class="shortcut" onclick="createC();" style="width: 100%;">
-                                                    <i class="h4 icon-search"></i>
-                                                </a>
-                                            </div>
-                                            <div class="col-md-1" style="padding-top: 1%;">
-                                                <a class="btn btn-info" data-toggle="modal" href="#modalAltaRapida" runat="server" id="btnModalAltaRapida" visible="true">
-                                                    <i class="shortcut-icon icon-bolt"></i>
-                                                </a>
-                                            </div>
                                         </div>
                                         <div>
                                             <asp:Button ID="btnFactImagen" class="btn btn-success" OnClick="btnFacturarImagen_Click" runat="server" Text="Facturar" />
@@ -1970,118 +1923,237 @@
         </div>
         <!-- /main modo imagenes-->
 
-         <div id="modalAltaRapida" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+        <div id="modalAltaRapida" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
 
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Alta Rapida</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div role="form" class="form-horizontal col-md-12">
-                                <asp:UpdatePanel ID="UpdatePanel15" UpdateMode="Always" runat="server">
-                                    <ContentTemplate>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Codigo</label>
-                                            <div class="col-md-6">
-                                                <asp:TextBox ID="txtCodigoAR" runat="server" class="form-control"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ErrorMessage="*" ControlToValidate="txtCodigoAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Razon Social</label>
-                                            <div class="col-md-6">
-                                                <asp:TextBox ID="txtRazonAR" runat="server" class="form-control"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ErrorMessage="*" ControlToValidate="txtRazonAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Tipo</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="DropListTipoAR" runat="server" class="form-control"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ErrorMessage="*" ControlToValidate="DropListTipoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">IVA</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="DropListIvaAR" runat="server" class="form-control">
-                                                    <asp:ListItem Text="Seleccione..." Value="-1"></asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ErrorMessage="*" ControlToValidate="DropListIvaAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Grupo</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="DropListGrupoAR" runat="server" class="form-control"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="*" ControlToValidate="DropListGrupoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">CUIT</label>
-                                            <div class="col-md-6">
-                                                <asp:TextBox ID="txtCuitAR" runat="server" class="form-control" MaxLength="11" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="*" ControlToValidate="txtCuitAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Lista Precio</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="ListListaPreciosAR" runat="server" class="form-control"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ErrorMessage="*" ControlToValidate="ListListaPreciosAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Forma Pago</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="DropListFormaPagoAR" runat="server" class="form-control"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ErrorMessage="*" ControlToValidate="DropListFormaPagoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Vendedor</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="ListVendedoresAR" runat="server" class="form-control"></asp:DropDownList>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ErrorMessage="*" ControlToValidate="ListVendedoresAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                    </ContentTemplate>
-                                    <Triggers>
-                                    </Triggers>
-                                </asp:UpdatePanel>
-
-                            </div>
-
-                            <div class="modal-footer">
-                                <asp:LinkButton ID="btnAltaRapida" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAltaRapida_Click" ValidationGroup="ClienteARGroup" />
-                            </div>
-                        </div>
-
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Alta Rapida</h4>
                     </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel15" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Codigo</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtCodigoAR" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ErrorMessage="*" ControlToValidate="txtCodigoAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Razon Social</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtRazonAR" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ErrorMessage="*" ControlToValidate="txtRazonAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Tipo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListTipoAR" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ErrorMessage="*" ControlToValidate="DropListTipoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">IVA</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListIvaAR" runat="server" class="form-control">
+                                                <asp:ListItem Text="Seleccione..." Value="-1"></asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ErrorMessage="*" ControlToValidate="DropListIvaAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Grupo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListGrupoAR" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="*" ControlToValidate="DropListGrupoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">CUIT</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtCuitAR" runat="server" class="form-control" MaxLength="11" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="*" ControlToValidate="txtCuitAR" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Lista Precio</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListListaPreciosAR" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ErrorMessage="*" ControlToValidate="ListListaPreciosAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Forma Pago</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListFormaPagoAR" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ErrorMessage="*" ControlToValidate="DropListFormaPagoAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Vendedor</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListVendedoresAR" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ErrorMessage="*" ControlToValidate="ListVendedoresAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <asp:LinkButton ID="btnAltaRapida" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAltaRapida_Click" ValidationGroup="ClienteARGroup" />
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </div>
+
+        <div id="modalTarjeta" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="btnCerrarTarjetas" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Pagos con Tarjeta</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                            <asp:DropDownList ID="ListOperadores" runat="server" class="form-control" OnSelectedIndexChanged="ListOperadores_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ErrorMessage="<h3>*</h3>" InitialValue="-1" ControlToValidate="ListOperadores" ValidationGroup="TarjetaGroup"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-5">
+                                            <asp:DropDownList ID="ListTarjetas" runat="server" class="form-control" OnSelectedIndexChanged="ListTarjetas_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" InitialValue="-1" ControlToValidate="ListTarjetas" ValidationGroup="TarjetaGroup"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <asp:TextBox ID="txtImporteT" runat="server" class="form-control" Text="0" AutoPostBack="true" OnTextChanged="txtImporteT_TextChanged" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImporteT" ValidationGroup="TarjetaGroup"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:LinkButton ID="lbtnAgregarPago" class="btn btn-info" ValidationGroup="TarjetaGroup" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarPago_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-6">Restan / Efectivo</label>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <asp:TextBox ID="txtImporteEfectivo" runat="server" class="form-control" ViewStateMode="Disabled" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImporteEfectivo" ValidationGroup="EfectivoGroup"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:LinkButton ID="lbtnAgregarEfectivo" class="btn btn-info" ValidationGroup="EfectivoGroup" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarEfectivo_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <asp:Label runat="server" Text="" Visible="false" ID="lblAvisoTarjeta" ForeColor="Red" Font-Bold="true"></asp:Label>
+                                    </div>
+                                    <div class="form-group">
+                                        <asp:Label ID="lblMontoCuotas" runat="server" class="alert alert-info alert-dismissable"></asp:Label>
+                                    </div>
+                                    <div class="form-group">
+                                        <asp:Label ID="lblAvisoPromocion" runat="server" class="alert alert-warning alert-dismissable" Visible="false"></asp:Label>
+                                    </div>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel3" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tipo</th>
+                                                    <th>Importe</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <asp:PlaceHolder ID="phPagosTarjeta" runat="server"></asp:PlaceHolder>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lbtnConfirmarPago" class="btn btn-success" runat="server" Visible="false" Text="Confirmar pagos" OnClick="lbtnConfirmarPago_Click" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lbtnCancelarPago" class="btn btn-default" runat="server" Visible="false" Text="Limpiar pagos" OnClick="lbtnCancelarPago_Click" />
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:UpdatePanel ID="UpdatePanelTarjeta" runat="server">
+                            <ContentTemplate>
+                                <asp:Label ID="Label2" runat="server" class="col-md-3" ForeColor="Gray" Font-Bold="true" Style="padding-right: 0%;">Sin Recargo: $</asp:Label>
+                                <div class="col-md-3" style="padding-left: 0%; text-align: left;">
+                                    <asp:Label ID="lblMontoOriginal" runat="server" ForeColor="Gray" Font-Bold="true"></asp:Label>
+                                </div>
+                                <asp:Label ID="Label1" runat="server" class="col-md-3" ForeColor="Blue" Font-Bold="true" Style="padding-right: 0%;">Con Recargo: $</asp:Label>
+                                <div class="col-md-3" style="padding-left: 0%; text-align: left;">
+                                    <asp:Label ID="lblSaldoTarjeta" runat="server" ForeColor="Blue" Font-Bold="true"></asp:Label>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
+
     <!-- /main principal-->
 
 
@@ -2279,6 +2351,12 @@
     <script>
         function abrirModalMutuales() {
             $('#modalMutuales').modal('show');
+        }
+    </script>
+
+    <script>
+        function openModalTarjeta() {
+            $('#modalTarjeta').modal('show');
         }
     </script>
 

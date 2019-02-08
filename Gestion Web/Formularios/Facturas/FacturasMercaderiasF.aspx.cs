@@ -240,6 +240,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 controladorSucursal contSucursal = new controladorSucursal();
                 controladorFacturacion contFacturacion = new controladorFacturacion();
+                //int idFactura = Convert.ToInt32(f["id"].ToString());
+                //var fm = contFactEntity.ObtenerFacturas_MercaderiasByFacturaID(idFactura);
 
                 //fila
                 TableRow tr = new TableRow();

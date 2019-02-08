@@ -333,6 +333,7 @@
                                                     <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
                                                     <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasImportacion2.aspx">Importar Ventas 2</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="/../../Formularios/Facturas/CuentaCorrienteF.aspx">Cuentas Corrientes</a></li>
@@ -385,7 +386,7 @@
                                                     <li><a href="/../../Formularios/Valores/LotesTarjetasF.aspx">Lotes</a></li>
                                                 </ul>
                                             </li>
-
+                                            <li><a href="/../../Formularios/Valores/RemesasF.aspx">Remesas</a></li>
                                         </ul>
                                     </li>
 

@@ -117,11 +117,13 @@
                                     <thead>
                                         <tr>
                                             <th style="width:10%">Fecha</th>
-                                            <th style="width:20%">Numero</th>
-                                            <th style="width:20%">Proveedor</th>
+                                            <th style="width:10%">Fecha Entrega</th>
+                                            <th style="width:15%">Numero</th>
+                                            <th style="width:15%">Proveedor</th>
                                             <th style="width:20%">Sucursal</th>
                                             <th style="width:15%">Estado</th>
                                             <th style="width:15%"></th>
+
                                         </tr>
                                     </thead>
                                     <tbody>

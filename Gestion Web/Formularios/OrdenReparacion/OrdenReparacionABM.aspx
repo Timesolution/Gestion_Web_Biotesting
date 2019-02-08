@@ -191,6 +191,15 @@
                                                                 </asp:DropDownList>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Sucursal OR</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="DropDownSucursalOR" runat="server" class="form-control" Enabled="false"></asp:DropDownList>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="DropDownSucursalOR" ValidationGroup="StoreGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-md-8">
                                                             <asp:Button ID="btnAgregar" runat="server" Text="Agregar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="StoreGroup" Visible="false"/>
                                                             <asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnGuardar_Click" ValidationGroup="StoreGroup" Visible="false" />
