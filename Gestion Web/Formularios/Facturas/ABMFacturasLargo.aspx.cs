@@ -996,6 +996,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //si esta concateno la alerta
                     script += "$.msgbox(\"Este articulo ya fue cargado previamente a la factura: Cod.: " + art.codigo + " \");";
                     alerta += "Este articulo fue cargado previamente a la factura: Articulo: " + art.codigo;
+                    ActualizarStockAlAgregarItem(art.codigo);
                 }
 
                 //miro si esta en alguna promocion 
