@@ -996,6 +996,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //si esta concateno la alerta
                     script += "$.msgbox(\"Este articulo ya fue cargado previamente a la factura: Cod.: " + art.codigo + " \");";
                     alerta += "Este articulo fue cargado previamente a la factura: Articulo: " + art.codigo;
+                    ActualizarStockAlAgregarItem(art.codigo);
                 }
 
                 //miro si esta en alguna promocion 
@@ -2429,7 +2430,7 @@ namespace Gestion_Web.Formularios.Facturas
                             return;
                         }
                     }
-
+                    //TODO Aca se calcula la promocion
                     decimal cantPromo = 0;
                     if (this.txtCantidad.Text != "")
                         cantPromo = Convert.ToDecimal(this.txtCantidad.Text);
@@ -2631,7 +2632,7 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
-                if (ListSucursalCliente.SelectedIndex > 0)
+                if(ListSucursalCliente.SelectedIndex > 0)
                     txtCant.Enabled = false;
                 else
                     txtCant.Enabled = true;
@@ -3908,8 +3909,14 @@ namespace Gestion_Web.Formularios.Facturas
                     //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los articulos a facturar deben tener la misma condición (todos en Promoción o todos sin Promoción). \", {type: \"error\"});", true);
                     //    return;
                     //}
+<<<<<<< HEAD
                 //}
 
+                //TODO Aca calculo la promocion
+=======
+                }
+
+>>>>>>> d04842cdc22ba02a82cf06109b2145a34f7e6fd9
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
                 if (p != null && p.FormaPago != 8)
                 {
@@ -5651,7 +5658,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     int total = stock - cantidad;
 
-                    if (total < 0)
+                    if(total < 0)
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita es mayor al stock que posee la sucursal \", {type: \"alert\"});", true);
                         return 0;
@@ -5665,6 +5672,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
+
         #endregion
 
         #region pagos tarjeta
@@ -6236,9 +6244,14 @@ namespace Gestion_Web.Formularios.Facturas
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToInt32(ListTarjetas.SelectedValue));
                 if (p != null)
                 {
+<<<<<<< HEAD
                     ValidarExisteArticuloEnPromoTarjeta(p);
-                    this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
+                    this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");                    
                     //this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
+=======
+                    this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
+                    this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
+>>>>>>> d04842cdc22ba02a82cf06109b2145a34f7e6fd9
                     this.actualizarTotales();
                     this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
@@ -6282,15 +6295,15 @@ namespace Gestion_Web.Formularios.Facturas
                     //TODO si es true que calcule el descuento
                     if (p != null && p.Id == promo.Id)
                     {
-                        totalItemPromocionArticulo(p, item);
-                    }
+                        totalItemPromocionArticulo(p,item);
+                    }                        
                 }
 
                 Session["Factura"] = f;
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "Error", "Error al validar si existe un articulo en la promocion de tarjeta " + ex.Message);
+                Log.EscribirSQL(1,"Error","Error al validar si existe un articulo en la promocion de tarjeta " + ex.Message);
             }
         }
 
@@ -6302,12 +6315,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (p.PrecioFijo > 0)
                     fi.precioUnitario = p.PrecioFijo.Value;
-                else
-                    desc = Convert.ToDecimal(p.Descuento);
+                else                
+                    desc = Convert.ToDecimal(p.Descuento);                
 
                 //recalculo los totales del item
                 decimal cantidad = Convert.ToDecimal(fi.cantidad);
-                decimal precio = Convert.ToDecimal(fi.precioUnitario);
+                decimal precio = Convert.ToDecimal(fi.precioUnitario);                
 
                 decimal total = decimal.Round((cantidad * precio), 2);
 
@@ -6327,6 +6340,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total " + ex.Message));
             }
         }
+
         #endregion
 
         #region Funciones cambio documento
