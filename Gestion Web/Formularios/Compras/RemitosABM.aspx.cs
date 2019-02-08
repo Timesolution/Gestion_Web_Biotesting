@@ -257,6 +257,9 @@ namespace Gestion_Web.Formularios.Compras
             {
                 if (ViewState["vsTraza"] != null)
                 {
+                    //var temp = ViewState["vsTraza"];
+                    //return (List<Trazabilidad>)ViewState["vsTraza"];
+                    //var dt
                     DataTable table = (DataTable)ViewState["vsTraza"];
                     List<TrazaTemp> lista = Helpers.ToListof<TrazaTemp>(table);
                     return lista;
@@ -948,6 +951,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                lblTrazaActual.Text = 0.ToString();
                 phCamposTrazabilidad.Controls.Clear();
                 List<Gestion_Api.Entitys.Trazabilidad_Campos> lstCampos = this.contArticulos.obtenerCamposTrazabilidadByGrupo(art.grupo.id);
 
@@ -1017,6 +1021,7 @@ namespace Gestion_Web.Formularios.Compras
                         columnas = 0;
                         pos++;
                         idTrazas = "";
+                        lblTrazaTotal.Text = pos.ToString();
                         phItemsTrazabilidad.Controls.Add(tr);
                     }
                 }
@@ -1158,6 +1163,7 @@ namespace Gestion_Web.Formularios.Compras
                         if (existe != null)
                         {
                             checkBox.Checked = true;
+                            lblTrazaActual.Text = (Convert.ToInt32(lblTrazaActual.Text) + 1).ToString();
                         }
                     }
                 }

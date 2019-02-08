@@ -459,6 +459,32 @@
             }
             return true;
         }
+
+        function updatebox(valor, id) {
+            var cantActual = document.getElementById("<%=lblTrazaActual.ClientID%>").textContent;
+            var cantTotal = document.getElementById("<%=lblTrazaTotal.ClientID%>").textContent;
+
+            var chk1 = document.getElementById(id);
+            if (cantActual == cantTotal) {
+                if (chk1.checked == false) {
+                    cantActual = parseInt(parseInt(cantActual) - 1);
+                    document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+                }
+
+                document.getElementById(id).checked = false;
+            }
+            else {
+                if (chk1.checked) {
+                    cantActual = parseInt(parseInt(cantActual) + 1);
+                }
+                else {
+                    cantActual = parseInt(parseInt(cantActual) - 1);
+                }
+                document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+            }
+
+        }
+
     </script>
 
 
