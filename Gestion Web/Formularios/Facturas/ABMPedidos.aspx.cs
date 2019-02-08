@@ -35,9 +35,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCotizaciones ct = new controladorCotizaciones();
         controladorFacturacion cf = new controladorFacturacion();
         Configuracion confEstados = new Configuracion();
-
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-
         controladorCotizaciones contCot = new controladorCotizaciones();
         //Pedido
         Pedido Pedido = new Pedido();
@@ -298,6 +296,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
                 this.txtComentarios.Text = "ORDEN DE COMPRA Nº: ";
+                this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroPedido();
@@ -2579,8 +2578,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #region importacion
-
-
         protected void btnImportarPedido_Click(object sender, EventArgs e)
         {
             try
@@ -2958,10 +2955,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-
-
-        #endregion
-
         protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)
         {
             try
@@ -2974,5 +2967,7 @@ namespace Gestion_Web.Formularios.Facturas
                 throw;
             }
         }
+        #endregion
+
     }
 }

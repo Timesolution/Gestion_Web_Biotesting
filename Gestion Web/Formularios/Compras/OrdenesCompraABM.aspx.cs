@@ -59,6 +59,15 @@ namespace Gestion_Web.Formularios.Compras
 
                     this.cargarProveedores();
                     this.cargarSucursal();
+
+                    //cargo sucursal
+                    this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                    if (this.ListSucursal.SelectedValue != "")
+                    {
+                        this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                        this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+                    }
+
                     this.dtItemsTemp = new DataTable();
                     this.CrearTablaItems();
 
@@ -295,6 +304,13 @@ namespace Gestion_Web.Formularios.Compras
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if (!listPermisos.Contains("181"))
+                {
+                    ListSucursal.Enabled = false;
+                    ListSucursal.CssClass = "form-control";
+                }
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
