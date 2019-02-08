@@ -2434,7 +2434,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (this.txtCantidad.Text != "")
                         cantPromo = Convert.ToDecimal(this.txtCantidad.Text);
                     Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(art.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), cantPromo);
-                    if (p != null)
+                    if (p != null && p.FormaPago != 8)
                     {
                         if (p.PrecioFijo > 0)
                         {
@@ -2622,7 +2622,7 @@ namespace Gestion_Web.Formularios.Facturas
                 TableCell celCantidad = new TableCell();
                 TextBox txtCant = new TextBox();
                 txtCant.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
-                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad;
+                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad + "_" + item.articulo.codigo;
                 txtCant.CssClass = "form-control";
                 txtCant.Style.Add("text-align", "Right");
                 //txtCant.TextMode = TextBoxMode.Number;
@@ -2631,6 +2631,10 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
+                if (ListSucursalCliente.SelectedIndex > 0)
+                    txtCant.Enabled = false;
+                else
+                    txtCant.Enabled = true;
                 tr.Cells.Add(celCantidad);
 
                 TableCell celDescripcion = new TableCell();
@@ -3889,21 +3893,25 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtTotalArri.Text = "0";
                 }
 
+                ActualizarStockAlAgregarItem(this.txtCodigo.Text);
+
+                if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
+                    return;
 
                 Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
 
-                if (artVerPromo != null)
-                {
+                //if (artVerPromo != null)
+                //{
                     //Verifico si ya existen o no articulos en promocion en la fc, para controlar que estos articulos sean todos del mismo tipo (con promocion / sin promocion)
                     //if (!verificarArticulosEnPromocion(artVerPromo))
                     //{
                     //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los articulos a facturar deben tener la misma condición (todos en Promoción o todos sin Promoción). \", {type: \"error\"});", true);
                     //    return;
                     //}
-                }
+                //}
 
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-                if (p != null)
+                if (p != null && p.FormaPago != 8)
                 {
                     if (p.PrecioFijo > 0)
                         this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
@@ -5621,6 +5629,42 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
+
+        public void ActualizarStockAlAgregarItem(string codigo)
+        {
+
+            Factura fc = Session["Factura"] as Factura;
+
+            var cantidadARestar = fc.items.Where(x => x.articulo.codigo == codigo).ToList().Sum(x => x.cantidad);
+
+            lbtnStockProd.Text = (Convert.ToDecimal(lbtnStockProd.Text) - Convert.ToDecimal(cantidadARestar)).ToString();
+        }
+
+        private int verificarNoEnviarMercaderiaSiNoHayStock()
+        {
+            try
+            {
+                if (this.ListSucursalCliente.SelectedIndex > 0)
+                {
+                    int stock = Convert.ToInt32(lbtnStockProd.Text);
+                    int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                    int total = stock - cantidad;
+
+                    if (total < 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita es mayor al stock que posee la sucursal \", {type: \"alert\"});", true);
+                        return 0;
+                    }
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarSiLaCantidadIngresadaPorItemEsPositiva. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
         #endregion
 
         #region pagos tarjeta
@@ -6192,8 +6236,9 @@ namespace Gestion_Web.Formularios.Facturas
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToInt32(ListTarjetas.SelectedValue));
                 if (p != null)
                 {
+                    ValidarExisteArticuloEnPromoTarjeta(p);
                     this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
-                    this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
+                    //this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
                     this.actualizarTotales();
                     this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
@@ -6219,6 +6264,67 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+        public void ValidarExisteArticuloEnPromoTarjeta(Gestion_Api.Entitys.Promocione promo)
+        {
+            try
+            {
+                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
+
+                Factura f = Session["Factura"] as Factura;
+
+                foreach (var item in f.items)
+                {
+                    Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(item.articulo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(item.cantidad));
+
+                    //TODO si es true que calcule el descuento
+                    if (p != null && p.Id == promo.Id)
+                    {
+                        totalItemPromocionArticulo(p, item);
+                    }
+                }
+
+                Session["Factura"] = f;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al validar si existe un articulo en la promocion de tarjeta " + ex.Message);
+            }
+        }
+
+        private void totalItemPromocionArticulo(Gestion_Api.Entitys.Promocione p, ItemFactura fi)
+        {
+            try
+            {
+                decimal desc = 0;
+
+                if (p.PrecioFijo > 0)
+                    fi.precioUnitario = p.PrecioFijo.Value;
+                else
+                    desc = Convert.ToDecimal(p.Descuento);
+
+                //recalculo los totales del item
+                decimal cantidad = Convert.ToDecimal(fi.cantidad);
+                decimal precio = Convert.ToDecimal(fi.precioUnitario);
+
+                decimal total = decimal.Round((cantidad * precio), 2);
+
+                total = decimal.Round(total, 2);
+
+                decimal totalConDescuento = decimal.Round(total - (total * (desc / 100)), 2);
+
+                decimal descuentoEnPesos = decimal.Round(total - totalConDescuento, 2);
+
+                fi.total = totalConDescuento;
+                fi.porcentajeDescuento = desc;
+                fi.descuento = descuentoEnPesos;
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total " + ex.Message));
             }
         }
         #endregion
