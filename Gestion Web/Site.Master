@@ -221,8 +221,7 @@
                                             <li>
                                                 <asp:Literal Text="" ID="litMillas" runat="server" />
                                             </li>
-                                            <li><a href="/../../Formularios/Valores/MovimientoCajaF.aspx">Movimientos de Caja</a></li>
-
+                                            <li><a tabindex="-1" href="/../../Formularios/MateriasPrimas/MateriasPrimasF.aspx">Materias Primas</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Mutuales</a>
                                                 <ul class="dropdown-menu">
