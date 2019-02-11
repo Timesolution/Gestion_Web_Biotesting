@@ -1205,7 +1205,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-1">
-                                            <asp:RadioButton ID="rbtnAnticipoCredito" runat="server" AutoPostBack="true" GroupName="PagosCtaCreditoGroup" OnCheckedChanged="rbtnAnticipoCredito_CheckedChanged" />
+                                            <asp:RadioButton ID="rbtnAnticipoCredito" runat="server" checked="true" AutoPostBack="true" GroupName="PagosCtaCreditoGroup" OnCheckedChanged="rbtnAnticipoCredito_CheckedChanged" />
                                         </div>
                                         <div class="col-md-2">
                                             <asp:LinkButton ID="lbtnAnticipo" runat="server" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Cobrar Anticipo" Text="$" OnClick="lbtnAnticipo_Click" />

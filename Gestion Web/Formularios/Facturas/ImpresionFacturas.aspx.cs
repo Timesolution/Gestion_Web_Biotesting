@@ -619,6 +619,18 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                 }
+
+                foreach (DataRow item in dtDetalles.Rows)
+                {
+                    if(item["tipo"].ToString() == "Presupuesto")
+                    {
+                        string temp = item["Observaciones"].ToString();
+                        string txtReplace = temp.Split(',')[0] + ", ";
+                        temp = temp.Replace(txtReplace, string.Empty);
+                        item["Observaciones"] = temp;
+                    }
+                }
+
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
 
                 Decimal total = 0;
