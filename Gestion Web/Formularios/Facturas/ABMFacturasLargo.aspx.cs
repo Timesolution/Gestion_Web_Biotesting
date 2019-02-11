@@ -8333,7 +8333,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int temp = this.verificarCobroAnticipo();
 
                     if (temp <= 0)
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto del cobro. \");", true);
+                        return;
 
                     this.obtenerPagosCuentaAnticipo();
 
@@ -8438,8 +8438,8 @@ namespace Gestion_Web.Formularios.Facturas
                     this.guardarDatosFechaNacimiento();
                     int temp = this.verificarCobroAnticipo();
 
-                    if(temp <= 0)                    
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto del cobro. \");", true);                    
+                    if(temp <= 0)                        
+                        return;
 
                     this.obtenerPagosCuentaAnticipo();
 
@@ -8571,12 +8571,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                         if(cobroAnticipo.total < Convert.ToDecimal(txtAnticipo.Text))
                         {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto del cobro. \");", true);
                             return -1;
                         }
 
                         if (cobroAnticipo != null)
                         {
-                            this.btnCredito.Attributes["class"] = "btn btn-success";                            
+                            this.btnCredito.Attributes["class"] = "btn btn-success";
                         }
                         else
                         {
@@ -8586,11 +8587,13 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.btnCredito.Attributes["class"] = "btn btn-danger";
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"No se genero un cobro. \");", true);
+                        return -1;
                     }
                 }
                 else
                 {
-                    this.btnCredito.Attributes["class"] = "btn btn-success";
+                    this.btnCredito.Attributes["class"] = "btn btn-danger";
                 }
 
                 return 1;
