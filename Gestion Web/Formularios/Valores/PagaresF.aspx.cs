@@ -226,8 +226,8 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control c in phPagares.Controls)
                 {
                     TableRow tr = c as TableRow;
-                    CheckBox ch = tr.Cells[11].Controls[2] as CheckBox;
-                    TableCell tc = tr.Cells[7] as TableCell;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    TableCell tc = tr.Cells[6] as TableCell;
 
                     if (ch.Checked == true)
                     {
