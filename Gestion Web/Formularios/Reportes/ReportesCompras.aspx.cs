@@ -61,12 +61,22 @@ namespace Gestion_Web.Formularios.Reportes
         #region Eventos Controles
         protected void lbtnReporteArticulosPorProveedor_Click(object sender, EventArgs e)
         {
-            ImprimirReporteComprasArticulos(0);
+            this.ImprimirReporteComprasArticulos(0);
         }
 
         protected void lbtnReporteArticulosPorProveedorPDF_Click(object sender, EventArgs e)
         {
-            ImprimirReporteComprasArticulos(1);
+            this.ImprimirReporteComprasArticulos(1);
+        }
+
+        protected void lbtnReporteArticulosCompradosVendidosPorProveedor_Click(object sender, EventArgs e)
+        {
+            this.ImprimirReporteComprasVentasArticulos(0);
+        }
+
+        protected void lbtnReporteArticulosCompradosVendidosPorProveedorPDF_Click(object sender, EventArgs e)
+        {
+            this.ImprimirReporteComprasVentasArticulos(1);
         }
 
         protected void btnBuscarProveedor_Click(object sender, EventArgs e)
@@ -195,7 +205,7 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 CargarTablaTopArticulosCantidad();
-
+                CargarTablaTopProveedoresCantidad();
             }
             catch (Exception ex)
             {
@@ -261,10 +271,61 @@ namespace Gestion_Web.Formularios.Reportes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando articulo en tabla top articulos. Excepción: " + ex.Message));
             }
         }
+
+        private void CargarTablaTopProveedoresCantidad()
+        {
+            try
+            {
+                DateTime fechaD = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                DateTime fechaH = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
+
+                var dt = controladorCompraEntity.obtenerTopRemitosProveedores_ItemsFiltro(fechaD, fechaH, proveedor);
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        CargarTablaTopProveedoresCantidadPh(dr);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error obteniendo top de articulos para cargar en la tabla top articulos. Excepción: " + ex.Message));
+            }
+        }
+
+        private void CargarTablaTopProveedoresCantidadPh(DataRow dr)
+        {
+            try
+            {
+                TableRow tr = new TableRow();
+
+                TableCell celNombreProveedor = new TableCell();
+                celNombreProveedor.Text = dr["razonSocial"].ToString();
+                celNombreProveedor.VerticalAlign = VerticalAlign.Bottom;
+                celNombreProveedor.HorizontalAlign = HorizontalAlign.Left;
+                celNombreProveedor.Width = Unit.Percentage(30);
+                tr.Cells.Add(celNombreProveedor);
+
+                TableCell celCantidad = new TableCell();
+                celCantidad.Text = Decimal.Round(Convert.ToDecimal(dr["cantidadComprada"]), 2).ToString();
+                celCantidad.VerticalAlign = VerticalAlign.Bottom;
+                celCantidad.HorizontalAlign = HorizontalAlign.Right;
+                celCantidad.Width = Unit.Percentage(30);
+                tr.Cells.Add(celCantidad);
+
+                phTopProveedoresCantidad.Controls.Add(tr);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error en fun: CargarTablaTopProveedoresCantidadPh. Excepción: " + ex.Message));
+            }
+        }
         #endregion
 
         #region Impresion
-        
+
         private void ImprimirReporteComprasArticulos(int tipoImpresion)
         {
             try
@@ -287,6 +348,27 @@ namespace Gestion_Web.Formularios.Reportes
             }
         }
 
+        private void ImprimirReporteComprasVentasArticulos(int tipoImpresion)
+        {
+            try
+            {
+                DateTime fechaD = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                DateTime fechaH = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
+
+                // Impresión PDF
+                if (tipoImpresion == 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=13&fd=" + fechaD.ToString("dd/MM/yyyy") + "&fh=" + fechaH.ToString("dd/MM/yyyy") + " &prov=" + proveedor + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                }
+
+                // Impresión Excel
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=13&ex=1&fd=" + fechaD.ToString("dd/MM/yyyy") + "&fh=" + fechaH.ToString("dd/MM/yyyy") + " &prov=" + proveedor + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error en fun: ImprimirReporteComprasVentasArticulos. Excepción: " + ex.Message));
+            }
+        }
         #endregion
 
     }
