@@ -300,10 +300,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.cargarPagosCuentaMutualCliente();
                 }
-                if (this.DropListFormaPago.SelectedItem.Text == "Credito")
-                {
-                    this.verificarCobroAnticipo();
-                }
+                //if (this.DropListFormaPago.SelectedItem.Text == "Credito")
+                //{
+                //    this.verificarCobroAnticipo();
+                //}
 
                 if (this.accion == 9)
                 {
@@ -1721,6 +1721,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 this.lbtnStockDestinoProd.Visible = false;
                                 this.ListSucursalCliente.Visible = false;
+                                this.ListSucursalCliente.SelectedValue = "-1";
                             }
                         }
                         else

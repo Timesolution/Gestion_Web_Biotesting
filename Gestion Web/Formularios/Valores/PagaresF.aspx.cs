@@ -20,6 +20,7 @@ namespace Gestion_Web.Formularios.Valores
         controladorFacturacion contFacturas = new controladorFacturacion();
         controladorCobranza contCobranza = new controladorCobranza();
         controladorUsuario contUser = new controladorUsuario();
+        controladorDocumentos contDocumentos = new controladorDocumentos();
         Mensajes m = new Mensajes();
         private int suc;
         private int idMutual;
@@ -345,6 +346,10 @@ namespace Gestion_Web.Formularios.Valores
                 if (estadoPagare != null)
                     estado = estadoPagare.Descripcion;
 
+                Factura fc = null;
+                if (p.Factura != null)
+                    fc = this.contFacturas.obtenerFacturaId(p.Factura.Value);
+
                 TableCell celFecha = new TableCell();
                 celFecha.Text = p.Fecha.Value.ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Center;
@@ -361,20 +366,17 @@ namespace Gestion_Web.Formularios.Valores
                 TableCell celDoc = new TableCell();
                 string documento = "";
                 if (p.Factura != null)
-                {
-                    Factura fc = this.contFacturas.obtenerFacturaId(p.Factura.Value);
                     documento = fc.tipo.tipo + " " + fc.numero;
-                }
                 celDoc.Text = documento;
                 celDoc.HorizontalAlign = HorizontalAlign.Left;
                 celDoc.VerticalAlign = VerticalAlign.Middle;
                 tr.Controls.Add(celDoc);
 
-                TableCell celMutual = new TableCell();
-                celMutual.Text = p.Mutuale.Nombre;
-                celMutual.HorizontalAlign = HorizontalAlign.Left;
-                celMutual.VerticalAlign = VerticalAlign.Middle;
-                tr.Controls.Add(celMutual);
+                //TableCell celMutual = new TableCell();
+                //celMutual.Text = p.Mutuale.Nombre;
+                //celMutual.HorizontalAlign = HorizontalAlign.Left;
+                //celMutual.VerticalAlign = VerticalAlign.Middle;
+                //tr.Controls.Add(celMutual);
 
                 TableCell celSocio = new TableCell();
                 celSocio.Text = p.NroSocio;
@@ -404,19 +406,26 @@ namespace Gestion_Web.Formularios.Valores
                 celImporte.Width = Unit.Percentage(10);
                 tr.Controls.Add(celImporte);
 
-                TableCell celVencimiento = new TableCell();
-                celVencimiento.Text = p.Vencimiento.Value.ToString("dd/MM/yyyy");
-                celVencimiento.HorizontalAlign = HorizontalAlign.Center;
-                celVencimiento.VerticalAlign = VerticalAlign.Middle;
-                celVencimiento.Width = Unit.Percentage(10);
-                tr.Controls.Add(celVencimiento);
+                TableCell celRazonSocial = new TableCell();
+                celRazonSocial.Text = fc.cliente.razonSocial;
+                celRazonSocial.HorizontalAlign = HorizontalAlign.Center;
+                celRazonSocial.VerticalAlign = VerticalAlign.Middle;
+                celRazonSocial.Width = Unit.Percentage(10);
+                tr.Controls.Add(celRazonSocial);
 
-                TableCell celCuota = new TableCell();
-                celCuota.Text = cuota.ToString();
-                celCuota.HorizontalAlign = HorizontalAlign.Center;
-                celCuota.VerticalAlign = VerticalAlign.Middle;
-                celCuota.Width = Unit.Percentage(5);
-                tr.Controls.Add(celCuota);
+                //TableCell celVencimiento = new TableCell();
+                //celVencimiento.Text = p.Vencimiento.Value.ToString("dd/MM/yyyy");
+                //celVencimiento.HorizontalAlign = HorizontalAlign.Center;
+                //celVencimiento.VerticalAlign = VerticalAlign.Middle;
+                //celVencimiento.Width = Unit.Percentage(10);
+                //tr.Controls.Add(celVencimiento);
+
+                //TableCell celCuota = new TableCell();
+                //celCuota.Text = cuota.ToString();
+                //celCuota.HorizontalAlign = HorizontalAlign.Center;
+                //celCuota.VerticalAlign = VerticalAlign.Middle;
+                //celCuota.Width = Unit.Percentage(5);
+                //tr.Controls.Add(celCuota);
 
                 TableCell celEstado = new TableCell();
                 celEstado.Text = estado;
@@ -448,6 +457,21 @@ namespace Gestion_Web.Formularios.Valores
                 cbSeleccion.Font.Size = 12;
                 celAction.Controls.Add(cbSeleccion);
 
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+                celAction.Controls.Add(l1);
+
+                LinkButton btnDetalles = new LinkButton();
+                btnDetalles.CssClass = "btn btn-info ui-tooltip";
+                btnDetalles.Attributes.Add("data-toggle", "tooltip");
+                btnDetalles.Attributes.Add("title data-original-title", "Detalles");
+                btnDetalles.ID = "btnSelec_" + fc.id + "_" + fc.tipo.id + "_" + p.Id;
+                btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
+                btnDetalles.Font.Size = 12;
+                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                btnDetalles.Click += new EventHandler(this.detalleFactura);
+                celAction.Controls.Add(btnDetalles);
+
                 tr.Cells.Add(celAction);
 
                 this.phPagares.Controls.Add(tr);
@@ -457,6 +481,49 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
+
+        private void detalleFactura(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtengo numero factura
+                string idBoton = (sender as LinkButton).ID;
+
+                string[] atributos = idBoton.Split('_');
+                string idFactura = atributos[1];
+                int tipo = Convert.ToInt32(atributos[2]);
+                TipoDocumento tp = this.contDocumentos.obtenerTipoDoc("Presupuesto");
+
+                if (tipo == tp.id || tipo == 11 || tipo == 12)//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Facturas/ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "');", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('.../Facturas/ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                }
+                else
+                {
+                    if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26)//Si es Factura A/E, Nota credito A/E o Nota debito A/E
+                    {
+                        //factura
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Facturas/ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "');", true);
+                        //ScriptManager.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('.../Facturas/ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
+                    }
+                    else
+                    {
+                        //facturab
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Facturas/ImpresionPresupuesto.aspx?a=2&Presupuesto=" + idFactura + "');", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('.../Facturas/ImpresionPresupuesto.aspx?a=2&Presupuesto=" + idFactura + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error al mostrar detalle de factura desde la interfaz. \", {type: \"error\"});", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
+            }
+        }
+
         private void liquidarPagares(string listPagares, decimal monto, string numeroLiquidacion)
         {
             try

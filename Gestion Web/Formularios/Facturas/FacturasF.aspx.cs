@@ -903,33 +903,11 @@ namespace Gestion_Web.Formularios.Facturas
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
 
-                //LinkButton btnEliminar = new LinkButton();
-                //btnEliminar.ID = "btnEliminar_" + f.id;
-                //btnEliminar.CssClass = "btn btn-info";
-                //btnEliminar.Attributes.Add("data-toggle", "modal");
-                //btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-                //btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                ////btnEliminar.Font.Size = 9;
-                ////btnEliminar.Click += new EventHandler(this.eliminarCobro);
-                ////btnEliminar.Attributes.Add("onclientclick", "abrirdialog("+ movV.id +")");
-                //btnEliminar.OnClientClick = "abrirConfirmacion(" + f.id + ");";
-                //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
-                //Literal l2 = new Literal();
-                //l2.Text = "&nbsp";
-                //celAccion.Controls.Add(l2);
-
-                //Literal l3 = new Literal();
-                //l3.Text = "&nbsp";
-                //celAccion.Controls.Add(l3);
-
                 CheckBox cbSeleccion = new CheckBox();
-                //cbSeleccion.Text = "&nbsp;Imputar";
                 cbSeleccion.ID = "cbSeleccion_" + f.id;
                 cbSeleccion.CssClass = "btn btn-info";
                 cbSeleccion.Font.Size = 12;
                 celAccion.Controls.Add(cbSeleccion);
-                //celAccion.Controls.Add(btnEliminar);
-
 
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;

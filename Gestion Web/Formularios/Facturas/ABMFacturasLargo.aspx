@@ -167,7 +167,7 @@
                                                             <a class="btn btn-info" data-toggle="modal" href="#modalTarjeta" runat="server" id="btnTarjeta" visible="false">
                                                                 <i class="shortcut-icon icon-credit-card"></i>
                                                             </a>
-                                                            <a class="btn btn-info ui-tooltip" title data-original-title="Credito" data-toggle="modal" data-backdrop="static" data-keyboard="false" href="#modalCreditos" runat="server" id="btnCredito" visible="false">
+                                                            <a class="btn btn-danger ui-tooltip" title data-original-title="Credito" data-toggle="modal" data-backdrop="static" data-keyboard="false" href="#modalCreditos" runat="server" id="btnCredito" visible="false">
                                                                 <i class="shortcut-icon icon-usd"></i>
                                                             </a>
                                                             <a class="btn btn-info ui-tooltip" title data-original-title="Mutual" data-toggle="modal" href="#modalMutuales" runat="server" id="btnMutual" visible="false">
