@@ -423,6 +423,12 @@
                                                     <li><a href="/../../Formularios/Reportes/ReportesCompras.aspx">Articulos</a></li>
                                                 </ul>
                                             </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Saldos</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReporteSaldosProveedores.aspx">Proveedores</a></li>
+                                                </ul>
+                                            </li>
                                             <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
                                                 <%--<li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>--%>

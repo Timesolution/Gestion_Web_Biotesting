@@ -1,5 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="PagaresF.aspx.cs" Inherits="Gestion_Web.Formularios.Valores.PagaresF" %>
 
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+<%@ Register Assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" Namespace="CrystalDecisions.Web" TagPrefix="CR" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
         <div>
@@ -132,19 +135,21 @@
                             <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
                                     <div class="table-responsive">
+                                        <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
                                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                             <thead>
                                                 <tr>
                                                     <th>Fecha</th>
                                                     <th>Sucursal</th>
                                                     <th>Documento</th>
-                                                    <th>Mutual</th>
+                                                    <%--<th>Mutual</th>--%>
                                                     <th># Socio</th>
                                                     <th>#Autorizacion</th>
                                                     <th>Numero</th>
                                                     <th style="text-align: right;">Importe</th>
-                                                    <th>Vencimiento</th>
-                                                    <th>Cuota</th>
+                                                    <th>Razon Social</th>
+                                                    <%--<th>Vencimiento</th>--%>
+                                                    <%--<th>Cuota</th>--%>
                                                     <th>Estado</th>
                                                     <th></th>
                                                 </tr>
@@ -310,10 +315,15 @@
         </div>
 
         <link href="../../css/pages/reports.css" rel="stylesheet">
+        <script src="../../Scripts/plugins/dataTables/jquery-2.0.0.js"></script>
+        <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
+        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+
 
         <!-- Core Scripts - Include with every page -->
-        <%--<script src="../../Scripts/jquery-1.10.2.js"></script>--%>
+        <script src="../../Scripts/jquery-1.10.2.js"></script>
         <script src="../../Scripts/bootstrap.min.js"></script>
+        <script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
 
         <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
         <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
@@ -330,12 +340,18 @@
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
         <script src="../../Scripts/demo/notifications.js"></script>
 
-        <!-- Page-Level Plugin Scripts - Tables -->
-        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
-        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+        <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+
+        <!-- Page-Level Plugin Scripts - Tables -->
+        <%--<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>--%>
+        <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+        <%--<script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>--%>
+        <%--<link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />--%>
+        <link href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
 
         <script>
 
@@ -349,6 +365,41 @@
             $(document).ready(function () {
                 $('#dataTables-example').dataTable({
                     "bLengthChange": false,
+                    "pageLength": 15,
+                    "bFilter": true,
+                    "bInfo": false,
+                    "bAutoWidth": false,
+                    "columnDefs": [
+                    { type: 'date-eu', targets: [0, 1, 2] }
+                    ],
+                    "language": {
+                        "search": "Buscar:"
+                    }
+                });
+            });
+
+        </script>
+
+        <script type="text/javascript">
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+            function endReq(sender, args) {
+                $('#dataTables-example').dataTable();
+            }
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+            //function endReq(sender, args) {
+            //    $('#dataTables-example').dataTable({
+            //        "bLengthChange": false,
+            //        "bFilter": false,
+            //        "bInfo": false,
+            //        "bAutoWidth": false
+            //    });
+            //}
+        </script>
+
+        <%--<script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable({
+                    "bLengthChange": false,
                     "bFilter": false,
                     "bInfo": false,
                     "bAutoWidth": false,
@@ -357,7 +408,7 @@
                     ]
                 });
             });
-        </script>
+        </script>--%>
 
         <script>
             //valida los campos solo numeros

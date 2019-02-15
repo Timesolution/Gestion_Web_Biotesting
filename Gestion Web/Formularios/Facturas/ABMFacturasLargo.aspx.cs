@@ -300,10 +300,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.cargarPagosCuentaMutualCliente();
                 }
-                if (this.DropListFormaPago.SelectedItem.Text == "Credito")
-                {
-                    this.verificarCobroAnticipo();
-                }
+                //if (this.DropListFormaPago.SelectedItem.Text == "Credito")
+                //{
+                //    this.verificarCobroAnticipo();
+                //}
 
                 if (this.accion == 9)
                 {
@@ -1721,6 +1721,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 this.lbtnStockDestinoProd.Visible = false;
                                 this.ListSucursalCliente.Visible = false;
+                                this.ListSucursalCliente.SelectedValue = "-1";
                             }
                         }
                         else
@@ -3896,6 +3897,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ActualizarStockAlAgregarItem(this.txtCodigo.Text);
 
+                if (this.verificarNoEnviarMercaderiaNegativa() == 0)
+                    return;
+
                 if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
                     return;
 
@@ -5662,7 +5666,30 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarSiLaCantidadIngresadaPorItemEsPositiva. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarNoEnviarMercaderiaSiNoHayStock. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
+
+        private int verificarNoEnviarMercaderiaNegativa()
+        {
+            try
+            {
+                if (this.ListSucursalCliente.SelectedIndex > 0)
+                {
+                    int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                    if (cantidad <= 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita debe ser mayor a 0 \", {type: \"alert\"});", true);
+                        return 0;
+                    }
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarNoEnviarMercaderiaNegativa. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
                 return 0;
             }
         }
@@ -8304,7 +8331,11 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     this.guardarDatosFechaNacimiento();
-                    this.verificarCobroAnticipo();
+                    int temp = this.verificarCobroAnticipo();
+
+                    if (temp <= 0)
+                        return;
+
                     this.obtenerPagosCuentaAnticipo();
 
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud seleccionada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
@@ -8406,7 +8437,11 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     this.guardarDatosFechaNacimiento();
-                    this.verificarCobroAnticipo();
+                    int temp = this.verificarCobroAnticipo();
+
+                    if(temp <= 0)                        
+                        return;
+
                     this.obtenerPagosCuentaAnticipo();
 
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud cargada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
@@ -8525,7 +8560,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private void verificarCobroAnticipo()
+        private int verificarCobroAnticipo()
         {
             try
             {
@@ -8534,6 +8569,13 @@ namespace Gestion_Web.Formularios.Facturas
                     if (Session["CobroAnticipo"] != null)
                     {
                         Cobro cobroAnticipo = Session["CobroAnticipo"] as Cobro;
+
+                        if(cobroAnticipo.total < Convert.ToDecimal(txtAnticipo.Text))
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto del cobro. \");", true);
+                            return -1;
+                        }
+
                         if (cobroAnticipo != null)
                         {
                             this.btnCredito.Attributes["class"] = "btn btn-success";
@@ -8546,16 +8588,20 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.btnCredito.Attributes["class"] = "btn btn-danger";
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"No se genero un cobro. \");", true);
+                        return -1;
                     }
                 }
                 else
                 {
-                    this.btnCredito.Attributes["class"] = "btn btn-success";
+                    this.btnCredito.Attributes["class"] = "btn btn-danger";
                 }
+
+                return 1;
             }
             catch
             {
-
+                return -1;
             }
         }
         protected void btnCerrarCreditos_Click(object sender, EventArgs e)
