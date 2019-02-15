@@ -251,6 +251,17 @@ namespace Gestion_Web.Formularios.Reportes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", this.m.mensajeBoxError("Error cargando movimiento en PH. " + ex.Message));
             }
         }
+
+        protected void lbtnImprimir_Click(object sender, EventArgs e)
+        {
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('../../Formularios/Compras/ImpresionCompras.aspx?a=11&fh=" + txtFechaHasta.Text + "&s=" + this.DropListSucursal.SelectedValue + "&prov=" + ListProveedor.SelectedValue + "&t=" + DropListTipo.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            //Response.Redirect("../../Formularios/Compras/ImpresionCompras.aspx?a=4&fh=" + txtFechaHasta.Text + "&s=" + this.DropListSucursal.SelectedValue + "&prov=" + DropListClientes.SelectedValue + "&t=" + DropListTipo.SelectedValue);
+        }
+
+        protected void lbtnExportar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("../../Formularios/Compras/ImpresionCompras.aspx?a=11&ex=1&fh=" + txtFechaHasta.Text + "&s=" + this.DropListSucursal.SelectedValue + "&prov=" + ListProveedor.SelectedValue + "&t=" + DropListTipo.SelectedValue);
+        }
     }
     
 }

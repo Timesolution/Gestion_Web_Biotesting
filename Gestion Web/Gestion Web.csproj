@@ -2999,6 +2999,7 @@
     <EmbeddedResource Include="Formularios\Compras\RetencionListado.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionPagos.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\EtiquetasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Compras\SaldosProvR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\CuentaCorrienteR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DespachosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />

@@ -23,10 +23,10 @@
                                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnImprimir" runat="server" >Imprimir reporte</asp:LinkButton> <%--OnClick="lbtnImprimir_Click"--%>
+                                                        <asp:LinkButton ID="lbtnImprimir" OnClick="lbtnImprimir_Click" runat="server" >Imprimir reporte</asp:LinkButton> 
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnExportar" runat="server" >Exportar reporte</asp:LinkButton> <%--OnClick="lbtnExportar_Click"--%>
+                                                        <asp:LinkButton ID="lbtnExportar" OnClick="lbtnExportar_Click" runat="server" >Exportar reporte</asp:LinkButton> 
                                                     </li>
                                                 </ul>
                                             </div>
