@@ -651,6 +651,8 @@ namespace Gestion_Web.Formularios.Reportes {
             
             private global::System.Data.DataColumn columncantidadVendida;
             
+            private global::System.Data.DataColumn columncantidadVendidaOferta;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ComprasVentasProveedorDataTable() {
@@ -710,6 +712,14 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn cantidadVendidaOfertaColumn {
+                get {
+                    return this.columncantidadVendidaOferta;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -745,12 +755,13 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ComprasVentasProveedorRow AddComprasVentasProveedorRow(string razonSocial, string cantidadComprada, string cantidadVendida) {
+            public ComprasVentasProveedorRow AddComprasVentasProveedorRow(string razonSocial, string cantidadComprada, string cantidadVendida, string cantidadVendidaOferta) {
                 ComprasVentasProveedorRow rowComprasVentasProveedorRow = ((ComprasVentasProveedorRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         razonSocial,
                         cantidadComprada,
-                        cantidadVendida};
+                        cantidadVendida,
+                        cantidadVendidaOferta};
                 rowComprasVentasProveedorRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowComprasVentasProveedorRow);
                 return rowComprasVentasProveedorRow;
@@ -776,6 +787,7 @@ namespace Gestion_Web.Formularios.Reportes {
                 this.columnrazonSocial = base.Columns["razonSocial"];
                 this.columncantidadComprada = base.Columns["cantidadComprada"];
                 this.columncantidadVendida = base.Columns["cantidadVendida"];
+                this.columncantidadVendidaOferta = base.Columns["cantidadVendidaOferta"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -787,6 +799,8 @@ namespace Gestion_Web.Formularios.Reportes {
                 base.Columns.Add(this.columncantidadComprada);
                 this.columncantidadVendida = new global::System.Data.DataColumn("cantidadVendida", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columncantidadVendida);
+                this.columncantidadVendidaOferta = new global::System.Data.DataColumn("cantidadVendidaOferta", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncantidadVendidaOferta);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1190,6 +1204,23 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string cantidadVendidaOferta {
+                get {
+                    try {
+                        return ((string)(this[this.tableComprasVentasProveedor.cantidadVendidaOfertaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'cantidadVendidaOferta\' in table \'ComprasVentasProveedor\' is" +
+                                " DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableComprasVentasProveedor.cantidadVendidaOfertaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsrazonSocialNull() {
                 return this.IsNull(this.tableComprasVentasProveedor.razonSocialColumn);
             }
@@ -1222,6 +1253,18 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetcantidadVendidaNull() {
                 this[this.tableComprasVentasProveedor.cantidadVendidaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IscantidadVendidaOfertaNull() {
+                return this.IsNull(this.tableComprasVentasProveedor.cantidadVendidaOfertaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetcantidadVendidaOfertaNull() {
+                this[this.tableComprasVentasProveedor.cantidadVendidaOfertaColumn] = global::System.Convert.DBNull;
             }
         }
         

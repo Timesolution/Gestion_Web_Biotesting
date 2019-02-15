@@ -964,15 +964,20 @@ namespace Gestion_Web.Formularios.Reportes
 
                 dtVentas.Merge(dtCompras, true);
 
+                DataTable dtVentasArtEnOferta = contFacturacion.obtenerTopArticulosCantidadByProveedorArticulosEnOferta(fechaD, fechaH, idSuc, idProveedor, listas, 0);
+                dtVentas.Merge(dtVentasArtEnOferta, true);
+
                 var result = from row in dtVentas.AsEnumerable()
                              where row.Field<decimal ?>("cantidadComprada") > 0 ||
-                                   row.Field<decimal?>("cantidadVendida") > 0
+                                   row.Field<decimal?>("cantidadVendida") > 0 ||
+                                   row.Field<decimal?>("cantidadVendidaOferta") > 0
                              group row by new { razonSocial = row.Field<string>("razonSocial") } into grp
                              select new
                              {
                                  razonSocial = grp.Key.razonSocial,
                                  cantidadVendida = grp.Sum(x => x.Field<decimal?>("cantidadVendida")),
                                  cantidadComprada = grp.Sum(x => x.Field<decimal?>("cantidadComprada")),
+                                 cantidadVendidaOferta = grp.Sum(x => x.Field<decimal?>("cantidadVendidaOferta")),
                              };
                 var listAgrupado = result.ToList();
 
