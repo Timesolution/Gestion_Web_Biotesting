@@ -479,6 +479,7 @@
     <Content Include="Formularios\Clientes\ProoveedoresABM.aspx" />
     <Content Include="Formularios\Clientes\ProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\RentabilidadFCosto.aspx" />
+    <Content Include="Formularios\Reportes\ReporteSaldosProveedores.aspx" />
     <Content Include="Formularios\Reportes\ReportesCobros.aspx" />
     <Content Include="Formularios\Reportes\ReportesCompras.aspx" />
     <Content Include="Formularios\Reportes\ReportesTrazabilidad.aspx" />
@@ -2390,6 +2391,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\RentabilidadFCosto.aspx.designer.cs">
       <DependentUpon>RentabilidadFCosto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReporteSaldosProveedores.aspx.cs">
+      <DependentUpon>ReporteSaldosProveedores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReporteSaldosProveedores.aspx.designer.cs">
+      <DependentUpon>ReporteSaldosProveedores.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\ReportesCobros.aspx.cs">
       <DependentUpon>ReportesCobros.aspx</DependentUpon>
