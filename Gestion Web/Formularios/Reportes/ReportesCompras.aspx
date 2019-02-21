@@ -35,6 +35,22 @@
                                                                 </li>
                                                             </ul>
                                                         </li>
+                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="0" href="#">Articulos comprados y vendidos por Proveedor</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnExportarExcelReporteArtCompradosVendidos" runat="server" OnClick="lbtnReporteArticulosCompradosVendidosPorProveedor_Click">
+                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp Exportar
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnImprimirPDFReporteArtCompradosVendidos" runat="server" OnClick="lbtnReporteArticulosCompradosVendidosPorProveedorPDF_Click">
+                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Imprimir
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </asp:PlaceHolder>
@@ -86,8 +102,10 @@
                                 <div class="bs-example">
                                     <ul id="myTab" class="nav nav-tabs">
                                         <li class="active"><a href="#home" data-toggle="tab">Articulos</a></li>
+                                        <li class=""><a href="#proveedores" data-toggle="tab">Proveedores</a></li>
                                     </ul>
                                     <div class="tab-content">
+
                                         <div class="tab-pane fade active in" id="home">
                                             <div class="col-md-6">
                                                 <div class="widget stacked widget-table">
@@ -112,13 +130,36 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="tab-pane fade" id="proveedores">
+                                            <div class="col-md-6">
+                                                <div class="widget stacked widget-table">
+                                                    <div class="widget-header">
+                                                        <span class="icon-list-alt"></span>
+                                                        <h3>Proveedores</h3>
+                                                    </div>
+                                                    <div class="widget-content">
+                                                        <table class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="text-align: left; width: 30%">Proveedor</th>
+                                                                    <th style="text-align: right; width: 30%">Cantidad</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <asp:PlaceHolder ID="phTopProveedoresCantidad" runat="server"></asp:PlaceHolder>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 

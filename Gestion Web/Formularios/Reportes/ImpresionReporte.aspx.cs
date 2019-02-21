@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -116,7 +117,10 @@ namespace Gestion_Web.Formularios.Reportes
                     {
                         this.generarReporte12(); // Reporte Ventas.Articulos agrupado fecha
                     }
-
+                    if (valor == 13)
+                    {
+                        this.generarReporte13(); // Reporte compras ventas.Articulos agrupado por proveedor
+                    }
                 }
             }
             catch (Exception ex)
@@ -536,6 +540,7 @@ namespace Gestion_Web.Formularios.Reportes
             }
 
         }
+
         private void generarReporte7()
         {
             try
@@ -725,6 +730,7 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
+
         private void generarReporte10()
         {
             try
@@ -934,5 +940,140 @@ namespace Gestion_Web.Formularios.Reportes
 
         }
 
+        private void generarReporte13()
+        {
+            try
+            {
+                //ventas
+                DataTable dt = this.contCliente.obtenerListaPrecios();
+
+                string listas = "";
+                foreach (DataRow lista in dt.Rows)
+                {
+                    if (lista[2].ToString().Contains("1"))
+                    {
+                        listas += lista[0] + ",";
+                    }
+                }
+                listas = listas.Remove(listas.Length-1,1);
+                DataTable dtVentas = contFacturacion.obtenerTopArticulosCantidadByProveedor(fechaD, fechaH, idSuc, idProveedor, listas, 0);
+                //compras
+                DateTime fechaDesde = Convert.ToDateTime(fechaD, new CultureInfo("es-AR"));
+                DateTime fechaHasta = Convert.ToDateTime(fechaH, new CultureInfo("es-AR"));
+                DataTable dtCompras = controladorCompraEntity.obtenerTopRemitosProveedores_ItemsFiltro(fechaDesde, fechaHasta, idProveedor);
+
+                dtVentas.Merge(dtCompras, true);
+
+                DataTable dtVentasArtEnOferta = contFacturacion.obtenerTopArticulosCantidadByProveedorArticulosEnOferta(fechaD, fechaH, idSuc, idProveedor, listas, 0);
+                dtVentas.Merge(dtVentasArtEnOferta, true);
+
+                var result = from row in dtVentas.AsEnumerable()
+                             where row.Field<decimal ?>("cantidadComprada") > 0 ||
+                                   row.Field<decimal?>("cantidadVendida") > 0 ||
+                                   row.Field<decimal?>("cantidadVendidaOferta") > 0
+                             group row by new { razonSocial = row.Field<string>("razonSocial") } into grp
+                             select new
+                             {
+                                 razonSocial = grp.Key.razonSocial,
+                                 cantidadVendida = grp.Sum(x => x.Field<decimal?>("cantidadVendida")),
+                                 cantidadComprada = grp.Sum(x => x.Field<decimal?>("cantidadComprada")),
+                                 cantidadVendidaOferta = grp.Sum(x => x.Field<decimal?>("cantidadVendidaOferta")),
+                             };
+                var listAgrupado = result.ToList();
+
+                DataTable dtFinal = new DataTable();
+                dtFinal = ListToDataTable(listAgrupado);
+
+                //Lo ordeno por cantidad
+                DataView dv = dtFinal.DefaultView;
+                
+                DataTable sortedDT = dv.ToTable();
+
+                var dtComprasVentasProveedores = dtVentas;
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ComprasVentasArticulosProv.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("dsComprasVentasProveedores", dtFinal);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "Reporte_CompraVentaArticulosProveedores", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+                    this.Response.End();
+                }
+                else
+                {
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public static DataTable ListToDataTable<T>(List<T> list)
+        {
+            DataTable dt = new DataTable();
+
+            foreach (PropertyInfo info in typeof(T).GetProperties())
+            {
+                dt.Columns.Add(new DataColumn(info.Name, GetNullableType(info.PropertyType)));
+            }
+            foreach (T t in list)
+            {
+                DataRow row = dt.NewRow();
+                foreach (PropertyInfo info in typeof(T).GetProperties())
+                {
+                    if (!IsNullableType(info.PropertyType))
+                        row[info.Name] = info.GetValue(t, null);
+                    else
+                        row[info.Name] = (info.GetValue(t, null) ?? DBNull.Value);
+                }
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
+
+        private static Type GetNullableType(Type t)
+        {
+            Type returnType = t;
+            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                returnType = Nullable.GetUnderlyingType(t);
+            }
+            return returnType;
+        }
+        private static bool IsNullableType(Type type)
+        {
+            return (type == typeof(string) ||
+                    type.IsArray ||
+                    (type.IsGenericType &&
+                     type.GetGenericTypeDefinition().Equals(typeof(Nullable<>))));
+        }
     }
 }
