@@ -234,8 +234,6 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("Pedido", p);
                 this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
                 this.cargarSucursal(p.empresa.id);
-                //TODO r hacer mejor esto
-                //this.cargarPuntoVta(p.sucursal.id);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();

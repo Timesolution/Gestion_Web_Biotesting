@@ -2492,7 +2492,6 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                         {
-                            //TODO ramiro se cambio por esta linea de precio sin iva
                             this.txtPUnitario.Text = art.precioSinIva.ToString();
                             //this.txtPUnitario.Text = decimal.Round((art.precioVenta / ((1 + (art.porcentajeIva / 100)))), 2).ToString();
                         }
