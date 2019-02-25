@@ -787,6 +787,11 @@ namespace Gestion_Web.Formularios.Articulos
                     if (store.Novedad == 1)
                         this.ListNovedades.SelectedValue = "SI";
 
+                    if (!string.IsNullOrEmpty(store.Especificaciones))
+                    {
+                        txtEspecificacionStore.Text = store.Especificaciones;
+                    }
+
                     this.txtDesde.Text = Convert.ToDateTime(store.Desde, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                     this.txtDesdeHora.Text = Convert.ToDateTime(store.Desde, new CultureInfo("es-AR")).ToString("HH:mm");
                     this.txtHasta.Text = Convert.ToDateTime(store.Hasta, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
