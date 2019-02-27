@@ -420,7 +420,12 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.ListPuntoVenta.Items.Clear();
-                this.ListPuntoVenta.SelectedIndex = 0;
+
+                if (ListPuntoVenta.SelectedIndex > -1)
+                {
+                    this.ListPuntoVenta.SelectedIndex = 0;
+                }
+                
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
