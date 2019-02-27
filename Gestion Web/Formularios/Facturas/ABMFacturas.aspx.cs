@@ -79,6 +79,13 @@ namespace Gestion_Web.Formularios.Facturas
                         string urlNueva = urlActual.Replace("ABMFacturas", "ABMFacturasLargo");
                         Response.Redirect(urlNueva);
                     }
+                    if (pantalla == "2")
+                    {
+                        //obtengo la url para salvar los parametros que tenga asi los envio al prox formulario
+                        string urlActual = Request.Url.ToString();
+                        string urlNueva = urlActual.Replace("ABMFacturas", "ABMFacturasUnidadMedida");
+                        Response.Redirect(urlNueva);
+                    }
                     //genero la factura de la session
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
