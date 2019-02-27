@@ -2774,7 +2774,19 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                //TODO r crear otra variable en item facturas q tenga la cantidadOriginal y ahi si no se va a pisar
                 this.factura = Session["Factura"] as Factura;
+
+                #region facturacion por unidad de medida
+                foreach (var item in this.factura.items)
+                {
+                    item.CantidadOriginal = item.cantidad;
+                    if (item.UnidadMedida != 0)//sino cuando se carga el item a la primera vez la unidad de medida es 0
+                    {
+                        item.cantidad = item.UnidadMedida;
+                    }
+                }
+                #endregion
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
@@ -2787,7 +2799,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     impuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
                     this.actualizarTotalesVentaCombustible();
-
                 }
                 else
                 {
@@ -2874,20 +2885,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtTotalTasaMunicipal.Text = this.factura.totalMunicipal.ToString();
                 this.txtTotalImpuestos.Text = impuestosCombustible.ToString();
 
-                //total: subtotal + iva + retencion + ivaPercepcion 
-                //impuestosCombustible
-                //if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
-                //{
-                //    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.iva21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                //}
-                //else
-                //{
-                //    //this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                //}
-                //cargo en pantalla
-
                 string neto = decimal.Round(this.factura.neto, 2).ToString();
-                //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
+
                 this.txtNeto.Text = neto;
 
                 this.txtDescuento.Text = decimal.Round(this.factura.descuento, 2).ToString();
@@ -2900,12 +2899,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.txtRetencion.Text = decimal.Round(this.factura.retencion, 2).ToString();//PERCERPCION
 
-                //string Stotal = .ToString();
                 this.txtTotal.Text = decimal.Round(this.factura.total, 2).ToString();
-                //this.txtImporteEfectivo.Text = decimal.Round(this.factura.total, 2).ToString();
-                //this.txtImporteT.Text = decimal.Round(this.factura.total, 2).ToString();
 
-                //this.lblSaldoTarjeta.Text = decimal.Round(this.factura.total, 2).ToString();
                 this.txtImporteFinanciar.Text = decimal.Round(this.factura.total, 2).ToString();
 
                 try
@@ -2920,12 +2915,17 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 catch { }
                 Factura f = this.factura;
+                #region facturacion por unidad de medida
+                foreach (var item in f.items)
+                {
+                    item.cantidad = item.CantidadOriginal;
+                }
+                #endregion
                 Session.Add("Factura", f);
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando totales. " + ex.Message));
-
             }
         }
         /// <summary>
@@ -4569,25 +4569,20 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total. Verifique que ingreso numeros en cantidad" + ex.Message));
             }
         }
-        protected void ActualizarTotalPH(int posicion, decimal cantNueva, int idArticulo)
+        protected void ActualizarTotalPH(int posicion, ItemFactura itemFactura, int idArticulo)
         {
             try
             {
                 Factura ct = Session["Factura"] as Factura;
-                ItemFactura item = ct.items[Convert.ToInt32(posicion)];
-
-                //guardo la cantidad real xq se va a pisar con la unidad de medida para calcular el total de ese item, para q no se pierda luego se la vuelvo a asignar
-                decimal auxCantidadOriginalDelItem = item.cantidad;
-                item.cantidad = Convert.ToDecimal(cantNueva, CultureInfo.InvariantCulture);
 
                 //me puede pasar que el item tenga un descuento que puso el usuario, pero si el art tiene desc por cantidad
                 //Prima el descuento por cantidad
 
                 //verifico si tengo que hacer un descuento por cantidad
-                decimal descCantidad = this.obtenerNuevoDescuentoCantidad(item.articulo.codigo, item.cantidad);
+                decimal descCantidad = this.obtenerNuevoDescuentoCantidad(itemFactura.articulo.codigo, itemFactura.cantidad);//TODO r consultar como va a quedar esto
                 if (descCantidad > 0)//si es descuento por cantidad, piso el del item, sino lo dejo
                 {
-                    item.porcentajeDescuento = descCantidad;
+                    itemFactura.porcentajeDescuento = descCantidad;
                 }
                 else
                 {
@@ -4595,25 +4590,31 @@ namespace Gestion_Web.Formularios.Facturas
                     //verifico si cliente aplica descuento por cantidad y el arti tambien aplica pero la cant. seleccionada no tiene un descuento lo pongo en cero
                     if (descCantidad == -1)
                     {
-                        item.porcentajeDescuento = 0;//pongo descuento en cero
+                        itemFactura.porcentajeDescuento = 0;//pongo descuento en cero
                     }
                 }
 
-                item.descuento = (item.precioUnitario * (item.porcentajeDescuento / 100)) * item.cantidad;
-                item.total = ((item.precioUnitario * (1 - (item.porcentajeDescuento / 100))) * item.cantidad);
-                ct.items.Remove(item);
+                //si es un articulo de traza de carne por ejemplo se debe usar los kilos de la variable unidad de medida para hacer los calculos
+                decimal auxCantidad = itemFactura.cantidad;
+                if (itemFactura.UnidadMedida != 0)
+                {
+                    auxCantidad = itemFactura.UnidadMedida;
+                }
 
-                //vuelvo a asignar la cantidad original de ese item
-                item.cantidad = auxCantidadOriginalDelItem;
+                itemFactura.descuento = (itemFactura.precioUnitario * (itemFactura.porcentajeDescuento / 100)) * auxCantidad;
+                itemFactura.total = ((itemFactura.precioUnitario * (1 - (itemFactura.porcentajeDescuento / 100))) * auxCantidad);
 
-                ct.items.Insert(Convert.ToInt32(posicion), item);
+                //borro y vuelvo a insertar el item
+                ct.items.Remove(itemFactura);
+                ct.items.Insert(Convert.ToInt32(posicion), itemFactura);
+
                 TableRow tr = this.phArticulos.Controls[Convert.ToInt32(posicion)] as TableRow;
                 //actualizo descuento
                 TableCell c2 = tr.Cells[4] as TableCell;
-                c2.Text = "$" + Decimal.Round(item.descuento, 2).ToString();
+                c2.Text = "$" + Decimal.Round(itemFactura.descuento, 2).ToString();
                 //actualizo total
                 TableCell c = tr.Cells[5] as TableCell;
-                c.Text = "$" + Decimal.Round(item.total, 2).ToString();
+                c.Text = "$" + Decimal.Round(itemFactura.total, 2).ToString();
                 //cargo el nuevo pedido a la sesion
                 Session["Factura"] = ct;
 
@@ -7859,6 +7860,21 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
             }
         }
+
+        private decimal obtenerCantidadColumnaUnidadDeMedida(string cantidad)
+        {
+            try
+            {
+                decimal cant = Convert.ToDecimal(cantidad);
+                return cant;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel8, UpdatePanel8.GetType(), "alert", "$.msgbox(\"Error en la traza seleccionada, el campo de unidad de medida a calcular contiene datos incorrectos. \", {type: \"error\"}); cerrarModal(); ", true);
+                return 0;
+            }
+        }
+
         protected void AgregarTraza_Click(object sender, EventArgs e)
         {
             try
@@ -7883,19 +7899,29 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
                         int numeroColumnaUnidadMedida = Convert.ToInt32(configuracion.ColumnaUnidadMedidaEnTrazabilidad);
-                        cantidadUnidadDeMedida += Convert.ToDecimal(tr.Cells[numeroColumnaUnidadMedida].Text);
+                        decimal cantAux = this.obtenerCantidadColumnaUnidadDeMedida(tr.Cells[numeroColumnaUnidadMedida].Text);
+                        if (cantAux != 0)
+                        {
+                            cantidadUnidadDeMedida += Convert.ToDecimal(tr.Cells[numeroColumnaUnidadMedida].Text);
+                        }
                     }
                 }
                 Articulo articuloMaestro = this.contArticulo.obtenerArticuloByID(idArticulo);
-                Articulo articuloItemFactura = f.items.Where(x => x.articulo.id == idArticulo).FirstOrDefault().articulo;
+                ItemFactura articuloItemFactura = f.items.Where(x => x.articulo.id == idArticulo).FirstOrDefault();
 
-                //traigo la descripcion original de la base para que luego le agregue los kilos
-                articuloItemFactura.descripcion = articuloMaestro.descripcion;
+                articuloItemFactura.UnidadMedida = cantidadUnidadDeMedida;
 
-                //le agrego la cantidad de kilos de las trazas seleccionadas a la descripcion.
-                articuloItemFactura.descripcion += " |Peso Total: "+ cantidadUnidadDeMedida;
+                articuloItemFactura.cantidad = f.items[posItem].cantidad;//guardo la cantidad solicitada de ese item
 
-                this.ActualizarTotalPH(posItem, cantidadUnidadDeMedida, idArticulo);
+                articuloItemFactura.CantidadOriginal = articuloItemFactura.cantidad;
+
+                if (articuloItemFactura.UnidadMedida != 0)
+                {
+                    articuloItemFactura.articulo.descripcion = articuloMaestro.descripcion;
+                    articuloItemFactura.articulo.descripcion += " |Peso: " + articuloItemFactura.UnidadMedida;
+                }
+
+                this.ActualizarTotalPH(posItem, articuloItemFactura, idArticulo);
 
                 if (!String.IsNullOrEmpty(idtildado))
                 {

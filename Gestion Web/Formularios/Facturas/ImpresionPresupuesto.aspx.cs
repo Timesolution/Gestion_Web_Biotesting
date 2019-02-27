@@ -331,16 +331,17 @@ namespace Gestion_Web.Formularios.Facturas
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
 
                 DataTable dtDatos;
-                string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
-                if (!string.IsNullOrEmpty(combustible) && combustible == "1")
-                {   //si es combustibles traer los datos de la tabla 'itemsFacturas_Datos' 
-                    dtDatos = controlador.obtenerDatosPresupuestoCombustibles(idPresupuesto);
+                string facturaPorUnidadDeMedida = WebConfigurationManager.AppSettings.Get("FormularioFC");
+                if (!string.IsNullOrEmpty(facturaPorUnidadDeMedida) && facturaPorUnidadDeMedida == "2")
+                {    
+                    dtDatos = controlador.obtenerDatosPresupuestoUnidadDeMedida(idPresupuesto);
                 }
                 else
                 {
                     //obtengo detalle de items
                     dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
                 }
+
                 //datos de encabezado y pie
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
                 //nro remito factura
@@ -1605,6 +1606,6 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-
+       
     }
 }
