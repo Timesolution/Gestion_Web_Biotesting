@@ -128,6 +128,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListFiltroArticulosSucursal.SelectedValue = configuracion.FiltroArticulosSucursal;
                 this.DropListSucGarantia.SelectedValue = configuracion.SucursalGarantia;
                 this.DropListSucServiceOficial.SelectedValue = configuracion.SucursalServiceOficial;
+                this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue = configuracion.ColumnaUnidadMedidaEnTrazabilidad;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1220,6 +1221,28 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al seleccionar la sucursal de service oficial " + ex.Message);
+            }
+        }
+
+        protected void lbtnColumnaUnidadMedidaEnTrazabilidad_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.ColumnaUnidadMedidaEnTrazabilidad = this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue;
+                int i = configuracion.ModificarColumnaUnidadMedidaEnTrazabilidad();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Columna Unidad Medida En Trazabilidad.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Columna Unidad Medida En Trazabilidad modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: ColumnaUnidadMedidaEnTrazabilidad !. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al seleccionar ColumnaUnidadMedidaEnTrazabilidad " + ex.Message);
             }
         }
     }

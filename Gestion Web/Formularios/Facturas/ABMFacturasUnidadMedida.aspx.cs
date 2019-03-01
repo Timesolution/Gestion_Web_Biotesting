@@ -27,7 +27,7 @@ using Task_Api.Entitys;
 
 namespace Gestion_Web.Formularios.Facturas
 {
-    public partial class ABMFacturasLargo : System.Web.UI.Page
+    public partial class ABMFacturasUnidadMedida : System.Web.UI.Page
     {
         Mensajes m = new Mensajes();
         controladorFacturacion controlador = new controladorFacturacion();
@@ -2492,6 +2492,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                         {
+                            //TODO ramiro se cambio por esta linea de precio sin iva
                             this.txtPUnitario.Text = art.precioSinIva.ToString();
                             //this.txtPUnitario.Text = decimal.Round((art.precioVenta / ((1 + (art.porcentajeIva / 100)))), 2).ToString();
                         }
@@ -2640,7 +2641,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 TableCell celDescripcion = new TableCell();
                 celDescripcion.Text = item.articulo.descripcion;
-                celDescripcion.Width = Unit.Percentage(35);
+                celDescripcion.Width = Unit.Percentage(30);
                 celDescripcion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDescripcion);
 
@@ -2660,7 +2661,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 TableCell celTotal = new TableCell();
                 celTotal.Text = "$" + item.total.ToString();
-                celTotal.Width = Unit.Percentage(10);
+                celTotal.Width = Unit.Percentage(5);
                 celTotal.VerticalAlign = VerticalAlign.Middle;
                 celTotal.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celTotal);
@@ -2773,7 +2774,19 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                //TODO r crear otra variable en item facturas q tenga la cantidadOriginal y ahi si no se va a pisar
                 this.factura = Session["Factura"] as Factura;
+
+                #region facturacion por unidad de medida
+                foreach (var item in this.factura.items)
+                {
+                    item.CantidadOriginal = item.cantidad;
+                    if (item.UnidadMedida != 0)//sino cuando se carga el item a la primera vez la unidad de medida es 0
+                    {
+                        item.cantidad = item.UnidadMedida;
+                    }
+                }
+                #endregion
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
@@ -2786,7 +2799,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     impuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
                     this.actualizarTotalesVentaCombustible();
-
                 }
                 else
                 {
@@ -2873,20 +2885,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtTotalTasaMunicipal.Text = this.factura.totalMunicipal.ToString();
                 this.txtTotalImpuestos.Text = impuestosCombustible.ToString();
 
-                //total: subtotal + iva + retencion + ivaPercepcion 
-                //impuestosCombustible
-                //if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
-                //{
-                //    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.iva21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                //}
-                //else
-                //{
-                //    //this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                //}
-                //cargo en pantalla
-
                 string neto = decimal.Round(this.factura.neto, 2).ToString();
-                //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
+
                 this.txtNeto.Text = neto;
 
                 this.txtDescuento.Text = decimal.Round(this.factura.descuento, 2).ToString();
@@ -2899,12 +2899,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.txtRetencion.Text = decimal.Round(this.factura.retencion, 2).ToString();//PERCERPCION
 
-                //string Stotal = .ToString();
                 this.txtTotal.Text = decimal.Round(this.factura.total, 2).ToString();
-                //this.txtImporteEfectivo.Text = decimal.Round(this.factura.total, 2).ToString();
-                //this.txtImporteT.Text = decimal.Round(this.factura.total, 2).ToString();
 
-                //this.lblSaldoTarjeta.Text = decimal.Round(this.factura.total, 2).ToString();
                 this.txtImporteFinanciar.Text = decimal.Round(this.factura.total, 2).ToString();
 
                 try
@@ -2919,12 +2915,17 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 catch { }
                 Factura f = this.factura;
+                #region facturacion por unidad de medida
+                foreach (var item in f.items)
+                {
+                    item.cantidad = item.CantidadOriginal;
+                }
+                #endregion
                 Session.Add("Factura", f);
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando totales. " + ex.Message));
-
             }
         }
         /// <summary>
@@ -3184,7 +3185,7 @@ namespace Gestion_Web.Formularios.Facturas
                         else
                         {
                             Session["Factura"] = null;
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasUnidadMedida.aspx';", true);
                         }
                     }
                     else
@@ -3699,7 +3700,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         else
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasUnidadMedida.aspx';", true);
                         }
 
                         this.btnNueva.Visible = true;
@@ -3712,29 +3713,26 @@ namespace Gestion_Web.Formularios.Facturas
                         if (i == 0)
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Se debe reprocesar factura electronica. Vuelva a facturar. \", {type: \"error\"});", true);
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se debe reprocesar factura electronica. Vuelva a facturar"));
                         }
                         string motivo = "";
                         try
                         {
                             motivo = fact.respuestaFE.Split('_')[2];
                         }
-                        catch { }
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura 2." + motivo + ". \", {type: \"error\"});", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar factura "));
+                        catch(Exception ex)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura 2. Ex: " + ex + " motivo: "  + motivo + ". \", {type: \"error\"});", true);
+                        }
                     }
-
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe agregar articulos a la factura. " + this.txtCodigo.Text + " \", {type: \"error\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura " + this.txtCodigo.Text));
                 }
             }
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error guardando facturas." + ex.Message + " \", {type: \"error\"});", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando facturas. " + ex.Message));
             }
         }
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
@@ -3774,7 +3772,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasUnidadMedida.aspx';", true);
                     }
 
                     this.btnNueva.Visible = true;
@@ -3873,11 +3871,9 @@ namespace Gestion_Web.Formularios.Facturas
             this.cargarProductoAFactura();
         }
 
-
         private void cargarProductoAFactura()
         {
             try
-
             {
                 ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
 
@@ -4573,17 +4569,71 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total. Verifique que ingreso numeros en cantidad" + ex.Message));
             }
         }
+        protected void ActualizarTotalPH(int posicion, ItemFactura itemFactura, int idArticulo)
+        {
+            try
+            {
+                Factura ct = Session["Factura"] as Factura;
+
+                //me puede pasar que el item tenga un descuento que puso el usuario, pero si el art tiene desc por cantidad
+                //Prima el descuento por cantidad
+
+                //verifico si tengo que hacer un descuento por cantidad
+                decimal descCantidad = this.obtenerNuevoDescuentoCantidad(itemFactura.articulo.codigo, itemFactura.cantidad);//TODO r consultar como va a quedar esto
+                if (descCantidad > 0)//si es descuento por cantidad, piso el del item, sino lo dejo
+                {
+                    itemFactura.porcentajeDescuento = descCantidad;
+                }
+                else
+                {
+                    //el articulo tiene desc por cantidad y el cliente aplica descuento por cantidad, mantengo descuento por cantidad
+                    //verifico si cliente aplica descuento por cantidad y el arti tambien aplica pero la cant. seleccionada no tiene un descuento lo pongo en cero
+                    if (descCantidad == -1)
+                    {
+                        itemFactura.porcentajeDescuento = 0;//pongo descuento en cero
+                    }
+                }
+
+                //si es un articulo de traza de carne por ejemplo se debe usar los kilos de la variable unidad de medida para hacer los calculos
+                decimal auxCantidad = itemFactura.cantidad;
+                if (itemFactura.UnidadMedida != 0)
+                {
+                    auxCantidad = itemFactura.UnidadMedida;
+                }
+
+                itemFactura.descuento = (itemFactura.precioUnitario * (itemFactura.porcentajeDescuento / 100)) * auxCantidad;
+                itemFactura.total = ((itemFactura.precioUnitario * (1 - (itemFactura.porcentajeDescuento / 100))) * auxCantidad);
+
+                //borro y vuelvo a insertar el item
+                ct.items.Remove(itemFactura);
+                ct.items.Insert(Convert.ToInt32(posicion), itemFactura);
+
+                TableRow tr = this.phArticulos.Controls[Convert.ToInt32(posicion)] as TableRow;
+                //actualizo descuento
+                TableCell c2 = tr.Cells[4] as TableCell;
+                c2.Text = "$" + Decimal.Round(itemFactura.descuento, 2).ToString();
+                //actualizo total
+                TableCell c = tr.Cells[5] as TableCell;
+                c.Text = "$" + Decimal.Round(itemFactura.total, 2).ToString();
+                //cargo el nuevo pedido a la sesion
+                Session["Factura"] = ct;
+
+                this.actualizarTotales();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total. Verifique que ingreso numeros en cantidad" + ex.Message));
+            }
+        }
         protected void ActualizarTotalPH(object sender, EventArgs e)
         {
             try
             {
-                string posicion = (sender as TextBox).ID.ToString().Split('_')[1];
+                int posicion = Convert.ToInt32((sender as TextBox).ID.ToString().Split('_')[1]);
                 Factura ct = Session["Factura"] as Factura;
                 ItemFactura item = ct.items[Convert.ToInt32(posicion)];
                 string cantNueva = (sender as TextBox).Text.Replace(',', '.');
                 item.cantidad = Convert.ToDecimal(cantNueva, CultureInfo.InvariantCulture);
-
-                //item.porcentajeDescuento = 0;
 
                 //me puede pasar que el item tenga un descuento que puso el usuario, pero si el art tiene desc por cantidad
                 //Prima el descuento por cantidad
@@ -4602,18 +4652,13 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         item.porcentajeDescuento = 0;//pongo descuento en cero
                     }
-                    else //mantengo el descuento 
-                    {
-                        item.porcentajeDescuento = item.porcentajeDescuento;
-                    }
                 }
-
 
                 item.descuento = (item.precioUnitario * (item.porcentajeDescuento / 100)) * item.cantidad;
                 item.total = ((item.precioUnitario * (1 - (item.porcentajeDescuento / 100))) * item.cantidad);
                 ct.items.Remove(item);
-                ct.items.Insert(Convert.ToInt32(posicion), item);
-                TableRow tr = this.phArticulos.Controls[Convert.ToInt32(posicion)] as TableRow;
+                ct.items.Insert(posicion, item);
+                TableRow tr = this.phArticulos.Controls[posicion] as TableRow;
                 //actualizo descuento
                 TableCell c2 = tr.Cells[4] as TableCell;
                 c2.Text = "$" + Decimal.Round(item.descuento, 2).ToString();
@@ -4623,10 +4668,18 @@ namespace Gestion_Web.Formularios.Facturas
                 //cargo el nuevo pedido a la sesion
                 Session["Factura"] = ct;
 
-                //vuelvo a cargar los items
-                //this.cargarItems();
+                LinkButton btnTraza = tr.Cells[6].Controls[2] as LinkButton;
+                btnTraza.CssClass.Replace("info", "danger");
+
+                //phArticulos.Controls[6].
+
                 this.actualizarTotales();
 
+                Factura f = Session["Factura"] as Factura;
+                //borrar las trazas item seleccionado
+                f.items[posicion].lstTrazas = null;
+
+                Session["Factura"] = f;
             }
             catch (Exception ex)
             {
@@ -6495,7 +6548,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int i = this.controlador.generarCierreZ(empresa, sucursal, puntoVenta);
                 if (i > 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cierre Realizado. ", "ABMFacturasLargo.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cierre Realizado. ", "ABMFacturasUnidadMedida.aspx"));
                 }
                 else
                 {
@@ -6510,7 +6563,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnNueva_Click(object sender, EventArgs e)
         {
-            Response.Redirect("ABMFacturasLargo.aspx");
+            Response.Redirect("ABMFacturasUnidadMedida.aspx");
         }
 
         #endregion
@@ -6550,7 +6603,7 @@ namespace Gestion_Web.Formularios.Facturas
                     script += " window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + remito + "&o=1','_blank');";
                 }
 
-                script += " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';";
+                script += " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasUnidadMedida.aspx';";
 
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
             }
@@ -7486,7 +7539,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 script2 = "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + prp.id + "','_blank');";
-                script3 = " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';";
+                script3 = " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasUnidadMedida.aspx';";
 
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script + script2 + script3 + scriptRemito, true);
             }
@@ -7763,7 +7816,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    //this.cargarEnPH(row, pos);                    
                     if (columnas == 0)
                     {
                         tr = new TableRow();
@@ -7808,6 +7860,21 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
             }
         }
+
+        private decimal obtenerCantidadColumnaUnidadDeMedida(string cantidad)
+        {
+            try
+            {
+                decimal cant = Convert.ToDecimal(cantidad);
+                return cant;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel8, UpdatePanel8.GetType(), "alert", "$.msgbox(\"Error en la traza seleccionada, el campo de unidad de medida a calcular contiene datos incorrectos. \", {type: \"error\"}); cerrarModal(); ", true);
+                return 0;
+            }
+        }
+
         protected void AgregarTraza_Click(object sender, EventArgs e)
         {
             try
@@ -7819,8 +7886,10 @@ namespace Gestion_Web.Formularios.Facturas
                 int posItem = Convert.ToInt32(idTraza.Split('_')[2]);
 
                 Factura f = Session["Factura"] as Factura;
+
                 this.lblTrazaTotal.Text = f.items[posItem].cantidad.ToString();
 
+                decimal cantidadUnidadDeMedida = 0;
                 string idtildado = "";
                 foreach (Control control in phStockTrazabilidad.Controls)
                 {
@@ -7829,8 +7898,30 @@ namespace Gestion_Web.Formularios.Facturas
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
+                        int numeroColumnaUnidadMedida = Convert.ToInt32(configuracion.ColumnaUnidadMedidaEnTrazabilidad);
+                        decimal cantAux = this.obtenerCantidadColumnaUnidadDeMedida(tr.Cells[numeroColumnaUnidadMedida].Text);
+                        if (cantAux != 0)
+                        {
+                            cantidadUnidadDeMedida += Convert.ToDecimal(tr.Cells[numeroColumnaUnidadMedida].Text);
+                        }
                     }
                 }
+                Articulo articuloMaestro = this.contArticulo.obtenerArticuloByID(idArticulo);
+                ItemFactura articuloItemFactura = f.items.Where(x => x.articulo.id == idArticulo).FirstOrDefault();
+
+                articuloItemFactura.UnidadMedida = cantidadUnidadDeMedida;
+
+                articuloItemFactura.cantidad = f.items[posItem].cantidad;//guardo la cantidad solicitada de ese item
+
+                articuloItemFactura.CantidadOriginal = articuloItemFactura.cantidad;
+
+                if (articuloItemFactura.UnidadMedida != 0)
+                {
+                    articuloItemFactura.articulo.descripcion = articuloMaestro.descripcion;
+                    articuloItemFactura.articulo.descripcion += " |Peso: " + articuloItemFactura.UnidadMedida;
+                }
+
+                this.ActualizarTotalPH(posItem, articuloItemFactura, idArticulo);
 
                 if (!String.IsNullOrEmpty(idtildado))
                 {
@@ -10450,6 +10541,10 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
             }
         }
+        #endregion
+
+        #region FACTURAS UNIDAD DE MEDIDA
+
         #endregion
 
         protected void btnCambiarPorcentajeCantidadFacturar_Click(object sender, EventArgs e)

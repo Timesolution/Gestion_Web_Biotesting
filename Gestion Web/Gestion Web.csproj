@@ -394,6 +394,7 @@
     <Content Include="Formularios\Facturas\ABMCotizaciones.aspx" />
     <Content Include="Formularios\Facturas\ABMCotizaciones2.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasImagenes.aspx" />
+    <Content Include="Formularios\Facturas\ABMFacturasUnidadMedida.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
@@ -1480,6 +1481,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasImagenes.aspx.designer.cs">
       <DependentUpon>ABMFacturasImagenes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasUnidadMedida.aspx.cs">
+      <DependentUpon>ABMFacturasUnidadMedida.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasUnidadMedida.aspx.designer.cs">
+      <DependentUpon>ABMFacturasUnidadMedida.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasLargo.aspx.cs">
       <DependentUpon>ABMFacturasLargo.aspx</DependentUpon>
