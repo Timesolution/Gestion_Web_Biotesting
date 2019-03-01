@@ -1147,7 +1147,6 @@
                                                         <div class="input-group">
                                                             <span class="input-group-addon">$</span>
                                                             <asp:TextBox ID="txtMontoAutorizacionOC" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0" Style="text-align: right"></asp:TextBox>
-
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
@@ -1165,6 +1164,18 @@
                                                             <asp:ListItem Text="Si" Value="1"></asp:ListItem>
                                                             <asp:ListItem Text="No" Value="0"></asp:ListItem>
                                                         </asp:DropDownList>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Forma de Pago</label>
+                                                    <div class="col-md-4">
+                                                        <div class="input-group">
+                                                            <asp:TextBox ID="txtFormaDePago_OC" runat="server" class="form-control" Style="text-align: right"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator41" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ControlToValidate="txtFormaDePago_OC" ValidationGroup="OrdenesCompraGroup" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
 

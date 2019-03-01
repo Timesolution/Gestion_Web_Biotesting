@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraABM.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraABM" %>
+
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
@@ -182,6 +183,12 @@
                                                     <asp:Label ID="lblObservacion" Text="" runat="server" />
                                                 </div>
                                             </div>
+                                            <div class="form-group alert alert-info">
+                                                <label class="col-md-5">Forma de pago:</label>
+                                                <div class="col-md-7">
+                                                    <asp:TextBox ID="txtFormaDePago" runat="server" class="form-control"></asp:TextBox>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </fieldset>
@@ -278,7 +285,7 @@
                 {
                     dateFormat: 'dd/mm/yy'
                 }
-                );
+            );
         });
     </script>
 
@@ -288,7 +295,7 @@
                 {
                     dateFormat: 'dd/mm/yy'
                 }
-                );
+            );
         });
     </script>
 
@@ -300,7 +307,7 @@
                     {
                         dateFormat: 'dd/mm/yy'
                     }
-                    );
+                );
             });
         }
     </script>
@@ -313,7 +320,7 @@
                     {
                         dateFormat: 'dd/mm/yy'
                     }
-                    );
+                );
             });
         }
     </script>

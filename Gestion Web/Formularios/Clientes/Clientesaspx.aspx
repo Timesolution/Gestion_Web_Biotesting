@@ -319,7 +319,7 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="*" ControlToValidate="ListVendedoresAR" InitialValue="-1" ValidationGroup="ClienteARGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-<%--                                <div class="form-group">
+                                <%--<div class="form-group">
                                     <label class="col-md-4">Aplica Descuento por Cantidad</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="ListDescuentoPorCantidad" runat="server" class="form-control">
@@ -328,7 +328,6 @@
                                         </asp:DropDownList>
                                     </div>
                                 </div>--%>
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -514,8 +513,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
@@ -559,8 +557,7 @@
             if (key < 48 || key > 57) {
                 if (key == 45) // Detectar  guion medio (-)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

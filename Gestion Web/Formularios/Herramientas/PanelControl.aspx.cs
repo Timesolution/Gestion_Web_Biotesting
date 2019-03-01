@@ -296,21 +296,21 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_SucUser"], "INFO", "Se modifico configuracion porcentaje iva PRP.");
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Presupuesto modificado con exito", "PanelControl.aspx"));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Presupuesto modificado con exito!. \", {type: \"info\"});", true);
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo actualizar Porcentaje IVA de los Presupuestos."));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Porcentaje IVA de los Presupuestos!. \", {type: \"info\"});", true);
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una opcion!."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \", {type: \"info\"});", true);
                 }
             }
             catch(Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error, no se ha podido completar la operacion!. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"no se ha podido completar la operacion!. \", {type: \"info\"});", true);
             }
         }
 
