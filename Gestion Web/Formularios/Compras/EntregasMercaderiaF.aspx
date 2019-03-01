@@ -27,7 +27,7 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Pto Venta</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="ListPtoVenta" runat="server" AutoPostBack="True" ></asp:DropDownList>
+                                                <asp:DropDownList ID="ListPtoVenta" runat="server" AutoPostBack="True"></asp:DropDownList>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -55,7 +55,7 @@
                                                 <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" onchange="completar8Ceros(this, this.value)"></asp:TextBox>
                                             </div>
                                             <div class="col-md-1">
-                                                 <asp:RequiredFieldValidator ControlToValidate="txtPVenta" ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                <asp:RequiredFieldValidator ControlToValidate="txtPVenta" ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                             </div>
                                             <div class="col-md-1">
                                                 <asp:RequiredFieldValidator ControlToValidate="txtNumero" ID="RequiredFieldValidator6" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -112,7 +112,7 @@
                                             <div class="col-md-6">
                                                 <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                             </div>
-                                        </div>                                        
+                                        </div>
                                     </fieldset>
                                 </div>
                                 <table class="table table-striped table-bordered">
@@ -134,9 +134,6 @@
                                     <div class="btn-group">
                                         <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />
                                     </div>
-                                    <%--<div class="alert alert-info alert-dismissable col-md-2">
-                                        <asp:Label ID="lblCartelTotal" runat="server" Text="asd"/>
-                                    </div>--%>
                                 </div>
 
                             </div>
@@ -149,6 +146,31 @@
                 </ContentTemplate>
 
             </asp:UpdatePanel>
+        </div>
+    </div>
+
+
+    <div id="modalSeleccionarOpcion" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Opciones</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal">
+                        <asp:Label runat="server" Font-Bold="true" Font-Size="Medium" Text="Hay cantidades recibidas mayores a las solicitadas, desea recibirlas?"></asp:Label>
+                    </div>
+                    <br />
+                    <div role="form" class="form-horizontal col-md-12 text-center">
+                        <asp:LinkButton ID="lbtnRecibirlaOrdenConCantidadesMayores" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClick="lbtnRecibirlaOrdenConCantidadesMayores_Click" />
+                        <asp:LinkButton ID="lbtnRecibirLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="lbtnRecibirLoSolicitado_Click" />
+                        <asp:LinkButton ID="lbtnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRecibirLoSolicitado_Click" />
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -173,12 +195,18 @@
     <script src="../../Scripts/JSFunciones1.js"></script>
 
     <script>
+        function openModal() {
+            $('#modalSeleccionarOpcion').modal('show');
+        }
+    </script>
+
+    <script>
         $(function () {
             $("#<%= txtFechaMercaderiaArribo.ClientID %>").datepicker(
                 {
                     dateFormat: 'dd/mm/yy'
                 }
-                );
+            );
         });
     </script>
 
@@ -188,7 +216,7 @@
                 {
                     dateFormat: 'dd/mm/yy'
                 }
-                );
+            );
         });
     </script>
 
@@ -198,7 +226,7 @@
                 {
                     dateFormat: 'dd/mm/yy'
                 }
-                );
+            );
         });
     </script>
 
@@ -210,7 +238,7 @@
                     {
                         dateFormat: 'dd/mm/yy'
                     }
-                    );
+                );
             });
         }
     </script>
@@ -223,7 +251,7 @@
                     {
                         dateFormat: 'dd/mm/yy'
                     }
-                    );
+                );
             });
         }
     </script>
@@ -236,7 +264,7 @@
                     {
                         dateFormat: 'dd/mm/yy'
                     }
-                    );
+                );
             });
         }
     </script>
@@ -338,5 +366,4 @@
             return true;
         }
     </script>
-
 </asp:Content>

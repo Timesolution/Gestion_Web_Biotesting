@@ -3834,6 +3834,7 @@ namespace Gestion_Web.Formularios.Clientes
                 poc.RequiereAutorizacion = Convert.ToInt32(this.ListRequiereAutorizacionOC.SelectedValue);
                 poc.MontoAutorizacion = Convert.ToDecimal(this.txtMontoAutorizacionOC.Text);
                 poc.RequiereAnticipo = Convert.ToInt32(this.ListRequiereAnticipoOC.SelectedValue);
+                poc.FormaDePago = this.txtFormaDePago_OC.Text;
                 int i = this.contClienteEntity.agregarProveedor_OC(poc);
                 if (i > 0)
                 {
@@ -3857,6 +3858,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.ListRequiereAutorizacionOC.SelectedValue = poc.RequiereAutorizacion.ToString();
                     this.txtMontoAutorizacionOC.Text = poc.MontoAutorizacion.ToString();
                     this.ListRequiereAnticipoOC.SelectedValue = poc.RequiereAnticipo.ToString();
+                    this.txtFormaDePago_OC.Text = poc.FormaDePago;
                 }
             }
             catch (Exception Ex)

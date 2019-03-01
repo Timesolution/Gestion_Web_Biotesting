@@ -193,7 +193,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                var estados = contCompraEntity.obtenerOrdenesCompra_Estados();
+                var estados = this.contCompraEntity.obtenerOrdenesCompra_Estados();
 
                 estados.Insert(0, new Gestion_Api.Entitys.OrdenesCompra_Estados
                 {
@@ -913,6 +913,25 @@ namespace Gestion_Web.Formularios.Compras
                     type.IsArray ||
                     (type.IsGenericType &&
                      type.GetGenericTypeDefinition().Equals(typeof(Nullable<>))));
+        }
+
+        protected void DropListEstadoFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.DropListEstadoFiltro.SelectedItem.Text == "Observado")
+                {
+                    this.phDropListEstadosItemOC.Visible = true;
+                }
+                else
+                {
+                    this.phDropListEstadosItemOC.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: DropListEstadoFiltro_SelectedIndexChanged. Excepción: " + ex.Message));
+            }
         }
     }
 }

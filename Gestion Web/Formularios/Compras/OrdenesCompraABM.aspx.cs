@@ -297,7 +297,6 @@ namespace Gestion_Web.Formularios.Compras
                 Response.Redirect("../../Account/Login.aspx");
             }
         }
-
         private int verificarAcceso()
         {
             try
@@ -559,9 +558,10 @@ namespace Gestion_Web.Formularios.Compras
                 oc.TipoDocumento = 27;
                 this.obtenerNroOrden(Convert.ToInt32(this.ListPtoVenta.SelectedValue), "Orden de Compra");
                 oc.Numero = this.txtPVenta.Text + "-" + this.txtNumero.Text;
-
+                oc.FormaDePago = this.txtFormaDePago.Text;
                 //obtengo items los borro y los leo de la pagina
                 oc.OrdenesCompra_Items.Clear();
+                oc.MailProveedor = this.lblMailOC.Text;
                 oc.OrdenesCompra_Items = this.obtenerItems();
                 decimal tempTotal = 0;
                 foreach (var item in oc.OrdenesCompra_Items)
@@ -667,7 +667,7 @@ namespace Gestion_Web.Formularios.Compras
                 //cargar items
                 this.cargarItemsCompra(oc.OrdenesCompra_Items.ToList());
 
-
+                this.cargarProveedor_OC();
             }
             catch
             {
@@ -694,6 +694,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.lblRequiereAutorizacionOC.Text = "Si";
                     this.lblMontoAutorizacionOC.Text = "$" + poc.MontoAutorizacion.ToString();
                     this.lblObservacion.Text = poc.cliente.observaciones;
+                    this.txtFormaDePago.Text = poc.FormaDePago;
                     if (poc.RequiereAnticipo == 0)
                         this.lblRequiereAnticipoOC.Text = "No";
                     if (poc.RequiereAutorizacion == 0)
