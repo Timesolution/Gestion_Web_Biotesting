@@ -2802,6 +2802,8 @@ namespace Gestion_Web.Formularios.Reportes {
             
             private global::System.Data.DataColumn columnCodigo;
             
+            private global::System.Data.DataColumn columnalias;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public CantidadArticulosClienteDataTable() {
@@ -2869,6 +2871,14 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn aliasColumn {
+                get {
+                    return this.columnalias;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -2904,13 +2914,14 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public CantidadArticulosClienteRow AddCantidadArticulosClienteRow(string Articulo, string Cliente, string Cantidad, string Codigo) {
+            public CantidadArticulosClienteRow AddCantidadArticulosClienteRow(string Articulo, string Cliente, string Cantidad, string Codigo, string alias) {
                 CantidadArticulosClienteRow rowCantidadArticulosClienteRow = ((CantidadArticulosClienteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Articulo,
                         Cliente,
                         Cantidad,
-                        Codigo};
+                        Codigo,
+                        alias};
                 rowCantidadArticulosClienteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowCantidadArticulosClienteRow);
                 return rowCantidadArticulosClienteRow;
@@ -2937,6 +2948,7 @@ namespace Gestion_Web.Formularios.Reportes {
                 this.columnCliente = base.Columns["Cliente"];
                 this.columnCantidad = base.Columns["Cantidad"];
                 this.columnCodigo = base.Columns["Codigo"];
+                this.columnalias = base.Columns["alias"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2950,6 +2962,8 @@ namespace Gestion_Web.Formularios.Reportes {
                 base.Columns.Add(this.columnCantidad);
                 this.columnCodigo = new global::System.Data.DataColumn("Codigo", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCodigo);
+                this.columnalias = new global::System.Data.DataColumn("alias", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnalias);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4253,6 +4267,22 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string alias {
+                get {
+                    try {
+                        return ((string)(this[this.tableCantidadArticulosCliente.aliasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'alias\' in table \'CantidadArticulosCliente\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableCantidadArticulosCliente.aliasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsArticuloNull() {
                 return this.IsNull(this.tableCantidadArticulosCliente.ArticuloColumn);
             }
@@ -4297,6 +4327,18 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCodigoNull() {
                 this[this.tableCantidadArticulosCliente.CodigoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsaliasNull() {
+                return this.IsNull(this.tableCantidadArticulosCliente.aliasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetaliasNull() {
+                this[this.tableCantidadArticulosCliente.aliasColumn] = global::System.Convert.DBNull;
             }
         }
         
