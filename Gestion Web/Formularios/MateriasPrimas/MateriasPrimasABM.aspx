@@ -50,7 +50,7 @@
                                                     <div class="form-group">
                                                         <label for="validateSelect" class="col-md-4">Moneda</label>
                                                         <div class="col-md-4">
-                                                            <asp:DropDownList ID="ddlMonedaVenta" AutoPostBack="true" runat="server" class="form-control" OnSelectedIndexChanged="ddlMonedaVenta_SelectedIndexChanged"></asp:DropDownList>
+                                                            <asp:DropDownList ID="ddlMonedaVenta" AutoPostBack="true" runat="server" class="form-control"></asp:DropDownList>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="Seleccione una Moneda" ControlToValidate="ddlMonedaVenta" InitialValue="-1" ValidationGroup="MateriasPrimasGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
