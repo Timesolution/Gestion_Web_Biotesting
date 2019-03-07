@@ -1060,7 +1060,7 @@ namespace Gestion_Web.Formularios.Compras
                         item.Descripcion = tr.Cells[1].Text;
                         item.Precio = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[1]);
                         item.Cantidad = Convert.ToDecimal(txt.Text);
-                        
+                        item.Estado = 2;
                         items.Add(item);
                     }
                 }

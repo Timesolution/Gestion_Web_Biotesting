@@ -258,8 +258,6 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
                                 <div class="form-group">
                                     <label class="col-md-4">Estado</label>
                                     <div class="col-md-6">
@@ -269,9 +267,8 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstadoFiltro" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <asp:PlaceHolder runat="server" ID="phDropListEstadosItemOC" Visible="false">
+                                <asp:PlaceHolder runat="server" ID="phDropListEstadosItemOC" Visible="false">
+                                    <div class="form-group">
                                         <label class="col-md-4">Estado Item OC</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListOC_ItemEstados" runat="server" class="form-control"></asp:DropDownList>
@@ -279,10 +276,8 @@
                                         <div class="col-md-2">
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListOC_ItemEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
-                                        </ContentTemplate>
-                                </div>
-                                    </asp:PlaceHolder>
-        </asp:UpdatePanel>
+                                    </div>
+                                </asp:PlaceHolder>
                             </fieldset>
                         </div>
                     </div>
