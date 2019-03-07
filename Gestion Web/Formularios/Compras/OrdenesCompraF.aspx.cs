@@ -80,7 +80,7 @@ namespace Gestion_Web.Formularios.Compras
                 }                
 
                 if(proveedor > 0)
-                    lbtnEntregas.Visible = true;
+                    lbtnEntregasPH.Visible = true;              
 
                 this.cargarEstadosFiltro();
                 this.cargarEstados();
@@ -635,36 +635,6 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void lbtnEntregas_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string idtildado = string.Empty;
-                foreach (Control C in phOrdenes.Controls)
-                {
-                    TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
-                    if (ch.Checked == true)
-                    {
-                        idtildado = ch.ID.Split('_')[1];
-                    }
-                }
-                if (!String.IsNullOrEmpty(idtildado))
-                {
-                    var oc = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
-
-                    if(oc.Estado != 7)
-                        Response.Redirect("EntregasMercaderiaF.aspx?oc="+idtildado);
-                    else
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra se encuentra entregada completamente!"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
-            }
-        }
-
         protected void btnCambiarEstado_Click(object sender, EventArgs e)
         {
             try
@@ -931,6 +901,75 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: DropListEstadoFiltro_SelectedIndexChanged. Excepción: " + ex.Message));
+            }
+        }
+
+        protected void lbtnProcesarEntrega_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    var oc = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
+
+                    if(oc.Estado == 5)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue rechazada!"));
+                    else if(oc.Estado == 9)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue aceptada!"));
+                    else
+                        Response.Redirect("EntregasMercaderiaF.aspx?oc=" + idtildado);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
+            }
+        }
+
+        protected void ConfirmarRechazarEntrega_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    var oc = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
+
+                    int temp = 0;
+
+                    if (oc.Estado == 5)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue rechazada!"));
+                    else if (oc.Estado == 9)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue aceptada!"));
+                    else
+                        temp = contCompraEntity.RechazarOrdenCompra(oc);
+
+                    if(temp > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("La orden de compra fue rechazada correctamente!", "OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked)));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
             }
         }
     }
