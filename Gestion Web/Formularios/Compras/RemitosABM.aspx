@@ -30,6 +30,13 @@
                                             <div class="col-md-6">
                                                 <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
                                             </div>
+                                            <div class="col-md-3">
+                                                <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
+                                                    <ProgressTemplate>
+                                                        <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Cargando artículos del Proveedor. Por favor aguarde.</span>
+                                                    </ProgressTemplate>
+                                                </asp:UpdateProgress>
+                                            </div>
                                         </div>
 
                                         <div class="form-group">

@@ -49,7 +49,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte2(idPresupuesto);
                     }
-                    //factura a-e
+                    //factura a,e
                     if(accion==1)
                     {
                         this.generarReporte3(idPresupuesto);
@@ -330,17 +330,9 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
 
-                DataTable dtDatos;
-                string facturaPorUnidadDeMedida = WebConfigurationManager.AppSettings.Get("FormularioFC");
-                if (!string.IsNullOrEmpty(facturaPorUnidadDeMedida) && facturaPorUnidadDeMedida == "2")
-                {    
-                    dtDatos = controlador.obtenerDatosPresupuestoUnidadDeMedida(idPresupuesto);
-                }
-                else
-                {
-                    //obtengo detalle de items
-                    dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
-                }
+                DataTable dtDatos = new DataTable();
+
+                dtDatos = this.obtenerDTarticulos(dtDatos);
 
                 //datos de encabezado y pie
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
@@ -790,6 +782,9 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
                 DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
+
+                dtDatos = agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(dtDatos);
+
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
 
                 //nro remito factura
@@ -1606,6 +1601,66 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-       
+        private DataTable obtenerDTarticulos(DataTable dataTable)
+        {
+            try
+            {
+                dataTable = this.traerDataTableSiEsModoFacturaUnidadDeMedida(dataTable);
+                dataTable = this.agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(dataTable);
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: obtenerDTarticulos. " + ex.Message);
+                return dataTable;
+            }
+        }
+
+        private DataTable traerDataTableSiEsModoFacturaUnidadDeMedida(DataTable dataTable)
+        {
+            try
+            {
+                string facturaPorUnidadDeMedida = WebConfigurationManager.AppSettings.Get("FormularioFC");
+                if (!string.IsNullOrEmpty(facturaPorUnidadDeMedida) && facturaPorUnidadDeMedida == "2")
+                {
+                    dataTable = controlador.obtenerDatosPresupuestoUnidadDeMedida(idPresupuesto);
+                    return dataTable;
+                }
+                else
+                {
+                    //obtengo detalle de items por defecto
+                    dataTable = controlador.obtenerDatosPresupuesto(idPresupuesto);
+                    return dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: traerDataTableSiEsModoFacturaUnidadDeMedida. " + ex.Message);
+                return null;
+            }
+        }
+
+        private DataTable agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(DataTable tablaArticulos)
+        {
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(this.configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas)
+                    && this.configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas == "1")
+                {
+                    ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
+                    foreach (DataRow row in tablaArticulos.Rows)
+                    {
+                        Gestion_Api.Entitys.articulo articulo = contArticulosEntity.obtenerArticuloEntityByCod(row["Codigo"].ToString());
+                        row["Descripcion"] += " (" + articulo.porcentajeIva.ToString() + ")";
+                    }
+                }
+                return tablaArticulos;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: agregarAlicuotaIVAEnLaDescripcionDeLosArticulos. " + ex.Message);
+                return tablaArticulos;
+            }
+        }       
     }
 }

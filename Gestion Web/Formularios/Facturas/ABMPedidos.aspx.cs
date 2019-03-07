@@ -25,7 +25,6 @@ namespace Gestion_Web.Formularios.Facturas
         Mensajes m = new Mensajes();
         ControladorPedido controlador = new ControladorPedido();
         controladorUsuario contUser = new controladorUsuario();
-        //
         controladorArticulo contArticulo = new controladorArticulo();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
@@ -39,9 +38,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCotizaciones contCot = new controladorCotizaciones();
         //Pedido
         Pedido Pedido = new Pedido();
-
         Cliente cliente = new Cliente();
-
         TipoDocumento tp = new TipoDocumento();
 
         int flag_clienteModal = 0;

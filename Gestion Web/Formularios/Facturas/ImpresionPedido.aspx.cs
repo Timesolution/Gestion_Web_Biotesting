@@ -887,20 +887,25 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtTotal = controlador.obtenerTotalPedidoMO(idPedido);
                 DataTable dtTotalPesos = controlador.obtenerTotalPedido(idPedido);
 
-                dtDatos.Columns.Add("codigoBarra");
-                Articulo a = new Articulo();
+                dtDatos.Columns.Add("CodigoBarra");
+                dtDatos.Columns.Add("PorcentajeIVA");
+                dtDatos.Columns.Add("TotalSinIVA", typeof(decimal));
                 foreach (DataRow rowDatos in dtDatos.Rows)
                 {
+                    Articulo a = new Articulo();
                     a = this.contArt.obtenerArticuloByID(Convert.ToInt32(rowDatos["Id"]));
+                    rowDatos["CodigoBarra"] = "";
+                    rowDatos["PorcentajeIVA"] = "";
+                    rowDatos["TotalSinIVA"] = rowDatos["Total"];
                     if (a != null)
                     {
-                        rowDatos["codigoBarra"] = a.codigoBarra;
-                    }
-                    else
-                    {
-                        rowDatos["codigoBarra"] = "";
+                        rowDatos["CodigoBarra"] = a.codigoBarra;
+                        rowDatos["PorcentajeIVA"] = a.porcentajeIva;
+                        rowDatos["TotalSinIVA"] = decimal.Round(Convert.ToDecimal(rowDatos["Total"]) / ((a.porcentajeIva / 100) + 1), 2);
                     }
                 }
+
+                decimal tipoDeCambio = ObtenerMontoTipoDeCambioDePedido(dtDatos);
 
                 int suc = Convert.ToInt32(dtDetalle.Rows[0]["Id_suc"]);
 
@@ -965,6 +970,8 @@ namespace Gestion_Web.Formularios.Facturas
                     zona = "-";
                 }
 
+                
+
                 dtDatos = contArtEntity.obtenerPresentacionesArtDT(dtDatos);
                 dtDatos = contArtEntity.obtenerStockArtDT(dtDatos, suc);
 
@@ -987,6 +994,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param7 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
+                ReportParameter paramTipoDeCambio = new ReportParameter("ParamTipoDeCambio", tipoDeCambio.ToString());
 
                 string imagen = this.generarCodigo(idPedido);
                 ReportParameter param10 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
@@ -1018,11 +1026,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param8);
                 this.ReportViewer1.LocalReport.SetParameters(param9);
                 this.ReportViewer1.LocalReport.SetParameters(param10);
+                this.ReportViewer1.LocalReport.SetParameters(paramTipoDeCambio);
 
                 //this.ReportViewer1.LocalReport.SetParameters(rpHora);
                 //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
-
 
                 Warning[] warnings;
 
@@ -1045,6 +1053,20 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+        private decimal ObtenerMontoTipoDeCambioDePedido(DataTable dtDatos)
+        {
+            try
+            {
+                decimal monto = Convert.ToDecimal(dtDatos.Rows[0]["CotizacionMO"]); 
+                return monto;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error en fun: ObtenerMontoTipoDeCambioDePedido. " + ex.Message);
+                return 0;
             }
         }
 
