@@ -106,6 +106,8 @@
               <xs:element name="Item" msprop:Generator_ColumnVarNameInTable="columnItem" msprop:Generator_ColumnPropNameInRow="Item" msprop:Generator_ColumnPropNameInTable="ItemColumn" msprop:Generator_UserColumnName="Item" type="xs:string" minOccurs="0" />
               <xs:element name="NroRenglon" msprop:Generator_ColumnVarNameInTable="columnNroRenglon" msprop:Generator_ColumnPropNameInRow="NroRenglon" msprop:Generator_ColumnPropNameInTable="NroRenglonColumn" msprop:Generator_UserColumnName="NroRenglon" type="xs:string" minOccurs="0" />
               <xs:element name="TotalPesos" msprop:Generator_ColumnVarNameInTable="columnTotalPesos" msprop:Generator_ColumnPropNameInRow="TotalPesos" msprop:Generator_ColumnPropNameInTable="TotalPesosColumn" msprop:Generator_UserColumnName="TotalPesos" type="xs:string" minOccurs="0" />
+              <xs:element name="PorcentajeIVA" msprop:Generator_ColumnVarNameInTable="columnPorcentajeIVA" msprop:Generator_ColumnPropNameInRow="PorcentajeIVA" msprop:Generator_ColumnPropNameInTable="PorcentajeIVAColumn" msprop:Generator_UserColumnName="PorcentajeIVA" type="xs:string" minOccurs="0" />
+              <xs:element name="TotalSinIVA" msprop:Generator_ColumnVarNameInTable="columnTotalSinIVA" msprop:Generator_ColumnPropNameInRow="TotalSinIVA" msprop:Generator_ColumnPropNameInTable="TotalSinIVAColumn" msprop:Generator_UserColumnName="TotalSinIVA" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

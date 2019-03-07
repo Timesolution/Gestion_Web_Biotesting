@@ -54,7 +54,6 @@
                             </td>
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
-
                                     <a href="ABMPedidos.aspx?c=1" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
                                         <i class="shortcut-icon icon-plus"></i>
                                     </a>
