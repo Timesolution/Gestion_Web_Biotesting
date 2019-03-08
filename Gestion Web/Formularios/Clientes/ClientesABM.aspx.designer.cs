@@ -1435,6 +1435,24 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.DropDownList ListRequiereAnticipoOC;
         
         /// <summary>
+        /// txtFormaDePago_OC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFormaDePago_OC;
+        
+        /// <summary>
+        /// RequiredFieldValidator41 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator41;
+        
+        /// <summary>
         /// lbtnAgregarProveedorOC control.
         /// </summary>
         /// <remarks>

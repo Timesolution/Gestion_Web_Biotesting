@@ -903,33 +903,11 @@ namespace Gestion_Web.Formularios.Facturas
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
 
-                //LinkButton btnEliminar = new LinkButton();
-                //btnEliminar.ID = "btnEliminar_" + f.id;
-                //btnEliminar.CssClass = "btn btn-info";
-                //btnEliminar.Attributes.Add("data-toggle", "modal");
-                //btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-                //btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                ////btnEliminar.Font.Size = 9;
-                ////btnEliminar.Click += new EventHandler(this.eliminarCobro);
-                ////btnEliminar.Attributes.Add("onclientclick", "abrirdialog("+ movV.id +")");
-                //btnEliminar.OnClientClick = "abrirConfirmacion(" + f.id + ");";
-                //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
-                //Literal l2 = new Literal();
-                //l2.Text = "&nbsp";
-                //celAccion.Controls.Add(l2);
-
-                //Literal l3 = new Literal();
-                //l3.Text = "&nbsp";
-                //celAccion.Controls.Add(l3);
-
                 CheckBox cbSeleccion = new CheckBox();
-                //cbSeleccion.Text = "&nbsp;Imputar";
                 cbSeleccion.ID = "cbSeleccion_" + f.id;
                 cbSeleccion.CssClass = "btn btn-info";
                 cbSeleccion.Font.Size = 12;
                 celAccion.Controls.Add(cbSeleccion);
-                //celAccion.Controls.Add(btnEliminar);
-
 
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
@@ -2296,6 +2274,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                Configuracion configuracion = new Configuracion();
                 
                 if (f.tipo.tipo.Contains("Factura A") || f.tipo.tipo.Contains("Debito A") || f.tipo.tipo.Contains("Credito A")
                 || f.tipo.tipo.Contains("Factura E") || f.tipo.tipo.Contains("Debito E") || f.tipo.tipo.Contains("Credito E"))
@@ -2654,9 +2633,10 @@ namespace Gestion_Web.Formularios.Facturas
           
                     #endregion
                 }
-                if (f.tipo.tipo.Contains("Factura B") || f.tipo.tipo.Contains("Debito B") || f.tipo.tipo.Contains("Credito B"))
+                if (f.tipo.tipo.Contains("Factura B") || f.tipo.tipo.Contains("Debito B") || f.tipo.tipo.Contains("Credito B")
+                    || f.tipo.tipo.Contains("Factura C") || f.tipo.tipo.Contains("Debito C") || f.tipo.tipo.Contains("Credito C"))
                 {
-                    #region Fact B
+                    #region Fact B || Fact C
                     DataTable dtDatos = controlador.obtenerDatosPresupuesto(f.id);
                     DataTable dtDetalle = controlador.obtenerDetallePresupuesto(f.id);
 
@@ -2715,6 +2695,25 @@ namespace Gestion_Web.Formularios.Facturas
                     ptoVta = drDatosFactura["ptoVenta"].ToString();
                     fechaVto = Convert.ToDateTime(drDatosFactura["Fecha"]).AddDays(10).ToString("ddMMyyyy");
                     codBarra = controlador.obtenerCodigoBarraFactura(drDatosFactura["CUIT"].ToString(), ptoVta, CAE, fechaVto);
+
+                    if (configuracion.monotributo == "1")
+                    {
+                        if (tipoDoc.Contains("Debito"))
+                        {
+                            tipoDoc = "Nota de Debito C";
+                        }
+                        else
+                        {
+                            if (tipoDoc.Contains("Credito"))
+                            {
+                                tipoDoc = "Nota de Credito C";
+                            }
+                            else
+                            {
+                                tipoDoc = "Factura C";
+                            }
+                        }
+                    }
 
                     if (string.IsNullOrEmpty(codBarra))
                     {
@@ -2851,16 +2850,13 @@ namespace Gestion_Web.Formularios.Facturas
                         textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
                     }
 
-
-
-
                     //Comentario factura
                     DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(f.id);
 
                     //obtengo id empresa para buscar el logo correspondiente
                     int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
                     //string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/Logo.jpg");
-                    string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc + "/Logo.jpg");
+                    string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc + "/" + pv.id + "/Logo.jpg");
                     //codigo barra codBarra
                     //Create an instance of Barcode Professional
                     BarcodeProfessional bcp = new BarcodeProfessional();

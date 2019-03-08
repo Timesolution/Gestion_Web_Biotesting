@@ -160,7 +160,8 @@
                                                     <asp:ListItem Text="TODOS" Value="-1"/>
                                                     <asp:ListItem Text="EN STOCK" Value="1"/>
                                                     <asp:ListItem Text="VENDIDO" Value="2"/>
-                                                    <asp:ListItem Text="DEVUELTO" Value="3"/>
+                                                    <asp:ListItem Text="TOMADA PEDIDO" Value="3"/>
+                                                    <asp:ListItem Text="DEVUELTO" Value="4"/>
                                                 </asp:DropDownList>
                                                 <!-- /input-group -->
                                             </div>

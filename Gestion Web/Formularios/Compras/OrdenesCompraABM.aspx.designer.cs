@@ -229,6 +229,15 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.Label lblObservacion;
         
         /// <summary>
+        /// txtFormaDePago control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFormaDePago;
+        
+        /// <summary>
         /// btnVerStockMinimo control.
         /// </summary>
         /// <remarks>

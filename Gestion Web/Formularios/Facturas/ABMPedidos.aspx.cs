@@ -25,7 +25,6 @@ namespace Gestion_Web.Formularios.Facturas
         Mensajes m = new Mensajes();
         ControladorPedido controlador = new ControladorPedido();
         controladorUsuario contUser = new controladorUsuario();
-        //
         controladorArticulo contArticulo = new controladorArticulo();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
@@ -35,15 +34,11 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCotizaciones ct = new controladorCotizaciones();
         controladorFacturacion cf = new controladorFacturacion();
         Configuracion confEstados = new Configuracion();
-
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-
         controladorCotizaciones contCot = new controladorCotizaciones();
         //Pedido
         Pedido Pedido = new Pedido();
-
         Cliente cliente = new Cliente();
-
         TipoDocumento tp = new TipoDocumento();
 
         int flag_clienteModal = 0;
@@ -236,8 +231,6 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("Pedido", p);
                 this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
                 this.cargarSucursal(p.empresa.id);
-                //TODO r hacer mejor esto
-                //this.cargarPuntoVta(p.sucursal.id);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
@@ -298,6 +291,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
                 this.txtComentarios.Text = "ORDEN DE COMPRA Nº: ";
+                this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroPedido();
@@ -423,7 +417,12 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.ListPuntoVenta.Items.Clear();
-                this.ListPuntoVenta.SelectedIndex = 0;
+
+                if (ListPuntoVenta.SelectedIndex > -1)
+                {
+                    this.ListPuntoVenta.SelectedIndex = 0;
+                }
+                
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
@@ -2579,8 +2578,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #region importacion
-
-
         protected void btnImportarPedido_Click(object sender, EventArgs e)
         {
             try
@@ -2958,10 +2955,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-
-
-        #endregion
-
         protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)
         {
             try
@@ -2974,5 +2967,7 @@ namespace Gestion_Web.Formularios.Facturas
                 throw;
             }
         }
+        #endregion
+
     }
 }

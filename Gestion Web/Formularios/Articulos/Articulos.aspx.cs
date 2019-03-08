@@ -1,4 +1,5 @@
 ﻿using Disipar.Models;
+using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
 using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -22,6 +24,8 @@ namespace Gestion_Web.Formularios.Articulos
         private controladorArticulo controlador = new controladorArticulo();
         private controladorUsuario contUser = new controladorUsuario();
         private ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
+        private ControladorCobranzaEntity contCobranzaEntity = new ControladorCobranzaEntity();
+        private controladorPais contPais = new controladorPais();
 
         Mensajes m = new Mensajes();
         Configuracion config = new Configuracion();
@@ -41,6 +45,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         int permisoEliminar = 0;
         int permisoStockValorizado = 0;//1 muestra costo, 0 muestra costo imponible
+        int permisoMostrarBotonAgregarMateriasPrimas = 0;
 
         public Dictionary<string, string> camposArticulos = null;
         protected void Page_Load(object sender, EventArgs e)
@@ -59,10 +64,10 @@ namespace Gestion_Web.Formularios.Articulos
                 this.desactualizados = Convert.ToInt32(Request.QueryString["desact"]);
                 this.idVendedor = (int)Session["Login_Vendedor"];
                 this.proveedor = Convert.ToInt32(Request.QueryString["p"]);
-                this.descSubGrupo =Request.QueryString["dsg"];
+                this.descSubGrupo = Request.QueryString["dsg"];
 
                 this.litNumero.Text = "(" + this.dias + ")";
-                
+
                 if (!IsPostBack)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
@@ -71,7 +76,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
                     this.cargarMarcasArticulos();
                     this.cargarClientes();
-                    this.cargarSucursal();               
+                    this.cargarSucursal();
                     this.cargarListaPrecio();
                     this.txtFechaHasta_St.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaRefDesde.Text = DateTime.Now.AddMonths(-6).ToString("dd/MM/yyyy");
@@ -127,7 +132,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 this.txtBusqueda.Focus();
                 Page.Form.DefaultButton = this.lbBuscar.UniqueID;
-                
+
                 this.lblConfigCSV.Text = "*Archivo .CSV delimitado por ";
                 if (c.separadorListas == "0")
                     this.lblConfigCSV.Text += "PuntoComa(;)";
@@ -173,7 +178,7 @@ namespace Gestion_Web.Formularios.Articulos
                 string permiso = listPermisos.Where(x => x == "14").FirstOrDefault();
 
                 if (permiso == null)
-                {                   
+                {
                     return 0;
                 }
                 else
@@ -192,7 +197,7 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         this.DropListSucursal_St2.Attributes.Remove("disabled");
                         this.DropListSucursalRef.Attributes.Remove("disabled");
-                        this.DropListSucNoVendido.Attributes.Remove("disabled");                        
+                        this.DropListSucNoVendido.Attributes.Remove("disabled");
                     }
                     else
                     {
@@ -201,8 +206,15 @@ namespace Gestion_Web.Formularios.Articulos
                         this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
                     }
 
-                    if(listPermisos.Contains("179"))
+                    if (listPermisos.Contains("179"))
                         this.permisoStockValorizado = 1;
+
+                    //verifico si muestro el boton de agregar materias primas de los articulos
+                    string permiso195 = listPermisos.Where(x => x == "195").FirstOrDefault();
+                    if (permiso195 != null)
+                    {
+                        this.permisoMostrarBotonAgregarMateriasPrimas = 1;
+                    }
 
                     return 1;
                 }
@@ -265,7 +277,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     DataTable dt = controlador.obtenerSubGruposDistinctDT();
 
-                   
+
                     //agrego todos
                     DataRow dr = dt.NewRow();
                     dr["descripcion"] = "Todos";
@@ -375,7 +387,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.DropListSucursal_St.DataValueField = "Id";
                 this.DropListSucursal_St.DataTextField = "nombre";
 
-                this.DropListSucursal_St.DataBind();                
+                this.DropListSucursal_St.DataBind();
 
                 this.DropListSucursal_St2.DataSource = dt;
                 this.DropListSucursal_St2.DataValueField = "Id";
@@ -402,7 +414,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListSucursalMovStock.DataTextField = "nombre";
                 this.ListSucursalMovStock.DataBind();
                 this.ListSucursalMovStock.SelectedValue = Session["Login_SucUser"].ToString();
-                
+
 
             }
             catch (Exception ex)
@@ -424,7 +436,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 dt = contCliente.obtenerProveedoresDT();
                 dt2 = contCliente.obtenerProveedoresDT();
-                
+
 
                 //agrego todos
                 DataRow dr = dt.NewRow();
@@ -443,7 +455,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.DropListProvRef.DataTextField = "alias";
 
                 this.DropListProvRef.DataBind();
-                
+
                 DataRow dr2 = dt.NewRow();
                 dr2["razonSocial"] = "Todos";
                 dr2["id"] = -1;
@@ -470,8 +482,8 @@ namespace Gestion_Web.Formularios.Articulos
                 this.DropListOtroProveedor.DataTextField = "razonSocial";
                 this.DropListOtroProveedor.DataBind();
 
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -507,8 +519,8 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     if (lista["nombre"].ToString() != "Seleccione...")
                     {
-                        ListItem item = new ListItem(lista["nombre"].ToString(), lista["id"].ToString());  
-                      
+                        ListItem item = new ListItem(lista["nombre"].ToString(), lista["id"].ToString());
+
                         this.chkListListas.Items.Add(item);
                         int i = this.chkListListas.Items.IndexOf(item);
                         this.chkListListas.Items[i].Selected = true;
@@ -527,7 +539,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
         #endregion
-        
+
         //private void cargarArticulos()
         //{
         //    try
@@ -536,7 +548,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         //        List<Articulo> articulos = new List<Articulo>();
         //        articulos = this.controlador.obtenerArticulosReduc();
-                
+
         //        //para cargar el articulo
         //        int i = 0;
 
@@ -737,8 +749,8 @@ namespace Gestion_Web.Formularios.Articulos
         //                tr.Cells.Add(celUltimaActualizacion);
         //                phColumna5.Visible = true;
         //            }
-                    
-                    
+
+
         //            if (c.precioArticulo.Contains("Con") == true)
         //            {
         //                tr.Cells.Add(celPrecio);
@@ -863,7 +875,7 @@ namespace Gestion_Web.Formularios.Articulos
         //            celPrecioSIva.Width = Unit.Percentage(5);
         //            celPrecioSIva.VerticalAlign = VerticalAlign.Middle;
         //            celPrecioSIva.HorizontalAlign = HorizontalAlign.Right;
-                    
+
         //            TableCell celPrecio = new TableCell();
         //            celPrecio.Text = art.precioVenta.ToString("C");
         //            celPrecio.Width = Unit.Percentage(5);
@@ -872,7 +884,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         //            TableCell celAction = new TableCell();
         //            celAction.Width = Unit.Percentage(20);
-                    
+
         //            Literal lDetail = new Literal();
         //            lDetail.ID = art.id.ToString();
 
@@ -905,7 +917,7 @@ namespace Gestion_Web.Formularios.Articulos
         //            btnEliminar.Attributes.Add("data-toggle", "modal");
         //            btnEliminar.Attributes.Add("href", "#modalConfirmacion");
         //            btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                   
+
         //            btnEliminar.OnClientClick = "abrirdialog(" + art.id + ");";
         //            if (this.permisoEliminar == 0)
         //            {
@@ -975,7 +987,7 @@ namespace Gestion_Web.Formularios.Articulos
         //                tr.Cells.Add(celUltimaActualizacion);
         //                phColumna5.Visible = true;
         //            }                    
-                    
+
         //            if (c.precioArticulo.Contains("Con") == true)
         //            {
         //                tr.Cells.Add(celPrecio);
@@ -1003,13 +1015,13 @@ namespace Gestion_Web.Formularios.Articulos
         private void cargarArticulosTablaDT(DataTable dt)
         {
             try
-            {                
+            {
                 //vacio place holder
                 this.phArticulos.Controls.Clear();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    this.cargarArticuloPH(row);   
+                    this.cargarArticuloPH(row);
                 }
             }
             catch (Exception ex)
@@ -1025,7 +1037,7 @@ namespace Gestion_Web.Formularios.Articulos
                 VisualizacionArticulos vista = new VisualizacionArticulos();
 
                 string oferta = "";
-                var artStore= this.contArtEnt.obtenerOfertaArticuloParaFacturar(Convert.ToInt32(row["id"]));
+                var artStore = this.contArtEnt.obtenerOfertaArticuloParaFacturar(Convert.ToInt32(row["id"]));
                 if (artStore != null)
                 {
                     if (artStore.Oferta > 1 && DateTime.Today >= artStore.Desde && DateTime.Today <= artStore.Hasta)
@@ -1035,7 +1047,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
 
                 Gestion_Api.Entitys.articulo artEnt = this.contArtEnt.obtenerArticuloEntity(Convert.ToInt32(row["id"]));
-                
+
                 //Verifico si el articulo está o no en promoción. Primero verifico que no esté en oferta, para no agregar dos veces el estilo. Uso el mismo string.
                 if (string.IsNullOrEmpty(oferta))
                 {
@@ -1068,7 +1080,7 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                 }
                 if (vista.columnaPresentacion == 1)
-                {                    
+                {
                     if (artEnt != null)
                     {
                         if (artEnt.Articulos_Presentaciones.Count > 0)
@@ -1086,7 +1098,7 @@ namespace Gestion_Web.Formularios.Articulos
                     decimal precioVtaMonedaAux = Math.Round(Convert.ToDecimal(row["precioVenta"]) / Convert.ToDecimal(row["cambioMoneda"]), 2);
                     precioVentaMonedaOriginal = precioVtaMonedaAux.ToString("C");
                 }
-                
+
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
@@ -1183,9 +1195,26 @@ namespace Gestion_Web.Formularios.Articulos
                 btnStock.PostBackUrl = "StockF.aspx?articulo=" + row["id"].ToString();
                 celAction.Controls.Add(btnStock);
 
-                Literal l2 = new Literal();
-                l2.Text = "&nbsp";
-                celAction.Controls.Add(l2);
+                //para que muestre el boton de agregar materia prima
+                if (this.permisoMostrarBotonAgregarMateriasPrimas == 1)
+                {
+                    Literal l2 = new Literal();
+                    l2.Text = "&nbsp";
+                    celAction.Controls.Add(l2);
+
+                    LinkButton btnComposicionMateriasPrimas = new LinkButton();
+                    btnComposicionMateriasPrimas.ID = "btnComposicionMateriasPrimas_" + row["id"].ToString();
+                    btnComposicionMateriasPrimas.CssClass = "btn btn-info ui-tooltip";
+                    btnComposicionMateriasPrimas.Attributes.Add("data-toggle", "tooltip");
+                    btnComposicionMateriasPrimas.Attributes.Add("title data-original-title", "Composicion");
+                    btnComposicionMateriasPrimas.Text = "<span class='shortcut-icon icon-dropbox'></span>";
+                    btnComposicionMateriasPrimas.PostBackUrl = "../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + row["id"].ToString();
+                    celAction.Controls.Add(btnComposicionMateriasPrimas);
+                }
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAction.Controls.Add(l3);
 
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.ID = "btnEliminar_" + row["id"].ToString();
@@ -1214,7 +1243,7 @@ namespace Gestion_Web.Formularios.Articulos
                 //arego fila a tabla
                 //table.Controls.Add(tr);
                 tr.Cells.Add(celCodigo);
-                tr.Cells.Add(celDescripcion);                
+                tr.Cells.Add(celDescripcion);
 
                 if (vista.columnaProveedores == 1)
                 {
@@ -1289,7 +1318,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 this.phArticulos.Controls.Add(tr);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -1385,7 +1414,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (configuracion.FiltroArticulosSucursal == "1")
                 {
                     int idSucursal = (int)Session["Login_SucUser"];
-                    dt = this.controlador.filtrarArticulosGrupoSubGrupoDT_Sucursales(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo,idSucursal);
+                    dt = this.controlador.filtrarArticulosGrupoSubGrupoDT_Sucursales(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo, idSucursal);
                 }
                 this.cargarArticulosTablaDT(dt);
             }
@@ -1422,11 +1451,11 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //agrego bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Articulo: " + art.descripcion);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo eliminado con exito", null));                    
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo eliminado con exito", null));
                 }
                 if (i == -2)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puede eliminar articulo ya que posee pedidos pendientes"));                    
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puede eliminar articulo ya que posee pedidos pendientes"));
                 }
                 else
                 {
@@ -1444,8 +1473,8 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                Response.Redirect("Articulos.aspx?accion=2&g=" + this.ListGrupo.SelectedValue 
-                    + "&sg=" + this.ListSubGrupo.SelectedValue 
+                Response.Redirect("Articulos.aspx?accion=2&g=" + this.ListGrupo.SelectedValue
+                    + "&sg=" + this.ListSubGrupo.SelectedValue
                     + "&p=" + this.ListProveedor.SelectedValue
                     + "&m=" + this.ListMarca.SelectedValue
                     + "&dsg=" + this.ListSubGrupo.SelectedItem.Text
@@ -1510,7 +1539,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     this.buscar(this.textoBuscar);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -1551,7 +1580,7 @@ namespace Gestion_Web.Formularios.Articulos
                 //filtro
                 if (this.accion == 2)
                 {
-                    this.filtrar(grupo, subgrupo, proveedor, dias, marca,descSubGrupo);
+                    this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
                 }
                 //busco
                 if (this.accion == 1)
@@ -1642,11 +1671,11 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 string id = (sender as LinkButton).ID.Split('_')[1];
-                Response.Redirect("Articulos.aspx?accion=3&d=" +id);
+                Response.Redirect("Articulos.aspx?accion=3&d=" + id);
             }
             catch
             {
- 
+
             }
         }
         protected void lbtnDesactualizados_Click(object sender, EventArgs e)
@@ -1692,7 +1721,7 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=1&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&m=" + this.marca + "&c=" + ceros + "&i=" + inactivos + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                     }
-                    
+
                 }
                 else
                 {
@@ -1713,12 +1742,12 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         //Response.Redirect("ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.ListGrupo.SelectedValue + "&sg=" + this.ListSubGrupo.SelectedValue + "&p=" + this.ListProveedor.SelectedValue + "&d=" + this.txtDiasActualizacion.Text + "&c=" + ceros);
                         //Response.Redirect("ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&m=" + this.marca +  "&c=" + ceros + "&i=" + inactivos + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);    
-                    }                    
-                    
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&m=" + this.marca + "&c=" + ceros + "&i=" + inactivos + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando informe de stock. " + ex.Message));
             }
@@ -1747,7 +1776,7 @@ namespace Gestion_Web.Formularios.Articulos
                     else
                     {
                         Response.Redirect("ReporteAF.aspx?e=1&accion=1&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros + "&m=" + this.marca);
-                    }                    
+                    }
                     //Response.Redirect("ReporteAF.aspx?e=1&accion=1&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros);
                 }
                 else
@@ -1767,9 +1796,9 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                     else
                     {
-                        Response.Redirect("ReporteAF.aspx?e=1&accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros + "&m=" + this.marca); 
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros + "&m=" + this.marca);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                    }                      
+                    }
                     //Response.Redirect("ReporteAF.aspx?e=1&accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros);
                 }
             }
@@ -1783,7 +1812,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                
+
                 //filtro
                 if (this.accion == 2)
                 {
@@ -1793,7 +1822,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (this.accion == 1)
                 {
                     Response.Redirect("ReporteAF.aspx?accion=4&txt=" + this.textoBuscar + "&d=" + this.dias + "&l=" + this.ListListaPrecio.SelectedValue + "&t=" + this.ListEtiqueta.SelectedValue + "&s=" + this.ListSucursalEtiquetas.SelectedValue + "&cero=" + Convert.ToInt32(this.StockCero.Checked) + "&m=" + this.marca);
-                   
+
                 }
                 //actualizaciones de precios
                 if (this.accion == 3)
@@ -1806,18 +1835,18 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando informe de etiquetas. " + ex.Message));
             }
         }
-             
+
         protected void btnImprimirListaPrecios_Click(object sender, EventArgs e)
         {
             try
-            {  
+            {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
                 int descuentoPorCantidad = 0;
                 if (this.chkDescuentoCantidad.Checked == true)
                     descuentoPorCantidad = 1;
 
-                int iva = 0;                
+                int iva = 0;
                 if (this.RadioSinIva.Checked == true)
                     iva = 1;
                 else
@@ -1833,7 +1862,7 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         if (accion == 1)// por busqueda
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=3&iva=" + iva + "&dc=" + descuentoPorCantidad +  "&t=" + this.textoBuscar + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=3&iva=" + iva + "&dc=" + descuentoPorCantidad + "&t=" + this.textoBuscar + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                         }
 
                         else//default
@@ -1873,14 +1902,14 @@ namespace Gestion_Web.Formularios.Articulos
                             }
                         }
                     }
-                }                
-                
+                }
+
             }
             catch
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de articulos. "));
             }
-            
+
         }
 
         protected void btnImprimirListaPrecios2_Click(object sender, EventArgs e)
@@ -1932,7 +1961,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     if (accion == 2)//si se filtro
                     {
-                        Response.Redirect("ImpresionListaPrecios.aspx?ex=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" +  this.dias + "&dc=" + descuentoPorCantidad + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&l=" + this.DropListListaPrecios.SelectedValue);
+                        Response.Redirect("ImpresionListaPrecios.aspx?ex=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&dc=" + descuentoPorCantidad + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&l=" + this.DropListListaPrecios.SelectedValue);
                     }
                     else
                     {
@@ -1969,7 +1998,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=2&ex=0&f=1&fh=" + this.txtFechaHasta_St.Text + "&s=" + this.DropListSucursal_St.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 }
-                    
+
                 else//todos
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=2&ex=0&f=0&fh=" + this.txtFechaHasta_St.Text + "&s=" + this.DropListSucursal_St.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
@@ -2022,7 +2051,7 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
             catch (Exception ex)
-            { 
+            {
 
             }
         }
@@ -2047,9 +2076,9 @@ namespace Gestion_Web.Formularios.Articulos
                     if (lista.Selected == true)
                     {
                         listas += lista.Value + ",";
-                    }                    
+                    }
                 }
-                int cero = Convert.ToInt32(this.chkDiasCero.Checked);               
+                int cero = Convert.ToInt32(this.chkDiasCero.Checked);
 
                 if (listas != "")
                 {
@@ -2061,7 +2090,7 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=4&ex=0&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&cero=" + cero + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                     }
-                    
+
                 }
                 else
                 {
@@ -2079,18 +2108,18 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 string listas = "";
-                foreach(ListItem lista in chkListListas.Items)
+                foreach (ListItem lista in chkListListas.Items)
                 {
                     if (lista.Selected == true)
                     {
                         listas += lista.Value + ",";
-                    }                    
+                    }
                 }
-                
+
                 int cero = Convert.ToInt32(this.chkDiasCero.Checked);
 
                 if (listas != "")
-                {    
+                {
                     //Response.Redirect("ImpresionMovStock.aspx?a=4&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&cero=" + cero);
                     if (this.chkNoVendida.Checked)
                     {
@@ -2099,9 +2128,9 @@ namespace Gestion_Web.Formularios.Articulos
                     else
                     {
                         Response.Redirect("ImpresionMovStock.aspx?a=4&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&cero=" + cero + "&g=" + this.grupo + "&sg=" + this.subgrupo);
-                    }                    
+                    }
                 }
-                else 
+                else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una lista"), true);
                 }
@@ -2110,9 +2139,9 @@ namespace Gestion_Web.Formularios.Articulos
             {
 
             }
-            
+
         }
-        
+
         protected void lbtnActualizarOtrosProveedores_Click(object sender, EventArgs e)
         {
             try
@@ -2158,7 +2187,7 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas articulos."));                        
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas articulos."));
                     }
 
                 }
@@ -2211,9 +2240,9 @@ namespace Gestion_Web.Formularios.Articulos
                     nuevo.ultActualizacion = DateTime.Now;
 
                     //guardo
-                    int i = this.controlador.modificarArticulo(nuevo, nuevo.codigo,1);    
+                    int i = this.controlador.modificarArticulo(nuevo, nuevo.codigo, 1);
                 }
-                
+
             }
             catch
             {
@@ -2262,7 +2291,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 if (listas != "")
                 {
-                    Response.Redirect("ImpresionMovStock.aspx?a=5&ex=1&listas=" + listas + "&s=" + this.DropListSucNoVendido.SelectedValue + "&fd=" + this.txtFechaDesdeNoVendido.Text + "&fh=" + this.txtFechaHastaNoVendido.Text +"&p=" + this.DropListProvNoVendido.SelectedValue);
+                    Response.Redirect("ImpresionMovStock.aspx?a=5&ex=1&listas=" + listas + "&s=" + this.DropListSucNoVendido.SelectedValue + "&fd=" + this.txtFechaDesdeNoVendido.Text + "&fh=" + this.txtFechaHastaNoVendido.Text + "&p=" + this.DropListProvNoVendido.SelectedValue);
                 }
                 else
                 {
@@ -2409,6 +2438,152 @@ namespace Gestion_Web.Formularios.Articulos
 
         }
 
+
+        #region despacho
+        protected void lbtnActualizarArticulosDespacho_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Inicio procesar actualizacion articulos despacho excel");
+                Boolean fileOK = false;
+
+                String path = Server.MapPath("../../content/excelFiles/artDespacho/");
+                String fileExtension = "";
+                if (FileUploadArticulosDespacho.HasFile)
+                {
+                    fileExtension = Path.GetExtension(FileUploadArticulosDespacho.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".xlsx" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "No existe directorio. " + path + ". lo creo");
+
+                        Directory.CreateDirectory(path);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "directorio creado");
+                    }
+                    //guardo nombre archivo
+                    string nombreArchivoExcel = FileUploadArticulosDespacho.FileName;
+
+                    //lo subo
+                    FileUploadArticulosDespacho.PostedFile.SaveAs(path + FileUploadArticulosDespacho.FileName);
+
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Voy a traer datos desde el excel " + path + FileUploadArticulosDespacho.FileName);
+                    var artDespachoExcel = new ArtDespachoExcel();
+                    var tablaDatos = artDespachoExcel.traerDatos(path + FileUploadArticulosDespacho.FileName);
+
+                    if (tablaDatos != null)
+                    {
+                        int contador = 0;
+                        //recorro los articulos del excel
+                        foreach (var item in tablaDatos)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.Codigo))
+                            {
+                                int i = this.actualizarDatosDelArticuloDespacho(item);
+                                if (i >= 1)
+                                {
+                                    contador++;
+                                }
+                            }
+                        }
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se actualizaron " + contador + " articulos.",null));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Verificar codigos y datos del excel."));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .xlsx"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Error procesando excel " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error procesando excel " + ex.Message));
+            }
+        }
+
+        private int actualizarDatosDelArticuloDespacho(ArtDespachoExcel artDespachoExcel)
+        {
+            try
+            {
+                Gestion_Api.Entitys.articulo artEntity = this.contArtEnt.obtenerArticuloEntityByCod(artDespachoExcel.Codigo);
+                Articulos_Despachos datosDespacho = new Articulos_Despachos();
+                //datosDespacho.FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
+                //datosDespacho.Lote = this.txtLote.Text;
+                //datosDespacho.Vencimiento = this.txtVencimiento.Text;
+                datosDespacho.NumeroDespacho = artDespachoExcel.NumeroDespacho;
+                datosDespacho.IdArticulo = artEntity.id;
+                datosDespacho.FechaDespacho = DateTime.Now;
+
+                var listaPaises = this.contPais.obtenerPaisList();
+                var paisEncontrado = listaPaises.Where(x => x.descripcion.ToLower() == artDespachoExcel.Procedencia.ToLower()).FirstOrDefault();
+                if (paisEncontrado != null)
+                {
+                    artEntity.procedencia = paisEncontrado.id;
+                }
+                int i = this.contArtEnt.actualizarCostoYPrecioVentaYRecalcularlo(artEntity.id, Convert.ToDecimal(artDespachoExcel.Costo.Replace(",", ".")), Convert.ToDecimal(artDespachoExcel.PrecioVenta.Replace(",",".")), artDespachoExcel.Moneda);
+                i += this.contArtEnt.crearOActualizarDatosDespachoArticulo(datosDespacho);
+                if (i == 2)
+                {
+                    return i;
+                }
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error en fun: actualizarDatosDelArticuloDespacho. " + ex.Message));
+                return 0;
+            }
+
+            ////ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
+            //Gestion_Api.Entitys.articulo artEntity = contArtEnt.obtenerArticuloEntity(idArticulo);
+            //if (artEntity.Articulos_Despachos.Count > 0)
+            //{
+            //    artEntity.Articulos_Despachos.FirstOrDefault().FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
+            //    artEntity.Articulos_Despachos.FirstOrDefault().NumeroDespacho = this.txtNumeroDespacho.Text;
+            //    artEntity.Articulos_Despachos.FirstOrDefault().Lote = this.txtLote.Text;
+            //    artEntity.Articulos_Despachos.FirstOrDefault().Vencimiento = this.txtVencimiento.Text;
+            //}
+            //else
+            //{
+            //    Articulos_Despachos datosDespacho = new Articulos_Despachos();
+            //    datosDespacho.FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
+            //    datosDespacho.NumeroDespacho = this.txtNumeroDespacho.Text;
+            //    datosDespacho.Lote = this.txtLote.Text;
+            //    datosDespacho.Vencimiento = this.txtVencimiento.Text;
+            //    artEntity.Articulos_Despachos.Add(datosDespacho);
+            //}
+            //contArtEnt.guardarDatosDespacho(artEntity);
+
+        }
+
+        //private int actualizarPrecioDelArticuloByMoneda(ArtDespachoExcel artDespachoExcel)
+        //{
+        //    try
+        //    {
+        //        decimal nuevoPrecioVenta = this.contCobranzaEntity.obtenerCotizacionPorNombreMoneda(artDespachoExcel.Moneda);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //}
+        #endregion
+        
         protected void lbtnNominaArticulosImprimir_Click(object sender, EventArgs e)
         {
             try
@@ -2433,4 +2608,5 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
     }
+
 }

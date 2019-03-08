@@ -40,7 +40,7 @@ namespace Gestion_Web.Formularios.Herramientas
             }
             catch
             {
-                
+
             }
         }
 
@@ -114,7 +114,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListNumeracionCobros.SelectedValue = configuracion.numeracionCobros;
                 this.DropListItemsEnCero.SelectedValue = configuracion.ItemsEnCero;
                 this.txtDiasArticulosSinActualizar.Text = configuracion.AlertaArticulosSinActualizar;
-                this.txtFechaCuentaCorrienteCompras.Text = configuracion.FechaFiltrosCuentaCorriente.Substring(0, 10).Replace(";","/");
+                this.txtFechaCuentaCorrienteCompras.Text = configuracion.FechaFiltrosCuentaCorriente.Substring(0, 10).Replace(";", "/");
                 this.txtFechaCuentaCorrienteVentas.Text = configuracion.FechaFiltrosCuentaCorriente.Substring(11, 10).Replace(";", "/");
                 this.txtTopeMinimoRetenciones.Text = configuracion.TopeMinimoRetencion;
                 this.DropListRedondearPrecioVenta.SelectedValue = configuracion.RedondearPrecioVenta;
@@ -128,6 +128,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListFiltroArticulosSucursal.SelectedValue = configuracion.FiltroArticulosSucursal;
                 this.DropListSucGarantia.SelectedValue = configuracion.SucursalGarantia;
                 this.DropListSucServiceOficial.SelectedValue = configuracion.SucursalServiceOficial;
+                this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue = configuracion.ColumnaUnidadMedidaEnTrazabilidad;
+                this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -141,7 +143,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.CheckBoxPrecioVentaMonedaOriginal.Checked = Convert.ToBoolean(vista.columnaPrecioVentaMonedaOriginal);
 
                 if (configuracion.modoBlanco == "1")
-                {                    
+                {
                     this.lbtnModoSeguro.CssClass = "btn btn-success";
                     this.lbtnModoSeguro.Text = "Activado";
                 }
@@ -159,7 +161,7 @@ namespace Gestion_Web.Formularios.Herramientas
 
                 // Tiempo por lineas de Pedido
                 this.cargarTiempoLineasPedido();
-                
+
             }
             catch
             {
@@ -219,7 +221,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.txtMinutosLineas.Text = "0";
                     this.txtSegundosLineas.Text = "0";
                 }
-                
+
             }
             catch (Exception Ex)
             {
@@ -295,21 +297,21 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_SucUser"], "INFO", "Se modifico configuracion porcentaje iva PRP.");
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Presupuesto modificado con exito", "PanelControl.aspx"));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Presupuesto modificado con exito!. \", {type: \"info\"});", true);
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo actualizar Porcentaje IVA de los Presupuestos."));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Porcentaje IVA de los Presupuestos!. \", {type: \"info\"});", true);
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una opcion!."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \", {type: \"info\"});", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error, no se ha podido completar la operacion!. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"no se ha podido completar la operacion!. \", {type: \"info\"});", true);
             }
         }
 
@@ -324,26 +326,26 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion modificar precio articulo.");
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Precio de venta del articulo modificado con exito!. \", {type: \"info\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Precio de venta del articulo modificado con exito!. \", {type: \"info\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precio de venta del articulo modificado con exito!.", "PanelControl.aspx"));
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Iva del Precio de venta.. \", {type: \"error\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Iva del Precio de venta.. \", {type: \"error\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo actualizar Iva del Precio de venta."));
                     }
                 }
-                else 
+                else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);                                                                
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una opcion!."));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error, no se ha podido completar la operacion!. "+ ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error, no se ha podido completar la operacion!. " + ex.Message));
             }
-        
+
         }
 
         protected void lbtnEditarDescripcion_Click(object sender, EventArgs e)
@@ -357,18 +359,18 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion editar descripcion.");
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Editar Descripcion modificada con exito!. \", {type: \"info\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Editar Descripcion modificada con exito!. \", {type: \"info\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Opcion: Editar Descripcion modificada con exito!.", "PanelControl.aspx"));
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Editar Descripcion. \", {type: \"error\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Editar Descripcion. \", {type: \"error\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo actualizar Opcion: Editar Descripcion."));
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);                                                                
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una opcion!."));
                 }
 
@@ -390,18 +392,18 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion consumidor final en cta cte.");
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: ConsumidorFinal Cta Cte modificada con exito!. \", {type: \"info\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: ConsumidorFinal Cta Cte modificada con exito!. \", {type: \"info\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Opcion: ConsumidorFinal Cta Cte modificada con exito!.", "PanelControl.aspx"));
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: ConsumidorFinal Cta Cte.!. \", {type: \"error\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: ConsumidorFinal Cta Cte.!. \", {type: \"error\"});", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo actualizar Opcion: ConsumidorFinal Cta Cte."));
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);                                                                
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una opcion!."));
                 }
 
@@ -411,7 +413,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error, no se ha podido completar la operacion!. " + ex.Message));
             }
         }
-        
+
         protected void btnGuardarPersonalizar_Click(object sender, EventArgs e)
         {
             try
@@ -469,7 +471,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo 4 campos!."), false);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", m.mensajeBoxError("Ocurrio un error guardando configuracion!. " + ex.Message), false);
             }
@@ -486,16 +488,16 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion numeracion pagos.");
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Numeracion Pagos modificada con exito! \", {type: \"info\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Numeracion Pagos modificada con exito! \", {type: \"info\"});", true);
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Numeracion Pagos \", {type: \"error\"});", true);                                                                
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Numeracion Pagos \", {type: \"error\"});", true);
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);                                                                                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe seleccionar una opcion!. \");", true);
                 }
             }
             catch
@@ -513,11 +515,11 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion separador listas.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Separador Listas modificada con exito! \", {type: \"info\"});", true);                                        
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Separador Listas modificada con exito! \", {type: \"info\"});", true);
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Separador Listas! \", {type: \"error\"});", true);                                        
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Separador Listas! \", {type: \"error\"});", true);
                 }
             }
             catch
@@ -535,11 +537,11 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion egreso stock.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Egreso Stock modificada con exito!. \", {type: \"info\"});", true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Egreso Stock modificada con exito!. \", {type: \"info\"});", true);
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Egreso Stock!. \", {type: \"info\"});", true);                                       
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Egreso Stock!. \", {type: \"info\"});", true);
                 }
             }
             catch
@@ -580,11 +582,11 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Max dto en fc.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Max dto en factura modificada con exito!. \", {type: \"info\"});", true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Max dto en factura modificada con exito!. \", {type: \"info\"});", true);
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Max dto en factura. \", {type: \"error\"});", true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Max dto en factura. \", {type: \"error\"});", true);
                 }
             }
             catch
@@ -606,7 +608,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Edicion precio unitario!. \", {type: \"error\"});", true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Edicion precio unitario!. \", {type: \"error\"});", true);
                 }
             }
             catch
@@ -710,9 +712,9 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
-                if(configuracion.modoBlanco == "0")
+                if (configuracion.modoBlanco == "0")
                     configuracion.modoBlanco = "1";
-                else                
+                else
                     configuracion.modoBlanco = "0";
 
                 int i = configuracion.ModificarModoBlanco();
@@ -809,7 +811,7 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
-                string fechaCuentaCorrienteCompras = txtFechaCuentaCorrienteCompras.Text.Replace("/",";");
+                string fechaCuentaCorrienteCompras = txtFechaCuentaCorrienteCompras.Text.Replace("/", ";");
                 string fechaCuentaCorrienteVentas = txtFechaCuentaCorrienteVentas.Text.Replace("/", ";");
                 configuracion.FechaFiltrosCuentaCorriente = fechaCuentaCorrienteCompras + ";" + fechaCuentaCorrienteVentas;
                 int i = configuracion.ModificarFechaFiltrosCuentaCorriente();
@@ -934,7 +936,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = contVisualizacion.ModificarVisualizacionCheques(vista);
 
                 if (i > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Vista de cheques modificada con éxito!",null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Vista de cheques modificada con éxito!", null));
                 else
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar la vista de cheques"));
 
@@ -1010,7 +1012,7 @@ namespace Gestion_Web.Formularios.Herramientas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al seleccionar la sucursal de garantia " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al seleccionar la sucursal de garantia " + ex.Message);
             }
         }
 
@@ -1141,7 +1143,7 @@ namespace Gestion_Web.Formularios.Herramientas
             {
                 configuracion.EstadoPendienteFacturar = this.DropListEstadoPendienteRefacturar.SelectedValue;
                 int i = configuracion.ModificarEstadoPendienteFacturar();
-                if (i > 0) 
+                if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de estado pendiente refacturar.");
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Estado inicial pedidos modificado con exito!. \", {type: \"info\"});", true);
@@ -1220,6 +1222,51 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al seleccionar la sucursal de service oficial " + ex.Message);
+            }
+        }
+
+        protected void lbtnColumnaUnidadMedidaEnTrazabilidad_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.ColumnaUnidadMedidaEnTrazabilidad = this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue;
+                int i = configuracion.ModificarColumnaUnidadMedidaEnTrazabilidad();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Columna Unidad Medida En Trazabilidad.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Columna Unidad Medida En Trazabilidad modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: ColumnaUnidadMedidaEnTrazabilidad !. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al seleccionar ColumnaUnidadMedidaEnTrazabilidad " + ex.Message);
+            }
+        }
+
+        protected void lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas_Click(object sender, EventArgs e)
+        {
+            string nombreConfiguracion = "Mostrar Alicuota IVA en Descripcion Articulos De Facturas";
+            try
+            {
+                configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas = this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue;
+                int i = configuracion.ModificarMostrarAlicuotaIVAenDescripcionArticulosDeFacturas();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Columna Unidad Medida En Trazabilidad.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: " + nombreConfiguracion + " modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion:  " + nombreConfiguracion + "!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion:  " + nombreConfiguracion + "!. \", {type: \"info\"});", true);
             }
         }
     }

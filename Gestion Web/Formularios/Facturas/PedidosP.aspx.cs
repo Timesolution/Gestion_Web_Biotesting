@@ -93,9 +93,9 @@ namespace Gestion_Web.Formularios.Facturas
                             idEstado = 0;
                         }
                         suc = (int)Session["Login_SucUser"];
-                        fechaD = DateTime.Now.AddDays(-5).ToString("dd/MM/yyyy");
+                        fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         fechaH = DateTime.Now.ToString("dd/MM/yyyy");
-                        fechaEntregaD = DateTime.Now.AddDays(-5).ToString("dd/MM/yyyy");
+                        fechaEntregaD = DateTime.Now.ToString("dd/MM/yyyy");
                         fechaEntregaH = DateTime.Now.ToString("dd/MM/yyyy");
                         this.tipoFecha = 1;
                     }

@@ -52,8 +52,9 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Gestion Api">
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+    <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\gestion_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -393,6 +394,7 @@
     <Content Include="Formularios\Facturas\ABMCotizaciones.aspx" />
     <Content Include="Formularios\Facturas\ABMCotizaciones2.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasImagenes.aspx" />
+    <Content Include="Formularios\Facturas\ABMFacturasUnidadMedida.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasLargo.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturasRapido.aspx" />
     <Content Include="Formularios\Facturas\ABMFacturas.aspx" />
@@ -431,6 +433,9 @@
     <Content Include="Formularios\Herramientas\ActPadronF.aspx" />
     <Content Include="Formularios\Herramientas\NumeracionDocumentos.aspx" />
     <Content Include="Formularios\Herramientas\PanelControl.aspx" />
+    <Content Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx" />
+    <Content Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx" />
+    <Content Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx" />
     <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
@@ -479,6 +484,7 @@
     <Content Include="Formularios\Clientes\ProoveedoresABM.aspx" />
     <Content Include="Formularios\Clientes\ProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\RentabilidadFCosto.aspx" />
+    <Content Include="Formularios\Reportes\ReporteSaldosProveedores.aspx" />
     <Content Include="Formularios\Reportes\ReportesCobros.aspx" />
     <Content Include="Formularios\Reportes\ReportesCompras.aspx" />
     <Content Include="Formularios\Reportes\ReportesTrazabilidad.aspx" />
@@ -1477,6 +1483,13 @@
     <Compile Include="Formularios\Facturas\ABMFacturasImagenes.aspx.designer.cs">
       <DependentUpon>ABMFacturasImagenes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasUnidadMedida.aspx.cs">
+      <DependentUpon>ABMFacturasUnidadMedida.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ABMFacturasUnidadMedida.aspx.designer.cs">
+      <DependentUpon>ABMFacturasUnidadMedida.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Facturas\ABMFacturasLargo.aspx.cs">
       <DependentUpon>ABMFacturasLargo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1684,6 +1697,27 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\RegimenF.aspx.designer.cs">
       <DependentUpon>RegimenF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx.cs">
+      <DependentUpon>MateriasPrimasABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx.designer.cs">
+      <DependentUpon>MateriasPrimasABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx.cs">
+      <DependentUpon>MateriasPrimasF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx.designer.cs">
+      <DependentUpon>MateriasPrimasF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.cs">
+      <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.designer.cs">
+      <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\dsOrdenReparacion.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2398,6 +2432,13 @@
     <Compile Include="Formularios\Reportes\RentabilidadFCosto.aspx.designer.cs">
       <DependentUpon>RentabilidadFCosto.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Reportes\ReporteSaldosProveedores.aspx.cs">
+      <DependentUpon>ReporteSaldosProveedores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReporteSaldosProveedores.aspx.designer.cs">
+      <DependentUpon>ReporteSaldosProveedores.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Reportes\ReportesCobros.aspx.cs">
       <DependentUpon>ReportesCobros.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2998,6 +3039,7 @@
     <EmbeddedResource Include="Formularios\Compras\RetencionListado.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionPagos.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\EtiquetasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Compras\SaldosProvR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\CuentaCorrienteR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DespachosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />
@@ -3057,6 +3099,7 @@
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadRCosto.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\TrazabilidadR.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\ComprasVentasArticulosProv.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosGrupoR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosLista.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasVendedores.rdlc" />

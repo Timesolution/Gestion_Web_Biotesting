@@ -440,7 +440,7 @@ namespace Gestion_Web.Formularios.Facturas
                     cuadroImagen.Linkbutton1.ID = item.id.ToString();
                     cuadroImagen.Label1.Text = item.descripcion;
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.mostrarArticulosGrupo);
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(MostrarSubGruposArticulos);
                     String path = Server.MapPath("../../images/Grupos/" + item.id + "/");
                     if (Directory.Exists(path))
                     {
@@ -452,7 +452,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
 
-                    cargarArticulosPh(item.id);
+                    CargarSubGruposPh(item.id);
 
                     this.phImagenCuadroGrupos.Controls.Add(cuadroImagen);
                 }
@@ -463,23 +463,71 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarArticulosPh(int idGrupo)
+        private void CargarSubGruposPh(int idGrupo)
         {
             try
             {
-                PlaceHolder placeHolder = new PlaceHolder();
-                placeHolder.ID = "phGrupo_" + idGrupo;
-                placeHolder.Visible = false;
+                PlaceHolder phSubGruposArticulos = new PlaceHolder();
+                phSubGruposArticulos.ID = "phSubGrupo_" + idGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
+                phSubGruposArticulos.Visible = false;
 
-                //cargo el primer boton de volver
                 CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
                 cuadroImagenVolver.Linkbutton1.ID = idGrupo.ToString();
                 cuadroImagenVolver.Label1.Text = "volver";
                 cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
-                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(this.ocultarArticulosGrupo);
+                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(OcultarSubGrupos);
+                phSubGruposArticulos.Controls.Add(cuadroImagenVolver);
+
+                var subGruposArticulos = contArticulo.obtenerSubGrupoByGrupo(idGrupo);
+                foreach (var item in subGruposArticulos)
+                {
+                    CuadroImagen imagenSubGrupo = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    imagenSubGrupo.Linkbutton1.ID = "_" + item.id.ToString();
+                    imagenSubGrupo.Label1.Text = item.descripcion;
+                    imagenSubGrupo.Image1.ImageUrl = "/images/no_picture.jpg";
+                    imagenSubGrupo.Linkbutton1.Click += new EventHandler(mostrarArticulosSubGrupo);
+
+                    string path = Server.MapPath("../../images/SubGrupos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            imagenSubGrupo.Image1.ImageUrl = "../../images/SubGrupos/" + item.id + "/" + f.Name;
+                        }
+                    }
+
+                    cargarArticulosPh(item.id);
+
+                    phSubGruposArticulos.Controls.Add(imagenSubGrupo);
+                }
+
+                phImagenCuadroSubGruposGrupos.Controls.Add(phSubGruposArticulos);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void cargarArticulosPh(int idSubGrupo)
+        {
+            try
+            {
+                PlaceHolder placeHolder = new PlaceHolder();
+                placeHolder.ID = "phArticulo_" + idSubGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
+                placeHolder.Visible = false;
+
+                //cargo el primer boton de volver
+                CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                cuadroImagenVolver.Linkbutton1.ID = idSubGrupo.ToString();
+                cuadroImagenVolver.Label1.Text = "volver";
+                cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
+                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(this.ocultarArticulosSubGrupo);
                 placeHolder.Controls.Add(cuadroImagenVolver);
 
-                var articulos = contArticuloEntity.obtenerArticulosEntityByIdGrupo(Convert.ToInt32(idGrupo)).ToList();
+                var articulos = contArticuloEntity.obtenerArticulosEntityByIdSubGrupo(Convert.ToInt32(idSubGrupo)).ToList();
                 foreach (var item in articulos)
                 {
                     CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
@@ -511,26 +559,58 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void mostrarArticulosGrupo(object sender, EventArgs e)
+        private void MostrarSubGruposArticulos(object sender, EventArgs e)
+        {
+            var idGrupo = (sender as LinkButton).ID;
+
+            phImagenCuadroSubGruposGrupos.Visible = true;
+
+            foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
+            {
+                var idPlaceHolder = item.ID.Split('_')[1];
+                if (idGrupo == idPlaceHolder)
+                {
+                    item.Visible = true;
+                }
+                else
+                {
+                    item.Visible = false;
+                }
+            }
+
+            phImagenCuadroGrupos.Visible = false;
+        }
+
+        private void OcultarSubGrupos(object sender, EventArgs e)
+        {
+            phImagenCuadroSubGruposGrupos.Visible = false;
+            phImagenCuadroArt.Visible = false;
+            phImagenCuadroGrupos.Visible = true;
+        }
+
+        private void mostrarArticulosSubGrupo(object sender, EventArgs e)
         {
             try
             {
-                reproducirSonido();
-                var idGrupo = (sender as LinkButton).ID;
+                var idSubGrupo = (sender as LinkButton).ID.Split('_')[1];
+
+                phImagenCuadroArt.Visible = true;
 
                 foreach (Control item in phImagenCuadroArt.Controls)
                 {
                     var idPlaceHolder = item.ID.Split('_')[1];
-                    if (idGrupo == idPlaceHolder)
+                    if (idSubGrupo == idPlaceHolder)
                     {
                         item.Visible = true;
-                        phImagenCuadroGrupos.Visible = false;
                     }
                     else
                     {
                         item.Visible = false;
                     }
                 }
+
+                phImagenCuadroGrupos.Visible = false;
+                phImagenCuadroSubGruposGrupos.Visible = false;
             }
             catch (Exception ex)
             {
@@ -538,23 +618,30 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void ocultarArticulosGrupo(object sender, EventArgs e)
+        private void ocultarArticulosSubGrupo(object sender, EventArgs e)
         {
             try
             {
-                reproducirSonido();
+                var idSubGrupo = (sender as LinkButton).ID;
 
-                var idGrupo = (sender as LinkButton).ID;
+                var grupo = contArticulo.obtenerSubGrupoID(Convert.ToInt32(idSubGrupo)).grupo.id;
 
-                foreach (Control item in phImagenCuadroArt.Controls)
+                phImagenCuadroSubGruposGrupos.Visible = true;
+
+                foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
                 {
                     var idPlaceHolder = item.ID.Split('_')[1];
-                    if (idGrupo == idPlaceHolder)
+                    if (grupo.ToString() == idPlaceHolder)
+                    {
+                        item.Visible = true;
+                    }
+                    else
                     {
                         item.Visible = false;
                     }
                 }
-                phImagenCuadroGrupos.Visible = true;
+                phImagenCuadroArt.Visible = false;
+                phImagenCuadroGrupos.Visible = false;
             }
             catch (Exception)
             {

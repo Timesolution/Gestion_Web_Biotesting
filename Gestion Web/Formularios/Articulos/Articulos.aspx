@@ -154,6 +154,9 @@
                                             <a href="#modalActualizarProveedor" data-toggle="modal">Actualizar Precios Proveedor</a>
                                         </li>
                                         <li>
+                                            <a href="#modalArticulosDespacho" data-toggle="modal">Actualizar Articulos Despacho</a>
+                                        </li>
+                                        <li>
                                             <asp:LinkButton ID="btnActualizarTodo" runat="server" Visible="False" Text="recalcular desde precio venta" OnClick="btnActualizarTodo_Click"></asp:LinkButton>
                                         </li>
                                     </ul>
@@ -483,6 +486,41 @@
                     </div>
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalArticulosDespacho" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Actualizar Despacho de articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel10" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Archivo:</label>
+                                    <div class="col-md-8">
+                                        <asp:FileUpload ID="FileUploadArticulosDespacho" runat="server" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="Label1" runat="server" ForeColor="#999999"></asp:Label>
+                                    <br />
+                                    <asp:Label ID="Label2" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnActualizarArticulosDespacho" runat="server" class="btn btn-success" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarArticulosDespacho_Click"></asp:LinkButton>
                     </div>
                 </div>
             </div>
@@ -1111,7 +1149,6 @@
         </div>
     </div>
 
-
     <div id="modalIngresosEgresosArticulos" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1158,7 +1195,6 @@
             </div>
         </div>
     </div>
-
 
     <script>
         function abrirdialog(valor) {

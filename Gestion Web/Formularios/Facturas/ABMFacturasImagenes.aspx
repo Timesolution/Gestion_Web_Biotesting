@@ -1737,6 +1737,7 @@
 
         </asp:PlaceHolder>
 
+        <%--UPDATE PANEL FACTURAS IMAGENES--%>
         <div class="main">
             <asp:UpdatePanel runat="server" ID="updatePanelModoImagen">
                 <ContentTemplate>
@@ -1899,8 +1900,9 @@
 
                                                     <div class="shortcuts" style="height: 400px; overflow-y: scroll;">
                                                         <%--aca van a ir los ascx con los botones grupo--%>
-                                                        <asp:PlaceHolder ID="phImagenCuadroGrupos" runat="server"></asp:PlaceHolder>
-                                                        <asp:PlaceHolder ID="phImagenCuadroArt" runat="server"></asp:PlaceHolder>
+                                                        <asp:PlaceHolder ID="phImagenCuadroGrupos" runat="server" Visible="true"></asp:PlaceHolder>
+                                                        <asp:PlaceHolder ID="phImagenCuadroSubGruposGrupos" runat="server" Visible="false"></asp:PlaceHolder>
+                                                        <asp:PlaceHolder ID="phImagenCuadroArt" runat="server" Visible="false"></asp:PlaceHolder>
                                                     </div>
                                                     <!-- /shortcuts -->
 

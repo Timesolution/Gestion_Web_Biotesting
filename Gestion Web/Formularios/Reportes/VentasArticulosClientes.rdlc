@@ -159,21 +159,21 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Cliente">
+                    <Textbox Name="alias">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Cliente.Value</Value>
+                              <Value>=Fields!alias.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Cliente</rd:DefaultName>
+                      <rd:DefaultName>alias</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -185,6 +185,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -365,10 +366,14 @@
           <DataField>Codigo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="alias">
+          <DataField>alias</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsVentas</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Lucas\Documents\SVN\Gestion Web\Gestion Web\Formularios\Reportes\dsVentas.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Proyectos\Gestion\Gestion_Web\Gestion Web\Formularios\Reportes\dsVentas.xsd</rd:SchemaPath>
         <rd:TableName>CantidadArticulosCliente</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

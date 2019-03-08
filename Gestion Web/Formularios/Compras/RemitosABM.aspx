@@ -30,6 +30,13 @@
                                             <div class="col-md-6">
                                                 <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
                                             </div>
+                                            <div class="col-md-3">
+                                                <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
+                                                    <ProgressTemplate>
+                                                        <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Cargando artículos del Proveedor. Por favor aguarde.</span>
+                                                    </ProgressTemplate>
+                                                </asp:UpdateProgress>
+                                            </div>
                                         </div>
 
                                         <div class="form-group">
@@ -459,6 +466,32 @@
             }
             return true;
         }
+
+        function updatebox(valor, id) {
+            var cantActual = document.getElementById("<%=lblTrazaActual.ClientID%>").textContent;
+            var cantTotal = document.getElementById("<%=lblTrazaTotal.ClientID%>").textContent;
+
+            var chk1 = document.getElementById(id);
+            if (cantActual == cantTotal) {
+                if (chk1.checked == false) {
+                    cantActual = parseInt(parseInt(cantActual) - 1);
+                    document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+                }
+
+                document.getElementById(id).checked = false;
+            }
+            else {
+                if (chk1.checked) {
+                    cantActual = parseInt(parseInt(cantActual) + 1);
+                }
+                else {
+                    cantActual = parseInt(parseInt(cantActual) - 1);
+                }
+                document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+            }
+
+        }
+
     </script>
 
 

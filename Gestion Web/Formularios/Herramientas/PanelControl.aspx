@@ -506,6 +506,38 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Columna de Unidad Medida En Trazabilidad:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListColumnaUnidadMedidaEnTrazabilidad" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="0"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="1"></asp:ListItem>
+                                                    <asp:ListItem Value="2" Text="2"></asp:ListItem>
+                                                    <asp:ListItem Value="3" Text="3"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnColumnaUnidadMedidaEnTrazabilidad" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnColumnaUnidadMedidaEnTrazabilidad_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Mostrar Alicuota IVA en Descripcion Articulos De las Facturas:</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas" runat="server" class="form-control">
+                                                    <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                    <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Personalizar tabla Articulos:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnPersonalizar" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalPersonalizacion" class="btn btn-success" />
@@ -532,7 +564,6 @@
                                                 <asp:LinkButton ID="lbtnModoSeguro" runat="server" OnClick="lbtnModoSeguro_Click" />
                                             </div>
                                         </div>
-
 
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
