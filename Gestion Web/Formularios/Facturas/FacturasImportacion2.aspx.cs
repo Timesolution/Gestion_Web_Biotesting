@@ -12,15 +12,15 @@ using System.Web.UI.WebControls;
 
 namespace Gestion_Web.Formularios.Facturas
 {
-    public partial class FacturasImportacion : System.Web.UI.Page
+    public partial class FacturasImportacion2 : System.Web.UI.Page
     {
         //controladorImportacion cont = new controladorImportacion();
         Mensajes m = new Mensajes();
 
-       
+
         controladorImportacion contImp = new controladorImportacion();
         controladorUsuario contUser = new controladorUsuario();
-        
+
         private int suc;
         private DateTime fechaD;
         private DateTime fechaH;
@@ -31,6 +31,10 @@ namespace Gestion_Web.Formularios.Facturas
         private int operador;
         private int origenPago;
 
+        private int idEmpresa;
+        private int idSucursal;
+        private int puntoVenta;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -40,6 +44,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.fechaH = Convert.ToDateTime(Request.QueryString["FechaHasta"], new CultureInfo("es-AR"));
                 this.suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
                 this.estado = Convert.ToInt32(Request.QueryString["estado"]);
+
+                this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.idEmpresa = Convert.ToInt32(Request.QueryString["empresa"]);
+                this.idSucursal = Convert.ToInt32(Request.QueryString["sucursal"]);
+                this.puntoVenta = Convert.ToInt32(Request.QueryString["puntoVenta"]);
 
                 if (!IsPostBack)
                 {
@@ -55,20 +64,29 @@ namespace Gestion_Web.Formularios.Facturas
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
-                        DropListSucursal.SelectedValue = suc.ToString();
+                        ListSucursal.SelectedValue = suc.ToString();
 
                         //DropListClientes.SelectedValue = idCliente.ToString();
-                        Response.Redirect("FacturasImportacion.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&estado=" + DropListEstado.SelectedValue);
+                        Response.Redirect("FacturasImportacion2.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + ListSucursal.SelectedValue + "&estado=" + DropListEstado.SelectedValue);
 
                     }
-                    this.cargarSucursal();
+                    this.cargarEmpresas();
+                    this.DropListEmpresa.SelectedValue = this.idEmpresa.ToString();
+                    this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
+                    this.ListSucursal.SelectedValue = this.idSucursal.ToString();
+                    this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+                    this.DropListPuntoVta.SelectedValue = this.puntoVenta.ToString();
+                    
+                    
 
                     //this.cargarClientes();
                     txtFechaDesde.Text = fechaD.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = fechaH.ToString("dd/MM/yyyy");
 
                     //DropListClientes.SelectedValue = idCliente.ToString();
-                    DropListSucursal.SelectedValue = suc.ToString();
+                    ListSucursal.SelectedValue = suc.ToString();
+
+
 
                 }
                 this.cargarLotesRango(fechaD, fechaH, estado);
@@ -127,6 +145,32 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        public void cargarEmpresas()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerEmpresas();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["Razon Social"] = "Seleccione...";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+
+                this.DropListEmpresa.DataSource = dt;
+                this.DropListEmpresa.DataValueField = "Id";
+                this.DropListEmpresa.DataTextField = "Razon Social";
+
+                this.DropListEmpresa.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando empresas. " + ex.Message));
+            }
+        }
 
         public void cargarSucursal()
         {
@@ -147,11 +191,11 @@ namespace Gestion_Web.Formularios.Facturas
                 dt.Rows.InsertAt(dr2, 1);
 
 
-                this.DropListSucursal.DataSource = dt;
-                this.DropListSucursal.DataValueField = "Id";
-                this.DropListSucursal.DataTextField = "nombre";
+                this.ListSucursal.DataSource = dt;
+                this.ListSucursal.DataValueField = "Id";
+                this.ListSucursal.DataTextField = "nombre";
 
-                this.DropListSucursal.DataBind();
+                this.ListSucursal.DataBind();
 
 
 
@@ -169,7 +213,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (fechaD != null && fechaH != null && suc != 0 && idCliente == 0)
                 {
                     var lotes = this.contImp.FiltrarLotesImportacion(fechaD, fechaH.AddHours(23).AddMinutes(59), estado);
-                    
+
                     decimal saldo = 0;
                     foreach (var l in lotes)
                     {
@@ -193,7 +237,7 @@ namespace Gestion_Web.Formularios.Facturas
                 label += fechaD + "," + fechaH + ",";
                 if (idSucursal > 0)
                 {
-                    label += DropListSucursal.Items.FindByValue(idSucursal.ToString()).Text + ",";
+                    label += ListSucursal.Items.FindByValue(idSucursal.ToString()).Text + ",";
                 }
 
                 this.lblParametros.Text = label;
@@ -251,7 +295,7 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celImporte);
 
                 TableCell celLiquidacion = new TableCell();
-                
+
                 if (l.Estado >= 0)
                 {
                     celLiquidacion.Text = "CORRECTO";
@@ -299,7 +343,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Response.Redirect("FacturasImportacion.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&estado=" + DropListEstado.SelectedValue);
+                Response.Redirect("FacturasImportacion2.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text +  "&estado=" + DropListEstado.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -315,23 +359,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Boolean fileOK = false;
 
-                String path = Server.MapPath("/XML/");//Liquidacion_" + DateTime.Today.Month + "-" + DateTime.Today.Day + "/");
-
-                //if (FileUpload1.HasFile)
-                //{
-                //    String fileExtension =
-                //        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
-
-                //    String[] allowedExtensions = { ".XML" };
-
-                //    for (int i = 0; i < allowedExtensions.Length; i++)
-                //    {
-                //        if (fileExtension == allowedExtensions[i])
-                //        {
-                //            fileOK = true;
-                //        }
-                //    }
-                //}
+                String path = Server.MapPath("/XML/");
+                
                 fileOK = true;
                 if (fileOK)
                 {
@@ -340,75 +369,133 @@ namespace Gestion_Web.Formularios.Facturas
                     //lo subo
                     FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
 
-                    int remito = 0;
-                    if (this.checkRemito.Checked)
-                    {
-                        remito = 1;
-                    }
+                    int empresa = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
+                    int sucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                    int puntoVenta = Convert.ToInt32(this.DropListPuntoVta.SelectedValue);
 
-                    int i =  this.contImp.obtenerFacturasDesdeXML(path + archivo, remito);
+                    int i = this.contImp.obtenerFacturasDesdeArchivo(path + archivo,empresa,sucursal,puntoVenta);
 
                     int cantRegistros = 0;
 
-                    if(i > 0)
+                    if (i > 0)
                     {
                         string script = "";
                         script += "window.onload=function(){";
                         script += "window.open('/Formularios/Facturas/FacturasF.aspx','_blank');";
-                        script += "window.open('/Formularios/Facturas/RemitosR.aspx','_blank');";
+                        //script += "window.open('/Formularios/Facturas/RemitosR.aspx','_blank');";
 
-                        script += " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = '/Formularios/Facturas/FacturasImportacion.aspx';";
+                        script += " $.msgbox(\"Archivo Importado. \", {type: \"info\"}); location.href = '/Formularios/Facturas/FacturasImportacion2.aspx';";
                         //sb.Append(message);
-                        script +=  "};";
+                        script += "};";
 
                         //script += m.mensajeBoxInfo("Importacion Finalizada con exito", "/FacturasImportacion.aspx");
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script, true);
-                        
+
                     }
                     else
                     {
-                        if (i == -2)
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El lote ya fue importado."));
-                            return;
-                        }
-                        if (i == -3)
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo importar la totalidad del lote. Verificque estado del mismo."));
-                            return;
-                        }
-                        if (i == -10)
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El punto de venta tiene CAI vencido"));
-                            return;
-                        }
+                        //if (i == -2)
+                        //{
+                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El lote ya fue importado."));
+                        //    return;
+                        //}
+                        //if (i == -3)
+                        //{
+                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo importar la totalidad del lote. Verificque estado del mismo."));
+                        //    return;
+                        //}
+                        //if (i == -10)
+                        //{
+                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El punto de venta tiene CAI vencido"));
+                        //    return;
+                        //}
 
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas lotes."));
                     }
-
-                    //int i = this.controlador.actualizarPrecioProveedoresXLS(path + archivo, Convert.ToInt32(DropListOtroProveedor.SelectedValue));
-
-                    //if (i > 0)
-                    //{
-                    //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros, Request.Url.ToString()));
-                    //}
-                    //else
-                    //{
-                    //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas articulos."));
-                    //}
-
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar un archivo '.XML'!. "));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar un archivo!. "));
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error subiendo XML. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error subiendo archivo. " + ex.Message));
             }
         }
 
+        protected void DropListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
+        }
 
+        protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+        }
+
+        public void cargarSucursal(int emp)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursalesDT(emp);
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+
+                this.ListSucursal.DataSource = dt;
+                this.ListSucursal.DataValueField = "Id";
+                this.ListSucursal.DataTextField = "nombre";
+
+                this.ListSucursal.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        public void cargarPuntoVta(int sucu)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
+
+                //agrego seleccione...
+                DataRow dr = dt.NewRow();
+                dr["NombreFantasia"] = "Seleccione...";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+                //agrego todos
+                //DataRow dr1 = dt.NewRow();
+                //dr1["NombreFantasia"] = "Todos";
+                //dr1["Id"] = 0;
+                //dt.Rows.InsertAt(dr1, 1);
+
+                this.DropListPuntoVta.DataSource = dt;
+                this.DropListPuntoVta.DataValueField = "Id";
+                this.DropListPuntoVta.DataTextField = "NombreFantasia";
+
+                this.DropListPuntoVta.DataBind();
+
+                if (dt.Rows.Count == 2)
+                {
+                    this.DropListPuntoVta.SelectedIndex = 1;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando puntos de venta. " + ex.Message));
+            }
+        }
+
+        
     }
 }
