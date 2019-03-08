@@ -212,13 +212,14 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                var items = contComprasEnt.obtenerOrden(ordenCompra);
+                var ordenCompra = contComprasEnt.obtenerOrden(this.ordenCompra);
 
-                foreach (var item in items.OrdenesCompra_Items)
+                foreach (var item in ordenCompra.OrdenesCompra_Items)
                 {
                     if (item.CantidadYaRecibida < item.Cantidad)
                     {
-                        cargarEnPh(item);
+                        var diferenciasOrdenCompra = ordenCompra.RemitoCompraOrdenCompra_Diferencias.Where(x => x.OrdenCompra == item.IdOrden && x.Articulo.ToString() == item.Codigo).ToList();
+                        cargarEnPh(item, diferenciasOrdenCompra);
                     }
                 }
             }
@@ -228,7 +229,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void cargarEnPh(OrdenesCompra_Items ocItem)
+        private void cargarEnPh(OrdenesCompra_Items ocItem, List<RemitoCompraOrdenCompra_Diferencias> diferencias = null)
         {
             try
             {
@@ -257,7 +258,12 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celCantidad);
 
                 TableCell celCantidadYaRecibida = new TableCell();
-                celCantidadYaRecibida.Text = ocItem.CantidadYaRecibida.ToString();
+                decimal cantidadYaRecibidas = ObtenerCantidadesYaRecibidas(diferencias);
+                celCantidadYaRecibida.Text = "0";
+
+                if(diferencias != null && diferencias.Count > 0)
+                    celCantidadYaRecibida.Text = cantidadYaRecibidas.ToString();                
+
                 celCantidadYaRecibida.HorizontalAlign = HorizontalAlign.Left;
                 celCantidadYaRecibida.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCantidadYaRecibida);
@@ -267,7 +273,7 @@ namespace Gestion_Web.Formularios.Compras
                 TextBox celCantidadRecibida = new TextBox();
                 celCantidadRecibida.TextMode = TextBoxMode.Number;
                 celCantidadRecibida.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
-                celCantidadRecibida.Text = (cantidad - ocItem.CantidadYaRecibida).ToString();
+                celCantidadRecibida.Text = (cantidad - cantidadYaRecibidas).ToString();
 
                 celAccion.Controls.Add(celCantidadRecibida);
 
@@ -280,6 +286,18 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun cargarEnPh EntregasMercaderiaF. Ex: " + ex.Message));
             }
+        }
+
+        private decimal ObtenerCantidadesYaRecibidas(List<RemitoCompraOrdenCompra_Diferencias> diferencias)
+        {
+            decimal totalDiferencias = 0;
+
+            foreach (var item in diferencias)
+            {
+                totalDiferencias = (decimal)item.CantidadYaRecibida + (decimal)item.CantidadRecibida;
+            }
+
+            return totalDiferencias;
         }
 
         private List<RemitoCompraOrdenCompra_Diferencias> obtenerDiferencias()
@@ -351,25 +369,6 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void guardarTodaLaEntregaConDiferencias()
-        {
-            try
-            {//TODO r descomentar
-                //int i = contComprasEnt.ProcesarEntregas(diferencias, rc, ordenCompra);
-
-                //if (i > 0)
-                //{
-                //    Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Remito nro " + rc.Numero + " generado con exito.");
-                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=8&rc=" + rc.Id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); $.msgbox(\"Remito Generado con exito\", {type: \"info\"}); location.href='RemitoF.aspx';", true);
-                //}
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
-
         private Tuple<List<RemitosCompras_Items>, List<RemitoCompraOrdenCompra_Diferencias>> obtenerItems(RemitosCompra remitoCompra)
         {
             try
@@ -420,20 +419,15 @@ namespace Gestion_Web.Formularios.Compras
                             diferencia.CantidadYaRecibida = cantidadYaRecibida;
 
                             diferencias.Add(diferencia);
-                            //contComprasEnt.AgregarRemitoCompraOrdenCompraDiferencias(remitoCompra, ordenCompra, cantidadPedida, cantidadRecibida,A.id);
                         }
                     }
                 }
-                //int temp = contComprasEnt.GuardarRemitoCompraOrdenCompraDiferencias();
-                //if(temp < 0)
-                //    Log.EscribirSQL(1, "ERROR", "Error guardando diferencias entre remitos y ordenes de compra");
                 return new Tuple<List<RemitosCompras_Items>, List<RemitoCompraOrdenCompra_Diferencias>>(items, diferencias);
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error cargando items a remito" + ex.Message);
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error cargando items a remito. " + ex.Message + ". \", {type: \"error\"});", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
                 return null;
             }
         }
@@ -487,41 +481,6 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "Error", "Error al generar remito de compra " + ex.Message);
             }
         }
-
-        //private List<OrdenesCompra_Items> actualizarCantidadesYaRecibidasOrdenDeCompra_Items()
-        //{
-        //    List<OrdenesCompra_Items> ordenCompraItems = new List<OrdenesCompra_Items>();
-
-        //    foreach (var c in this.phProductos.Controls)
-        //    {
-        //        TableRow tr = c as TableRow;
-        //        string txt = tr.ID;
-        //        decimal cantidadPedida = Convert.ToDecimal(tr.Cells[2].Text);
-        //        TextBox cantidadRecibidaTB = tr.Cells[4].Controls[0] as TextBox;
-        //        decimal cantidadRecibida = Convert.ToDecimal(cantidadRecibidaTB.Text);
-
-        //        if (!String.IsNullOrEmpty(txt))
-        //        {
-        //            var item = new RemitosCompras_Items();
-        //            string idArt = txt;
-        //            Articulo articulo = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
-        //            item.Codigo = articulo.id;
-        //            item.Cantidad = cantidadRecibida;
-        //            OrdenesCompra_Items ordenesCompra_Items = contComprasEnt.OrdenCompra_ItemGetOne(ordenCompra, articulo.id.ToString());
-        //            //ordenesCompra_Items.CantidadYaRecibida += cantidadRecibida;
-        //            ordenCompraItems.Add(ordenesCompra_Items);
-        //            //int i = contComprasEnt.modificarOrdenDeCompra_Items(ordenesCompra_Items); //sumo la cantidad q recibi y la guardo en la orden
-
-        //            //if (i < 0)
-        //            //{
-        //            //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error en fun:contieneCantidadesRecibidasMayoresAlasSolictados. " + ex.Message + ". \", {type: \"error\"});", true);
-        //            //    Log.EscribirSQL(1, "ERROR", "Error modificando item de OrdenesCompra_Items");
-        //            //}
-        //        }
-        //    }
-
-        //    return ordenCompraItems;
-        //}
 
         protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
