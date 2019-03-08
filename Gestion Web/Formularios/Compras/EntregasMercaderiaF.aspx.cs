@@ -300,18 +300,18 @@ namespace Gestion_Web.Formularios.Compras
             return totalDiferencias;
         }
 
-        private List<RemitoCompraOrdenCompra_Diferencias> obtenerDiferencias()
-        {
-            List<RemitoCompraOrdenCompra_Diferencias> diferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
-            var orden = this.contComprasEnt.obtenerOrden(ordenCompra);
-            RemitosCompra rc = new RemitosCompra();
-            rc = this.obtenerRemitoCompraAPartirDeLosDatosDeLaVista(rc);
-            var itemsCargar = this.obtenerItems(rc);
-            rc.RemitosCompras_Items = itemsCargar.Item1;
-            diferencias = itemsCargar.Item2;
+        //private List<RemitoCompraOrdenCompra_Diferencias> obtenerDiferencias()
+        //{
+        //    List<RemitoCompraOrdenCompra_Diferencias> diferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
+        //    var orden = this.contComprasEnt.obtenerOrden(ordenCompra);
+        //    RemitosCompra rc = new RemitosCompra();
+        //    rc = this.obtenerRemitoCompraAPartirDeLosDatosDeLaVista(rc);
+        //    var itemsCargar = this.obtenerItems(rc);
+        //    rc.RemitosCompras_Items = itemsCargar.Item1;
+        //    diferencias = itemsCargar.Item2;
 
-            return diferencias;
-        }
+        //    return diferencias;
+        //}
 
         private RemitosCompra obtenerRemitoCompraAPartirDeLosDatosDeLaVista(RemitosCompra rc)
         {

@@ -4,6 +4,7 @@ using Gestor_Solution.Controladores;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -22,18 +23,24 @@ namespace Gestion_Web.Formularios.Compras.Entregas
         {
             VerificarLogin();
 
-            if (fechaD == null && fechaH == null)
+            if (!IsPostBack)
             {
-                fechaD = DateTime.Now.ToString("dd/MM/yyyy");
-                fechaH = DateTime.Now.ToString("dd/MM/yyyy");
-                
-                txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            }
+                if (fechaD == null && fechaH == null)
+                {
+                    fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaH = DateTime.Now.ToString("dd/MM/yyyy");
 
-            txtFechaDesde.Text = fechaD;
-            txtFechaHasta.Text = fechaH;
-            ListProveedor.SelectedValue = proveedor.ToString();
+                    txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                }
+
+                cargarProveedores();
+
+                txtFechaDesde.Text = fechaD;
+                txtFechaHasta.Text = fechaH;
+                ListProveedor.SelectedValue = proveedor.ToString();
+            }
+            cargarEntregas();
         }
 
         private void VerificarLogin()
@@ -133,7 +140,30 @@ namespace Gestion_Web.Formularios.Compras.Entregas
             }
         }
 
-        //public void CargarItemsFacturaEnPH()
+        private void cargarEntregas()
+        {
+            try
+            {
+                phEntregas.Controls.Clear();
+
+                DateTime desde = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                DateTime hasta = desde.AddHours(23).AddMinutes(59);
+
+                if (fechaD != null && fechaH != null)
+                {
+                    desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
+                    hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+                }
+
+                //CargarEntregasEnPH(p, cuota);
+            }
+            catch
+            {
+
+            }
+        }
+
+        //public void CargarEntregasEnPH()
         //{
         //    try
         //    {

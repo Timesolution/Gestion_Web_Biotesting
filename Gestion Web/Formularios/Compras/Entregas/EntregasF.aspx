@@ -125,4 +125,44 @@
             </div>
         </div>
     </div>
+
+    <link href="../../css/pages/reports.css" rel="stylesheet">
+        <script src="../../Scripts/plugins/dataTables/jquery-2.0.0.js"></script>
+        <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
+        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+
+        <script src="../../Scripts/jquery-1.10.2.js"></script>
+        <script src="../../Scripts/bootstrap.min.js"></script>
+        <script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+        <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+        <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+
+        <script src="../../Scripts/Application.js"></script>
+
+        <script src="../../Scripts/demo/gallery.js"></script>
+
+        <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+        <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../Scripts/demo/notifications.js"></script>
+
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+        <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+        <link href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+
+    <script>
+        function pageLoad()
+        {
+            $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        }
+    </script>
+
 </asp:Content>
