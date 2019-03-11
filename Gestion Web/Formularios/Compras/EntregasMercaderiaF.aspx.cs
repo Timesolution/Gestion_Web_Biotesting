@@ -262,7 +262,7 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidadYaRecibida.Text = "0";
 
                 if(diferencias != null && diferencias.Count > 0)
-                    celCantidadYaRecibida.Text = cantidadYaRecibidas.ToString();                
+                    celCantidadYaRecibida.Text = cantidadYaRecibidas.ToString();
 
                 celCantidadYaRecibida.HorizontalAlign = HorizontalAlign.Left;
                 celCantidadYaRecibida.VerticalAlign = VerticalAlign.Middle;
@@ -355,9 +355,8 @@ namespace Gestion_Web.Formularios.Compras
 
                 List<RemitoCompraOrdenCompra_Diferencias> itemsConDiferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
                 itemsConDiferencias = tuplaItemsYDiferencias.Item2;
-                //itemsConDiferencias = this.obtenerDiferencias();
 
-                //var ordenCompraItems = this.actualizarCantidadesYaRecibidasOrdenDeCompra_Items();
+                actualizarCantidadesYaRecibidasOrdenDeCompra_Items();
 
                 var resp = contComprasEnt.ProcesarEntregas(itemsConDiferencias, rc, ordenCompra);
 
@@ -396,6 +395,7 @@ namespace Gestion_Web.Formularios.Compras
                         remitoCompra_Items.Cantidad = cantidadRecibida;
 
                         items.Add(remitoCompra_Items);
+
                         int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
                         if (trazable > 0)
                         {
@@ -429,6 +429,25 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "ERROR", "Error cargando items a remito" + ex.Message);
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error cargando items a remito. " + ex.Message + ". \", {type: \"error\"});", true);
                 return null;
+            }
+        }
+
+        private void actualizarCantidadesYaRecibidasOrdenDeCompra_Items()
+        {
+            foreach (var c in this.phProductos.Controls)
+            {
+                TableRow tr = c as TableRow;
+                string txt = tr.ID;
+                TextBox cantidadRecibidaTB = tr.Cells[4].Controls[0] as TextBox;
+                decimal cantidadRecibida = Convert.ToDecimal(cantidadRecibidaTB.Text);
+
+                if (!String.IsNullOrEmpty(txt))
+                {
+                    string idArt = txt;
+                    Articulo articulo = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
+                    OrdenesCompra_Items ordenesCompra_Items = contComprasEnt.OrdenCompra_ItemGetOne(ordenCompra, articulo.id.ToString());
+                    ordenesCompra_Items.CantidadYaRecibida += cantidadRecibida;
+                }
             }
         }
 
