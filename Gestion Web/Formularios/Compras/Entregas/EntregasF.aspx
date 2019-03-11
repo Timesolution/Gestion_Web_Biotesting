@@ -57,12 +57,10 @@
                             <thead>
                                 <tr>
                                     <th style="width: 10%">Fecha</th>
-                                    <th style="width: 10%">Fecha Entrega</th>
                                     <th style="width: 15%">Numero</th>
                                     <th style="width: 15%">Proveedor</th>
                                     <th style="width: 20%">Sucursal</th>
-                                    <th style="width: 15%">Estado</th>
-                                    <th style="width: 15%"></th>
+                                    <th style="width: 5%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,45 +76,63 @@
     <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Busqueda</h4>
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="col-md-3">Fecha Orden Compra</label>
-                                <div class="col-md-3">
-                                    <asp:TextBox ID="txtFechaDesde" placeholder="Desde" runat="server" class="form-control"></asp:TextBox>
-                                </div>
-                                <div class="col-md-3">
-                                    <asp:TextBox ID="txtFechaHasta" placeholder="Hasta" runat="server" class="form-control"></asp:TextBox>
-                                </div>
-                                <div class="col-md-1">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                </div>
-                                <div class="col-md-1">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="name" class="col-md-3">Cod. Proveedor</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtCodProveedor" class="form-control" runat="server"></asp:TextBox>
-                                </div>
-                                <div class="col-md-5">
-                                    <asp:LinkButton ID="btnBuscarCodigoProveedor" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodigoProveedor_Click" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="name" class="col-md-3">Proveedor</label>
-                                <div class="col-md-6">
-                                    <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True"></asp:DropDownList>
-                                </div>
-                            </div>
-                        </fieldset>
+                        <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Always">
+                            <ContentTemplate>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-md-3">Fecha Remito de Compra</label>
+                                        <div class="col-md-3">
+                                            <asp:TextBox ID="txtFechaDesde" placeholder="Desde" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <asp:TextBox ID="txtFechaHasta" placeholder="Hasta" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-md-3">Cod. Proveedor</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtCodProveedor" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <asp:LinkButton ID="btnBuscarCodigoProveedor" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodigoProveedor_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-md-3">Proveedor</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-md-3">Sucusal</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListSucursal" class="form-control" runat="server" AutoPostBack="True"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name" class="col-md-3">Tipo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListTipo" runat="server" class="form-control">
+                                                <asp:ListItem Text="FC" Value="1"></asp:ListItem>
+                                                <asp:ListItem Text="PRP" Value="2"></asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
                 </div>
                 <div class="modal-footer">

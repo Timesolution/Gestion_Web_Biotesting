@@ -49,6 +49,15 @@ namespace Gestion_Web.Formularios.Compras.Entregas {
         protected global::System.Web.UI.WebControls.PlaceHolder phEntregas;
         
         /// <summary>
+        /// UpdatePanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        
+        /// <summary>
         /// txtFechaDesde control.
         /// </summary>
         /// <remarks>
@@ -110,6 +119,24 @@ namespace Gestion_Web.Formularios.Compras.Entregas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListProveedor;
+        
+        /// <summary>
+        /// ListSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListSucursal;
+        
+        /// <summary>
+        /// ListTipo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListTipo;
         
         /// <summary>
         /// lbtnBuscar control.
