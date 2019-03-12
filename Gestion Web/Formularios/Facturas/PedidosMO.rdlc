@@ -75,66 +75,6 @@
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="DatosPedidoMO">
-      <Query>
-        <DataSourceName>dsPedidos</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Codigo">
-          <DataField>Codigo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Descripcion">
-          <DataField>Descripcion</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PrecioUnitario">
-          <DataField>PrecioUnitario</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Cantidad">
-          <DataField>Cantidad</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Total">
-          <DataField>Total</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Ubicacion">
-          <DataField>Ubicacion</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Stock">
-          <DataField>Stock</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Item">
-          <DataField>Item</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NroRenglon">
-          <DataField>NroRenglon</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="TotalPesos">
-          <DataField>TotalPesos</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>dsPedidos</rd:DataSetName>
-        <rd:SchemaPath>C:\Proyectos\Repositorio WEB\Gestion Web\Formularios\Facturas\dsPedidos.xsd</rd:SchemaPath>
-        <rd:TableName>DatosPedidoMO</rd:TableName>
-        <rd:TableAdapterFillMethod />
-        <rd:TableAdapterGetDataMethod />
-        <rd:TableAdapterName />
-      </rd:DataSetInfo>
-    </DataSet>
     <DataSet Name="TotalPedidoMO">
       <Query>
         <DataSourceName>dsPedidos</DataSourceName>
@@ -191,6 +131,74 @@
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
+    <DataSet Name="DatosPedidoMO">
+      <Query>
+        <DataSourceName>dsPedidos</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Id">
+          <DataField>Id</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Codigo">
+          <DataField>Codigo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Descripcion">
+          <DataField>Descripcion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PrecioUnitario">
+          <DataField>PrecioUnitario</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Cantidad">
+          <DataField>Cantidad</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Total">
+          <DataField>Total</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Ubicacion">
+          <DataField>Ubicacion</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Stock">
+          <DataField>Stock</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Item">
+          <DataField>Item</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NroRenglon">
+          <DataField>NroRenglon</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotalPesos">
+          <DataField>TotalPesos</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PorcentajeIVA">
+          <DataField>PorcentajeIVA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotalSinIVA">
+          <DataField>TotalSinIVA</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>dsPedidos</rd:DataSetName>
+        <rd:SchemaPath>C:\Users\black\Documents\Trabajo\Gestion\gestion_WEB\Gestion Web\Formularios\Facturas\dsPedidos.xsd</rd:SchemaPath>
+        <rd:TableName>DatosPedidoMO</rd:TableName>
+        <rd:TableAdapterFillMethod />
+        <rd:TableAdapterGetDataMethod />
+        <rd:TableAdapterName />
+      </rd:DataSetInfo>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -221,8 +229,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Observaciones</rd:DefaultName>
-            <Top>4.58054cm</Top>
-            <Left>0.47057cm</Left>
+            <Top>5.53304cm</Top>
+            <Left>0.50112cm</Left>
             <Height>0.99687cm</Height>
             <Width>19.23984cm</Width>
             <Style>
@@ -239,10 +247,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.80449cm</Width>
+                  <Width>2.18257cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>9.35148cm</Width>
+                  <Width>8.56953cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.76135cm</Width>
@@ -259,7 +267,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.6cm</Height>
+                  <Height>1.43534cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -398,7 +406,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Total</Value>
+                                  <Value>Total Moneda Original</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -558,9 +566,9 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PrecioUnitario.Value/1.21</Value>
+                                  <Value>=Math.round(Fields!PrecioUnitario.Value/((Fields!PorcentajeIVA.Value/100)+1),2)</Value>
                                   <Style>
-                                    <Format>#,0.00'€';(#,0.00'€')</Format>
+                                    <Format>'$'#,0.00;('$'#,0.00)</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -578,23 +586,24 @@
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
-                            <rd:FormatSymbolCulture>ca-IT</rd:FormatSymbolCulture>
+                            <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Total">
+                        <Textbox Name="TotalMO">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Total.Value/1.21</Value>
+                                  <Value>=Fields!TotalSinIVA.Value</Value>
                                   <Style>
-                                    <Format>#,0.00'€';(#,0.00'€')</Format>
+                                    <Format>'$'#,0.00;('$'#,0.00)</Format>
+                                    <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -603,7 +612,6 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Total</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -612,23 +620,24 @@
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
-                            <rd:FormatSymbolCulture>ca-IT</rd:FormatSymbolCulture>
+                            <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalPesos">
+                        <Textbox Name="TotalSinIVA">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalPesos.Value/1.21</Value>
+                                  <Value>=Fields!TotalSinIVA.Value * Parameters!ParamTipoDeCambio.Value</Value>
                                   <Style>
                                     <Format>'$'0.00;'$'-0.00</Format>
+                                    <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -637,7 +646,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalPesos</rd:DefaultName>
+                          <rd:DefaultName>TotalSinIVA</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -883,7 +892,7 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox38">
+                        <Textbox Name="Textbox3">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -891,13 +900,15 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value />
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox38</rd:DefaultName>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -920,7 +931,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Sum(Fields!Cantidad.Value)</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -954,7 +967,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value />
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -977,15 +992,18 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox41">
+                        <Textbox Name="txtTotalMO">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
-                                  <Style />
+                                  <Value>=Sum(Fields!TotalSinIVA.Value)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>'$'#,0.00;('$'#,0.00)</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -993,7 +1011,9 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox41</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1002,21 +1022,25 @@
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
+                            <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox9">
+                        <Textbox Name="txtTotalPesos">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
-                                  <Style />
+                                  <Value>=Sum(Fields!TotalSinIVA.Value) * Parameters!ParamTipoDeCambio.Value</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>'$'#,0.00;('$'#,0.00)</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -1024,7 +1048,9 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1033,6 +1059,7 @@
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
+                            <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1070,8 +1097,8 @@
             <DataSetName>DatosPedidoMO</DataSetName>
             <Top>0.28249cm</Top>
             <Left>0.50112cm</Left>
-            <Height>2.4cm</Height>
-            <Width>20.02179cm</Width>
+            <Height>3.23534cm</Height>
+            <Width>19.61792cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -1079,30 +1106,6 @@
               </Border>
             </Style>
           </Tablix>
-          <Line Name="Line3">
-            <Top>0.17666cm</Top>
-            <Left>0.47057cm</Left>
-            <Height>0cm</Height>
-            <Width>19.645cm</Width>
-            <ZIndex>2</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-            </Style>
-          </Line>
-          <Line Name="Line4">
-            <Top>0.88249cm</Top>
-            <Left>0.40517cm</Left>
-            <Height>0cm</Height>
-            <Width>19.645cm</Width>
-            <ZIndex>3</ZIndex>
-            <Style>
-              <Border>
-                <Style>Solid</Style>
-              </Border>
-            </Style>
-          </Line>
           <Textbox Name="TotalFinal">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -1110,10 +1113,10 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!Total.Value, "TotalPedidoMO")/1.21</Value>
+                    <Value>=ReportItems!txtTotalMO.Value</Value>
                     <Style>
                       <FontSize>11pt</FontSize>
-                      <Format>#,0.00'€';(#,0.00'€')</Format>
+                      <Format>'$'#,0.00;('$'#,0.00)</Format>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1123,11 +1126,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TotalFinal</rd:DefaultName>
-            <Top>2.78554cm</Top>
+            <Top>3.65894cm</Top>
             <Left>15.2776cm</Left>
             <Height>0.73229cm</Height>
             <Width>4.12634cm</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1136,7 +1139,7 @@
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
               <PaddingBottom>2pt</PaddingBottom>
-              <rd:FormatSymbolCulture>ca-IT</rd:FormatSymbolCulture>
+              <rd:FormatSymbolCulture>haw-US</rd:FormatSymbolCulture>
             </Style>
           </Textbox>
           <Textbox Name="Textbox34">
@@ -1159,11 +1162,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox34</rd:DefaultName>
-            <Top>2.78554cm</Top>
+            <Top>3.73804cm</Top>
             <Left>11.76336cm</Left>
             <Height>0.73229cm</Height>
             <Width>3.37312cm</Width>
-            <ZIndex>5</ZIndex>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1181,10 +1184,10 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!TotalFinal.Value, "TotalPedidoPesos")/1.21</Value>
+                    <Value>=ReportItems!txtTotalPesos.Value</Value>
                     <Style>
                       <FontSize>11pt</FontSize>
-                      <Format>#,0.00'$';#,0.00-'$'</Format>
+                      <Format>'$'#,0.00;'$'-#,0.00</Format>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1194,11 +1197,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>TotalFinal</rd:DefaultName>
-            <Top>3.67186cm</Top>
+            <Top>4.56762cm</Top>
             <Left>15.2776cm</Left>
             <Height>0.73229cm</Height>
             <Width>4.12634cm</Width>
-            <ZIndex>6</ZIndex>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1230,11 +1233,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox34</rd:DefaultName>
-            <Top>3.67186cm</Top>
+            <Top>4.62436cm</Top>
             <Left>11.76336cm</Left>
             <Height>0.73229cm</Height>
             <Width>3.37312cm</Width>
-            <ZIndex>7</ZIndex>
+            <ZIndex>5</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1246,7 +1249,7 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>2.27083in</Height>
+        <Height>2.69583in</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1699,6 +1702,65 @@
                 </Border>
               </Style>
             </Image>
+            <Textbox Name="Divisa">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Parameters!ParamTipoDeCambio.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>5.10328cm</Top>
+              <Left>5.19148cm</Left>
+              <Height>0.6cm</Height>
+              <Width>4.88125cm</Width>
+              <ZIndex>12</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox15">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Cotizacion:</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox15</rd:DefaultName>
+              <Top>5.10328cm</Top>
+              <Left>2.51509cm</Left>
+              <Height>0.6cm</Height>
+              <Width>2.5cm</Width>
+              <ZIndex>13</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1707,7 +1769,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>7.03792cm</Height>
+          <Height>6.86153cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1729,7 +1791,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>6.2592cm</Top>
+              <Top>5.9417cm</Top>
               <Left>0.47057cm</Left>
               <Height>0.6cm</Height>
               <Width>6.78625cm</Width>
@@ -1768,7 +1830,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox12</rd:DefaultName>
-              <Top>0.68476cm</Top>
+              <Top>0.36726cm</Top>
               <Left>0.50112cm</Left>
               <Height>0.73229cm</Height>
               <Width>3.88412cm</Width>
@@ -1808,7 +1870,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox13</rd:DefaultName>
-              <Top>0.68476cm</Top>
+              <Top>0.36726cm</Top>
               <Left>5.18266cm</Left>
               <Height>0.73229cm</Height>
               <Width>3.42762cm</Width>
@@ -1847,7 +1909,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox14</rd:DefaultName>
-              <Top>0.68476cm</Top>
+              <Top>0.36726cm</Top>
               <Left>8.78667cm</Left>
               <Height>0.73229cm</Height>
               <Width>2.87042cm</Width>
@@ -1888,7 +1950,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox13</rd:DefaultName>
-              <Top>6.15337cm</Top>
+              <Top>5.83587cm</Top>
               <Left>17.47344cm</Left>
               <Height>0.6cm</Height>
               <Width>2.67268cm</Width>
@@ -1920,7 +1982,7 @@ No obstante lo previsto en el presente, si los productos objeto de la transacci�
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>1.59344cm</Top>
+              <Top>1.27594cm</Top>
               <Left>0.50112cm</Left>
               <Height>4.38354cm</Height>
               <Width>19.23984cm</Width>
@@ -2011,6 +2073,12 @@ No obstante lo previsto en el presente, si los productos objeto de la transacci�
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamCodBarra">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamTipoDeCambio">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
