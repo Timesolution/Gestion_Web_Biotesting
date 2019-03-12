@@ -174,6 +174,78 @@
         </div>
     </div>
 
+    <%--<div id="modalCerrarOrden" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">ATENCION!</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-lg-10">
+                        <div class="col-md-10">
+                            <asp:Label runat="server" Font-Size="Medium" Text="La cantidad recibida es inferior a la pedida, desea cerrar la orden?"></asp:Label>
+                        </div>
+                        <div class="form-group">
+                            <fieldset>
+                                <div class="col-md-12">
+                                    <asp:Label runat="server" Font-Size="Medium" class="col-md-6">Nueva fecha de entrega</asp:Label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                        <asp:TextBox ID="txtNuevaFechaEntrega" runat="server" class="form-control col-md-6"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <asp:RequiredFieldValidator ControlToValidate="txtNuevaFechaEntrega" ID="RequiredFieldValidator3" runat="server" ErrorMessage="*" ValidationGroup="NuevaFechaEntregaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div role="form" class="form-horizontal col-md-12 text-right">
+                        <asp:LinkButton ID="lbtnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
+                        <asp:LinkButton ID="lbtnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>--%>
+
+    <div id="modalCerrarOrden" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">ATENCION!</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-12" style="font-size:medium">La cantidad recibida es inferior a la pedida, desea cerrar la orden?</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4" style="font-size:small">Nueva fecha de entrega</label>
+                            <div class="input-group col-md-4">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <asp:TextBox ID="txtNuevaFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                            </div>
+                            <div class="col-md-4">
+                                <asp:RequiredFieldValidator ControlToValidate="txtNuevaFechaEntrega" ID="RequiredFieldValidator3" runat="server" ErrorMessage="*" ValidationGroup="NuevaFechaEntregaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
+                    <asp:LinkButton ID="lbtnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
@@ -198,6 +270,20 @@
         function openModal() {
             $('#modalSeleccionarOpcion').modal('show');
         }
+
+        function openModal2() {
+            $('#modalCerrarOrden').modal('show');
+        }
+    </script>
+
+    <script>
+        $(function () {
+            $("#<%= txtNuevaFechaEntrega.ClientID %>").datepicker(
+                {
+                    dateFormat: 'dd/mm/yy'
+                }
+            );
+        });
     </script>
 
     <script>

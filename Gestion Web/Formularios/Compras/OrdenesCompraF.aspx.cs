@@ -77,6 +77,7 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaHasta.Text = fechaH;
                     txtFechaEntregaDesde.Text = fechaEntregaD;
                     txtFechaEntregaHasta.Text = fechaEntregaH;
+                    DropListProveedor.SelectedValue = proveedor.ToString();
                 }                
 
                 if(proveedor > 0)
@@ -308,6 +309,7 @@ namespace Gestion_Web.Formularios.Compras
                 Sucursal suc = contsuc.obtenerSucursalID(oc.IdSucursal.Value);
 
                 var oce = this.contCompraEntity.obtenerOrdenCompra_Estado_PorId((int)oc.Estado);
+                var ordenCompraEstadoGeneral = this.contCompraEntity.obtenerOrdenCompra_Estado_PorId((int)oc.EstadoGeneral);
 
                 //fila
                 TableRow tr = new TableRow();
@@ -318,40 +320,45 @@ namespace Gestion_Web.Formularios.Compras
                 TableCell celFecha = new TableCell();
                 celFecha.Text = Convert.ToDateTime(oc.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 celFecha.VerticalAlign = VerticalAlign.Middle;
-                celFecha.HorizontalAlign = HorizontalAlign.Left;
+                celFecha.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celFecha);
 
                 TableCell celFechaEntrega = new TableCell();
                 celFechaEntrega.Text = Convert.ToDateTime(oc.FechaEntrega, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 celFechaEntrega.VerticalAlign = VerticalAlign.Middle;
-                celFechaEntrega.HorizontalAlign = HorizontalAlign.Left;
+                celFechaEntrega.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celFechaEntrega);
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = oc.Numero;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
-                celNumero.HorizontalAlign = HorizontalAlign.Left;
+                celNumero.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celNumero);
 
                 TableCell celRazon = new TableCell();
                 Gestor_Solution.Modelo.Cliente p = this.contCliente.obtenerProveedorID(oc.IdProveedor.Value);
                 celRazon.Text = p.razonSocial;
                 celRazon.VerticalAlign = VerticalAlign.Middle;
-                celRazon.HorizontalAlign = HorizontalAlign.Left;
+                celRazon.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celRazon);
 
                 TableCell celSucursal = new TableCell();
                 celSucursal.Text = suc.nombre;
                 celSucursal.VerticalAlign = VerticalAlign.Middle;
-                celSucursal.HorizontalAlign = HorizontalAlign.Left;
+                celSucursal.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celSucursal);
 
                 TableCell celEstado = new TableCell();
                 celEstado.Text = oce.TipoEstado;
                 celEstado.VerticalAlign = VerticalAlign.Middle;
-                celEstado.HorizontalAlign = HorizontalAlign.Left;
+                celEstado.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celEstado);
 
+                TableCell celEstadoGeneral = new TableCell();
+                celEstadoGeneral.Text = ordenCompraEstadoGeneral.TipoEstado;
+                celEstadoGeneral.VerticalAlign = VerticalAlign.Middle;
+                celEstadoGeneral.HorizontalAlign = HorizontalAlign.Center;
+                tr.Cells.Add(celEstadoGeneral);
 
                 //si estoy cargando una nota de credito
 
@@ -912,7 +919,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -927,7 +934,12 @@ namespace Gestion_Web.Formularios.Compras
                     else if(oc.Estado == 9)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue aceptada!"));
                     else
-                        Response.Redirect("EntregasMercaderiaF.aspx?oc=" + idtildado);
+                    {
+                        if (oc.EstadoGeneral == 12)
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra se encuentra cerrada!"));
+                        else
+                            Response.Redirect("EntregasMercaderiaF.aspx?oc=" + idtildado);
+                    }
                 }
             }
             catch (Exception ex)
@@ -944,7 +956,7 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -961,7 +973,12 @@ namespace Gestion_Web.Formularios.Compras
                     else if (oc.Estado == 9)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue aceptada!"));
                     else
-                        temp = contCompraEntity.RechazarOrdenCompra(oc);
+                    {
+                        if (oc.EstadoGeneral == 12)
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra se encuentra cerrada!"));
+                        else
+                            temp = contCompraEntity.RechazarOrdenCompra(oc);
+                    }                       
 
                     if(temp > 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("La orden de compra fue rechazada correctamente!", "OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked)));

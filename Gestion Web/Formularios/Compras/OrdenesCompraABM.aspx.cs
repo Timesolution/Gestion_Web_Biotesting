@@ -583,6 +583,7 @@ namespace Gestion_Web.Formularios.Compras
                 //    oc.Estado = 8;
 
                 oc.Estado = 1;
+                oc.EstadoGeneral = 11;
 
                 if (oc.OrdenesCompra_Items.Count > 0)
                 {

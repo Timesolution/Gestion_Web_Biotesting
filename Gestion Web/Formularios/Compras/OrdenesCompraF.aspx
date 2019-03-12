@@ -104,14 +104,14 @@
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                            <th style="width: 10%">Fecha</th>
+                                            <th style="width: 5%">Fecha</th>
                                             <th style="width: 10%">Fecha Entrega</th>
-                                            <th style="width: 15%">Numero</th>
+                                            <th style="width: 10%">Numero</th>
                                             <th style="width: 15%">Proveedor</th>
-                                            <th style="width: 20%">Sucursal</th>
-                                            <th style="width: 15%">Estado</th>
+                                            <th style="width: 15%">Sucursal</th>
+                                            <th style="width: 10%">Estado</th>
+                                            <th style="width: 10%">Estado General</th>
                                             <th style="width: 15%"></th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
