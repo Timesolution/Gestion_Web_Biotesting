@@ -188,27 +188,27 @@ namespace Gestion_Web.Formularios.Sucursales
                     {
                         ptoVenta.retiene_gan = false;
                     }
-
                     ptoVenta.nombre_fantasia = this.txtNombreFantasia.Text;
                     ptoVenta.direccion = this.txtDireccion.Text;
                     ptoVenta.empresa.id = empresa;
                     ptoVenta.estado = 1;
                     ptoVenta.tope = Convert.ToDecimal(this.txtTope.Text);
 
+                    string mailsPuntoVenta = this.txtMailPtoVenta.Text.Replace(" ", "");
+
                     if (pvDatosMail.PuntoVta_Datos.Count > 0)
                     {
-                        pvDatosMail.PuntoVta_Datos.FirstOrDefault().MailContacto = this.txtMailPtoVenta.Text;
+                        pvDatosMail.PuntoVta_Datos.FirstOrDefault().MailContacto = mailsPuntoVenta;
                         pvDatosMail.PuntoVta_Datos.FirstOrDefault().TelefonoContacto = this.txtTelPtoVenta.Text;
                     }
                     else
                     {
                         Gestion_Api.Entitys.PuntoVta_Datos datos = new Gestion_Api.Entitys.PuntoVta_Datos();
-                        datos.MailContacto = this.txtMailPtoVenta.Text;
+                        datos.MailContacto = mailsPuntoVenta;
                         datos.TelefonoContacto = this.txtTelPtoVenta.Text;
 
                         pvDatosMail.PuntoVta_Datos.Add(datos);
                     }
-
                     try
                     {
                         ptoVenta.caiRemito = this.txtCAIRemito.Text;
@@ -224,13 +224,7 @@ namespace Gestion_Web.Formularios.Sucursales
                         //agrego bien
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico Punto de Venta: " + ptoVenta.nombre_fantasia);
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Punto de venta editado con exito", "ABMPuntoVenta.aspx?codigo=" + codigo + "&empresa=" + empresa));
-                        //this.cargarSucursal();
                         borrarCampos();
-
-                    }
-                    else
-                    {
-                        //agrego mal
                     }
                 }
                 else
@@ -270,11 +264,6 @@ namespace Gestion_Web.Formularios.Sucursales
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Punto de venta cargada con exito", "ABMPuntoVenta.aspx?codigo=" + codigo + "&empresa=" + empresa));
                         //this.cargarSucursal();
                         borrarCampos();
-
-                    }
-                    else
-                    {
-                        //agrego mal
                     }
                 }
             }
@@ -282,7 +271,6 @@ namespace Gestion_Web.Formularios.Sucursales
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando punto de venta . " + ex.Message));
             }
-
         }
 
         public void borrarCampos()
@@ -326,7 +314,6 @@ namespace Gestion_Web.Formularios.Sucursales
                     this.panelFiscal.Visible = true;
                     this.txtTope.Text = "0.00";
                 }
-
                 else
                 {
                     this.panelFiscal.Visible = false;
