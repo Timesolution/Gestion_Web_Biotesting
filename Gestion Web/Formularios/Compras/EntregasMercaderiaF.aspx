@@ -166,7 +166,7 @@
                     <div role="form" class="form-horizontal col-md-12 text-center">
                         <asp:LinkButton ID="lbtnRecibirlaOrdenConCantidadesMayores" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClick="lbtnRecibirlaOrdenConCantidadesMayores_Click" />
                         <asp:LinkButton ID="lbtnRecibirLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="lbtnRecibirLoSolicitado_Click" />
-                        <asp:LinkButton ID="lbtnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRecibirLoSolicitado_Click" />
+                        <asp:LinkButton ID="lbtnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
                     </div>
                     <div class="modal-footer"></div>
                 </div>
@@ -223,19 +223,26 @@
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
-                        <div class="form-group">
-                            <label class="col-md-12" style="font-size:medium">La cantidad recibida es inferior a la pedida, desea cerrar la orden?</label>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4" style="font-size:small">Nueva fecha de entrega</label>
-                            <div class="input-group col-md-4">
-                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                <asp:TextBox ID="txtNuevaFechaEntrega" runat="server" class="form-control"></asp:TextBox>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:RequiredFieldValidator ControlToValidate="txtNuevaFechaEntrega" ID="RequiredFieldValidator3" runat="server" ErrorMessage="*" ValidationGroup="NuevaFechaEntregaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                            </div>
-                        </div>
+                        <asp:UpdatePanel runat="server" ID="UpdatePanel2" UpdateMode="Always">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-12" style="font-size: medium">La cantidad recibida es inferior a la pedida, desea cerrar la orden?</label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4" style="font-size: small">Nueva fecha de entrega</label>
+                                    <div class="input-group col-md-4">
+                                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                        <asp:TextBox ID="txtNuevaFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ControlToValidate="txtNuevaFechaEntrega" ID="RequiredFieldValidator3" runat="server" ErrorMessage="*" ValidationGroup="NuevaFechaEntregaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <asp:Label ID="lblFechaEntregaError" runat="server" class="text-danger" Style="font-size: small" Visible="false">La fecha de entrega es menor a la actual</asp:Label>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -265,6 +272,12 @@
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
     <script src="../../Scripts/JSFunciones1.js"></script>
+
+    <script>
+        function pageLoad() {
+            $("#<%= txtNuevaFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        }
+    </script>
 
     <script>
         function openModal() {

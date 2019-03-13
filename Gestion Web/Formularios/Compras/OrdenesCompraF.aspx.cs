@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Compras
         private int sucursal;
         private int proveedor;
         private int estado;
+        private int estadoGeneral;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -47,6 +48,7 @@ namespace Gestion_Web.Formularios.Compras
             sucursal = Convert.ToInt32(Request.QueryString["suc"]);
             proveedor = Convert.ToInt32(Request.QueryString["p"]);
             estado = Convert.ToInt32(Request.QueryString["e"]);
+            estadoGeneral = Convert.ToInt32(Request.QueryString["eg"]);
             filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
             filtroPorFechaEntrega = Convert.ToInt32(Request.QueryString["fpfe"]);
 
@@ -67,6 +69,7 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaEntregaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.btnAccion.Visible = false;
                     estado = 0;
+                    estadoGeneral = 0;
                     filtroPorFecha = 1;
                     filtroPorFechaEntrega = 0;
                 }
@@ -78,6 +81,8 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaEntregaDesde.Text = fechaEntregaD;
                     txtFechaEntregaHasta.Text = fechaEntregaH;
                     DropListProveedor.SelectedValue = proveedor.ToString();
+                    DropListEstadoFiltro.SelectedValue = estado.ToString();
+                    DropListEstadoGeneralFiltro.SelectedValue = estadoGeneral.ToString();
                 }                
 
                 if(proveedor > 0)
@@ -86,13 +91,14 @@ namespace Gestion_Web.Formularios.Compras
                 this.cargarEstadosFiltro();
                 this.cargarEstados();
                 this.cargarSucursal();
+                cargarEstadosGeneralesFiltro();
                 //txtFechaDesde.Text = fechaD;
                 //txtFechaHasta.Text = fechaH;                
             }
 
             if (fechaD != null && fechaH != null)
             {
-                this.buscar(fechaD, fechaH, proveedor, sucursal,estado,fechaEntregaD,fechaEntregaH,filtroPorFecha,filtroPorFechaEntrega);
+                this.buscar(fechaD, fechaH, proveedor, sucursal,estado,fechaEntregaD,fechaEntregaH,filtroPorFecha,filtroPorFechaEntrega,estadoGeneral);
             }
             
         }
@@ -212,7 +218,32 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando estados filtros. " + ex.Message));
+            }
+        }
+        public void cargarEstadosGeneralesFiltro()
+        {
+            try
+            {
+                var estados = this.contCompraEntity.obtenerOrdenesCompra_EstadosGenerales();
+
+                estados.Insert(0, new Gestion_Api.Entitys.OrdenesCompra_Estados
+                {
+                    Id = 0,
+                    TipoEstado = "Todos"
+                });
+
+                //agrego todos
+
+                this.DropListEstadoGeneralFiltro.DataSource = estados;
+                this.DropListEstadoGeneralFiltro.DataValueField = "Id";
+                this.DropListEstadoGeneralFiltro.DataTextField = "TipoEstado";
+                this.DropListEstadoGeneralFiltro.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando estados generales. " + ex.Message));
             }
         }
         public void cargarEstados()
@@ -230,7 +261,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando estados. " + ex.Message));
             }
         }
         public void cargarProveedores()
@@ -263,7 +294,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado, string fEntregaD,string fEntregaH,int filtroPorFecha, int filtroPorFechaEntrega)
+        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado, string fEntregaD,string fEntregaH,int filtroPorFecha, int filtroPorFechaEntrega, int estadoGeneral)
         {
             try
             {
@@ -273,7 +304,7 @@ namespace Gestion_Web.Formularios.Compras
                 DateTime entregaH = Convert.ToDateTime(fEntregaH, new CultureInfo("es-AR"));
                 //int estado = Convert.ToInt32(DropListEstado.SelectedValue);
 
-                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, hasta, proveedor, idSucursal, estado, entregaD, entregaH, filtroPorFecha, filtroPorFechaEntrega);
+                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, hasta, proveedor, idSucursal, estado, entregaD, entregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral);
 
                 this.cargarOrdenes(ordenes);
             }
@@ -457,7 +488,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (DropListProveedor.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked));
+                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&eg=" + this.DropListEstadoGeneralFiltro.SelectedValue);
                     }
                     else
                     {
@@ -528,78 +559,6 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
 
-            }
-        }
-
-        protected void lbtnPendienteOC_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.modificarEstadoOrdenCompra(1);
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
-            }
-        }
-
-        protected void lbtnAtrasadoOC_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.modificarEstadoOrdenCompra(2);
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
-            }
-        }
-
-        protected void lbtnAutorizado_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.modificarEstadoOrdenCompra(3);
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
-            }
-        }
-
-        protected void lbtnObservado_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.modificarEstadoOrdenCompra(4);
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
-            }
-        }
-
-        protected void lbtnRechazado_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.modificarEstadoOrdenCompra(5);
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
-            }
-        }
-
-        protected void lbtnEntregaParcial_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.modificarEstadoOrdenCompra(6);
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error modificando el estado de la Orden de Compra. Excepción: " + Ex.Message));
             }
         }
 
@@ -981,7 +940,7 @@ namespace Gestion_Web.Formularios.Compras
                     }                       
 
                     if(temp > 0)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("La orden de compra fue rechazada correctamente!", "OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked)));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("La orden de compra fue rechazada correctamente!", "OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&eg=" + this.DropListEstadoGeneralFiltro.SelectedValue));
                 }
             }
             catch (Exception ex)
