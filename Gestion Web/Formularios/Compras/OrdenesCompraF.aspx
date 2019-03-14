@@ -33,35 +33,22 @@
                                                 <li>
                                                     <asp:LinkButton ID="ltbnCambiarEstado" runat="server" Visible="false" Enabled="false" data-toggle="modal" href="#modalCambiarEstado">Cambiar estado</asp:LinkButton>
                                                 </li>
-                                                <%--<li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#modalCambiarEstado">Cambiar Estado</a>
+                                            </asp:PlaceHolder>
+                                            <asp:PlaceHolder runat="server" ID="lbtnEntregasPH" Visible="false">
+                                                <li class="dropdown-submenu">
+                                                    <a tabindex="" href="#">Entregas</a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <asp:LinkButton ID="lbtnPendienteOC" OnClick="lbtnPendienteOC_Click" runat="server">Pendiente</asp:LinkButton>
+                                                            <asp:LinkButton ID="lbtnAceptarEntregas" runat="server" OnClick="lbtnProcesarEntrega_Click">Entrega</asp:LinkButton>
                                                         </li>
                                                         <li>
-                                                            <asp:LinkButton ID="lbtnAtrasadoOC" OnClick="lbtnAtrasadoOC_Click" runat="server">Atrasado</asp:LinkButton>
-                                                        </li>
-                                                        <li>
-                                                            <asp:LinkButton ID="lbtnAutorizado" OnClick="lbtnAutorizado_Click" runat="server">Autorizado</asp:LinkButton>
-                                                        </li>
-                                                        <li>
-                                                            <asp:LinkButton ID="lbtnObservado" OnClick="lbtnObservado_Click" runat="server">Observado</asp:LinkButton>
-                                                        </li>
-                                                        <li>
-                                                            <asp:LinkButton ID="lbtnRechazado" OnClick="lbtnRechazado_Click" runat="server">Rechazado</asp:LinkButton>
-                                                        </li>
-                                                        <li>
-                                                            <asp:LinkButton ID="lbtnEntregaParcial" OnClick="lbtnEntregaParcial_Click" runat="server">Entrega Parcial</asp:LinkButton>
+                                                            <asp:LinkButton ID="lbtnRechazarEntregas" runat="server" data-toggle="modal" href="#modalConfirmacionRechazarEntrega">Rechazar Entrega</asp:LinkButton>
                                                         </li>
                                                     </ul>
-                                                </li>--%>
+                                                </li>
                                             </asp:PlaceHolder>
-                                            <li>
-                                                <asp:LinkButton ID="lbtnEntregas" runat="server" Visible="false" OnClick="lbtnEntregas_Click">Entregas</asp:LinkButton>
-                                            </li>
                                         </ul>
                                     </div>
-                                    <!-- /btn-group -->
                                 </td>
                                 <td style="width: 65%">
                                     <h5>
@@ -117,14 +104,14 @@
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                            <th style="width: 10%">Fecha</th>
+                                            <th style="width: 5%">Fecha</th>
                                             <th style="width: 10%">Fecha Entrega</th>
-                                            <th style="width: 15%">Numero</th>
+                                            <th style="width: 10%">Numero</th>
                                             <th style="width: 15%">Proveedor</th>
-                                            <th style="width: 20%">Sucursal</th>
-                                            <th style="width: 15%">Estado</th>
+                                            <th style="width: 15%">Sucursal</th>
+                                            <th style="width: 10%">Estado</th>
+                                            <th style="width: 10%">Estado General</th>
                                             <th style="width: 15%"></th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -178,20 +165,46 @@
                                 <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                             </div>
                         </div>
-                        <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-
-                        <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
+    <div id="modalConfirmacionRechazarEntrega" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmar Rechazo</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="Label1" Text="Esta seguro que desea rechazar la Orden de Compra seleccionada?" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
+                            <div class="col-md-3">
+                                <asp:TextBox runat="server" ID="TextBox1" Text="0" Style="display: none"></asp:TextBox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="ConfirmarRechazarEntrega" Text="Rechazar" class="btn btn-danger" OnClick="ConfirmarRechazarEntrega_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -258,8 +271,6 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-        <asp:UpdatePanel runat="server">
-            <ContentTemplate>
                                 <div class="form-group">
                                     <label class="col-md-4">Estado</label>
                                     <div class="col-md-6">
@@ -269,9 +280,17 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstadoFiltro" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
-                                    <asp:PlaceHolder runat="server" ID="phDropListEstadosItemOC" Visible="false">
+                                    <label class="col-md-4">Estado General</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListEstadoGeneralFiltro" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstadoGeneralFiltro" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <asp:PlaceHolder runat="server" ID="phDropListEstadosItemOC" Visible="false">
+                                    <div class="form-group">
                                         <label class="col-md-4">Estado Item OC</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListOC_ItemEstados" runat="server" class="form-control"></asp:DropDownList>
@@ -279,10 +298,8 @@
                                         <div class="col-md-2">
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListOC_ItemEstados" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
-                                        </ContentTemplate>
-                                </div>
-                                    </asp:PlaceHolder>
-        </asp:UpdatePanel>
+                                    </div>
+                                </asp:PlaceHolder>
                             </fieldset>
                         </div>
                     </div>

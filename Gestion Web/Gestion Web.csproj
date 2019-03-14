@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\gestion_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -375,6 +375,7 @@
     <Content Include="Formularios\Compras\ComprasF.aspx" />
     <Content Include="Formularios\Compras\DiferenciaCompraMercaderiaF.aspx" />
     <Content Include="Formularios\Compras\EntregasMercaderiaF.aspx" />
+    <Content Include="Formularios\Compras\Entregas\EntregasF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesGastosF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesMonedasABM.aspx" />
     <Content Include="Formularios\Compras\ImportacionesTiposGastosABM.aspx" />
@@ -1384,6 +1385,13 @@
     </Compile>
     <Compile Include="Formularios\Compras\EntregasMercaderiaF.aspx.designer.cs">
       <DependentUpon>EntregasMercaderiaF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Compras\Entregas\EntregasF.aspx.cs">
+      <DependentUpon>EntregasF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Compras\Entregas\EntregasF.aspx.designer.cs">
+      <DependentUpon>EntregasF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Compras\ImportacionesGastosF.aspx.cs">
       <DependentUpon>ImportacionesGastosF.aspx</DependentUpon>

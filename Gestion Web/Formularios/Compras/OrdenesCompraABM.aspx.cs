@@ -572,14 +572,18 @@ namespace Gestion_Web.Formularios.Compras
 
                 oc.Total = tempTotal;
 
+                //TODO esto queda o vuela?
                 //Agrego Estado
-                if (prov.RequiereAutorizacion < 1)
-                    oc.Estado = 1;
-                else
-                    if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
-                    oc.Estado = 1;
-                    else
-                    oc.Estado = 8;
+                //if (prov.RequiereAutorizacion < 1)
+                //    oc.Estado = 1;
+                //else
+                //    if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
+                //    oc.Estado = 1;
+                //    else
+                //    oc.Estado = 8;
+
+                oc.Estado = 1;
+                oc.EstadoGeneral = 11;
 
                 if (oc.OrdenesCompra_Items.Count > 0)
                 {
@@ -1060,7 +1064,7 @@ namespace Gestion_Web.Formularios.Compras
                         item.Descripcion = tr.Cells[1].Text;
                         item.Precio = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[1]);
                         item.Cantidad = Convert.ToDecimal(txt.Text);
-                        
+                        item.Estado = 2;
                         items.Add(item);
                     }
                 }
