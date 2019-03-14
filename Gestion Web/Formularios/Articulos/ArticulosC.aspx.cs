@@ -28,25 +28,23 @@ namespace Gestion_Web.Formularios.Articulos
 
         Mensajes m = new Mensajes();
 
-        int accion;        
+        int accion;
         int grupo;
         int subgrupo;
         int proveedor;
         string descSubGrupo;
         string textoBuscar;
-
-
         public Dictionary<string, string> camposArticulos = null;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
-                
                 this.grupo = Convert.ToInt32(Request.QueryString["g"]);
                 this.subgrupo = Convert.ToInt32(Request.QueryString["sg"]);
-                this.textoBuscar = Request.QueryString["t"];                
+                this.textoBuscar = Request.QueryString["t"];
                 this.proveedor = Convert.ToInt32(Request.QueryString["p"]);
                 this.descSubGrupo = Request.QueryString["dsg"];
 
@@ -55,22 +53,23 @@ namespace Gestion_Web.Formularios.Articulos
                     if (Session["PedidoCliente"] == null)
                     {
                         Session.Add("PedidoCliente", new Pedido());
-                    }                    
+                    }
                     //cargo combos
                     this.cargarGruposArticulos();
-                    this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));                    
+                    this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
+                    this.cargarBotonesDeLosGrupos();
                 }
                 this.lbtnVerPedido.Visible = true;
                 //ver carro
                 if (this.accion == 3)
                 {
-                    this.lbtnVerPedido.Visible = false;                    
+                    this.lbtnVerPedido.Visible = false;
                     this.verCarroPedido();
                 }
                 //filtro
                 if (this.accion == 2)
                 {
-                    this.filtrar(grupo, subgrupo, proveedor, 0,0);
+                    this.filtrar(grupo, subgrupo, proveedor, 0, 0);
                 }
                 //busco
                 if (this.accion == 1)
@@ -85,7 +84,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarArticulosTabla(articulos);
                 }
                 this.txtBusqueda.Focus();
-                Page.Form.DefaultButton = this.lbBuscar.UniqueID;               
+                Page.Form.DefaultButton = this.lbBuscar.UniqueID;
 
             }
             catch (Exception ex)
@@ -93,6 +92,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pagina. " + ex.Message));
             }
         }
+
         private void VerificarLogin()
         {
             try
@@ -100,7 +100,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (Session["User"] == null)
                 {
                     Response.Redirect("../../Account/Login.aspx");
-                }                
+                }
             }
             catch
             {
@@ -108,13 +108,10 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        
-        
         private void cargarGruposArticulos()
         {
             try
             {
-
                 DataTable dt = controlador.obtenerGruposArticulos();
 
                 //agrego todos
@@ -128,9 +125,6 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListGrupo.DataTextField = "descripcion";
 
                 this.ListGrupo.DataBind();
-
-
-
             }
             catch (Exception ex)
             {
@@ -161,7 +155,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Subgrupos de articulos a la lista. " + ex.Message));
             }
         }
-        
+
         private void cargarArticulosTabla(List<Articulo> articulos)
         {
             try
@@ -169,7 +163,7 @@ namespace Gestion_Web.Formularios.Articulos
                 int idCliente = (int)Session["Login_Vendedor"];
                 Cliente cl = this.contCliente.obtenerClienteID(idCliente);
                 //vacio place holder
-                this.phArticulos.Controls.Clear();                
+                this.phArticulos.Controls.Clear();
 
                 foreach (Articulo art in articulos)
                 {
@@ -268,7 +262,7 @@ namespace Gestion_Web.Formularios.Articulos
                 //celPrecio.Text = art.precioVenta.ToString("C");
                 //celPrecio.Text = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id).precioSinIva.ToString("C");
                 Articulo articulo = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id);
-                decimal totalSIva = (articulo.precioVenta/ (1 + (articulo.porcentajeIva / 100)));
+                decimal totalSIva = (articulo.precioVenta / (1 + (articulo.porcentajeIva / 100)));
                 celPrecio.Text = totalSIva.ToString("C");
                 celPrecio.Width = Unit.Percentage(5);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
@@ -303,16 +297,16 @@ namespace Gestion_Web.Formularios.Articulos
 
                 this.phArticulos.Controls.Add(tr);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articuloa a tabla. " + ex.Message));
             }
         }
 
-        private void cargarCarroPh(Articulo art,int pos,decimal cantidad)
+        private void cargarCarroPh(Articulo art, int pos, decimal cantidad)
         {
             try
-            {                
+            {
                 TableRow tr = new TableRow();
                 tr.ID = "tr_" + art.id.ToString() + "_" + pos;
 
@@ -372,7 +366,7 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                 {
                     celMarca.Text = "SIN MARCA";
-                }                
+                }
                 celMarca.Width = Unit.Percentage(10);
                 celMarca.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celMarca);
@@ -433,6 +427,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos a tabla. " + ex.Message));
             }
         }
+
         private void verCarroPedido()
         {
             try
@@ -444,18 +439,19 @@ namespace Gestion_Web.Formularios.Articulos
 
                 foreach (ItemPedido item in p.items)
                 {
-                    this.cargarCarroPh(item.articulo,p.items.IndexOf(item),item.cantidad);
+                    this.cargarCarroPh(item.articulo, p.items.IndexOf(item), item.cantidad);
                 }
 
                 this.lbtnVerPedido.Visible = false;
                 this.lbtnGenerarPedido.Visible = true;
                 this.lbtnContinuarPedido.Visible = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
         }
+
         private void buscar(string art)
         {
             try
@@ -476,14 +472,14 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                controladorCliente contCli = new controladorCliente();                
+                controladorCliente contCli = new controladorCliente();
                 string Sgrupo = this.ListGrupo.Items.FindByValue(grupo.ToString()).Text;
                 string SSubgrupo = "";
                 try
                 {
                     SSubgrupo = this.controlador.obtenerSubGrupoID(subgrupo).descripcion;
                 }
-                catch { }                
+                catch { }
 
                 string sdias = null;
                 if (dias > 0)
@@ -556,7 +552,7 @@ namespace Gestion_Web.Formularios.Articulos
                     p.estado = controladorPedido.obtenerEstadoDesc("A Autorizar");
 
                     foreach (var item in p.items)
-                    {                        
+                    {
                         item.nroRenglon = p.items.IndexOf(item) + 1;
                     }
 
@@ -576,11 +572,12 @@ namespace Gestion_Web.Formularios.Articulos
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando pedido. " + ex.Message));
             }
         }
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -595,7 +592,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando articulo. " + ex.Message));
             }
         }
-        
+
         protected void btnFiltrar_Click(object sender, EventArgs e)
         {
             try
@@ -619,7 +616,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando subgrupo" + ex.Message));
             }
         }
-        
+
         protected void lbtnGenerarPedido_Click(object sender, EventArgs e)
         {
             try
@@ -659,6 +656,7 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
         private void CambiarCantidadItem(object sender, EventArgs e)
         {
             try
@@ -676,15 +674,16 @@ namespace Gestion_Web.Formularios.Articulos
                     p.items[pos].cantidad = Convert.ToDecimal(cantidad);
                     p.items[pos].total = decimal.Round(p.items[pos].precioUnitario * p.items[pos].cantidad, 2, MidpointRounding.AwayFromZero);
 
-                    Session.Add("PedidoCliente", p);                    
+                    Session.Add("PedidoCliente", p);
                     Response.Redirect("ArticulosC.aspx?accion=3");
                 }
-                
+
             }
             catch (Exception ex)
             {
             }
         }
+
         private void QuitarItem(object sender, EventArgs e)
         {
             try
@@ -701,10 +700,11 @@ namespace Gestion_Web.Formularios.Articulos
                 //this.verCarroPedido();                
                 Response.Redirect("ArticulosC.aspx?accion=3");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
             }
         }
+
         private void AgregarItem(object sender, EventArgs e)
         {
             try
@@ -715,39 +715,97 @@ namespace Gestion_Web.Formularios.Articulos
 
                 //obtengo el pedido del session
                 Pedido p = Session["PedidoCliente"] as Pedido;
-                ItemPedido i = new ItemPedido();   
+                ItemPedido i = new ItemPedido();
 
                 foreach (Control c in this.phArticulos.Controls)
                 {
                     TableRow tr = c as TableRow;
-                    TextBox txtCantidad = tr.Cells[7].Controls[0] as TextBox;                    
+                    TextBox txtCantidad = tr.Cells[7].Controls[0] as TextBox;
                     LinkButton btnArticulo = tr.Cells[7].Controls[2] as LinkButton;
                     int id = Convert.ToInt32(btnArticulo.ID.Split('_')[1]);
 
                     if (Convert.ToInt32(idArticulo.Split('_')[1]) == id)
                     {
-                        string codigo = tr.Cells[1].Text;                        
+                        string codigo = tr.Cells[1].Text;
                         Articulo a = this.controlador.obtenerArticuloFacturar(codigo, cl.lisPrecio.id);
                         i.articulo = a;
                         i.precioUnitario = a.precioVenta;
                         i.descripcion = a.descripcion;
                         i.cantidad = Convert.ToInt32(txtCantidad.Text);
-                        i.total = decimal.Round(i.precioUnitario * i.cantidad,2,MidpointRounding.AwayFromZero);
-                        
+                        i.total = decimal.Round(i.precioUnitario * i.cantidad, 2, MidpointRounding.AwayFromZero);
+
                     }
                 }
 
                 p.items.Add(i);
                 Session.Add("PedidoCliente", p);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo agregado al carro.",""));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo agregado al carro.", ""));
 
                 //this.verCarroPedido();
                 Response.Redirect("ArticulosC.aspx?accion=3");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando item al carro. " + ex.Message));
             }
         }
+
+        private void cargarBotonesDeLosGrupos()
+        {
+            try
+            {
+                this.phBotonesGrupos.Controls.Clear();
+
+                DataTable dtGrupos = controlador.obtenerGruposArticulos();
+
+                char letra = 'A';
+                string colorBoton = "btn btn-primary";
+                string colorNaranja = "btn btn-primary";
+                string colorAzul = "btn btn-info";
+
+                //boton de todos los grupos
+                LinkButton btnTodosLosGrupos = new LinkButton();
+                btnTodosLosGrupos.ID = "btnTodosLosGrupos";
+                btnTodosLosGrupos.Text = "TODOS LOS GRUPOS";
+                btnTodosLosGrupos.Attributes.Add("href", "ArticulosC.aspx?accion=0");
+                btnTodosLosGrupos.Attributes.Add("Style", "margin:2px");
+                btnTodosLosGrupos.CssClass = colorBoton;
+                phBotonesGrupos.Controls.Add(btnTodosLosGrupos);
+
+                foreach (DataRow fila in dtGrupos.Rows)
+                {
+                    int idGrupo = Convert.ToInt32(fila["id"]);
+                    string descripcion = fila["descripcion"].ToString().Trim().ToUpper();
+
+                    LinkButton btnGrupo = new LinkButton();
+                    btnGrupo.ID = "btnGrupo_" + idGrupo;
+                    btnGrupo.Text = descripcion;
+                    btnGrupo.Attributes.Add("href", "ArticulosC.aspx?accion=2&g=" + idGrupo + "&sg=-1");
+                    btnGrupo.Attributes.Add("Style", "margin:2px");
+
+                    char auxLetraBtn = descripcion[0];
+                    if (!auxLetraBtn.Equals(letra))
+                    {
+                        letra = auxLetraBtn;
+                        if (colorBoton.Contains("primary"))
+                        {
+                            colorBoton = colorAzul;
+                        }
+                        else
+                        {
+                            colorBoton = colorNaranja;
+                        }
+                    }
+                    btnGrupo.CssClass = colorBoton;
+                    phBotonesGrupos.Controls.Add(btnGrupo);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
     }
 }

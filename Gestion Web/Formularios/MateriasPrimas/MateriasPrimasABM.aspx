@@ -70,7 +70,7 @@
                                                     <div class="form-group">
                                                         <label for="validateSelect" class="col-md-4">Unidad de Medida</label>
                                                         <div class="col-md-4">
-                                                            <asp:DropDownList ID="ddlUnidadDeMedida" AutoPostBack="true" runat="server" class="form-control" OnSelectedIndexChanged="ddlUnidadDeMedida_SelectedIndexChanged">
+                                                            <asp:DropDownList ID="ddlUnidadDeMedida" AutoPostBack="true" runat="server" class="form-control">
                                                                 <asp:ListItem Value="Centimetros cubicos">Centimetros cubicos</asp:ListItem>
                                                                 <asp:ListItem Value="Gramos">Gramos</asp:ListItem>
                                                                 <asp:ListItem Value="Kilos">Kilos</asp:ListItem>

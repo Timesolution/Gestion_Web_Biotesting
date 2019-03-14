@@ -33,7 +33,6 @@ namespace Gestion_Web
                 if (!IsPostBack)
                 {
                     this.VerificarLogin();
-                    //this.cargarDatos();
                     this.cargarSucursal();
                     this.cargarMemo();
                     this.obtenerAlertaPedidos();
@@ -48,9 +47,6 @@ namespace Gestion_Web
                 if (this.valor == 1)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeDenegado());
-                    //string script = "$(document).ready( function abrirDenegado() { document.getElementById('abreDenegado').click(); } );";
-                    //ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", script, true);
-                    //ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirDenegado();", true);
                 }
                 
             }
