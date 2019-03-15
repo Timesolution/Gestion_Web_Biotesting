@@ -159,16 +159,21 @@
                     <h4 class="modal-title">Opciones</h4>
                 </div>
                 <div class="modal-body">
-                    <div role="form" class="form-horizontal">
-                        <asp:Label runat="server" Font-Bold="true" Font-Size="Medium" Text="Hay cantidades recibidas mayores a las solicitadas, desea recibirlas?"></asp:Label>
-                    </div>
-                    <br />
-                    <div role="form" class="form-horizontal col-md-12 text-center">
-                        <asp:LinkButton ID="lbtnRecibirlaOrdenConCantidadesMayores" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClick="lbtnRecibirlaOrdenConCantidadesMayores_Click" />
-                        <asp:LinkButton ID="lbtnRecibirLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="lbtnRecibirLoSolicitado_Click" />
-                        <asp:LinkButton ID="lbtnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
-                    </div>
-                    <div class="modal-footer"></div>
+                    <asp:UpdatePanel runat="server" ID="UpdatePanel3" UpdateMode="Always">
+                        <ContentTemplate>
+                            <div role="form" class="form-horizontal">
+                                <asp:Label runat="server" Font-Bold="true" Font-Size="Medium" Text="Hay cantidades recibidas mayores a las solicitadas, desea recibirlas?"></asp:Label>
+                            </div>
+                            <br />
+                            <div role="form" class="form-horizontal col-md-12 text-center">
+                                <asp:Button ID="btnRecibirTodo" type="button" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClientClick="disableBtn(this)" OnClick="btnRecibirTodo_Click" />
+                                <asp:Button ID="btnRecibirLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="lbtnRecibirLoSolicitado_Click" OnClientClick="disableBtn(this)"/>
+                                <asp:Button ID="btnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClientClick="disableBtn(this)" OnClick="lbtnRechazarTodo_Click" />
+                            </div>
+                            <div class="modal-footer"></div>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </div>
         </div>
@@ -465,4 +470,35 @@
             return true;
         }
     </script>
+
+    <script type="text/javascript">
+        function disableBtn(t)
+        {            
+            var btn = document.getElementById('<%=btnRecibirTodo.ClientID %>');
+            var btn2 = document.getElementById('<%=btnRecibirLoSolicitado.ClientID %>');
+            var btn3 = document.getElementById('<%=btnRechazarTodo.ClientID %>');
+
+            btn.disabled = true;
+            btn2.disabled = true;
+            btn3.disabled = true;
+
+            btn.value = 'Aguarde…';
+            btn2.value = 'Aguarde…';
+            btn3.value = 'Aguarde…';
+
+            t.onclick = function ()
+            {
+                document.getElementById('<%=btnRecibirLoSolicitado.ClientID %>').click();
+            }
+        }
+
+    </script>
+
+    <script>
+        function clickLoSolicitado()
+        {
+            document.getElementById('<%=btnRecibirLoSolicitado.ClientID %>').click();
+        }
+    </script>
+
 </asp:Content>

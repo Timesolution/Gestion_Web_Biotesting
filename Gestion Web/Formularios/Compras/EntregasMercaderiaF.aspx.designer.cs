@@ -166,31 +166,40 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.Button btnAgregar;
         
         /// <summary>
-        /// lbtnRecibirlaOrdenConCantidadesMayores control.
+        /// UpdatePanel3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnRecibirlaOrdenConCantidadesMayores;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel3;
         
         /// <summary>
-        /// lbtnRecibirLoSolicitado control.
+        /// btnRecibirTodo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnRecibirLoSolicitado;
+        protected global::System.Web.UI.WebControls.Button btnRecibirTodo;
         
         /// <summary>
-        /// lbtnRechazarTodo control.
+        /// btnRecibirLoSolicitado control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnRechazarTodo;
+        protected global::System.Web.UI.WebControls.Button btnRecibirLoSolicitado;
+        
+        /// <summary>
+        /// btnRechazarTodo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRechazarTodo;
         
         /// <summary>
         /// UpdatePanel2 control.
