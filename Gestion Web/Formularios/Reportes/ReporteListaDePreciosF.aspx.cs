@@ -1,25 +1,21 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Gestion_Api.Entitys;
 
 namespace Gestion_Web.Formularios.Reportes
 {
-    public partial class StockF : System.Web.UI.Page
+    public partial class ReporteListasDePreciosF : System.Web.UI.Page
     {
-        controladorSucursal contSucursal = new controladorSucursal();
-        ControladorEmpresa contEmpresa = new ControladorEmpresa();
+        ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
         ControladorInformesEntity contInformesEnt = new ControladorInformesEntity();
         controladorReportes contReportes = new controladorReportes();
         Mensajes m = new Mensajes();
@@ -33,11 +29,8 @@ namespace Gestion_Web.Formularios.Reportes
                 if (!IsPostBack)
                 {
                     DateTime today = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-                    //this.txtFechaDesde.Text = new DateTime(today.AddMonths(-1).Year, today.AddMonths(-1).Month, 1).ToString("dd/MM/yyyy");
-                    //this.txtFechaHasta.Text = new DateTime(today.AddMonths(-1).Year, today.AddMonths(-1).Month, today.AddDays(-1).Day).ToString("dd/MM/yyyy");
 
-                    this.cargarEmpresas();
-                    this.cargarSucursales();
+                    cargarDLLListaDePrecio();
                 }
             }
             catch (Exception Ex)
@@ -47,11 +40,22 @@ namespace Gestion_Web.Formularios.Reportes
         }
 
         #region Eventos Controles
+        protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //this.cargarSucursales();
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Sucursales de la Empresa seleccionada. Excepción: " + Ex.Message));
+            }
+        }
         protected void lbtnSolicitarInforme_Click(object sender, EventArgs e)
         {
             try
             {
-                if (this.ListEmpresa.SelectedValue != "-1")
+                if (this.ddlListaDePrecios.SelectedValue != "-1")
                 {
                     Informes_Pedidos ip = new Informes_Pedidos();
                     InformeXML infXML = new InformeXML();
@@ -119,7 +123,7 @@ namespace Gestion_Web.Formularios.Reportes
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
-                        if (s == "122")
+                        if (s == "201")
                             valor = 1;
                     }
                 }
@@ -135,105 +139,64 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 ip.Fecha = DateTime.Now;
-                ip.Informe = 3;
+                ip.Informe = 5;
                 ip.Usuario = (int)Session["Login_IdUser"];
                 ip.Estado = 0;
-                ip.NombreInforme = "STOCK-UNIDADES" + "_" + DateTime.Now.ToString("ddMMyyyy");
+                ip.NombreInforme = "ARTICULOS-LISTA-DE-PRECIOS" + "_" + DateTime.Now.ToString("ddMMyyyy");
             }
             catch (Exception Ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos de Informe_Pedido. Excepción: " + Ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: cargarDatosInformeListaDePrecios. Ex: " + Ex.Message));
             }
         }
         public void cargarDatosInformeXML(InformeXML infXML)
         {
             try
             {
-                int artInactivos = 0;
-                if (this.chkArticulosInactivos.Checked == true)
-                    artInactivos = 1;
+                infXML.ListaPrecio = ddlListaDePrecios.SelectedIndex;
 
-                infXML.Empresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
-                infXML.ArticulosInactivos = artInactivos;
+                //if (this.chkDescuentoCantidad.Checked == true)
+                //    infXMLartInactivos = 1;
 
+                infXML.ArticulosPrecioConIva = 0;
+                if (RadioConIva.Checked) infXML.ArticulosPrecioConIva = 1;
+
+                if (chkUbicacion.Checked) infXML.ArticulosAguparPorUbicacion = 1;
             }
             catch (Exception Ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos de InformeXML. Excepción: " + Ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos de InformeXML lista de precios. Excepción: " + Ex.Message));
             }
-            
         }
         #endregion
 
         #region Carga Inicial
-        public void cargarEmpresas()
+        public void cargarDLLListaDePrecio()
         {
             try
             {
-                var dt = this.contSucursal.obtenerEmpresas();
+                controladorCliente contCliente = new controladorCliente();
+                DataTable dt = contCliente.obtenerListaPrecios();
 
+                //agrego todos
                 DataRow dr = dt.NewRow();
-                dr["Razon Social"] = "Seleccione...";
-                dr["Id"] = "-1";
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
-                //DataRow dr2 = dt.NewRow();
-                //dr2["Razon Social"] = "Todas";
-                //dr2["Id"] = "0";
-                //dt.Rows.InsertAt(dr2, 1);
-
-                this.ListEmpresa.DataSource = dt;
-                this.ListEmpresa.DataValueField = "Id";
-                this.ListEmpresa.DataTextField = "Razon Social";
-                this.ListEmpresa.DataBind();
+                //controles modalEtiquetas
+                this.ddlListaDePrecios.DataSource = dt;
+                this.ddlListaDePrecios.DataValueField = "id";
+                this.ddlListaDePrecios.DataTextField = "nombre";
+                this.ddlListaDePrecios.DataBind();
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Empresas a la lista. Excepción: " + Ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Lista de precios. " + ex.Message));
             }
         }
-        public void cargarSucursales()
-        {
-            try
-            {
-                this.chkListSucursales.Items.Clear();
-
-                if (this.ListEmpresa.SelectedItem.Text != "Seleccione...")
-                {
-                    DataTable dt = new DataTable();
-
-                    if (this.ListEmpresa.SelectedItem.Text == "Todas")
-                        dt = this.contSucursal.obtenerSucursales();
-                    else
-                        dt = this.contSucursal.obtenerSucursalesDT(Convert.ToInt32(this.ListEmpresa.SelectedValue));
-
-                    if (dt != null)
-                    {
-                        //this.phSucursal.Visible = true;
-
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            ListItem item = new ListItem(dr["nombre"].ToString(), dr["id"].ToString());
-
-                            this.chkListSucursales.Items.Add(item);
-                            int i = this.chkListSucursales.Items.IndexOf(item);
-                            this.chkListSucursales.Items[i].Selected = true;
-                        }
-                    }
-                }
-                else
-                {
-                    this.chkListSucursales.Items.Clear();
-                    this.phSucursal.Visible = false;
-                }
-                    
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Sucursales. Excepción: " + Ex.Message));
-            }
-        }
-
         #endregion
+
+
     }
 }

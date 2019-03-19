@@ -783,21 +783,24 @@ namespace Gestion_Web.Formularios.Articulos
                     btnGrupo.Attributes.Add("href", "ArticulosC.aspx?accion=2&g=" + idGrupo + "&sg=-1");
                     btnGrupo.Attributes.Add("Style", "margin:2px");
 
-                    char auxLetraBtn = descripcion[0];
-                    if (!auxLetraBtn.Equals(letra))
+                    if (!String.IsNullOrWhiteSpace(descripcion))
                     {
-                        letra = auxLetraBtn;
-                        if (colorBoton.Contains("primary"))
+                        char auxLetraBtn = descripcion[0];
+                        if (!auxLetraBtn.Equals(letra))
                         {
-                            colorBoton = colorAzul;
+                            letra = auxLetraBtn;
+                            if (colorBoton.Contains("primary"))
+                            {
+                                colorBoton = colorAzul;
+                            }
+                            else
+                            {
+                                colorBoton = colorNaranja;
+                            }
                         }
-                        else
-                        {
-                            colorBoton = colorNaranja;
-                        }
+                        btnGrupo.CssClass = colorBoton;
+                        phBotonesGrupos.Controls.Add(btnGrupo);
                     }
-                    btnGrupo.CssClass = colorBoton;
-                    phBotonesGrupos.Controls.Add(btnGrupo);
                 }
             }
             catch (Exception ex)
