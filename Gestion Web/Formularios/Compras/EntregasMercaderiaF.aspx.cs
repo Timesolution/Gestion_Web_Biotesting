@@ -31,7 +31,7 @@ namespace Gestion_Web.Formularios.Compras
 
             this.VerificarLogin();
 
-            btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+            ConfigurarBotonesAguarde();
 
             if (!IsPostBack)
             {
@@ -40,6 +40,14 @@ namespace Gestion_Web.Formularios.Compras
                 CargarDatosDesdeOrdenCompra();
             }
             CargarItemsFacturaEnPH();
+        }
+
+        private void ConfigurarBotonesAguarde()
+        {
+            btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+            btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
+            btnRecibirSoloLoSolicitado.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirSoloLoSolicitado, null) + ";");
+            btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
         }
 
         private void VerificarLogin()
@@ -310,7 +318,6 @@ namespace Gestion_Web.Formularios.Compras
         //    var itemsCargar = this.obtenerItems(rc);
         //    rc.RemitosCompras_Items = itemsCargar.Item1;
         //    diferencias = itemsCargar.Item2;
-
         //    return diferencias;
         //}
 
@@ -347,7 +354,7 @@ namespace Gestion_Web.Formularios.Compras
                 ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModal", "openModal('');", true);
             else
             {
-                var resp = GenerarEntrega(true);                
+                var resp = GenerarEntrega(true,false);                
 
                 if (resp.resultadoProcesarEntrega)
                 {
@@ -357,7 +364,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public ProcesarEntregaResponse GenerarEntrega(bool cerrarOrden, RemitosCompra remitoCompra = null)
+        public ProcesarEntregaResponse GenerarEntrega(bool cerrarOrden, bool devolucionTotalMercaderia, RemitosCompra remitoCompra = null)
         {
             if(remitoCompra == null)
             {
@@ -365,7 +372,7 @@ namespace Gestion_Web.Formularios.Compras
                 remitoCompra = this.obtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompra);
             }
             
-            var tuplaItemsYDiferencias = this.obtenerItems(remitoCompra);
+            var tuplaItemsYDiferencias = this.obtenerItems(remitoCompra, devolucionTotalMercaderia);
             remitoCompra.RemitosCompras_Items = tuplaItemsYDiferencias.Item1;
 
             List<RemitoCompraOrdenCompra_Diferencias> itemsConDiferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
@@ -424,7 +431,7 @@ namespace Gestion_Web.Formularios.Compras
 
         }
 
-        private Tuple<List<RemitosCompras_Items>, List<RemitoCompraOrdenCompra_Diferencias>> obtenerItems(RemitosCompra remitoCompra)
+        private Tuple<List<RemitosCompras_Items>, List<RemitoCompraOrdenCompra_Diferencias>> obtenerItems(RemitosCompra remitoCompra,bool devolucionTotalMercaderia)
         {
             try
             {
@@ -450,7 +457,12 @@ namespace Gestion_Web.Formularios.Compras
                         remitoCompra_Items.Codigo = A.id;
 
                         if(remitoCompra.Devolucion == 1)
-                            remitoCompra_Items.Cantidad = cantidadRecibida - cantidadPedida; //al hacer cantidad recibida menos cantidad pedida el numero deberia quedar siempre positivo
+                        {
+                            if (devolucionTotalMercaderia)
+                                remitoCompra_Items.Cantidad = cantidadRecibida;
+                            else
+                                remitoCompra_Items.Cantidad = cantidadRecibida - cantidadPedida; //al hacer cantidad recibida menos cantidad pedida el numero deberia quedar siempre positivo
+                        }                            
                         else
                             remitoCompra_Items.Cantidad = cantidadRecibida;
 
@@ -474,7 +486,12 @@ namespace Gestion_Web.Formularios.Compras
                             diferencia.OrdenCompra = ordenCompra;
                             diferencia.CantidadPedida = cantidadPedida;
                             diferencia.CantidadRecibida = cantidadRecibida;
-                            diferencia.Diferencia = cantidadPedida - cantidadRecibida;
+
+                            if (devolucionTotalMercaderia)
+                                diferencia.Diferencia = cantidadRecibida;
+                            else
+                                diferencia.Diferencia = cantidadPedida - cantidadRecibida;
+
                             diferencia.Articulo = A.id;
                             diferencia.CantidadYaRecibida = cantidadYaRecibida;
 
@@ -613,7 +630,7 @@ namespace Gestion_Web.Formularios.Compras
             if (!Page.IsValid)
                 return;
 
-            var resp = GenerarEntrega(true);
+            var resp = GenerarEntrega(true,false);
             
             if (resp.resultadoProcesarEntrega)
             {
@@ -628,7 +645,7 @@ namespace Gestion_Web.Formularios.Compras
             if (!Page.IsValid)
                 return;
 
-            var resp = GenerarEntrega(false);
+            var resp = GenerarEntrega(false,false);
 
             if (resp.resultadoProcesarEntrega)
             {
@@ -646,9 +663,23 @@ namespace Gestion_Web.Formularios.Compras
                 if (!Page.IsValid)
                     return;
 
-                var oc = contComprasEnt.obtenerOrden(ordenCompra);
+                var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
 
-                int temp = contComprasEnt.RechazarOrdenCompra(oc);
+                RemitosCompra remitoCompraDevolucion = new RemitosCompra();
+
+                remitoCompraDevolucion = this.obtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompraDevolucion);
+
+                remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
+                remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
+                remitoCompraDevolucion.Devolucion = 1;
+
+                var nuevoRemitoCompra = GenerarEntrega(true,false);
+
+                var idRemitoDevolucion = GenerarEntrega(true,true,remitoCompraDevolucion);
+
+                ImprimirRemito(nuevoRemitoCompra.idRemito, idRemitoDevolucion.idRemito);
+
+                int temp = contComprasEnt.RechazarOrdenCompra(ordenDeCompra);
 
                 if (temp > 0)
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("La orden de compra fue rechazada correctamente!", "OrdenesCompraF.aspx"));
@@ -659,46 +690,6 @@ namespace Gestion_Web.Formularios.Compras
             }            
         }
 
-        protected void lbtnRecibirLoSolicitado_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!Page.IsValid)
-                    return;                
-
-                var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
-
-                RemitosCompra remitoCompraDevolucion = new RemitosCompra();
-
-                remitoCompraDevolucion.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
-                remitoCompraDevolucion.Numero = this.txtPVenta.Text + this.txtNumero.Text;
-                remitoCompraDevolucion.Fecha = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR"));
-                remitoCompraDevolucion.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
-                remitoCompraDevolucion.Tipo = 1;
-                remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
-                remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
-                remitoCompraDevolucion.Devolucion = 1;
-
-                var nuevoRemitoCompra = GenerarEntrega(true);
-                //var resp =
-                var idRemitoDevolucion = GenerarEntrega(true, remitoCompraDevolucion);
-
-                //if (resp)
-                //{
-                //    Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Remito nro " + remitoCompra.Numero + " generado con exito.");
-                //    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=8&rc=" + remitoCompra.Id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); $.msgbox(\"Remito Generado con exito\", {type: \"info\"}); ", true);
-                //}
-
-                ImprimirRemito(nuevoRemitoCompra.idRemito, idRemitoDevolucion.idRemito);
-                //ImprimirRemito(183650, 183649);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
-
         private void ImprimirRemito(int idRemito, int idRemitoDevolucion)
         {
             try
@@ -707,7 +698,8 @@ namespace Gestion_Web.Formularios.Compras
 
                 script = "window.open('ImpresionCompras.aspx?a=8&rc=" + idRemito + "','_blank');";
 
-                script += "window.open('ImpresionCompras.aspx?a=8&rc=" + idRemitoDevolucion + "','_blank');";
+                if(idRemitoDevolucion > 0)
+                    script += "window.open('ImpresionCompras.aspx?a=8&rc=" + idRemitoDevolucion + "','_blank');";
 
                 script += " $.msgbox(\"Entrega generada. \", {type: \"info\"}); location.href = 'RemitoF.aspx';";
 
@@ -726,10 +718,48 @@ namespace Gestion_Web.Formularios.Compras
                 if (!Page.IsValid)
                     return;
 
+                var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
+
+                var nuevoRemitoCompra = GenerarEntrega(true,false);
+
+                ImprimirRemito(nuevoRemitoCompra.idRemito,0);
+
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al recibir la orden de compra cuando la mercaderia era mayor a la solicitada " + ex.Message);
+            }
+        }
+
+        protected void btnRecibirLoSolicitado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!Page.IsValid)
+                    return;
+
+                var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
+
+                RemitosCompra remitoCompraDevolucion = new RemitosCompra();
+
+                remitoCompraDevolucion.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
+                remitoCompraDevolucion.Numero = this.txtPVenta.Text + this.txtNumero.Text;
+                remitoCompraDevolucion.Fecha = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR"));
+                remitoCompraDevolucion.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                remitoCompraDevolucion.Tipo = 1;
+                remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
+                remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
+                remitoCompraDevolucion.Devolucion = 1;
+
+                var nuevoRemitoCompra = GenerarEntrega(true,false);
+
+                var idRemitoDevolucion = GenerarEntrega(true,false,remitoCompraDevolucion);
+
+                ImprimirRemito(nuevoRemitoCompra.idRemito, idRemitoDevolucion.idRemito);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al recibir la mercaderia solicitada de la orden de compra cuando la mercaderia era mayor a la solicitada " + ex.Message);
             }
         }
     }

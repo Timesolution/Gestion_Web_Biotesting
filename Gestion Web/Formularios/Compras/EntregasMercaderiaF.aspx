@@ -167,7 +167,9 @@
                             <br />
                             <div role="form" class="form-horizontal col-md-12 text-center">
                                 <asp:Button ID="btnRecibirTodo" type="button" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClientClick="disableBtn(this)" OnClick="btnRecibirTodo_Click" />
-                                <asp:Button ID="btnRecibirLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="lbtnRecibirLoSolicitado_Click" OnClientClick="disableBtn(this)"/>
+                                <%--<input id ="btn" type="button" class="btn btn-warning" value="No, recibir solo lo solicitado" onclick="disableBtn(this)"/>--%>
+                                <asp:Button ID="btnRecibirSoloLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="btnRecibirLoSolicitado_Click"/>
+                                <%--<a id="aRecibirSoloLoSolicitado" runat="server" class="btn btn-warning" OnClick="disableBtn(this)">No, recibir solo lo solicitado</a>--%>
                                 <asp:Button ID="btnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClientClick="disableBtn(this)" OnClick="lbtnRechazarTodo_Click" />
                             </div>
                             <div class="modal-footer"></div>
@@ -471,33 +473,25 @@
         }
     </script>
 
-    <script type="text/javascript">
-        function disableBtn(t)
-        {            
-            var btn = document.getElementById('<%=btnRecibirTodo.ClientID %>');
-            var btn2 = document.getElementById('<%=btnRecibirLoSolicitado.ClientID %>');
-            var btn3 = document.getElementById('<%=btnRechazarTodo.ClientID %>');
-
-            btn.disabled = true;
-            btn2.disabled = true;
-            btn3.disabled = true;
-
-            btn.value = 'Aguarde…';
-            btn2.value = 'Aguarde…';
-            btn3.value = 'Aguarde…';
-
-            t.onclick = function ()
-            {
-                document.getElementById('<%=btnRecibirLoSolicitado.ClientID %>').click();
-            }
-        }
-
-    </script>
-
     <script>
-        function clickLoSolicitado()
+        function disableBtn(t)
         {
-            document.getElementById('<%=btnRecibirLoSolicitado.ClientID %>').click();
+            <%--var btn = document.getElementById('<%=btnRecibirTodo.ClientID %>');--%>
+            <%--var btn2 = document.getElementById('<%=btnRecibirSoloLoSolicitado.ClientID %>');--%>
+            <%--var btn3 = document.getElementById('<%=btnRechazarTodo.ClientID %>');--%>
+
+            t.disabled = true;
+            //btn2.disabled = true;
+            //btn3.disabled = true;
+
+            t.value = 'Aguarde…';
+
+            //btn2.click();
+            //btn2.value = 'Aguarde…';
+            //btn3.value = 'Aguarde…';
+            //__doPostBack('btnRecibirLoSolicitado_Click', '');
+
+            return true;
         }
     </script>
 

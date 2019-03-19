@@ -184,13 +184,13 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.Button btnRecibirTodo;
         
         /// <summary>
-        /// btnRecibirLoSolicitado control.
+        /// btnRecibirSoloLoSolicitado control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRecibirLoSolicitado;
+        protected global::System.Web.UI.WebControls.Button btnRecibirSoloLoSolicitado;
         
         /// <summary>
         /// btnRechazarTodo control.

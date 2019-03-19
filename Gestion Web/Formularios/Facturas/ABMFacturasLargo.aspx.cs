@@ -2938,6 +2938,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (IsValid)
                 {
+                    if(DropListVendedor.SelectedValue < ""0 && DropListFormaPago.SelectedValue < 0)
+
                     //Verifico si tiene la alerta de precios de articulos sin actualizar
                     if (!this.verificarArticulosSinActualizar())
                     {
