@@ -873,9 +873,13 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celCant);
 
                 TableCell celPrecio = new TableCell();
-                celPrecio.Text = "$ " + precio;
-                celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
+
+                TextBox txtCantidadPrecio = new TextBox();
+                txtCantidadPrecio.Text = precio.ToString();
+                txtCantidadPrecio.TextMode = TextBoxMode.Number;
+                txtCantidadPrecio.Attributes.Add("Style", "text-align: right;");
+                celPrecio.Controls.Add(txtCantidadPrecio);
                 tr.Cells.Add(celPrecio);
 
                 TableCell celPrecioMasIva = new TableCell();
