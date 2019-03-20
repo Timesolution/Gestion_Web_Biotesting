@@ -241,7 +241,13 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celCantidadRecibida);
 
                 TableCell celDiferencia = new TableCell();
-                celDiferencia.Text = f.Diferencia.ToString();
+                decimal diferencia = Convert.ToDecimal(f.Diferencia);
+
+                if (diferencia > 0)
+                    celDiferencia.Text = (diferencia * -1).ToString();
+                else
+                    celDiferencia.Text = (Math.Abs(diferencia)).ToString();
+
                 celDiferencia.HorizontalAlign = HorizontalAlign.Left;
                 celDiferencia.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDiferencia);

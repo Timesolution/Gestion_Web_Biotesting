@@ -2938,16 +2938,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (IsValid)
                 {
-                    if (Convert.ToInt32(DropListVendedor.SelectedValue) < 0 || Convert.ToInt32(DropListFormaPago.SelectedValue) < 0 || Convert.ToInt32(DropListLista.SelectedValue) < 0)
-                    {
-                        btnAgregar.Enabled = true;
-                        btnAgregar.Text = "Facturar";
-
-                        btnAgregarRemitir.Enabled = true;
-                        btnAgregarRemitir.Text = "Facturar y Remitir";
-                        return;
-                    }                        
-
                     //Verifico si tiene la alerta de precios de articulos sin actualizar
                     if (!this.verificarArticulosSinActualizar())
                     {
