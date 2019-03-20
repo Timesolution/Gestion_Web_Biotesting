@@ -28,9 +28,9 @@
                                 <td style="width: 65%"></td>                                
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
-                                        <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
+                                        <%--<a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                             <i class="shortcut-icon icon-filter"></i>
-                                        </a>
+                                        </a>--%>
                                     </div>
                                 </td>
                             </tr>
@@ -54,7 +54,7 @@
                                         <tr>
                                             <th>Fecha</th>
                                             <th>Sucursal Destino</th>
-                                            <th>Remito</th>
+                                            <th>Remito de Compra</th>
                                             <th>Orden de Compra</th>
                                             <%--<th>Estado</th>--%>
                                             <th>Articulo</th>

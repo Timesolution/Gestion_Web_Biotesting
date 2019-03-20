@@ -211,7 +211,9 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celSucursalDestino);
 
                 TableCell celNumeroRemito = new TableCell();
-                celNumeroRemito.Text = f.RemitosCompra.Numero;
+                string ptoVenta = f.RemitosCompra.Numero.Substring(0, 4).ToString();
+                string numero = f.RemitosCompra.Numero.Substring(4, 8).ToString();
+                celNumeroRemito.Text = ptoVenta + "-" + numero;
                 celNumeroRemito.HorizontalAlign = HorizontalAlign.Left;
                 celNumeroRemito.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumeroRemito);
