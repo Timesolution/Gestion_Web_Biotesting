@@ -251,8 +251,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
-                    <asp:LinkButton ID="lbtnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
+                    <asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
+                    <asp:Button ID="btnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
                 </div>
             </div>
         </div>

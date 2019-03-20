@@ -238,21 +238,21 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.Label lblFechaEntregaError;
         
         /// <summary>
-        /// lbtnGuardar control.
+        /// btnGuardar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnGuardar;
+        protected global::System.Web.UI.WebControls.Button btnGuardar;
         
         /// <summary>
-        /// lbtnCerrar control.
+        /// btnCerrar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnCerrar;
+        protected global::System.Web.UI.WebControls.Button btnCerrar;
     }
 }
