@@ -832,12 +832,23 @@ namespace Gestion_Web.Formularios.Compras
                         TableRow tr = c as TableRow;
                         string codigo = this.obtenerCodigo((tr.Cells[0]).Text);
                         var art = contArticulos.obtenerArticuloCodigoAparece(codigo);
+                        OrdenesCompra_Items itemOrdenCompra = controlador.OrdenCompra_ItemGetOne((long)item.IdOrden, art.id.ToString());
 
-                        TextBox txt = tr.Cells[4].Controls[0] as TextBox;
-                        if (art.id == Convert.ToInt32(item.Codigo))
+                        TextBox txtCantidad = tr.Cells[4].Controls[0] as TextBox;
+                        TextBox txtPrecio = tr.Cells[2].Controls[0] as TextBox;
+
+                        if(itemOrdenCompra != null)
                         {
-                            txt.Text = item.Cantidad.ToString();
+                            txtCantidad.Text = itemOrdenCompra.Cantidad.ToString();
+                            txtPrecio.Text = itemOrdenCompra.Precio.ToString();
                         }
+                        else
+                        {
+                            if (art.id == Convert.ToInt32(item.Codigo))
+                            {
+                                txtCantidad.Text = item.Cantidad.ToString();
+                            }
+                        }                        
                     }
                 }
             }
@@ -1051,24 +1062,44 @@ namespace Gestion_Web.Formularios.Compras
                     TextBox txt = tr.Cells[4].Controls[0] as TextBox;
                     if (txt.Text != "0" && !String.IsNullOrEmpty(txt.Text))
                     {
-                        var item = new OrdenesCompra_Items();
                         string codigo = this.obtenerCodigo((tr.Cells[0]).Text);
-                        Articulo A = contArticulos.obtenerArticuloCodigoAparece(codigo);
-                        if (A == null)
+                        Articulo a = contArticulos.obtenerArticuloCodigoAparece(codigo);
+                        OrdenesCompra_Items item = controlador.OrdenCompra_ItemGetOne(orden, a.id.ToString());
+
+                        if (item == null)
                         {
-                            item.Codigo = codigo;
-                            item.PrecioConIVA = 0.00m;
+                            item = new OrdenesCompra_Items();
+
+                            if (a == null)
+                            {
+                                item.Codigo = codigo;
+                                item.PrecioConIVA = 0.00m;
+                            }
+                            else
+                            {
+                                item.PrecioConIVA = decimal.Round(a.costo * (1 + (a.porcentajeIva / 100)), 2);
+                                item.Codigo = a.id.ToString();
+                            }
+
+                            item.Descripcion = tr.Cells[1].Text;
+
+                            var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
+
+                            item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
+                            item.Cantidad = Convert.ToDecimal(txt.Text);
+                            item.Estado = 2;
                         }
                         else
                         {
-                            item.PrecioConIVA = decimal.Round(A.costo * (1 + (A.porcentajeIva / 100)), 2);
-                            item.Codigo = A.id.ToString();
-                        }
+                            var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
 
-                        item.Descripcion = tr.Cells[1].Text;
-                        item.Precio = Convert.ToDecimal(tr.Cells[2].Text.Split('$')[1]);
-                        item.Cantidad = Convert.ToDecimal(txt.Text);
-                        item.Estado = 2;
+                            if (item.Cantidad != Convert.ToDecimal(txt.Text))
+                                item.Cantidad = Convert.ToDecimal(txt.Text);
+
+                            if(item.Precio != Convert.ToDecimal(nuevoPrecio.Text))
+                                item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
+                            
+                        }
                         items.Add(item);
                     }
                 }
