@@ -188,7 +188,7 @@ namespace Gestion_Web.Formularios.Valores
                             valor = 1;
                         }
 
-                        if (s == "183")
+                        if (s == "193")
                             lbtnRemesa.Visible = true;
                     }
                 }

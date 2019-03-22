@@ -307,7 +307,7 @@
                                                                     <a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>
-                                                                    <asp:Button runat="server" style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();"  class="btn btn-info" title="Search"/>
+                                                                    <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />
                                                                     <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
                                                                         <%--<i class="btn-icon-only icon-check-sign"></i>--%>
                                                                 </span>
@@ -553,15 +553,21 @@
                                                                     </div>
                                                                 </div>
 
+                                                                <div class="form-group" style="text-align: left">
+                                                                    <label class="col-md-3">Descuento %: </label>
+                                                                    <div class="col-md-9">
+                                                                        <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+
                                                                 <asp:PlaceHolder ID="phDescuentoSobreElTotal" runat="server" Visible="true">
                                                                     <div class="form-group" style="text-align: left">
-                                                                        <label class="col-md-3">Descuento %: </label>
-                                                                        <div class="col-md-4">
-                                                                            <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
-                                                                        </div>
-                                                                        <div class="col-md-5">
+                                                                        <label class="col-md-3">Descuento $</label>
+                                                                        <div class="col-md-9">
                                                                             <div class="input-group">
-                                                                                <span class="input-group-addon">$</span>
+                                                                                <a class="btn btn-info ui-tooltip input-group-addon" title data-original-title="Descuento" data-toggle="modal" href="#modalCalcularDescuentoConUnMonto" runat="server" id="A2" visible="true">
+                                                                                    <i class="shortcut-icon icon-money"></i>
+                                                                                </a>
                                                                                 <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
                                                                             </div>
                                                                         </div>
@@ -573,9 +579,10 @@
                                                                     <div class="col-md-9">
                                                                         <div class="input-group">
                                                                             <span class="input-group-addon">$</span>
-                                                                            <asp:TextBox ID="txtsubTotal" Style="text-align: right" runat="server" class="form-control col-md-4" Text="0.00" disabled></asp:TextBox>
+                                                                                <asp:TextBox ID="txtsubTotal" Style="text-align: right" runat="server" class="form-control col-md-4" Text="0.00" disabled></asp:TextBox>
                                                                         </div>
                                                                     </div>
+
                                                                 </div>
                                                                 <div class="form-group" style="text-align: left">
                                                                     <label class="col-md-3">Iva: </label>
@@ -1205,7 +1212,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-1">
-                                            <asp:RadioButton ID="rbtnAnticipoCredito" runat="server" checked="true" AutoPostBack="true" GroupName="PagosCtaCreditoGroup" OnCheckedChanged="rbtnAnticipoCredito_CheckedChanged" />
+                                            <asp:RadioButton ID="rbtnAnticipoCredito" runat="server" Checked="true" AutoPostBack="true" GroupName="PagosCtaCreditoGroup" OnCheckedChanged="rbtnAnticipoCredito_CheckedChanged" />
                                         </div>
                                         <div class="col-md-2">
                                             <asp:LinkButton ID="lbtnAnticipo" runat="server" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Cobrar Anticipo" Text="$" OnClick="lbtnAnticipo_Click" />
@@ -1844,6 +1851,44 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalCalcularDescuentoConUnMonto" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="btnCerrarModalDescuentoMonto" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
+                        <h4 class="modal-title">Aplicar descuento</h4>
+                    </div>
+                    <div class="modal-body" style="padding-bottom: 0px;">
+
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label for="validateSelect" class="col-md-3">Monto de descuento</label>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <asp:TextBox ID="txtMontoParaAplicarDescuentoAlTotal" runat="server" class="form-control" TextMode="Number" Text="100" ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">$</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <asp:RequiredFieldValidator ErrorMessage="*" Font-Bold="true" ForeColor="Red" ValidationGroup="PorcentajeCantGroup" ControlToValidate="txtPorcentajeCantFacturar" runat="server" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <asp:UpdatePanel ID="updatePanelAgregarMontoParaCalcularPorcentajeDescuento" runat="server">
+                            <ContentTemplate>
+                                <asp:Label ID="Label16" runat="server" Style="display: none;"></asp:Label>
+                                <asp:LinkButton ID="lbtnAgregarMontoParaCalcularPorcentajeDescuento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar descuento" ValidationGroup="MontoDescuentoGroup" OnClick="lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click" />
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <%--Fin modalGrupo--%>
     </div>
     <!-- /main -->
@@ -2046,6 +2091,12 @@
     </script>
 
     <script>
+        function modalCalcularDescuentoConUnMonto() {
+            $('#modal').modal('show');
+        }
+    </script>
+
+    <script>
         function cerrarModal() {
             document.getElementById('btnCerrarTraza').click();
         }
@@ -2070,7 +2121,9 @@
         function clickTab() {
             document.getElementById("<%= this.linkCombustible.ClientID %>").click();
         }
-
+        function cerrarModalDescuentoMonto() {
+            document.getElementById('btnCerrarModalDescuentoMonto').click();
+        }
     </script>
 
     <script>

@@ -708,6 +708,15 @@ namespace Gestion_Web.Formularios.Facturas
                 string perfil = Session["Login_NombrePerfil"] as string;                
                 Cliente cl = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
 
+                try
+                {
+                    this.DropListLista.SelectedValue = cl.lisPrecio.id.ToString();
+                    this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
+                }
+                catch
+                {
+
+                }
                 if (perfil == "Vendedor" || perfil == "Cliente")
                 {
                     
