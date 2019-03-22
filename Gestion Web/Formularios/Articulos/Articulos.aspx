@@ -254,7 +254,6 @@
     <!-- /container -->
 
 
-
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -293,7 +292,6 @@
             </div>
         </div>
     </div>
-    <%--Fin modalGrupo--%>
 
     <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -385,54 +383,46 @@
     <div id="modalRecalcular" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Modificar Precio</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-4">Porcentaje Costo</label>
+                                    <div class="col-md-5">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Modificar Precio</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <%-- <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
-                            <ContentTemplate>--%>
-                        <div class="form-group">
-                            <label class="col-md-4">Porcentaje Costo</label>
-                            <div class="col-md-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnModificarPrecio" runat="server" text="Actualizar" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Nuevo Precio Venta</label>
+                                    <div class="col-md-5">
 
-                                <div class="input-group">
-                                    <span class="input-group-addon">%</span>
-                                    <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnSeteaPrecioventa" runat="server" text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <asp:LinkButton ID="btnModificarPrecio" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
+                            <div class="modal-footer">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-4">Nuevo Precio Venta</label>
-                            <div class="col-md-6">
-
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-
-                                <asp:LinkButton ID="btnSeteaPrecioventa" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
-                            </div>
-                        </div>
-
-                        <%--</ContentTemplate>
-                            <Triggers>
-                            </Triggers>
-                        </asp:UpdatePanel>--%>
-                    </div>
-
-
-                    <div class="modal-footer">
-                    </div>
-                </div>
-
+                    </ContentTemplate>
+                </asp:UpdatePanel>
             </div>
         </div>
     </div>
@@ -1274,9 +1264,9 @@
             $.msgbox("Are you sure that you want to permanently delete the selected element?", {
                 type: "confirm",
                 buttons: [
-                  { type: "submit", value: "Yes" },
-                  { type: "submit", value: "No" },
-                  { type: "cancel", value: "Cancel" }
+                    { type: "submit", value: "Yes" },
+                    { type: "submit", value: "No" },
+                    { type: "cancel", value: "Cancel" }
                 ]
             }, function (result) {
                 if (result == 'Yes') {
@@ -1346,8 +1336,7 @@
             if (key < 48 || key > 57) {
                 if (key == 45 || key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

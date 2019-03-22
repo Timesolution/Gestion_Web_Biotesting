@@ -48,6 +48,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.proveedor = Convert.ToInt32(Request.QueryString["p"]);
                 this.descSubGrupo = Request.QueryString["dsg"];
 
+                this.cargarComentarioDesdeLaSession();
                 if (!IsPostBack)
                 {
                     if (Session["PedidoCliente"] == null)
@@ -57,7 +58,6 @@ namespace Gestion_Web.Formularios.Articulos
                     //cargo combos
                     this.cargarGruposArticulos();
                     this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
-                    this.cargarBotonesDeLosGrupos();
                 }
                 this.lbtnVerPedido.Visible = true;
                 //ver carro
@@ -83,6 +83,7 @@ namespace Gestion_Web.Formularios.Articulos
                     articulos = this.controlador.obtenerArticulosReduc();
                     this.cargarArticulosTabla(articulos);
                 }
+                this.cargarBotonesDeLosGrupos();
                 this.txtBusqueda.Focus();
                 Page.Form.DefaultButton = this.lbBuscar.UniqueID;
 
@@ -169,7 +170,6 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     if (art.apareceLista == 1)
                     {
-                        //cargo articulo aal ph
                         this.cargarArticuloPH(art, cl);
                     }
                 }
@@ -207,7 +207,7 @@ namespace Gestion_Web.Formularios.Articulos
                         celImagen.Controls.Add(gallery);
                     }
                 }
-                catch { }
+                catch (Exception ex) { }
 
                 celImagen.Width = Unit.Percentage(10);
                 tr.Cells.Add(celImagen);
@@ -666,7 +666,7 @@ namespace Gestion_Web.Formularios.Articulos
                 int pos = Convert.ToInt32(boton.Split('_')[2]);
                 string cantidad = (sender as TextBox).Text;
 
-                if (!String.IsNullOrEmpty(cantidad))
+                if (!String.IsNullOrEmpty(cantidad) && Convert.ToDecimal(cantidad) > 0)
                 {
                     //obtengo el pedido del session
                     Pedido p = Session["PedidoCliente"] as Pedido;
@@ -677,10 +677,14 @@ namespace Gestion_Web.Formularios.Articulos
                     Session.Add("PedidoCliente", p);
                     Response.Redirect("ArticulosC.aspx?accion=3");
                 }
-
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La cantidad tiene que ser mayor a 0."));
+                }
             }
             catch (Exception ex)
             {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: CambiarCantidadItem. " + ex.Message));
             }
         }
 
@@ -712,41 +716,62 @@ namespace Gestion_Web.Formularios.Articulos
                 string idArticulo = (sender as LinkButton).ID.ToString();
                 int idCliente = (int)Session["Login_Vendedor"];
                 Cliente cl = this.contCliente.obtenerClienteID(idCliente);
-
-                //obtengo el pedido del session
-                Pedido p = Session["PedidoCliente"] as Pedido;
-                ItemPedido i = new ItemPedido();
+                ItemPedido itemAagregar = new ItemPedido();
+                int id = 0;
 
                 foreach (Control c in this.phArticulos.Controls)
                 {
                     TableRow tr = c as TableRow;
                     TextBox txtCantidad = tr.Cells[7].Controls[0] as TextBox;
                     LinkButton btnArticulo = tr.Cells[7].Controls[2] as LinkButton;
-                    int id = Convert.ToInt32(btnArticulo.ID.Split('_')[1]);
+                    id = Convert.ToInt32(btnArticulo.ID.Split('_')[1]);
 
+                    //creo el item pedido
                     if (Convert.ToInt32(idArticulo.Split('_')[1]) == id)
                     {
                         string codigo = tr.Cells[1].Text;
                         Articulo a = this.controlador.obtenerArticuloFacturar(codigo, cl.lisPrecio.id);
-                        i.articulo = a;
-                        i.precioUnitario = a.precioVenta;
-                        i.descripcion = a.descripcion;
-                        i.cantidad = Convert.ToInt32(txtCantidad.Text);
-                        i.total = decimal.Round(i.precioUnitario * i.cantidad, 2, MidpointRounding.AwayFromZero);
+                        itemAagregar.articulo = a;
+                        itemAagregar.precioUnitario = a.precioVenta;
+                        itemAagregar.descripcion = a.descripcion;
+                        itemAagregar.cantidad = Convert.ToInt32(txtCantidad.Text);
+                        itemAagregar.total = decimal.Round(itemAagregar.precioUnitario * itemAagregar.cantidad, 2, MidpointRounding.AwayFromZero);
 
+                        agregarArticuloAlaSessionOmodificarSuCantidad(id, itemAagregar);
+                        return;
                     }
                 }
-
-                p.items.Add(i);
-                Session.Add("PedidoCliente", p);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo agregado al carro.", ""));
-
-                //this.verCarroPedido();
-                Response.Redirect("ArticulosC.aspx?accion=3");
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando item al carro. " + ex.Message));
+            }
+        }
+
+        private void agregarArticuloAlaSessionOmodificarSuCantidad(int id, ItemPedido itemAagregar)
+        {
+            try
+            {
+                //obtengo el pedido del session
+                Pedido p = Session["PedidoCliente"] as Pedido;
+
+                //si el articulo ya esta en la session modifico la cantidad
+                if (p.items.Where(x => x.articulo.id == id).FirstOrDefault() != null)
+                {
+                    p.items.Where(x => x.articulo.id == id).FirstOrDefault().cantidad = itemAagregar.cantidad;
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cantidad actualizada con exito.", ""));
+                }
+                else
+                {
+                    p.items.Add(itemAagregar);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo agregado al carro.", ""));
+                }
+                Session.Remove("PedidoCliente");
+                Session.Add("PedidoCliente", p);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: agregarArticuloAlaSessionOmodificarSuCantidad. " + ex.Message));
             }
         }
 
@@ -785,19 +810,19 @@ namespace Gestion_Web.Formularios.Articulos
 
                     if (!String.IsNullOrWhiteSpace(descripcion))
                     {
-                        char auxLetraBtn = descripcion[0];
-                        if (!auxLetraBtn.Equals(letra))
-                        {
-                            letra = auxLetraBtn;
-                            if (colorBoton.Contains("primary"))
-                            {
-                                colorBoton = colorAzul;
-                            }
-                            else
-                            {
-                                colorBoton = colorNaranja;
-                            }
-                        }
+                        //char auxLetraBtn = descripcion[0];
+                        //if (!auxLetraBtn.Equals(letra))
+                        //{
+                        //    letra = auxLetraBtn;
+                        //    if (colorBoton.Contains("primary"))
+                        //    {
+                        //        colorBoton = colorAzul;
+                        //    }
+                        //    else
+                        //    {
+                        //        colorBoton = colorNaranja;
+                        //    }
+                        //}
                         btnGrupo.CssClass = colorBoton;
                         phBotonesGrupos.Controls.Add(btnGrupo);
                     }
@@ -809,6 +834,45 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+        protected void lbtnGuardarComentarios_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtengo el pedido del session
+                Pedido p = Session["PedidoCliente"] as Pedido;
 
+                //actualizo el comentario en la session
+                p.comentario = txtComentarios.Text;
+
+                Session.Remove("PedidoCliente");
+                Session.Add("PedidoCliente", p);
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Comentarios guardados con exito.", ""));
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: lbtnGuardarComentarios_Click. " + ex.Message));
+            }
+        }
+
+        private void cargarComentarioDesdeLaSession()
+        {
+            try
+            {
+                //obtengo el pedido del session
+                Pedido p = Session["PedidoCliente"] as Pedido;
+
+                if (p != null)
+                {
+                    txtComentarios.Text = p.comentario;
+                }
+                Session.Remove("PedidoCliente");
+                Session.Add("PedidoCliente", p);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: cargarComentarioDesdeLaSession. " + ex.Message));
+            }
+        }
     }
 }

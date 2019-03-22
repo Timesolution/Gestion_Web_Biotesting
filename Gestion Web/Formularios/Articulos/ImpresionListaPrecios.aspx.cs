@@ -283,11 +283,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 List<Articulo> listArticulos = new List<Articulo>();
                 List<Gestion_Api.Entitys.Articulos_Catalogo> listArticulosCatalogo = new List<Gestion_Api.Entitys.Articulos_Catalogo>();
-                string descuentoCantidad = "0";
-                Decimal descuento = 0.00m;
-                Decimal descuento2 = 0.00m;
-                Decimal descuento3 = 0.00m;
-
+                
                 if (accion == 1)//por filtro
                 {
                     if (dias == 0)
@@ -298,7 +294,6 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         listArticulos = this.controlador.filtrarArticulosGrupoSubGrupo(grupo, subgrupo, proveedor, DateTime.Now.AddDays(-dias).ToString("yyyyMMdd"), this.marca, this.descSubGrupo);
                     }
-
                 }
                 if (accion == 2)//default top 20
                     listArticulos = this.controlador.obtenerArticulosReduc();
@@ -330,11 +325,6 @@ namespace Gestion_Web.Formularios.Articulos
                     //Creo una variable flag. Esta variable va a servir para ver si el articulo no tiene que aparecer en la impresion de la lista de precios
                     int apareceListaPrecio = 1;
 
-                    descuentoCantidad = "0";
-                    descuento = 0.00m;
-                    descuento2 = 0.00m;
-                    descuento3 = 0.00m;
-
                     DataRow drDatos = dtArticulos.NewRow();
                     Gestion_Api.Entitys.articulo artEntity = this.contArtEntity.obtenerArticuloEntity(articulo.id);
 
@@ -360,38 +350,8 @@ namespace Gestion_Web.Formularios.Articulos
 
                     if (artEntity != null)
                     {
-                        if (artEntity.Articulos_Descuentos.Count > 0)
-                        {
-                            drDatos["CantidadDto1"] = artEntity.Articulos_Descuentos.FirstOrDefault().Desde; //Desde
-                            drDatos["CantidadHastaDto1"] = artEntity.Articulos_Descuentos.FirstOrDefault().Hasta;
-                            drDatos["PocentajeDto1"] = artEntity.Articulos_Descuentos.FirstOrDefault().Descuento;
-                            descuento = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.FirstOrDefault().Descuento / 100)));
-                            descuento = decimal.Round(descuento, 2);
-
-                            if (artEntity.Articulos_Descuentos.Count > 1)
-                            {
-                                drDatos["CantidadDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Desde;
-                                drDatos["CantidadHastaDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Hasta;
-                                drDatos["PocentajeDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Descuento;
-                                descuento2 = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.ElementAt(1).Descuento / 100)));
-                                descuento2 = decimal.Round(descuento2, 2);
-
-                                if (artEntity.Articulos_Descuentos.Count > 2)
-                                {
-                                    drDatos["CantidadDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Desde;
-                                    drDatos["CantidadHastaDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Hasta;
-                                    drDatos["PocentajeDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Descuento;
-                                    descuento3 = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.ElementAt(2).Descuento / 100)));
-                                    descuento3 = decimal.Round(descuento3, 2);
-                                }
-                            }
-                        }
-
-                        drDatos["DescuentoPorCantidad"] = descuentoCantidad;
-                        drDatos["Descuento1"] = descuento;
-                        drDatos["Descuento2"] = descuento2;
-                        drDatos["Descuento3"] = descuento3;
-
+                        SetearDescuentoPorCantidadALATabla(drDatos, articulo, artEntity);
+                        
                         var marca = artEntity.Articulos_Marca.FirstOrDefault();
                         if (marca != null)
                         {
@@ -422,10 +382,8 @@ namespace Gestion_Web.Formularios.Articulos
                                 }
                                 catch { }
                             }
-
                         }
                         #endregion
-
                     }
 
                     if ((this.valor != 1) || (this.valor == 1 && artMed != null && artMed.Catalogo != ""))
@@ -448,6 +406,52 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando articulo. " + ex.Message));
+            }
+        }
+
+        private void SetearDescuentoPorCantidadALATabla(DataRow drDatos,Articulo articulo, Gestion_Api.Entitys.articulo artEntity)
+        {
+            try
+            {
+                string descuentoCantidad = "0";
+                Decimal descuento = 0.00m;
+                Decimal descuento2 = 0.00m;
+                Decimal descuento3 = 0.00m;
+
+                if (artEntity.Articulos_Descuentos.Count > 0 && descuentoPorCantidad == 1)
+                {
+                    drDatos["CantidadDto1"] = artEntity.Articulos_Descuentos.FirstOrDefault().Desde; //Desde
+                    drDatos["CantidadHastaDto1"] = artEntity.Articulos_Descuentos.FirstOrDefault().Hasta;
+                    drDatos["PocentajeDto1"] = artEntity.Articulos_Descuentos.FirstOrDefault().Descuento;
+                    descuento = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.FirstOrDefault().Descuento / 100)));
+                    descuento = decimal.Round(descuento, 2);
+
+                    if (artEntity.Articulos_Descuentos.Count > 1)
+                    {
+                        drDatos["CantidadDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Desde;
+                        drDatos["CantidadHastaDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Hasta;
+                        drDatos["PocentajeDto2"] = artEntity.Articulos_Descuentos.ElementAt(1).Descuento;
+                        descuento2 = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.ElementAt(1).Descuento / 100)));
+                        descuento2 = decimal.Round(descuento2, 2);
+
+                        if (artEntity.Articulos_Descuentos.Count > 2)
+                        {
+                            drDatos["CantidadDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Desde;
+                            drDatos["CantidadHastaDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Hasta;
+                            drDatos["PocentajeDto3"] = artEntity.Articulos_Descuentos.ElementAt(2).Descuento;
+                            descuento3 = (decimal)(articulo.precioVenta * (1 - (artEntity.Articulos_Descuentos.ElementAt(2).Descuento / 100)));
+                            descuento3 = decimal.Round(descuento3, 2);
+                        }
+                    }
+                }
+                drDatos["DescuentoPorCantidad"] = descuentoCantidad;
+                drDatos["Descuento1"] = descuento;
+                drDatos["Descuento2"] = descuento2;
+                drDatos["Descuento3"] = descuento3;
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 

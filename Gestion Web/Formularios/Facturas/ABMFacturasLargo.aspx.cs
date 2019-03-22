@@ -3800,12 +3800,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //despues de refacturar dejo el IVA en no informa
-                Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
-                int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
-                c.iva = idIva.ToString();
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
-                return cMod;
+                if (configuracion.siemprePRP == "1")
+                {
+                    //despues de refacturar dejo el IVA en no informa
+                    Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                    int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
+                    c.iva = idIva.ToString();
+                    int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                    return cMod;
+                }
+                return 1;
             }
             catch
             {

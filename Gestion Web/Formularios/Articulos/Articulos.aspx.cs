@@ -26,7 +26,6 @@ namespace Gestion_Web.Formularios.Articulos
         private ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
         private ControladorCobranzaEntity contCobranzaEntity = new ControladorCobranzaEntity();
         private controladorPais contPais = new controladorPais();
-
         Mensajes m = new Mensajes();
         Configuracion config = new Configuracion();
         int accion;
@@ -40,18 +39,19 @@ namespace Gestion_Web.Formularios.Articulos
         string textoBuscar;
         string descSubGrupo;
         List<Gestion_Api.Entitys.Promocione> listPromociones;
-
         int desactualizados;
-
         int permisoEliminar = 0;
         int permisoStockValorizado = 0;//1 muestra costo, 0 muestra costo imponible
         int permisoMostrarBotonAgregarMateriasPrimas = 0;
-
         public Dictionary<string, string> camposArticulos = null;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
+                btnModificarPrecio.Attributes.Add("onclick", " this.disabled = true;  " + btnModificarPrecio.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnModificarPrecio, null) + ";");
+                btnSeteaPrecioventa.Attributes.Add("onclick", " this.disabled = true;  " + btnSeteaPrecioventa.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnSeteaPrecioventa, null) + ";");
+
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 //listas = 1, cambio precios segun la lista de precios seleccionada
@@ -145,6 +145,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pagina. " + ex.Message));
             }
         }
+
         private void VerificarLogin()
         {
             try
@@ -238,780 +239,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        #region cargas iniciales
-        private void cargarGruposArticulos()
-        {
-            try
-            {
-                DataTable dt = controlador.obtenerGruposArticulos();
-
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["descripcion"] = "Todos";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                //agrego todos
-                DataRow dr2 = dt.NewRow();
-                dr2["descripcion"] = "Todos SubGrupos";
-                dr2["id"] = 0;
-                dt.Rows.InsertAt(dr2, 1);
-
-                this.ListGrupo.DataSource = dt;
-                this.ListGrupo.DataValueField = "id";
-                this.ListGrupo.DataTextField = "descripcion";
-
-                this.ListGrupo.DataBind();
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando grupos de articulos a la lista. " + ex.Message));
-            }
-        }
-        private void cargarSubGruposArticulos(int sGrupo)
-        {
-            try
-            {
-                if (sGrupo == 0)
-                {
-                    DataTable dt = controlador.obtenerSubGruposDistinctDT();
-
-
-                    //agrego todos
-                    DataRow dr = dt.NewRow();
-                    dr["descripcion"] = "Todos";
-                    dr["id"] = -1;
-                    dt.Rows.InsertAt(dr, 0);
-
-                    this.ListSubGrupo.DataSource = dt;
-                    this.ListSubGrupo.DataValueField = "id";
-                    this.ListSubGrupo.DataTextField = "descripcion";
-
-                    this.ListSubGrupo.DataBind();
-                }
-                else
-                {
-                    DataTable dt = controlador.obtenerSubGruposArticulos(sGrupo);
-
-                    //agrego todos
-                    DataRow dr = dt.NewRow();
-                    dr["descripcion"] = "Todos";
-                    dr["id"] = -1;
-                    dt.Rows.InsertAt(dr, 0);
-
-                    this.ListSubGrupo.DataSource = dt;
-                    this.ListSubGrupo.DataValueField = "id";
-                    this.ListSubGrupo.DataTextField = "descripcion";
-
-                    this.ListSubGrupo.DataBind();
-                }
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Subgrupos de articulos a la lista. " + ex.Message));
-            }
-        }
-
-        private void cargarMarcasArticulos()
-        {
-            try
-            {
-                DataTable dt = controlador.obtenerMarcasDT();
-
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["marca"] = "Todas";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                this.ListMarca.DataSource = dt;
-                this.ListMarca.DataValueField = "id";
-                this.ListMarca.DataTextField = "marca";
-
-                this.ListMarca.DataBind();
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando marcas de articulos a la lista. " + ex.Message));
-            }
-        }
-
-        public void cargarSucursal()
-        {
-            try
-            {
-                controladorSucursal contSucu = new controladorSucursal();
-                DataTable dt = contSucu.obtenerSucursales();
-
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["nombre"] = "Todas";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                this.listSucursal.DataSource = dt;
-                this.listSucursal.DataValueField = "Id";
-                this.listSucursal.DataTextField = "nombre";
-                this.listSucursal.DataBind();
-
-                this.ListSucursalEtiquetas.DataSource = dt;
-                this.ListSucursalEtiquetas.DataValueField = "Id";
-                this.ListSucursalEtiquetas.DataTextField = "nombre";
-                this.ListSucursalEtiquetas.DataBind();
-
-                this.DropListSucursalRef.DataSource = dt;
-                this.DropListSucursalRef.DataValueField = "Id";
-                this.DropListSucursalRef.DataTextField = "nombre";
-                this.DropListSucursalRef.DataBind();
-                this.DropListSucursalRef.SelectedValue = Session["Login_SucUser"].ToString();
-
-                this.ListSucursalIEArticulos.DataSource = dt;
-                this.ListSucursalIEArticulos.DataValueField = "Id";
-                this.ListSucursalIEArticulos.DataTextField = "nombre";
-                this.ListSucursalIEArticulos.DataBind();
-                this.ListSucursalIEArticulos.SelectedValue = Session["Login_SucUser"].ToString();
-
-                //stock no vendido
-                this.DropListSucNoVendido.DataSource = dt;
-                this.DropListSucNoVendido.DataValueField = "Id";
-                this.DropListSucNoVendido.DataTextField = "nombre";
-                this.DropListSucNoVendido.DataBind();
-                this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
-
-                dt.Rows[0].ItemArray[2] = "Seleccione...";
-                dr["nombre"] = "Seleccione...";
-
-                this.DropListSucursal_St.DataSource = dt;
-                this.DropListSucursal_St.DataValueField = "Id";
-                this.DropListSucursal_St.DataTextField = "nombre";
-
-                this.DropListSucursal_St.DataBind();
-
-                this.DropListSucursal_St2.DataSource = dt;
-                this.DropListSucursal_St2.DataValueField = "Id";
-                this.DropListSucursal_St2.DataTextField = "nombre";
-
-                this.DropListSucursal_St2.DataBind();
-                this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
-
-                //informe stock unico en sucursal y en la otra no
-                this.ListSucursalCentral.DataSource = dt;
-                this.ListSucursalCentral.DataValueField = "Id";
-                this.ListSucursalCentral.DataTextField = "nombre";
-                this.ListSucursalCentral.DataBind();
-                this.ListSucursalCentral.SelectedValue = Session["Login_SucUser"].ToString();
-
-                this.ListSucursalComparar.DataSource = dt;
-                this.ListSucursalComparar.DataValueField = "Id";
-                this.ListSucursalComparar.DataTextField = "nombre";
-                this.ListSucursalComparar.DataBind();
-                this.ListSucursalComparar.SelectedValue = Session["Login_SucUser"].ToString();
-                //list informe mov stock sucursal
-                this.ListSucursalMovStock.DataSource = dt;
-                this.ListSucursalMovStock.DataValueField = "Id";
-                this.ListSucursalMovStock.DataTextField = "nombre";
-                this.ListSucursalMovStock.DataBind();
-                this.ListSucursalMovStock.SelectedValue = Session["Login_SucUser"].ToString();
-
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
-            }
-        }
-        public void cargarClientes()
-        {
-            try
-            {
-                string perfil = Session["Login_NombrePerfil"] as string;
-
-                controladorCliente contCliente = new controladorCliente();
-
-                DataTable dt = new DataTable();
-                DataTable dt2 = new DataTable();
-
-
-                dt = contCliente.obtenerProveedoresDT();
-                dt2 = contCliente.obtenerProveedoresDT();
-
-
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["alias"] = "Todos";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                this.ListProveedor.DataSource = dt;
-                this.ListProveedor.DataValueField = "id";
-                this.ListProveedor.DataTextField = "alias";
-
-                this.ListProveedor.DataBind();
-
-                this.DropListProvRef.DataSource = dt;
-                this.DropListProvRef.DataValueField = "id";
-                this.DropListProvRef.DataTextField = "alias";
-
-                this.DropListProvRef.DataBind();
-
-                DataRow dr2 = dt.NewRow();
-                dr2["razonSocial"] = "Todos";
-                dr2["id"] = -1;
-                dt.Rows.InsertAt(dr2, 0);
-
-                this.ListRazonSocial.DataSource = dt;
-                this.ListRazonSocial.DataValueField = "id";
-                this.ListRazonSocial.DataTextField = "razonSocial";
-                this.ListRazonSocial.DataBind();
-
-                //stock no vendido
-                this.DropListProvNoVendido.DataSource = dt;
-                this.DropListProvNoVendido.DataValueField = "id";
-                this.DropListProvNoVendido.DataTextField = "razonSocial";
-                this.DropListProvNoVendido.DataBind();
-
-                //list modal actualizacion precios
-                DataRow dr3 = dt2.NewRow();
-                dr3["razonSocial"] = "Seleccione...";
-                dr3["id"] = -1;
-                dt2.Rows.InsertAt(dr3, 0);
-                this.DropListOtroProveedor.DataSource = dt2;
-                this.DropListOtroProveedor.DataValueField = "id";
-                this.DropListOtroProveedor.DataTextField = "razonSocial";
-                this.DropListOtroProveedor.DataBind();
-
-
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
-            }
-        }
-        public void cargarListaPrecio()
-        {
-            try
-            {
-                controladorCliente contCliente = new controladorCliente();
-                DataTable dt = contCliente.obtenerListaPrecios();
-
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["nombre"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                //controles modalEtiquetas
-                this.ListListaPrecio.DataSource = dt;
-                this.ListListaPrecio.DataValueField = "id";
-                this.ListListaPrecio.DataTextField = "nombre";
-                this.ListListaPrecio.DataBind();
-
-                //controles modalListaPrecios
-                this.DropListListaPrecios.DataSource = dt;
-                this.DropListListaPrecios.DataValueField = "id";
-                this.DropListListaPrecios.DataTextField = "nombre";
-                this.DropListListaPrecios.DataBind();
-
-                foreach (DataRow lista in dt.Rows)
-                {
-                    if (lista["nombre"].ToString() != "Seleccione...")
-                    {
-                        ListItem item = new ListItem(lista["nombre"].ToString(), lista["id"].ToString());
-
-                        this.chkListListas.Items.Add(item);
-                        int i = this.chkListListas.Items.IndexOf(item);
-                        this.chkListListas.Items[i].Selected = true;
-
-                        //reporte stock no vendido
-                        this.chkListListasNoVendido.Items.Add(item);
-                        int j = this.chkListListasNoVendido.Items.IndexOf(item);
-                        this.chkListListasNoVendido.Items[j].Selected = true;
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Lista de precios. " + ex.Message));
-            }
-        }
-        #endregion
-
-        //private void cargarArticulos()
-        //{
-        //    try
-        //    {
-        //        phArticulos.Controls.Clear();
-
-        //        List<Articulo> articulos = new List<Articulo>();
-        //        articulos = this.controlador.obtenerArticulosReduc();
-
-        //        //para cargar el articulo
-        //        int i = 0;
-
-        //        foreach (Articulo art in articulos)
-        //        {
-
-        //            string oferta = "";
-        //            var artStore = this.contArtEnt.obtenerOfertaArticuloParaFacturar(art.id);
-        //            if (artStore != null)
-        //            {
-        //                if (artStore.Oferta > 1 && DateTime.Today >= artStore.Desde && DateTime.Today <= artStore.Hasta)
-        //                {
-        //                    oferta = "&nbsp <i class='icon-star'></i>";
-        //                }                        
-        //            }
-        //            string presen = "";
-        //            string st = "";
-        //            Gestion_Api.Entitys.articulo artEnt = this.contArtEnt.obtenerArticuloEntity(art.id);
-        //            var stock = this.contArtEnt.obtenerStockArticuloLocal(art.id, (int)Session["Login_SucUser"]);
-        //            if (stock != null)
-        //            {
-        //                st = stock.stock1.Value.ToString();
-        //            }
-        //            if (artEnt != null)
-        //            {
-        //                if (artEnt.Articulos_Presentaciones.Count > 0)
-        //                {
-        //                    var p = artEnt.Articulos_Presentaciones.FirstOrDefault();
-        //                    presen = p.Minima + "|" + p.Media + "|" + p.Maxima;
-        //                }
-        //            }
-
-
-        //            //Celdas
-        //            TableCell celCodigo = new TableCell();
-        //            celCodigo.Text = art.codigo + oferta;
-        //            celCodigo.Width = Unit.Percentage(10);
-        //            celCodigo.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celDescripcion = new TableCell();
-        //            celDescripcion.Text = art.descripcion;
-        //            celDescripcion.Width = Unit.Percentage(35);
-        //            celDescripcion.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celProveedor = new TableCell();
-        //            celProveedor.Text = art.proveedor.alias;
-        //            celProveedor.Width = Unit.Percentage(10);
-        //            celProveedor.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celGrupo = new TableCell();
-        //            celGrupo.Text = art.grupo.descripcion;
-        //            celGrupo.Width = Unit.Percentage(10);
-        //            celGrupo.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celSubGrupo = new TableCell();
-        //            celSubGrupo.Text = art.subGrupo.descripcion;
-        //            celSubGrupo.Width = Unit.Percentage(10);
-        //            celSubGrupo.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celPresentacion = new TableCell();
-        //            celPresentacion.Text = presen;
-        //            celPresentacion.Width = Unit.Percentage(10);
-        //            celPresentacion.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celStock = new TableCell();
-        //            celStock.Text = st;
-        //            celStock.Width = Unit.Percentage(10);
-        //            celStock.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celMoneda = new TableCell();
-        //            celMoneda.Text = art.monedaVenta.moneda;
-        //            celMoneda.Width = Unit.Percentage(5);
-        //            celMoneda.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celUltimaActualizacion = new TableCell();
-        //            celUltimaActualizacion.Text = art.ultActualizacion.ToString("dd/MM/yyyy");
-        //            celUltimaActualizacion.Width = Unit.Percentage(5);
-        //            celUltimaActualizacion.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celPrecioSIva = new TableCell();
-        //            celPrecioSIva.Text = art.precioSinIva.ToString("C");
-        //            celPrecioSIva.Width = Unit.Percentage(5);
-        //            celPrecioSIva.VerticalAlign = VerticalAlign.Middle;
-        //            celPrecioSIva.HorizontalAlign = HorizontalAlign.Right;
-
-        //            TableCell celPrecio = new TableCell();
-        //            celPrecio.Text = art.precioVenta.ToString("C");
-        //            celPrecio.Width = Unit.Percentage(5);
-        //            celPrecio.VerticalAlign = VerticalAlign.Middle;
-        //            celPrecio.HorizontalAlign = HorizontalAlign.Right;
-
-        //            TableCell celAction = new TableCell();
-        //            Literal lDetail = new Literal();
-        //            lDetail.ID = art.id.ToString();
-
-        //            lDetail.Text = "<a href=\"ArticulosABM.aspx?accion=2&id=" + art.id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
-        //            //lDetail.Text += "style=\"width: 100%\">";
-        //            lDetail.Text += "<i class=\"shortcut-icon icon-search\"></i>";
-        //            lDetail.Text += "</a>";
-        //            celAction.Controls.Add(lDetail);
-
-        //            Literal l = new Literal();
-        //            l.Text = "&nbsp";
-        //            celAction.Controls.Add(l);
-
-        //            LinkButton btnStock = new LinkButton();
-        //            btnStock.ID = "btnStock_" + art.id.ToString();
-        //            btnStock.CssClass = "btn btn-info ui-tooltip";
-        //            btnStock.Attributes.Add("data-toggle", "tooltip");
-        //            btnStock.Attributes.Add("title data-original-title", "Stock");
-        //            btnStock.Text = "<span class='shortcut-icon  icon-list-alt'></span>";
-        //            btnStock.PostBackUrl = "StockF.aspx?articulo=" + art.id.ToString();
-        //            celAction.Controls.Add(btnStock);
-
-        //            Literal l2 = new Literal();
-        //            l2.Text = "&nbsp";
-        //            celAction.Controls.Add(l2);
-
-        //            LinkButton btnEliminar = new LinkButton();
-        //            btnEliminar.ID = "btnEliminar_" + art.id;
-        //            btnEliminar.CssClass = "btn btn-info";
-        //            btnEliminar.Attributes.Add("data-toggle", "modal");
-        //            btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-        //            btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-        //            //btnEliminar.Font.Size = 9;
-        //            //btnEliminar.Click += new EventHandler(this.eliminarCobro);
-        //            //btnEliminar.Attributes.Add("onclientclick", "abrirdialog("+ movV.id +")");
-        //            btnEliminar.OnClientClick = "abrirdialog(" + art.id + ");";
-        //            //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
-
-        //            if (this.permisoEliminar == 0)
-        //            {
-        //                btnEliminar.Visible = false;
-        //            }
-
-        //            celAction.Controls.Add(btnEliminar);
-        //            celAction.Width = Unit.Percentage(20);
-
-        //            i++;
-
-
-        //            TableRow tr = new TableRow();
-        //            tr.ID = art.id + "_TR";
-        //            if (art.apareceLista == 0)
-        //            {
-        //                tr.ForeColor = System.Drawing.Color.Red;
-        //            }
-        //            //arego fila a tabla
-        //            //table.Controls.Add(tr);
-        //            tr.Cells.Add(celCodigo);
-        //            tr.Cells.Add(celDescripcion);
-
-        //            //Agrego las celdas que seleccione en la configuracion de visualizacion.                    
-        //            VisualizacionArticulos vista = new VisualizacionArticulos();
-        //            //Cargo configuracion para mostrar Precio de venta con o sin IVA.
-        //            Configuracion c = new Configuracion();
-
-        //            if (vista.columnaProveedores == 1)
-        //            {
-        //                tr.Cells.Add(celProveedor);
-        //                phColumna1.Visible = true;
-        //            }
-        //            if (vista.columnaGrupo == 1)
-        //            {
-        //                tr.Cells.Add(celGrupo);
-        //                phColumna2.Visible = true;
-        //            }
-        //            if (vista.columnaSubGrupo == 1)
-        //            {
-        //                tr.Cells.Add(celSubGrupo);
-        //                phColumna3.Visible = true;
-        //            }
-        //            if (vista.columnaPresentacion == 1)
-        //            {
-        //                tr.Cells.Add(celPresentacion);
-        //                phColumna7.Visible = true;
-        //            }
-        //            if (vista.columnaStock == 1)
-        //            {
-        //                tr.Cells.Add(celStock);
-        //                phColumna8.Visible = true;
-        //            }
-        //            if (vista.columnaMoneda == 1)
-        //            {
-        //                if (c.monedaArticulos == "1")//0 = en pesos, 1 = en dolar/euro/lo que sea
-        //                {
-        //                    if (art.monedaVenta.cambio > 0)
-        //                    {
-        //                        celPrecio.Text = decimal.Round(art.precioVenta / art.monedaVenta.cambio, 2).ToString("C");
-        //                        celPrecioSIva.Text = decimal.Round(art.precioSinIva / art.monedaVenta.cambio, 2).ToString("C");
-        //                    }
-        //                }
-        //                tr.Cells.Add(celMoneda);
-        //                phColumna4.Visible = true;
-        //            }
-        //            if (vista.columnaActualizacion == 1)
-        //            {
-        //                tr.Cells.Add(celUltimaActualizacion);
-        //                phColumna5.Visible = true;
-        //            }
-
-
-        //            if (c.precioArticulo.Contains("Con") == true)
-        //            {
-        //                tr.Cells.Add(celPrecio);
-        //                this.headerPrecio.InnerText = "Precio C/Iva";
-        //            }
-        //            else
-        //            {
-        //                tr.Cells.Add(celPrecioSIva);
-        //                this.headerPrecio.InnerText = "Precio S/Iva";
-        //            }
-        //            tr.Cells.Add(celAction);
-        //            //arego fila a tabla
-        //            //table.Controls.Add(tr);
-        //            if (!String.IsNullOrEmpty(oferta))
-        //            {
-        //                this.LitReferencia.Visible = true;
-        //                tr.ForeColor = System.Drawing.Color.ForestGreen;
-        //            }
-
-        //            this.phArticulos.Controls.Add(tr);
-
-        //        }
-        //        //agrego la tabla al placeholder
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos a tabla. " + ex.Message));
-        //    }
-        //}
-
-        /// <summary>
-        /// carga la lista de articulos en la tabla de la pantalla
-        /// </summary>
-        /// <param name="articulos"></param>
-        //private void cargarArticulosTabla(List<Articulo> articulos)
-        //{
-        //    try
-        //    {
-        //        //vacio place holder
-        //        this.phArticulos.Controls.Clear();
-
-        //        //para cargar el cliente
-
-        //        foreach (Articulo art in articulos)
-        //        {
-
-        //            string oferta = "";
-        //            var artStock = this.contArtEnt.obtenerOfertaArticuloParaFacturar(art.id);
-        //            if (artStock != null)
-        //            {
-        //                if (artStock.Oferta > 1 && DateTime.Today >= artStock.Desde && DateTime.Today <= artStock.Hasta)
-        //                {
-        //                    oferta = "&nbsp <i class='icon-star'></i>";
-        //                }
-        //            }
-        //            string presen = "";
-        //            string st = "";
-        //            Gestion_Api.Entitys.articulo artEnt = this.contArtEnt.obtenerArticuloEntity(art.id);
-        //            var stock = this.contArtEnt.obtenerStockArticuloLocal(art.id, (int)Session["Login_SucUser"]);
-        //            if (stock != null)
-        //            {
-        //                st = stock.stock1.Value.ToString();
-        //            }
-        //            if (artEnt != null)
-        //            {
-        //                if (artEnt.Articulos_Presentaciones.Count > 0)
-        //                {
-        //                    var p = artEnt.Articulos_Presentaciones.FirstOrDefault();
-        //                    presen = p.Minima + "|" + p.Media + "|" + p.Maxima;
-        //                }
-        //            }
-
-        //            //Celdas
-        //            TableCell celCodigo = new TableCell();
-        //            celCodigo.Text = art.codigo + oferta;
-        //            celCodigo.Width = Unit.Percentage(10);
-        //            celCodigo.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celDescripcion = new TableCell();
-        //            celDescripcion.Text = art.descripcion;
-        //            celDescripcion.Width = Unit.Percentage(30);
-        //            celDescripcion.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celProveedor = new TableCell();
-        //            celProveedor.Text = art.proveedor.alias;
-        //            celProveedor.Width = Unit.Percentage(10);
-        //            celProveedor.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celGrupo = new TableCell();
-        //            celGrupo.Text = art.grupo.descripcion;
-        //            celGrupo.Width = Unit.Percentage(10);
-        //            celGrupo.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celSubGrupo = new TableCell();
-        //            celSubGrupo.Text = art.subGrupo.descripcion;
-        //            celSubGrupo.Width = Unit.Percentage(10);
-        //            celSubGrupo.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celPresentacion = new TableCell();
-        //            celPresentacion.Text = presen;
-        //            celPresentacion.Width = Unit.Percentage(10);
-        //            celPresentacion.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celStock = new TableCell();
-        //            celStock.Text = st;
-        //            celStock.Width = Unit.Percentage(10);
-        //            celStock.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celMoneda = new TableCell();
-        //            celMoneda.Text = art.monedaVenta.moneda;
-        //            celMoneda.Width = Unit.Percentage(5);
-        //            celMoneda.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celUltimaActualizacion = new TableCell();
-        //            celUltimaActualizacion.Text = art.ultActualizacion.ToString("dd/MM/yyyy");
-        //            celUltimaActualizacion.Width = Unit.Percentage(5);
-        //            celUltimaActualizacion.VerticalAlign = VerticalAlign.Middle;
-
-        //            TableCell celPrecioSIva = new TableCell();
-        //            celPrecioSIva.Text = art.precioSinIva.ToString("C");
-        //            celPrecioSIva.Width = Unit.Percentage(5);
-        //            celPrecioSIva.VerticalAlign = VerticalAlign.Middle;
-        //            celPrecioSIva.HorizontalAlign = HorizontalAlign.Right;
-
-        //            TableCell celPrecio = new TableCell();
-        //            celPrecio.Text = art.precioVenta.ToString("C");
-        //            celPrecio.Width = Unit.Percentage(5);
-        //            celPrecio.VerticalAlign = VerticalAlign.Middle;
-        //            celPrecio.HorizontalAlign = HorizontalAlign.Right;
-
-        //            TableCell celAction = new TableCell();
-        //            celAction.Width = Unit.Percentage(20);
-
-        //            Literal lDetail = new Literal();
-        //            lDetail.ID = art.id.ToString();
-
-        //            lDetail.Text = "<a href=\"ArticulosABM.aspx?accion=2&id=" + art.id.ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >";
-        //            //lDetail.Text += "style=\"width: 100%\">";
-        //            lDetail.Text += "<i class=\"shortcut-icon icon-search\"></i>";
-        //            lDetail.Text += "</a>";
-        //            celAction.Controls.Add(lDetail);
-
-        //            Literal l = new Literal();
-        //            l.Text = "&nbsp";
-        //            celAction.Controls.Add(l);
-
-        //            LinkButton btnStock = new LinkButton();
-        //            btnStock.ID = "btnStock_" + art.id.ToString();
-        //            btnStock.CssClass = "btn btn-info ui-tooltip";
-        //            btnStock.Attributes.Add("data-toggle", "tooltip");
-        //            btnStock.Attributes.Add("title data-original-title", "Stock");
-        //            btnStock.Text = "<span class='shortcut-icon icon-list-alt'></span>";
-        //            btnStock.PostBackUrl = "StockF.aspx?articulo=" + art.id.ToString();
-        //            celAction.Controls.Add(btnStock);
-
-        //            Literal l2 = new Literal();
-        //            l2.Text = "&nbsp";
-        //            celAction.Controls.Add(l2);
-
-        //            LinkButton btnEliminar = new LinkButton();
-        //            btnEliminar.ID = "btnEliminar_" + art.id;
-        //            btnEliminar.CssClass = "btn btn-info";
-        //            btnEliminar.Attributes.Add("data-toggle", "modal");
-        //            btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-        //            btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-
-        //            btnEliminar.OnClientClick = "abrirdialog(" + art.id + ");";
-        //            if (this.permisoEliminar == 0)
-        //            {
-        //                btnEliminar.Visible = false;
-        //            }
-
-        //            celAction.Controls.Add(btnEliminar);      
-
-        //            TableRow tr = new TableRow();
-        //            //tr.ID = art.id + "1";
-        //            tr.ID = "tr_" + art.id.ToString();
-        //            if (art.apareceLista == 0)
-        //            {
-        //                tr.ForeColor = System.Drawing.Color.Red;
-        //            }
-
-        //            //arego fila a tabla
-        //            //table.Controls.Add(tr);
-        //            tr.Cells.Add(celCodigo);
-        //            tr.Cells.Add(celDescripcion);
-
-        //            //Agrego las celdas que seleccione en la configuracion de visualizacion.                    
-        //            VisualizacionArticulos vista = new VisualizacionArticulos();
-        //            //Cargo configuracion para mostrar Precio de venta con o sin IVA.
-        //            Configuracion c = new Configuracion();
-
-        //            if (vista.columnaProveedores == 1)
-        //            {
-        //                tr.Cells.Add(celProveedor);
-        //                phColumna1.Visible = true;
-        //            }
-        //            if (vista.columnaGrupo == 1)
-        //            {
-        //                tr.Cells.Add(celGrupo);
-        //                phColumna2.Visible = true;
-        //            }
-        //            if (vista.columnaSubGrupo == 1)
-        //            {
-        //                tr.Cells.Add(celSubGrupo);
-        //                phColumna3.Visible = true;
-        //            }
-        //            if (vista.columnaPresentacion == 1)
-        //            {
-        //                tr.Cells.Add(celPresentacion);
-        //                phColumna7.Visible = true;
-        //            }
-        //            if (vista.columnaStock == 1)
-        //            {
-        //                tr.Cells.Add(celStock);
-        //                phColumna8.Visible = true;
-        //            }
-        //            if (vista.columnaMoneda == 1)
-        //            {
-        //                if (c.monedaArticulos == "1")//0=en pesos, 1 = en dolar/euro/lo que sea
-        //                {
-        //                    if (art.monedaVenta.cambio > 0)
-        //                    {
-        //                        celPrecio.Text = decimal.Round(art.precioVenta / art.monedaVenta.cambio, 4).ToString("C");
-        //                        celPrecioSIva.Text = decimal.Round(art.precioSinIva / art.monedaVenta.cambio, 4).ToString("C");
-        //                    }
-        //                }
-        //                tr.Cells.Add(celMoneda);
-        //                phColumna4.Visible = true;
-        //            }
-        //            if (vista.columnaActualizacion == 1)
-        //            {
-        //                tr.Cells.Add(celUltimaActualizacion);
-        //                phColumna5.Visible = true;
-        //            }                    
-
-        //            if (c.precioArticulo.Contains("Con") == true)
-        //            {
-        //                tr.Cells.Add(celPrecio);
-        //            }
-        //            else
-        //            {
-        //                tr.Cells.Add(celPrecioSIva);
-        //            }
-        //            tr.Cells.Add(celAction);
-
-        //            if (!String.IsNullOrEmpty(oferta))
-        //            {
-        //                this.LitReferencia.Visible = true;
-        //                tr.ForeColor = System.Drawing.Color.ForestGreen;
-        //            }
-
-        //            this.phArticulos.Controls.Add(tr);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos a tabla. " + ex.Message));
-        //    }
-        //}
         private void cargarArticulosTablaDT(DataTable dt)
         {
             try
@@ -1029,6 +256,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos a tabla. " + ex.Message));
             }
         }
+
         private void cargarArticuloPH(DataRow row)
         {
             try
@@ -1323,35 +551,7 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
-        //private bool verificarPromocionArticulo(Gestion_Api.Entitys.articulo art)
-        //{
-        //    try
-        //    {
-        //        if (this.listPromociones != null)
-        //        {
-        //            int idSuc = (int)Session["Login_SucUser"];
-        //            int idEmp = (int)Session["Login_EmpUser"];
 
-        //            Gestion_Api.Entitys.sucursale s = new Gestion_Api.Entitys.sucursale();
-        //            s.id = idSuc;
-
-
-
-        //            var list = this.listPromociones.Where(x => x.Desde >= DateTime.Now && x.Hasta <= DateTime.Now).ToList();
-        //            list = list.Where(x => x.Empresa == 0 || x.Empresa == idEmp).ToList();
-        //            list = list.Where(x => x.sucursales.Count == 0 || x.sucursales.Contains(s)).ToList();
-        //            list = list.Where(x => x.articulos.Count == 0 || x.articulos.Contains(art)).ToList();
-        //            list = list.Where(x => x.gruposArticulos.Count == 0 || x.gruposArticulos.Contains(art.gr))
-
-
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception Ex)
-        //    {
-        //        return false;
-        //    }
-        //}
         private void buscar(string busqueda)
         {
             try
@@ -1424,177 +624,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        protected void btnBuscar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!String.IsNullOrEmpty(this.txtBusqueda.Text))
-                {
-                    Response.Redirect("Articulos.aspx?accion=1&t=" + this.txtBusqueda.Text);
-                }
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando articulo. " + ex.Message));
-            }
-        }
-
-        protected void btnSi_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                int idArticulo = Convert.ToInt32(this.txtMovimiento.Text);
-                Articulo art = this.controlador.obtenerArticuloByID(idArticulo);
-                art.estado = 0;
-                int i = this.controlador.eliminarArticulo(art);
-                if (i > 0)
-                {
-                    //agrego bien
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Articulo: " + art.descripcion);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo eliminado con exito", null));
-                }
-                if (i == -2)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puede eliminar articulo ya que posee pedidos pendientes"));
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error eliminando Articulo"));
-
-                }
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar Articulo. " + ex.Message));
-            }
-        }
-
-        protected void btnFiltrar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Response.Redirect("Articulos.aspx?accion=2&g=" + this.ListGrupo.SelectedValue
-                    + "&sg=" + this.ListSubGrupo.SelectedValue
-                    + "&p=" + this.ListProveedor.SelectedValue
-                    + "&m=" + this.ListMarca.SelectedValue
-                    + "&dsg=" + this.ListSubGrupo.SelectedItem.Text
-                    + "&d=" + this.txtDiasActualizacion.Text);
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error filtrando articulos. " + ex.Message));
-            }
-        }
-
-        protected void ListGrupo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando subgrupo" + ex.Message));
-            }
-        }
-
-        protected void btnModificarPrecio_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
-                string noActu = "";
-                foreach (var c in this.phArticulos.Controls)
-                {
-                    TableRow tr = c as TableRow;
-                    string id = tr.ID.Split('_')[1];
-                    int i = this.controlador.aumentarPrecioPorcentaje(Convert.ToInt32(id), porcentaje);
-                    if (i <= 0)
-                    {
-                        //no se atualizo
-                        if (!String.IsNullOrEmpty(id))
-                        {
-                            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
-                            noActu += art.codigo + "; ";
-                            //noActu += id + "; ";
-                        }
-
-                    }
-                }
-                if (string.IsNullOrEmpty(noActu))
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
-                }
-                //filtro
-                if (this.accion == 2)
-                {
-                    this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
-                }
-                //busco
-                if (this.accion == 1)
-                {
-                    this.buscar(this.textoBuscar);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
-            }
-        }
-
-        protected void btnSeteaPrecioventa_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                decimal precio = Convert.ToDecimal(this.txtPrecioVenta.Text, CultureInfo.InvariantCulture);
-                string noActu = "";
-                foreach (var c in this.phArticulos.Controls)
-                {
-                    TableRow tr = c as TableRow;
-                    string id = tr.ID.Split('_')[1];
-                    int i = this.controlador.setearPrecioVenta(Convert.ToInt32(id), precio);
-                    if (i <= 0)
-                    {
-                        //no se atualizo
-                        if (!String.IsNullOrEmpty(id))
-                        {
-                            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
-                            noActu += art.codigo + "; ";
-                            //noActu += id + "; ";
-                        }
-                    }
-                }
-                if (string.IsNullOrEmpty(noActu))
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
-                }
-                //filtro
-                if (this.accion == 2)
-                {
-                    this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
-                }
-                //busco
-                if (this.accion == 1)
-                {
-                    this.buscar(this.textoBuscar);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
-            }
-        }
-
         protected void ListRazonSocial_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1618,6 +647,318 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error seleccionando valor en razon social. " + ex.Message));
             }
         }
+
+        protected void ListGrupo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando subgrupo" + ex.Message));
+            }
+        }
+
+        #region cargas iniciales
+        private void cargarGruposArticulos()
+        {
+            try
+            {
+                DataTable dt = controlador.obtenerGruposArticulos();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Todos";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                //agrego todos
+                DataRow dr2 = dt.NewRow();
+                dr2["descripcion"] = "Todos SubGrupos";
+                dr2["id"] = 0;
+                dt.Rows.InsertAt(dr2, 1);
+
+                this.ListGrupo.DataSource = dt;
+                this.ListGrupo.DataValueField = "id";
+                this.ListGrupo.DataTextField = "descripcion";
+
+                this.ListGrupo.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando grupos de articulos a la lista. " + ex.Message));
+            }
+        }
+        private void cargarSubGruposArticulos(int sGrupo)
+        {
+            try
+            {
+                if (sGrupo == 0)
+                {
+                    DataTable dt = controlador.obtenerSubGruposDistinctDT();
+
+
+                    //agrego todos
+                    DataRow dr = dt.NewRow();
+                    dr["descripcion"] = "Todos";
+                    dr["id"] = -1;
+                    dt.Rows.InsertAt(dr, 0);
+
+                    this.ListSubGrupo.DataSource = dt;
+                    this.ListSubGrupo.DataValueField = "id";
+                    this.ListSubGrupo.DataTextField = "descripcion";
+
+                    this.ListSubGrupo.DataBind();
+                }
+                else
+                {
+                    DataTable dt = controlador.obtenerSubGruposArticulos(sGrupo);
+
+                    //agrego todos
+                    DataRow dr = dt.NewRow();
+                    dr["descripcion"] = "Todos";
+                    dr["id"] = -1;
+                    dt.Rows.InsertAt(dr, 0);
+
+                    this.ListSubGrupo.DataSource = dt;
+                    this.ListSubGrupo.DataValueField = "id";
+                    this.ListSubGrupo.DataTextField = "descripcion";
+
+                    this.ListSubGrupo.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Subgrupos de articulos a la lista. " + ex.Message));
+            }
+        }
+        private void cargarMarcasArticulos()
+        {
+            try
+            {
+                DataTable dt = controlador.obtenerMarcasDT();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["marca"] = "Todas";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.ListMarca.DataSource = dt;
+                this.ListMarca.DataValueField = "id";
+                this.ListMarca.DataTextField = "marca";
+
+                this.ListMarca.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando marcas de articulos a la lista. " + ex.Message));
+            }
+        }
+        public void cargarSucursal()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursales();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todas";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.listSucursal.DataSource = dt;
+                this.listSucursal.DataValueField = "Id";
+                this.listSucursal.DataTextField = "nombre";
+                this.listSucursal.DataBind();
+
+                this.ListSucursalEtiquetas.DataSource = dt;
+                this.ListSucursalEtiquetas.DataValueField = "Id";
+                this.ListSucursalEtiquetas.DataTextField = "nombre";
+                this.ListSucursalEtiquetas.DataBind();
+
+                this.DropListSucursalRef.DataSource = dt;
+                this.DropListSucursalRef.DataValueField = "Id";
+                this.DropListSucursalRef.DataTextField = "nombre";
+                this.DropListSucursalRef.DataBind();
+                this.DropListSucursalRef.SelectedValue = Session["Login_SucUser"].ToString();
+
+                this.ListSucursalIEArticulos.DataSource = dt;
+                this.ListSucursalIEArticulos.DataValueField = "Id";
+                this.ListSucursalIEArticulos.DataTextField = "nombre";
+                this.ListSucursalIEArticulos.DataBind();
+                this.ListSucursalIEArticulos.SelectedValue = Session["Login_SucUser"].ToString();
+
+                //stock no vendido
+                this.DropListSucNoVendido.DataSource = dt;
+                this.DropListSucNoVendido.DataValueField = "Id";
+                this.DropListSucNoVendido.DataTextField = "nombre";
+                this.DropListSucNoVendido.DataBind();
+                this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
+
+                dt.Rows[0].ItemArray[2] = "Seleccione...";
+                dr["nombre"] = "Seleccione...";
+
+                this.DropListSucursal_St.DataSource = dt;
+                this.DropListSucursal_St.DataValueField = "Id";
+                this.DropListSucursal_St.DataTextField = "nombre";
+
+                this.DropListSucursal_St.DataBind();
+
+                this.DropListSucursal_St2.DataSource = dt;
+                this.DropListSucursal_St2.DataValueField = "Id";
+                this.DropListSucursal_St2.DataTextField = "nombre";
+
+                this.DropListSucursal_St2.DataBind();
+                this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
+
+                //informe stock unico en sucursal y en la otra no
+                this.ListSucursalCentral.DataSource = dt;
+                this.ListSucursalCentral.DataValueField = "Id";
+                this.ListSucursalCentral.DataTextField = "nombre";
+                this.ListSucursalCentral.DataBind();
+                this.ListSucursalCentral.SelectedValue = Session["Login_SucUser"].ToString();
+
+                this.ListSucursalComparar.DataSource = dt;
+                this.ListSucursalComparar.DataValueField = "Id";
+                this.ListSucursalComparar.DataTextField = "nombre";
+                this.ListSucursalComparar.DataBind();
+                this.ListSucursalComparar.SelectedValue = Session["Login_SucUser"].ToString();
+                //list informe mov stock sucursal
+                this.ListSucursalMovStock.DataSource = dt;
+                this.ListSucursalMovStock.DataValueField = "Id";
+                this.ListSucursalMovStock.DataTextField = "nombre";
+                this.ListSucursalMovStock.DataBind();
+                this.ListSucursalMovStock.SelectedValue = Session["Login_SucUser"].ToString();
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        public void cargarClientes()
+        {
+            try
+            {
+                string perfil = Session["Login_NombrePerfil"] as string;
+
+                controladorCliente contCliente = new controladorCliente();
+
+                DataTable dt = new DataTable();
+                DataTable dt2 = new DataTable();
+
+
+                dt = contCliente.obtenerProveedoresDT();
+                dt2 = contCliente.obtenerProveedoresDT();
+
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Todos";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.ListProveedor.DataSource = dt;
+                this.ListProveedor.DataValueField = "id";
+                this.ListProveedor.DataTextField = "alias";
+
+                this.ListProveedor.DataBind();
+
+                this.DropListProvRef.DataSource = dt;
+                this.DropListProvRef.DataValueField = "id";
+                this.DropListProvRef.DataTextField = "alias";
+
+                this.DropListProvRef.DataBind();
+
+                DataRow dr2 = dt.NewRow();
+                dr2["razonSocial"] = "Todos";
+                dr2["id"] = -1;
+                dt.Rows.InsertAt(dr2, 0);
+
+                this.ListRazonSocial.DataSource = dt;
+                this.ListRazonSocial.DataValueField = "id";
+                this.ListRazonSocial.DataTextField = "razonSocial";
+                this.ListRazonSocial.DataBind();
+
+                //stock no vendido
+                this.DropListProvNoVendido.DataSource = dt;
+                this.DropListProvNoVendido.DataValueField = "id";
+                this.DropListProvNoVendido.DataTextField = "razonSocial";
+                this.DropListProvNoVendido.DataBind();
+
+                //list modal actualizacion precios
+                DataRow dr3 = dt2.NewRow();
+                dr3["razonSocial"] = "Seleccione...";
+                dr3["id"] = -1;
+                dt2.Rows.InsertAt(dr3, 0);
+                this.DropListOtroProveedor.DataSource = dt2;
+                this.DropListOtroProveedor.DataValueField = "id";
+                this.DropListOtroProveedor.DataTextField = "razonSocial";
+                this.DropListOtroProveedor.DataBind();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
+            }
+        }
+        public void cargarListaPrecio()
+        {
+            try
+            {
+                controladorCliente contCliente = new controladorCliente();
+                DataTable dt = contCliente.obtenerListaPrecios();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                //controles modalEtiquetas
+                this.ListListaPrecio.DataSource = dt;
+                this.ListListaPrecio.DataValueField = "id";
+                this.ListListaPrecio.DataTextField = "nombre";
+                this.ListListaPrecio.DataBind();
+
+                //controles modalListaPrecios
+                this.DropListListaPrecios.DataSource = dt;
+                this.DropListListaPrecios.DataValueField = "id";
+                this.DropListListaPrecios.DataTextField = "nombre";
+                this.DropListListaPrecios.DataBind();
+
+                foreach (DataRow lista in dt.Rows)
+                {
+                    if (lista["nombre"].ToString() != "Seleccione...")
+                    {
+                        ListItem item = new ListItem(lista["nombre"].ToString(), lista["id"].ToString());
+
+                        this.chkListListas.Items.Add(item);
+                        int i = this.chkListListas.Items.IndexOf(item);
+                        this.chkListListas.Items[i].Selected = true;
+
+                        //reporte stock no vendido
+                        this.chkListListasNoVendido.Items.Add(item);
+                        int j = this.chkListListasNoVendido.Items.IndexOf(item);
+                        this.chkListListasNoVendido.Items[j].Selected = true;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Lista de precios. " + ex.Message));
+            }
+        }
+        #endregion
 
         #region busquedas actualizacion precios
         private void cargarArticulosActualizacionPrecios(int dias)
@@ -2416,29 +1757,6 @@ namespace Gestion_Web.Formularios.Articulos
 
         #endregion
 
-        protected void lbtnBuscarProveedorDesdeActualizarProveedor_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                controladorCliente contrCliente = new controladorCliente();
-                DataTable dtProveedores = contrCliente.obtenerProveedorNombreDT(this.txtBuscarProveedor.Text);
-
-                //cargo la lista
-                this.DropListOtroProveedor.DataSource = dtProveedores;
-                this.DropListOtroProveedor.DataValueField = "id";
-                this.DropListOtroProveedor.DataTextField = "alias";
-
-                this.DropListOtroProveedor.DataBind();
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pueden cargar los proveedores. Excepción: " + ex.Message), true);
-            }
-
-        }
-
-
         #region despacho
         protected void lbtnActualizarArticulosDespacho_Click(object sender, EventArgs e)
         {
@@ -2497,7 +1815,7 @@ namespace Gestion_Web.Formularios.Articulos
                                 }
                             }
                         }
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se actualizaron " + contador + " articulos.",null));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se actualizaron " + contador + " articulos.", null));
                     }
                     else
                     {
@@ -2535,7 +1853,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     artEntity.procedencia = paisEncontrado.id;
                 }
-                int i = this.contArtEnt.actualizarCostoYPrecioVentaYRecalcularlo(artEntity.id, Convert.ToDecimal(artDespachoExcel.Costo.Replace(",", ".")), Convert.ToDecimal(artDespachoExcel.PrecioVenta.Replace(",",".")), artDespachoExcel.Moneda);
+                int i = this.contArtEnt.actualizarCostoYPrecioVentaYRecalcularlo(artEntity.id, Convert.ToDecimal(artDespachoExcel.Costo.Replace(",", ".")), Convert.ToDecimal(artDespachoExcel.PrecioVenta.Replace(",", ".")), artDespachoExcel.Moneda);
                 i += this.contArtEnt.crearOActualizarDatosDespachoArticulo(datosDespacho);
                 if (i == 2)
                 {
@@ -2583,7 +1901,8 @@ namespace Gestion_Web.Formularios.Articulos
         //    }
         //}
         #endregion
-        
+
+        #region eventos botones
         protected void lbtnNominaArticulosImprimir_Click(object sender, EventArgs e)
         {
             try
@@ -2595,7 +1914,6 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
-
         protected void lbtnNominaArticulosExportar_Click(object sender, EventArgs e)
         {
             try
@@ -2607,6 +1925,220 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
-    }
+        protected void lbtnBuscarProveedorDesdeActualizarProveedor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                DataTable dtProveedores = contrCliente.obtenerProveedorNombreDT(this.txtBuscarProveedor.Text);
 
+                //cargo la lista
+                this.DropListOtroProveedor.DataSource = dtProveedores;
+                this.DropListOtroProveedor.DataValueField = "id";
+                this.DropListOtroProveedor.DataTextField = "alias";
+
+                this.DropListOtroProveedor.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pueden cargar los proveedores. Excepción: " + ex.Message), true);
+            }
+
+        }
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.txtBusqueda.Text))
+                {
+                    Response.Redirect("Articulos.aspx?accion=1&t=" + this.txtBusqueda.Text);
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando articulo. " + ex.Message));
+            }
+        }
+        protected void btnSi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idArticulo = Convert.ToInt32(this.txtMovimiento.Text);
+                Articulo art = this.controlador.obtenerArticuloByID(idArticulo);
+                art.estado = 0;
+                int i = this.controlador.eliminarArticulo(art);
+                if (i > 0)
+                {
+                    //agrego bien
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Articulo: " + art.descripcion);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo eliminado con exito", null));
+                }
+                if (i == -2)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puede eliminar articulo ya que posee pedidos pendientes"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error eliminando Articulo"));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar Articulo. " + ex.Message));
+            }
+        }
+        protected void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("Articulos.aspx?accion=2&g=" + this.ListGrupo.SelectedValue
+                    + "&sg=" + this.ListSubGrupo.SelectedValue
+                    + "&p=" + this.ListProveedor.SelectedValue
+                    + "&m=" + this.ListMarca.SelectedValue
+                    + "&dsg=" + this.ListSubGrupo.SelectedItem.Text
+                    + "&d=" + this.txtDiasActualizacion.Text);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error filtrando articulos. " + ex.Message));
+            }
+        }
+        protected void btnModificarPrecio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+                foreach (var c in this.phArticulos.Controls)
+                {
+                    TableRow tr = c as TableRow;
+                    string id = tr.ID.Split('_')[1];
+                    int i = this.controlador.aumentarPrecioPorcentaje(Convert.ToInt32(id), porcentaje);
+                    if (i <= 0)
+                    {
+                        //no se atualizo
+                        if (!String.IsNullOrEmpty(id))
+                        {
+                            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+                            noActu += art.codigo + "; ";
+                        }
+                    }
+                }
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+                //filtro
+                if (this.accion == 2)
+                {
+                    this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
+                }
+                //busco
+                if (this.accion == 1)
+                {
+                    this.buscar(this.textoBuscar);
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
+            }
+        }
+        protected void btnSeteaPrecioventa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal precio = Convert.ToDecimal(this.txtPrecioVenta.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+                foreach (var c in this.phArticulos.Controls)
+                {
+                    TableRow tr = c as TableRow;
+                    string id = tr.ID.Split('_')[1];
+                    int i = this.controlador.setearPrecioVenta(Convert.ToInt32(id), precio);
+                    if (i <= 0)
+                    {
+                        //no se atualizo
+                        if (!String.IsNullOrEmpty(id))
+                        {
+                            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+                            noActu += art.codigo + "; ";
+                            //noActu += id + "; ";
+                        }
+                    }
+                }
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+                //filtro
+                if (this.accion == 2)
+                {
+                    this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
+                }
+                //busco
+                if (this.accion == 1)
+                {
+                    this.buscar(this.textoBuscar);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
+            }
+        }
+
+        #endregion
+
+        //protected void btnModificarPrecio2_Click(object sender, EventArgs e)
+        //{
+
+        //    decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
+        //    string noActu = "";
+        //    foreach (var c in this.phArticulos.Controls)
+        //    {
+        //        TableRow tr = c as TableRow;
+        //        string id = tr.ID.Split('_')[1];
+        //        int i = this.controlador.aumentarPrecioPorcentaje(Convert.ToInt32(id), porcentaje);
+        //        if (i <= 0)
+        //        {
+        //            //no se atualizo
+        //            if (!String.IsNullOrEmpty(id))
+        //            {
+        //                Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+        //                noActu += art.codigo + "; ";
+        //            }
+        //        }
+        //    }
+        //    if (string.IsNullOrEmpty(noActu))
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+        //    }
+        //    else
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+        //    }
+        //    //filtro
+        //    if (this.accion == 2)
+        //    {
+        //        this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
+        //    }
+        //    //busco
+        //    if (this.accion == 1)
+        //    {
+        //        this.buscar(this.textoBuscar);
+        //    }
+        //}
+
+    }
 }
