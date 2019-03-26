@@ -2864,7 +2864,6 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-
                 }
 
                 this.txtTotalITC.Text = this.factura.totalITC.ToString();
@@ -3501,12 +3500,12 @@ namespace Gestion_Web.Formularios.Facturas
                         this.procesoFacturarPorcentual(fact, dtPago, user, generaRemito);
                         return;
                     }
-                    
+
                     //por si es venta entre sucursales y selecciono un cliente interno q no pueda ingresar cantidades en negativo
                     if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(factura) == 0)
                     {
                         return;
-                    } 
+                    }
 
                     //por si es venta entre sucursales y selecciono un cliente interno q no pueda ingresar cantidades en negativo
                     if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(factura) == 0)
@@ -3801,12 +3800,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //despues de refacturar dejo el IVA en no informa
-                Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
-                int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
-                c.iva = idIva.ToString();
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
-                return cMod;
+                if (configuracion.siemprePRP == "1")
+                {
+                    //despues de refacturar dejo el IVA en no informa
+                    Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                    int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
+                    c.iva = idIva.ToString();
+                    int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                    return cMod;
+                }
+                return 1;
             }
             catch
             {
@@ -3906,12 +3909,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //if (artVerPromo != null)
                 //{
-                    //Verifico si ya existen o no articulos en promocion en la fc, para controlar que estos articulos sean todos del mismo tipo (con promocion / sin promocion)
-                    //if (!verificarArticulosEnPromocion(artVerPromo))
-                    //{
-                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los articulos a facturar deben tener la misma condición (todos en Promoción o todos sin Promoción). \", {type: \"error\"});", true);
-                    //    return;
-                    //}
+                //Verifico si ya existen o no articulos en promocion en la fc, para controlar que estos articulos sean todos del mismo tipo (con promocion / sin promocion)
+                //if (!verificarArticulosEnPromocion(artVerPromo))
+                //{
+                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los articulos a facturar deben tener la misma condición (todos en Promoción o todos sin Promoción). \", {type: \"error\"});", true);
+                //    return;
+                //}
                 //}
 
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
@@ -5618,7 +5621,7 @@ namespace Gestion_Web.Formularios.Facturas
                     foreach (var item in f.items)
                     {
 
-                        if(item.cantidad <= 0)
+                        if (item.cantidad <= 0)
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe ingresar cantidades en los articulos mayores a '0' \", {type: \"error\"});", true);
                             return 0;
@@ -6271,14 +6274,14 @@ namespace Gestion_Web.Formularios.Facturas
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.txtImporteEfectivo.Text = "0";
                     this.lbtnAgregarEfectivo.Visible = false;
-
                     this.lblAvisoPromocion.Text = "Tarjeta en Promocion " + p.Descuento.Value.ToString() + "% de dto.";
                     this.lblAvisoPromocion.Visible = true;
                 }
                 else
                 {
+                    //Al seleccionar metodo de pago con tarjeta se borraba el descuento que se le habia puesto, y se borraba cuando se le ponia un descuento a traves de un monto ingresado
+                    //this.txtPorcDescuento.Text = "0";
                     this.txtImporteEfectivo.Attributes.Remove("disabled");
-                    this.txtPorcDescuento.Text = "0";
                     this.actualizarTotales();
                     this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
@@ -8438,7 +8441,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.guardarDatosFechaNacimiento();
                     int temp = this.verificarCobroAnticipo();
 
-                    if(temp <= 0)                        
+                    if (temp <= 0)
                         return;
 
                     this.obtenerPagosCuentaAnticipo();
@@ -8569,7 +8572,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         Cobro cobroAnticipo = Session["CobroAnticipo"] as Cobro;
 
-                        if(cobroAnticipo.total < Convert.ToDecimal(txtAnticipo.Text))
+                        if (cobroAnticipo.total < Convert.ToDecimal(txtAnticipo.Text))
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto del cobro. \");", true);
                             return -1;
@@ -10495,6 +10498,23 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        protected void lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtPorcDescuento.Text = "0";
+                actualizarTotales();
+                if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
+                {
+                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
+                    actualizarTotales();
+                }
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "cerrarModalDescuentoMonto();", true);
+            }
+            catch (Exception ex)
+            {
 
+            }
+        }
     }
 }

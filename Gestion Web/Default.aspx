@@ -165,7 +165,7 @@
                                             <i class="shortcut-icon icon-stethoscope"></i>
                                             <span class="shortcut-label">Historias</span>
                                         </asp:LinkButton>
-                                        
+
                                     </div>
                                     <!-- /shortcuts -->
 
@@ -206,108 +206,84 @@
                         </div>
                         <!-- /widget -->
 
-
                     </div>
                     <!-- /span6 -->
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="phClientes" Visible="false" runat="server">
-                     <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="widget stacked">
 
-
-                    <div class="widget stacked">
-
-                        <div class="widget-header">
-                            <i class="icon-bookmark"></i>
-                            <h3>Mis Accesos</h3>
-                        </div>
-                        <!-- /widget-header -->
-
-                        <div class="widget-content">
-
-                            <div class="shortcuts">
-                               
-                                <a href="Formularios/Articulos/ArticulosC.aspx" class="shortcut">
-                                    <i class="shortcut-icon icon-bookmark"></i>
-                                    <span class="shortcut-label">Articulos</span>
-                                </a>
-
-                               <%-- <a href="Formularios/Facturas/ABMPedidos.aspx" class="shortcut">
-                                    <i class="shortcut-icon icon-plus"></i>
-                                    <span class="shortcut-label">Hacer Pedido</span>
-                                </a>--%>
-
-                                <a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
-                                    <i class="shortcut-icon icon-shopping-cart"></i>
-                                    <span class="shortcut-label">Listado Pedidos</span>
-                                </a>
-
-                                <a href="Formularios/Facturas/CuentaCorrienteF.aspx" class="shortcut">
-                                    <i class="shortcut-icon icon-th-list"></i>
-                                    <span class="shortcut-label">Cuenta Corriente</span>
-                                </a>
-
-                                
+                            <div class="widget-header">
+                                <i class="icon-bookmark"></i>
+                                <h3>Mis Accesos</h3>
                             </div>
-                            <!-- /shortcuts -->
 
+                            <div class="widget-content">
+                                <div class="shortcuts">
+                                    <a href="Formularios/Articulos/ArticulosC.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-bookmark"></i>
+                                        <span class="shortcut-label">Articulos</span>
+                                    </a>
+                                    <a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-shopping-cart"></i>
+                                        <span class="shortcut-label">Listado Pedidos</span>
+                                    </a>
+                                    <a href="Formularios/Facturas/CuentaCorrienteF.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-th-list"></i>
+                                        <span class="shortcut-label">Cuenta Corriente</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <!-- /widget-content -->
-
                     </div>
-                    <!-- /widget -->
-
-
-                </div>
-
                 </asp:PlaceHolder>
 
-
                 <asp:PlaceHolder ID="phImportacion" Visible="false" runat="server">
-                     <div class="col-md-12">
+                    <div class="col-md-12">
 
 
-                    <div class="widget stacked">
+                        <div class="widget stacked">
 
-                        <div class="widget-header">
-                            <i class="icon-bookmark"></i>
-                            <h3>Mis Accesos</h3>
-                        </div>
-                        <!-- /widget-header -->
+                            <div class="widget-header">
+                                <i class="icon-bookmark"></i>
+                                <h3>Mis Accesos</h3>
+                            </div>
+                            <!-- /widget-header -->
 
-                        <div class="widget-content">
+                            <div class="widget-content">
 
-                            <div class="shortcuts">
+                                <div class="shortcuts">
 
-                                 <a href="Formularios/Facturas/FacturasImportacion.aspx" class="shortcut">
-                                    <i class="shortcut-icon icon-plus"></i>
-                                    <span class="shortcut-label">Importar Archivo</span>
-                                </a>
-                               
-                              <a href="Formularios/Articulos/Articulos.aspx" class="shortcut">
-                                    <i class="shortcut-icon icon-bookmark"></i>
-                                    <span class="shortcut-label">Articulos</span>
-                                </a>
+                                    <a href="Formularios/Facturas/FacturasImportacion.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-plus"></i>
+                                        <span class="shortcut-label">Importar Archivo</span>
+                                    </a>
 
-                                <a href="Formularios/Clientes/Clientesaspx.aspx" class="shortcut">
+                                    <a href="Formularios/Articulos/Articulos.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-bookmark"></i>
+                                        <span class="shortcut-label">Articulos</span>
+                                    </a>
+
+                                    <a href="Formularios/Clientes/Clientesaspx.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-group"></i>
                                         <span class="shortcut-label">Clientes</span>
                                     </a>
 
-                                <a href="Formularios/Facturas/FacturasF.aspx" class="shortcut">
+                                    <a href="Formularios/Facturas/FacturasF.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-file-text"></i>
                                         <span class="shortcut-label">Facturas</span>
                                     </a>
 
-                                <a href="Formularios/Facturas/RemitosR.aspx" class="shortcut">
+                                    <a href="Formularios/Facturas/RemitosR.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-th-list"></i>
                                         <span class="shortcut-label">Remitos</span>
                                     </a>
 
 
 
-                               
 
-                                <%--<a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
+
+                                    <%--<a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
                                     <i class="shortcut-icon icon-shopping-cart"></i>
                                     <span class="shortcut-label">Listado Pedidos</span>
                                 </a>
@@ -316,19 +292,17 @@
                                     <i class="shortcut-icon icon-th-list"></i>
                                     <span class="shortcut-label">Cuenta Corriente</span>
                                 </a>--%>
+                                </div>
+                                <!-- /shortcuts -->
 
-                                
                             </div>
-                            <!-- /shortcuts -->
+                            <!-- /widget-content -->
 
                         </div>
-                        <!-- /widget-content -->
+                        <!-- /widget -->
+
 
                     </div>
-                    <!-- /widget -->
-
-
-                </div>
 
                 </asp:PlaceHolder>
 

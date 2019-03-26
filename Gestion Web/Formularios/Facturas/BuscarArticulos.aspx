@@ -59,9 +59,7 @@
                 <div class="navbar navbar-inverse navbar-fixed-top hidden-print">
                     <div class="container">
                         <div class="navbar-header">
-                            <asp:LinkButton runat="server" ID="btnCerrar" class="navbar-toggle" OnClick="btnCerrar_Click" Text="<span class='icon-remove icon-white'></span>" />
-
-
+                            <asp:LinkButton runat="server" ID="btnCerrar" class="navbar-toggle" OnClick="btnCerrar_Click" Text="<span class='icon-remove icon-white'></span>" enabled="false"/>
                             <asp:Label CssClass="navbar-brand" runat="server" ID="LabelInicio" Text="Busqueda"></asp:Label>
                         </div>
 

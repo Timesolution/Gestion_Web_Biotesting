@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\gestion_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -485,6 +485,7 @@
     <Content Include="Formularios\Clientes\ProoveedoresABM.aspx" />
     <Content Include="Formularios\Clientes\ProveedoresF.aspx" />
     <Content Include="Formularios\Reportes\RentabilidadFCosto.aspx" />
+    <Content Include="Formularios\Reportes\ReporteListaDePreciosF.aspx" />
     <Content Include="Formularios\Reportes\ReporteSaldosProveedores.aspx" />
     <Content Include="Formularios\Reportes\ReportesCobros.aspx" />
     <Content Include="Formularios\Reportes\ReportesCompras.aspx" />
@@ -2439,6 +2440,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\RentabilidadFCosto.aspx.designer.cs">
       <DependentUpon>RentabilidadFCosto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReporteListaDePreciosF.aspx.cs">
+      <DependentUpon>ReporteListaDePreciosF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ReporteListaDePreciosF.aspx.designer.cs">
+      <DependentUpon>ReporteListaDePreciosF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\ReporteSaldosProveedores.aspx.cs">
       <DependentUpon>ReporteSaldosProveedores.aspx</DependentUpon>
