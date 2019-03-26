@@ -39,7 +39,7 @@
                                                     <a tabindex="" href="#">Entregas</a>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <asp:LinkButton ID="lbtnAceptarEntregas" runat="server" OnClick="lbtnProcesarEntrega_Click">Entrega</asp:LinkButton>
+                                                            <asp:LinkButton ID="lbtnAceptarEntregas" runat="server" OnClick="lbtnProcesarEntrega_Click">Generar Entrega</asp:LinkButton>
                                                         </li>
                                                         <li>
                                                             <asp:LinkButton ID="lbtnRechazarEntregas" runat="server" data-toggle="modal" href="#modalConfirmacionRechazarEntrega">Rechazar Entrega</asp:LinkButton>
@@ -47,6 +47,9 @@
                                                     </ul>
                                                 </li>
                                             </asp:PlaceHolder>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnGenerarFacturaCompra" runat="server" OnClick="lbtnGenerarFacturaCompra_Click">Agregar FC de Compra</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

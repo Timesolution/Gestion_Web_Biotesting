@@ -38,6 +38,7 @@ namespace Gestion_Web.Formularios.Compras
                 cargarProveedores();
                 cargarSucursal();
                 CargarDatosDesdeOrdenCompra();
+                ConfigurarNuevaFechaEntrega();
             }
             CargarItemsFacturaEnPH();
         }
@@ -50,6 +51,12 @@ namespace Gestion_Web.Formularios.Compras
             btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
             btnGuardar.Attributes.Add("onclick", " this.disabled = true; " + btnCerrar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGuardar, null) + ";");
             btnCerrar.Attributes.Add("onclick", " this.disabled = true; " + btnGuardar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCerrar, null) + ";");
+        }
+
+        public void ConfigurarNuevaFechaEntrega()
+        {
+            if (string.IsNullOrEmpty(txtNuevaFechaEntrega.Text))
+                txtNuevaFechaEntrega.Text = txtFechaOC.Text;
         }
 
         private void VerificarLogin()
@@ -432,7 +439,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     if (!String.IsNullOrEmpty(txt))
                     {
-                        if (cantidadRecibida > cantidadPedida)
+                        if (cantidadRecibida + cantidadYaRecibida > cantidadPedida)
                         {
                             return true;
                         }
@@ -529,11 +536,20 @@ namespace Gestion_Web.Formularios.Compras
             if (!Page.IsValid)
                 return;
 
+            var nuevaFechaEntrega = Convert.ToDateTime(txtNuevaFechaEntrega.Text, new CultureInfo("es-AR"));
+
+            if (nuevaFechaEntrega < DateTime.Today)
+            {
+                ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"La nueva fecha ingresada es inferior a la fecha de hoy!\", {type: \"alert\"});", true);
+                return;
+            }
+
             var resp = GenerarEntrega(false,false,false);
 
             if (resp.resultadoProcesarEntrega)
             {
                 ImprimirRemito(resp.idRemito, 0);
+                //ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", " $.msgbox(\"Orden procesada con exito!\", {type: \"alert\"}); location.href = 'RemitoF.aspx';", true);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden procesada con exito!", "RemitoF.aspx"));
             }                
             else

@@ -72,6 +72,8 @@ namespace Gestion_Web.Formularios.Compras
                     estadoGeneral = 0;
                     filtroPorFecha = 1;
                     filtroPorFechaEntrega = 0;
+                    fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                 }
                 else
                 {
@@ -92,6 +94,8 @@ namespace Gestion_Web.Formularios.Compras
                 this.cargarEstados();
                 this.cargarSucursal();
                 cargarEstadosGeneralesFiltro();
+
+                //this.buscar(fechaD, fechaH, proveedor, sucursal, estado, fechaEntregaD, fechaEntregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral);
                 //txtFechaDesde.Text = fechaD;
                 //txtFechaHasta.Text = fechaH;                
             }
@@ -272,16 +276,10 @@ namespace Gestion_Web.Formularios.Compras
 
                 DataTable dt = contCliente.obtenerProveedoresReducDT();
 
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["alias"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
                 DataRow dr2 = dt.NewRow();
                 dr2["alias"] = "Todos";
                 dr2["id"] = 0;
-                dt.Rows.InsertAt(dr2, 1);
+                dt.Rows.InsertAt(dr2, 0);
 
                 this.DropListProveedor.DataSource = dt;
                 this.DropListProveedor.DataValueField = "id";
@@ -345,6 +343,12 @@ namespace Gestion_Web.Formularios.Compras
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = oc.Id.ToString();
+                if (oc.Estado == 9)                
+                    tr.ForeColor = System.Drawing.Color.Green;
+                else if(oc.Estado == 4)
+                    tr.ForeColor = System.Drawing.Color.Gold;
+                else if (oc.Estado == 5)
+                    tr.ForeColor = System.Drawing.Color.Red;
 
                 //Celdas
 
@@ -946,6 +950,39 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
+            }
+        }
+
+        protected void lbtnGenerarFacturaCompra_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                int ordenesTildadas = 0;
+
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                        ordenesTildadas++;
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    if(ordenesTildadas > 1)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un documento!"));
+                    else
+                        Response.Redirect("ComprasABM.aspx?a=4&oc=" + idtildado);
+                }
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar algún documento!"));                
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error generando factura de compra desde orden de compra. " + ex.Message);
             }
         }
     }

@@ -30,48 +30,79 @@ namespace Gestion_Web.Formularios.Compras
         //private string cuit;
         private long idCompra;
         private long idRemito;
+        private long idOrdenCompra;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                this.VerificarLogin();
-                this.accion = Convert.ToInt32(Request.QueryString["a"]);
-                this.idCompra = Convert.ToInt32(Request.QueryString["c"]);
-                this.idRemito = Convert.ToInt64(Request.QueryString["r"]);
+                VerificarLogin();
+                accion = Convert.ToInt32(Request.QueryString["a"]);
+                idCompra = Convert.ToInt32(Request.QueryString["c"]);
+                idRemito = Convert.ToInt64(Request.QueryString["r"]);
+                idOrdenCompra = Convert.ToInt64(Request.QueryString["oc"]);
 
                 if (!IsPostBack)
                 {
-                    this.cargarEmpresas();
-                    this.ListEmpresa.SelectedValue = Session["Login_EmpUser"].ToString();
-                    this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));                    
-                    this.cargarProveedores();
+                    cargarEmpresas();
+                    ListEmpresa.SelectedValue = Session["Login_EmpUser"].ToString();
+                    cargarSucursal(Convert.ToInt32(ListEmpresa.SelectedValue));                    
+                    cargarProveedores();
                     //pongo fecha de hoy
-                    this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    this.txtVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    this.txtImputacionCont.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    if (this.accion == 2)
+                    txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtImputacionCont.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    if (accion == 2)
                     {                        
-                        this.cargarCompra();
+                        cargarCompra();
                     }
-                    if(this.accion == 3)
+                    if(accion == 3)
                     {
                         CargarCompraDesdeRemito();
                     }
-                    //cargo sucursal
-                    this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                    if (this.ListSucursal.SelectedValue != "")
+                    if (accion == 4)
                     {
-                        this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                        this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+                        CargarCompraDesdeOrdenCompra();
                     }
-                    this.cargarCuentas();
+                    //cargo sucursal
+                    ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                    if (ListSucursal.SelectedValue != "")
+                    {
+                        ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                        cargarPuntoVta(Convert.ToInt32(ListSucursal.SelectedValue));
+                    }
+                    cargarCuentas();
                 }
 
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error inicializando formulario. " + ex.Message));
+            }
+        }
+
+        private void CargarCompraDesdeOrdenCompra()
+        {
+            try
+            {
+                var remitosCompra = contEntity.ObtenerRemitoComprasPorOrdenCompra(idOrdenCompra);
+                string numerosRemitos = string.Empty;
+
+                txtObservaciones.Text = "Remitos relacionados con orden de compra: ";
+
+                foreach (var remitoCompra in remitosCompra)
+                {
+                    var puntoVenta = remitoCompra.Numero.Substring(0,4);
+                    var numero = remitoCompra.Numero.Substring(4, 8);
+
+                    numerosRemitos += puntoVenta + "-" + numero + " ";
+                }
+
+                txtObservaciones.Text += numerosRemitos;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al cargar compra desde orden de compra " + ex.Message);
             }
         }
 
