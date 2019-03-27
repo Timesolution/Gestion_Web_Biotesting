@@ -62,7 +62,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha Mercaderia Arribada</label>
+                                            <label for="name" class="col-md-2">Fecha Remito</label>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
@@ -93,7 +93,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha de Ingreso de mercaderia</label>
+                                            <label for="name" class="col-md-2">Fecha de Ingreso</label>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
