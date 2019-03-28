@@ -45,7 +45,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Numero</label>
+                                            <label for="name" class="col-md-2">Remito Numero</label>
 
                                             <div class="col-md-2">
                                                 <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" onchange="completar4Ceros(this, this.value)"></asp:TextBox>
@@ -62,7 +62,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha Mercaderia Arribada</label>
+                                            <label for="name" class="col-md-2">Fecha Remito</label>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
@@ -93,7 +93,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha de Ingreso de mercaderia</label>
+                                            <label for="name" class="col-md-2">Fecha de Ingreso</label>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
@@ -159,72 +159,39 @@
                     <h4 class="modal-title">Opciones</h4>
                 </div>
                 <div class="modal-body">
-                    <div role="form" class="form-horizontal">
-                        <asp:Label runat="server" Font-Bold="true" Font-Size="Medium" Text="Hay cantidades recibidas mayores a las solicitadas, desea recibirlas?"></asp:Label>
-                    </div>
-                    <br />
-                    <div role="form" class="form-horizontal col-md-12 text-center">
-                        <asp:LinkButton ID="lbtnRecibirlaOrdenConCantidadesMayores" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClick="lbtnRecibirlaOrdenConCantidadesMayores_Click" />
-                        <asp:LinkButton ID="lbtnRecibirLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="lbtnRecibirLoSolicitado_Click" />
-                        <asp:LinkButton ID="lbtnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
-                    </div>
-                    <div class="modal-footer"></div>
+                    <asp:UpdatePanel runat="server" ID="UpdatePanel3" UpdateMode="Always">
+                        <ContentTemplate>
+                            <div role="form" class="form-horizontal">
+                                <asp:Label runat="server" Font-Bold="true" Font-Size="Medium" Text="Hay cantidades recibidas mayores a las solicitadas, desea recibirlas?"></asp:Label>
+                            </div>
+                            <br />
+                            <div role="form" class="form-horizontal col-md-12 text-center">
+                                <asp:Button ID="btnRecibirTodo" type="button" runat="server" Text="Si, recibir todo" class="btn btn-success" OnClick="btnRecibirTodo_Click" />
+                                <asp:Button ID="btnRecibirSoloLoSolicitado" runat="server" Text="No, recibir solo lo solicitado" class="btn btn-warning" OnClick="btnRecibirLoSolicitado_Click"/>
+                                <asp:Button ID="btnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
+                            </div>
+                            <div class="modal-footer"></div>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </div>
         </div>
     </div>
 
-    <%--<div id="modalCerrarOrden" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">ATENCION!</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-lg-10">
-                        <div class="col-md-10">
-                            <asp:Label runat="server" Font-Size="Medium" Text="La cantidad recibida es inferior a la pedida, desea cerrar la orden?"></asp:Label>
-                        </div>
-                        <div class="form-group">
-                            <fieldset>
-                                <div class="col-md-12">
-                                    <asp:Label runat="server" Font-Size="Medium" class="col-md-6">Nueva fecha de entrega</asp:Label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                        <asp:TextBox ID="txtNuevaFechaEntrega" runat="server" class="form-control col-md-6"></asp:TextBox>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <asp:RequiredFieldValidator ControlToValidate="txtNuevaFechaEntrega" ID="RequiredFieldValidator3" runat="server" ErrorMessage="*" ValidationGroup="NuevaFechaEntregaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div role="form" class="form-horizontal col-md-12 text-right">
-                        <asp:LinkButton ID="lbtnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
-                        <asp:LinkButton ID="lbtnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>--%>
-
     <div id="modalCerrarOrden" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <asp:UpdatePanel runat="server" ID="UpdatePanel2" UpdateMode="Always">
+                <ContentTemplate>
+                    <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">ATENCION!</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <asp:UpdatePanel runat="server" ID="UpdatePanel2" UpdateMode="Always">
-                            <ContentTemplate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">ATENCION!</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+
                                 <div class="form-group">
                                     <label class="col-md-12" style="font-size: medium">La cantidad recibida es inferior a la pedida, desea cerrar la orden?</label>
                                 </div>
@@ -241,15 +208,16 @@
                                 <div class="form-group col-md-12">
                                     <asp:Label ID="lblFechaEntregaError" runat="server" class="text-danger" Style="font-size: small" Visible="false">La fecha de entrega es menor a la actual</asp:Label>
                                 </div>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
+                            <asp:Button ID="btnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnGuardar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="NuevaFechaEntregaGroup" OnClick="lbtnGuardar_Click" />
-                    <asp:LinkButton ID="lbtnCerrar" runat="server" Text="Cerrar Orden" class="btn btn-danger" OnClick="lbtnCerrar_Click" />
-                </div>
-            </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
         </div>
     </div>
 

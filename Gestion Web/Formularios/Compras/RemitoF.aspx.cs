@@ -310,7 +310,9 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celTipo);
 
                 TableCell celNumero = new TableCell();
-                celNumero.Text = rc.Numero;
+                string ptoVenta = rc.Numero.Substring(0, 4).ToString();
+                string numero = rc.Numero.Substring(4, 8).ToString();
+                celNumero.Text = ptoVenta + "-" + numero;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 celNumero.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celNumero);

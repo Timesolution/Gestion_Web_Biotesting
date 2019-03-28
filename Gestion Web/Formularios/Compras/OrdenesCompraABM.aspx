@@ -186,7 +186,7 @@
                                             <div class="form-group alert alert-info">
                                                 <label class="col-md-5">Forma de pago:</label>
                                                 <div class="col-md-7">
-                                                    <asp:TextBox ID="txtFormaDePago" runat="server" class="form-control"></asp:TextBox>
+                                                    <asp:TextBox ID="txtFormaDePago" TextMode="MultiLine" Rows="4" runat="server" class="form-control"></asp:TextBox>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,15 +219,15 @@
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Descripcion</th>
-                                            <th>Precio</th>
-                                            <th>Precio Mas IVA</th>
-                                            <th>Cantidad</th>
-                                            <th>Stock Sucursal</th>
-                                            <th>Stock Minimo Sucursal</th>
-                                            <th>Stock Total</th>
-                                            <th>Stock Minimo</th>
+                                            <th style="width:20%">Codigo</th>
+                                            <th style="width:20%">Descripcion</th>
+                                            <th style="width:5%">Precio</th>
+                                            <th style="width:10%">Precio Mas IVA</th>
+                                            <th style="width:5%">Cantidad</th>
+                                            <th style="width:10%">Stock Sucursal</th>
+                                            <th style="width:10%">Stock Minimo Sucursal</th>
+                                            <th style="width:10%">Stock Total</th>
+                                            <th style="width:10%">Stock Minimo</th>
                                             <th></th>
                                         </tr>
                                     </thead>

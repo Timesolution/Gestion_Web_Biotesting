@@ -24,14 +24,13 @@
                             <tr>
                                 <td style="width: 30%">
                                     <div class="col-lg-8">
-                                        <div class="input-group">
-                                            <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Proveedor"></asp:TextBox>
+                                        <div class="input-group">                                            
                                             <span class="input-group-btn">
                                                 <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscar_Click" OnClientClick="obtenerProveedores();">
                                                     <i class="shortcut-icon icon-search"></i>
                                                 </asp:LinkButton>
                                             </span>
-
+                                            <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Proveedor"></asp:TextBox>
                                         </div>
                                         <!-- /input-group -->
                                     </div>

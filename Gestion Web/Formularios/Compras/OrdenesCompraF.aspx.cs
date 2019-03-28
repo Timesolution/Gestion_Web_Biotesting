@@ -52,6 +52,8 @@ namespace Gestion_Web.Formularios.Compras
             filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
             filtroPorFechaEntrega = Convert.ToInt32(Request.QueryString["fpfe"]);
 
+            Page.Form.DefaultButton = btnBuscarCodigoProveedor.UniqueID;
+
             if (!IsPostBack)
             {
                 this.cargarProveedores();
@@ -72,6 +74,8 @@ namespace Gestion_Web.Formularios.Compras
                     estadoGeneral = 0;
                     filtroPorFecha = 1;
                     filtroPorFechaEntrega = 0;
+                    fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                 }
                 else
                 {
@@ -92,6 +96,8 @@ namespace Gestion_Web.Formularios.Compras
                 this.cargarEstados();
                 this.cargarSucursal();
                 cargarEstadosGeneralesFiltro();
+
+                //this.buscar(fechaD, fechaH, proveedor, sucursal, estado, fechaEntregaD, fechaEntregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral);
                 //txtFechaDesde.Text = fechaD;
                 //txtFechaHasta.Text = fechaH;                
             }
@@ -272,16 +278,10 @@ namespace Gestion_Web.Formularios.Compras
 
                 DataTable dt = contCliente.obtenerProveedoresReducDT();
 
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["alias"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
                 DataRow dr2 = dt.NewRow();
                 dr2["alias"] = "Todos";
                 dr2["id"] = 0;
-                dt.Rows.InsertAt(dr2, 1);
+                dt.Rows.InsertAt(dr2, 0);
 
                 this.DropListProveedor.DataSource = dt;
                 this.DropListProveedor.DataValueField = "id";
@@ -345,50 +345,56 @@ namespace Gestion_Web.Formularios.Compras
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = oc.Id.ToString();
+                if (oc.Estado == 9)                
+                    tr.ForeColor = System.Drawing.Color.Green;
+                else if(oc.Estado == 4)
+                    tr.ForeColor = System.Drawing.Color.Gold;
+                else if (oc.Estado == 5)
+                    tr.ForeColor = System.Drawing.Color.Red;
 
                 //Celdas
 
                 TableCell celFecha = new TableCell();
                 celFecha.Text = Convert.ToDateTime(oc.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 celFecha.VerticalAlign = VerticalAlign.Middle;
-                celFecha.HorizontalAlign = HorizontalAlign.Center;
+                celFecha.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celFecha);
 
                 TableCell celFechaEntrega = new TableCell();
                 celFechaEntrega.Text = Convert.ToDateTime(oc.FechaEntrega, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 celFechaEntrega.VerticalAlign = VerticalAlign.Middle;
-                celFechaEntrega.HorizontalAlign = HorizontalAlign.Center;
+                celFechaEntrega.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celFechaEntrega);
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = oc.Numero;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
-                celNumero.HorizontalAlign = HorizontalAlign.Center;
+                celNumero.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celNumero);
 
                 TableCell celRazon = new TableCell();
                 Gestor_Solution.Modelo.Cliente p = this.contCliente.obtenerProveedorID(oc.IdProveedor.Value);
                 celRazon.Text = p.razonSocial;
                 celRazon.VerticalAlign = VerticalAlign.Middle;
-                celRazon.HorizontalAlign = HorizontalAlign.Center;
+                celRazon.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celRazon);
 
                 TableCell celSucursal = new TableCell();
                 celSucursal.Text = suc.nombre;
                 celSucursal.VerticalAlign = VerticalAlign.Middle;
-                celSucursal.HorizontalAlign = HorizontalAlign.Center;
+                celSucursal.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celSucursal);
 
                 TableCell celEstado = new TableCell();
                 celEstado.Text = oce.TipoEstado;
                 celEstado.VerticalAlign = VerticalAlign.Middle;
-                celEstado.HorizontalAlign = HorizontalAlign.Center;
+                celEstado.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celEstado);
 
                 TableCell celEstadoGeneral = new TableCell();
                 celEstadoGeneral.Text = ordenCompraEstadoGeneral.TipoEstado;
                 celEstadoGeneral.VerticalAlign = VerticalAlign.Middle;
-                celEstadoGeneral.HorizontalAlign = HorizontalAlign.Center;
+                celEstadoGeneral.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celEstadoGeneral);
 
                 //si estoy cargando una nota de credito
@@ -946,6 +952,68 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error cargando entregas de mercaderia. " + ex.Message);
+            }
+        }
+
+        protected void lbtnGenerarFacturaCompra_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = string.Empty;
+                int ordenesTildadas = 0;
+
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado = ch.ID.Split('_')[1];
+                        ordenesTildadas++;
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    if(ordenesTildadas > 1)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un documento!"));
+                    else
+                        Response.Redirect("ComprasABM.aspx?a=4&oc=" + idtildado);
+                }
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar algún documento!"));                
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error generando factura de compra desde orden de compra. " + ex.Message);
+            }
+        }
+
+        protected void btnBuscarCodigoProveedor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = this.txtCodProveedor.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerProveedorNombreDT(buscar);
+
+                if (txtCodProveedor.Text.Trim().ToLower() == "todo" || txtCodProveedor.Text.Trim().ToLower() == "todos")
+                {
+                    DataRow dr2 = dtClientes.NewRow();
+                    dr2["alias"] = "Todos";
+                    dr2["id"] = 0;
+                    dtClientes.Rows.InsertAt(dr2, 0);
+                }                
+
+                //cargo la lista
+                this.DropListProveedor.DataSource = dtClientes;
+                this.DropListProveedor.DataValueField = "id";
+                this.DropListProveedor.DataTextField = "alias";
+                this.DropListProveedor.DataBind();
+
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. Excepción: " + Ex.Message));
             }
         }
     }
