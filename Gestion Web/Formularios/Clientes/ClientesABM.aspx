@@ -1166,19 +1166,15 @@
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group">
-                                                    <label for="name" class="col-md-4">Forma de Pago</label>
+                                                    <label class="col-md-4">Forma de Pago</label>
                                                     <div class="col-md-4">
-                                                        <div class="input-group">
-                                                            <asp:TextBox ID="txtFormaDePago_OC" runat="server" class="form-control" Style="text-align: right"></asp:TextBox>
-                                                        </div>
+                                                        <asp:TextBox ID="txtFormaDePago_OC" runat="server" TextMode="MultiLine" Rows="4" class="form-control"></asp:TextBox>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator41" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ControlToValidate="txtFormaDePago_OC" ValidationGroup="OrdenesCompraGroup" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </ContentTemplate>
                                         <Triggers>
