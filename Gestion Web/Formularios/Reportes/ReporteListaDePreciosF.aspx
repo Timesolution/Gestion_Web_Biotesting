@@ -64,7 +64,7 @@
                                    
                                             </label>
                                             <div class="col-md-1">
-                                                <asp:CheckBox ID="chkDescuentoCantidad" runat="server" />
+                                                <asp:CheckBox ID="chkDescuentoCantidad" runat="server" visible="false"/>
                                             </div>
                                         </div>
 

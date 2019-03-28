@@ -33,7 +33,6 @@ namespace Gestion_Web.Formularios.Articulos
         private int marca;
         string descSubGrupo;
         int descuentoPorCantidad;
-
         private int valor;
 
         private DataTable dtArticulos = new DataTable();
@@ -397,11 +396,9 @@ namespace Gestion_Web.Formularios.Articulos
                         }
                     }
                 }
-
                 DataView dv = dtArticulos.DefaultView;
                 dv.Sort = "descripcion";
                 this.dtArticulos = dv.ToTable();
-
             }
             catch (Exception ex)
             {
@@ -704,15 +701,11 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaPreciosUbicacionR.rdlc");
 
                 ReportDataSource rds = new ReportDataSource("ListaPrecios", this.dtArticulos);
-
                 ReportParameter param = new ReportParameter("ParamLista", nombreLista);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
-
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-
                 this.ReportViewer1.LocalReport.SetParameters(param);
-
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -732,24 +725,19 @@ namespace Gestion_Web.Formularios.Articulos
                     this.Response.ContentType = "application/ms-excel";
                     this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
                     this.Response.BinaryWrite(xlsContent);
-
                     this.Response.End();
                 }
                 else
                 {
                     //get pdf content
-
                     Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
-
                     this.Response.Clear();
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/pdf";
                     this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                     this.Response.BinaryWrite(pdfContent);
-
                     this.Response.End();
                 }
-
             }
             catch (Exception ex)
             {

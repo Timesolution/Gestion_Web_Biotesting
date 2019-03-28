@@ -143,6 +143,12 @@ namespace Gestion_Web.Formularios.Reportes
                 ip.Usuario = (int)Session["Login_IdUser"];
                 ip.Estado = 0;
                 ip.NombreInforme = "ARTICULOS-LISTA-DE-PRECIOS" + "_" + DateTime.Now.ToString("ddMMyyyy");
+
+                if (chkUbicacion.Checked)//si es agrupado por ubicacion
+                {
+                    ip.Informe = 6;
+                    ip.NombreInforme = "ARTICULOS-LISTA-DE-PRECIOS-AGRUPADO-POR-UBICACION" + "_" + DateTime.Now.ToString("ddMMyyyy");
+                }
             }
             catch (Exception Ex)
             {
@@ -158,8 +164,8 @@ namespace Gestion_Web.Formularios.Reportes
                 //if (this.chkDescuentoCantidad.Checked == true)
                 //    infXMLartInactivos = 1;
 
-                infXML.ArticulosPrecioConIva = 0;
-                if (RadioConIva.Checked) infXML.ArticulosPrecioConIva = 1;
+                infXML.ArticulosPrecioConIva = 1; //1 es sin iva
+                if (RadioConIva.Checked) infXML.ArticulosPrecioConIva = 2;
 
                 if (chkUbicacion.Checked) infXML.ArticulosAguparPorUbicacion = 1;
             }
