@@ -65,6 +65,8 @@ namespace Gestion_Web.Formularios.Facturas
         DataTable lstPagosTemp;
         DataTable dtTrazasTemp;
 
+        private string _verificarEnvioMercaderiaSiNoHayStockOrNegativo;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -73,6 +75,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
+
+                 _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true;  " + btnAgregarRemitir.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 btnAgregarRemitir.Attributes.Add("onclick", " this.disabled = true; " + btnAgregar.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarRemitir, null) + ";");
@@ -362,10 +366,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!listPermisos.Contains("173"))
                     return 0;
 
-                //Permiso para bloquear la lista de precios
                 if (!listPermisos.Contains("150"))
-                    this.DropListLista.Attributes.Add("disabled", "disabled");
-
+                {
+                    DropListLista.Enabled = false;
+                    DropListLista.CssClass = "form-control";
+                }
+                    
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -484,7 +490,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     foreach (ItemFactura item in f.items)
                     {
-                        this.agregarInfoDespachoDesdePedido(item);
+                        this.AgregarInfoDespachoItem(item.articulo);
                     }
                 }
 
@@ -2406,7 +2412,6 @@ namespace Gestion_Web.Formularios.Facturas
                 Configuracion config = new Configuracion();
                 Articulo art = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
 
-                //Limpio campo de Descuento Arriba
                 this.TxtDescuentoArri.Text = "0";
 
                 if (art != null)
@@ -2431,6 +2436,8 @@ namespace Gestion_Web.Formularios.Facturas
                             return;
                         }
                     }
+
+                    AgregarInfoDespachoItem(art);
 
                     decimal cantPromo = 0;
                     if (this.txtCantidad.Text != "")
@@ -2470,11 +2477,9 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     this.verificarMedidasVenta(art.id);
-                    //agrego los txt
                     this.txtDescripcion.Text = art.descripcion;
 
                     this.verificarStockMinimo();
-                    //TODO
                     if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
                     {
                         this.txtIva.Text = 0 + "%";
@@ -2485,7 +2490,6 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
                         this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
-
                     }
 
                     if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
@@ -2493,27 +2497,18 @@ namespace Gestion_Web.Formularios.Facturas
                         if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                         {
                             this.txtPUnitario.Text = art.precioSinIva.ToString();
-                            //this.txtPUnitario.Text = decimal.Round((art.precioVenta / ((1 + (art.porcentajeIva / 100)))), 2).ToString();
                         }
                     }
 
                     this.verificarAlertaArticulo(art);
 
-                    if (config.infoImportacionFacturas == "1")
-                    {
-                        //si tiene datos de despacho se los cargo
-                        this.agregarInfoDespachoItem(art);
-                    }
-
-                    //this.txtPUnitario.Text = decimal.Round(art.precioVenta,4).ToString();
                     Session["FacturasABM_ArticuloModal"] = null;
                     this.txtPorcDescuento.Focus();
                     this.txtCantidad.Focus();
-                    //recalculo total
                     this.totalItem();
 
-                    Factura f = Session["Factura"] as Factura;
-                    this.txtRenglon.Text = (f.items.Count + 1).ToString();
+                    Factura factura = Session["Factura"] as Factura;
+                    this.txtRenglon.Text = (factura.items.Count + 1).ToString();
 
                     //Si tiene configuracion CON COMMITANTE
                     //agrego automaticamente el articulo a la FC con la cant y dto que este escrito
@@ -2534,17 +2529,14 @@ namespace Gestion_Web.Formularios.Facturas
                             this.txtCodigo.Text = "";
                         }
                     }
-
                 }
                 else
                 {
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra Articulo " + this.txtCodigo.Text));
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encuentra Articulo. \");", true);
                 }
             }
             catch (Exception ex)
             {
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Articulo. " + ex.Message));
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error buscando articulo." + ex.Message + " \", {type: \"error\"});", true);
             }
         }
@@ -2573,7 +2565,6 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Factura f = Session["Factura"] as Factura;
-                //limpio el place holder y lo vuelvo a cargar
                 this.phArticulos.Controls.Clear();
                 int pos = 0;
 
@@ -2586,6 +2577,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 foreach (ItemFactura item in f.items)
                 {
+                    AgregarInfoDespachoItem(item.articulo);
+
                     pos = f.items.IndexOf(item);
                     this.agregarItemFactura(item, pos);
                 }
@@ -5651,19 +5644,23 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (this.ListSucursalCliente.SelectedIndex > 0)
+                if (!string.IsNullOrEmpty(_verificarEnvioMercaderiaSiNoHayStockOrNegativo) && _verificarEnvioMercaderiaSiNoHayStockOrNegativo == "1")
                 {
-                    int stock = Convert.ToInt32(lbtnStockProd.Text);
-                    int cantidad = Convert.ToInt32(txtCantidad.Text);
-
-                    int total = stock - cantidad;
-
-                    if (total < 0)
+                    if (this.ListSucursalCliente.SelectedIndex > 0)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita es mayor al stock que posee la sucursal \", {type: \"alert\"});", true);
-                        return 0;
+                        int stock = Convert.ToInt32(lbtnStockProd.Text);
+                        int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                        int total = stock - cantidad;
+
+                        if (total < 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita es mayor al stock que posee la sucursal \", {type: \"alert\"});", true);
+                            return 0;
+                        }
                     }
                 }
+
                 return 1;
             }
             catch (Exception ex)
@@ -5677,16 +5674,20 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (this.ListSucursalCliente.SelectedIndex > 0)
+                if (!string.IsNullOrEmpty(_verificarEnvioMercaderiaSiNoHayStockOrNegativo) && _verificarEnvioMercaderiaSiNoHayStockOrNegativo == "1")
                 {
-                    int cantidad = Convert.ToInt32(txtCantidad.Text);
-
-                    if (cantidad <= 0)
+                    if (this.ListSucursalCliente.SelectedIndex > 0)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita debe ser mayor a 0 \", {type: \"alert\"});", true);
-                        return 0;
+                        int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                        if (cantidad <= 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita debe ser mayor a 0 \", {type: \"alert\"});", true);
+                            return 0;
+                        }
                     }
                 }
+
                 return 1;
             }
             catch (Exception ex)
@@ -8077,35 +8078,34 @@ namespace Gestion_Web.Formularios.Facturas
 
         #region datos despacho
 
-        private void agregarInfoDespachoItem(Articulo articulo)
+        private void AgregarInfoDespachoItem(Articulo articulo)
         {
             try
             {
                 ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
                 controladorPais contPais = new controladorPais();
+
+                Factura fact = Session["Factura"] as Factura;
+                //si es PRP omito la info de despachos
+                if (fact.tipo.tipo.Contains("Presupuesto") || fact.tipo.tipo.Contains("PRP"))
+                    return;
 
                 Gestion_Api.Entitys.articulo art = contArtEntity.obtenerArticuloEntity(articulo.id);
-
-                Factura fact = Session["Factura"] as Factura;
-                //si es PRP omito la info de despachos
-                if (fact.tipo.tipo.Contains("Presupuesto") || fact.tipo.tipo.Contains("PRP"))
-                    return;
-
                 if (art.Articulos_Despachos.Count > 0)
                 {
                     Pais pais = contPais.obtenerPaisID(art.procedencia.Value);
                     var datos = art.Articulos_Despachos.FirstOrDefault();
 
-                    if (datos.FechaDespacho != null)
-                        this.txtDescripcion.Text += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
-                    if (!String.IsNullOrEmpty(datos.NumeroDespacho))
-                        this.txtDescripcion.Text += " |" + "D.I.: " + datos.NumeroDespacho;
-                    if (!String.IsNullOrEmpty(datos.Lote))
-                        this.txtDescripcion.Text += " |" + "Lote: " + datos.Lote;
-                    if (!String.IsNullOrEmpty(datos.Vencimiento))
-                        this.txtDescripcion.Text += " |" + "Vencimiento: " + datos.Vencimiento;
-                    if (pais != null)
-                        this.txtDescripcion.Text += " |" + "Procedencia: " + pais.descripcion;
+                    if (datos.FechaDespacho != null && ! articulo.descripcion.Contains("Fecha despacho:"))
+                        articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
+                    if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !articulo.descripcion.Contains("D.I.:"))
+                        articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
+                    if (!String.IsNullOrEmpty(datos.Lote) && !articulo.descripcion.Contains("Lote:"))
+                        articulo.descripcion += " |" + "Lote: " + datos.Lote;
+                    if (!String.IsNullOrEmpty(datos.Vencimiento) && !articulo.descripcion.Contains("Vencimiento:"))
+                        articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
+                    if (pais != null && !articulo.descripcion.Contains("Procedencia:"))
+                        articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
                 }
 
                 return;
@@ -8115,43 +8115,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return;
             }
         }
-        private void agregarInfoDespachoDesdePedido(ItemFactura item)
-        {
-            try
-            {
-                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
-                controladorPais contPais = new controladorPais();
 
-                Factura fact = Session["Factura"] as Factura;
-                //si es PRP omito la info de despachos
-                if (fact.tipo.tipo.Contains("Presupuesto") || fact.tipo.tipo.Contains("PRP"))
-                    return;
-
-                Gestion_Api.Entitys.articulo art = contArtEntity.obtenerArticuloEntity(item.articulo.id);
-                if (art.Articulos_Despachos.Count > 0)
-                {
-                    Pais pais = contPais.obtenerPaisID(art.procedencia.Value);
-                    var datos = art.Articulos_Despachos.FirstOrDefault();
-
-                    if (datos.FechaDespacho != null && !item.articulo.descripcion.Contains("Fecha despacho:"))
-                        item.articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
-                    if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !item.articulo.descripcion.Contains("D.I.:"))
-                        item.articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
-                    if (!String.IsNullOrEmpty(datos.Lote) && !item.articulo.descripcion.Contains("Lote:"))
-                        item.articulo.descripcion += " |" + "Lote: " + datos.Lote;
-                    if (!String.IsNullOrEmpty(datos.Vencimiento) && !item.articulo.descripcion.Contains("Vencimiento:"))
-                        item.articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
-                    if (pais != null && !item.articulo.descripcion.Contains("Procedencia:"))
-                        item.articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
-                }
-
-                return;
-            }
-            catch
-            {
-                return;
-            }
-        }
         #endregion        
 
         #region CREDITOS
@@ -10433,7 +10397,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     foreach (ItemFactura item in f.items)
                     {
-                        this.agregarInfoDespachoDesdePedido(item);
+                        this.AgregarInfoDespachoItem(item.articulo);
                     }
                 }
 

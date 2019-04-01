@@ -161,8 +161,8 @@ namespace Gestion_Web.Formularios.Compras
                         if (s == "177")
                             this.DropListSucursal.Attributes.Remove("disabled");
 
-                        if (s == "178")
-                            ltbnCambiarEstado.Visible = true;
+                        //if (s == "178")
+                        //    ltbnCambiarEstado.Visible = true;
                     }
                 }
 
@@ -449,7 +449,8 @@ namespace Gestion_Web.Formularios.Compras
                 btnDetallesExcel.ID = "btnSelecEx_" + oc.Id;
                 btnDetallesExcel.Text = "<span class='fa fa-file-text-o'></span>";
                 btnDetallesExcel.Font.Size = 12;
-                btnDetallesExcel.PostBackUrl = "ImpresionCompras.aspx?a=3&ex=1&oc=" + oc.Id;
+                //btnDetallesExcel.PostBackUrl = "ImpresionCompras.aspx?a=3&ex=1&oc=" + oc.Id;
+                btnDetallesExcel.Click += new EventHandler(this.detalleOrdenExcel);
                 celAccion.Controls.Add(btnDetallesExcel);
                 
                 celAccion.Width = Unit.Percentage(10);
@@ -485,6 +486,28 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "ERROR", "Error cargando detalle orden desde la interfaz. " + ex.Message);
             }
         }
+
+        private void detalleOrdenExcel(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtengo numero factura
+                string idBoton = (sender as LinkButton).ID;
+
+                string[] atributos = idBoton.Split('_');
+                string idOrden = atributos[1];
+
+                Response.Redirect("ImpresionCompras.aspx?a=3&ex=1&oc=" + idOrden);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=3&oc=" + idOrden + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error cargando detalle orden desde la interfaz. " + ex.Message);
+            }
+        }
+
         protected void lbtnBuscar_Click(object sender, EventArgs e)
         {
             try
