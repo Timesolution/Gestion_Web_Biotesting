@@ -159,7 +159,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                infXML.ListaPrecio = ddlListaDePrecios.SelectedIndex;
+                infXML.ListaPrecio = Convert.ToInt32(ddlListaDePrecios.SelectedValue);
 
                 //if (this.chkDescuentoCantidad.Checked == true)
                 //    infXMLartInactivos = 1;
