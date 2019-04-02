@@ -2931,30 +2931,42 @@ namespace Gestion_Web.Formularios.Facturas
                 if (IsValid)
                 {
                     //Verifico si tiene la alerta de precios de articulos sin actualizar
-                    if (!this.verificarArticulosSinActualizar())
+                    if (!VerificarArticulosSinActualizar())
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
                         return;
                     }
 
                     //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
-                    if (!this.validarSaldoMutual())
+                    if (!ValidarSaldoMutual())
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
                         return;
                     }
 
                     //Verifico en caso de que sea Nota de Crédito de una Factura con Forma de Pago Mutual, que haya eliminado los cobros asociados
-                    if (!this.verificarAnularFcMutual())
+                    if (!VerificarAnularFcMutual())
                     {
                         //Si existen cobros pendientes, retorno. El mensaje lo muestro en el método.
                         return;
                     }
 
                     //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
-                    if (!validarNotaCreditoFactura())
+                    if (!VerificarNotaCreditoFactura())
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarFacturaEnCero())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarDescripcionDeItems())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
                         return;
                     }
 
@@ -3058,8 +3070,49 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-
         }
+
+        private bool VerificarDescripcionDeItems()
+        {
+            try
+            {
+                Factura factura = Session["Factura"] as Factura;
+
+                foreach (var item in factura.items)
+                {
+                    if (string.IsNullOrEmpty(item.articulo.descripcion))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool VerificarFacturaEnCero()
+        {
+            try
+            {
+                Factura factura = Session["Factura"] as Factura;
+
+                if (factura.EsFactura() && factura.total <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         protected void btnAgregarFactE_Click(object sender, EventArgs e)
         {
             try
@@ -3196,23 +3249,35 @@ namespace Gestion_Web.Formularios.Facturas
             if (IsValid)
             {
                 //Verifico si tiene la alerta de precios de articulos sin actualizar
-                if (!this.verificarArticulosSinActualizar())
+                if (!this.VerificarArticulosSinActualizar())
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
                     return;
                 }
 
                 //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
-                if (!this.validarSaldoMutual())
+                if (!this.ValidarSaldoMutual())
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
                     return;
                 }
 
                 //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
-                if (!validarNotaCreditoFactura())
+                if (!VerificarNotaCreditoFactura())
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                    return;
+                }
+
+                if (!VerificarFacturaEnCero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                    return;
+                }
+
+                if (!VerificarDescripcionDeItems())
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
                     return;
                 }
 
@@ -3840,7 +3905,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private bool verificarArticulosSinActualizar()
+        private bool VerificarArticulosSinActualizar()
         {
             try
             {
@@ -5149,7 +5214,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private bool validarSaldoMutual()
+        private bool ValidarSaldoMutual()
         {
             try
             {
@@ -5572,7 +5637,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private bool validarNotaCreditoFactura()
+        private bool VerificarNotaCreditoFactura()
         {
             try
             {
@@ -10019,7 +10084,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private bool verificarAnularFcMutual()
+        private bool VerificarAnularFcMutual()
         {
             try
             {
