@@ -160,13 +160,8 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 infXML.ListaPrecio = Convert.ToInt32(ddlListaDePrecios.SelectedValue);
-
-                //if (this.chkDescuentoCantidad.Checked == true)
-                //    infXMLartInactivos = 1;
-
                 infXML.ArticulosPrecioConIva = 1; //1 es sin iva
                 if (RadioConIva.Checked) infXML.ArticulosPrecioConIva = 2;
-
                 if (chkUbicacion.Checked) infXML.ArticulosAguparPorUbicacion = 1;
             }
             catch (Exception Ex)
