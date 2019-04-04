@@ -340,7 +340,7 @@
                                                             </div>
                                                             <div class="col-md-4" style="text-align:right;padding-right:0px;">
                                                                 <label for="" style="color:black;" >Lector Cheque:</label>
-                                                                <asp:TextBox ID="txtLectorCheque" runat="server" AutoPostBack="true" OnTextChanged="txtLectorCheque_TextChanged"/>
+                                                                <asp:TextBox ID="txtLectorCheque" runat="server" AutoPostBack="true"/>
                                                             </div>
                                                             <table class="table table-bordered table-striped" id="dataTables-example">
                                                                 <thead>
@@ -356,6 +356,10 @@
                                                                             <a class="btn btn-success" data-toggle="modal" href="#modalLiberar" id="A1" runat="server" style="display:none;">
                                                                                 <span class='shortcut-icon icon-refresh'></span>
                                                                             </a>
+                                                                            <a class="btn btn-success" data-toggle="modal" href="#modalEscanearCheques" id="A2" runat="server">
+                                                                                <span class='shortcut-icon icon-search'></span>
+                                                                            </a>
+                                                                            <%--<asp:LinkButton ID="LinkButton4" ValidationGroup="ChequeTercero" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"></asp:LinkButton>--%>
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
@@ -836,6 +840,61 @@
             </div>
         </div>
 
+        <div id="modalEscanearCheques" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" style="width: 60%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Cheques</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Conditional" runat="server">
+                                <ContentTemplate>
+                                    <asp:Panel ID="Panel1" runat="server">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Lector de Cheques</label>
+                                                    <div class="col-md-3">
+                                                        <asp:TextBox ID="txtCheque" onkeypress="javascript:return validarNroSinPunto(event)" class="form-control" runat="server"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                    <asp:LinkButton ID="btnBuscarCheque" runat="server" Text="<span class='shortcut-icon icon-search'></span>" OnClick="btnBuscarCheque_Click" class="btn btn-info" />
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Importe</th>
+                                                    <th>Numero</th>
+                                                    <th>Banco</th>
+                                                    <th>Cuenta</th>
+                                                    <th>Tipo</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <asp:PlaceHolder ID="phChequesEscaneados" runat="server"></asp:PlaceHolder>
+                                            </tbody>
+                                        </table>
+                                    </asp:Panel>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnGuardarChequesEscaneados" Text="Guardar" class="btn btn-success" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
         <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
@@ -904,6 +963,28 @@
             }
         </script>
 
+        <script>
+            //valida los campos solo numeros
+            function validarNroSinPunto(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
+
+                if (key < 48 || key > 57) {
+                    if (key == 8 || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                    { return true; }
+                    else
+                    { return false; }
+                }
+                return true;
+            }
+        </script>
 
         <script>
             //window.onload = TotalImputado;
