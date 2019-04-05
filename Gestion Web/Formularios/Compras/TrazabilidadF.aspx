@@ -32,10 +32,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <!-- /widget-content -->
-
                         </div>
-                        <!-- /widget -->
 
                         <div class="widget stacked">
 
@@ -43,7 +40,6 @@
                                 <i class="icon-road"></i>
                                 <h3>Trazabilidad</h3>
                             </div>
-                            <!-- /widget-header -->
 
                             <div class="widget-content">
                                 <div id="validation-form" role="form" class="form-horizontal col-md-10">
@@ -61,6 +57,9 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:Button ID="btnCargarPorCantidad" runat="server" Text="Agregar por Cantidad" class="btn btn-success" OnClick="btnCargarPorCantidad_Click" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:Button ID="btnImportarPorExcel" runat="server" Text="Importar por Excel" class="btn btn-success" href="#modalImportarExcel" data-toggle="modal" />
                                             </div>
                                         </div>
                                     </fieldset>
@@ -112,6 +111,33 @@
                 </ContentTemplate>
 
             </asp:UpdatePanel>
+        </div>
+    </div>
+
+    <div id="modalImportarExcel" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Importar Excel</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Always">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label for="validateSelect" class="col-md-2">Archivo:</label>
+                                    <div class="col-md-6">
+                                        <asp:FileUpload ID="FileUpload" runat="server" />
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:Button ID="btnImportarTrazasByExcel" runat="server" Text="Importar" class="btn btn-success" OnClick="btnImportarTrazasByExcel_Click" />
+                </div>
+            </div>
         </div>
     </div>
 
