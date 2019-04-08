@@ -79,6 +79,8 @@ namespace Gestion_Web.Formularios.Pagos
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     //pongo variables de session
                     Session["ABMCobros_PosCheque"] = null;
+                    Session["ChequesEscaneados"] = null;
+                    Session["ChequesDisponibles"] = null;
 
                     this.txtFechaCh.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaRetencion.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -153,6 +155,7 @@ namespace Gestion_Web.Formularios.Pagos
                     this.cargarTablaChequesTerceros();
                     this.cargarTablaDocumentos();
                     this.cargarTablaPAgos();
+                    ObtenerChequesEscaneadosYDibujarlosEnPantalla();
 
                     //this.cargarTablaChequesTerceros();
                     this.actualizarTotales(0);                    
@@ -2169,34 +2172,44 @@ namespace Gestion_Web.Formularios.Pagos
                             break;
                         }
                     }
-                    
-                    //posCheques = (int)Session["ABMCobros_PosCheque"];
-                    //DataRow drPago = dtPagos.Rows[posCheques];
-                    //drPago["Monto"] = this.actualizarTotalCheque();
-                    //drPago["Total"] = this.actualizarTotalCheque();
-                    //dt.Rows.RemoveAt(posCheques);
-                    //dt.Rows.InsertAt(drPago, posCheques);
-                    //posCheques = dt.Rows.IndexOf(drPago);
-                    //Session.Add("ABMCobros_PosCheque", posCheques);
+
+                    ActualizarChequesEscaneadosPorIdCheque(idCheque);
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("No se pudo quitar cheque. "));
+                    ClientScript.RegisterClientScriptBlock(GetType(), "alert", mje.mensajeBoxError("No se pudo quitar cheque. "));
                 }
-                this.cargarTablaChequesCartera();
-                this.cargarTablaChequesTerceros();
-                this.actualizarTotalCheque();
-                this.actualizarTotalChequeTerceros();
-                this.actualizarTotales(0);
-                this.cargarTablaPAgos();
-
+                cargarTablaChequesCartera();
+                cargarTablaChequesTerceros();
+                actualizarTotalCheque();
+                actualizarTotalChequeTerceros();
+                actualizarTotales(0);
+                ObtenerChequesEscaneadosYDibujarlosEnPantalla();
+                cargarTablaPAgos();
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error editando cheque. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(GetType(), "alert", mje.mensajeBoxError("Error editando cheque. " + ex.Message));
             }
         }
 
+        private void ActualizarChequesEscaneadosPorIdCheque(int idCheque)
+        {
+            if (Session["ChequesEscaneados"] != null)
+            {
+                var chequesEscaneadosTemp = (List<Gestion_Api.Modelo.Cheque>)Session["ChequesEscaneados"];
+                chequesEscaneadosTemp = chequesEscaneadosTemp.Where(x => x.id != idCheque).ToList();
+                Session["ChequesEscaneados"] = chequesEscaneadosTemp;
+
+                if(Session["ChequesDisponibles"] != null)
+                {
+                    var chequesDisponiblesTemp = (List<Gestion_Api.Modelo.Cheque>)Session["ChequesDisponibles"];
+                    Gestion_Api.Modelo.Cheque cheque = contCobranza.obtenerChequeId(idCheque);
+                    chequesDisponiblesTemp.Add(cheque);
+                    Session["ChequesDisponibles"] = chequesDisponiblesTemp;
+                }                
+            }
+        }
         #endregion
 
         #region transferencias
@@ -2816,7 +2829,7 @@ namespace Gestion_Web.Formularios.Pagos
                 if (chequesDisponibles != null)
                     chequeEscaneado = chequesDisponibles.Where(x => x.numero == Convert.ToInt32(numeroCheque)).FirstOrDefault();
 
-                if (chequeEscaneado != null && chequesDisponibles != null)
+                if (chequeEscaneado != null)
                 {
                     phChequesEscaneados.Controls.Clear();
 
@@ -2826,12 +2839,43 @@ namespace Gestion_Web.Formularios.Pagos
                     {
                         CargarPHChequesEscaneados(cheque);
                     }
-                }                                 
+                }
+                
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1,"Error","Error al buscar cheque " + ex.Message);
             }
+        }
+
+        public void ObtenerChequesEscaneadosYDibujarlosEnPantalla()
+        {
+            try
+            {
+                var chequesEscaneados = ObtenerChequesEscaneados();
+
+                if (chequesEscaneados == null)
+                    return;
+
+                phChequesEscaneados.Controls.Clear();
+
+                foreach (var cheque in chequesEscaneados)
+                {
+                    CargarPHChequesEscaneados(cheque);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al obtener cheques escaneados y mostrarlos en pantalla" + ex.Message);
+                throw;
+            }
+        }
+
+        private List<Gestion_Api.Modelo.Cheque> ObtenerChequesEscaneados()
+        {
+            List<Gestion_Api.Modelo.Cheque> chequesEscaneados = (List<Gestion_Api.Modelo.Cheque>)Session["ChequesEscaneados"];
+
+            return chequesEscaneados;
         }
 
         private List<Gestion_Api.Modelo.Cheque> ActualizarChequesEscaneados(Gestion_Api.Modelo.Cheque chequeEscaneado, List<Gestion_Api.Modelo.Cheque> chequesDisponibles)
@@ -2895,17 +2939,16 @@ namespace Gestion_Web.Formularios.Pagos
             TableCell celAccion = new TableCell();
             LinkButton btnEliminar = new LinkButton();
             btnEliminar.CssClass = "btn btn-danger";
-            btnEliminar.ID = "btnEditar_" + cheque.id.ToString();
+            btnEliminar.ID = "btnEliminar_" + cheque.id.ToString();
             btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
             btnEliminar.Click += new EventHandler(EliminarChequeEscaneado);
+            btnEliminar.Click += new EventHandler(EliminarChequeTercero);
             celAccion.Controls.Add(btnEliminar);
             celAccion.Width = Unit.Percentage(5);
             celAccion.VerticalAlign = VerticalAlign.Middle;
             tr.Cells.Add(celAccion);
 
             phChequesEscaneados.Controls.Add(tr);
-
-            UpdatePanel9.Update();
         }
 
         private void EliminarChequeEscaneado(object sender, EventArgs e)
@@ -2924,12 +2967,12 @@ namespace Gestion_Web.Formularios.Pagos
                 //    if(tr.ID == idCheque.ToString())                    
                 //        trTemp = tr;                    
                 //}
-                var control = phChequesEscaneados.FindControl(idCheque.ToString());
+                //var control = phChequesEscaneados.FindControl(idCheque.ToString());
 
-                phChequesEscaneados.Controls.Remove(control);
+                //phChequesEscaneados.Controls.Remove(control);
                 //if (trTemp != null)
                 //    phChequesEscaneados.Controls.Remove(trTemp);
-                //phChequesEscaneados.Controls.Clear();
+                phChequesEscaneados.Controls.Clear();
 
                 var chequesDisponibles = ActualizarChequesEscaneadosYDisponiblesEliminados(idCheque);
 
@@ -2956,6 +2999,42 @@ namespace Gestion_Web.Formularios.Pagos
             Session["ChequesDisponibles"] = chequesDisponiblesTemp;
 
             return chequesEscaneadosTemp;
+        }
+
+        protected void btnGuardarChequesEscaneados_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (Control C in phChequesEscaneados.Controls)
+                {
+                    TableRow tr = C as TableRow;
+
+                    if(!VerificarSiChequeEscaneadoFueAgregadoAPago(Convert.ToInt32(tr.ID)))
+                        this.agregarChequesAPago(Convert.ToInt32(tr.ID));
+                }
+
+                this.cargarTablaChequesTerceros();
+                this.cargarTablaChequesCartera();
+                this.actualizarTotales(0);
+                this.cargarTablaPAgos();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al guardar cheques escaneados " + ex.Message);
+            }
+        }
+
+        private bool VerificarSiChequeEscaneadoFueAgregadoAPago(int idCheque)
+        {
+            DataTable dt = this.lstPago;
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (Convert.ToInt32(dr["ID"]) == idCheque)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

@@ -849,7 +849,7 @@
                     </div>
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
-                            <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Conditional" runat="server">
+                            <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
                                     <asp:Panel ID="Panel1" runat="server">
                                         <div class="form-group">
@@ -883,12 +883,12 @@
                                         </table>
                                     </asp:Panel>
                                 </ContentTemplate>
-                                <Triggers>
+                                <Triggers>                                    
                                 </Triggers>
                             </asp:UpdatePanel>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnGuardarChequesEscaneados" Text="Guardar" class="btn btn-success" />
+                            <asp:Button runat="server" ID="btnGuardarChequesEscaneados" Text="Guardar" class="btn btn-success" OnClick="btnGuardarChequesEscaneados_Click"/>
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
