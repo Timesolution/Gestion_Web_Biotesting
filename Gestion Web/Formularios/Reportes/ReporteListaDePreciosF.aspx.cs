@@ -159,14 +159,9 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                infXML.ListaPrecio = ddlListaDePrecios.SelectedIndex;
-
-                //if (this.chkDescuentoCantidad.Checked == true)
-                //    infXMLartInactivos = 1;
-
+                infXML.ListaPrecio = Convert.ToInt32(ddlListaDePrecios.SelectedValue);
                 infXML.ArticulosPrecioConIva = 1; //1 es sin iva
                 if (RadioConIva.Checked) infXML.ArticulosPrecioConIva = 2;
-
                 if (chkUbicacion.Checked) infXML.ArticulosAguparPorUbicacion = 1;
             }
             catch (Exception Ex)
