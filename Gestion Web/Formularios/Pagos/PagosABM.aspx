@@ -345,13 +345,13 @@
                                                             <table class="table table-bordered table-striped" id="dataTables-example">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Fecha</th>
-                                                                        <th>Importe</th>
-                                                                        <th>Numero</th>
-                                                                        <th>Banco</th>
-                                                                        <th>Cuenta</th>
-                                                                        <th>Tipo</th>
-                                                                        <th class="td-actions">
+                                                                        <th style="width:10%">Fecha</th>
+                                                                        <th style="width:10%">Importe</th>
+                                                                        <th style="width:10%">Numero</th>
+                                                                        <th style="width:20%">Banco</th>
+                                                                        <th style="width:10%">Cuenta</th>
+                                                                        <th style="width:5%">Tipo</th>
+                                                                        <th class="td-actions" style="width:10%">
                                                                             <asp:LinkButton ID="LinkButton3" ValidationGroup="ChequeTercero" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click1"></asp:LinkButton>
                                                                             <a class="btn btn-success" data-toggle="modal" href="#modalLiberar" id="A1" runat="server" style="display:none;">
                                                                                 <span class='shortcut-icon icon-refresh'></span>
@@ -855,13 +855,20 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="name" class="col-md-4">Lector de Cheques</label>
+                                                    <label for="name" class="col-md-4">Lector de Cheques</label>                                                    
                                                     <div class="col-md-3">
                                                         <asp:TextBox ID="txtCheque" onkeypress="javascript:return validarNroSinPunto(event)" class="form-control" runat="server"></asp:TextBox>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                    <asp:LinkButton ID="btnBuscarCheque" runat="server" Text="<span class='shortcut-icon icon-search'></span>" OnClick="btnBuscarCheque_Click" class="btn btn-info" />
-                                                </div>
+                                                    <div class="col-md-1">
+                                                        <asp:LinkButton ID="btnBuscarCheque" runat="server" Text="<span class='shortcut-icon icon-search'></span>" OnClick="btnBuscarCheque_Click" class="btn btn-info" />
+                                                    </div>
+                                                    <div class="col-md-4" style="text-align:left">
+                                                        <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel9">
+                                                            <ProgressTemplate>
+                                                                <i class="fa fa-spinner fa-spin" style="text-align:left"></i><span>&nbsp;&nbsp;Procesando, por favor aguarde</span>
+                                                            </ProgressTemplate>
+                                                        </asp:UpdateProgress>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
