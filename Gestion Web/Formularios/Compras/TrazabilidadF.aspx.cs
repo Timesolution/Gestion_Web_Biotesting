@@ -56,6 +56,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (idArticulo > 0)
                 {
                     this.obtenerGrupoTrazabilidad(idRemito, idArticulo);
+                    btnImportarPorExcel.Visible = true;
                 }
 
             }
@@ -227,7 +228,6 @@ namespace Gestion_Web.Formularios.Compras
                         this.idGrupo = art.grupo.id;
                         this.cargarCamposGrupo();
                         this.CargarItems();
-
                     }
                     else
                     {
@@ -269,14 +269,18 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 int indice = 1;
-                foreach (Trazabilidad_Campos campo in campos)
-                {
-                    string nombreColumna = "Campo" + indice.ToString();
-                    dtItemsTemp.Columns.Add(nombreColumna);
-                    indice++;
-                }
 
-                dtItems = dtItemsTemp;
+                if (dtItemsTemp != null)
+                {
+                    foreach (Trazabilidad_Campos campo in campos)
+                    {
+                        string nombreColumna = "Campo" + indice.ToString();
+                        dtItemsTemp.Columns.Add(nombreColumna);
+                        indice++;
+                    }
+
+                    dtItems = dtItemsTemp;
+                }
             }
             catch (Exception ex)
             {
@@ -330,22 +334,17 @@ namespace Gestion_Web.Formularios.Compras
                         celAccion.VerticalAlign = VerticalAlign.Middle;
                         tr.Cells.Add(celAccion);
 
-
                         columnas = 0;
                         pos++;
                         idTrazas = "";
                         phTrazabilidad.Controls.Add(tr);
-
                     }
                 }
-
                 if (pos == Convert.ToDecimal(this.lblCantidad.Text))
                 {
                     this.btnCargar.Visible = false;
                 }
-
                 this.lblCantCargada.Text = pos.ToString();
-
             }
             catch (Exception ex)
             {
@@ -384,7 +383,6 @@ namespace Gestion_Web.Formularios.Compras
 
                 foreach (CampoDinamico txt in phCampos.Controls)
                 {
-
                     Trazabilidad traza = new Trazabilidad();
                     Trazabilidad_Campos campo = this.contArticulos.obtenerCamposTrazabilidadByNombre(txt.lblCampo.InnerText, a.grupo.id);
 
@@ -556,6 +554,12 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                if (lblCantCargada.Text == lblCantidad.Text)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Las trazas ya estan todas cargadas",""));
+                    return;
+                }
+
                 Boolean fileOK = false;
 
                 String path = Server.MapPath("../../content/excelFiles/trazas");
@@ -587,11 +591,16 @@ namespace Gestion_Web.Formularios.Compras
 
                     var trazasExcel = new TrazasExcel();
                     var itemsTrazasExcel = trazasExcel.traerDatos(path + FileUpload.FileName);
-                    ImportarTrazabilidadExcelResponse response = contArticulos.ComprobarQueElExcelParaImportarTrazasEsteCorrecto(idRemito, itemsTrazasExcel);
+                    ImportarTrazabilidadExcelResponse response = contArticulos.ProcesarExcelParaImportarTrazas(idRemito, idArticulo, itemsTrazasExcel,Convert.ToInt32(lblCantCargada.Text));
 
                     if (!response.resultadoImportarTrazabilidadExcel)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"" + response.detalleImportarTrazabilidadExcel + "\", {type: \"error\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(response.detalleImportarTrazabilidadExcel));
+                        return;
+                    }
+                    else
+                    {
+                        Response.Redirect("TrazabilidadF.aspx?rc=" + idRemito + "&art=" + idArticulo);
                     }
                 }
                 else

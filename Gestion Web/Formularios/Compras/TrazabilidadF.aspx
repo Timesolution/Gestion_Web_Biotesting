@@ -59,7 +59,7 @@
                                                 <asp:Button ID="btnCargarPorCantidad" runat="server" Text="Agregar por Cantidad" class="btn btn-success" OnClick="btnCargarPorCantidad_Click" />
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:Button ID="btnImportarPorExcel" runat="server" Text="Importar por Excel" class="btn btn-success" href="#modalImportarExcel" data-toggle="modal" />
+                                                <asp:Button ID="btnImportarPorExcel" Visible="false" runat="server" Text="Importar por Excel" class="btn btn-success" href="#modalImportarExcel" data-toggle="modal" />
                                             </div>
                                         </div>
                                     </fieldset>
