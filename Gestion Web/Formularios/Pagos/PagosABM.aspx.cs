@@ -2030,6 +2030,8 @@ namespace Gestion_Web.Formularios.Pagos
                     dr["Monto"] = ch.importe;
                     dr["Cotizacion"] = "1 ";
                     dr["Total"] = decimal.Round(ch.importe, 2);
+                    dr["IdTipoPago"] = "4"; //CHEQUE TERCERO
+                    dr["FilaTipoPago"] = dtCheque.Rows.IndexOf(drCheque).ToString();
 
                     dt.Rows.Add(dr);
 
@@ -2564,6 +2566,18 @@ namespace Gestion_Web.Formularios.Pagos
                     dtTransf.Rows.RemoveAt(fila);
                     this.lstTransferencia = dtTransf;
                 }
+                //quito cheque tercero
+                if (forma == 4)
+                {
+                    DataTable dtChequeTercero = this.lstChequeTercero2;
+                    var cheque = dtChequeTercero.Rows[fila];
+                    ActualizarChequesEscaneadosYDisponiblesEliminados(Convert.ToInt32(cheque["ID"]));
+                    ObtenerChequesEscaneadosYDibujarlosEnPantalla();
+                    dtChequeTercero.Rows.RemoveAt(fila);
+                    this.lstChequeTercero2 = dtChequeTercero;
+                    this.cargarTablaChequesTerceros();
+                    this.cargarTablaChequesCartera();
+                }
                 //quito Tarjetas
                 if (forma == 5)
                 {
@@ -2958,20 +2972,6 @@ namespace Gestion_Web.Formularios.Pagos
                 string[] Cheque = (sender as LinkButton).ID.Split('_');
                 int idCheque = Convert.ToInt32(Cheque[1]);
 
-                //int f = contPagos.liberarCheque(idCheque);
-
-                //TableRow trTemp = null;
-
-                //foreach (TableRow tr in phChequesEscaneados.Controls)
-                //{
-                //    if(tr.ID == idCheque.ToString())                    
-                //        trTemp = tr;                    
-                //}
-                //var control = phChequesEscaneados.FindControl(idCheque.ToString());
-
-                //phChequesEscaneados.Controls.Remove(control);
-                //if (trTemp != null)
-                //    phChequesEscaneados.Controls.Remove(trTemp);
                 phChequesEscaneados.Controls.Clear();
 
                 var chequesDisponibles = ActualizarChequesEscaneadosYDisponiblesEliminados(idCheque);
