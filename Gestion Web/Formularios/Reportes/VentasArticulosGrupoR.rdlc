@@ -31,7 +31,7 @@
         <Top>0.50271cm</Top>
         <Left>1.00542cm</Left>
         <Height>1.05833cm</Height>
-        <Width>17.30375cm</Width>
+        <Width>19.10292cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -46,10 +46,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>9.11583cm</Width>
+              <Width>5.39278cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.18792cm</Width>
+              <Width>2.20014cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2.5cm</Width>
@@ -64,24 +64,26 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox13">
+                    <Textbox Name="Textbox5">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Grupo</Value>
+                              <Value>SubGrupo</Value>
                               <Style>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox13</rd:DefaultName>
+                      <rd:DefaultName>Textbox5</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -215,21 +217,21 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="GrupoArticulos">
+                    <Textbox Name="SubGrupoArticulos">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!GrupoArticulos.Value</Value>
+                              <Value>=Fields!SubGrupoArticulos.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>GrupoArticulos</rd:DefaultName>
+                      <rd:DefaultName>SubGrupoArticulos</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -342,23 +344,23 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox1">
+                    <Textbox Name="Textbox13">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Totales:</Value>
-                              <Style />
+                              <Value>Total:</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <rd:DefaultName>Textbox13</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -370,6 +372,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -382,7 +385,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Sum(Fields!Cantidad.Value)</Value>
-                              <Style />
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -400,6 +405,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -412,7 +418,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Sum(Fields!Costo.Value)</Value>
-                              <Style />
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -430,6 +438,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -442,7 +451,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Sum(Fields!Total.Value)</Value>
-                              <Style />
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -460,6 +471,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -477,12 +489,132 @@
         <TablixRowHierarchy>
           <TablixMembers>
             <TablixMember>
+              <TablixHeader>
+                <Size>6.51cm</Size>
+                <CellContents>
+                  <Textbox Name="Textbox8">
+                    <CanGrow>true</CanGrow>
+                    <KeepTogether>true</KeepTogether>
+                    <Paragraphs>
+                      <Paragraph>
+                        <TextRuns>
+                          <TextRun>
+                            <Value>Grupo Articulos</Value>
+                            <Style>
+                              <FontSize>11pt</FontSize>
+                              <FontWeight>Bold</FontWeight>
+                            </Style>
+                          </TextRun>
+                        </TextRuns>
+                        <Style />
+                      </Paragraph>
+                    </Paragraphs>
+                    <rd:DefaultName>Textbox8</rd:DefaultName>
+                    <Style>
+                      <Border>
+                        <Color>LightGrey</Color>
+                        <Style>Solid</Style>
+                      </Border>
+                      <BackgroundColor>LightGrey</BackgroundColor>
+                      <VerticalAlign>Middle</VerticalAlign>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingRight>2pt</PaddingRight>
+                      <PaddingTop>2pt</PaddingTop>
+                      <PaddingBottom>2pt</PaddingBottom>
+                    </Style>
+                  </Textbox>
+                </CellContents>
+              </TablixHeader>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
               <KeepWithGroup>After</KeepWithGroup>
             </TablixMember>
             <TablixMember>
-              <Group Name="Details" />
+              <Group Name="GrupoArticulos">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!GrupoArticulos.Value</GroupExpression>
+                </GroupExpressions>
+              </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!GrupoArticulos.Value</Value>
+                </SortExpression>
+              </SortExpressions>
+              <TablixHeader>
+                <Size>6.51cm</Size>
+                <CellContents>
+                  <Textbox Name="GrupoArticulos1">
+                    <CanGrow>true</CanGrow>
+                    <KeepTogether>true</KeepTogether>
+                    <Paragraphs>
+                      <Paragraph>
+                        <TextRuns>
+                          <TextRun>
+                            <Value>=Fields!GrupoArticulos.Value</Value>
+                            <Style />
+                          </TextRun>
+                        </TextRuns>
+                        <Style />
+                      </Paragraph>
+                    </Paragraphs>
+                    <rd:DefaultName>GrupoArticulos1</rd:DefaultName>
+                    <Style>
+                      <Border>
+                        <Color>LightGrey</Color>
+                        <Style>Solid</Style>
+                      </Border>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingRight>2pt</PaddingRight>
+                      <PaddingTop>2pt</PaddingTop>
+                      <PaddingBottom>2pt</PaddingBottom>
+                    </Style>
+                  </Textbox>
+                </CellContents>
+              </TablixHeader>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Details" />
+                </TablixMember>
+              </TablixMembers>
             </TablixMember>
             <TablixMember>
+              <TablixHeader>
+                <Size>6.51cm</Size>
+                <CellContents>
+                  <Textbox Name="Textbox11">
+                    <CanGrow>true</CanGrow>
+                    <KeepTogether>true</KeepTogether>
+                    <Paragraphs>
+                      <Paragraph>
+                        <TextRuns>
+                          <TextRun>
+                            <Value />
+                            <Style />
+                          </TextRun>
+                        </TextRuns>
+                        <Style>
+                          <TextAlign>Right</TextAlign>
+                        </Style>
+                      </Paragraph>
+                    </Paragraphs>
+                    <rd:DefaultName>Textbox11</rd:DefaultName>
+                    <Style>
+                      <Border>
+                        <Color>LightGrey</Color>
+                        <Style>Solid</Style>
+                      </Border>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingRight>2pt</PaddingRight>
+                      <PaddingTop>2pt</PaddingTop>
+                      <PaddingBottom>2pt</PaddingBottom>
+                    </Style>
+                  </Textbox>
+                </CellContents>
+              </TablixHeader>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
               <KeepWithGroup>Before</KeepWithGroup>
             </TablixMember>
           </TablixMembers>
@@ -491,7 +623,7 @@
         <Top>1.84891cm</Top>
         <Left>1.00542cm</Left>
         <Height>1.90583cm</Height>
-        <Width>17.30375cm</Width>
+        <Width>19.10292cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -503,7 +635,7 @@
     <Height>1.58333in</Height>
     <Style />
   </Body>
-  <Width>7.55717in</Width>
+  <Width>8.21851in</Width>
   <Page>
     <PageHeader>
       <Height>0.9966cm</Height>
@@ -531,7 +663,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox60</rd:DefaultName>
           <Top>0.31158cm</Top>
-          <Left>15.33292cm</Left>
+          <Left>16.70876cm</Left>
           <Height>0.39398cm</Height>
           <Width>3.39958cm</Width>
           <Style>
@@ -577,7 +709,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox59</rd:DefaultName>
           <Top>0.17639cm</Top>
-          <Left>16.2325cm</Left>
+          <Left>17.60834cm</Left>
           <Height>0.6cm</Height>
           <Width>2.5cm</Width>
           <Style>
@@ -652,10 +784,14 @@
           <DataField>Costo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="SubGrupoArticulos">
+          <DataField>SubGrupoArticulos</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsVentas</rd:DataSetName>
-        <rd:SchemaPath>C:\Proyectos\Repositorios\Repositorio WEB\Gestion Web\Formularios\Reportes\dsVentas.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\black\Documents\Trabajo\Gestion\gestion_WEB\Gestion Web\Formularios\Reportes\dsVentas.xsd</rd:SchemaPath>
         <rd:TableName>TopArticulosCant</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

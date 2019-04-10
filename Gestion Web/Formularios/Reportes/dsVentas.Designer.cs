@@ -608,6 +608,8 @@ namespace Gestion_Web.Formularios.Reportes {
             
             private global::System.Data.DataColumn columnCosto;
             
+            private global::System.Data.DataColumn columnSubGrupoArticulos;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public TopArticulosCantDataTable() {
@@ -699,6 +701,14 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SubGrupoArticulosColumn {
+                get {
+                    return this.columnSubGrupoArticulos;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -734,7 +744,7 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public TopArticulosCantRow AddTopArticulosCantRow(string Codigo, string Descripcion, string Cantidad, string Sucursal, string GrupoArticulos, string Total, string Costo) {
+            public TopArticulosCantRow AddTopArticulosCantRow(string Codigo, string Descripcion, string Cantidad, string Sucursal, string GrupoArticulos, string Total, string Costo, string SubGrupoArticulos) {
                 TopArticulosCantRow rowTopArticulosCantRow = ((TopArticulosCantRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Codigo,
@@ -743,7 +753,8 @@ namespace Gestion_Web.Formularios.Reportes {
                         Sucursal,
                         GrupoArticulos,
                         Total,
-                        Costo};
+                        Costo,
+                        SubGrupoArticulos};
                 rowTopArticulosCantRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowTopArticulosCantRow);
                 return rowTopArticulosCantRow;
@@ -773,6 +784,7 @@ namespace Gestion_Web.Formularios.Reportes {
                 this.columnGrupoArticulos = base.Columns["GrupoArticulos"];
                 this.columnTotal = base.Columns["Total"];
                 this.columnCosto = base.Columns["Costo"];
+                this.columnSubGrupoArticulos = base.Columns["SubGrupoArticulos"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -792,6 +804,8 @@ namespace Gestion_Web.Formularios.Reportes {
                 base.Columns.Add(this.columnTotal);
                 this.columnCosto = new global::System.Data.DataColumn("Costo", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCosto);
+                this.columnSubGrupoArticulos = new global::System.Data.DataColumn("SubGrupoArticulos", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSubGrupoArticulos);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3523,6 +3537,22 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SubGrupoArticulos {
+                get {
+                    try {
+                        return ((string)(this[this.tableTopArticulosCant.SubGrupoArticulosColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'SubGrupoArticulos\' in table \'TopArticulosCant\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTopArticulosCant.SubGrupoArticulosColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsCodigoNull() {
                 return this.IsNull(this.tableTopArticulosCant.CodigoColumn);
             }
@@ -3603,6 +3633,18 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCostoNull() {
                 this[this.tableTopArticulosCant.CostoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSubGrupoArticulosNull() {
+                return this.IsNull(this.tableTopArticulosCant.SubGrupoArticulosColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSubGrupoArticulosNull() {
+                this[this.tableTopArticulosCant.SubGrupoArticulosColumn] = global::System.Convert.DBNull;
             }
         }
         

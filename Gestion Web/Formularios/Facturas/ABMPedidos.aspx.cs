@@ -2832,7 +2832,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Inicio procesar pedido excel");
                 Boolean fileOK = false;
 
                 String path = Server.MapPath("../../content/excelFiles/pedidos");
@@ -2855,10 +2854,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (!Directory.Exists(path))
                     {
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "No existe directorio. " + path + ". lo creo");
-
                         Directory.CreateDirectory(path);
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "directorio creado");
                     }
                     //guardo nombre archivo
                     string nombreArchivoExcel = FileUpload1.FileName;
@@ -2866,7 +2862,6 @@ namespace Gestion_Web.Formularios.Facturas
                     //lo subo
                     FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
 
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Voy a traer pedidos desde el excel " + path + FileUpload1.FileName);
                     var pedidoExcel = new PedidoExcel();
                     var pedidos = pedidoExcel.traerDatos(path + FileUpload1.FileName);
 
