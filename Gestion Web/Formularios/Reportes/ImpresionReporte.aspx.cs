@@ -52,7 +52,8 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 if (!IsPostBack)
-                {                    
+                {
+
                     this.valor = Convert.ToInt32(Request.QueryString["valor"]);                    
                     this.excel = Convert.ToInt32(Request.QueryString["ex"]);
                     this.fechaD = Request.QueryString["fd"] as string;
