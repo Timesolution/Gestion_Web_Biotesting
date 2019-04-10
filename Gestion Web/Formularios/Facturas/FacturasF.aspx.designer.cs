@@ -751,15 +751,6 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.DropDownList dropDownListProveedoresPatentamiento;
         
         /// <summary>
-        /// RequiredFieldValidator24 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator24;
-        
-        /// <summary>
         /// txtTotalPatentamiento control.
         /// </summary>
         /// <remarks>
@@ -769,13 +760,13 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.TextBox txtTotalPatentamiento;
         
         /// <summary>
-        /// lbtnGenerarPatentamiento control.
+        /// btnGenerarPatentamiento control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarPatentamiento;
+        protected global::System.Web.UI.WebControls.Button btnGenerarPatentamiento;
         
         /// <summary>
         /// UpdatePanel3 control.

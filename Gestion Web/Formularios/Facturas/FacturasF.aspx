@@ -663,11 +663,8 @@
                                 <label class="col-md-4">Proveedor</label>
                                 <div class="col-md-6">
                                     <h5>
-                                        <asp:DropDownList ID="dropDownListProveedoresPatentamiento" runat="server" class="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="dropDownListProveedoresPatentamiento" runat="server" InitialValue="-1" class="form-control"></asp:DropDownList>
                                     </h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListIvaFact" InitialValue="-1" ValidationGroup="RefactGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -678,7 +675,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <asp:LinkButton ID="lbtnGenerarPatentamiento" runat="server" class="btn btn-success" OnClick="lbtnGenerarPatentamiento_Click">Generar</asp:LinkButton>
+                                <asp:Button ID="btnGenerarPatentamiento" runat="server" Text="Generar" class="btn btn-success" OnClick="btnGenerarPatentamiento_Click"/>
                             </div>
                         </div>
                     </div>
