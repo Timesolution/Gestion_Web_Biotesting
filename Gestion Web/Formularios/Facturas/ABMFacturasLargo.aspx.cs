@@ -72,11 +72,13 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
 
-                this.VerificarLogin();
-                this.accion = Convert.ToInt32(Request.QueryString["accion"]);
-                this.idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
+                VerificarLogin();
+                ConfigurarModoCredito();
 
-                 _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
+                accion = Convert.ToInt32(Request.QueryString["accion"]);
+                idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
+
+                _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true;  " + btnAgregarRemitir.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 btnAgregarRemitir.Attributes.Add("onclick", " this.disabled = true; " + btnAgregar.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarRemitir, null) + ";");
@@ -331,6 +333,27 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
         }
+
+        private void ConfigurarModoCredito()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple == "1")
+                {
+                    chkCreditoManual.Checked = true;
+                    phCreditoModoAvanzado.Visible = false;
+                }
+                else
+                {
+                    phCreditoModoAvanzado.Visible = true;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
         private void VerificarLogin()
         {
             try
@@ -342,7 +365,6 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     if (this.verificarAcceso() != 1)
-                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
                     {
                         Response.Redirect("/Default.aspx?m=1", false);
                     }
@@ -371,7 +393,7 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListLista.Enabled = false;
                     DropListLista.CssClass = "form-control";
                 }
-                    
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -2496,7 +2518,8 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                         {
-                            this.txtPUnitario.Text = art.precioSinIva.ToString();
+                            this.txtPUnitario.Text = Decimal.Round(art.precioVenta / (1 + (art.porcentajeIva / 100)), 2).ToString();
+
                         }
                     }
 
@@ -3401,6 +3424,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (fact.items.Count > 0)
                 {
+                    FormatearPrecioUnitarioAndTotalItems(fact);
 
                     int datosExtras = this.validarDatosExtrasCargadosFactura(fact);
                     if (datosExtras < 1)
@@ -3467,18 +3491,21 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     if (fact.formaPAgo.forma == "Credito")
                     {
-                        if (String.IsNullOrEmpty(fact.NroSolicitud) && this.accion != 6)
+                        if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se cargo solicitud del credito!. \");", true);
-                            return;
+                            if (String.IsNullOrEmpty(fact.NroSolicitud) && this.accion != 6)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se cargo solicitud del credito!. \");", true);
+                                return;
+                            }
                         }
+
                         int okAnticipo = this.validarCobroAnticipo();
                         if (okAnticipo <= 0)
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se genero el cobro del anticipo!. \");", true);
                             return;
                         }
-
                     }
                     if (fact.formaPAgo.forma == "Mutuales")
                     {
@@ -3559,13 +3586,7 @@ namespace Gestion_Web.Formularios.Facturas
                         return;
                     }
 
-                    //por si es venta entre sucursales y selecciono un cliente interno q no pueda ingresar cantidades en negativo
-                    if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(factura) == 0)
-                    {
-                        return;
-                    }
-
-                    //por si es venta entre sucursales y selecciono un cliente interno q no pueda ingresar cantidades en negativo
+                    //por si es venta entre sucursales y selecciono un cliente interno que no pueda ingresar cantidades en negativo
                     if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(factura) == 0)
                     {
                         return;
@@ -3596,7 +3617,6 @@ namespace Gestion_Web.Formularios.Facturas
                                 //si NC de prp cuando facturo anulo el remito par devolver las trazas
                                 if (fact.tipo.tipo.Contains("Credito PRP") && config.egresoStock == "1")
                                 {
-
                                     Remito r = this.controlador.obtenerRemitoByFactura(Convert.ToInt32(facturas.Split(';')[0]));
                                     this.contArticulo.AnularTrazabilidadArticulosDesdeRemito(r);
                                 }
@@ -3747,7 +3767,6 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         #endregion
 
-                        //factura exitosa
                         Session.Remove("Factura");
                         string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
                         if (imprimir == "1")
@@ -3769,7 +3788,6 @@ namespace Gestion_Web.Formularios.Facturas
                         if (i == 0)
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Se debe reprocesar factura electronica. Vuelva a facturar. \", {type: \"error\"});", true);
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se debe reprocesar factura electronica. Vuelva a facturar"));
                         }
                         string motivo = "";
                         try
@@ -3778,22 +3796,43 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         catch { }
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura 2." + motivo + ". \", {type: \"error\"});", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar factura "));
                     }
 
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe agregar articulos a la factura. " + this.txtCodigo.Text + " \", {type: \"error\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura " + this.txtCodigo.Text));
                 }
             }
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error guardando facturas." + ex.Message + " \", {type: \"error\"});", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando facturas. " + ex.Message));
             }
         }
+
+        private void FormatearPrecioUnitarioAndTotalItems(Factura factura)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
+                {
+                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
+                    {
+                        foreach (var item in factura.items)
+                        {
+                            item.precioUnitario = item.precioUnitario * (1 + (item.porcentajeIva / 100));
+                            item.total = item.total * (1 + (item.porcentajeIva / 100));
+                            item.descuento = item.descuento * (1 + (item.porcentajeIva / 100));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Ocurrió un error en FormatearPrecioUnitarioAndTotalItems. Excepción: " + ex.Message);
+            }
+        }
+
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
         {
             try
@@ -8277,10 +8316,14 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string omitioValidacion = this.lblOmitioCodigoCredito.Text;
                 string motivo = this.txtMotivoCredito.Text;
-                if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
-                    return;
+                    if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
+                        return;
+                    }
                 }
 
                 foreach (Control c in this.phSolicitud.Controls)
@@ -8300,84 +8343,92 @@ namespace Gestion_Web.Formularios.Facturas
                         solicitud.FechaValidacion = DateTime.Now;
                     }
                 }
-                if (!String.IsNullOrEmpty(nroSolicitud))
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                 {
+                    if (String.IsNullOrEmpty(nroSolicitud))
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe seleccionar al menos una solicitud. \");", true);
+                        return;
+                    }
+
                     int okSucursal = contPlenario.validarSucursalSolicitudPlenario(solicitud.Dni, solicitud.NroSolicitud, Convert.ToInt32(this.ListSucursal.SelectedValue));
                     if (okSucursal < 0)
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"La solicitud seleccionada no corresponde a esta sucursal. \");", true);
                         return;
                     }
+                }
 
-                    Factura f = Session["Factura"] as Factura;
+                Factura f = Session["Factura"] as Factura;
 
-                    decimal diferencia = f.total - (solicitud.Capital + solicitud.Anticipo.Value);
+                decimal diferencia = f.total - (solicitud.Capital + solicitud.Anticipo.Value);
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
+                {
                     if (Math.Abs(diferencia) > Convert.ToDecimal(10))
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto de la factura. \");", true);
                         return;
                     }
+                }
 
-                    if (solicitud.Anticipo.ToString() != this.txtAnticipo.Text)
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
-                        return;
-                    }
-                    this.txtComentarios.Text += "\n " + datos;
-                    f.NroSolicitud = nroSolicitud;
-                    f.Solicitud = solicitud;
-                    Session["Factura"] = f;
+                if (solicitud.Anticipo.ToString() != this.txtAnticipo.Text)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
+                    return;
+                }
+
+                this.txtComentarios.Text += "\n " + datos;
+                f.NroSolicitud = nroSolicitud;
+                f.Solicitud = solicitud;
+                Session["Factura"] = f;
+                //lo marco como que se uso
+                contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
+
+                if (omitioValidacion == "0")
+                {
                     //lo marco como que se uso
                     contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
-
-                    if (omitioValidacion == "0")
-                    {
-                        //lo marco como que se uso
-                        contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
-                        this.txtComentarios.Text += " - VALIDADO POR SMS";
-                    }
-                    else
-                    {
-                        if (this.lblIdRegistro.Text == "0")
-                        {
-                            CodigosTelefono registro = new CodigosTelefono();
-                            registro.DNI = this.txtDniCredito.Text;
-                            string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
-                            if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
-                            {
-                                registro.Telefono = telefono;
-                            }
-                            registro.FechaHora = DateTime.Now;
-                            registro.Estado = 0;
-                            registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
-                            registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
-                            registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            contPlenario.agregarCodigoTelefono(registro);
-                            this.lblIdRegistro.Text = registro.Id.ToString();
-                        }
-                        else
-                        {
-                            Planario_Api.Plenario p = new Planario_Api.Plenario();
-                            CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            p.modificarTelefonoDNI(registro);
-                        }
-                    }
-                    this.guardarDatosFechaNacimiento();
-                    int temp = this.verificarCobroAnticipo();
-
-                    if (temp <= 0)
-                        return;
-
-                    this.obtenerPagosCuentaAnticipo();
-
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud seleccionada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
+                    this.txtComentarios.Text += " - VALIDADO POR SMS";
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe seleccionar al menos una solicitud. \");", true);
+                    if (this.lblIdRegistro.Text == "0")
+                    {
+                        CodigosTelefono registro = new CodigosTelefono();
+                        registro.DNI = this.txtDniCredito.Text;
+                        string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
+                        if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
+                        {
+                            registro.Telefono = telefono;
+                        }
+                        registro.FechaHora = DateTime.Now;
+                        registro.Estado = 0;
+                        registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
+                        registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                        registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        contPlenario.agregarCodigoTelefono(registro);
+                        this.lblIdRegistro.Text = registro.Id.ToString();
+                    }
+                    else
+                    {
+                        Planario_Api.Plenario p = new Planario_Api.Plenario();
+                        CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        p.modificarTelefonoDNI(registro);
+                    }
                 }
+                this.guardarDatosFechaNacimiento();
+                int temp = this.verificarCobroAnticipo();
+
+                if (temp <= 0)
+                    return;
+
+                this.obtenerPagosCuentaAnticipo();
+
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud seleccionada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
             }
             catch (Exception ex)
             {
@@ -8389,107 +8440,127 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 ControladorPlenario contPlenario = new ControladorPlenario();
+                SolicitudPlenario solicitudPlenario = new SolicitudPlenario();
 
                 string omitioValidacion = this.lblOmitioCodigoCredito.Text;
                 string motivo = this.txtMotivoCredito.Text;
-                if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
-                    return;
-                }
-
-                if (this.txtNroSolicitudManual.Text.Length != 6)
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Nro de solicitud debe ser de 6 digitos. \");", true);
-                    return;
-                }
-
-                if (!String.IsNullOrEmpty(this.txtNroSolicitudManual.Text) && !String.IsNullOrEmpty(this.txtFechaSolicitudManual.Text) && !String.IsNullOrEmpty(this.txtCapitalSolicitudManual.Text))
-                {
-                    SolicitudPlenario solicitud = new SolicitudPlenario();
-                    solicitud.Dni = this.txtDniCredito.Text;
-                    solicitud.FechaOperacion = Convert.ToDateTime(this.txtFechaSolicitudManual.Text, new CultureInfo("es-AR"));
-                    solicitud.NroSolicitud = Convert.ToInt32(this.txtNroSolicitudManual.Text);
-                    solicitud.Capital = Convert.ToDecimal(this.txtCapitalSolicitudManual.Text);
-                    solicitud.Anticipo = Convert.ToDecimal(this.txtAnticipoSolicitudManual.Text);
-                    solicitud.Validada = 0;
-
-                    string datos = "Solicitud nº " + this.txtNroSolicitudManual.Text + ", DNI: " + this.txtDniCredito.Text + ", Fecha: " + this.txtFechaSolicitudManual.Text + ", Capital:" + this.txtCapitalSolicitudManual.Text + ", Anticipo:" + this.txtAnticipoSolicitudManual.Text;
-
-                    Factura f = Session["Factura"] as Factura;
-
-                    decimal diferencia = f.total - (solicitud.Capital + solicitud.Anticipo.Value);
-                    if (Math.Abs(diferencia) > Convert.ToDecimal(10))
+                    if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto de la factura. \");", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
                         return;
                     }
 
-                    if (solicitud.Anticipo.ToString() != this.txtAnticipo.Text)
+                    if (this.txtNroSolicitudManual.Text.Length != 6)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Nro de solicitud debe ser de 6 digitos. \");", true);
                         return;
                     }
 
-                    f.NroSolicitud = this.txtNroSolicitudManual.Text;
-                    f.Solicitud = solicitud;
-                    Session["Factura"] = f;
-                    this.txtComentarios.Text += "\n " + datos;
-
-                    if (omitioValidacion == "0")
+                    if (String.IsNullOrEmpty(this.txtNroSolicitudManual.Text) && String.IsNullOrEmpty(this.txtFechaSolicitudManual.Text) && String.IsNullOrEmpty(this.txtCapitalSolicitudManual.Text))
                     {
-                        //lo marco como que se uso
-                        contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
-                        this.txtComentarios.Text += " - VALIDADO POR SMS";
-                    }
-                    else
-                    {
-                        if (this.lblIdRegistro.Text == "0")
-                        {
-                            CodigosTelefono registro = new CodigosTelefono();
-                            registro.DNI = this.txtDniCredito.Text;
-                            string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
-                            if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
-                            {
-                                registro.Telefono = telefono;
-                            }
-                            registro.FechaHora = DateTime.Now;
-                            registro.Estado = 0;
-                            registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
-                            registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
-                            registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            contPlenario.agregarCodigoTelefono(registro);
-                            this.lblIdRegistro.Text = registro.Id.ToString();
-                        }
-                        else
-                        {
-                            Planario_Api.Plenario p = new Planario_Api.Plenario();
-                            CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            p.modificarTelefonoDNI(registro);
-                        }
-                    }
-                    this.guardarDatosFechaNacimiento();
-                    int temp = this.verificarCobroAnticipo();
-
-                    if (temp <= 0)
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar todos los datos!. \");", true);
                         return;
+                    }
 
-                    this.obtenerPagosCuentaAnticipo();
-
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud cargada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
+                    solicitudPlenario.Dni = this.txtDniCredito.Text;
+                    solicitudPlenario.FechaOperacion = Convert.ToDateTime(this.txtFechaSolicitudManual.Text, new CultureInfo("es-AR"));
+                    solicitudPlenario.NroSolicitud = Convert.ToInt32(this.txtNroSolicitudManual.Text);
+                    solicitudPlenario.Capital = Convert.ToDecimal(this.txtCapitalSolicitudManual.Text);
+                    solicitudPlenario.Anticipo = Convert.ToDecimal(this.txtAnticipoSolicitudManual.Text);
+                    solicitudPlenario.Validada = 0;
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar todos los datos!. \");", true);
+                    InicializarSolicitudPlenarioPorDefault(solicitudPlenario);
                 }
+
+                string datos = "Solicitud nº " + solicitudPlenario.NroSolicitud.ToString() + ", DNI: " + solicitudPlenario.Dni + ", Fecha: " + solicitudPlenario.FechaOperacion.ToString("dd/MM/yyyy") + 
+                    ", Capital:" + solicitudPlenario.Capital + ", Anticipo:" + solicitudPlenario.Anticipo;
+
+                Factura f = Session["Factura"] as Factura;
+
+                decimal diferencia = f.total - (solicitudPlenario.Capital + solicitudPlenario.Anticipo.Value);
+
+                if (Math.Abs(diferencia) > Convert.ToDecimal(10))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto de la factura. \");", true);
+                    return;
+                }
+
+                if (solicitudPlenario.Anticipo.ToString() != this.txtAnticipo.Text)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
+                    return;
+                }
+
+                f.NroSolicitud = solicitudPlenario.NroSolicitud.ToString();
+                f.Solicitud = solicitudPlenario;
+                Session["Factura"] = f;
+                this.txtComentarios.Text += "\n " + datos;
+
+                if (omitioValidacion == "0")
+                {
+                    //lo marco como que se uso
+                    contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
+                    this.txtComentarios.Text += " - VALIDADO POR SMS";
+                }
+                else
+                {
+                    if (this.lblIdRegistro.Text == "0")
+                    {
+                        CodigosTelefono registro = new CodigosTelefono();
+                        registro.DNI = this.txtDniCredito.Text;
+                        string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
+                        if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
+                        {
+                            registro.Telefono = telefono;
+                        }
+                        registro.FechaHora = DateTime.Now;
+                        registro.Estado = 0;
+                        registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
+                        registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                        registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        contPlenario.agregarCodigoTelefono(registro);
+                        this.lblIdRegistro.Text = registro.Id.ToString();
+                    }
+                    else
+                    {
+                        Planario_Api.Plenario p = new Planario_Api.Plenario();
+                        CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        p.modificarTelefonoDNI(registro);
+                    }
+                }
+                this.guardarDatosFechaNacimiento();
+                int temp = this.verificarCobroAnticipo();
+
+                if (temp <= 0)
+                    return;
+
+                this.obtenerPagosCuentaAnticipo();
+
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud cargada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
             }
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Ocurrio un error guardando solicitud. " + ex.Message + " \", {type: \"error\"});", true);
             }
         }
+
+        private void InicializarSolicitudPlenarioPorDefault(SolicitudPlenario solicitudPlenario) 
+        {
+            solicitudPlenario.Dni = "00000000";
+            solicitudPlenario.FechaOperacion = DateTime.Now;
+            solicitudPlenario.NroSolicitud = 000000;
+            solicitudPlenario.Capital = Convert.ToDecimal(txtFinanciado.Text);
+            solicitudPlenario.Anticipo = Convert.ToDecimal(txtAnticipo.Text);
+            solicitudPlenario.Validada = 0;
+        }
+
         private void guardarDatosFechaNacimiento()
         {
             try
@@ -8581,7 +8652,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.panelSolicitudes.Visible = false;
                     this.panelCreditoManual.Visible = true;
-                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos, UpdatePanelCreditos.GetType(), "alert", "tooltipCredito();", true);
                 }
                 else
                 {
