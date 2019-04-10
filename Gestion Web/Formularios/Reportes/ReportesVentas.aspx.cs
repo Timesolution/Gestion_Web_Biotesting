@@ -562,7 +562,7 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 DataTable dt = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
-                foreach(DataRow dr in dt.Rows)
+                foreach (DataRow dr in dt.Rows)
                 {
                     this.cargarTopArticulosCantidadTable(dr);
                 }

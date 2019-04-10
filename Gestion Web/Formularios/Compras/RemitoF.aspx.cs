@@ -19,7 +19,7 @@ namespace Gestion_Web.Formularios.Compras
         controladorArticulo contArticulos = new controladorArticulo();
 
         Mensajes m = new Mensajes();
-        
+
         private string fechaD;
         private string fechaH;
         private int sucursal;
@@ -38,7 +38,7 @@ namespace Gestion_Web.Formularios.Compras
             devolucion = Convert.ToInt32(Request.QueryString["dev"]);
             if (!IsPostBack)
             {
-                this.cargarProveedores();                
+                this.cargarProveedores();
 
                 if (fechaD == null && fechaH == null)
                 {
@@ -51,7 +51,7 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.btnAccion.Visible = false;
-                    
+
                 }
                 else
                 {
@@ -70,9 +70,9 @@ namespace Gestion_Web.Formularios.Compras
 
             if (fechaD != null && fechaH != null)
             {
-                this.buscar(fechaD, fechaH, proveedor, sucursal,tipo,devolucion);
-            }   
-            
+                this.buscar(fechaD, fechaH, proveedor, sucursal, tipo, devolucion);
+            }
+
         }
         private void VerificarLogin()
         {
@@ -122,7 +122,7 @@ namespace Gestion_Web.Formularios.Compras
                                 if (i <= 0)
                                 {
                                     this.DropListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                                } 
+                                }
                             }
                             return 1;
                         }
@@ -173,7 +173,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataRow dr = dt.NewRow();
                 dr["nombre"] = "Todas";
                 dr["id"] = 0;
-                dt.Rows.InsertAt(dr, 0);                
+                dt.Rows.InsertAt(dr, 0);
 
 
                 this.DropListSucursal.DataSource = dt;
@@ -241,7 +241,7 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int tipo, int devolucion)
+        private void buscar(string fDesde, string fHasta, int proveedor, int idSucursal, int tipo, int devolucion)
         {
             try
             {
@@ -249,7 +249,10 @@ namespace Gestion_Web.Formularios.Compras
                 DateTime Hasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR")).AddHours(23);
                 List<Gestion_Api.Entitys.RemitosCompra> remitos = this.contCompraEntity.buscarRemito(desde, Hasta, proveedor, idSucursal, tipo, devolucion);
 
-                this.cargarRemitos(remitos);
+                if (remitos != null)
+                {
+                    this.cargarRemitos(remitos);
+                }
             }
             catch (Exception ex)
             {
@@ -298,7 +301,7 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celFecha);
 
                 TableCell celTipo = new TableCell();
-                if(rc.Devolucion != null)
+                if (rc.Devolucion != null)
                 {
                     if (rc.Devolucion > 0)
                         celTipo.Text = "Devolucion";
@@ -343,7 +346,7 @@ namespace Gestion_Web.Formularios.Compras
                 btnDetalles.Font.Size = 12;
                 btnDetalles.Click += new EventHandler(this.detalleRemito);
                 //btnDetalles.PostBackUrl = "RemitoDetalleF.aspx?r=" + rc.Id;
-                
+
                 celAccion.Controls.Add(btnDetalles);
 
                 Literal l2 = new Literal();
@@ -455,7 +458,7 @@ namespace Gestion_Web.Formularios.Compras
                         if (!String.IsNullOrEmpty(idRemito))
                         {
                             int i = this.contCompraEntity.anularRemito(Convert.ToInt64(idRemito), usuario);
-                            if (i < 1)                            
+                            if (i < 1)
                             {
                                 j++;
                                 if (i == -1)
@@ -584,7 +587,7 @@ namespace Gestion_Web.Formularios.Compras
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un Documento"));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -605,7 +608,7 @@ namespace Gestion_Web.Formularios.Compras
                         idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                         cantidadTildada++;
                     }
-                    
+
                 }
                 if (!String.IsNullOrEmpty(idtildado) && cantidadTildada == 1)
                 {
@@ -617,14 +620,14 @@ namespace Gestion_Web.Formularios.Compras
                         }
                     }
                 }
-                else if(!String.IsNullOrEmpty(idtildado) && cantidadTildada > 1)
+                else if (!String.IsNullOrEmpty(idtildado) && cantidadTildada > 1)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un Documento"));
                 }
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar un Documento"));
-                }                
+                }
             }
             catch
             {
