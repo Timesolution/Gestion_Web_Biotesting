@@ -4077,7 +4077,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             var compras = controladorCompraEntity.buscarComprasProveedorDoc(Convert.ToInt32(dropDownListProveedoresPatentamiento.SelectedValue));
 
-            return (Convert.ToInt32(compras.LastOrDefault().Numero) + 1).ToString();
+            return (Convert.ToInt32(compras.LastOrDefault().Numero) + 1).ToString("D8");
         }
     }
 } 
