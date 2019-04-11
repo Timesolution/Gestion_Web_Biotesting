@@ -49,6 +49,42 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.Label lblParametros;
         
         /// <summary>
+        /// phCantidadDeRegistros control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCantidadDeRegistros;
+        
+        /// <summary>
+        /// lbCantidadRegistros control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCantidadRegistros;
+        
+        /// <summary>
+        /// lbNombreColumnaTrazaUnidadMedida control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbNombreColumnaTrazaUnidadMedida;
+        
+        /// <summary>
+        /// lbCantidadTotal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCantidadTotal;
+        
+        /// <summary>
         /// phTabla control.
         /// </summary>
         /// <remarks>

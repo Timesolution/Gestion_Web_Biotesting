@@ -7,6 +7,7 @@
             <asp:UpdatePanel runat="server" ID="UpdatePanel1">
                 <ContentTemplate>
                     <div class="col-md-12 col-xs-12">
+
                         <div class="widget stacked">
                             <div class="stat">
                                 <h5><i class="icon-map-marker"></i>Compras > Remitos > Trazabilidad</h5>
@@ -36,6 +37,25 @@
 
                         <div class="widget stacked">
 
+                            <asp:PlaceHolder ID="phCantidadDeRegistros" runat="server" Visible="false">
+                                <div class="col-md-12">
+                                    <div class="widget big-stats-container stacked">
+                                        <div class="widget-content">
+                                            <div id="big_stats" class="cf">
+
+                                                <div class="stat">
+                                                    <h3><asp:Label runat="server" ID="lbNombreColumnaTrazaUnidadMedida"></asp:Label></h3>
+                                                    <span class="value">
+                                                        <asp:Label runat="server" ID="lbCantidadTotal"></asp:Label>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:PlaceHolder>
+
                             <div class="widget-header">
                                 <i class="icon-road"></i>
                                 <h3>Trazabilidad</h3>
@@ -59,7 +79,7 @@
                                                 <asp:Button ID="btnCargarPorCantidad" runat="server" Text="Agregar por Cantidad" class="btn btn-success" OnClick="btnCargarPorCantidad_Click" />
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:Button ID="btnImportarPorExcel" Visible="false" runat="server" Text="Importar por Excel" class="btn btn-success" href="#modalImportarExcel" data-toggle="modal" />
+                                                <asp:Button ID="btnImportarPorCSV" Visible="false" runat="server" Text="Importar por CSV" class="btn btn-success" href="#modalImportarCSV" data-toggle="modal" />
                                             </div>
                                         </div>
                                     </fieldset>
@@ -114,11 +134,11 @@
         </div>
     </div>
 
-    <div id="modalImportarExcel" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalImportarCSV" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Importar Excel</h4>
+                    <h4 class="modal-title">Importar CSV</h4>
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
