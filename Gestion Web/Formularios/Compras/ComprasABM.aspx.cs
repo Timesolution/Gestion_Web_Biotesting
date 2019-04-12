@@ -163,7 +163,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public void cargarPuntoVta(int sucu)
+        public void cargarPuntoVta(int sucu, int idPuntoVenta = 0)
         {
             try
             {
@@ -185,6 +185,13 @@ namespace Gestion_Web.Formularios.Compras
                 if (dt.Rows.Count == 2)
                 {
                     this.ListPuntoVenta.SelectedIndex = 1;
+                }
+                else
+                {
+                    if(idPuntoVenta > 0)
+                    {
+                        ListPuntoVenta.SelectedValue = idPuntoVenta.ToString();
+                    }
                 }
 
             }
@@ -229,7 +236,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.ListEmpresa.SelectedValue = c.IdEmpresa.ToString();
                 this.cargarSucursal(c.IdEmpresa.Value);
                 this.ListSucursal.SelectedValue = c.IdSucursal.ToString();
-                this.cargarPuntoVta(c.IdSucursal.Value);
+                this.cargarPuntoVta(c.IdSucursal.Value,(int)c.IdPuntoVenta);
                 this.txtFecha.Text = Convert.ToDateTime(c.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 this.ListTipoDocumento.SelectedValue = c.TipoDocumento;
                 this.txtPVenta.Text = c.PuntoVenta;
