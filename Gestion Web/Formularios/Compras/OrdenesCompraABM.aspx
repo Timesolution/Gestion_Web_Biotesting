@@ -43,16 +43,20 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Proveedor</label>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click"/>
                                             </div>
                                             <div class="col-md-4">
                                                 <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
                                                     <ProgressTemplate>
-                                                        <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Cargando artículos del Proveedor. Por favor aguarde.</span>
+                                                        <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Procesando cambios. Por favor aguarde.</span>
                                                     </ProgressTemplate>
                                                 </asp:UpdateProgress>
                                             </div>
+                                            
                                         </div>
 
                                         <div class="form-group">
@@ -123,12 +127,15 @@
                                                     <tr>
                                                         <td style="width: 20%">
                                                             <div class="form-group">
-                                                                <div class="col-md-12">
+                                                                <div class="col-md-8">
                                                                     <div class="input-group">
                                                                         <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                                <div class="col-md-2">
+                                                                    <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" />
+                                                                </div>
+                                                            </div>                                                                
                                                         </td>
                                                         <td style="width: 30%">
                                                             <div style="width: 100%">
@@ -210,6 +217,11 @@
                                         <div class="btn-group">
                                             <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
                                         </div>
+                                        <div class="btn-group">
+                                            <a class="btn btn-info" onclick="TestCodeBehind();">
+                                                <i class="shortcut-icon icon-refresh"></i>
+                                            </a>
+                                        </div>
                                     </div>
 
                                     <br />
@@ -256,7 +268,61 @@
 
             </asp:UpdatePanel>
         </div>
-    </div>
+
+        <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
+            <asp:UpdatePanel ID="UpdatePanel7" ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
+                <ContentTemplate>
+                    <asp:Panel ID="Panel2" runat="server" DefaultButton="btnBuscarArticuloDescripcion">
+                        <div class="modal-dialog" style="width: 60%;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title">Busqueda de Articulos</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div role="form" class="form-horizontal col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Buscar Articulo</label>
+                                                    <div class="col-md-3">
+                                                        <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-3">                                                        
+                                                        <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Codigo</th>
+                                                    <th>Descripcion</th>
+                                                    <th>Costo</th>
+                                                    <th>Precio de Venta</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </asp:Panel>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="btnBuscarArticuloDescripcion" EventName="Click" />
+                </Triggers>
+            </asp:UpdatePanel>
+        </div>
+    
 
     <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
     </rsweb:ReportViewer>
@@ -423,5 +489,21 @@
         }
     </script>
 
-
+        <script type="text/javascript">             //Default.aspx
+            function TestCodeBehind() {
+                $.ajax({
+                    type: "POST",
+                    url: 'Random.aspx/Prueba',
+                    data: "",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        alert("asd")
+                    },
+                    error: function (e) {
+                        $("#divResult").html("Something Wrong.");
+                    }
+                });
+            }
+        </script>
 </asp:Content>
