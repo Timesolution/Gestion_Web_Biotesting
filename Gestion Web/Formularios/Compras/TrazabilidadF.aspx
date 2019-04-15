@@ -79,7 +79,7 @@
                                                 <asp:Button ID="btnCargarPorCantidad" runat="server" Text="Agregar por Cantidad" class="btn btn-success" OnClick="btnCargarPorCantidad_Click" />
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:Button ID="btnImportarPorCSV" Visible="false" runat="server" Text="Importar por CSV" class="btn btn-success" href="#modalImportarCSV" data-toggle="modal" />
+                                                <asp:Button ID="btnImportarPorCSV" runat="server" Text="Importar por CSV" class="btn btn-success" href="#modalImportarCSV" data-toggle="modal" />
                                             </div>
                                         </div>
                                     </fieldset>

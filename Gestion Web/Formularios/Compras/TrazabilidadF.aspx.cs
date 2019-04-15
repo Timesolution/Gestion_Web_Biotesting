@@ -51,15 +51,11 @@ namespace Gestion_Web.Formularios.Compras
                         remitoCompra = controlador.obtenerRemito(idRemito);
                     }
                 }
-
                 this.cargarItemsRemito(idRemito);
-
                 if (idArticulo > 0)
                 {
                     this.obtenerGrupoTrazabilidad(idRemito, idArticulo);
-                    btnImportarPorCSV.Visible = true;
                 }
-
             }
             catch (Exception ex)
             {
@@ -595,7 +591,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     while ((linea = sr.ReadLine()) != null)
                     {
-                        var valores = linea.Split(',');
+                        var valores = linea.Split(';');
                         if (valores.Length != 10)
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("La cantidad de columnas del excel deben ser 10"));

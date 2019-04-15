@@ -227,9 +227,14 @@ namespace Gestion_Web.Formularios.Facturas
 
                         if (s == "175")
                             lbtnRemitir.Visible = true;
+
                     }
                 }
-
+                if (!listPermisos.Contains("203"))//permiso filtrar prp
+                {
+                    this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("Ambos"));
+                    this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("PRP"));
+                }
                 return valor;
             }
             catch

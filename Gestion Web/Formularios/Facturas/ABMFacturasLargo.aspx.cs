@@ -306,10 +306,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.cargarPagosCuentaMutualCliente();
                 }
-                //if (this.DropListFormaPago.SelectedItem.Text == "Credito")
-                //{
-                //    this.verificarCobroAnticipo();
-                //}
 
                 if (this.accion == 9)
                 {
@@ -323,10 +319,6 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     catch { }
                 }
-                //cargo el numero de remito
-                //this.obtenerNroFactura();
-
-
             }
             catch (Exception ex)
             {
