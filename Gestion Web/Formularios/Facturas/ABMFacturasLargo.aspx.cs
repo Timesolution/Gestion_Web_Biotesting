@@ -8690,7 +8690,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    this.btnCredito.Attributes["class"] = "btn btn-danger";
+                    this.btnCredito.Attributes["class"] = "btn btn-success";
                 }
 
                 return 1;

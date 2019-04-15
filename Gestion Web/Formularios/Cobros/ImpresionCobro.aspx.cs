@@ -30,7 +30,6 @@ namespace Gestion_Web.Formularios.Cobros
         private int idTipo;
         private int excel;
         private int impagasVencidas;
-        private string listaCobros;
         private int soloNotaDebito;
         Mensajes mje = new Mensajes();
         controladorCobranza controlador = new controladorCobranza();
@@ -52,13 +51,7 @@ namespace Gestion_Web.Formularios.Cobros
                     this.idTipo = Convert.ToInt32(Request.QueryString["t"]);
                     this.excel = Convert.ToInt32(Request.QueryString["ex"]);
                     this.impagasVencidas = Convert.ToInt32(Request.QueryString["vencida"]);
-                    this.listaCobros = Request.QueryString["lc"];
                     this.soloNotaDebito = Convert.ToInt32(Request.QueryString["nd"]);
-
-                    if (!string.IsNullOrEmpty(this.listaCobros))
-                    {
-                        this.listaCobros = this.listaCobros.Remove(this.listaCobros.Length - 1);
-                    }
 
                     if (valor == 1)
                     {
@@ -98,7 +91,7 @@ namespace Gestion_Web.Formularios.Cobros
                     }
                     if (valor == 10) //reporte detalle cobros
                     {
-                        this.generarReporte11(listaCobros);
+                        this.generarReporte11();
                     }
                 }
             }
@@ -900,17 +893,26 @@ namespace Gestion_Web.Formularios.Cobros
 
             }
         }
-        private void generarReporte11(string listaCobros)
+        private void generarReporte11()
         {
             try
             {
+                var listaCobros = Request.Cookies["listaReporteDetalleCobros"].Value;
+
+                if (string.IsNullOrEmpty(listaCobros))
+                {
+                    return;
+                }
+
+                Request.Cookies.Remove("listaReporteDetalleCobros");
+
+                listaCobros = listaCobros.Remove(listaCobros.Length - 1).Replace(',',';');
+
                 DataTable dt = this.generarDetalleCobrosDT(listaCobros);
 
+                ReportDataSource rds = new ReportDataSource("DetalleCobros", dt);
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleCobros.rdlc");
-
-                ReportDataSource rds = new ReportDataSource("DetalleCobros", dt);
-
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.Refresh();

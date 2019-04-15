@@ -715,11 +715,14 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     TableRow tr = C as TableRow;
                     LinkButton lbtn = tr.Cells[5].Controls[0] as LinkButton;
-                    listaCobros += lbtn.ID.Split('_')[1] + ";";
+                    listaCobros += lbtn.ID.Split('_')[1] + ",";
                 }
+
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
-                    Response.Redirect("ImpresionCobro.aspx?valor=10&ex=1&lc=" + listaCobros);
+                    Response.Cookies["listaReporteDetalleCobros"].Value = listaCobros;
+                    Response.Cookies["listaReporteDetalleCobros"].Expires = DateTime.Now.AddMinutes(10);
+                    Response.Redirect("ImpresionCobro.aspx?valor=10&ex=1");
                 }
                 else
                 {
@@ -746,7 +749,9 @@ namespace Gestion_Web.Formularios.Cobros
                 }
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=10&lc=" + listaCobros + "','_blank');", true);
+                    Response.Cookies["listaReporteDetalleCobros"].Value = listaCobros;
+                    Response.Cookies["listaReporteDetalleCobros"].Expires = DateTime.Now.AddMinutes(10);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=10','_blank');", true);
                 }
                 else
                 {
