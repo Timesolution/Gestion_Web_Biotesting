@@ -5,14 +5,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="main">
-
         <div>
-
             <div>
                 <div class="col-md-12 col-xs-12">
                     <div class="widget stacked">
                         <div class="stat">
-                            <h5><i class="icon-map-marker"></i> Reportes > Trazabilidad </h5>
+                            <h5><i class="icon-map-marker"></i>Reportes > Trazabilidad </h5>
                         </div>
                         <div class="widget-header">
                             <i class="icon-wrench"></i>
@@ -28,12 +26,11 @@
                                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                       <asp:LinkButton ID="lbtnImprimir" runat="server" OnClick="lbtnImprimir_Click">Imprimir</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnImprimir" runat="server" OnClick="lbtnImprimir_Click">Imprimir</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </asp:PlaceHolder>
-                                        <!-- /btn-group -->
 
                                     </td>
 
@@ -50,15 +47,37 @@
                                         </div>
                                     </td>
                                 </tr>
-
                             </table>
                         </div>
-                        <!-- /widget-content -->
-
                     </div>
-                    <!-- /widget -->
                 </div>
             </div>
+
+            <asp:PlaceHolder ID="phCantidadDeRegistros" runat="server" Visible="false">
+                <div class="col-md-12">
+                    <div class="widget big-stats-container stacked">
+                        <div class="widget-content">
+                            <div id="big_stats" class="cf">
+
+                                <div class="stat">
+                                    <h3>Cantidad de Registros</h3>
+                                    <span class="value">
+                                        <asp:Label runat="server" ID="lbCantidadRegistros"></asp:Label>
+                                    </span>
+                                </div>
+
+                                <div class="stat">
+                                    <h3><asp:Label runat="server" ID="lbNombreColumnaTrazaUnidadMedida"></asp:Label></h3>
+                                    <span class="value">
+                                        <asp:Label runat="server" ID="lbCantidadTotal"></asp:Label>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:PlaceHolder>
 
             <div>
                 <div class="col-md-12 col-xs-12">
@@ -79,7 +98,7 @@
                                             <th>Descripcion</th>
                                             <asp:PlaceHolder ID="phTabla" runat="server"></asp:PlaceHolder>
                                             <th>Estado</th>
-                                            <th>Sucursal</th>                                            
+                                            <th>Sucursal</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -87,15 +106,11 @@
                                         <asp:PlaceHolder ID="phTrazabilidad" runat="server"></asp:PlaceHolder>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
-                        <!-- /widget-content -->
                     </div>
                 </div>
-
             </div>
-
 
             <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
@@ -115,7 +130,7 @@
                                                 <asp:DropDownList ID="DropListGrupo" runat="server" class="form-control" OnSelectedIndexChanged="DropListGrupo_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:UpdateProgress ID="UpdateProgress1" AssociatedUpdatePanelID="UpdatePanel4" runat="server" >
+                                                <asp:UpdateProgress ID="UpdateProgress1" AssociatedUpdatePanelID="UpdatePanel4" runat="server">
                                                     <ProgressTemplate>
                                                         <h2>
                                                             <i class="fa fa-spinner fa-spin"></i>
@@ -137,13 +152,13 @@
                                             <!-- /input-group -->
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-4" style="display:none;">Desc Articulo</label>
+                                            <label class="col-md-4" style="display: none;">Desc Articulo</label>
                                             <div class="col-md-6">
-                                                <asp:TextBox ID="txtDescArticulo" class="form-control" runat="server" style="display:none;"></asp:TextBox>
+                                                <asp:TextBox ID="txtDescArticulo" class="form-control" runat="server" Style="display: none;"></asp:TextBox>
                                             </div>
 
                                             <div class="col-md-2">
-                                                <asp:LinkButton ID="btnBuscarCod" runat="server" class="btn btn-info" style="display:none;" Text="<span class='shortcut-icon icon-search'></span>" OnClick="btnBuscarCod_Click" />
+                                                <asp:LinkButton ID="btnBuscarCod" runat="server" class="btn btn-info" Style="display: none;" Text="<span class='shortcut-icon icon-search'></span>" OnClick="btnBuscarCod_Click" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -157,11 +172,11 @@
                                             <label class="col-md-4">Estado</label>
                                             <div class="col-md-6">
                                                 <asp:DropDownList ID="DropListEstado" runat="server" class="form-control">
-                                                    <asp:ListItem Text="TODOS" Value="-1"/>
-                                                    <asp:ListItem Text="EN STOCK" Value="1"/>
-                                                    <asp:ListItem Text="VENDIDO" Value="2"/>
-                                                    <asp:ListItem Text="TOMADA PEDIDO" Value="3"/>
-                                                    <asp:ListItem Text="DEVUELTO" Value="4"/>
+                                                    <asp:ListItem Text="TODOS" Value="-1" />
+                                                    <asp:ListItem Text="EN STOCK" Value="1" />
+                                                    <asp:ListItem Text="VENDIDO" Value="2" />
+                                                    <asp:ListItem Text="TOMADA PEDIDO" Value="3" />
+                                                    <asp:ListItem Text="DEVUELTO" Value="4" />
                                                 </asp:DropDownList>
                                                 <!-- /input-group -->
                                             </div>
@@ -173,59 +188,52 @@
                             </div>
                         </div>
 
-
                         <div class="modal-footer">
                             <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnBuscar_Click" ValidationGroup="BusquedaGroup" />
                         </div>
                     </div>
-
                 </div>
             </div>
-            <!-- /container -->
-
         </div>
-        <!-- /main -->
+    </div>
 
+    <link href="../../css/pages/reports.css" rel="stylesheet">
 
+    <script src="../../Scripts/plugins/flot/jquery.flot.js"></script>
+    <script src="../../Scripts/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="../../Scripts/plugins/flot/jquery.flot.orderBars.js"></script>
+    <script src="../../Scripts/plugins/flot/jquery.flot.resize.js"></script>
 
-        <link href="../../css/pages/reports.css" rel="stylesheet">
+    <script src="../../Scripts/Application.js"></script>
 
-        <script src="../../Scripts/plugins/flot/jquery.flot.js"></script>
-        <script src="../../Scripts/plugins/flot/jquery.flot.pie.js"></script>
-        <script src="../../Scripts/plugins/flot/jquery.flot.orderBars.js"></script>
-        <script src="../../Scripts/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="../../Scripts/charts/pie.js"></script>
+    <script src="../../Scripts/charts/bar.js"></script>
 
-        <script src="../../Scripts/Application.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-        <script src="../../Scripts/charts/pie.js"></script>
-        <script src="../../Scripts/charts/bar.js"></script>
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
-        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script>
 
-        <!-- Page-Level Plugin Scripts - Tables -->
-        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
-        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-
-        <script>
-            
-                $('#dataTables-example').dataTable({
-                    "bLengthChange": false,
-                    "pageLength": 15,
-                    "bFilter": true,
-                    "bInfo": false,
-                    "bAutoWidth": false,
-                    "language": {
-                        "search": "Buscar:"
-                    }
-                });
-            
-
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-            function endReq(sender, args) {
-                $('#dataTables-example').dataTable();
+        $('#dataTables-example').dataTable({
+            "bLengthChange": false,
+            "pageLength": 15,
+            "bFilter": true,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "language": {
+                "search": "Buscar:"
             }
-        </script>
+        });
 
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        function endReq(sender, args) {
+            $('#dataTables-example').dataTable();
+        }
+    </script>
 </asp:Content>

@@ -16,28 +16,39 @@
                     <div class="widget-content">
                         <table style="width: 100%">
                             <tr>
-                                <td style="width: 20%;">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <asp:LinkButton ID="btnExportarExcel" runat="server" data-toggle="modal" href="#modalExportar">Exportar</asp:LinkButton>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- /btn-group -->
-                                </td>
-                                <td style="width: 75%">
+                                <td style="width: 20%;"></td>
+
+                                <td style="width: 70%">
                                     <h5>
 
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
+
+                                <td style="width: 5%">
+                                    <div class="btn-group" style="width: 100%">
+                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
+                                            &nbsp<i class="shortcut-icon icon-print"></i>&nbsp<span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <asp:LinkButton ID="lbtnReporteArticulosPorProveedor" runat="server" OnClick="btnExportarExcel_Click">
+                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp Exportar Excel
+                                                </asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnReporteArticulosPorProveedorPDF" runat="server" OnClick="lbtnImprimirPDF_Click">
+                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Imprimir PDF
+                                                </asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
-
-
-
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                             <i class="shortcut-icon icon-filter"></i>
                                         </a>

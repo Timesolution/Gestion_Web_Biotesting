@@ -648,7 +648,6 @@ namespace Gestion_Web.Formularios.Compras
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/ms-excel";
                     this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
-                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                     this.Response.BinaryWrite(xlsContent);
 
                     this.Response.End();
