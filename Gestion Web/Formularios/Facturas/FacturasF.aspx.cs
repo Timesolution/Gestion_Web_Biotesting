@@ -34,6 +34,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFunciones contFunciones = new controladorFunciones();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
         ControladorFormasPago contFormPago = new ControladorFormasPago();
+        controladorCompraEntity controladorCompraEntity = new controladorCompraEntity();
 
         Mensajes m = new Mensajes();
         private int suc;
@@ -106,6 +107,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarFormaPago();
                     this.cargarChkListaPrecio();
                     this.cargarVendedores();
+                    this.CargarListaProveedoresPatentamiento();
 
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
@@ -227,6 +229,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                         if (s == "175")
                             lbtnRemitir.Visible = true;
+
+                        if (s == "202")
+                            lbtnPatentamiento.Visible = true;
                     }
                 }
 
@@ -511,6 +516,32 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se cargaron los puntos de venta. " + Ex.Message));
+            }
+        }
+        public void CargarListaProveedoresPatentamiento()
+        {
+            try
+            {
+                DataTable dt = this.contCliente.obtenerProveedoresPatentamientoDT();
+
+                //agrego todos
+                if(dt != null)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["razonSocial"] = "Seleccione";
+                    dr["id"] = -1;
+                    dt.Rows.InsertAt(dr, 0);
+
+                    this.dropDownListProveedoresPatentamiento.DataSource = dt;
+                    this.dropDownListProveedoresPatentamiento.DataValueField = "id";
+                    this.dropDownListProveedoresPatentamiento.DataTextField = "razonSocial";
+
+                    this.dropDownListProveedoresPatentamiento.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Lista de precios. " + ex.Message));
             }
         }
         public void cargarListaPrecio()
@@ -937,6 +968,23 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+        private bool ExisteFilaAndTieneDatos(DataRow fila, string nombreCampo)
+        {
+            try
+            {
+                if (fila.Table.Columns.Contains(nombreCampo))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Ocurrió un error en ExisteFila de controladorArticulos. Excepción: " + ex.Message);
+                return false;
+            }
+        }
         private void cargarEnPhDR(DataRow row)
         {
             try
@@ -952,6 +1000,15 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     tr.ForeColor = System.Drawing.Color.DarkGreen;
                     tr.Font.Bold = true;
+                }
+                
+                if(ExisteFilaAndTieneDatos(row, "patentamiento"))
+                {
+                    if(!string.IsNullOrEmpty(row["patentamiento"].ToString()) && Convert.ToInt32(row["patentamiento"]) == 1)
+                    {
+                        tr.ForeColor = System.Drawing.Color.Violet;
+                        tr.Font.Bold = true;
+                    }
                 }
 
                 //Celdas
@@ -3899,6 +3956,128 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Log.EscribirSQL(1, "Error", "Error al generar orden de reparacion " + ex.Message);
             }
+        }
+
+        protected void btnGenerarPatentamiento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<int> facturasTildadas = new List<int>();
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        facturasTildadas.Add(Convert.ToInt32(ch.ID.Split('_')[1]));
+                    }
+                }
+                if (facturasTildadas.Count > 0)
+                {
+                    if (ValidarCamposPatentamientosEstenCompletos())
+                    {
+                        if(!controladorCompraEntity.ComprobarSiLasFacturasFueronPatentadas(facturasTildadas))
+                            GenerarCompraPorPatentamiento(facturasTildadas);
+                        else
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Alguna de las facturas seleccionadas ya fue patentada."));
+                    }
+                }
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una factura."));
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al generar patentamiento " + ex.Message);
+            }
+        }
+
+        private bool ValidarCamposPatentamientosEstenCompletos()
+        {
+            if (Convert.ToInt32(dropDownListProveedoresPatentamiento.SelectedValue) > 0 && !string.IsNullOrEmpty(txtTotalPatentamiento.Text) && Convert.ToDecimal(txtTotalPatentamiento.Text) > 0)
+                return true;
+            else
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Compruebe que haya un proveedor seleccionado y el monto ingresado sea mayor a 0."));
+                return false;
+            }                
+        }
+
+        private void GenerarCompraPorPatentamiento(List<int> idsTildados)
+        {
+            if (!controladorCompraEntity.ComprobarFacturasPatentamientoSonFacturas(idsTildados))
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los documentos seleccionados no son facturas!"));
+                return;
+            }
+                
+            Usuario user = contUser.obtenerUsuariosID((int)Session["Login_IdUser"]);
+            var proveedor = contCliente.obtenerProveedorID(Convert.ToInt32(dropDownListProveedoresPatentamiento.SelectedValue));
+
+            Gestion_Api.Entitys.Compra compra = new Gestion_Api.Entitys.Compra();
+
+            compra.IdEmpresa = Convert.ToInt32(user.empresa.id);
+            compra.IdSucursal = Convert.ToInt32(user.sucursal.id);
+            compra.IdPuntoVenta = Convert.ToInt32(user.ptoVenta.id);
+            compra.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
+            compra.TipoDocumento = "Presupuesto";
+            compra.PuntoVenta = user.ptoVenta.puntoVenta;
+            compra.Numero = ObtenerUltimaCompraProveedor();
+            compra.Proveedor = Convert.ToInt32(dropDownListProveedoresPatentamiento.SelectedValue);
+            compra.Cuit = proveedor.cuit;
+            compra.Iva = proveedor.iva;
+            compra.NetoNoGrabado = Convert.ToDecimal(txtTotalPatentamiento.Text);
+            compra.Total = Convert.ToDecimal(txtTotalPatentamiento.Text);
+            compra.Vencimiento = Convert.ToDateTime(DateTime.Now.AddDays(30), new CultureInfo("es-AR"));
+            compra.FechaImputacion = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
+            compra.Tipo = 3;
+
+            int i = controladorCompraEntity.agregarCompra(compra);
+
+            if(i > 0)
+                ProcesarFacturasPatentamiento(compra.Id, compra.Proveedor.Value,idsTildados);
+        }
+
+        private void ProcesarFacturasPatentamiento(long idCompra, int idProveedor, List<int> idsTildados)
+        {
+            List<Gestion_Api.Entitys.Facturas_Patentamiento> facturas_Patentamiento = new List<Facturas_Patentamiento>();
+
+            string idsTildadosString = "";
+
+            foreach (var idFactura in idsTildados)
+            {
+                idsTildadosString += idFactura.ToString() + ",";
+                facturas_Patentamiento.Add(GenerarFacturasPatentamiento(idCompra, idFactura, idProveedor));
+            }
+
+            idsTildadosString = idsTildadosString.Remove(idsTildadosString.Length - 1);
+
+            int i = controladorCompraEntity.ProcesarFacturas_Patentamiento(facturas_Patentamiento, idsTildadosString);
+
+            if (i > 0)
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Patentamiento relizado con exito!", "FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue)));                
+            else
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al realizar el patentamiento!."));
+        }
+
+        private Facturas_Patentamiento GenerarFacturasPatentamiento(long idCompra, int idFactura, int idProveedor)
+        {
+            Gestion_Api.Entitys.Facturas_Patentamiento facturas_Patentamiento = new Gestion_Api.Entitys.Facturas_Patentamiento();
+
+            facturas_Patentamiento.IdCompra = idCompra;
+            facturas_Patentamiento.IdFactura = idFactura;
+            facturas_Patentamiento.IdProveedor = idProveedor;
+
+            return facturas_Patentamiento;
+        }
+
+        private string ObtenerUltimaCompraProveedor()
+        {
+            controladorCompraEntity controladorCompraEntity = new controladorCompraEntity();
+
+            var compras = controladorCompraEntity.buscarComprasProveedorDoc(Convert.ToInt32(dropDownListProveedoresPatentamiento.SelectedValue));
+
+            return (Convert.ToInt32(compras.LastOrDefault().Numero) + 1).ToString("D8");
         }
     }
 } 

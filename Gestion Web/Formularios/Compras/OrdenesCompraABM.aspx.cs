@@ -17,6 +17,7 @@ using Microsoft.Reporting.WebForms;
 using System.IO;
 using System.Net.Mail;
 using System.Reflection;
+using System.Web.Services;
 
 namespace Gestion_Web.Formularios.Compras
 {
@@ -33,6 +34,10 @@ namespace Gestion_Web.Formularios.Compras
         Mensajes m = new Mensajes();
         int accion;
         long orden;
+
+        List<Articulo> articulosProveedor = new List<Articulo>();
+        List<Articulo> articulosProveedorBuscados = new List<Articulo>();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -76,10 +81,13 @@ namespace Gestion_Web.Formularios.Compras
                         //cargar orden
                         this.cargarOrdenCompra();
                     }
+
+                    lbtnBuscarArticulo.Visible = false;
                 }
                 
 
                 this.actualizarTotales();
+                ObtenerArticulosProveedor();
             }
             catch (Exception ex)
             {
@@ -144,24 +152,7 @@ namespace Gestion_Web.Formularios.Compras
             }
 
         }
-        protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                Log.EscribirSQL(1, "ERROR", "Inicio evento index change de provedor");
-                this.cargarAlertaProveedor();
-
-                Log.EscribirSQL(1, "ERROR", "Voy a cargar articulos");
-                this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
-                Log.EscribirSQL(1, "ERROR", "Cargue articulos");
-                this.cargarProveedor_OC();
-            }
-            catch (Exception Ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error ejecutando eventos del list change de proveedores " + Ex.Message);
-            }
-
-        }
+        
         protected void btnFiltrar_Click(object sender, EventArgs e)
         {
             this.filtrarItems();
@@ -1419,5 +1410,93 @@ namespace Gestion_Web.Formularios.Compras
         }
         #endregion
 
+        protected void lbtnCargarArticulos_Click(object sender, EventArgs e) 
+        {
+            try
+            {
+                this.cargarAlertaProveedor();
+                this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+                this.cargarProveedor_OC();
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cargando cargando articulos del proveedor " + Ex.Message);
+            }
+        }
+
+        protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e) 
+        {
+            try
+            {
+                cargarAlertaProveedor();
+                phProductos.Controls.Clear();
+                cargarProveedor_OC();
+                ObtenerArticulosProveedor();
+                if (ListProveedor.SelectedIndex > 0)
+                    lbtnBuscarArticulo.Visible = true;
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error cargando cambiando de proveedor " + Ex.Message);
+            }
+        }
+
+        private void ObtenerArticulosProveedor()
+        {
+            articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
+        }
+
+        private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
+        {
+            TableRow tr = new TableRow();
+
+            TableCell celCodigo = new TableCell();
+            celCodigo.Text = articulo.codigo;
+            celCodigo.Width = Unit.Percentage(15);
+            celCodigo.VerticalAlign = VerticalAlign.Middle;
+            tr.Cells.Add(celCodigo);
+
+            TableCell celDescripcion = new TableCell();
+            celDescripcion.Text = articulo.descripcion;
+            celDescripcion.Width = Unit.Percentage(15);
+            celDescripcion.VerticalAlign = VerticalAlign.Middle;
+            tr.Cells.Add(celDescripcion);
+
+            TableCell celCosto = new TableCell();
+            celCosto.Text = articulo.costo.ToString();
+            celCosto.Width = Unit.Percentage(15);
+            celCosto.VerticalAlign = VerticalAlign.Middle;
+            tr.Cells.Add(celCosto);
+
+            TableCell celPrecioVenta = new TableCell();
+            celPrecioVenta.Text = articulo.precioVenta.ToString();
+            celPrecioVenta.Width = Unit.Percentage(15);
+            celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
+            tr.Cells.Add(celPrecioVenta);
+
+            phBuscarArticulo.Controls.Add(tr);
+            UpdatePanel7.Update();
+        }
+
+        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e) 
+        {
+            articulosProveedorBuscados.Add(articulosProveedor.Where
+                (
+                x => x.descripcion.ToLower().Trim() == txtDescripcionArticulo.Text.Trim().ToLower() 
+                || 
+                x.codigo.ToLower().Trim() == txtDescripcionArticulo.Text.Trim().ToLower()).FirstOrDefault()
+                );
+
+            foreach (var articulo in articulosProveedorBuscados)
+            {
+                CargarEnPHBusquedaDeArticulos(articulo);
+            }            
+        }
+
+        [WebMethod]
+        public static void Prueba()
+        {
+
+        }
     }
 }

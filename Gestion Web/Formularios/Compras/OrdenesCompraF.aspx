@@ -48,6 +48,9 @@
                                                 </li>
                                             </asp:PlaceHolder>
                                             <li>
+                                                <asp:LinkButton ID="lbtnExportarExcel" runat="server" Visible="false" OnClick="lbtnExportarExcel_Click">Exportar a Excel</asp:LinkButton>
+                                            </li>
+                                            <li>
                                                 <asp:LinkButton ID="lbtnGenerarFacturaCompra" runat="server" OnClick="lbtnGenerarFacturaCompra_Click">Agregar FC de Compra</asp:LinkButton>
                                             </li>
                                         </ul>
