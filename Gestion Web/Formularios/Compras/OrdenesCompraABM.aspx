@@ -47,7 +47,7 @@
                                                 <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
                                             </div>
                                             <div class="col-md-1">
-                                                <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click"/>
+                                                <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click" />
                                             </div>
                                             <div class="col-md-4">
                                                 <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
@@ -56,7 +56,7 @@
                                                     </ProgressTemplate>
                                                 </asp:UpdateProgress>
                                             </div>
-                                            
+
                                         </div>
 
                                         <div class="form-group">
@@ -135,7 +135,7 @@
                                                                 <div class="col-md-2">
                                                                     <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" />
                                                                 </div>
-                                                            </div>                                                                
+                                                            </div>
                                                         </td>
                                                         <td style="width: 30%">
                                                             <div style="width: 100%">
@@ -216,7 +216,7 @@
                                         </div>
                                         <div class="btn-group">
                                             <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
-                                        </div>                                        
+                                        </div>
                                     </div>
 
                                     <br />
@@ -226,15 +226,15 @@
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th style="width:20%">Codigo</th>
-                                            <th style="width:20%">Descripcion</th>
-                                            <th style="width:5%">Precio</th>
-                                            <th style="width:10%">Precio Mas IVA</th>
-                                            <th style="width:5%">Cantidad</th>
-                                            <th style="width:10%">Stock Sucursal</th>
-                                            <th style="width:10%">Stock Minimo Sucursal</th>
-                                            <th style="width:10%">Stock Total</th>
-                                            <th style="width:10%">Stock Minimo</th>
+                                            <th style="width: 20%">Codigo</th>
+                                            <th style="width: 20%">Descripcion</th>
+                                            <th style="width: 5%">Precio</th>
+                                            <th style="width: 10%">Precio Mas IVA</th>
+                                            <th style="width: 5%">Cantidad</th>
+                                            <th style="width: 10%">Stock Sucursal</th>
+                                            <th style="width: 10%">Stock Minimo Sucursal</th>
+                                            <th style="width: 10%">Stock Total</th>
+                                            <th style="width: 10%">Stock Minimo</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -283,18 +283,18 @@
                                                     <div class="col-md-3">
                                                         <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                                     </div>
-                                                    <div class="col-md-3">                                                        
+                                                    <div class="col-md-3">
                                                         <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <a class="btn btn-info" onclick="TestCodeBehind();">
+                                                        <a class="btn btn-info" onclick="BuscarArticuloPrueba();"> <%--onclick="BuscarArticulo();"--%>
                                                             <i class="shortcut-icon icon-refresh"></i>
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <table class="table table-striped table-bordered">
+                                        <table class="table table-striped table-bordered" id="articulosTabla">
                                             <thead>
                                                 <tr>
                                                     <th>Codigo</th>
@@ -322,52 +322,31 @@
                 </Triggers>
             </asp:UpdatePanel>
         </div>
-    
 
-    <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
-    </rsweb:ReportViewer>
 
-    <!-- Core Scripts - Include with every page -->
-    <script src="../../Scripts/jquery-1.10.2.js"></script>
-    <script src="../../Scripts/bootstrap.min.js"></script>
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
-    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
-    <script src="../../Scripts/Application.js"></script>
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-    <script src="../../Scripts/demo/notifications.js"></script>
-    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
+        </rsweb:ReportViewer>
 
-    <!-- Page-Level Plugin Scripts - Tables -->
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-    <script>
-        $(function () {
-            $("#<%= txtFecha.ClientID %>").datepicker(
-                {
-                    dateFormat: 'dd/mm/yy'
-                }
-            );
-        });
-    </script>
+        <!-- Core Scripts - Include with every page -->
+        <script src="../../Scripts/jquery-1.10.2.js"></script>
+        <script src="../../Scripts/bootstrap.min.js"></script>
+        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+        <script src="../../Scripts/libs/bootstrap.min.js"></script>
+        <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+        <script src="../../Scripts/Application.js"></script>
+        <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+        <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../Scripts/demo/notifications.js"></script>
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-    <script>
-        $(function () {
-            $("#<%= txtFechaEntrega.ClientID %>").datepicker(
-                {
-                    dateFormat: 'dd/mm/yy'
-                }
-            );
-        });
-    </script>
-
-    <script type="text/javascript">
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-        function endReq(sender, args) {
+        <!-- Page-Level Plugin Scripts - Tables -->
+        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <%--<script src="prueba.js" type="text/javascript"></script>--%>
+        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+        <script>
             $(function () {
                 $("#<%= txtFecha.ClientID %>").datepicker(
                     {
@@ -375,12 +354,9 @@
                     }
                 );
             });
-        }
-    </script>
+        </script>
 
-    <script type="text/javascript">
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-        function endReq(sender, args) {
+        <script>
             $(function () {
                 $("#<%= txtFechaEntrega.ClientID %>").datepicker(
                     {
@@ -388,113 +364,152 @@
                     }
                 );
             });
-        }
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#dataTables-example').dataTable({
-                "paging": false,
-                "bInfo": false,
-                "bAutoWidth": false,
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "Ningún dato disponible en esta tabla",
-                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "Buscar:",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Último",
-                        "sNext": "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                    }
-                }
-
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-        function endReq(sender, args) {
-            $('#dataTables-example').dataTable({
-
-                "paging": false,
-                "bInfo": false,
-                "bAutoWidth": false,
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "Ningún dato disponible en esta tabla",
-                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "Buscar:",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Último",
-                        "sNext": "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                    }
-                }
-
-
-            });
-        }
-    </script>
-
-    <script>
-        //valida los campos solo numeros
-        function validarNro(e) {
-            var key;
-            if (window.event) // IE
-            {
-                key = e.keyCode;
-            }
-            else if (e.which) // Netscape/Firefox/Opera
-            {
-                key = e.which;
-            }
-            if (key < 48 || key > 57) {
-                if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
-                {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            return true;
-        }
-    </script>
+        </script>
 
         <script type="text/javascript">
-            function TestCodeBehind() {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+            function endReq(sender, args) {
+                $(function () {
+                    $("#<%= txtFecha.ClientID %>").datepicker(
+                        {
+                            dateFormat: 'dd/mm/yy'
+                        }
+                    );
+                });
+            }
+        </script>
+
+        <script type="text/javascript">
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+            function endReq(sender, args) {
+                $(function () {
+                    $("#<%= txtFechaEntrega.ClientID %>").datepicker(
+                        {
+                            dateFormat: 'dd/mm/yy'
+                        }
+                    );
+                });
+            }
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable({
+                    "paging": false,
+                    "bInfo": false,
+                    "bAutoWidth": false,
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+            function endReq(sender, args) {
+                $('#dataTables-example').dataTable({
+
+                    "paging": false,
+                    "bInfo": false,
+                    "bAutoWidth": false,
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+
+
+                });
+            }
+        </script>
+
+        <script>
+            //valida los campos solo numeros
+            function validarNro(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
+                if (key < 48 || key > 57) {
+                    if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                    {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        </script>
+
+        <script type="text/javascript">
+            
+            function BuscarArticulo()
+            {
+                var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value
+                <%--var phBuscarArticulo = document.getElementById('<%=this.phBuscarArticulo.ClientID%>').value
+                var updatePanel = document.getElementById('<%=this.UpdatePanel7.ClientID%>').value--%>
+
+                //alert(phBuscarArticulo);
+
                 $.ajax({
                     type: "POST",
-                    url: 'Random.aspx/Prueba',
-                    data: "",
+                    url: 'OrdenesCompraABM.aspx/ObtenerArticulosYDibujarlosEnPantalla',
+                    data: JSON.stringify(
+                        {
+                            'txtDescripcion': textbox
+                            //'phBuscarArticulo': phBuscarArticulo,
+                            //'UpdatePanel7': updatePanel
+                        }
+                    ),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (msg) {
@@ -504,6 +519,68 @@
                         $("#divResult").html("Something Wrong.");
                     }
                 });
+                addHtmlTableRow();
+            }
+
+            function BuscarArticuloPrueba()
+            {
+                <%--var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value--%>
+                <%--var phBuscarArticulo = document.getElementById('<%=this.phBuscarArticulo.ClientID%>').value
+                var updatePanel = document.getElementById('<%=this.UpdatePanel7.ClientID%>').value--%>
+
+                //alert(phBuscarArticulo);
+
+                $.ajax({
+                    type: "POST",
+                    url: 'OrdenesCompraABM.aspx/ObtenerDatosArticulo',
+                    contentType: "application/json; charset=utf-8",
+                    DataType: "text",
+                    success: function (data)
+                    {
+                        addHtmlTableRow(data.d)
+                    },
+                    error: function (e) {
+                        $("#divResult").html("Something Wrong.");
+                    },
+                });
+                
+                //$.get({
+                //    url: 'OrdenesCompraABM.aspx/ObtenerDatosArticulo',
+                //    dataType: 'text'
+                //}).done(function (config) {
+                //    addHtmlTableRow(config);
+                //});
+            }
+
+            function addHtmlTableRow(data)
+            {
+                var table = document.getElementById("articulosTabla"),
+                    newRow = table.insertRow(table.length),
+                    cell1 = newRow.insertCell(0);
+                // get the table by id
+                // create a new row and cells
+                // get value from input text
+                // set the values into row cell's
+                //var newRow = table.insertRow(articulosTabla.length),
+                //    cell1 = newRow.insertCell(0),
+                    //cell2 = newRow.insertCell(1),
+                //cell3 = newRow.insertCell(2),
+                fname = data;
+
+                    //document.getElementById("fname").value,
+                    //lname = document.getElementById("lname").value,
+                    //age = document.getElementById("age").value;
+            
+                cell1.innerHTML = fname;
+                //cell2.innerHTML = lname;
+                //cell3.innerHTML = age;
+                // call the function to set the event to the new row
+                //selectedRowToInput();
+            }
+
+            function succesFunction(result,status)
+            {
+                alert(result.d);
             }
         </script>
 </asp:Content>

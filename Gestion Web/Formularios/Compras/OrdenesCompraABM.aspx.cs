@@ -35,8 +35,8 @@ namespace Gestion_Web.Formularios.Compras
         int accion;
         long orden;
 
-        List<Articulo> articulosProveedor = new List<Articulo>();
-        List<Articulo> articulosProveedorBuscados = new List<Articulo>();
+        static List<Articulo> articulosProveedor = new List<Articulo>();
+        static List<Articulo> articulosProveedorBuscados = new List<Articulo>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -82,9 +82,8 @@ namespace Gestion_Web.Formularios.Compras
                         this.cargarOrdenCompra();
                     }
 
-                    lbtnBuscarArticulo.Visible = false;
-                }
-                
+                    //lbtnBuscarArticulo.Visible = false;
+                }                
 
                 this.actualizarTotales();
                 ObtenerArticulosProveedor();
@@ -1432,8 +1431,8 @@ namespace Gestion_Web.Formularios.Compras
                 phProductos.Controls.Clear();
                 cargarProveedor_OC();
                 ObtenerArticulosProveedor();
-                if (ListProveedor.SelectedIndex > 0)
-                    lbtnBuscarArticulo.Visible = true;
+                //if (ListProveedor.SelectedIndex > 0)
+                //    lbtnBuscarArticulo.Visible = true;
             }
             catch (Exception Ex)
             {
@@ -1446,7 +1445,7 @@ namespace Gestion_Web.Formularios.Compras
             articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
         }
 
-        private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
+        private static void CargarEnPHBusquedaDeArticulos(Articulo articulo)
         {
             TableRow tr = new TableRow();
 
@@ -1474,29 +1473,48 @@ namespace Gestion_Web.Formularios.Compras
             celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
             tr.Cells.Add(celPrecioVenta);
 
+            Page page = (Page)HttpContext.Current.Handler;
+            PlaceHolder phBuscarArticulo = (PlaceHolder)page.FindControl("Content1").FindControl("phBuscarArticulo");
+            UpdatePanel UpdatePanel7 = (UpdatePanel)page.FindControl("UpdatePanel7");
+
             phBuscarArticulo.Controls.Add(tr);
             UpdatePanel7.Update();
         }
 
-        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e) 
+        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e)
         {
+            //ObtenerArticulosYDibujarlosEnPantalla();
+        }
+
+        [WebMethod]
+        public static void ObtenerArticulosYDibujarlosEnPantalla(string txtDescripcion)
+        {
+            if (string.IsNullOrEmpty(txtDescripcion))
+                return;
+
             articulosProveedorBuscados.Add(articulosProveedor.Where
-                (
-                x => x.descripcion.ToLower().Trim() == txtDescripcionArticulo.Text.Trim().ToLower() 
-                || 
-                x.codigo.ToLower().Trim() == txtDescripcionArticulo.Text.Trim().ToLower()).FirstOrDefault()
-                );
+            (
+            x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
+            ||
+            x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
+            );
 
             foreach (var articulo in articulosProveedorBuscados)
             {
                 CargarEnPHBusquedaDeArticulos(articulo);
-            }            
+            }
         }
 
         [WebMethod]
-        public static void Prueba()
+        public static Json ObtenerDatosArticulo()
         {
-
+            var json ={
+  "id" : 12,
+  "name": "Jack",
+  "description": "Description"
+};
+            return "prueba";
         }
+
     }
 }
