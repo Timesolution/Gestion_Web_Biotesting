@@ -216,12 +216,7 @@
                                         </div>
                                         <div class="btn-group">
                                             <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
-                                        </div>
-                                        <div class="btn-group">
-                                            <a class="btn btn-info" onclick="TestCodeBehind();">
-                                                <i class="shortcut-icon icon-refresh"></i>
-                                            </a>
-                                        </div>
+                                        </div>                                        
                                     </div>
 
                                     <br />
@@ -290,6 +285,11 @@
                                                     </div>
                                                     <div class="col-md-3">                                                        
                                                         <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a class="btn btn-info" onclick="TestCodeBehind();">
+                                                            <i class="shortcut-icon icon-refresh"></i>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -489,7 +489,7 @@
         }
     </script>
 
-        <script type="text/javascript">             //Default.aspx
+        <script type="text/javascript">
             function TestCodeBehind() {
                 $.ajax({
                     type: "POST",

@@ -17,6 +17,7 @@ using Microsoft.Reporting.WebForms;
 using System.IO;
 using System.Net.Mail;
 using System.Reflection;
+using System.Web.Services;
 
 namespace Gestion_Web.Formularios.Compras
 {
@@ -1490,6 +1491,12 @@ namespace Gestion_Web.Formularios.Compras
             {
                 CargarEnPHBusquedaDeArticulos(articulo);
             }            
+        }
+
+        [WebMethod]
+        public static void Prueba()
+        {
+
         }
     }
 }
