@@ -67,7 +67,9 @@ namespace Gestion_Web.Formularios.Compras
 
                     this.cargarProveedores();
                     this.cargarSucursal();
-
+                    articulosProveedor.Clear();
+                    articulosProveedorBuscados.Clear();
+                    ObtenerArticulosProveedor();
                     //cargo sucursal
                     this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                     if (this.ListSucursal.SelectedValue != "")
@@ -88,8 +90,7 @@ namespace Gestion_Web.Formularios.Compras
                     //lbtnBuscarArticulo.Visible = false;
                 }                
 
-                this.actualizarTotales();
-                ObtenerArticulosProveedor();
+                this.actualizarTotales();                
             }
             catch (Exception ex)
             {
@@ -1521,6 +1522,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     ArticuloBuscado articuloBuscado = new ArticuloBuscado();
 
+                    articuloBuscado.id = articulo.id;
                     articuloBuscado.codigo = articulo.codigo;
                     articuloBuscado.descripcion = articulo.descripcion;
                     articuloBuscado.costo = articulo.costo;
@@ -1541,6 +1543,7 @@ namespace Gestion_Web.Formularios.Compras
 
     public class ArticuloBuscado
     {
+        public int id;
         public string codigo;
         public string descripcion;
         public decimal costo;

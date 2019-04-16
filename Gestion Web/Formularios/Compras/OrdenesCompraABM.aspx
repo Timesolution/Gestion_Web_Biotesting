@@ -526,23 +526,23 @@
 
             function addHtmlTableRow(data)
             {
-                var table = document.getElementById("articulosTabla");                    
+                var table = document.getElementById("articulosTabla");
+                var temp = table.outerHTML;
+                newRow = table.insertRow(table.length);
 
-                for (var i = 0; i < data.length; i++)
+                for (var i = 1; i <= data.length; i++)
                 {
-                    newRow = table.insertRow(table.length),
                     cell1 = newRow.insertCell(0),
                     cell2 = newRow.insertCell(1),
                     cell3 = newRow.insertCell(2),
                     cell4 = newRow.insertCell(3);
 
-                    cell1.setAttribute('id', i);
+                    table.rows[i].id = data[i].id;
                     cell1.innerHTML = data[i].codigo;
                     cell2.innerHTML = data[i].descripcion;
                     cell3.innerHTML = data[i].costo;
                     cell4.innerHTML = data[i].precioVenta;
-                }
-                
+                }                
             }
             function LimpiarTabla()
             {
