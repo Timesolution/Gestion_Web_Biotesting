@@ -18,6 +18,9 @@ using System.IO;
 using System.Net.Mail;
 using System.Reflection;
 using System.Web.Services;
+using System.Web.Script.Services;
+using System.Web.Script.Serialization;
+using System.Web.Mvc;
 
 namespace Gestion_Web.Formularios.Compras
 {
@@ -1486,35 +1489,61 @@ namespace Gestion_Web.Formularios.Compras
             //ObtenerArticulosYDibujarlosEnPantalla();
         }
 
-        [WebMethod]
-        public static void ObtenerArticulosYDibujarlosEnPantalla(string txtDescripcion)
+        //[WebMethod]
+        public static void AgregarArticulosBuscados(string txtDescripcion)
         {
-            if (string.IsNullOrEmpty(txtDescripcion))
-                return;
-
-            articulosProveedorBuscados.Add(articulosProveedor.Where
-            (
-            x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
-            ||
-            x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
-            );
-
-            foreach (var articulo in articulosProveedorBuscados)
+            if (!articulosProveedorBuscados.Exists(j => j.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim() || j.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()))
             {
-                CargarEnPHBusquedaDeArticulos(articulo);
+                articulosProveedorBuscados.Add(articulosProveedor.Where
+                (
+                    x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
+                    ||
+                    x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
+                );
             }
         }
 
         [WebMethod]
-        public static Json ObtenerDatosArticulo()
+        public static string ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
         {
-            var json ={
-  "id" : 12,
-  "name": "Jack",
-  "description": "Description"
-};
-            return "prueba";
+            if (string.IsNullOrEmpty(txtDescripcion))
+                return "";
+
+            AgregarArticulosBuscados(txtDescripcion);
+
+            JavaScriptSerializer TheSerializer = new JavaScriptSerializer();
+
+            if(articulosProveedorBuscados.Count > 0)
+            {
+                List<ArticuloBuscado> articulosBuscados = new List<ArticuloBuscado>();
+
+                foreach (var articulo in articulosProveedorBuscados)
+                {
+                    ArticuloBuscado articuloBuscado = new ArticuloBuscado();
+
+                    articuloBuscado.codigo = articulo.codigo;
+                    articuloBuscado.descripcion = articulo.descripcion;
+                    articuloBuscado.costo = articulo.costo;
+                    articuloBuscado.precioVenta = articulo.precioVenta;
+
+                    articulosBuscados.Add(articuloBuscado);                    
+                }
+
+                var TheJson = TheSerializer.Serialize(articulosBuscados);
+
+                return TheJson;
+            }
+            
+            return "";
         }
 
+    }
+
+    public class ArticuloBuscado
+    {
+        public string codigo;
+        public string descripcion;
+        public decimal costo;
+        public decimal precioVenta;
     }
 }

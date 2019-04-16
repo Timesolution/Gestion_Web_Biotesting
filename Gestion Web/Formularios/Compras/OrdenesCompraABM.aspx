@@ -287,8 +287,13 @@
                                                         <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <a class="btn btn-info" onclick="BuscarArticuloPrueba();"> <%--onclick="BuscarArticulo();"--%>
+                                                        <a class="btn btn-info" onclick="BuscarArticulo();">
                                                             <i class="shortcut-icon icon-refresh"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a class="btn btn-info" onclick="LimpiarTabla();">
+                                                            <i class="shortcut-icon icon-trash"></i>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -494,93 +499,54 @@
             
             function BuscarArticulo()
             {
-                var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value
-                <%--var phBuscarArticulo = document.getElementById('<%=this.phBuscarArticulo.ClientID%>').value
-                var updatePanel = document.getElementById('<%=this.UpdatePanel7.ClientID%>').value--%>
-
-                //alert(phBuscarArticulo);
+                var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value;
+                var json = null;
 
                 $.ajax({
                     type: "POST",
-                    url: 'OrdenesCompraABM.aspx/ObtenerArticulosYDibujarlosEnPantalla',
+                    url: 'OrdenesCompraABM.aspx/ObtenerDatosArticuloYDibujarlosEnPantalla',
                     data: JSON.stringify(
                         {
                             'txtDescripcion': textbox
-                            //'phBuscarArticulo': phBuscarArticulo,
-                            //'UpdatePanel7': updatePanel
                         }
                     ),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: function (msg) {
-                        alert("asd")
+                    success: function (data)
+                    {
+                        json = JSON.parse(data.d);
+                        addHtmlTableRow(json);
                     },
-                    error: function (e) {
+                    error: function (e)
+                    {
                         $("#divResult").html("Something Wrong.");
                     }
                 });
-                addHtmlTableRow();
-            }
-
-            function BuscarArticuloPrueba()
-            {
-                <%--var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value--%>
-                <%--var phBuscarArticulo = document.getElementById('<%=this.phBuscarArticulo.ClientID%>').value
-                var updatePanel = document.getElementById('<%=this.UpdatePanel7.ClientID%>').value--%>
-
-                //alert(phBuscarArticulo);
-
-                $.ajax({
-                    type: "POST",
-                    url: 'OrdenesCompraABM.aspx/ObtenerDatosArticulo',
-                    contentType: "application/json; charset=utf-8",
-                    DataType: "text",
-                    success: function (data)
-                    {
-                        addHtmlTableRow(data.d)
-                    },
-                    error: function (e) {
-                        $("#divResult").html("Something Wrong.");
-                    },
-                });
-                
-                //$.get({
-                //    url: 'OrdenesCompraABM.aspx/ObtenerDatosArticulo',
-                //    dataType: 'text'
-                //}).done(function (config) {
-                //    addHtmlTableRow(config);
-                //});
             }
 
             function addHtmlTableRow(data)
             {
-                var table = document.getElementById("articulosTabla"),
+                var table = document.getElementById("articulosTabla");                    
+
+                for (var i = 0; i < data.length; i++)
+                {
                     newRow = table.insertRow(table.length),
-                    cell1 = newRow.insertCell(0);
-                // get the table by id
-                // create a new row and cells
-                // get value from input text
-                // set the values into row cell's
-                //var newRow = table.insertRow(articulosTabla.length),
-                //    cell1 = newRow.insertCell(0),
-                    //cell2 = newRow.insertCell(1),
-                //cell3 = newRow.insertCell(2),
-                fname = data;
+                    cell1 = newRow.insertCell(0),
+                    cell2 = newRow.insertCell(1),
+                    cell3 = newRow.insertCell(2),
+                    cell4 = newRow.insertCell(3);
 
-                    //document.getElementById("fname").value,
-                    //lname = document.getElementById("lname").value,
-                    //age = document.getElementById("age").value;
-            
-                cell1.innerHTML = fname;
-                //cell2.innerHTML = lname;
-                //cell3.innerHTML = age;
-                // call the function to set the event to the new row
-                //selectedRowToInput();
+                    cell1.setAttribute('id', i);
+                    cell1.innerHTML = data[i].codigo;
+                    cell2.innerHTML = data[i].descripcion;
+                    cell3.innerHTML = data[i].costo;
+                    cell4.innerHTML = data[i].precioVenta;
+                }
+                
             }
-
-            function succesFunction(result,status)
+            function LimpiarTabla()
             {
-                alert(result.d);
+                $("#articulosTabla").find("tr:gt(0)").remove();
             }
         </script>
 </asp:Content>
