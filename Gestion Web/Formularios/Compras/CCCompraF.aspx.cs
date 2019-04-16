@@ -206,12 +206,10 @@ namespace Gestion_Web.Formularios.Compras
                             saldoVencimiento += (decimal)m.Saldo;
                         }
                     }
-                    
                     this.cargarMovimientoPH(m, saldoAcumulado);                    
                 }
                 this.lblSaldo.Text = "$ " + saldoAcumulado.ToString("N");
                 this.lblVencimiento.Text = "$ " + saldoVencimiento.ToString("N");
-                
             }
             catch (Exception ex)
             {

@@ -756,8 +756,7 @@ namespace Gestion_Web.Formularios.Reportes
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
-                //this.ReportViewer1.LocalReport.SetParameters(param);
-
+         
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
