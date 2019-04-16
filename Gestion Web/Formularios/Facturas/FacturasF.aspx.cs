@@ -229,6 +229,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                         if (s == "175")
                             lbtnRemitir.Visible = true;
+
+                        if (s == "202")
+                            lbtnPatentamiento.Visible = true;
                     }
                 }
                 if (!listPermisos.Contains("203"))//permiso filtrar prp
@@ -526,7 +529,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dt = this.contCliente.obtenerProveedoresPatentamientoDT();
 
                 //agrego todos
-                if(dt != null)
+                if (dt != null)
                 {
                     DataRow dr = dt.NewRow();
                     dr["razonSocial"] = "Seleccione";
@@ -1002,10 +1005,10 @@ namespace Gestion_Web.Formularios.Facturas
                     tr.ForeColor = System.Drawing.Color.DarkGreen;
                     tr.Font.Bold = true;
                 }
-                
-                if(ExisteFilaAndTieneDatos(row, "patentamiento"))
+
+                if (ExisteFilaAndTieneDatos(row, "patentamiento"))
                 {
-                    if(!string.IsNullOrEmpty(row["patentamiento"].ToString()) && Convert.ToInt32(row["patentamiento"]) == 1)
+                    if (!string.IsNullOrEmpty(row["patentamiento"].ToString()) && Convert.ToInt32(row["patentamiento"]) == 1)
                     {
                         tr.ForeColor = System.Drawing.Color.Violet;
                         tr.Font.Bold = true;
@@ -3950,7 +3953,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (ValidarCamposPatentamientosEstenCompletos())
                     {
-                        if(!controladorCompraEntity.ComprobarSiLasFacturasFueronPatentadas(facturasTildadas))
+                        if (!controladorCompraEntity.ComprobarSiLasFacturasFueronPatentadas(facturasTildadas))
                             GenerarCompraPorPatentamiento(facturasTildadas);
                         else
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Alguna de las facturas seleccionadas ya fue patentada."));
@@ -3974,7 +3977,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Compruebe que haya un proveedor seleccionado y el monto ingresado sea mayor a 0."));
                 return false;
-            }                
+            }
         }
 
         private void GenerarCompraPorPatentamiento(List<int> idsTildados)
@@ -3984,7 +3987,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los documentos seleccionados no son facturas!"));
                 return;
             }
-                
+
             Usuario user = contUser.obtenerUsuariosID((int)Session["Login_IdUser"]);
             var proveedor = contCliente.obtenerProveedorID(Convert.ToInt32(dropDownListProveedoresPatentamiento.SelectedValue));
 
@@ -4008,8 +4011,8 @@ namespace Gestion_Web.Formularios.Facturas
 
             int i = controladorCompraEntity.agregarCompra(compra);
 
-            if(i > 0)
-                ProcesarFacturasPatentamiento(compra.Id, compra.Proveedor.Value,idsTildados);
+            if (i > 0)
+                ProcesarFacturasPatentamiento(compra.Id, compra.Proveedor.Value, idsTildados);
         }
 
         private void ProcesarFacturasPatentamiento(long idCompra, int idProveedor, List<int> idsTildados)
@@ -4029,7 +4032,7 @@ namespace Gestion_Web.Formularios.Facturas
             int i = controladorCompraEntity.ProcesarFacturas_Patentamiento(facturas_Patentamiento, idsTildadosString);
 
             if (i > 0)
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Patentamiento relizado con exito!", "FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue)));                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Patentamiento relizado con exito!", "FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue)));
             else
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al realizar el patentamiento!."));
         }
