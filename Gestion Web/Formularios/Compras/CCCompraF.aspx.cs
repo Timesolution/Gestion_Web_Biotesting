@@ -206,12 +206,10 @@ namespace Gestion_Web.Formularios.Compras
                             saldoVencimiento += (decimal)m.Saldo;
                         }
                     }
-                    
                     this.cargarMovimientoPH(m, saldoAcumulado);                    
                 }
                 this.lblSaldo.Text = "$ " + saldoAcumulado.ToString("N");
                 this.lblVencimiento.Text = "$ " + saldoVencimiento.ToString("N");
-                
             }
             catch (Exception ex)
             {
@@ -388,8 +386,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=6&fd="+this.txtFechaDesde.Text+"&fh="+this.txtFechaHasta.Text+"&prov=" + this.idProveedor + "&s=" + this.sucursal + "&t=" + this.tipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                //Response.Redirect("ImpresionCompras.aspx?a=6&prov=" + this.idProveedor + "&s=" + this.sucursal + "&t=" + this.tipo);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=6&fd="+this.txtFechaDesde.Text+"&fh="+this.txtFechaHasta.Text+"&prov=" + this.idProveedor + "&s=" + this.sucursal + "&t=" + this.tipo + "&td=" + this.tipoDocumento + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {

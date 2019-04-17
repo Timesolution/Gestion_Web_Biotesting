@@ -13,24 +13,6 @@ namespace Gestion_Web.Formularios.Compras {
     public partial class CCCompraF {
         
         /// <summary>
-        /// btnAccion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
-        
-        /// <summary>
-        /// btnExportarExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnExportarExcel;
-        
-        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>
@@ -38,6 +20,24 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblParametros;
+        
+        /// <summary>
+        /// lbtnReporteArticulosPorProveedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorProveedor;
+        
+        /// <summary>
+        /// lbtnReporteArticulosPorProveedorPDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorProveedorPDF;
         
         /// <summary>
         /// lblSaldo control.

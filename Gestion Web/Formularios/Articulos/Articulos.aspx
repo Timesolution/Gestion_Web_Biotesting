@@ -827,7 +827,6 @@
                                     <label class="col-md-4">Desde</label>
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtFechaRefDesde" runat="server" class="form-control"></asp:TextBox>
-                                        <!-- /input-group -->
                                     </div>
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaRefDesde" ValidationGroup="ReferenciaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -841,7 +840,6 @@
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaRefHasta" ValidationGroup="ReferenciaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
-                                    <!-- /input-group -->
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Cant. Dias</label>
@@ -887,6 +885,12 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProvRef" InitialValue="0" ValidationGroup="ReferenciaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Categoria</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListCategoria" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="form-group">

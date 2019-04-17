@@ -15,6 +15,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -40,7 +41,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.idRemito = Convert.ToInt32(Request.QueryString["rc"]);
                 this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
                 this.VerificarLogin();
-
+                this.mostrarWidgetCantidadRegistros();
                 if (!IsPostBack)
                 {
                     dtItemsTemp = new DataTable();
@@ -50,15 +51,11 @@ namespace Gestion_Web.Formularios.Compras
                         remitoCompra = controlador.obtenerRemito(idRemito);
                     }
                 }
-
                 this.cargarItemsRemito(idRemito);
-
                 if (idArticulo > 0)
                 {
                     this.obtenerGrupoTrazabilidad(idRemito, idArticulo);
-                    btnImportarPorExcel.Visible = true;
                 }
-
             }
             catch (Exception ex)
             {
@@ -255,7 +252,6 @@ namespace Gestion_Web.Formularios.Compras
                     TableHeaderCell th = new TableHeaderCell();
                     th.Text = campos.nombre;
                     phTabla.Controls.Add(th);
-
                 }
                 this.CrearTablaItems(lstCampos);
             }
@@ -278,7 +274,6 @@ namespace Gestion_Web.Formularios.Compras
                         dtItemsTemp.Columns.Add(nombreColumna);
                         indice++;
                     }
-
                     dtItems = dtItemsTemp;
                 }
             }
@@ -298,10 +293,18 @@ namespace Gestion_Web.Formularios.Compras
                 int columnas = 0;
                 TableRow tr = new TableRow();
                 string idTrazas = "";
+                decimal cantTotales = 0;
+                Configuracion configuracion = new Configuracion();
+                var articulo = contArticulos.obtenerArticuloByID(idArticulo);
+                if (articulo != null)
+                {
+                    string nombreColumna = contArticulos.obtenerNombreDeLaColumnaSeleccionadaUnidadDeMedida(configuracion, articulo.grupo.id);
+                    lbNombreColumnaTrazaUnidadMedida.Text = "Total " + nombreColumna;
+                }
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    //this.cargarEnPH(row, pos);                    
+                    cantTotales = contArticulos.cargarCantidadesDeRegistrosParaWidget(row, columnas, cantTotales, configuracion.ColumnaUnidadMedidaEnTrazabilidad);
                     if (columnas == 0)
                     {
                         tr = new TableRow();
@@ -345,6 +348,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.btnCargar.Visible = false;
                 }
                 this.lblCantCargada.Text = pos.ToString();
+                lbCantidadTotal.Text = decimal.Round(cantTotales, 2).ToString();
             }
             catch (Exception ex)
             {
@@ -457,9 +461,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                //obtengo indice de la fila a borrar
                 string[] codigo = (sender as LinkButton).ID.Split('_');
-
                 Response.Redirect("TrazabilidadF.aspx?rc=" + this.idRemito + "&art=" + codigo[1]);
             }
             catch
@@ -547,16 +549,13 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando items. " + ex.Message));
             }
         }
-
-        #endregion
-
         protected void btnImportarTrazasByExcel_Click(object sender, EventArgs e)
         {
             try
             {
                 if (lblCantCargada.Text == lblCantidad.Text)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Las trazas ya estan todas cargadas",""));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Las trazas ya estan todas cargadas", ""));
                     return;
                 }
 
@@ -568,7 +567,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     fileExtension = Path.GetExtension(FileUpload.FileName).ToLower();
 
-                    String[] allowedExtensions = { ".xlsx", ".xls" };
+                    String[] allowedExtensions = { ".csv" };
 
                     for (int i = 0; i < allowedExtensions.Length; i++)
                     {
@@ -584,14 +583,29 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         Directory.CreateDirectory(path);
                     }
-                    string nombreArchivoExcel = FileUpload.FileName;
+                    StreamReader sr = new StreamReader(FileUpload.FileContent);
+                    Configuracion config = new Configuracion();
+                    string linea;
+                    int contador = 0;
+                    List<string> itemsTrazasExcel = new List<string>();
 
-                    //lo subo
-                    FileUpload.PostedFile.SaveAs(path + FileUpload.FileName);
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        var valores = linea.Split(';');
+                        if (valores.Length != 10)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("La cantidad de columnas del excel deben ser 10"));
+                            return;
+                        }
+                        if (contador != 0)
+                        {
+                            itemsTrazasExcel.Add(linea);//obtengo datos del registro
+                        }
+                        contador++;
+                    }
 
-                    var trazasExcel = new TrazasExcel();
-                    var itemsTrazasExcel = trazasExcel.traerDatos(path + FileUpload.FileName);
-                    ImportarTrazabilidadExcelResponse response = contArticulos.ProcesarExcelParaImportarTrazas(idRemito, idArticulo, itemsTrazasExcel,Convert.ToInt32(lblCantCargada.Text));
+                    Log.EscribirSQL(1, "ERROR", "voy a entrar en fun contArticulos.ProcesarExcelParaImportarTrazas. ");
+                    ImportarTrazabilidadExcelResponse response = contArticulos.ProcesarExcelParaImportarTrazas(idRemito, idArticulo, itemsTrazasExcel, Convert.ToInt32(lblCantCargada.Text));
 
                     if (!response.resultadoImportarTrazabilidadExcel)
                     {
@@ -609,6 +623,23 @@ namespace Gestion_Web.Formularios.Compras
                 }
             }
             catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "error en fun btnImportarTrazasByExcel_Click. " + ex.Message);
+            }
+        }
+        #endregion
+
+        private void mostrarWidgetCantidadRegistros()
+        {
+            try
+            {
+                string formaFacturar = WebConfigurationManager.AppSettings.Get("FormularioFC");
+                if (formaFacturar == "2")
+                {
+                    this.phCantidadDeRegistros.Visible = true;
+                }
+            }
+            catch (Exception)
             {
 
             }

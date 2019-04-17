@@ -26,6 +26,7 @@ namespace Gestion_Web.Formularios.Articulos
         private ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
         private ControladorCobranzaEntity contCobranzaEntity = new ControladorCobranzaEntity();
         private controladorPais contPais = new controladorPais();
+        private controladorListaPrecio contListaPrecio = new controladorListaPrecio();
         Mensajes m = new Mensajes();
         Configuracion config = new Configuracion();
         int accion;
@@ -78,6 +79,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarClientes();
                     this.cargarSucursal();
                     this.cargarListaPrecio();
+                    this.cargarListaCategoria();
                     this.txtFechaHasta_St.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaRefDesde.Text = DateTime.Now.AddMonths(-6).ToString("dd/MM/yyyy");
                     this.txtFechaRefHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -958,6 +960,32 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Lista de precios. " + ex.Message));
             }
         }
+        public void cargarListaCategoria()
+        {
+            try
+            {
+                DataTable dt = this.contListaPrecio.obtenerCategoriasSubListasPreciosDT();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+
+                if (dt.Rows.Count > 1)
+                {
+                    dr["categoria"] = "Todos";
+                    dr["id"] = 0;
+                    dt.Rows.InsertAt(dr, 0);
+                }
+                this.DropListCategoria.DataSource = dt;
+                this.DropListCategoria.DataValueField = "id";
+                this.DropListCategoria.DataTextField = "categoria";
+
+                this.DropListCategoria.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando categoria. " + ex.Message));
+            }
+        }
         #endregion
 
         #region busquedas actualizacion precios
@@ -1425,11 +1453,11 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     if (this.chkNoVendida.Checked)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=5&ex=0&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=5&ex=0&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&c=" + this.DropListCategoria.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=4&ex=0&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&cero=" + cero + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=4&ex=0&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&cero=" + cero + "&c=" + this.DropListCategoria.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                     }
 
                 }
@@ -1461,14 +1489,13 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (listas != "")
                 {
-                    //Response.Redirect("ImpresionMovStock.aspx?a=4&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&cero=" + cero);
                     if (this.chkNoVendida.Checked)
                     {
-                        Response.Redirect("ImpresionMovStock.aspx?a=5&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo);
+                        Response.Redirect("ImpresionMovStock.aspx?a=5&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&c=" + this.DropListCategoria.SelectedValue);
                     }
                     else
                     {
-                        Response.Redirect("ImpresionMovStock.aspx?a=4&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&cero=" + cero + "&g=" + this.grupo + "&sg=" + this.subgrupo);
+                        Response.Redirect("ImpresionMovStock.aspx?a=4&ex=1&listas=" + listas + "&fd=" + this.txtFechaRefDesde.Text + "&fh=" + this.txtFechaRefHasta.Text + "&s=" + this.DropListSucursalRef.SelectedValue + "&p=" + this.DropListProvRef.SelectedValue + "&d=" + this.txtDias.Text + "&cero=" + cero + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&c=" + this.DropListCategoria.SelectedValue);
                     }
                 }
                 else

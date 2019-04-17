@@ -31,6 +31,33 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.PlaceHolder phItems;
         
         /// <summary>
+        /// phCantidadDeRegistros control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCantidadDeRegistros;
+        
+        /// <summary>
+        /// lbNombreColumnaTrazaUnidadMedida control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbNombreColumnaTrazaUnidadMedida;
+        
+        /// <summary>
+        /// lbCantidadTotal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCantidadTotal;
+        
+        /// <summary>
         /// phCampos control.
         /// </summary>
         /// <remarks>
@@ -76,13 +103,13 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.Button btnCargarPorCantidad;
         
         /// <summary>
-        /// btnImportarPorExcel control.
+        /// btnImportarPorCSV control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnImportarPorExcel;
+        protected global::System.Web.UI.WebControls.Button btnImportarPorCSV;
         
         /// <summary>
         /// lblCodigo control.
