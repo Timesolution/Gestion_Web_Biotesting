@@ -286,7 +286,7 @@
                                                     <div class="col-md-3">
                                                         <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <%--<div class="col-md-3">
                                                         <a class="btn btn-info" onclick="BuscarArticulo();">
                                                             <i class="shortcut-icon icon-refresh"></i>
                                                         </a>
@@ -295,18 +295,18 @@
                                                         <a class="btn btn-info" onclick="LimpiarTabla();">
                                                             <i class="shortcut-icon icon-trash"></i>
                                                         </a>
-                                                    </div>
+                                                    </div>--%>
                                                 </div>
                                             </div>
                                         </div>
                                         <table class="table table-striped table-bordered" id="articulosTabla">
                                             <thead>
                                                 <tr>
-                                                    <th>Codigo</th>
-                                                    <th>Descripcion</th>
-                                                    <th>Costo</th>
-                                                    <th>Precio de Venta</th>
-                                                    <th></th>
+                                                    <th style="width: 10%">Codigo</th>
+                                                    <th style="width: 30%">Descripcion</th>
+                                                    <th style="width: 10%">Costo</th>
+                                                    <th style="width: 10%">Precio de Venta</th>
+                                                    <th style="width: 10%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -315,6 +315,8 @@
                                         </table>
                                     </div>
                                     <div class="modal-footer">
+                                        <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click" />
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                                     </div>
                                 </div>
                             </div>
@@ -327,7 +329,6 @@
                 </Triggers>
             </asp:UpdatePanel>
         </div>
-
 
         <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
         </rsweb:ReportViewer>
@@ -495,7 +496,7 @@
             }
         </script>
 
-        <script type="text/javascript">
+        <%--<script type="text/javascript">
             
             function BuscarArticulo()
             {
@@ -527,26 +528,29 @@
             function addHtmlTableRow(data)
             {
                 var table = document.getElementById("articulosTabla");
-                var temp = table.outerHTML;
-                newRow = table.insertRow(table.length);
-
-                for (var i = 1; i <= data.length; i++)
+                //var temp = table.outerHTML;
+                LimpiarTabla();
+                for (var i = 0; i <= data.length - 1; i++)
                 {
+                    newRow = table.insertRow(table.length);
+
                     cell1 = newRow.insertCell(0),
                     cell2 = newRow.insertCell(1),
                     cell3 = newRow.insertCell(2),
-                    cell4 = newRow.insertCell(3);
+                    cell4 = newRow.insertCell(3),
+                    cell5 = newRow.insertCell(4);
 
-                    table.rows[i].id = data[i].id;
+                    //table.rows[i + 1].id = data[i].id;
                     cell1.innerHTML = data[i].codigo;
                     cell2.innerHTML = data[i].descripcion;
                     cell3.innerHTML = data[i].costo;
                     cell4.innerHTML = data[i].precioVenta;
-                }                
+                    cell5.innerHTML = "<asp:LinkButton ID=\"btnBuscarArticuloDescripcion_" + i + "Text=\" < span class='shortcut-icon icon-search' ></span > \" class=\"btn btn - info\"/>;"
+                }
             }
             function LimpiarTabla()
             {
                 $("#articulosTabla").find("tr:gt(0)").remove();
             }
-        </script>
+        </script>--%>
 </asp:Content>
