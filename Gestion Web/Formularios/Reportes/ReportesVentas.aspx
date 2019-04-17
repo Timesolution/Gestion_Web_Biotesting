@@ -5,7 +5,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="main">
-        <%--<div class="container">--%>
         <div>
             <div class="col-md-12">
 
@@ -61,13 +60,29 @@
                                                                     <asp:LinkButton ID="lbtnReporteArticulosPorGrupo" runat="server" OnClick="lbtnReporteArticulosPorGrupo_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
-                                                                </asp:LinkButton>
+                                                                    </asp:LinkButton>
                                                                 </li>
                                                                 <li>
                                                                     <asp:LinkButton ID="lbtnReporteArticulosPorGrupoPDF" runat="server" OnClick="lbtnReporteArticulosPorGrupoPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
-                                                                </asp:LinkButton>
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Articulos por categoria</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteArticulosPorCategoriaAndProveedorXLS" runat="server" OnClick="lbtnReporteArticulosPorCategoriaAndProveedorXLS_Click">
+                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp Exportar
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteArticulosPorCategoriaAndProveedorPDF" runat="server" OnClick="lbtnReporteArticulosPorCategoriaAndProveedorPDF_Click">
+                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Imprimir
+                                                                    </asp:LinkButton>
                                                                 </li>
                                                             </ul>
                                                         </li>

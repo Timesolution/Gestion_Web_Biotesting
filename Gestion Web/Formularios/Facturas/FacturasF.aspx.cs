@@ -151,7 +151,6 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     if (this.verificarAcceso() != 1)
-                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
                     {
                         Response.Redirect("/Default.aspx?m=1", false);
                     }
