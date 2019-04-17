@@ -256,8 +256,11 @@ namespace Gestion_Web.Formularios.Compras
                 {
 
                     this.cargarAlertaProveedor();
-                    this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+                    //this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
                     this.cargarProveedor_OC();
+                    _articulosProveedorBuscados.Clear();
+                    ObtenerArticulosProveedor();
+                    lbtnBuscarArticulo.Visible = true;
                 }
 
             }

@@ -283,8 +283,15 @@
                                                     <div class="col-md-3">
                                                         <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-1">
                                                         <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel7">
+                                                            <ProgressTemplate>
+                                                                <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Procesando cambios. Por favor aguarde.</span>
+                                                            </ProgressTemplate>
+                                                        </asp:UpdateProgress>
                                                     </div>
                                                     <%--<div class="col-md-3">
                                                         <a class="btn btn-info" onclick="BuscarArticulo();">
