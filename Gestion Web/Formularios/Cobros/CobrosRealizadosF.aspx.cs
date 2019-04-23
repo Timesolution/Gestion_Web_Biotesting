@@ -745,7 +745,7 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     TableRow tr = C as TableRow;
                     LinkButton lbtn = tr.Cells[5].Controls[0] as LinkButton;
-                    listaCobros += lbtn.ID.Split('_')[1] + ";";
+                    listaCobros += lbtn.ID.Split('_')[1] + ",";
                 }
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
