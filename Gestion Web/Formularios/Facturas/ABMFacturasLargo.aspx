@@ -915,7 +915,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-6">Restan / Efectivo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListMonedas" runat="server" class="form-control"></asp:DropDownList>
+                                            <label>Restan / Efectivo</label>
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
