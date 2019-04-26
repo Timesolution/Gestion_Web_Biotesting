@@ -38,7 +38,6 @@ namespace Gestion_Web.Formularios.Reportes
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("SocioBeneficiosR.rdlc");
 
-                //ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
                 ReportDataSource rds = new ReportDataSource("SocioBeneficios", datosSocios);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
@@ -52,7 +51,6 @@ namespace Gestion_Web.Formularios.Reportes
 
                 string[] streams;
 
-                //get xls content
                 Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                 String filename = string.Format("{0}.{1}", "Datos Socios", "xls");
@@ -61,11 +59,9 @@ namespace Gestion_Web.Formularios.Reportes
                 this.Response.Buffer = true;
                 this.Response.ContentType = "application/ms-excel";
                 this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
-                //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                 this.Response.BinaryWrite(xlsContent);
 
                 this.Response.End();
-
             }
             catch (Exception ex)
             {
