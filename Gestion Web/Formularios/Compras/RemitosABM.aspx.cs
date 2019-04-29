@@ -14,14 +14,12 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Gestion_Web.Formularios.Compras
-{
+namespace Gestion_Web.Formularios.Compras {
     using Gestion_Api.Entitys;
     using System.Reflection;
     using System.Web.Providers.Entities;
 
-    public partial class RemitosABM : System.Web.UI.Page
-    {
+    public partial class RemitosABM : System.Web.UI.Page {
         controladorCompraEntity controlador = new controladorCompraEntity();
         controladorArticulo contArticulos = new controladorArticulo();
         controladorCliente contCliente = new controladorCliente();
@@ -36,8 +34,7 @@ namespace Gestion_Web.Formularios.Compras
         int accion;
         int ordenReparacion;
         int ordenReparacionId;
-        protected void Page_Load(object sender, EventArgs e)
-        {
+        protected void Page_Load(object sender, EventArgs e) {
             try
             {
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
@@ -79,8 +76,7 @@ namespace Gestion_Web.Formularios.Compras
 
         }
 
-        private void VerificarLogin()
-        {
+        private void VerificarLogin() {
             try
             {
                 if (Session["User"] == null)
@@ -102,8 +98,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private int verificarAcceso()
-        {
+        private int verificarAcceso() {
             try
             {
                 string permisos = Session["Login_Permisos"] as string;
@@ -141,8 +136,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public int verficarPermisoCambiarSucursal()
-        {
+        public int verficarPermisoCambiarSucursal() {
             try
             {
                 string permisos = Session["Login_Permisos"] as string;
@@ -166,8 +160,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void CrearTablaItems()
-        {
+        private void CrearTablaItems() {
             try
             {
                 dtItemsTemp.Columns.Add("Codigo");
@@ -184,12 +177,11 @@ namespace Gestion_Web.Formularios.Compras
             }
 
         }
-        private void CrearTablaItems2()
-        {
+        private void CrearTablaItems2() {
             try
             {
                 dtItemsTemp2.Columns.Add("Codigo");
-                
+
 
                 dtItems2 = dtItemsTemp2;
             }
@@ -200,8 +192,7 @@ namespace Gestion_Web.Formularios.Compras
 
         }
 
-        private void CrearListaTrazabilidad()
-        {
+        private void CrearListaTrazabilidad() {
             try
             {
                 vsTraza = trazabilidadTmp;
@@ -276,8 +267,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public void cargarProveedores()
-        {
+        public void cargarProveedores() {
             try
             {
                 controladorCliente contCliente = new controladorCliente();
@@ -302,8 +292,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        public void cargarSucursal()
-        {
+        public void cargarSucursal() {
             try
             {
                 controladorSucursal contSucu = new controladorSucursal();
@@ -330,8 +319,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio, int idArticulo)
-        {
+        private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio, int idArticulo) {
             try
             {
                 //fila
@@ -447,8 +435,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void CargarItems()
-        {
+        private void CargarItems() {
             try
             {
                 this.phProductos.Controls.Clear();
@@ -466,8 +453,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e)
-        {
+        protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e) {
             try
             {
 
@@ -513,8 +499,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void guardarRemito()
-        {
+        private void guardarRemito() {
             try
             {
                 RemitosCompra rc = new RemitosCompra();
@@ -551,7 +536,7 @@ namespace Gestion_Web.Formularios.Compras
                     datos.Vencimiento = this.txtVencimiento.Text;
                     rc.RemitosCompras_Despachos.Add(datos);
                 }
-                //obengo items
+
                 rc.RemitosCompras_Items = this.obtenerItems();
 
                 if (rc.RemitosCompras_Items.Count > 0)
@@ -567,20 +552,17 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         if (i == -1)
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar remito. Reintente\", {type: \"warning\"});", true);
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo guardar remito. Reintente"));
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar remito. Reintente\", {type: \"error\"});", true);
                         }
                         else
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encontro stock para uno o mas articulos. Reintente\", {type: \"warning\"});", true);
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo guardar remito. Reintente"));
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encontro stock para uno o mas articulos. Reintente\", {type: \"alert\"});", true);
                         }
-
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Items del remito debe ser mayor a 0.\", {type: \"warning\"}); ", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Items del remito debe ser mayor a 0.\", {type: \"alert\"}); ", true);
                 }
             }
             catch (Exception ex)
@@ -589,8 +571,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void limpiarCampos()
-        {
+        private void limpiarCampos() {
             try
             {
                 this.ListProveedor.SelectedIndex = 0;
@@ -606,8 +587,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private List<RemitosCompras_Items> obtenerItems()
-        {
+        private List<RemitosCompras_Items> obtenerItems() {
             try
             {
                 List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
@@ -679,8 +659,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private List<RemitosCompras_Items> filtrarItems()
-        {
+        private List<RemitosCompras_Items> filtrarItems() {
             try
             {
                 List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
@@ -707,8 +686,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private int verificarProcedenciaProv()
-        {
+        private int verificarProcedenciaProv() {
             try
             {
                 Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
@@ -724,8 +702,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void btnAgregar_Click(object sender, EventArgs e)
-        {
+        protected void btnAgregar_Click(object sender, EventArgs e) {
             try
             {
                 if (this.accion == 1) this.guardarRemito();
@@ -736,8 +713,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void cargarArticulosProveedor(int idPRoveedor)
-        {
+        private void cargarArticulosProveedor(int idPRoveedor) {
             try
             {
                 List<Articulo> articulos = this.contArticulos.obtenerArticulosByProveedor(idPRoveedor);
@@ -797,8 +773,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e) {
             Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
             c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
             if (!String.IsNullOrEmpty(c.alerta.descripcion))
@@ -814,18 +789,15 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void btnFiltrar_Click(object sender, EventArgs e)
-        {
+        protected void btnFiltrar_Click(object sender, EventArgs e) {
             this.filtrarItems();
         }
 
-        protected void lbtnAgregarArticuloASP_Click1(object sender, EventArgs e)
-        {
+        protected void lbtnAgregarArticuloASP_Click1(object sender, EventArgs e) {
 
         }
 
-        public void GenerarRemitoDesdeOrdenReparacion()
-        {
+        public void GenerarRemitoDesdeOrdenReparacion() {
             try
             {
                 ControladorOrdenReparacionEntity contOrdenReparacionEnt = new ControladorOrdenReparacionEntity();
@@ -862,8 +834,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void cargarArticuloOrdenReparacion(OrdenReparacion or)
-        {
+        private void cargarArticuloOrdenReparacion(OrdenReparacion or) {
             try
             {
                 Articulo a = this.contArticulos.obtenerArticuloByID((int)or.Producto);
@@ -915,8 +886,7 @@ namespace Gestion_Web.Formularios.Compras
         }
 
         #region devolucionTrazas
-        private void TrazabilidadItem(object sender, EventArgs e)
-        {
+        private void TrazabilidadItem(object sender, EventArgs e) {
             try
             {
                 string idBoton = (sender as LinkButton).ID;
@@ -934,8 +904,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void CargarTrazasPH(int idArt)
-        {
+        private void CargarTrazasPH(int idArt) {
             try
             {
                 Articulo a = this.contArticulos.obtenerArticuloByID(idArt);
@@ -947,8 +916,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void cargarCamposGrupoTrazabilidad(Articulo art)
-        {
+        private void cargarCamposGrupoTrazabilidad(Articulo art) {
             try
             {
                 lblTrazaActual.Text = 0.ToString();
@@ -969,8 +937,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void CargarTrazasArticulo(int idArticulo, int cantCampos)
-        {
+        private void CargarTrazasArticulo(int idArticulo, int cantCampos) {
             try
             {
                 controladorCompraEntity contCompra = new controladorCompraEntity();
@@ -1032,8 +999,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void AgregarTraza_Click(object sender, EventArgs e)
-        {
+        protected void AgregarTraza_Click(object sender, EventArgs e) {
             try
             {
                 this.agregarOQuitarTrazasDeLaSesion();
@@ -1044,8 +1010,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void agregarOQuitarTrazasDeLaSesion()
-        {
+        private void agregarOQuitarTrazasDeLaSesion() {
             try
             {
                 string idArtBtnAceptarTraza = this.lblMovTraza.Text;
@@ -1107,8 +1072,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void setearCantidadAlTxtBoxDelArticulo(decimal cantidadXArticulo, int idArt)
-        {
+        private void setearCantidadAlTxtBoxDelArticulo(decimal cantidadXArticulo, int idArt) {
             try
             {
                 foreach (Control control in phProductos.Controls)
@@ -1125,7 +1089,7 @@ namespace Gestion_Web.Formularios.Compras
                             (tr.Cells[3].Controls[0] as TextBox).Text = "";
                         }
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -1138,8 +1102,7 @@ namespace Gestion_Web.Formularios.Compras
         /// activa si se habia apretado antes el checkbox
         /// </summary>
         /// <returns></returns>
-        private void activarChkBox(CheckBox checkBox, string idTraza)
-        {
+        private void activarChkBox(CheckBox checkBox, string idTraza) {
             try
             {
                 long traza = Convert.ToInt64(idTraza.Split('-')[0]);
@@ -1158,7 +1121,7 @@ namespace Gestion_Web.Formularios.Compras
                                 idArticulo = item.IdArticulo
                             });
                         }
-                        
+
                         var existe = trazasADevolver.Where(x => x.Id == traza).FirstOrDefault();
                         if (existe != null)
                         {
@@ -1178,8 +1141,7 @@ namespace Gestion_Web.Formularios.Compras
         /// cambia el estado a 4 de las trazas seleccionada y crea registros en la tabla Trazabilidad_Movimientos
         /// </summary>
         /// <param name="trazasADevolver"></param>
-        private void devolverTrazasSeleccionadas()
-        {
+        private void devolverTrazasSeleccionadas() {
             try
             {
                 int i = 0;
