@@ -40,6 +40,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorSucursal cs = new controladorSucursal();
         ControladorPedido cp = new ControladorPedido();
         controladorTarjeta ct = new controladorTarjeta();
+        controladorCobranza contCobranza = new controladorCobranza();
         Configuracion configuracion = new Configuracion();
 
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
@@ -106,6 +107,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     lstPagosTemp = new DataTable();
                     this.InicializarListaPagos();
+
 
                     dtTrazasTemp = new DataTable();
                     //this.InicializarListaTrazas();
@@ -513,6 +515,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCobranza contCob = new controladorCobranza();
                 Cobro c = contCob.obtenerCobroByFactura(Convert.ToInt32(facturas.Split(';')[0]), f.cliente.id);
                 Pago_Tarjeta pt = new Pago_Tarjeta();
+                Pago_Credito pagoCredito = new Pago_Credito();
                 DataTable dt = lstPago;
 
                 foreach (var pago in c.pagos)
@@ -522,6 +525,17 @@ namespace Gestion_Web.Formularios.Facturas
                         //Guardar la info de pago en el DT Temporal de pagos                        
                         DataRow dr = dt.NewRow();
                         dr["Tipo Pago"] = (pago as Pago_Tarjeta).tarjeta.nombre;
+                        dr["Importe"] = pago.monto;
+                        dr["Neto"] = pago.monto;
+                        dr["Recargo"] = Convert.ToDecimal(0.00);
+
+                        dt.Rows.Add(dr);
+                        lstPago = dt;
+                    }
+                    else if (pagoCredito.SosPagoCredito(pago))
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Tipo Pago"] = "Credito";
                         dr["Importe"] = pago.monto;
                         dr["Neto"] = pago.monto;
                         dr["Recargo"] = Convert.ToDecimal(0.00);
@@ -1557,6 +1571,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ViewState["ListaPagos"] = value;
             }
         }
+
         private void cargarCliente(int idCliente)
         {
             try
@@ -2369,6 +2384,7 @@ namespace Gestion_Web.Formularios.Facturas
                 lstPagosTemp.Columns.Add("Importe");
                 lstPagosTemp.Columns.Add("Neto");
                 lstPagosTemp.Columns.Add("Recargo");
+                lstPagosTemp.Columns.Add("DetallePago");
                 lstPago = lstPagosTemp;
             }
             catch (Exception ex)
@@ -2408,19 +2424,19 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                controladorCobranza contCobranza = new controladorCobranza();
                 DataTable dt = contCobranza.obtenerMonedasDT();
 
                 DataRow dr = dt.NewRow();
 
                 this.ListMonedas.DataSource = dt;
-                this.ListMonedas.DataValueField = "Cambio";
+                this.ListMonedas.DataValueField = "id";
                 this.ListMonedas.DataTextField = "moneda";
 
                 this.ListMonedas.DataBind();
                 this.ListMonedas.Items.Add(new ListItem
                 {
-                    Text = "Credito", Value = "1"
+                    Text = "Credito",
+                    Value = "0"
                 });
             }
             catch (Exception ex)
@@ -3123,7 +3139,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-       
+
         private bool VerificarDescripcionDeItems()
         {
             try
@@ -5882,19 +5898,21 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //genero la clase
-                Tarjeta t = ct.obtenerTarjetaID(Convert.ToInt32(this.ListTarjetas.SelectedValue));
-                Pago_Tarjeta ptarjeta = new Pago_Tarjeta();
-
                 Factura f = Session["Factura"] as Factura;
                 if (f.items.Count > 0)
                 {
                     decimal montoIngresadoTxtEnEfectivo = Convert.ToDecimal(this.txtImporteEfectivo.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
-                    montoIngresadoTxtEnEfectivo *= Convert.ToDecimal(ListMonedas.SelectedValue);
+                    decimal totalFactura = Convert.ToDecimal(this.lblMontoOriginal.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                    controladorMoneda contMoneda = new controladorMoneda();
+                    var moneda = contMoneda.obtenerMonedaID(Convert.ToInt32(ListMonedas.SelectedValue));
+                    if (!ListMonedas.SelectedItem.Text.Equals("Credito"))
+                    {
+                        montoIngresadoTxtEnEfectivo *= Convert.ToDecimal(moneda.cambio);
+                    }
                     DataTable dt = this.lstPago;
 
                     decimal sumaDeMontosPagos = 0;
-                    //obtengo parametro si usa recargos o no
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         sumaDeMontosPagos += Convert.ToDecimal(dr["Neto"]);
@@ -5902,26 +5920,25 @@ namespace Gestion_Web.Formularios.Facturas
 
                     sumaDeMontosPagos += montoIngresadoTxtEnEfectivo;
 
-                    //si es mayor significa que el monto q ingreso supera al total de la factura
-                    if (f.total >= sumaDeMontosPagos && montoIngresadoTxtEnEfectivo > 0)
+                    if (totalFactura >= sumaDeMontosPagos && montoIngresadoTxtEnEfectivo > 0)
                     {
-                        //Guardar la info de pago en el DT Temporal de pagos
                         DataRow dr = dt.NewRow();
+                        dr["Tipo Pago"] = "Efectivo";
                         string tipoDePago = "Efectivo en " + ListMonedas.SelectedItem.Text;
-                        if (ListMonedas.SelectedItem.Text == "Credito")
+                        if (ListMonedas.SelectedItem.Text.Equals("Credito"))
                         {
                             tipoDePago = "Credito";
+                            dr["Tipo Pago"] = "Credito";
                         }
-                        dr["Tipo Pago"] = tipoDePago;
                         dr["Importe"] = montoIngresadoTxtEnEfectivo;
                         dr["Neto"] = montoIngresadoTxtEnEfectivo;
                         dr["Recargo"] = Convert.ToDecimal(0.00);
+                        dr["DetallePago"] = tipoDePago;
 
                         dt.Rows.Add(dr);
 
                         lstPago = dt;
 
-                        //llamo al metodo que muestra los pagos en la tabla
                         this.cargarTablaPAgos();
                         this.txtImporteEfectivo.Text = "";
 
@@ -5939,6 +5956,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura "));
                 }
+                MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
             }
             catch (Exception ex)
             {
@@ -5949,26 +5967,30 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //genero la clase
                 Tarjeta t = ct.obtenerTarjetaID(Convert.ToInt32(this.ListTarjetas.SelectedValue));
                 Pago_Tarjeta ptarjeta = new Pago_Tarjeta();
 
                 Factura f = Session["Factura"] as Factura;
+
+                decimal totalImportesIngresadosPagosConTarjeta = obtenerImportesIngresadosPagosConTarjeta();
+                decimal totalFactura = Convert.ToDecimal(this.lblMontoOriginal.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                decimal montoTxtTarjeta = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
+
                 if (f.items.Count > 0)
                 {
                     //obtengo parametro si usa recargos o no
                     string recargo = WebConfigurationManager.AppSettings.Get("Recargo");
                     if (recargo == "1")
                     {
-                        decimal totalActual = Convert.ToDecimal(this.txtImporteEfectivo.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                         ptarjeta.tarjeta.id = Convert.ToInt32(this.ListTarjetas.SelectedValue);
                         ptarjeta.tarjeta.nombre = this.ListTarjetas.SelectedItem.Text;
-                        decimal monto = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
-                        ptarjeta.monto = monto;
+                        ptarjeta.monto = montoTxtTarjeta;
+
                         ptarjeta.tarjeta.recargo = t.recargo;
                         decimal TotalIngresado = decimal.Round(ptarjeta.monto, 2);
 
-                        if (totalActual >= TotalIngresado)
+                        //pregunta si el pago q se agrego no supera al total de la factura
+                        if (totalImportesIngresadosPagosConTarjeta + montoTxtTarjeta <= totalFactura && montoTxtTarjeta > 0)
                         {
                             decimal montoRecargado = TotalIngresado;
                             if (t.recargo > 0)
@@ -5984,6 +6006,7 @@ namespace Gestion_Web.Formularios.Facturas
                             dr["Importe"] = montoRecargado;//TotalIngresado;
                             dr["Neto"] = ptarjeta.monto;
                             dr["Recargo"] = ptarjeta.tarjeta.recargo;
+                            dr["DetallePago"] = ptarjeta.tarjeta.nombre;
 
                             dt.Rows.Add(dr);
                             lstPago = dt;
@@ -6002,7 +6025,6 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        decimal totalActual = Convert.ToDecimal(this.txtImporteEfectivo.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                         ptarjeta.tarjeta.id = Convert.ToInt32(this.ListTarjetas.SelectedValue);
                         ptarjeta.tarjeta.nombre = this.ListTarjetas.SelectedItem.Text;
                         decimal monto = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
@@ -6010,7 +6032,7 @@ namespace Gestion_Web.Formularios.Facturas
                         ptarjeta.tarjeta.recargo = t.recargo;
                         decimal TotalIngresado = decimal.Round(ptarjeta.monto, 2);
 
-                        if (totalActual >= TotalIngresado)
+                        if (totalImportesIngresadosPagosConTarjeta + montoTxtTarjeta <= totalFactura && montoTxtTarjeta > 0)
                         {
                             //Guardar la info de pago en el DT Temporal de pagos
                             DataTable dt = lstPago;
@@ -6019,6 +6041,7 @@ namespace Gestion_Web.Formularios.Facturas
                             dr["Importe"] = TotalIngresado;//TotalIngresado;
                             dr["Neto"] = ptarjeta.monto;
                             dr["Recargo"] = ptarjeta.tarjeta.recargo;
+                            dr["DetallePago"] = ptarjeta.tarjeta.nombre;
 
                             dt.Rows.Add(dr);
                             lstPago = dt;
@@ -6031,11 +6054,11 @@ namespace Gestion_Web.Formularios.Facturas
                             this.lblAvisoTarjeta.Visible = true;
                             this.txtImporteT.Focus();
                         }
-
                         //llamo al metodo que muestra los pagos en la tabla
                         this.cargarTablaPAgos();
                         this.txtImporteT.Text = "";
                     }
+                    MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
                 }
                 else
                 {
@@ -6045,6 +6068,42 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+        private void MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta()
+        {
+            try
+            {
+                DataTable dt = lstPago;
+                decimal resta = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    resta += Convert.ToDecimal(row["Neto"]);
+                }
+                this.txtImporteEfectivo.Text = (Convert.ToDecimal(lblMontoOriginal.Text) - resta).ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private decimal obtenerImportesIngresadosPagosConTarjeta()
+        {
+            try
+            {
+                decimal montoTotal = 0;
+                DataTable dt = lstPago;
+                foreach (DataRow row in dt.Rows)
+                {
+                    montoTotal += Convert.ToDecimal(row["Neto"]);
+                }
+                return montoTotal;
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
         private void cargarTablaPAgos()
@@ -6082,12 +6141,12 @@ namespace Gestion_Web.Formularios.Facturas
                             if (i > 0)
                             {
                                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Recargos aplicados a factura \", {type: \"info\"});", true);
-                                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
                             }
                             else
                             {
                                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"No se pudo aplicar recargo/s a factura! \", {type: \"info\"});", true);
-                                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
                             }
                         }
                     }
@@ -6124,7 +6183,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //Celdas
 
                 TableCell celCodigo = new TableCell();
-                celCodigo.Text = dr["Tipo Pago"].ToString();
+                celCodigo.Text = dr["DetallePago"].ToString();
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
 
@@ -6199,6 +6258,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarTablaPAgos();
 
                 this.lblMontoCuotas.Text = "";
+
+                this.MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
             }
             catch (Exception ex)
             {

@@ -252,10 +252,10 @@
                                                 <asp:ListItem Value="2">Cheque</asp:ListItem>
                                                 <asp:ListItem Value="3">Transferencia</asp:ListItem>
                                                 <asp:ListItem Value="5">Tarjeta</asp:ListItem>
+                                                <asp:ListItem Value="8">Credito</asp:ListItem>
                                                 <asp:ListItem Value="9">Pagare</asp:ListItem>
                                             </asp:DropDownList>
 
-                                            <!-- /input-group -->
                                         </div>
                                         <div class="col-md-2">
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListTipos" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
