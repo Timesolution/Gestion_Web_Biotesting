@@ -383,7 +383,7 @@
     <div id="modalRecalcular" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <asp:UpdatePanel runat="server">
+                <asp:UpdatePanel runat="server" ID="UpdatePanel11">
                     <ContentTemplate>
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

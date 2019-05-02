@@ -103,8 +103,9 @@
       <HintPath>..\..\..\..\..\..\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Millas_Api">
-      <HintPath>Auxiliar\Millas_Api.dll</HintPath>
+    <Reference Include="Millas_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Repositorio millas api\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -381,7 +382,6 @@
     <Content Include="Formularios\Compras\ImportacionesTiposGastosABM.aspx" />
     <Content Include="Formularios\Compras\ImpresionCompras.aspx" />
     <Content Include="Formularios\Compras\OrdenesCompraABM.aspx" />
-    <Content Include="Formularios\Compras\Random.aspx" />
     <Content Include="Formularios\Compras\RemitoDetalleF.aspx" />
     <Content Include="Formularios\Compras\OrdenesCompraF.aspx" />
     <Content Include="Formularios\Compras\ImportacionesF.aspx" />
@@ -459,6 +459,7 @@
     <Content Include="Formularios\Reportes\BalanceF.aspx" />
     <Content Include="Formularios\Reportes\ImpresionRentabilidadD.aspx" />
     <Content Include="Formularios\Reportes\ImpresionReporte.aspx" />
+    <Content Include="Formularios\Reportes\ImpresionReporteBeneficios.aspx" />
     <Content Include="Formularios\Reportes\InformesF.aspx" />
     <Content Include="Formularios\Reportes\RentabilidadF.aspx" />
     <Content Include="Formularios\Listas\ABMListas.aspx" />
@@ -766,6 +767,17 @@
     </Content>
     <Content Include="Formularios\Reportes\dsReportesCompras.xsc">
       <DependentUpon>dsReportesCompras.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\Reportes\dsReportesBeneficios.xsc">
+      <DependentUpon>dsReportesBeneficios.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Reportes\dsReportesBeneficios.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReportesBeneficios.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Reportes\dsReportesBeneficios.xss">
+      <DependentUpon>dsReportesBeneficios.xsd</DependentUpon>
     </Content>
     <None Include="Formularios\Reportes\dsReportesCompras.xsd">
       <SubType>Designer</SubType>
@@ -1430,13 +1442,6 @@
     <Compile Include="Formularios\Compras\OrdenesCompraABM.aspx.designer.cs">
       <DependentUpon>OrdenesCompraABM.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\Compras\Random.aspx.cs">
-      <DependentUpon>Random.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Formularios\Compras\Random.aspx.designer.cs">
-      <DependentUpon>Random.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Formularios\Compras\RemitoDetalleF.aspx.cs">
       <DependentUpon>RemitoDetalleF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1873,6 +1878,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsReportes.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Reportes\dsReportesBeneficios.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReportesBeneficios.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Reportes\dsReportesCompras.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2259,6 +2269,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\ImpresionReporte.aspx.designer.cs">
       <DependentUpon>ImpresionReporte.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ImpresionReporteBeneficios.aspx.cs">
+      <DependentUpon>ImpresionReporteBeneficios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\ImpresionReporteBeneficios.aspx.designer.cs">
+      <DependentUpon>ImpresionReporteBeneficios.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\InformesF.aspx.cs">
       <DependentUpon>InformesF.aspx</DependentUpon>
@@ -3122,6 +3139,7 @@
     <EmbeddedResource Include="Formularios\Reportes\ComprasArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadRCosto.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\SocioBeneficiosR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\TrazabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\ComprasVentasArticulosProv.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosGrupoR.rdlc" />
