@@ -64,6 +64,10 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         CargarCompraDesdeOrdenCompra();
                     }
+                    if (accion == 5)
+                    {
+                        EditarCompra();
+                    }
                     //cargo sucursal
                     ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                     if (ListSucursal.SelectedValue != "")
@@ -228,6 +232,95 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
+        private void EditarCompra()
+        {
+            try
+            {
+                Gestion_Api.Entitys.Compra c = this.contEntity.obtenerCompraId(this.idCompra);
+                this.ListEmpresa.SelectedValue = c.IdEmpresa.ToString();
+                this.cargarSucursal(c.IdEmpresa.Value);
+                this.ListSucursal.SelectedValue = c.IdSucursal.ToString();
+                this.cargarPuntoVta(c.IdSucursal.Value, (int)c.IdPuntoVenta);
+                this.txtFecha.Text = Convert.ToDateTime(c.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
+                this.ListTipoDocumento.SelectedValue = c.TipoDocumento;
+                this.txtPVenta.Text = c.PuntoVenta;
+                this.txtNumero.Text = c.Numero;
+                this.ListProveedor.SelectedValue = c.Proveedor.ToString();
+                this.txtCuit.Text = c.Cuit;
+                this.txtIva.Text = c.Iva;
+                this.txtNetoNoGrabado.Text = c.NetoNoGrabado.ToString();
+                this.txtNeto2.Text = c.Neto2.ToString();
+                this.txtNeto5.Text = c.Neto5.ToString();
+                this.txtNeto105.Text = c.Neto105.ToString();
+                this.txtNeto21.Text = c.Neto21.ToString();
+                this.txtNeto27.Text = c.Neto27.ToString();
+                this.txtIvaNeto2.Text = c.Iva2.ToString();
+                this.txtIvaNeto5.Text = c.Iva5.ToString();
+                this.txtIvaNeto105.Text = c.Iva105.ToString();
+                this.txtIvaNeto21.Text = c.Iva21.ToString();
+                this.txtIvaNeto27.Text = c.Iva27.ToString();
+                this.txtPIB.Text = c.PIB.ToString();
+                this.txtPIva.Text = c.PIva.ToString();
+                this.txtImpuestosInternos.Text = c.ImpuestosInternos.ToString();
+                this.txtOtros.Text = c.Otros.ToString();
+
+                this.txtRetencionIIBB.Text = c.RetencionIIBB.ToString();
+                this.txtRetencionIVA.Text = c.RetencionIVA.ToString();
+                this.txtRetencionGanancias.Text = c.RetencionGanancia.ToString();
+                this.txtRetencionSuss.Text = c.RetencionSuss.ToString();
+
+                this.txtITC.Text = c.ITC.ToString();
+                this.txtTasaCo2.Text = c.TasaCo2.ToString();
+
+                this.txtVencimiento.Text = Convert.ToDateTime(c.Vencimiento, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
+                this.txtTotal.Text = c.Total.ToString();
+                this.ListTipoCompra.SelectedValue = c.Tipo.ToString();
+                this.txtImputacionCont.Text = Convert.ToDateTime(c.FechaImputacion, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
+
+                if (c.Compras_Observaciones.Count > 0)
+                    this.txtObservaciones.Text = c.Compras_Observaciones.FirstOrDefault().Observacion;
+
+                //this.btnAgregar.Visible = false;
+                this.btnCancelar.Text = "Volver";
+                this.BloquearControlesAlEditar();
+
+                var cta = this.contPlanCta.obtenerCuentaContableCompra(c.Id);
+                if (cta != null)
+                {
+                    this.txtPlanCtaProv.Text = cta.Cuentas_Contables.Codigo + " - " + cta.Cuentas_Contables.Descripcion;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error inicializando formulario. " + ex.Message));
+            }
+        }
+
+        private void BloquearControlesAlEditar()
+        {
+            try
+            {
+                this.ListEmpresa.Attributes.Add("disabled", "true");
+                this.ListSucursal.Attributes.Add("disabled", "true");
+                this.ListPuntoVenta.Attributes.Add("disabled", "true");
+                this.txtFecha.Attributes.Add("disabled", "true");
+                this.ListTipoDocumento.Attributes.Add("disabled", "true");
+                this.ListProveedor.Attributes.Add("disabled", "true");
+                this.txtCuit.Attributes.Add("disabled", "true");
+                this.txtObservaciones.Attributes.Add("disabled", "true");
+                this.txtVencimiento.Attributes.Add("disabled", "true");
+                this.txtTotal.Attributes.Add("disabled", "true");
+                this.ListTipoCompra.Attributes.Add("disabled", "true");
+                this.txtImputacionCont.Attributes.Add("disabled", "true");
+                this.btnAgregarPagar.Visible = false;
+            }
+            catch
+            {
+
+            }
+        }
+
         private void cargarCompra()
         {
             try
@@ -387,6 +480,12 @@ namespace Gestion_Web.Formularios.Compras
                 this.txtCuit.Attributes.Add("disabled", "true");
                 this.txtIva.Attributes.Add("disabled", "true");
                 this.txtNetoNoGrabado.Attributes.Add("disabled", "true");
+                this.txtNeto2.Attributes.Add("disabled", "true");
+                this.txtNeto5.Attributes.Add("disabled", "true");
+                this.txtITC.Attributes.Add("disabled", "true");
+                this.txtTasaCo2.Attributes.Add("disabled", "true");
+                this.txtImputacionCont.Attributes.Add("disabled", "true");
+                this.txtObservaciones.Attributes.Add("disabled", "true");
                 this.txtNeto105.Attributes.Add("disabled", "true");
                 this.txtNeto21.Attributes.Add("disabled", "true");
                 this.txtNeto27.Attributes.Add("disabled", "true");
