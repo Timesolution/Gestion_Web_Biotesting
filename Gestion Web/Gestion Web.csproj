@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -105,7 +105,7 @@
     </Reference>
     <Reference Include="Millas_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio millas api\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+      <HintPath>..\..\Repositorio Millas API\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>

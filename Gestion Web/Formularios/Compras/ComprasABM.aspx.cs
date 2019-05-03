@@ -42,6 +42,9 @@ namespace Gestion_Web.Formularios.Compras
                 idRemito = Convert.ToInt64(Request.QueryString["r"]);
                 idOrdenCompra = Convert.ToInt64(Request.QueryString["oc"]);
 
+                btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+                btnAgregarPagar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarPagar, null) + ";");
+
                 if (!IsPostBack)
                 {
                     cargarEmpresas();
@@ -578,15 +581,18 @@ namespace Gestion_Web.Formularios.Compras
         #region Eventos Controles
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid)
+                return;
+
             if (this.accion == 1 || this.accion == 3)
-            {
                 this.agregarCompra(0);
-            }
-            if (this.accion == 2)
-            {
-                this.modificarCompra(0);
-            }
             
+            if (this.accion == 2)            
+                this.modificarCompra(0);
+            
+            if(this.accion == 5)
+                this.GuardarCompraEditada();
+
         }
         #endregion
 
@@ -605,7 +611,9 @@ namespace Gestion_Web.Formularios.Compras
 
                 if (j > 0)
                 {
-                    Gestion_Api.Entitys.Compra c = this.obtenerDatosCompra();
+                    Gestion_Api.Entitys.Compra c = new Gestion_Api.Entitys.Compra();
+                    c = this.obtenerDatosCompra(c);
+
                     if (c != null)
                     {
                         int i = this.contEntity.agregarCompra(c);
@@ -656,6 +664,49 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
+        private void GuardarCompraEditada()
+        {
+            try
+            {
+                Gestion_Api.Entitys.Compra c = this.contEntity.obtenerCompraId(this.idCompra);                
+
+                if (c != null)
+                {
+                    calcularTotal();
+
+                    c = this.obtenerDatosCompra(c);
+                    int i = this.contEntity.EditarCompra(c);
+                    if (i >= 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Compra modificada con exito\", {type: \"info\"});", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"No se pudo modificar compra\";", true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Error agregando compra. " + ex.Message + "\", {type: \"error\"});", true);
+            }
+        }
+
+        private void AgregarObservacionACompra(Gestion_Api.Entitys.Compra c)
+        {
+            if (c.Compras_Observaciones.Count > 0)
+            {
+                if (!string.IsNullOrEmpty(txtObservaciones.Text))
+                    c.Compras_Observaciones.FirstOrDefault().Observacion = this.txtObservaciones.Text;
+            }
+            else
+            {
+                Gestion_Api.Entitys.Compras_Observaciones obs = new Gestion_Api.Entitys.Compras_Observaciones();
+                obs.Observacion = this.txtObservaciones.Text;
+                c.Compras_Observaciones.Add(obs);
+            }
+        }
+
         private void modificarCompra(int pagar)
         {
             try
@@ -665,16 +716,7 @@ namespace Gestion_Web.Formularios.Compras
                 Gestion_Api.Entitys.Compra c = this.contEntity.obtenerCompraId(this.idCompra);
                 c.FechaImputacion = Convert.ToDateTime(this.txtImputacionCont.Text, new CultureInfo("es-AR"));
 
-                if (c.Compras_Observaciones.Count > 0)
-                {
-                    c.Compras_Observaciones.FirstOrDefault().Observacion = this.txtObservaciones.Text;
-                }
-                else
-                {
-                    Gestion_Api.Entitys.Compras_Observaciones obs = new Gestion_Api.Entitys.Compras_Observaciones();
-                    obs.Observacion = this.txtObservaciones.Text;
-                    c.Compras_Observaciones.Add(obs);
-                }
+                AgregarObservacionACompra(c);
 
                 if (c != null)
                 {
@@ -707,11 +749,10 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private Gestion_Api.Entitys.Compra obtenerDatosCompra()
+        private Gestion_Api.Entitys.Compra obtenerDatosCompra(Gestion_Api.Entitys.Compra c)
         {
             try
-            {
-                Gestion_Api.Entitys.Compra c = new Gestion_Api.Entitys.Compra();
+            {                
                 c.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
                 c.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
                 c.IdPuntoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
@@ -750,9 +791,8 @@ namespace Gestion_Web.Formularios.Compras
                 c.Vencimiento = Convert.ToDateTime(this.txtVencimiento.Text, new CultureInfo("es-AR"));
                 c.FechaImputacion = Convert.ToDateTime(this.txtImputacionCont.Text, new CultureInfo("es-AR"));
                 c.Tipo = Convert.ToInt32(this.ListTipoCompra.SelectedValue);
-                Gestion_Api.Entitys.Compras_Observaciones obs = new Gestion_Api.Entitys.Compras_Observaciones();
-                obs.Observacion = this.txtObservaciones.Text;
-                c.Compras_Observaciones.Add(obs);
+
+                AgregarObservacionACompra(c);
 
                 //check de imputa
                 c.ImputaCC = 1;
