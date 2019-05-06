@@ -1769,7 +1769,18 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        this.ListSucursalCliente.Visible = false;
+                        if(contClienteEntity.obtenerSucursalesCliente(f.cliente.id).Count > 0)
+                        {
+                            ListSucursalCliente.Visible = false;
+                            f.items.Clear();
+                            f.cliente = null;
+                            labelCliente.Text = string.Empty;
+                            borrarCamposagregarItem();
+                            Session.Add("Factura", f);
+                            cargarItems();
+                            DropListClientes.SelectedValue = "-1";
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No tiene permiso para facturarle a un cliente interno!"));
+                        }
                     }
 
 
@@ -2792,7 +2803,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.TxtDescuentoArri.Text = "0";
                 this.txtPUnitario.Text = "";
                 this.txtTotalArri.Text = "0";
-                this.lbtnStockProd.Text = "0";
+                this.lbtnStockProd.Text = "0";                
             }
             catch (Exception ex)
             {
@@ -4943,6 +4954,8 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     Factura f = Session["Factura"] as Factura;
                     f.items.Clear();
+                    f.cliente = null;
+                    labelCliente.Text = string.Empty;
                     this.borrarCamposagregarItem();
                     Session.Add("Factura", f);
                     //lo dibujo en pantalla

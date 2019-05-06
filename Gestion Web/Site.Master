@@ -438,6 +438,12 @@
                                                     <li><a href="/../../Formularios/Reportes/ReporteListaDePreciosF.aspx">Lista De Precios</a></li>
                                                 </ul>
                                             </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Sistema Beneficios</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ImpresionReporteBeneficios.aspx?a=1">Lista De Socios</a></li>
+                                                </ul>
+                                            </li>
                                             <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
                                                 <%--<li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>--%>

@@ -18,6 +18,9 @@ using System.IO;
 using System.Net.Mail;
 using System.Reflection;
 using System.Web.Services;
+using System.Web.Script.Services;
+using System.Web.Script.Serialization;
+using System.Web.Mvc;
 
 namespace Gestion_Web.Formularios.Compras
 {
@@ -35,8 +38,8 @@ namespace Gestion_Web.Formularios.Compras
         int accion;
         long orden;
 
-        List<Articulo> articulosProveedor = new List<Articulo>();
-        List<Articulo> articulosProveedorBuscados = new List<Articulo>();
+        static List<Articulo> _articulosProveedor = new List<Articulo>();
+        static List<Articulo> _articulosProveedorBuscados = new List<Articulo>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -64,7 +67,9 @@ namespace Gestion_Web.Formularios.Compras
 
                     this.cargarProveedores();
                     this.cargarSucursal();
-
+                    _articulosProveedor.Clear();
+                    _articulosProveedorBuscados.Clear();
+                    ObtenerArticulosProveedor();
                     //cargo sucursal
                     this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                     if (this.ListSucursal.SelectedValue != "")
@@ -84,10 +89,9 @@ namespace Gestion_Web.Formularios.Compras
 
                     lbtnBuscarArticulo.Visible = false;
                 }
-                
 
-                this.actualizarTotales();
-                ObtenerArticulosProveedor();
+                RecorrerArticulosBuscados();
+                this.actualizarTotales();                
             }
             catch (Exception ex)
             {
@@ -252,8 +256,11 @@ namespace Gestion_Web.Formularios.Compras
                 {
 
                     this.cargarAlertaProveedor();
-                    this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+                    //this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
                     this.cargarProveedor_OC();
+                    _articulosProveedorBuscados.Clear();
+                    ObtenerArticulosProveedor();
+                    lbtnBuscarArticulo.Visible = true;
                 }
 
             }
@@ -1417,6 +1424,9 @@ namespace Gestion_Web.Formularios.Compras
                 this.cargarAlertaProveedor();
                 this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
                 this.cargarProveedor_OC();
+                _articulosProveedorBuscados.Clear();
+                phBuscarArticulo.Controls.Clear();
+                txtDescripcionArticulo.Text = "";
             }
             catch (Exception Ex)
             {
@@ -1432,6 +1442,8 @@ namespace Gestion_Web.Formularios.Compras
                 phProductos.Controls.Clear();
                 cargarProveedor_OC();
                 ObtenerArticulosProveedor();
+                dtItems.Rows.Clear();
+                _articulosProveedorBuscados.Clear();
                 if (ListProveedor.SelectedIndex > 0)
                     lbtnBuscarArticulo.Visible = true;
             }
@@ -1443,7 +1455,7 @@ namespace Gestion_Web.Formularios.Compras
 
         private void ObtenerArticulosProveedor()
         {
-            articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
+            _articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
         }
 
         private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
@@ -1474,29 +1486,201 @@ namespace Gestion_Web.Formularios.Compras
             celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
             tr.Cells.Add(celPrecioVenta);
 
+            TableCell celAction = new TableCell();
+            LinkButton btnEliminar = new LinkButton();
+            btnEliminar.ID = "btnEliminar_" + articulo.id;
+            btnEliminar.CssClass = "btn btn-info";
+            btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+            btnEliminar.Click += new EventHandler(EliminarArticuloBuscado);
+            celAction.Controls.Add(btnEliminar);
+            tr.Cells.Add(celAction);
+
             phBuscarArticulo.Controls.Add(tr);
             UpdatePanel7.Update();
         }
 
-        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e) 
+        private void EliminarArticuloBuscado(object sender, EventArgs e)
         {
-            articulosProveedorBuscados.Add(articulosProveedor.Where
-                (
-                x => x.descripcion.ToLower().Trim() == txtDescripcionArticulo.Text.Trim().ToLower() 
-                || 
-                x.codigo.ToLower().Trim() == txtDescripcionArticulo.Text.Trim().ToLower()).FirstOrDefault()
-                );
-
-            foreach (var articulo in articulosProveedorBuscados)
+            try
             {
-                CargarEnPHBusquedaDeArticulos(articulo);
-            }            
+                string id = (sender as LinkButton).ID;
+                int idArticulo = Convert.ToInt32(id.Split('_')[1]);
+
+                var articulo = _articulosProveedorBuscados.Where(x => x.id == idArticulo).FirstOrDefault();
+                _articulosProveedorBuscados.Remove(articulo);
+
+                RecorrerArticulosBuscados();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error eliminando articulo de articulos buscados " + ex.Message);
+            }
+
         }
 
-        [WebMethod]
-        public static void Prueba()
+        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e)
         {
-
+            ObtenerDatosArticuloYDibujarlosEnPantalla(txtDescripcionArticulo.Text);
         }
+
+        public void ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
+        {
+            if (string.IsNullOrEmpty(txtDescripcion))
+                return;
+
+            AgregarArticulosBuscados(txtDescripcion);
+
+            RecorrerArticulosBuscados();
+        }
+
+        public void RecorrerArticulosBuscados()
+        {
+            if (_articulosProveedorBuscados.Count > 0)
+            {
+                phBuscarArticulo.Controls.Clear();
+
+                foreach (var articulo in _articulosProveedorBuscados)
+                {
+                    CargarEnPHBusquedaDeArticulos(articulo);
+                }
+            }
+        }
+
+        public void AgregarArticulosBuscados(string txtDescripcion)
+        {
+            if (!_articulosProveedorBuscados.Exists(j => j.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim() || j.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()))
+            {
+                _articulosProveedorBuscados.Add(_articulosProveedor.Where
+                (
+                    x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
+                    ||
+                    x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
+                );
+            }
+        }
+
+        public void AgregarArticulosATablaDeItems()
+        {
+            foreach (var articulo in _articulosProveedorBuscados)
+            {
+                DataTable dt = this.dtItems;
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dr[1].ToString() == articulo.descripcion)
+                        return;
+                }
+
+                DataRow drFila = dt.NewRow();
+
+                List<ProveedorArticulo> ProvArticulo = this.contArticulos.obtenerProveedorArticulosByArticulo(Convert.ToInt32(articulo.id));
+                string codArtProveedor = "";
+                
+                foreach (var p in ProvArticulo)
+                {
+                    codArtProveedor += p.codigoProveedor + " - ";
+                }
+
+                if (codArtProveedor.Length > 0)//saco el ultimo guion
+                {
+                    codArtProveedor = codArtProveedor.Substring(0, codArtProveedor.Length - 3);
+                }
+
+                drFila["Codigo"] = articulo.codigo.ToString() + " (" + codArtProveedor + ") ";
+
+                drFila["Descripcion"] = articulo.descripcion;
+                drFila["Cant"] = 0;
+                drFila["Costo"] = Convert.ToDecimal(articulo.costo);
+
+                decimal porcentajeIvaArticulo = Convert.ToDecimal(articulo.porcentajeIva);
+                decimal ivaArticulo = Convert.ToDecimal(articulo.porcentajeIva);
+
+                if (porcentajeIvaArticulo > 0)                
+                    ivaArticulo = (porcentajeIvaArticulo / 100) + 1;                
+                else
+                    ivaArticulo = 0;
+
+                drFila["CostoMasIva"] = Decimal.Round(Convert.ToDecimal(articulo.costoImponible) * ivaArticulo, 2);
+
+                dt.Rows.Add(drFila);
+
+                this.dtItems = dt;
+            }
+
+            this.CargarItems();
+        }
+
+        protected void lbtnAgregarArticulosBuscadosATablaItems_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                phBuscarArticulo.Controls.Clear();
+                txtDescripcionArticulo.Text = "";
+                AgregarArticulosATablaDeItems();
+                _articulosProveedorBuscados.Clear();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error agregando articulos buscados a tabla items " + ex.Message);
+            }
+        }
+        //[WebMethod]
+        //public static void AgregarArticulosBuscados(string txtDescripcion)
+        //{
+        //    if (!articulosProveedorBuscados.Exists(j => j.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim() || j.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()))
+        //    {
+        //        articulosProveedorBuscados.Add(articulosProveedor.Where
+        //        (
+        //            x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
+        //            ||
+        //            x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
+        //        );
+        //    }
+        //}
+
+        //[WebMethod]
+        //public static string ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
+        //{
+        //    if (string.IsNullOrEmpty(txtDescripcion))
+        //        return "";
+
+        //    AgregarArticulosBuscados(txtDescripcion);
+
+        //    JavaScriptSerializer TheSerializer = new JavaScriptSerializer();
+
+        //    if(articulosProveedorBuscados.Count > 0)
+        //    {
+        //        List<ArticuloBuscado> articulosBuscados = new List<ArticuloBuscado>();
+
+        //        foreach (var articulo in articulosProveedorBuscados)
+        //        {
+        //            ArticuloBuscado articuloBuscado = new ArticuloBuscado();
+
+        //            articuloBuscado.id = articulo.id;
+        //            articuloBuscado.codigo = articulo.codigo;
+        //            articuloBuscado.descripcion = articulo.descripcion;
+        //            articuloBuscado.costo = articulo.costo;
+        //            articuloBuscado.precioVenta = articulo.precioVenta;
+
+        //            articulosBuscados.Add(articuloBuscado);                    
+        //        }
+
+        //        var TheJson = TheSerializer.Serialize(articulosBuscados);
+
+        //        return TheJson;
+        //    }
+
+        //    return "";
+        //}
+
     }
+
+    //public class ArticuloBuscado
+    //{
+    //    public int id;
+    //    public string codigo;
+    //    public string descripcion;
+    //    public decimal costo;
+    //    public decimal precioVenta;
+    //}
 }

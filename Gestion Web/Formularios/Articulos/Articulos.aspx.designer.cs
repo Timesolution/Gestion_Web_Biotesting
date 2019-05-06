@@ -436,6 +436,15 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.LinkButton btnFiltrar;
         
         /// <summary>
+        /// UpdatePanel11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel11;
+        
+        /// <summary>
         /// txtPorcentajeAumento control.
         /// </summary>
         /// <remarks>
