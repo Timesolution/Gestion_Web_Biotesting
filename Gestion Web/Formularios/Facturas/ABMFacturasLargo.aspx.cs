@@ -528,6 +528,7 @@ namespace Gestion_Web.Formularios.Facturas
                         dr["Importe"] = pago.monto;
                         dr["Neto"] = pago.monto;
                         dr["Recargo"] = Convert.ToDecimal(0.00);
+                        
 
                         dt.Rows.Add(dr);
                         lstPago = dt;
@@ -545,12 +546,12 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-
                         DataRow dr = dt.NewRow();
                         dr["Tipo Pago"] = "Efectivo";
                         dr["Importe"] = pago.monto;
                         dr["Neto"] = pago.monto;
                         dr["Recargo"] = Convert.ToDecimal(0.00);
+                        dr["IdMoneda"] = (pago as Pago_Contado).moneda.id;
 
                         dt.Rows.Add(dr);
                         lstPago = dt;
@@ -2385,6 +2386,7 @@ namespace Gestion_Web.Formularios.Facturas
                 lstPagosTemp.Columns.Add("Neto");
                 lstPagosTemp.Columns.Add("Recargo");
                 lstPagosTemp.Columns.Add("DetallePago");
+                lstPagosTemp.Columns.Add("IdMoneda");
                 lstPago = lstPagosTemp;
             }
             catch (Exception ex)
@@ -5934,6 +5936,7 @@ namespace Gestion_Web.Formularios.Facturas
                         dr["Neto"] = montoIngresadoTxtEnEfectivo;
                         dr["Recargo"] = Convert.ToDecimal(0.00);
                         dr["DetallePago"] = tipoDePago;
+                        dr["IdMoneda"] = ListMonedas.SelectedValue;
 
                         dt.Rows.Add(dr);
 
