@@ -363,6 +363,12 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtDiasActualizacion" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Solo proveedor predeterminado</label>
+                                    <div class="col-md-6">
+                                        <asp:CheckBox ID="cbSoloProveedorPredeterminado" runat="server" />
+                                    </div>
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
