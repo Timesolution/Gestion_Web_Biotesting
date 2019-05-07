@@ -1549,15 +1549,15 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         cantRegistros = dtProveedoresArticulos.Rows.Count;
                     }
-                    int i = this.controlador.actualizarPrecioProveedoresXLS(path + archivo, Convert.ToInt32(DropListOtroProveedor.SelectedValue));
+                    int i = this.controlador.actualizarPrecioProveedoresXLS(path + archivo, Convert.ToInt32(DropListOtroProveedor.SelectedValue), dtProveedoresArticulos);
 
                     if (i > 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros, Request.Url.ToString()));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas articulos."));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"No se pudieron procesar una o mas articulos\", {type: \"info\"});", true);
                     }
 
                 }
