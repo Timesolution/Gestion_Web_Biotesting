@@ -120,7 +120,7 @@
                                         <tr>
                                             <th>Codigo</th>
                                             <th>Descripcion</th>
-                                            <th>Cantidad Pedida</th>
+                                            <%--<th>Cantidad Pedida</th>--%>
                                             <th>Cantidad ya Recibida</th>
                                             <th>Cantidad Recibida</th>
                                         </tr>
@@ -199,7 +199,7 @@
                                     <label class="col-md-4" style="font-size: small">Nueva fecha de entrega</label>
                                     <div class="input-group col-md-4">
                                         <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                        <asp:TextBox ID="txtNuevaFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                                        <asp:TextBox ID="txtNuevaFechaEntrega" Enabled="false" runat="server" class="form-control"></asp:TextBox>
                                     </div>
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ControlToValidate="txtNuevaFechaEntrega" ID="RequiredFieldValidator3" runat="server" ErrorMessage="*" ValidationGroup="NuevaFechaEntregaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>

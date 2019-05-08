@@ -112,6 +112,12 @@ namespace Gestion_Web.Formularios.Compras
                 else
                     ListPtoVenta.Enabled = false;
 
+                if (!permisos.Contains("204"))
+                    btnCerrar.Visible = false;
+
+                if (permisos.Contains("205"))
+                    txtNuevaFechaEntrega.Enabled = true;
+
                 return 1;
             }
             catch
@@ -129,6 +135,7 @@ namespace Gestion_Web.Formularios.Compras
                 ListSucursal.SelectedValue = oc.IdSucursal.ToString();
 
                 ListPtoVenta.CssClass = "form-control";
+                txtNuevaFechaEntrega.CssClass = "form-control";
 
                 cargarPuntoVta(Convert.ToInt32(ListSucursal.SelectedValue), oc.IdPtoVenta.Value);
 
@@ -273,6 +280,7 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidad.Text = cantidad.ToString();
                 celCantidad.HorizontalAlign = HorizontalAlign.Left;
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
+                celCantidad.Visible = false;
                 tr.Cells.Add(celCantidad);
 
                 TableCell celCantidadYaRecibida = new TableCell();
@@ -696,6 +704,9 @@ namespace Gestion_Web.Formularios.Compras
                     decimal cantidadRecibida = cantidades.Item4;
                     TableCell cantidadYaRecibidaTB = cantidades.Item5;
                     decimal cantidadYaRecibida = cantidades.Item6;
+
+                    if (cantidadRecibida <= 0)
+                        continue;
 
                     if (!String.IsNullOrEmpty(idArticulo))
                     {

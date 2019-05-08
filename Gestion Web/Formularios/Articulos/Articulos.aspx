@@ -476,14 +476,14 @@
                                     <br />
                                     <asp:Label ID="lblFormato" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
-                            </div>
+                            </div>                            
                         </div>
-                        </div>
+                        
                     </ContentTemplate>
                 </asp:UpdatePanel>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
+                </div>
             </div>
         </div>
     </div>

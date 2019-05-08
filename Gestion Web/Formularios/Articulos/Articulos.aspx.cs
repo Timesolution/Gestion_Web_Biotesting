@@ -1553,11 +1553,13 @@ namespace Gestion_Web.Formularios.Articulos
 
                     if (i > 0)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros,null));
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"No se pudieron procesar una o mas articulos\", {type: \"info\"});", true);
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"No se pudieron procesar una o mas articulos\", {type: \"info\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudieron procesar una o mas articulos. "));
                     }
 
                 }
