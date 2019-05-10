@@ -2651,6 +2651,26 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+        protected void lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtPorcDescuento.Text = "0";
+                actualizarTotales();
+                if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
+                {
+                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
+                    actualizarTotales();
+                }
+                //Para recalcular el label del modal de metodo de pago de tarjeta
+                this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "cerrarModalDescuentoMonto();", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "Error en fun: lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click. Ex: " + ex.Message, true);
+            }
+        }
         #endregion
 
         private void cargarProducto(string codigo)
@@ -3649,6 +3669,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         return;
                     }
+
+                    //para saber si se va a imprimir el ticket de cambio con la factura
+                    fact.imprimirTicketDeCambio = this.chkImprimirTicketDeCambio.Checked;
 
                     //facturo
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
@@ -10631,25 +10654,6 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtComentarios.Text = f.comentario;
             }
             catch (Exception Ex)
-            {
-
-            }
-        }
-
-        protected void lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                txtPorcDescuento.Text = "0";
-                actualizarTotales();
-                if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
-                {
-                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
-                    actualizarTotales();
-                }
-                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "cerrarModalDescuentoMonto();", true);
-            }
-            catch (Exception ex)
             {
 
             }

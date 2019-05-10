@@ -47,7 +47,7 @@ namespace Gestion_Web.Formularios.Reportes
                 idArticulo = Convert.ToInt32(Request.QueryString["Articulo"]);
                 idSubGrupo = Convert.ToInt32(Request.QueryString["SubGrupo"]);
                 idGrupo = Convert.ToInt32(Request.QueryString["Grupo"]);
-                idCliente =  Convert.ToInt32(Request.QueryString["Cliente"]);
+                idCliente = Convert.ToInt32(Request.QueryString["Cliente"]);
                 idVendedor = Convert.ToInt32(Request.QueryString["Vendedor"]);
                 idProveedor = Convert.ToInt32(Request.QueryString["Prov"]);
                 idTipo = Convert.ToInt32(Request.QueryString["tipo"]);
@@ -57,7 +57,7 @@ namespace Gestion_Web.Formularios.Reportes
                 {
                     if (fechaD == null && fechaH == null && suc == 0)
                     {
-                        suc = (int)Session["Login_SucUser"];                        
+                        suc = (int)Session["Login_SucUser"];
                         fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -89,7 +89,7 @@ namespace Gestion_Web.Formularios.Reportes
                 this.cargarDatosRango(fechaD, fechaH, suc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, idTipo);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
 
@@ -398,9 +398,9 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                
+
                 if (fechaD != null && fechaH != null && listas != null)
-                {                    
+                {
                     this.lbDevoluciones.Text = contFacturacion.obtenerTotalDevoluciones(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor).ToString();
                     this.lblPedidosPendientes.Text = contPedido.obtenerTotalPedidosPendientes(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor).ToString();
                     //para que me incluya hasta el final de dia
@@ -538,7 +538,7 @@ namespace Gestion_Web.Formularios.Reportes
             {
 
                 String buscar = this.txtDescArticulo.Text.Replace(' ', '%');
-                DataTable dt = contArticulo.obtenerArticulosByDescDT(buscar);                
+                DataTable dt = contArticulo.obtenerArticulosByDescDT(buscar);
 
                 //cargo la lista
                 this.DropListArticulos.DataSource = dt;
@@ -566,10 +566,28 @@ namespace Gestion_Web.Formularios.Reportes
                 {
                     this.cargarTopArticulosCantidadTable(dr);
                 }
+                lbArticulosXVenta.Text = obtenerPromedioCantidadArticulosVendidosXVenta().ToString();
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando tabla de Top Articulos por Cantidad" + ex.Message));
+            }
+        }
+
+        public decimal obtenerPromedioCantidadArticulosVendidosXVenta()
+        {
+            try
+            {
+                if (Convert.ToDecimal(lblVentasRealizadas.Text) > 0)
+                {
+                    decimal cantidadArticulosVendidosXVenta = Math.Round(Convert.ToDecimal(lblProductosVendidos.Text) / Convert.ToDecimal(lblVentasRealizadas.Text), 2);
+                    return cantidadArticulosVendidosXVenta;
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
 
@@ -605,7 +623,7 @@ namespace Gestion_Web.Formularios.Reportes
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando tabla de Top Articulos por Cantidad. " + ex.Message));
 
@@ -710,7 +728,6 @@ namespace Gestion_Web.Formularios.Reportes
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando tabla de Top Articulos" + ex.Message));
-
             }
         }
 
@@ -722,15 +739,39 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
+                decimal montoTotalDeArticulosVendidos = 0;
+
                 DataTable dt = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
                 foreach (DataRow dr in dt.Rows)
                 {
                     this.cargarTopArticulosImporteTable(dr);
+                    montoTotalDeArticulosVendidos += Convert.ToDecimal(dr[2]);
                 }
+                lbVentaPromedio.Text = obtenerVentaPromedio(montoTotalDeArticulosVendidos).ToString();
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando tabla de Top Articulos por Importe" + ex.Message));
+            }
+        }
+
+        private decimal obtenerVentaPromedio(decimal montoTotal)
+        {
+            try
+            {
+                decimal ventasRealizadas = Convert.ToDecimal(lblVentasRealizadas.Text);
+                if (ventasRealizadas > 0)
+                {
+                    return Math.Round((montoTotal / ventasRealizadas), 2);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
 
@@ -889,7 +930,7 @@ namespace Gestion_Web.Formularios.Reportes
                 celTotal.Width = Unit.Percentage(20);
                 tr.Cells.Add(celTotal);
 
-                
+
 
                 phTopVendedorImporte.Controls.Add(tr);
 
@@ -952,7 +993,7 @@ namespace Gestion_Web.Formularios.Reportes
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// 
-        
+
         protected void DropListGrupo_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -997,7 +1038,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=3&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);            
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=3&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
 
         protected void lbtnExportar3_Click(object sender, EventArgs e)
@@ -1011,7 +1052,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=4&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);            
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=4&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
 
         protected void lbtnExportar4_Click(object sender, EventArgs e)
@@ -1070,7 +1111,7 @@ namespace Gestion_Web.Formularios.Reportes
 
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 string resultadoJSON = serializer.Serialize(datos);
-                return resultadoJSON;                
+                return resultadoJSON;
             }
             catch
             {

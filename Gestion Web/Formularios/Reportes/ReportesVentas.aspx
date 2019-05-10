@@ -128,27 +128,39 @@
                             <div class="widget-content">
 
                                 <div id="big_stats" class="cf">
-                                    <div class="stat">
+                                    <div class="stat" style="width:10%">
                                         <h4>Pedidos Pendientes</h4>
                                         <asp:Label ID="lblPedidosPendientes" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat">
+                                    <div class="stat" style="width:10%">
                                         <h4>Ventas Realizadas</h4>
                                         <asp:Label ID="lblVentasRealizadas" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat">
+                                    <div class="stat" style="width:10%">
                                         <h4>Productos Vendidos</h4>
                                         <asp:Label ID="lblProductosVendidos" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat">
+                                    <div class="stat" style="width:8%">
                                         <h4>Devoluciones</h4>
                                         <asp:Label ID="lbDevoluciones" runat="server" Text="" class="value"></asp:Label>
+                                    </div>
+                                    <!-- .stat -->
+
+                                     <div class="stat" style="width:15%">
+                                        <h4>Venta Promedio</h4>
+                                        <asp:Label ID="lbVentaPromedio" runat="server" Text="" class="value"></asp:Label>
+                                    </div>
+                                    <!-- .stat -->
+
+                                    <div class="stat" style="width:10%">
+                                        <h4>Articulos Por Venta</h4>
+                                        <asp:Label ID="lbArticulosXVenta" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
                                 </div>

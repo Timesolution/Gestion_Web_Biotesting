@@ -400,6 +400,13 @@
                                                                     <td>
                                                                         <asp:PlaceHolder ID="phDatosEntrega" Visible="false" runat="server">
                                                                             <div class="form-group">
+                                                                                <label class="col-md-3">Ticket de cambio:</label>
+
+                                                                                <div class="col-md-1">
+                                                                                    <asp:CheckBox ID="chkImprimirTicketDeCambio" runat="server" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
                                                                                 <label class="col-md-3">Fecha Entrega: </label>
 
                                                                                 <div class="col-md-4">

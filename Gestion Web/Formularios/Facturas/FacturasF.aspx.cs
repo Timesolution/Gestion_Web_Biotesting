@@ -1664,7 +1664,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             asignarMailsDeClienteAlTextBoxEnvioMail();
         }
-
         private void asignarMailsDeClienteAlTextBoxEnvioMail()
         {
             try
@@ -1719,7 +1718,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando factura para envio via mail. " + ex.Message));
             }
         }
-
         protected void lbtnReimprimirFiscal_Click(object sender, EventArgs e)
         {
             try
@@ -1838,7 +1836,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error generando Factura desde Editar Factura " + ex.Message));
             }
         }
-
         protected void btnClienteFacturarPRP_Click(object sender, EventArgs e)
         {
             try
@@ -1861,7 +1858,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
             }
         }
-
         protected void listClienteFacturarPRP_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1874,7 +1870,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error seleccionando cliente. " + ex.Message));
             }
         }
-
         protected void btnForm12_Click(object sender, EventArgs e)
         {
             try
@@ -1909,6 +1904,46 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error remitiendo facturas. " + ex.Message));
+            }
+        }
+        protected void lbtnImprimirTicketDeCambio_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorFacturacion contFacturacion = new controladorFacturacion();
+                Factura factura = new Factura();
+                int idTildado = 0;
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idTildado = Convert.ToInt32(ch.ID.Split('_')[1]);
+                        break;
+                    }
+                }
+                if (idTildado != 0)
+                {
+                    factura = contFacturacion.obtenerFacturaId(idTildado);
+                    int resultado = contFacturacion.generarXMLTicketDeCambio(factura);
+                    if (resultado > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Ticket de cambio impreso correctamente.", ""));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo imprimir Ticket de cambio."));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe tildar una factura antes."));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: lbtnImprimirTicketDeCambio_Click. " + ex.Message));
             }
         }
         #endregion
@@ -4055,5 +4090,6 @@ namespace Gestion_Web.Formularios.Facturas
 
             return (Convert.ToInt32(compras.LastOrDefault().Numero) + 1).ToString("D8");
         }
+
     }
 }
