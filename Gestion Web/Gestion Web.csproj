@@ -552,6 +552,8 @@
     <Content Include="Formularios\Valores\LiquidacionesF.aspx" />
     <Content Include="Formularios\Valores\TarjetasF.aspx" />
     <Content Include="Formularios\Reportes\TrazabilidadABM.aspx" />
+    <Content Include="Formularios\Vendedores\Comisiones\Comisiones.js" />
+    <Content Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx" />
     <Content Include="Formularios\Vendedores\ImpresionVendedores.aspx" />
     <Content Include="Formularios\Vendedores\Vendedores.aspx" />
     <Content Include="Formularios\Vendedores\VendedoresABM.aspx" />
@@ -2935,6 +2937,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\TrazabilidadABM.aspx.designer.cs">
       <DependentUpon>TrazabilidadABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx.cs">
+      <DependentUpon>ComisionesPorGrupoF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx.designer.cs">
+      <DependentUpon>ComisionesPorGrupoF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Vendedores\dsVendedores.Designer.cs">
       <AutoGen>True</AutoGen>
