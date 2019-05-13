@@ -3838,7 +3838,7 @@ namespace Gestion_Web.Formularios.Clientes
                 int i = this.contClienteEntity.agregarProveedor_OC(poc);
                 if (i > 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se cargaron los datos para las Ordenes de Compra correctamente."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se cargaron los datos para las Ordenes de Compra correctamente.",null));
                 }
             }
             catch (Exception Ex)

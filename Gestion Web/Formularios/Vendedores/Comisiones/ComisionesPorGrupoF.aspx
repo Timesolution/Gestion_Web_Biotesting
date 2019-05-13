@@ -166,25 +166,66 @@
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });            
 
-            controlFechaDesde.addEventListener("change", FechaDesdeMenorAFechaHasta);
-            controlFechaDesde.addEventListener("change", ComprobarFechaCorrecta(controlFechaDesde.value));
+            controlFechaDesde.addEventListener("change", ComprobacionFechaDesde);
+            controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
         });  
         
     </script>
     <script type="text/javascript">
-        function FechaDesdeMenorAFechaHasta()
+        function ComprobacionFechaHasta()
         {
             var fechaActual = ObtenerFechaActual();
 
             var controlFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>');
             var controlFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>');
 
+            var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+            //si es invalida
+            if (!pattern.test(controlFechaHasta.value))
+            {
+                controlFechaHasta.value = fechaActual;
+                return false;
+            }
+            //si hasta es mas chico que desde
+            var desde = new Date(controlFechaDesde.value);
+            var hasta = new Date(controlFechaHasta.value);
+
+            if (desde.value > hasta.value)
+            {
+                controlFechaHasta.value = fechaActual;
+                return false;
+            }
+            //si hasta es mas grande que hoy
+            if (controlFechaHasta.value > fechaActual)
+            {
+                controlFechaHasta.value = fechaActual;
+                return false;
+            }
+        };
+
+        function ComprobacionFechaDesde(controlFechaDesde, controlFechaHasta)
+        {
+            var fechaActual = ObtenerFechaActual();
+
+            var controlFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>');
+            var controlFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>');
+
+            var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+
+            //si es invalida
+            if (!pattern.test(controlFechaDesde.value))
+            {
+                controlFechaDesde.value = fechaActual;
+                return false;
+            }
+            //si es mas grande que la fecha hasta
             if (controlFechaDesde.value > controlFechaHasta.value)
             {
                 controlFechaDesde.value = fechaActual;
                 return false;
-            }                
+            }
         };
+
     </script>
 
 </asp:Content>
