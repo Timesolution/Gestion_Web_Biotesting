@@ -86,22 +86,22 @@
                                                                 </li>
                                                             </ul>
                                                         </li>
-                                                        <%--<li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas por Punto de venta</a>
+                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas por Punto de venta</a>
                                                             <ul class="dropdown-menu">
                                                                 <li>
-                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVenta" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVenta_Click">
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaExcel" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaExcel_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
                                                                     </asp:LinkButton>
                                                                 </li>
                                                                 <li>
-                                                                    <asp:LinkButton ID="LinkButton2" runat="server" OnClick="lbtnReporteArticulosPorCategoriaAndProveedorPDF_Click">
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaPDF" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
                                                                     </asp:LinkButton>
                                                                 </li>
                                                             </ul>
-                                                        </li>--%>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </asp:PlaceHolder>
