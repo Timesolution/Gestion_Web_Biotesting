@@ -167,6 +167,7 @@
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });            
 
             controlFechaDesde.addEventListener("change", FechaDesdeMenorAFechaHasta);
+            controlFechaDesde.addEventListener("change", ComprobarFechaCorrecta(controlFechaDesde.value));
         });  
         
     </script>
