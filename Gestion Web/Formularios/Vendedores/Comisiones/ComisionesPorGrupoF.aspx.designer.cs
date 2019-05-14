@@ -76,13 +76,13 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
         
         /// <summary>
-        /// ListPuntoVenta control.
+        /// DropListPuntoVenta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ListPuntoVenta;
+        protected global::System.Web.UI.WebControls.DropDownList DropListPuntoVenta;
         
         /// <summary>
         /// lbtnBuscar control.

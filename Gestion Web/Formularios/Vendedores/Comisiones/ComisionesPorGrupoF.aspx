@@ -97,7 +97,7 @@
                         <div class="form-group">
                             <label class="col-md-4">Desde</label>
                             <div class="col-md-6">
-                                <asp:TextBox ID="txtFechaDesde"  runat="server" class="form-control"></asp:TextBox> <%--onKeyPress="javascript:FechaDesdeMenorAFechaHasta();"--%>
+                                <asp:TextBox ID="txtFechaDesde"  runat="server" class="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="form-group">
@@ -109,7 +109,7 @@
                         <div class="form-group">
                             <label class="col-md-4">Empresa</label>
                             <div class="col-md-6">
-                                <asp:DropDownList ID="DropListEmpresa" runat="server" class="form-control"></asp:DropDownList>
+                                <asp:DropDownList ID="DropListEmpresa" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
                             </div>
                         </div>
                         <div class="form-group">
@@ -121,7 +121,7 @@
                         <div class="form-group">
                             <label class="col-md-4">Punto Venta</label>
                             <div class="col-md-6">
-                                <asp:DropDownList ID="ListPuntoVenta" runat="server" class="form-control"></asp:DropDownList>
+                                <asp:DropDownList ID="DropListPuntoVenta" runat="server" class="form-control"></asp:DropDownList>
                             </div>
                         </div>
                     </div>
@@ -148,9 +148,9 @@
     <script src="../../Scripts/demo/gallery.js"></script>
     <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>--%>
-    <script src="Comisiones.js" type="text/javascript"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>--%>    
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="Comisiones.js" type="text/javascript"></script>
 
     <script>
         $(function ()
@@ -159,6 +159,8 @@
 
             var controlFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>');
             var controlFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>');
+            var controlDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>');
+            var controlDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>');
 
             controlFechaDesde.value = fechaActual;
             controlFechaHasta.value = fechaActual;
@@ -168,6 +170,8 @@
 
             controlFechaDesde.addEventListener("change", ComprobacionFechaDesde);
             controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
+            controlDropListEmpresa.addEventListener("change", CargarSucursales);
+            controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
         });  
         
     </script>
@@ -180,30 +184,33 @@
             var controlFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>');
 
             var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+
             //si es invalida
             if (!pattern.test(controlFechaHasta.value))
             {
                 controlFechaHasta.value = fechaActual;
                 return false;
             }
-            //si hasta es mas chico que desde
-            var desde = new Date(controlFechaDesde.value);
-            var hasta = new Date(controlFechaHasta.value);
 
-            if (desde.value > hasta.value)
+            //si hasta es mas chico que desde
+            var desde = InvertirDiaPorMes(controlFechaDesde.value);
+            var hasta = InvertirDiaPorMes(controlFechaHasta.value);
+            if (desde > hasta)
             {
                 controlFechaHasta.value = fechaActual;
+                controlFechaDesde.value = fechaActual;
                 return false;
             }
+
             //si hasta es mas grande que hoy
             if (controlFechaHasta.value > fechaActual)
             {
                 controlFechaHasta.value = fechaActual;
                 return false;
             }
-        };
+        };        
 
-        function ComprobacionFechaDesde(controlFechaDesde, controlFechaHasta)
+        function ComprobacionFechaDesde()
         {
             var fechaActual = ObtenerFechaActual();
 
@@ -218,14 +225,99 @@
                 controlFechaDesde.value = fechaActual;
                 return false;
             }
+
+            var desde = InvertirDiaPorMes(controlFechaDesde.value);
+            var hasta = InvertirDiaPorMes(controlFechaHasta.value);
             //si es mas grande que la fecha hasta
-            if (controlFechaDesde.value > controlFechaHasta.value)
+            if (desde > hasta)
             {
                 controlFechaDesde.value = fechaActual;
+                controlFechaHasta.value = fechaActual;
                 return false;
             }
         };
 
+        function CargarSucursales()
+        {
+            var controlDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>').value;
+
+            $.ajax({
+                type: "POST",
+                url: "ComisionesPorGrupoF.aspx/RecargarSucursales",
+                data: '{empresa: "' + controlDropListEmpresa + '"  }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    alert("No se pudieron cargar las sucursales.");
+                },
+                success: OnSuccessSucursal
+            });
+        };
+
+        function OnSuccessSucursal(response)
+        {
+            var controlDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>');
+
+            while (controlDropListSucursal.options.length > 0)
+            {
+                controlDropListSucursal.remove(0);
+            } 
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++)
+            {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListSucursal.add(option);
+            }
+
+            CargarPuntosVenta();
+        }
+
+        function CargarPuntosVenta()
+        {
+            var DropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>').value;
+
+            $.ajax({
+                type: "POST",
+                url: "ComisionesPorGrupoF.aspx/RecargarPuntoVenta",
+                data: '{sucursal: "' + DropListSucursal + '"  }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    alert("No se pudieron cargar los puntos de venta.");
+                },
+                success: OnSuccessPuntoVenta
+            });
+        };
+
+        function OnSuccessPuntoVenta(response)
+        {
+            var controlDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>');
+
+            while (controlDropListPuntoVenta.options.length > 0)
+            {
+                controlDropListPuntoVenta.remove(0);
+            } 
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++)
+            {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombreFantasia;
+
+                controlDropListPuntoVenta.add(option);
+            }
+        }
     </script>
 
 </asp:Content>

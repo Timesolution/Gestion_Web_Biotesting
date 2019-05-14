@@ -37,21 +37,11 @@ function ObtenerFechaDia()
     return fechaActual;
 }
 
-function ComprobarFechaCorrecta(fecha)
+function InvertirDiaPorMes(fecha)
 {
-    return fecha instanceof Date && !isNaN(fecha);
-}
+    var fechaSeparada = fecha.split("/");
 
-function obtenerFechaActual_ddMMyyyyEnString()
-{
-    var d = new Date();
+    var fechaNueva = new Date([fechaSeparada[1], fechaSeparada[0], fechaSeparada[2]].join('/'));
 
-    var month = d.getMonth() + 1;
-    var day = d.getDate();
-    var year = d.getFullYear();
-
-    if (month.toString().length < 2) month = '0' + month;
-    if (day.toString().length < 2) day = '0' + day;
-
-    return [day, month, year].join('/');
+    return fechaNueva;
 }
