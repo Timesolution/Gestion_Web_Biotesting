@@ -125,6 +125,27 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             string resultadoJSON = serializer.Serialize(puntosVenta);
             return resultadoJSON;
         }
+
+        [WebMethod]
+        public static string Filtrar(DateTime fechaDesde/*, DateTime fechaHasta, int idEmpresa, int idSucursal, int idPuntoVenta*/)
+        {
+            controladorVendedor controladorVendedor = new controladorVendedor();
+            //DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);
+
+            List<PuntoVentaTemporal> puntosVenta = new List<PuntoVentaTemporal>();
+
+            //foreach (DataRow row in dt.Rows)
+            //{
+            //    PuntoVentaTemporal puntoVentaTemporal = new PuntoVentaTemporal();
+            //    puntoVentaTemporal.id = row["Id"].ToString();
+            //    puntoVentaTemporal.nombreFantasia = row["NombreFantasia"].ToString();
+            //    puntosVenta.Add(puntoVentaTemporal);
+            //}
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(puntosVenta);
+            return resultadoJSON;
+        }
     }
 
     class SucursalesTemporal

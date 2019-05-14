@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" />
+                    <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"/>
                 </div>
             </div>
         </div>
@@ -161,6 +161,7 @@
             var controlFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>');
             var controlDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>');
             var controlDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>');
+            var controlBotonBuscar = document.getElementById('<%= lbtnBuscar.ClientID %>');
 
             controlFechaDesde.value = fechaActual;
             controlFechaHasta.value = fechaActual;
@@ -172,6 +173,7 @@
             controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
             controlDropListEmpresa.addEventListener("change", CargarSucursales);
             controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
+            controlBotonBuscar.addEventListener("click", Filtrar);
         });  
         
     </script>
@@ -317,6 +319,53 @@
 
                 controlDropListPuntoVenta.add(option);
             }
+        }
+
+        function Filtrar()
+        {
+            var valorTxtFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>').value;
+            var valorTxtFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>').value;
+            var valorDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>').value;
+            var valorDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>').value;
+            var valorDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>').value;
+
+            var desde = InvertirDiaPorMes(valorTxtFechaDesde);
+
+            $.ajax({
+                type: "POST",
+                url: "ComisionesPorGrupoF.aspx/Filtrar",
+                data: '{ fechaDesde: "' + desde + '" }', /*'", fechaHasta: "' + valorTxtFechaHasta + '",idEmpresa: "' + valorDropListEmpresa + '", idSucursal: "' + valorDropListSucursal + '",idPuntoVenta: "' + valorDropListPuntoVenta +*/
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    alert("No se pudo filtrar correctamente.");
+                },
+                success: OnSuccessFiltro
+            });
+        }
+
+        function OnSuccessFiltro(response)
+        {
+            <%--var controlDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>');
+
+            while (controlDropListPuntoVenta.options.length > 0)
+            {
+                controlDropListPuntoVenta.remove(0);
+            } 
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++)
+            {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombreFantasia;
+
+                controlDropListPuntoVenta.add(option);
+            }--%>
+            alert("filtro.");
         }
     </script>
 
