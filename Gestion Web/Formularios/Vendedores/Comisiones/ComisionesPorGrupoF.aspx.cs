@@ -134,6 +134,8 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             //try
             //{
                 controladorVendedor controladorVendedor = new controladorVendedor();
+                fechaDesde = Convert.ToDateTime(fechaDesde.ToString("dd/MM/yyyy"), CultureInfo.InvariantCulture);
+                fechaHasta = Convert.ToDateTime("05/15/2019");
                 DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);
 
                 //foreach (DataRow dataRow in dt.Rows)
@@ -156,7 +158,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 datosFiltradosTemporal.codigo = row["codigo"].ToString();
                 datosFiltradosTemporal.descripcion = row["descripcion"].ToString();
                 datosFiltradosTemporal.nombre = row["nombre"].ToString();
-                datosFiltradosTemporal.precioSinIVA = row["precioSinIva"].ToString();
+                datosFiltradosTemporal.precioSinIVA = row["precioSinIVA"].ToString();
                 datosFiltradosTemporal.comision = row["comision"].ToString();
                 datosFiltradosTemporales.Add(datosFiltradosTemporal);
             }
