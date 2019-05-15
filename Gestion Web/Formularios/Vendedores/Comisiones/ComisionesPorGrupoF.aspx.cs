@@ -1,8 +1,10 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -127,26 +129,104 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         }
 
         [WebMethod]
-        public static string Filtrar(DateTime fechaDesde/*, DateTime fechaHasta, int idEmpresa, int idSucursal, int idPuntoVenta*/)
+        public static string Filtrar(DateTime fechaDesde, DateTime fechaHasta, int idEmpresa, int idSucursal, int idPuntoVenta)
         {
-            controladorVendedor controladorVendedor = new controladorVendedor();
-            //DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);
-
-            List<PuntoVentaTemporal> puntosVenta = new List<PuntoVentaTemporal>();
-
-            //foreach (DataRow row in dt.Rows)
+            //try
             //{
-            //    PuntoVentaTemporal puntoVentaTemporal = new PuntoVentaTemporal();
-            //    puntoVentaTemporal.id = row["Id"].ToString();
-            //    puntoVentaTemporal.nombreFantasia = row["NombreFantasia"].ToString();
-            //    puntosVenta.Add(puntoVentaTemporal);
+                controladorVendedor controladorVendedor = new controladorVendedor();
+                DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);
+
+                //foreach (DataRow dataRow in dt.Rows)
+                //{
+                //    CargarPH(dataRow);
+                //}
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log.EscribirSQL(1,"Error","Error al filtrar y llenar el PH de ventas por comision " + ex.Message);
             //}
 
+            List<DatosFiltradosTemporal> datosFiltradosTemporales = new List<DatosFiltradosTemporal>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                DatosFiltradosTemporal datosFiltradosTemporal = new DatosFiltradosTemporal();
+                datosFiltradosTemporal.fecha = Convert.ToDateTime(row["fecha"].ToString(), CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
+                datosFiltradosTemporal.tipo = row["tipo"].ToString();
+                datosFiltradosTemporal.codigo = row["codigo"].ToString();
+                datosFiltradosTemporal.descripcion = row["descripcion"].ToString();
+                datosFiltradosTemporal.nombre = row["nombre"].ToString();
+                datosFiltradosTemporal.precioSinIVA = row["precioSinIva"].ToString();
+                datosFiltradosTemporal.comision = row["comision"].ToString();
+                datosFiltradosTemporales.Add(datosFiltradosTemporal);
+            }
+
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            string resultadoJSON = serializer.Serialize(puntosVenta);
+            string resultadoJSON = serializer.Serialize(datosFiltradosTemporales);
             return resultadoJSON;
         }
-    }
+
+        //static void CargarPH(DataRow dataRow)
+        //{
+        //    try
+        //    {
+        //        TableRow tr = new TableRow();
+        //        //tr.ID = item.articulo.codigo.ToString() + pos;
+
+        //        TableCell celFecha = new TableCell();
+        //        celFecha.Text = Convert.ToDateTime(dataRow["fecha"].ToString(), CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
+        //        celFecha.Width = Unit.Percentage(15);
+        //        celFecha.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celFecha);
+
+        //        TableCell celDocumento = new TableCell();
+        //        celDocumento.Text = dataRow["tipo"].ToString();
+        //        celDocumento.Width = Unit.Percentage(15);
+        //        celDocumento.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celDocumento);
+
+        //        TableCell celCodigoArticulo = new TableCell();
+        //        celCodigoArticulo.Text = dataRow["codigo"].ToString();
+        //        celCodigoArticulo.Width = Unit.Percentage(15);
+        //        celCodigoArticulo.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celCodigoArticulo);
+
+        //        TableCell celDescripcion = new TableCell();
+        //        celDescripcion.Text = dataRow["descripcion"].ToString();
+        //        celDescripcion.Width = Unit.Percentage(15);
+        //        celDescripcion.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celDescripcion);
+
+        //        TableCell celVendedor = new TableCell();
+        //        celVendedor.Text = dataRow["nombre"].ToString();
+        //        celVendedor.Width = Unit.Percentage(15);
+        //        celVendedor.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celVendedor);
+
+        //        TableCell celNeto = new TableCell();
+        //        celNeto.Text = dataRow["precioSinIva"].ToString();
+        //        celNeto.Width = Unit.Percentage(15);
+        //        celNeto.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celNeto);
+
+        //        TableCell celComision = new TableCell();
+        //        celComision.Text = dataRow["comision"].ToString();
+        //        celComision.Width = Unit.Percentage(15);
+        //        celComision.VerticalAlign = VerticalAlign.Middle;
+        //        tr.Cells.Add(celComision);
+
+        //        //TableCell celTotal = new TableCell();
+        //        //celTotal.Text = dataRow["fecha"].ToString();
+        //        //celTotal.Width = Unit.Percentage(15);
+        //        //celTotal.VerticalAlign = VerticalAlign.Middle;
+        //        //tr.Cells.Add(celTotal);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }            
+        //}
+    }   
 
     class SucursalesTemporal
     {
@@ -157,5 +237,15 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
     {
         public string id;
         public string nombreFantasia;
+    }
+    class DatosFiltradosTemporal
+    {
+        public string fecha;
+        public string tipo;
+        public string codigo;
+        public string descripcion;
+        public string nombre;
+        public string precioSinIVA;
+        public string comision;
     }
 }

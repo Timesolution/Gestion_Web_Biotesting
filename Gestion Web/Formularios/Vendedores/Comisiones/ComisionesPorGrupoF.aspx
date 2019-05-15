@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ComisionesPorGrupoF.aspx.cs" Inherits="Gestion_Web.Formularios.Vendedores.Comisiones.ComisionesPorGrupoF" %>
+﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ComisionesPorGrupoF.aspx.cs" Inherits="Gestion_Web.Formularios.Vendedores.Comisiones.ComisionesPorGrupoF" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div>
@@ -59,9 +59,9 @@
                 </div>
                 <div class="widget-content">
                     <div class="panel-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive" id ="divComisiones">
                             <%--<a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#Comentario">Agregar Tipo Cliente</a>--%>
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th style="width: 10%">Fecha</th>
@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"/>
+                    <asp:LinkButton ID="lbtnBuscar" OnClientClick="Filtrar()" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack = "false"/>
                 </div>
             </div>
         </div>
@@ -173,7 +173,7 @@
             controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
             controlDropListEmpresa.addEventListener("change", CargarSucursales);
             controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
-            controlBotonBuscar.addEventListener("click", Filtrar);
+            //controlBotonBuscar.addEventListener("click", Filtrar);
         });  
         
     </script>
@@ -329,12 +329,13 @@
             var valorDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>').value;
             var valorDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>').value;
 
-            var desde = InvertirDiaPorMes(valorTxtFechaDesde);
+            var fechaDesde = InvertirDiaPorMes(valorTxtFechaDesde);
+            var fechaHasta = InvertirDiaPorMes(valorTxtFechaHasta);
 
             $.ajax({
                 type: "POST",
                 url: "ComisionesPorGrupoF.aspx/Filtrar",
-                data: '{ fechaDesde: "' + desde + '" }', /*'", fechaHasta: "' + valorTxtFechaHasta + '",idEmpresa: "' + valorDropListEmpresa + '", idSucursal: "' + valorDropListSucursal + '",idPuntoVenta: "' + valorDropListPuntoVenta +*/
+                data: '{ fechaDesde: "' + fechaDesde.toUTCString() + '", fechaHasta: "' + fechaHasta.toUTCString() + '", idEmpresa: "' + valorDropListEmpresa + '", idSucursal: "' + valorDropListSucursal + '", idPuntoVenta: "' + valorDropListPuntoVenta + '" }',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function ()
@@ -347,24 +348,53 @@
 
         function OnSuccessFiltro(response)
         {
-            <%--var controlDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>');
+            //while (controlDropListPuntoVenta.options.length > 0)
+            //{
+            //    controlDropListPuntoVenta.remove(0);
+            //} 
 
-            while (controlDropListPuntoVenta.options.length > 0)
-            {
-                controlDropListPuntoVenta.remove(0);
-            } 
+            var div1 = document.getElementById('divComisiones');
+            var tbl = document.createElement("table");
 
             var data = response.d;
-            obj = JSON.parse(data);
+            obj = JSON.parse(data);                        
 
-            for (i = 0; i < obj.length; i++)
-            {
-                option = document.createElement('option');
-                option.value = obj[i].id;
-                option.text = obj[i].nombreFantasia;
+            //for (i = 0; i < obj.length; i++)
+            //{
+            //    var row = document.createElement("tr");
 
-                controlDropListPuntoVenta.add(option);
-            }--%>
+            //    for (var c = 0; c < 8; c++)
+            //    {
+            //        var cell = document.createElement("td");                    
+            //        var cellText = document.createTextNode(obj[i].fecha);
+            //        cell.appendChild(cellText);
+            //        row.appendChild(cell);
+            //    }
+
+            //    controlPHComisiones.appendChild(row);
+            //    //option = document.createElement('option');
+            //    //option.value = obj[i].id;
+            //    //option.text = obj[i].nombreFantasia;
+
+            //    //controlDropListPuntoVenta.add(option);
+            //}
+
+            //for (var r = 0; r < totalRows; r++)
+            //{
+            //    var row = document.createElement("tr");
+
+            //    // create cells in row
+            //    for (var c = 0; c < cellsInRow; c++)
+            //    {
+            //        var cell = document.createElement("td");
+            //        getRandom = Math.floor(Math.random() * (max - min + 1)) + min;
+            //        var cellText = document.createTextNode(Math.floor(Math.random() * (max - min + 1)) + min);
+            //        cell.appendChild(cellText);
+            //        row.appendChild(cell);
+            //    }
+
+            //    tbl.appendChild(row); // add the row to the end of the table body
+
             alert("filtro.");
         }
     </script>
