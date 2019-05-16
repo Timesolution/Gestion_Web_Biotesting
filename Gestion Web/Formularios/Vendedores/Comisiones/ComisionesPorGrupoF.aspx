@@ -59,19 +59,19 @@
                 </div>
                 <div class="widget-content">
                     <div class="panel-body">
-                        <div class="table-responsive" id ="divComisiones">
-                            <%--<a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#Comentario">Agregar Tipo Cliente</a>--%>
+                        <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="tablaComisiones">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%">Fecha</th>
-                                        <th style="width: 15%">Documento</th>
-                                        <th style="width: 10%">Cod. Articulo</th>
+                                        <th style="width: 5%">Fecha</th>
+                                        <th style="width: 5%">Documento</th>
+                                        <th style="width: 5%">Cod. Articulo</th>
                                         <th style="width: 15%">Descripcion</th>
-                                        <th style="width: 10%">Vendedor</th>
-                                        <th style="width: 10%">Neto Item</th>
+                                        <th style="width: 5%">Vendedor</th>
+                                        <th style="width: 5%">Neto Item</th>
+                                        <th style="width: 10%">Grupo</th>
                                         <th style="width: 5%">Comision</th>
-                                        <%--<th style="width: 15%">Total</th>--%>
+                                        <th style="width: 5%">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -137,7 +137,7 @@
     <%--<script src="../../Scripts/plugins/dataTables/jquery-2.0.0.js"></script>
     <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>--%>
-    <%--<script src="../../Scripts/jquery-1.10.2.js"></script>--%>
+    <%--<script src="../../../Scripts/jquery-1.10.2.js"></script>--%>
     <%--<script src="../../Scripts/bootstrap.min.js"></script>
     <script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
@@ -149,6 +149,10 @@
     <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
     <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>    --%>
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+    <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script src="Comisiones.js" type="text/javascript"></script>
 
@@ -174,8 +178,8 @@
             controlDropListEmpresa.addEventListener("change", CargarSucursales);
             controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
             //controlBotonBuscar.addEventListener("click", Filtrar);
-        });  
-        
+
+        });
     </script>
 
     <script type="text/javascript">
@@ -339,40 +343,50 @@
                 data: '{ fechaDesde: "' + fechaDesde.toUTCString() + '", fechaHasta: "' + fechaHasta.toUTCString() + '", idEmpresa: "' + valorDropListEmpresa + '", idSucursal: "' + valorDropListSucursal + '", idPuntoVenta: "' + valorDropListPuntoVenta + '" }',
                 contentType: "application/json",
                 dataType: 'json',
-                error: function ()
+                error: (error) =>
                 {
+                    console.log(JSON.stringify(error));
                     alert("No se pudo filtrar correctamente.");
-                },
+                }
+                ,
                 success: OnSuccessFiltro
             });
         }
 
         function OnSuccessFiltro(response)
         {
-            //var div1 = document.getElementById('divComisiones');
-            //var tbl = document.createElement("table");
-
             var data = response.d;
-            var obj = JSON.parse(data);                        
+            var obj = JSON.parse(data);
 
             $('#modalBusqueda').modal('hide');
             $('#tablaComisiones').find("tr:gt(0)").remove();
 
-            for (var i = 0; i < obj.length; i++)
-            {
+            for (var i = 0; i < obj.length; i++) {
                 $('#tablaComisiones').append(
-                    "<tr>" + 
+                    "<tr>" +
                     "<td> " + obj[i].fecha + "</td>" +
                     "<td> " + obj[i].tipo + "</td>" +
                     "<td> " + obj[i].codigo + "</td>" +
                     "<td> " + obj[i].descripcion + "</td>" +
                     "<td> " + obj[i].nombre + "</td>" +
-                    "<td> " + obj[i].precioSinIVA + "</td>" +
-                    "<td> " + obj[i].comision + "</td>" +
+                    '<td style="text-align:right"> ' + obj[i].precioSinIVA + "</td>" +
+                    "<td> " + obj[i].grupoArticulo + "</td>" +
+                    '<td style="text-align:right"> ' + obj[i].comision + "</td>" +
+                    '<td style="text-align:right"> ' + obj[i].total + "</td>" +
                     "</tr> ");
             };
 
-
+            $('#tablaComisiones').dataTable(
+                {                    
+                    "bFilter": false,
+                    "bInfo": false,
+                    "bAutoWidth": false,
+                    "bStateSave": true,
+                    "pageLength": 25,
+                    "columnDefs": [
+                        { type: 'date-eu', targets: 5 }
+                    ]
+                });
         }
     </script>
 

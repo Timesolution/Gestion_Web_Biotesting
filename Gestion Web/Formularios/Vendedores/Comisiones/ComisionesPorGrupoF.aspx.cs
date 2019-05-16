@@ -16,8 +16,8 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
 {
     public partial class ComisionesPorGrupoF : System.Web.UI.Page
     {
-        Mensajes m = new Mensajes();
-        controladorSucursal controladorSucursal = new controladorSucursal();
+        Mensajes _m = new Mensajes();
+        controladorSucursal _controladorSucursal = new controladorSucursal();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -34,7 +34,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         {
             try
             {                
-                DataTable dt = controladorSucursal.obtenerEmpresas();
+                DataTable dt = _controladorSucursal.obtenerEmpresas();
 
                 DropListEmpresa.DataSource = dt;
                 DropListEmpresa.DataValueField = "Id";
@@ -45,7 +45,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando empresas. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxError("Error cargando empresas. " + ex.Message));
             }
         }
 
@@ -53,7 +53,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         {
             try
             {
-                DataTable dt = controladorSucursal.obtenerSucursalesDT(empresa);
+                DataTable dt = _controladorSucursal.obtenerSucursalesDT(empresa);
 
                 DropListSucursal.DataSource = dt;
                 DropListSucursal.DataValueField = "Id";
@@ -63,7 +63,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
 
@@ -71,7 +71,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         {
             try
             {
-                DataTable dt = controladorSucursal.obtenerPuntoVentaDT(sucursal);
+                DataTable dt = _controladorSucursal.obtenerPuntoVentaDT(sucursal);
 
                 DropListPuntoVenta.DataSource = dt;
                 DropListPuntoVenta.DataValueField = "Id";
@@ -82,7 +82,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pto ventas. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxError("Error cargando pto ventas. " + ex.Message));
             }
         }
 
@@ -131,22 +131,9 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         [WebMethod]
         public static string Filtrar(DateTime fechaDesde, DateTime fechaHasta, int idEmpresa, int idSucursal, int idPuntoVenta)
         {
-            //try
-            //{
-                controladorVendedor controladorVendedor = new controladorVendedor();
-                fechaDesde = Convert.ToDateTime(fechaDesde.ToString("dd/MM/yyyy"), CultureInfo.InvariantCulture);
-                fechaHasta = Convert.ToDateTime("05/15/2019");
-                DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);
+            controladorVendedor controladorVendedor = new controladorVendedor();
 
-                //foreach (DataRow dataRow in dt.Rows)
-                //{
-                //    CargarPH(dataRow);
-                //}
-            //}
-            //catch (Exception ex)
-            //{
-            //    Log.EscribirSQL(1,"Error","Error al filtrar y llenar el PH de ventas por comision " + ex.Message);
-            //}
+            DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);            
 
             List<DatosFiltradosTemporal> datosFiltradosTemporales = new List<DatosFiltradosTemporal>();
 
@@ -158,8 +145,10 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 datosFiltradosTemporal.codigo = row["codigo"].ToString();
                 datosFiltradosTemporal.descripcion = row["descripcion"].ToString();
                 datosFiltradosTemporal.nombre = row["nombre"].ToString();
-                datosFiltradosTemporal.precioSinIVA = row["precioSinIVA"].ToString();
-                datosFiltradosTemporal.comision = row["comision"].ToString();
+                datosFiltradosTemporal.precioSinIVA = "$" + row["precioSinIVA"].ToString();
+                datosFiltradosTemporal.grupoArticulo = row["grupo"].ToString();
+                datosFiltradosTemporal.comision = "$" + row["comision"].ToString();
+                datosFiltradosTemporal.total = "$" + CalcularTotal(datosFiltradosTemporal.precioSinIVA, datosFiltradosTemporal.comision);
                 datosFiltradosTemporales.Add(datosFiltradosTemporal);
             }
 
@@ -168,67 +157,16 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             return resultadoJSON;
         }
 
-        //static void CargarPH(DataRow dataRow)
-        //{
-        //    try
-        //    {
-        //        TableRow tr = new TableRow();
-        //        //tr.ID = item.articulo.codigo.ToString() + pos;
+        static string CalcularTotal(string comision, string neto)
+        {
+            decimal comisionTemp = Convert.ToDecimal(comision.Split('$')[1]);
+            decimal netoTemp = Convert.ToDecimal(neto.Split('$')[1]);
 
-        //        TableCell celFecha = new TableCell();
-        //        celFecha.Text = Convert.ToDateTime(dataRow["fecha"].ToString(), CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
-        //        celFecha.Width = Unit.Percentage(15);
-        //        celFecha.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celFecha);
+            decimal total = decimal.Round((comisionTemp / 100) * netoTemp,2);
 
-        //        TableCell celDocumento = new TableCell();
-        //        celDocumento.Text = dataRow["tipo"].ToString();
-        //        celDocumento.Width = Unit.Percentage(15);
-        //        celDocumento.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celDocumento);
-
-        //        TableCell celCodigoArticulo = new TableCell();
-        //        celCodigoArticulo.Text = dataRow["codigo"].ToString();
-        //        celCodigoArticulo.Width = Unit.Percentage(15);
-        //        celCodigoArticulo.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celCodigoArticulo);
-
-        //        TableCell celDescripcion = new TableCell();
-        //        celDescripcion.Text = dataRow["descripcion"].ToString();
-        //        celDescripcion.Width = Unit.Percentage(15);
-        //        celDescripcion.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celDescripcion);
-
-        //        TableCell celVendedor = new TableCell();
-        //        celVendedor.Text = dataRow["nombre"].ToString();
-        //        celVendedor.Width = Unit.Percentage(15);
-        //        celVendedor.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celVendedor);
-
-        //        TableCell celNeto = new TableCell();
-        //        celNeto.Text = dataRow["precioSinIva"].ToString();
-        //        celNeto.Width = Unit.Percentage(15);
-        //        celNeto.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celNeto);
-
-        //        TableCell celComision = new TableCell();
-        //        celComision.Text = dataRow["comision"].ToString();
-        //        celComision.Width = Unit.Percentage(15);
-        //        celComision.VerticalAlign = VerticalAlign.Middle;
-        //        tr.Cells.Add(celComision);
-
-        //        //TableCell celTotal = new TableCell();
-        //        //celTotal.Text = dataRow["fecha"].ToString();
-        //        //celTotal.Width = Unit.Percentage(15);
-        //        //celTotal.VerticalAlign = VerticalAlign.Middle;
-        //        //tr.Cells.Add(celTotal);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }            
-        //}
-    }   
+            return total.ToString();
+        }
+    }
 
     class SucursalesTemporal
     {
@@ -248,6 +186,8 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         public string descripcion;
         public string nombre;
         public string precioSinIVA;
+        public string grupoArticulo;
         public string comision;
+        public string total;
     }
 }
