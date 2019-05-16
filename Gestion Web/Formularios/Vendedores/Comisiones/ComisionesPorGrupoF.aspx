@@ -45,7 +45,7 @@
                     <div id="big_stats" class="cf">
                         <div class="stat">
                             <h4>Saldo</h4>
-                            <asp:Label ID="lblSaldo" runat="server" Text="" class="value"></asp:Label>
+                            <asp:Label ID="labelSaldo" runat="server" Text="" class="value" Visible="true"></asp:Label>
                         </div>
                     </div>
                 </div>
@@ -124,6 +124,12 @@
                                 <asp:DropDownList ID="DropListPuntoVenta" runat="server" class="form-control"></asp:DropDownList>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-4">Vendedor</label>
+                            <div class="col-md-6">
+                                <asp:DropDownList ID="DropListVendedor" runat="server" class="form-control"></asp:DropDownList>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -177,6 +183,7 @@
             controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
             controlDropListEmpresa.addEventListener("change", CargarSucursales);
             controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
+            controlDropListSucursal.addEventListener("change", CargarVendedores);
             //controlBotonBuscar.addEventListener("click", Filtrar);
 
         });
@@ -283,7 +290,8 @@
                 controlDropListSucursal.add(option);
             }
 
-            CargarPuntosVenta();
+            //CargarPuntosVenta();
+            //CargarVendedores();
         }
 
         function CargarPuntosVenta()
@@ -326,6 +334,46 @@
             }
         }
 
+        function CargarVendedores()
+        {
+            var DropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>').value;
+
+            $.ajax({
+                type: "POST",
+                url: "ComisionesPorGrupoF.aspx/RecargarVendedores",
+                data: '{sucursal: "' + DropListSucursal + '"  }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    alert("No se pudieron cargar los vendedores.");
+                },
+                success: OnSuccessVendedores
+            });
+        };
+
+        function OnSuccessVendedores(response)
+        {
+            var controlDropListVendedor = document.getElementById('<%= DropListVendedor.ClientID %>');
+
+            while (controlDropListVendedor.options.length > 0)
+            {
+                controlDropListVendedor.remove(0);
+            } 
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++)
+            {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListVendedor.add(option);
+            }
+        }
+
         function Filtrar()
         {
             var valorTxtFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>').value;
@@ -333,6 +381,7 @@
             var valorDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>').value;
             var valorDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>').value;
             var valorDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>').value;
+            var valorDropListVendedor = document.getElementById('<%= DropListVendedor.ClientID %>').value;
 
             var fechaDesde = InvertirDiaPorMes(valorTxtFechaDesde);
             var fechaHasta = InvertirDiaPorMes(valorTxtFechaHasta);
@@ -340,12 +389,12 @@
             $.ajax({
                 type: "POST",
                 url: "ComisionesPorGrupoF.aspx/Filtrar",
-                data: '{ fechaDesde: "' + fechaDesde.toUTCString() + '", fechaHasta: "' + fechaHasta.toUTCString() + '", idEmpresa: "' + valorDropListEmpresa + '", idSucursal: "' + valorDropListSucursal + '", idPuntoVenta: "' + valorDropListPuntoVenta + '" }',
+                data: '{ fechaDesde: "' + fechaDesde.toUTCString() + '", fechaHasta: "' + fechaHasta.toUTCString() + '", idEmpresa: "' + valorDropListEmpresa + '", idSucursal: "' + valorDropListSucursal + '", idPuntoVenta: "' + valorDropListPuntoVenta + '", vendedor: "' + valorDropListVendedor +'" }',
                 contentType: "application/json",
                 dataType: 'json',
                 error: (error) =>
                 {
-                    console.log(JSON.stringify(error));
+                    //console.log(JSON.stringify(error));
                     alert("No se pudo filtrar correctamente.");
                 }
                 ,
@@ -355,11 +404,16 @@
 
         function OnSuccessFiltro(response)
         {
+            var controlLabelSaldo = document.getElementById('<%= labelSaldo.ClientID %>');
+
             var data = response.d;
             var obj = JSON.parse(data);
 
             $('#modalBusqueda').modal('hide');
-            $('#tablaComisiones').find("tr:gt(0)").remove();
+            $("#tablaComisiones").dataTable().fnDestroy();
+            $('#tablaComisiones').find("tr:gt(0)").remove();            
+
+            var totalNeto = 0;
 
             for (var i = 0; i < obj.length; i++) {
                 $('#tablaComisiones').append(
@@ -374,10 +428,19 @@
                     '<td style="text-align:right"> ' + obj[i].comision + "</td>" +
                     '<td style="text-align:right"> ' + obj[i].total + "</td>" +
                     "</tr> ");
-            };
+
+                var splitted = obj[i].precioSinIVA.split("$");
+
+                var numero = parseFloat(splitted[1]);
+
+                totalNeto += parseFloat(numero);
+            };            
+
+            controlLabelSaldo.text = totalNeto.toFixed(2);
 
             $('#tablaComisiones').dataTable(
                 {                    
+                    //"bLengthChange": false,
                     "bFilter": false,
                     "bInfo": false,
                     "bAutoWidth": false,

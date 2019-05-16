@@ -27,6 +27,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 CargarEmpresas();
                 CargarSucursal(Convert.ToInt32(DropListEmpresa.SelectedValue));
                 CargarPuntoVenta(Convert.ToInt32(DropListSucursal.SelectedValue));
+                CargarVendedores(Convert.ToInt32(DropListSucursal.SelectedValue));
             }
         }
 
@@ -35,6 +36,11 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             try
             {                
                 DataTable dt = _controladorSucursal.obtenerEmpresas();
+
+                DataRow dr = dt.NewRow();
+                dr["Razon Social"] = "Todas";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
 
                 DropListEmpresa.DataSource = dt;
                 DropListEmpresa.DataValueField = "Id";
@@ -53,7 +59,17 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         {
             try
             {
-                DataTable dt = _controladorSucursal.obtenerSucursalesDT(empresa);
+                DataTable dt = null;
+
+                if (empresa > 0)
+                    dt = _controladorSucursal.obtenerSucursalesDT(empresa);
+                else
+                    dt = _controladorSucursal.obtenerSucursales();
+
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todas";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
 
                 DropListSucursal.DataSource = dt;
                 DropListSucursal.DataValueField = "Id";
@@ -71,7 +87,17 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         {
             try
             {
-                DataTable dt = _controladorSucursal.obtenerPuntoVentaDT(sucursal);
+                DataTable dt = null;
+
+                if (sucursal > 0)
+                    dt = _controladorSucursal.obtenerPuntoVentaDT(sucursal);
+                else
+                    dt = _controladorSucursal.obtenerPuntoVenta();
+
+                DataRow dr = dt.NewRow();
+                dr["NombreFantasia"] = "Todas";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
 
                 DropListPuntoVenta.DataSource = dt;
                 DropListPuntoVenta.DataValueField = "Id";
@@ -86,11 +112,52 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             }
         }
 
+        void CargarVendedores(int sucursal)
+        {
+            try
+            {
+                controladorVendedor controladorVendedor = new controladorVendedor();
+                DataTable dt = null;
+
+                if (sucursal > 0)
+                    dt = controladorVendedor.obtenerVendedoresBySuc(sucursal);
+                else
+                    dt = controladorVendedor.obtenerVendedores();
+
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todos";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DropListVendedor.DataSource = dt;
+                DropListVendedor.DataValueField = "id";
+                DropListVendedor.DataTextField = "nombre";
+
+                DropListVendedor.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxError("Error cargando vendedores. " + ex.Message));
+            }
+        }
+
         [WebMethod]
         public static string RecargarSucursales(int empresa)
         {
             controladorSucursal controladorSucursal = new controladorSucursal();
-            DataTable dt = controladorSucursal.obtenerSucursalesDT(empresa);
+
+            DataTable dt = null;
+
+            if (empresa > 0)
+                dt = controladorSucursal.obtenerSucursalesDT(empresa);
+            else
+                dt = controladorSucursal.obtenerSucursales();
+
+            DataRow dr = dt.NewRow();
+            dr["nombre"] = "Todas";
+            dr["Id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
 
             List<SucursalesTemporal> sucursales = new List<SucursalesTemporal>();
 
@@ -111,7 +178,18 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         public static string RecargarPuntoVenta(int sucursal)
         {
             controladorSucursal controladorSucursal = new controladorSucursal();
-            DataTable dt = controladorSucursal.obtenerPuntoVentaDT(sucursal);
+
+            DataTable dt = null;
+
+            if (sucursal > 0)
+                dt = controladorSucursal.obtenerPuntoVentaDT(sucursal);
+            else
+                dt = controladorSucursal.obtenerPuntoVenta();
+
+            DataRow dr = dt.NewRow();
+            dr["NombreFantasia"] = "Todos";
+            dr["Id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
 
             List<PuntoVentaTemporal> puntosVenta = new List<PuntoVentaTemporal>();
 
@@ -129,11 +207,42 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         }
 
         [WebMethod]
-        public static string Filtrar(DateTime fechaDesde, DateTime fechaHasta, int idEmpresa, int idSucursal, int idPuntoVenta)
+        public static string RecargarVendedores(int sucursal)
+        {
+            controladorVendedor controladorVendedor = new controladorVendedor();
+            DataTable dt = null;
+
+            if (sucursal > 0)
+                dt = controladorVendedor.obtenerVendedoresBySuc(sucursal);
+            else
+                dt = controladorVendedor.obtenerVendedores();
+
+            DataRow dr = dt.NewRow();
+            dr["nombre"] = "Todos";
+            dr["id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
+
+            List<VendedorTemporal> vendedores = new List<VendedorTemporal>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                VendedorTemporal vendedorTemporal = new VendedorTemporal();
+                vendedorTemporal.id = row["id"].ToString();
+                vendedorTemporal.nombre = row["nombre"].ToString();
+                vendedores.Add(vendedorTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(vendedores);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string Filtrar(DateTime fechaDesde, DateTime fechaHasta, int idEmpresa, int idSucursal, int idPuntoVenta, int vendedor)
         {
             controladorVendedor controladorVendedor = new controladorVendedor();
 
-            DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta);            
+            DataTable dt = controladorVendedor.ObtenerVentasPorComisionByGrupo(fechaDesde, fechaHasta, idEmpresa, idSucursal, idPuntoVenta, vendedor);            
 
             List<DatosFiltradosTemporal> datosFiltradosTemporales = new List<DatosFiltradosTemporal>();
 
@@ -177,6 +286,11 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
     {
         public string id;
         public string nombreFantasia;
+    }
+    class VendedorTemporal
+    {
+        public string id;
+        public string nombre;
     }
     class DatosFiltradosTemporal
     {

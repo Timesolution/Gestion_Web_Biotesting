@@ -22,13 +22,13 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         protected global::System.Web.UI.WebControls.Label lblParametros;
         
         /// <summary>
-        /// lblSaldo control.
+        /// labelSaldo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSaldo;
+        protected global::System.Web.UI.WebControls.Label labelSaldo;
         
         /// <summary>
         /// phComisiones control.
@@ -83,6 +83,15 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListPuntoVenta;
+        
+        /// <summary>
+        /// DropListVendedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListVendedor;
         
         /// <summary>
         /// lbtnBuscar control.
