@@ -255,7 +255,7 @@ namespace Gestion_Web.Formularios.Articulos
                 celStock.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celStock);
 
-                cargarVisualizacionTablaStock(tr, s);
+                //cargarVisualizacionTablaStock(tr, s);
                 TableCell celAccion = new TableCell();
 
                 LinkButton btnHistorico = new LinkButton();

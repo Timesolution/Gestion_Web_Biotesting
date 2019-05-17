@@ -61,21 +61,29 @@ namespace Gestion_Web
 
         protected void master_Page_PreLoad(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            try
             {
-                // Establecer token Anti-XSRF
-                ViewState[AntiXsrfTokenKey] = Page.ViewStateUserKey;
-                ViewState[AntiXsrfUserNameKey] = Context.User.Identity.Name ?? String.Empty;
-            }
-            else
-            {
-                // Validar el token Anti-XSRF
-                if ((string)ViewState[AntiXsrfTokenKey] != _antiXsrfTokenValue
-                    || (string)ViewState[AntiXsrfUserNameKey] != (Context.User.Identity.Name ?? String.Empty))
+                if (!IsPostBack)
                 {
-                    throw new InvalidOperationException("Error de validación del token Anti-XSRF.");
+                    // Establecer token Anti-XSRF
+                    ViewState[AntiXsrfTokenKey] = Page.ViewStateUserKey;
+                    ViewState[AntiXsrfUserNameKey] = Context.User.Identity.Name ?? String.Empty;
+                }
+                else
+                {
+                    // Validar el token Anti-XSRF
+                    if ((string)ViewState[AntiXsrfTokenKey] != _antiXsrfTokenValue
+                        || (string)ViewState[AntiXsrfUserNameKey] != (Context.User.Identity.Name ?? String.Empty))
+                    {
+                        throw new InvalidOperationException("Error de validación del token Anti-XSRF.");
+                    }
                 }
             }
+            catch
+            {
+                Response.Redirect("/Account/Login.aspx?cerrar=si");
+            }
+            
              
         }
 
