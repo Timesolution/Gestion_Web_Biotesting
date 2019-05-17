@@ -58,8 +58,11 @@ namespace Gestion_Web.Formularios.Compras
                         //txtFechaHasta.Text = fechaH;
                         //DropListSucursal.SelectedValue = suc.ToString();
                     }
-                    this.cargarSucursal();
-                    this.cargarProveedores();
+
+                    //this.cargarSucursal();
+                    cargarEmpresas();
+                    cargarSucursalByEmpresa((int)Session["Login_EmpUser"]);
+                    cargarProveedores();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                     txtFechaDesdeImp.Text = fechaD;
@@ -184,38 +187,67 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
+        protected void DropListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int idEmpresa = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
+                this.cargarSucursalByEmpresa(idEmpresa);
+            }
+            catch
+            {
 
-        public void cargarSucursal()
+            }
+        }
+
+        public void cargarSucursalByEmpresa(int idEmpresa)
         {
             try
             {
                 controladorSucursal contSucu = new controladorSucursal();
-                DataTable dt = contSucu.obtenerSucursales();
+                DataTable dt = contSucu.obtenerSucursalesDT(idEmpresa);
 
-                //agrego seleccione
-                DataRow dr = dt.NewRow();
-                dr["nombre"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                //agrego todos
-                DataRow dr2 = dt.NewRow();
-                dr2["nombre"] = "Todas";
-                dr2["id"] = 0;
-                dt.Rows.InsertAt(dr2, 1);
+                DataRow dr1 = dt.NewRow();
+                dr1["nombre"] = "Todas";
+                dr1["id"] = 0;
+                dt.Rows.InsertAt(dr1, 0);
 
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
                 this.DropListSucursal.DataTextField = "nombre";
-
                 this.DropListSucursal.DataBind();
-
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+
+        public void cargarEmpresas()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerEmpresas();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["Razon Social"] = "Seleccione...";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListEmpresa.DataSource = dt;
+                this.DropListEmpresa.DataValueField = "Id";
+                this.DropListEmpresa.DataTextField = "Razon Social";
+                this.DropListEmpresa.DataBind();
+
+                DropListEmpresa.SelectedValue = Session["Login_EmpUser"].ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando empresas. " + ex.Message));
+            }
+        }        
         public void cargarProveedores()
         {
             try
@@ -408,6 +440,21 @@ namespace Gestion_Web.Formularios.Compras
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
 
+                LinkButton btnEditar = new LinkButton();
+                btnEditar.CssClass = "btn btn-info ui-tooltip";
+                btnEditar.Attributes.Add("data-toggle", "tooltip");
+                btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                btnEditar.ID = "btnEdit_" + c.Id + "_";
+                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                btnEditar.Font.Size = 12;
+                //btnEditar.PostBackUrl = "ComprasABM.aspx?a=5&c=" + c.Id;
+                btnEditar.Click += new EventHandler(EditarFactura);
+                celAccion.Controls.Add(btnEditar);
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
+
                 CheckBox cbSeleccion = new CheckBox();
                 //cbSeleccion.Text = "&nbsp;Imputar";
                 cbSeleccion.ID = "cbSeleccion_" + c.Id;
@@ -429,7 +476,27 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando comra a la tabla. " + ex.Message));
             }
         }
-        
+
+        protected void EditarFactura(object sender, EventArgs e)
+        {
+            try
+            {
+                string idCompra = (sender as LinkButton).ID;
+                string[] atributos = idCompra.Split('_');
+                idCompra = atributos[1];
+
+                var tienePago = contCompraEntity.ComprobarSiCompraTienePagoImputado(Convert.ToInt32(idCompra));
+
+                if (tienePago)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se puede editar la compra porque tiene un pago imputado!"));
+                else
+                    Response.Redirect("ComprasABM.aspx?a=5&c=" + idCompra);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al editar Factura " + ex.Message);
+            }
+        }
 
         private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor,int tipoFecha)
         { 

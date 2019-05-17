@@ -273,7 +273,8 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando remitos de compra."));
+                Log.EscribirSQL(1,"Error", "Error cargando remitos de compra. " + ex.Message);
             }
         }
 
@@ -385,7 +386,8 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando comra a la tabla. " + ex.Message));
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando comra a la tabla. " + ex.Message));
+                throw new Exception(ex.Message);
             }
         }
 

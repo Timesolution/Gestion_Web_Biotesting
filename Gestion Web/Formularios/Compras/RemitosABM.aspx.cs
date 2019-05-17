@@ -499,9 +499,28 @@ namespace Gestion_Web.Formularios.Compras {
             }
         }
 
+        bool ComprobarNumeracionCorrectaRemito()
+        {
+            if(string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los campos de numeracion estan vacios!\", {type: \"alert\"});", true);
+                return false;
+            }                
+            if (txtPVenta.Text.Length != 4 || txtNumero.Text.Length != 8)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los campos de numeracion son incorrectos!\", {type: \"alert\"});", true);
+                return false;
+            }
+
+            return true;
+        }
+
         private void guardarRemito() {
             try
             {
+                if (!ComprobarNumeracionCorrectaRemito())
+                    return;
+
                 RemitosCompra rc = new RemitosCompra();
 
                 rc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);

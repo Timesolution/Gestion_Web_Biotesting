@@ -363,6 +363,12 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtDiasActualizacion" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Solo proveedor predeterminado</label>
+                                    <div class="col-md-6">
+                                        <asp:CheckBox ID="cbSoloProveedorPredeterminado" runat="server" />
+                                    </div>
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -430,14 +436,15 @@
     <div id="modalActualizarProveedor" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Actualizar Precio de Otros Proveedores</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Always" runat="server">
-                            <ContentTemplate>
+                <asp:UpdatePanel ID="UpdatePanel9" runat="server">
+                    <ContentTemplate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Actualizar Precio de Otros Proveedores</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+
                                 <div class="form-group">
                                     <label class="col-md-4">Buscar Proveedor</label>
                                     <div class="col-md-6">
@@ -469,14 +476,13 @@
                                     <br />
                                     <asp:Label ID="lblFormato" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
                                 </div>
-                            </ContentTemplate>
-                            <Triggers>
-                            </Triggers>
-                        </asp:UpdatePanel>
-                    </div>
-                    <div class="modal-footer">
-                        <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
-                    </div>
+                            </div>                            
+                        </div>
+                        
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
                 </div>
             </div>
         </div>

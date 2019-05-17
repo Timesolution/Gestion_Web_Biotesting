@@ -150,9 +150,9 @@
                                                             </a>
                                                         </div>--%>
 
-                                                        <div class="col-md-2">
+                                                        <%--<div class="col-md-2">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListVendedor" InitialValue="-1" ValidationGroup="FacturaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
+                                                        </div>--%>
                                                     </th>
                                                     <th style="width: 35%">
                                                         <div class="col-md-8">
@@ -174,9 +174,9 @@
                                                                 <i class="shortcut-icon icon-money"></i>
                                                             </a>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <%--<div class="col-md-2">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListFormaPago" InitialValue="-1" ValidationGroup="FacturaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
+                                                        </div>--%>
                                                     </th>
                                                     <th style="width: 25%">
                                                         <div class="col-md-10">
@@ -188,9 +188,9 @@
                                                             </a>
                                                         </div>--%>
 
-                                                        <div class="col-md-2">
+                                                        <%--<div class="col-md-2">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListLista" InitialValue="-1" ValidationGroup="FacturaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
+                                                        </div>--%>
                                                     </th>
 
                                                     <th style="width: 5%">
@@ -736,9 +736,9 @@
                                     <ContentTemplate>
                                         <div role="form" class="form-horizontal col-md-12">
                                             <div class="col-md-12">
-                                                <asp:Button ID="btnAgregar" runat="server" Text="Facturar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="FacturaGroup" OnClientClick="desbloquear();" />
+                                                <asp:Button ID="btnAgregar" runat="server" Text="Facturar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="FacturaGroup"/>                                                
                                                 <a class="btn btn-success" data-toggle="modal" href="#modalFacturaE" runat="server" id="btnFacturaE" visible="false">Siguiente</a>
-                                                <asp:Button ID="btnAgregarRemitir" runat="server" Text="Facturar y Remitir" class="btn btn-success" ValidationGroup="FacturaGroup" OnClick="btnAgregarRemitir_Click" OnClientClick="desbloquear();" />
+                                                <asp:Button ID="btnAgregarRemitir" runat="server" Text="Facturar y Remitir" class="btn btn-success" ValidationGroup="FacturaGroup" OnClick="btnAgregarRemitir_Click"/>
                                                 <asp:Button ID="btnNueva" Visible="false" runat="server" Text="Nueva Factura" class="btn btn-success" OnClick="btnNueva_Click" />
                                                 <asp:Button ID="btnRefacturar" runat="server" Visible="false" Text="Refacturar" CssClass="btn btn-success" OnClick="btnRefacturar_Click" />
                                                 <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="~/Default.aspx" />
@@ -1988,7 +1988,7 @@
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
             }
-        }
+        }        
 
         function foco() {
             document.getElementById("<%= this.txtCantidad.ClientID %>").focus();

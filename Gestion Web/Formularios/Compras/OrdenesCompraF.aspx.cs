@@ -426,19 +426,19 @@ namespace Gestion_Web.Formularios.Compras
                 celAccion.Controls.Add(cbSeleccion);
                 //celAccion.Controls.Add(btnEliminar);
 
-                Literal l3 = new Literal();
-                l3.Text = "&nbsp";
-                celAccion.Controls.Add(l3);
+                //Literal l3 = new Literal();
+                //l3.Text = "&nbsp";
+                //celAccion.Controls.Add(l3);
 
-                LinkButton btnEditar = new LinkButton();
-                btnEditar.CssClass = "btn btn-info ui-tooltip";
-                btnEditar.Attributes.Add("data-toggle", "tooltip");
-                btnEditar.Attributes.Add("title data-original-title", "Detalles");
-                btnEditar.ID = "btnEdit_" + oc.Id;
-                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                btnEditar.Font.Size = 12;
-                btnEditar.PostBackUrl = "OrdenesCompraABM.aspx?a=2&oc=" + oc.Id;
-                celAccion.Controls.Add(btnEditar);
+                //LinkButton btnEditar = new LinkButton();
+                //btnEditar.CssClass = "btn btn-info ui-tooltip";
+                //btnEditar.Attributes.Add("data-toggle", "tooltip");
+                //btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                //btnEditar.ID = "btnEdit_" + oc.Id;
+                //btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                //btnEditar.Font.Size = 12;
+                //btnEditar.PostBackUrl = "OrdenesCompraABM.aspx?a=2&oc=" + oc.Id;
+                //celAccion.Controls.Add(btnEditar);
                 
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;

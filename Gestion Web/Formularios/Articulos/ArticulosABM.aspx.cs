@@ -2373,6 +2373,8 @@ namespace Gestion_Web.Formularios.Articulos
                                 
                 tr.ID = "tr_" + pa.id.ToString();
 
+                if(lblNombreArticulo!= null)
+                    lblNombreArticulo.Text = "Otros Proveedores - " + pa.articulo.descripcion;
 
                 TableCell celDescripcion = new TableCell();
                 celDescripcion.Text = pa.proveedor.alias;
