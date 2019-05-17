@@ -49,14 +49,14 @@
                                             <div class="col-md-4">
                                                 <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" onchange="completar8Ceros(this, this.value)"></asp:TextBox>
                                             </div>
-                                            <div class="col-md-1">
+                                            <%--<div class="col-md-1">
                                                 <asp:RequiredFieldValidator ControlToValidate="txtPVenta" ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
 
                                             </div>
                                             <div class="col-md-1">
                                                 <asp:RequiredFieldValidator ControlToValidate="txtNumero" ID="RequiredFieldValidator6" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
 
-                                            </div>
+                                            </div>--%>
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-3">Tipo remito</label>

@@ -37,6 +37,7 @@ namespace Gestion_Web.Formularios.Articulos
         int dias;
         int idVendedor;
         int proveedor;
+        int soloProveedorPredeterminado;
         string textoBuscar;
         string descSubGrupo;
         List<Gestion_Api.Entitys.Promocione> listPromociones;
@@ -66,6 +67,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.idVendedor = (int)Session["Login_Vendedor"];
                 this.proveedor = Convert.ToInt32(Request.QueryString["p"]);
                 this.descSubGrupo = Request.QueryString["dsg"];
+                this.soloProveedorPredeterminado = Convert.ToInt32(Request.QueryString["spp"]);
 
                 this.litNumero.Text = "(" + this.dias + ")";
 
@@ -612,8 +614,8 @@ namespace Gestion_Web.Formularios.Articulos
                 //List<Articulo> articulos = this.controlador.filtrarArticulosGrupoSubGrupo(grupo, subgrupo, proveedor, sdias);
                 //this.cargarArticulosTabla(articulos);
                 Configuracion configuracion = new Configuracion();
-                DataTable dt = this.controlador.filtrarArticulosGrupoSubGrupoDT(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo);
-                if (configuracion.FiltroArticulosSucursal == "1")
+                DataTable dt = this.controlador.filtrarArticulosGrupoSubGrupoDT(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo, soloProveedorPredeterminado);
+                if (configuracion.FiltroArticulosSucursal == "1" && soloProveedorPredeterminado == 0)
                 {
                     int idSucursal = (int)Session["Login_SucUser"];
                     dt = this.controlador.filtrarArticulosGrupoSubGrupoDT_Sucursales(grupo, subgrupo, proveedor, sdias, marca, descSubGrupo, idSucursal);
@@ -1547,15 +1549,17 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         cantRegistros = dtProveedoresArticulos.Rows.Count;
                     }
-                    int i = this.controlador.actualizarPrecioProveedoresXLS(path + archivo, Convert.ToInt32(DropListOtroProveedor.SelectedValue));
+                    int i = this.controlador.actualizarPrecioProveedoresXLS(path + archivo, Convert.ToInt32(DropListOtroProveedor.SelectedValue), dtProveedoresArticulos);
 
                     if (i > 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros, Request.Url.ToString()));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros,null));
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas articulos."));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"No se pudieron procesar una o mas articulos\", {type: \"info\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudieron procesar una o mas articulos. "));
                     }
 
                 }
@@ -2025,7 +2029,8 @@ namespace Gestion_Web.Formularios.Articulos
                     + "&p=" + this.ListProveedor.SelectedValue
                     + "&m=" + this.ListMarca.SelectedValue
                     + "&dsg=" + this.ListSubGrupo.SelectedItem.Text
-                    + "&d=" + this.txtDiasActualizacion.Text);
+                    + "&d=" + this.txtDiasActualizacion.Text
+                    + "&spp=" + Convert.ToInt32(this.cbSoloProveedorPredeterminado.Checked));
             }
             catch (Exception ex)
             {

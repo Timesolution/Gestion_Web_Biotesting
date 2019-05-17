@@ -601,7 +601,8 @@
 
                                                         <div class="widget-header">
                                                             <span class="icon-group"></span>
-                                                            <h3>Otros Proveedores</h3>
+                                                            <%--<h3>Otros Proveedores</h3>--%>
+                                                            <h3><asp:Label ID="lblNombreArticulo" runat="server"></asp:Label></h3>
                                                         </div>
                                                         <!-- .widget-header -->
 

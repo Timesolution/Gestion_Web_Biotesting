@@ -2956,6 +2956,12 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (IsValid)
                 {
+                    Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                    if (!respuesta.Item2)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                        return;
+                    }
                     //Verifico si tiene la alerta de precios de articulos sin actualizar
                     if (!VerificarArticulosSinActualizar())
                     {
@@ -10611,6 +10617,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 txtPorcDescuento.Text = "0";
                 actualizarTotales();
+
                 if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
                 {
                     txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
@@ -10622,6 +10629,18 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
+        }
+
+        public Tuple<string,bool> ComprobarCamposSeleccionados()
+        {
+            if (Convert.ToInt32(DropListVendedor.SelectedValue) <= 0)
+                return new Tuple<string,bool>("Debe seleccionar un vendedor!", false);
+            else if (Convert.ToInt32(DropListLista.SelectedValue) <= 0)
+                return new Tuple<string, bool>("Debe seleccionar una lista de precios!", false);
+            else if (Convert.ToInt32(DropListFormaPago.SelectedValue) <= 0)
+                return new Tuple<string, bool>("Debe seleccionar una forma de pago!", false);
+            else
+                return new Tuple<string, bool>("", true);
         }
     }
 }
