@@ -139,6 +139,42 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorGrupoPDF;
         
         /// <summary>
+        /// lbtnReporteArticulosPorCategoriaAndProveedorXLS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorCategoriaAndProveedorXLS;
+        
+        /// <summary>
+        /// lbtnReporteArticulosPorCategoriaAndProveedorPDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorCategoriaAndProveedorPDF;
+        
+        /// <summary>
+        /// lbtnReporteVentasPorPuntoDeVentaPDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorPuntoDeVentaPDF;
+        
+        /// <summary>
+        /// lbtnReporteVentasPorPuntoDeVentaExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorPuntoDeVentaExcel;
+        
+        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>
@@ -182,6 +218,24 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbDevoluciones;
+        
+        /// <summary>
+        /// lbVentaPromedio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbVentaPromedio;
+        
+        /// <summary>
+        /// lbArticulosXVenta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbArticulosXVenta;
         
         /// <summary>
         /// lblParametrosUrl control.

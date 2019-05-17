@@ -56,7 +56,7 @@
                                                 <asp:LinkButton ID="lbtnInformeCierres" runat="server" OnClick="lbtnInformeCierres_Click">Informe cierres de caja</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnRemesa" Visible ="false" runat="server" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnRemesa" Visible="false" runat="server" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -69,13 +69,13 @@
                                 </td>
                                 <asp:PlaceHolder runat="server" ID="phPasarBanco">
                                     <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
+                                        <div class="shortcuts" style="height: 100%">
 
-                                        <a class="btn btn-primary ui-tooltip" href="#pasarBanco" data-toggle="modal" title data-original-title="Movimiento a Banco" style="width: 100%">
-                                            <i class="shortcut-icon icon-exchange "></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                            <a class="btn btn-primary ui-tooltip" href="#pasarBanco" data-toggle="modal" title data-original-title="Movimiento a Banco" style="width: 100%">
+                                                <i class="shortcut-icon icon-exchange "></i>
+                                            </a>
+                                        </div>
+                                    </td>
                                 </asp:PlaceHolder>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
@@ -201,10 +201,7 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Desde</label>
                                         <div class="col-md-6">
-
                                             <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
-
-                                            <!-- /input-group -->
                                         </div>
                                         <div class="col-md-2">
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -252,10 +249,10 @@
                                                 <asp:ListItem Value="2">Cheque</asp:ListItem>
                                                 <asp:ListItem Value="3">Transferencia</asp:ListItem>
                                                 <asp:ListItem Value="5">Tarjeta</asp:ListItem>
+                                                <asp:ListItem Value="8">Credito</asp:ListItem>
                                                 <asp:ListItem Value="9">Pagare</asp:ListItem>
                                             </asp:DropDownList>
 
-                                            <!-- /input-group -->
                                         </div>
                                         <div class="col-md-2">
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListTipos" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -309,6 +306,13 @@
                         <div role="form" class="form-horizontal col-md-12">
                             <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                                 <ContentTemplate>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Fecha Del Movimiento</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtFechaModalAgregarCaja" runat="server" class="form-control" onkeypress="return false" onchange="javascript:return validarQueLaFechaSeaMenorOIgualALaActual(event)"></asp:TextBox>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label class="col-md-4">Sucursal</label>
@@ -504,7 +508,7 @@
                                             <div class="col-md-6">
                                                 <asp:DropDownList ID="ListPuntoVentaOrigenMovimientoBanco" runat="server" class="form-control"></asp:DropDownList>
                                             </div>
-                                           <%-- <div class="col-md-2">
+                                            <%-- <div class="col-md-2">
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListPuntoVentaOrigenMovimientoBanco" InitialValue="-1" ValidationGroup="MovimientoBancoGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                             </div>--%>
                                         </div>
@@ -562,7 +566,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button ID="btnAgregarMovimientoBanco" runat="server" Text="Agregar" class="btn btn-success" ValidationGroup="MovimientoBancoGroup" OnClick="btnAgregarMovimientoBanco_Click"/>
+                        <asp:Button ID="btnAgregarMovimientoBanco" runat="server" Text="Agregar" class="btn btn-success" ValidationGroup="MovimientoBancoGroup" OnClick="btnAgregarMovimientoBanco_Click" />
                     </div>
                 </div>
             </div>
@@ -720,8 +724,7 @@
                 if (key < 48 || key > 57) {
                     if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                     { return true; }
-                    else
-                    { return false; }
+                    else { return false; }
                 }
                 return true;
             }
@@ -754,8 +757,6 @@
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
         <script>
-
-
             $(function () {
                 $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
@@ -764,6 +765,10 @@
                 $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
 
+            $(function () {
+                $("#<%= txtFechaModalAgregarCaja.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= txtFechaModalAgregarCaja.ClientID %>").val(obtenerFechaActual_ddMMyyyyEnString());
+            });
         </script>
 
         <!-- Page-Level Plugin Scripts - Tables -->
@@ -771,17 +776,26 @@
         <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
         <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
-        <script>
-            //$(document).ready(function () {
-            //    $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
-            //});
-        </script>
+        <script src="../../js/Funciones.js"></script>
+        <script src="../../js/moment/moment.js"></script>
 
-        <script type="text/javascript">
-            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-            //function endReq(sender, args) {
-            //    $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
-            //}
+        <script>
+            function validarQueLaFechaSeaMenorOIgualALaActual(e) {
+                var txtFechaModalAgregarCaja = $("#<%= txtFechaModalAgregarCaja.ClientID %>");
+
+                var fechaSeleccionada = moment(txtFechaModalAgregarCaja.val(), "DD/MM/YYYY").format("MM/DD/YYYY");
+                fechaSeleccionada = new Date(fechaSeleccionada);
+                var hoyString = obtenerFechaActual_ddMMyyyyEnString();
+                var hoy = new Date(moment(hoyString, "DD/MM/YYYY").format("MM/DD/YYYY"));
+
+                if (fechaSeleccionada > hoy) {
+                    txtFechaModalAgregarCaja.val(hoyString);
+                }
+
+                if (isNaN(fechaSeleccionada)) {
+                    txtFechaModalAgregarCaja.val(hoyString);
+                }
+            }
         </script>
 
     </div>

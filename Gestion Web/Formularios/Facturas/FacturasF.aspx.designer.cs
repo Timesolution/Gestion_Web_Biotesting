@@ -175,6 +175,24 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnDebitoCreditoDiferenciaCambio;
         
         /// <summary>
+        /// phImprimirTicketDeCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phImprimirTicketDeCambio;
+        
+        /// <summary>
+        /// lbtnImprimirTicketDeCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirTicketDeCambio;
+        
+        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>

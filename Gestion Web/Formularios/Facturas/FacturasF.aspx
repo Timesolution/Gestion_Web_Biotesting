@@ -78,6 +78,11 @@
                                                 <asp:LinkButton runat="server" ID="lbtnDebitoCreditoDiferenciaCambio" OnClick="lbtnDebitoCreditoDiferenciaCambio_Click">ND/C Diferencia Cambio</asp:LinkButton>
                                             </li>
                                         </asp:PlaceHolder>
+                                        <asp:PlaceHolder runat="server" ID="phImprimirTicketDeCambio" Visible="true">
+                                            <li>
+                                                <asp:LinkButton ID="lbtnImprimirTicketDeCambio" runat="server" OnClick="lbtnImprimirTicketDeCambio_Click">Imprimir Ticket De Cambio</asp:LinkButton>
+                                            </li>
+                                        </asp:PlaceHolder>
                                     </ul>
                                 </div>
                                 <!-- /btn-group -->

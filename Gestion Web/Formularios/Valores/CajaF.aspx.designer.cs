@@ -274,6 +274,15 @@ namespace Gestion_Web.Formularios.Valores {
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
         
         /// <summary>
+        /// txtFechaModalAgregarCaja control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaModalAgregarCaja;
+        
+        /// <summary>
         /// ListSucursal2 control.
         /// </summary>
         /// <remarks>
