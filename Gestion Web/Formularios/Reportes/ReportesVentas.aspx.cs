@@ -1182,7 +1182,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=14&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "&ex=1");
+            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=14&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "&ex=0");
         }
 
         protected void lbtnReporteVentasPorPuntoDeVentaExcel_Click(object sender, EventArgs e)

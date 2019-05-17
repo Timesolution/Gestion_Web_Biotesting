@@ -89,13 +89,13 @@
                                                         <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas por Punto de venta</a>
                                                             <ul class="dropdown-menu">
                                                                 <li>
-                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaExcel" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaExcel_Click">
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaPDF" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaPDF_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
                                                                     </asp:LinkButton>
                                                                 </li>
                                                                 <li>
-                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaPDF" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaPDF_Click">
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaExcel" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaExcel_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
                                                                     </asp:LinkButton>

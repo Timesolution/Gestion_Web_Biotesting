@@ -1110,9 +1110,9 @@ namespace Gestion_Web.Formularios.Reportes
                 DataTable dtReporteVentasBySucursalesAndPuntosDeVenta = contFacturacion.obtenerTotalVentasRealizadasBySucursalesAndPuntosDeVenta(fechaD, fechaH);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosByCategoriaAndProveedor.rdlc");
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasBySucursalesAndPuntoDeVenta.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("ArticulosCategoria", dtReporteVentasBySucursalesAndPuntosDeVenta);
+                ReportDataSource rds = new ReportDataSource("VentasBySucursalesAndPuntoDeVenta", dtReporteVentasBySucursalesAndPuntosDeVenta);
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
 

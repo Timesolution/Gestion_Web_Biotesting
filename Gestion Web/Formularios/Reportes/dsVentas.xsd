@@ -120,6 +120,17 @@
               <xs:element name="PrecioVenta" msprop:Generator_ColumnVarNameInTable="columnPrecioVenta" msprop:Generator_ColumnPropNameInRow="PrecioVenta" msprop:Generator_ColumnPropNameInTable="PrecioVentaColumn" msprop:Generator_UserColumnName="PrecioVenta" type="xs:string" minOccurs="0" />
               <xs:element name="Total" msprop:Generator_ColumnVarNameInTable="columnTotal" msprop:Generator_ColumnPropNameInRow="Total" msprop:Generator_ColumnPropNameInTable="TotalColumn" msprop:Generator_UserColumnName="Total" type="xs:string" minOccurs="0" />
               <xs:element name="Grupo" msprop:Generator_ColumnVarNameInTable="columnGrupo" msprop:Generator_ColumnPropNameInRow="Grupo" msprop:Generator_ColumnPropNameInTable="GrupoColumn" msprop:Generator_UserColumnName="Grupo" type="xs:string" minOccurs="0" />
+              <xs:element name="Sucursal" msprop:Generator_ColumnVarNameInTable="columnSucursal" msprop:Generator_ColumnPropNameInRow="Sucursal" msprop:Generator_ColumnPropNameInTable="SucursalColumn" msprop:Generator_UserColumnName="Sucursal" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="VentasBySucursalesAndPuntoDeVenta" msprop:Generator_TableClassName="VentasBySucursalesAndPuntoDeVentaDataTable" msprop:Generator_TableVarName="tableVentasBySucursalesAndPuntoDeVenta" msprop:Generator_RowChangedName="VentasBySucursalesAndPuntoDeVentaRowChanged" msprop:Generator_TablePropName="VentasBySucursalesAndPuntoDeVenta" msprop:Generator_RowDeletingName="VentasBySucursalesAndPuntoDeVentaRowDeleting" msprop:Generator_RowChangingName="VentasBySucursalesAndPuntoDeVentaRowChanging" msprop:Generator_RowEvHandlerName="VentasBySucursalesAndPuntoDeVentaRowChangeEventHandler" msprop:Generator_RowDeletedName="VentasBySucursalesAndPuntoDeVentaRowDeleted" msprop:Generator_RowClassName="VentasBySucursalesAndPuntoDeVentaRow" msprop:Generator_UserTableName="VentasBySucursalesAndPuntoDeVenta" msprop:Generator_RowEvArgName="VentasBySucursalesAndPuntoDeVentaRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Sucursal" msprop:Generator_ColumnVarNameInTable="columnSucursal" msprop:Generator_ColumnPropNameInRow="Sucursal" msprop:Generator_ColumnPropNameInTable="SucursalColumn" msprop:Generator_UserColumnName="Sucursal" type="xs:string" minOccurs="0" />
+              <xs:element name="NombreFantasia" msprop:Generator_ColumnVarNameInTable="columnNombreFantasia" msprop:Generator_ColumnPropNameInRow="NombreFantasia" msprop:Generator_ColumnPropNameInTable="NombreFantasiaColumn" msprop:Generator_UserColumnName="NombreFantasia" type="xs:string" minOccurs="0" />
+              <xs:element name="cantidadFacturas" msprop:Generator_ColumnVarNameInTable="columncantidadFacturas" msprop:Generator_ColumnPropNameInRow="cantidadFacturas" msprop:Generator_ColumnPropNameInTable="cantidadFacturasColumn" msprop:Generator_UserColumnName="cantidadFacturas" type="xs:string" minOccurs="0" />
+              <xs:element name="cantidadArticulos" msprop:Generator_ColumnVarNameInTable="columncantidadArticulos" msprop:Generator_ColumnPropNameInRow="cantidadArticulos" msprop:Generator_ColumnPropNameInTable="cantidadArticulosColumn" msprop:Generator_UserColumnName="cantidadArticulos" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
