@@ -256,7 +256,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 datosFiltradosTemporal.nombre = row["nombre"].ToString();
                 datosFiltradosTemporal.precioSinIVA = "$" + row["precioSinIVA"].ToString();
                 datosFiltradosTemporal.grupoArticulo = row["grupo"].ToString();
-                datosFiltradosTemporal.comision = "$" + row["comision"].ToString();
+                datosFiltradosTemporal.comision = row["comision"].ToString();
                 datosFiltradosTemporal.total = "$" + CalcularTotal(datosFiltradosTemporal.precioSinIVA, datosFiltradosTemporal.comision);
                 datosFiltradosTemporales.Add(datosFiltradosTemporal);
             }
@@ -269,7 +269,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         static string CalcularTotal(string comision, string neto)
         {
             decimal comisionTemp = Convert.ToDecimal(comision.Split('$')[1]);
-            decimal netoTemp = Convert.ToDecimal(neto.Split('$')[1]);
+            decimal netoTemp = Convert.ToDecimal(neto);
 
             decimal total = decimal.Round((comisionTemp / 100) * netoTemp,2);
 

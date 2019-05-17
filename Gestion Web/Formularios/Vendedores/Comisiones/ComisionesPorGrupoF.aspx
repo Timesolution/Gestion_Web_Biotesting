@@ -40,17 +40,36 @@
                     </table>
                 </div>
             </div>
-            <div class="widget big-stats-container stacked">
+            <%--<div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
                             <h4>Saldo</h4>
-                            <asp:Label ID="labelSaldo" runat="server" Text="" class="value" Visible="true"></asp:Label>
+                            <asp:Label ID="labelSaldo" runat="server" class="value" Visible="true"></asp:Label>
+                            <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>--%>
+        </div>
+
+        <div class="col-md-12">
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Neto</h4>
+                            <asp:Label ID="labelNeto" runat="server" class="value"></asp:Label>
+                        </div>
+                        <div class="stat">
+                            <h4>Total</h4>
+                            <asp:Label ID="labelTotal" runat="server" class="value"></asp:Label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-md-12 col-xs-12">
             <div class="widget stacked widget-table action-table">
                 <div class="widget-header">
@@ -155,6 +174,7 @@
     <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
     <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>    --%>
+    <link href="../../../css/pages/reports.css" rel="stylesheet">
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
     <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
@@ -289,9 +309,6 @@
 
                 controlDropListSucursal.add(option);
             }
-
-            //CargarPuntosVenta();
-            //CargarVendedores();
         }
 
         function CargarPuntosVenta()
@@ -404,7 +421,8 @@
 
         function OnSuccessFiltro(response)
         {
-            var controlLabelSaldo = document.getElementById('<%= labelSaldo.ClientID %>');
+            var controlLabelNeto = document.getElementById('<%= labelNeto.ClientID %>');
+            var controlLabelTotal = document.getElementById('<%= labelTotal.ClientID %>');
 
             var data = response.d;
             var obj = JSON.parse(data);
@@ -414,6 +432,7 @@
             $('#tablaComisiones').find("tr:gt(0)").remove();            
 
             var totalNeto = 0;
+            var total = 0;
 
             for (var i = 0; i < obj.length; i++) {
                 $('#tablaComisiones').append(
@@ -429,14 +448,19 @@
                     '<td style="text-align:right"> ' + obj[i].total + "</td>" +
                     "</tr> ");
 
-                var splitted = obj[i].precioSinIVA.split("$");
+                var splittedNeto = obj[i].precioSinIVA.split("$");
+                var splittedTotal = obj[i].total.split("$");
 
-                var numero = parseFloat(splitted[1]);
+                var numeroNeto = parseFloat(splittedNeto[1]);
+                var numeroTotal = parseFloat(splittedTotal[1]);
 
-                totalNeto += parseFloat(numero);
+                totalNeto += parseFloat(numeroNeto);
+                total += parseFloat(numeroTotal);
             };            
 
-            controlLabelSaldo.text = totalNeto.toFixed(2);
+            //controlLabelSaldo.text = totalNeto.toFixed(2);
+            controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+            controlLabelTotal.innerHTML = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
 
             $('#tablaComisiones').dataTable(
                 {                    
