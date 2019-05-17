@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Configuration;
+using Gestion_Api.Entitys;
 
 namespace Gestion_Web.Formularios.Valores
 {
@@ -85,7 +86,7 @@ namespace Gestion_Web.Formularios.Valores
                     txtFechaHasta.Text = fechaH;
                     ListTipos.SelectedValue = this.tipoPago.ToString();
                     this.ListMovimiento.SelectedValue = this.tipoMovimiento.ToString();
-                    
+
                     DropListSucursal.SelectedValue = suc.ToString();
                     ListSucursal2.SelectedValue = suc.ToString();
                     ListSucursalOrigen.SelectedValue = suc.ToString();
@@ -97,7 +98,7 @@ namespace Gestion_Web.Formularios.Valores
                     this.cargarTiposMovimientos();
 
                     this.verificarAccesoCajaEspecial();
-                }               
+                }
 
                 if (fechaD != null && fechaH != null && suc != 0)
                 {
@@ -141,7 +142,7 @@ namespace Gestion_Web.Formularios.Valores
                 else
                 {
                     //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Valores.Caja") != 1)
-                    if(this.verificarAcceso() != 1)
+                    if (this.verificarAcceso() != 1)
                     {
                         Response.Redirect("/Default.aspx?m=1", false);
                     }
@@ -160,9 +161,9 @@ namespace Gestion_Web.Formularios.Valores
                 int valor = 0;
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
-                foreach(string s in listPermisos)
+                foreach (string s in listPermisos)
                 {
-                    if(!String.IsNullOrEmpty(s))
+                    if (!String.IsNullOrEmpty(s))
                     {
                         if (s == "45")
                         {
@@ -223,7 +224,7 @@ namespace Gestion_Web.Formularios.Valores
                     if (!String.IsNullOrEmpty(s))
                     {
                         if (s == "77")
-                        {                            
+                        {
                             return 1;
                         }
                     }
@@ -249,7 +250,7 @@ namespace Gestion_Web.Formularios.Valores
                     this.DropListSucursal.Attributes.Remove("disabled");
                     this.ListSucursal2.Attributes.Remove("disabled");
                 }
-                
+
             }
             catch
             {
@@ -262,7 +263,7 @@ namespace Gestion_Web.Formularios.Valores
             {
                 int idUser = (int)Session["Login_IdUser"];
                 int i = this.contCajaCierre.verificarAccesoCajaEspecial(this.ptoVenta, idUser);
-                if(i < 0)
+                if (i < 0)
                 {
                     Response.Redirect("/Default.aspx?m=1", false);
                 }
@@ -375,7 +376,7 @@ namespace Gestion_Web.Formularios.Valores
                 this.ListSucursalOrigenMovimientoBanco.DataSource = dt;
                 this.ListSucursalOrigenMovimientoBanco.DataValueField = "Id";
                 this.ListSucursalOrigenMovimientoBanco.DataTextField = "nombre";
-                this.ListSucursalOrigenMovimientoBanco.DataBind(); 
+                this.ListSucursalOrigenMovimientoBanco.DataBind();
             }
             catch (Exception ex)
             {
@@ -482,7 +483,7 @@ namespace Gestion_Web.Formularios.Valores
                 DataRow dr = dt.NewRow();
                 dr["NombreFantasia"] = "Seleccione...";
                 dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);               
+                dt.Rows.InsertAt(dr, 0);
 
                 this.ListPuntoVenta2.DataSource = dt;
                 this.ListPuntoVenta2.DataValueField = "Id";
@@ -519,7 +520,7 @@ namespace Gestion_Web.Formularios.Valores
 
             this.ListPuntoVentaOrigen.DataBind();
 
-            
+
         }
         public void cargarPuntoVentaOrigenMovimientoBanco(int idSucursal)
         {
@@ -626,7 +627,7 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
         #endregion
-        
+
         private void obtenerFechaUltimoCierre()
         {
             try
@@ -724,13 +725,13 @@ namespace Gestion_Web.Formularios.Valores
 
                     }
                 }
-                
+
                 //Verificar si muetro saldo
                 if (!mostrarSaldo())
                 {
                     lblSaldo.Text = "$ " + "****.**";
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -753,8 +754,8 @@ namespace Gestion_Web.Formularios.Valores
                     DateTime fechaHasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
                     var cierre = this.contCajaCierre.obtenerCierres(this.suc, this.ptoVenta, fechaDesde, fechaHasta);
-                    
-                    if(cierre.Count > 0)
+
+                    if (cierre.Count > 0)
                     {
                         return true;
                     }
@@ -776,12 +777,12 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 controladorSucursal contSucu = new controladorSucursal();
-                
+
                 var suc = contSucu.obtenerSucursalID(c.suc.id);
                 if (suc.clienteDefecto == -2)
                 {
                     string perfil = Session["Login_NombrePerfil"] as string;
-                    
+
                     if (perfil == "SuperAdministrador")
                     {
                         return true;
@@ -793,12 +794,12 @@ namespace Gestion_Web.Formularios.Valores
                 }
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
         }
-        
+
         private void cargarLabel(string fechaD, string fechaH, int idSucursal, int tipoPago)
         {
             try
@@ -982,7 +983,7 @@ namespace Gestion_Web.Formularios.Valores
                 cbSeleccion.ID = "cbSeleccion_" + c.id;
                 cbSeleccion.CssClass = "btn btn-info";
                 cbSeleccion.Font.Size = 12;
-                celAccion.Controls.Add(cbSeleccion);                
+                celAccion.Controls.Add(cbSeleccion);
 
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
@@ -1052,47 +1053,58 @@ namespace Gestion_Web.Formularios.Valores
                 }
 
                 caja.tipoMovimiento = 2;
-                //if (caja.mov.id == 5)
-                //{
-                //    caja.tipoMovimiento = 5;
-                //}
-                //else
-                //{
-                //    caja.tipoMovimiento = 2;
-                //}
-                caja.fecha = DateTime.Now;
+                caja.fecha = DateTime.ParseExact(txtFechaModalAgregarCaja.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 caja.suc.id = Convert.ToInt32(this.ListSucursal2.SelectedValue);
                 caja.pv.id = Convert.ToInt32(this.ListPuntoVenta2.SelectedValue);
-                //cargo comentarios
                 caja.comentario = this.txtComentarios.Text;
 
+                bool result = VerificarQueLaFechaDelMovimientoSeaMayorOIgualAlCierreDeLaCaja(caja);
+
+                if (!result)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("La fecha no puede ser menor a la ultima apertura de caja"));
+                    return;
+                }
 
                 int i = this.controlador.agregar(caja, 0);
+
                 if (i > 0)
                 {
-                    //agrego bien
-                    //Log.EscribirSQL(idUsuario, "INFO", "Agrego el Grupo de Articulo: " + i);
-                    //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Caja: " + this.txtMovimiento.Text);
-                    
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Caja cargado con exito", null));
                     this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                     this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                     this.tipoPago = 0;
                     this.tipoMovimiento = 0;
                     this.suc = (int)Session["Login_SucUser"];
                     Response.Redirect("CajaF.aspx?FD=" + this.fechaD + "&FH=" + this.fechaH + "&S=" + this.suc + "&TP=" + this.tipoPago + "&TM=" + this.tipoMovimiento);
-                    
                 }
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Caja"));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando nuevo movimiento de Caja" + ex.Message));
             }
         }
+
+        public bool VerificarQueLaFechaDelMovimientoSeaMayorOIgualAlCierreDeLaCaja(Caja caja)
+        {
+            try
+            {
+                Caja_Cierre ultimoCierreCaja = contCajaCierre.obtenerUltimoCierrePV(caja.suc.id, caja.pv.id);
+                if (ultimoCierreCaja != null && caja.fecha.Date >= ultimoCierreCaja.FechaApertura.Value.Date)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         //pasaje de caja
         protected void btnAgregarTraspaso_Click(object sender, EventArgs e)
         {
@@ -1144,7 +1156,7 @@ namespace Gestion_Web.Formularios.Valores
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando traspaso de caja " + ex.Message));
             }
         }
-        
+
         protected void ListSucursalOrigen_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.cargarPuntoVentaOrigen(Convert.ToInt32(this.ListSucursalOrigen.SelectedValue));
@@ -1153,7 +1165,7 @@ namespace Gestion_Web.Formularios.Valores
         protected void ListSucursalDestino_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.cargarPuntoVentaDestino(Convert.ToInt32(this.ListSucursalDestino.SelectedValue));
-        }       
+        }
 
         private void ComentariosCaja(object sender, EventArgs e)
         {
@@ -1219,10 +1231,10 @@ namespace Gestion_Web.Formularios.Valores
 
                 ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "window.open('../Cobros/ImpresionCobro.aspx?Cobro=" + caja.cobro.id + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
 
-               // ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + caja.cobro.id + "&valor=1', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                
+                // ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + caja.cobro.id + "&valor=1', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
 
-                
+
+
 
             }
             catch (Exception ex)
@@ -1249,7 +1261,7 @@ namespace Gestion_Web.Formularios.Valores
                 Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
             }
         }
-        
+
         protected void btnaEfectivo_Click(object sender, EventArgs e)
         {
             try
@@ -1266,11 +1278,11 @@ namespace Gestion_Web.Formularios.Valores
         protected void btnaTarjeta_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 //de Efectivo (1) a Tarjeta (5) 
-                modificarTipoPago(1, 5);                
+                modificarTipoPago(1, 5);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error editando movimiento de caja . " + ex.Message));
             }
@@ -1292,7 +1304,7 @@ namespace Gestion_Web.Formularios.Valores
                 //{
                 //    DataRow drDatos = dtDatos.NewRow();
                 //    TableRow tr = control as TableRow;
-                                        
+
                 //    drDatos[0] = tr.Cells[0].Text;
                 //    drDatos[1] = tr.Cells[1].Text;
                 //    drDatos[2] = tr.Cells[2].Text;
@@ -1313,7 +1325,7 @@ namespace Gestion_Web.Formularios.Valores
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de cta cte desde la interfaz. " + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error exportando detalles de cta cte a excel. " + ex.Message);
             }
-            
+
         }
 
         protected void lbtnGastos_Click(object sender, EventArgs e)
@@ -1327,13 +1339,13 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
-        
+
         protected void lbtnResumen_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionValores.aspx?a=5&FD=" + this.fechaD + "&FH=" + this.fechaH + "&S=" + this.suc + "&PV=" + this.ptoVenta + "&TP=" + this.tipoPago + "&TM=" + this.tipoMovimiento + "&e=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionValores.aspx?a=5&FD=" + this.fechaD + "&FH=" + this.fechaH + "&S=" + this.suc + "&PV=" + this.ptoVenta + "&TP=" + this.tipoPago + "&TM=" + this.tipoMovimiento + "&e=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {
@@ -1367,7 +1379,7 @@ namespace Gestion_Web.Formularios.Valores
         }
 
         #endregion
-        
+
         private int enviarMailTraspasoCaja(int sucOrigen, int ptoVtaOrigen, int sucDestino, int ptoVtaDestino)
         {
             try
@@ -1590,7 +1602,7 @@ namespace Gestion_Web.Formularios.Valores
 
                     return;
                 }
-                
+
                 //Seteo valores para realizar el traspaso
                 int idSucursalOrigen = Convert.ToInt32(this.ListSucursalOrigenMovimientoBanco.SelectedValue);
                 int idPuntoVentaOrigen = Convert.ToInt32(this.ListPuntoVentaOrigenMovimientoBanco.SelectedValue);
@@ -1610,7 +1622,7 @@ namespace Gestion_Web.Formularios.Valores
                 int i = this.controlador.pasarCajaBanco(idSucursalOrigen, idPuntoVentaOrigen, cuenta, empresa, mov);
 
                 if (i > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento agregado con éxito. ","CajaF.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento agregado con éxito. ", "CajaF.aspx"));
                 if (i == -1)
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error agregando movimiento a la Caja."));
                 if (i == -2)
@@ -1626,7 +1638,7 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 var fecha = this.controlador.obtenerUltimaApertura(idSucursal, idPuntoVenta);
-                
+
                 //si la fecha de apertura es mas gande q hoy no lo dejo
                 if (DateTime.Now < fecha)
                     return -1;
@@ -1692,7 +1704,7 @@ namespace Gestion_Web.Formularios.Valores
                 }
 
                 return 1;
-                
+
             }
             catch (Exception Ex)
             {
@@ -1739,11 +1751,11 @@ namespace Gestion_Web.Formularios.Valores
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al redireccionar a la pagina de creacion de remesa " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al redireccionar a la pagina de creacion de remesa " + ex.Message);
             }
         }
 
@@ -1762,7 +1774,7 @@ namespace Gestion_Web.Formularios.Valores
 
                     if (ch.Checked == true)
                     {
-                        if(descripcion.Contains("Traspaso de Caja") || descripcion.Contains("Traspaso Caja"))
+                        if (descripcion.Contains("Traspaso de Caja") || descripcion.Contains("Traspaso Caja"))
                             tildados++;
                     }
                 }

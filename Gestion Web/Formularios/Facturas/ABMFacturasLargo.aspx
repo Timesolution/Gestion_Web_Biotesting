@@ -400,6 +400,13 @@
                                                                     <td>
                                                                         <asp:PlaceHolder ID="phDatosEntrega" Visible="false" runat="server">
                                                                             <div class="form-group">
+                                                                                <label class="col-md-3">Ticket de cambio:</label>
+
+                                                                                <div class="col-md-1">
+                                                                                    <asp:CheckBox ID="chkImprimirTicketDeCambio" runat="server" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group">
                                                                                 <label class="col-md-3">Fecha Entrega: </label>
 
                                                                                 <div class="col-md-4">
@@ -915,7 +922,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-6">Restan / Efectivo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListMonedas" runat="server" class="form-control"></asp:DropDownList>
+                                            <label>Restan / Efectivo</label>
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>

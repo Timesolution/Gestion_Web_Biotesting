@@ -5,7 +5,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="main">
-        <%--<div class="container">--%>
         <div>
             <div class="col-md-12">
 
@@ -61,13 +60,45 @@
                                                                     <asp:LinkButton ID="lbtnReporteArticulosPorGrupo" runat="server" OnClick="lbtnReporteArticulosPorGrupo_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
-                                                                </asp:LinkButton>
+                                                                    </asp:LinkButton>
                                                                 </li>
                                                                 <li>
                                                                     <asp:LinkButton ID="lbtnReporteArticulosPorGrupoPDF" runat="server" OnClick="lbtnReporteArticulosPorGrupoPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
-                                                                </asp:LinkButton>
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Articulos por categoria</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteArticulosPorCategoriaAndProveedorXLS" runat="server" OnClick="lbtnReporteArticulosPorCategoriaAndProveedorXLS_Click">
+                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp Exportar
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteArticulosPorCategoriaAndProveedorPDF" runat="server" OnClick="lbtnReporteArticulosPorCategoriaAndProveedorPDF_Click">
+                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Imprimir
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas por Punto de venta</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaPDF" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaPDF_Click">
+                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp Exportar
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorPuntoDeVentaExcel" runat="server" OnClick="lbtnReporteVentasPorPuntoDeVentaExcel_Click">
+                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Imprimir
+                                                                    </asp:LinkButton>
                                                                 </li>
                                                             </ul>
                                                         </li>
@@ -113,27 +144,39 @@
                             <div class="widget-content">
 
                                 <div id="big_stats" class="cf">
-                                    <div class="stat">
+                                    <div class="stat" style="width:10%">
                                         <h4>Pedidos Pendientes</h4>
                                         <asp:Label ID="lblPedidosPendientes" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat">
+                                    <div class="stat" style="width:10%">
                                         <h4>Ventas Realizadas</h4>
                                         <asp:Label ID="lblVentasRealizadas" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat">
+                                    <div class="stat" style="width:10%">
                                         <h4>Productos Vendidos</h4>
                                         <asp:Label ID="lblProductosVendidos" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat">
+                                    <div class="stat" style="width:8%">
                                         <h4>Devoluciones</h4>
                                         <asp:Label ID="lbDevoluciones" runat="server" Text="" class="value"></asp:Label>
+                                    </div>
+                                    <!-- .stat -->
+
+                                     <div class="stat" style="width:15%">
+                                        <h4>Venta Promedio</h4>
+                                        <asp:Label ID="lbVentaPromedio" runat="server" Text="" class="value"></asp:Label>
+                                    </div>
+                                    <!-- .stat -->
+
+                                    <div class="stat" style="width:10%">
+                                        <h4>Articulos Por Venta</h4>
+                                        <asp:Label ID="lbArticulosXVenta" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
                                 </div>
