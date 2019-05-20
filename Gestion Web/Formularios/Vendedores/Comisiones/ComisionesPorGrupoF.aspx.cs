@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            VerificarLogin();
 
             if (!IsPostBack)
             {
@@ -28,6 +29,45 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 CargarSucursal(Convert.ToInt32(DropListEmpresa.SelectedValue));
                 CargarPuntoVenta(Convert.ToInt32(DropListSucursal.SelectedValue));
                 CargarVendedores(Convert.ToInt32(DropListSucursal.SelectedValue));
+            }
+        }
+
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.VerificarAcceso() != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../../Account/Login.aspx");
+            }
+        }
+        private int VerificarAcceso()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                if (!permisos.Contains("206"))
+                    return 0;
+
+                return 1;
+            }
+            catch
+            {
+                return -1;
             }
         }
 
@@ -262,6 +302,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             }
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
             string resultadoJSON = serializer.Serialize(datosFiltradosTemporales);
             return resultadoJSON;
         }

@@ -335,18 +335,6 @@ namespace Gestion_Web.Formularios.Valores
                 
                 var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));
 
-                // Si existen solicitudes de créditos, verifico que estén validadas
-                //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
-                //if (okSolicitudes <= 0)
-                //{
-                //    if (okSolicitudes == -1)
-                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "$.msgbox(\"Existen solicitudes de Créditos pendientes de validar. \");", true);
-                //    if (okSolicitudes == 0)
-                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Ocurrió un error verificando solicitudes de Créditos. \", {type: \"error\"});", true);
-
-                //    return;
-                //}
-
                 if (Facturas != null)
                 {
                     //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
