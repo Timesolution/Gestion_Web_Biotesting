@@ -109,7 +109,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.txtMaxDtoFc.Text = configuracion.maxDtoFactura;
                 this.DropListEdicionPrecio.SelectedValue = configuracion.edicionPrecioUnitario;
                 this.txtLimiteDif.Text = configuracion.limiteDifCaja;
-                this.txtMaxApertura.Text = configuracion.diasMaxApertura;
+                this.txtMaxDiasSinAceptarMercaderia.Text = configuracion.diasMaxSinAceptarMercaderia;
                 this.DropListNumeracionArt.SelectedValue = configuracion.numeracionArticulos;
                 this.DropListNumeracionCobros.SelectedValue = configuracion.numeracionCobros;
                 this.DropListItemsEnCero.SelectedValue = configuracion.ItemsEnCero;
@@ -685,16 +685,16 @@ namespace Gestion_Web.Formularios.Herramientas
             {
                 try
                 {
-                    configuracion.diasMaxApertura = this.txtMaxApertura.Text;
-                    int i = configuracion.ModificarDiasMaxApertura();
+                    configuracion.diasMaxSinAceptarMercaderia = this.txtMaxDiasSinAceptarMercaderia.Text;
+                    int i = configuracion.ModificardiasMaxSinAceptarMercaderia();
                     if (i > 0)
                     {
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Max dias apertura.");
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Dias max apertura caja modificada con exito!. \", {type: \"info\"});", true);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Dias max sin aceptar mercaderia.");
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Dias max sin aceptar mercaderia modificada con exito!. \", {type: \"info\"});", true);
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Dias max apertura caja!. \", {type: \"error\"});", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Dias max sin aceptar mercaderia!. \", {type: \"error\"});", true);
                     }
                 }
                 catch
