@@ -3355,6 +3355,12 @@ namespace Gestion_Web.Formularios.Facturas
 
             if (IsValid)
             {
+                Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                if (!respuesta.Item2)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                    return;
+                }
                 //Verifico si tiene la alerta de precios de articulos sin actualizar
                 if (!this.VerificarArticulosSinActualizar())
                 {
