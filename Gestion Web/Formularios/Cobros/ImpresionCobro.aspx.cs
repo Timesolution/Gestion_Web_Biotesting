@@ -10,6 +10,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -897,14 +898,14 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                var listaCobros = Request.Cookies["listaReporteDetalleCobros"].Value;
+                var listaCobros = Session["listaReporteDetalleCobros"] as string;
+
+                Session.Remove("listaReporteDetalleCobros");
 
                 if (string.IsNullOrEmpty(listaCobros))
                 {
                     return;
                 }
-
-                Request.Cookies.Remove("listaReporteDetalleCobros");
 
                 listaCobros = listaCobros.Remove(listaCobros.Length - 1).Replace(',',';');
 
@@ -981,6 +982,5 @@ namespace Gestion_Web.Formularios.Cobros
                 return null;
             }
         }
-
     }
 }
