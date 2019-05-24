@@ -231,9 +231,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="validateSelect" class="col-md-4">Max dias apertura caja</label>
+                                            <label for="validateSelect" class="col-md-4">Max dias sin aceptar mercaderia</label>
                                             <div class="col-md-4">
-                                                <asp:TextBox ID="txtMaxApertura" runat="server" class="form-control" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                <asp:TextBox ID="txtMaxDiasSinAceptarMercaderia" runat="server" class="form-control" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2">
                                             </div>

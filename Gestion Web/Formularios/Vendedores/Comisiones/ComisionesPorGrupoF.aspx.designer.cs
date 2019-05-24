@@ -22,13 +22,22 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         protected global::System.Web.UI.WebControls.Label lblParametros;
         
         /// <summary>
-        /// labelSaldo control.
+        /// labelNeto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelSaldo;
+        protected global::System.Web.UI.WebControls.Label labelNeto;
+        
+        /// <summary>
+        /// labelTotal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labelTotal;
         
         /// <summary>
         /// phComisiones control.

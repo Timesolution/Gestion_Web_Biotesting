@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            VerificarLogin();
 
             if (!IsPostBack)
             {
@@ -28,6 +29,45 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 CargarSucursal(Convert.ToInt32(DropListEmpresa.SelectedValue));
                 CargarPuntoVenta(Convert.ToInt32(DropListSucursal.SelectedValue));
                 CargarVendedores(Convert.ToInt32(DropListSucursal.SelectedValue));
+            }
+        }
+
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.VerificarAcceso() != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../../Account/Login.aspx");
+            }
+        }
+        private int VerificarAcceso()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                if (!permisos.Contains("206"))
+                    return 0;
+
+                return 1;
+            }
+            catch
+            {
+                return -1;
             }
         }
 
@@ -256,12 +296,13 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
                 datosFiltradosTemporal.nombre = row["nombre"].ToString();
                 datosFiltradosTemporal.precioSinIVA = "$" + row["precioSinIVA"].ToString();
                 datosFiltradosTemporal.grupoArticulo = row["grupo"].ToString();
-                datosFiltradosTemporal.comision = "$" + row["comision"].ToString();
+                datosFiltradosTemporal.comision = row["comision"].ToString();
                 datosFiltradosTemporal.total = "$" + CalcularTotal(datosFiltradosTemporal.precioSinIVA, datosFiltradosTemporal.comision);
                 datosFiltradosTemporales.Add(datosFiltradosTemporal);
             }
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
             string resultadoJSON = serializer.Serialize(datosFiltradosTemporales);
             return resultadoJSON;
         }
@@ -269,7 +310,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         static string CalcularTotal(string comision, string neto)
         {
             decimal comisionTemp = Convert.ToDecimal(comision.Split('$')[1]);
-            decimal netoTemp = Convert.ToDecimal(neto.Split('$')[1]);
+            decimal netoTemp = Convert.ToDecimal(neto);
 
             decimal total = decimal.Round((comisionTemp / 100) * netoTemp,2);
 

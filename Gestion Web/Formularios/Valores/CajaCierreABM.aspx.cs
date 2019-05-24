@@ -331,34 +331,20 @@ namespace Gestion_Web.Formularios.Valores
                 controladorFactEntity contFactEntity = new controladorFactEntity();
                 string fechaD = this.txtFecha.Text;
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
-                List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
+                List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, sucursal);
                 
                 var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));
-
-                // Si existen solicitudes de créditos, verifico que estén validadas
-                //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
-                //if (okSolicitudes <= 0)
-                //{
-                //    if (okSolicitudes == -1)
-                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "$.msgbox(\"Existen solicitudes de Créditos pendientes de validar. \");", true);
-                //    if (okSolicitudes == 0)
-                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Ocurrió un error verificando solicitudes de Créditos. \", {type: \"error\"});", true);
-
-                //    return;
-                //}
 
                 if (Facturas != null)
                 {
                     //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
                     int ok;
 
-                    if (chequearMercaderia == 0)
+                    if (chequearMercaderia > 0)
                     {
-                        //ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                        var temp = contFactEntity.AceptarMercaderiaAntesDelMaximoEstablecido(sucursal);
 
-                        var temp = contFactEntity.AceptarMercaderiaAntes48Horas(this.sucursal);
-
-                        if (temp == null)
+                        if (temp)
                             ok = 1;
                         else
                             ok = -1;
@@ -367,6 +353,7 @@ namespace Gestion_Web.Formularios.Valores
                     {
                         ok = 1;
                     }
+
                     if (ok > 0 && Facturas.Count > 0 || Facturas.Count == 0)
                     {
                         //agrego diferencia
