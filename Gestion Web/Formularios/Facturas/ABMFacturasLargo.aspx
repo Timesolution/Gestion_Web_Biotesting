@@ -304,6 +304,7 @@
                                                                 <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
 
                                                                 <span class="input-group-btn">
+                                                                    <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" /> <%--OnClientClick="BuscarArticulosPorDescripcion"--%>
                                                                     <a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>
@@ -1902,6 +1903,55 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
+            <asp:Panel ID="Panel2" runat="server" > <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
+                <div class="modal-dialog" style="width: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Busqueda de Articulos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-4">Buscar Articulo</label>
+                                            <div class="col-md-3">
+                                                <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-bordered" id="articulosTabla">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">Codigo</th>
+                                            <th style="width: 30%">Descripcion</th>
+                                            <th style="width: 10%">Stock</th>
+                                            <th style="width: 10%">Moneda</th>
+                                            <th style="width: 10%">P.Venta</th>
+                                            <th style="width: 10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click" />--%>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:Panel>
+        </div>
         <%--Fin modalGrupo--%>
     </div>
     <!-- /main -->
@@ -1913,6 +1963,10 @@
 
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+    <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
     <script src="../../Scripts/libs/bootstrap.min.js"></script>
 
     <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
@@ -1926,7 +1980,7 @@
     <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
     <script src="../../Scripts/demo/notifications.js"></script>
 
-    <script src="../../Scripts/bootstrap.min.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>    
 
     <script>
         function pageLoad() {
@@ -1965,7 +2019,53 @@
         });
 
     </script>
+    <script>
+        $(function()
+        {
+            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+            var idSucursal = ddlSucursal.selectedOptions[0].value;
 
+            var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
+                data: '{codigoArticulo: "' + descripcionArticulo.value + '", idSucursal: "' + idSucursal + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    alert("No se pudieron cargar los articulos.");
+                },
+                success: OnSuccessBuscarArticulo
+            });
+        });
+
+        function OnSuccessBuscarArticulo(response)
+        {
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            $("#articulosTabla").dataTable().fnDestroy();
+            $('#articulosTabla').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++)
+            {
+                var button = document.createElement('button');
+
+                $('#articulosTabla').append(
+                    "<tr>" +
+                    "<td> " + obj[i].codigo + "</td>" +
+                    "<td> " + obj[i].descripcion + "</td>" +
+                    "<td> " + obj[i].stock + "</td>" +
+                    "<td> " + obj[i].moneda + "</td>" +                    
+                    '<td style="text-align:right"> ' + obj[i].precioVenta + "</td>" +
+                    "<td> <span class='shortcut-icon icon-ok'></span> </td>" +
+                    "</tr> ");
+            };
+        }
+
+    </script>
     <script type="text/javascript">
 
         function darclick() {

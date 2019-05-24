@@ -290,7 +290,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             {
                 DatosFiltradosTemporal datosFiltradosTemporal = new DatosFiltradosTemporal();
                 datosFiltradosTemporal.fecha = Convert.ToDateTime(row["fecha"].ToString(), CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
-                datosFiltradosTemporal.tipo = row["tipo"].ToString();
+                datosFiltradosTemporal.tipo = row["tipo"].ToString() + " " + row["numero"].ToString();
                 datosFiltradosTemporal.codigo = row["codigo"].ToString();
                 datosFiltradosTemporal.descripcion = row["descripcion"].ToString();
                 datosFiltradosTemporal.nombre = row["nombre"].ToString();

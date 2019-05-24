@@ -20,6 +20,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Task_Api;
@@ -10683,5 +10685,78 @@ namespace Gestion_Web.Formularios.Facturas
                 return new Tuple<string, bool>("", true);
         }
 
+        [WebMethod]
+        public static string BuscarArticulosPorDescripcion(string codigoArticulo, int idSucursal)
+        {
+            Configuracion configuracion = new Configuracion();
+            List<Articulo> articulos = new List<Articulo>();
+            controladorArticulo contArticulo = new controladorArticulo();
+
+            if (String.IsNullOrEmpty(codigoArticulo))
+            {
+                articulos = contArticulo.obtenerArticulosReduc();
+                //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                if (configuracion.FiltroArticulosSucursal == "1")
+                {
+                    articulos = contArticulo.obtenerArticulosReduc_Sucursales(idSucursal);
+                }
+            }
+            else
+            {
+                //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                if (configuracion.FiltroArticulosSucursal == "1")
+                {
+                    articulos = contArticulo.buscarArticuloListReduc_Sucursales(codigoArticulo, idSucursal);
+                }
+                else
+                {
+                    articulos = contArticulo.buscarArticuloList(codigoArticulo);
+                }
+            }
+
+            List<ArticulosTemporal> articulosTemporal = new List<ArticulosTemporal>();
+
+            foreach (var articulo in articulos)
+            {
+                ArticulosTemporal articuloTemporal = new ArticulosTemporal();
+                articuloTemporal.codigo = articulo.codigo;
+                articuloTemporal.descripcion = articulo.descripcion;
+                articuloTemporal.stock = obtenerStockArticuloBySucursal(articulo.codigo,idSucursal).ToString();
+                articuloTemporal.moneda = articulo.monedaVenta.moneda;
+                articuloTemporal.precioVenta = "$" + articulo.precioVenta.ToString();
+                articulosTemporal.Add(articuloTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(articulosTemporal);
+            return resultadoJSON;
+        }
+
+        static decimal obtenerStockArticuloBySucursal(string codigoArticulo, int idSucursal)
+        {
+
+            ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+            decimal stock = 0;
+            Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(codigoArticulo);
+            if (artEnt != null)
+            {
+                var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, idSucursal);
+                stock = 0;
+
+                stock = stocks.stock1.Value;
+                return stock;
+            }
+
+            return 0;
+        }
+
+        class ArticulosTemporal
+        {
+            public string codigo;
+            public string descripcion;
+            public string stock;
+            public string moneda;
+            public string precioVenta;
+        }
     }
 }
