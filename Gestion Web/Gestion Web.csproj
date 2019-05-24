@@ -629,6 +629,8 @@
     <Content Include="js\charts\line.js" />
     <Content Include="js\charts\pie.js" />
     <Content Include="js\daypilot-modal-2.0.js" />
+    <Content Include="js\Funciones.js" />
+    <Content Include="js\moment\moment.js" />
     <Content Include="js\plugins\cirque\cirque.css" />
     <Content Include="js\plugins\cirque\cirque.js" />
     <Content Include="js\plugins\easing\jquery.easing.js" />

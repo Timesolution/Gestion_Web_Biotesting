@@ -40,17 +40,36 @@
                     </table>
                 </div>
             </div>
-            <div class="widget big-stats-container stacked">
+            <%--<div class="widget big-stats-container stacked">
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
                             <h4>Saldo</h4>
-                            <asp:Label ID="labelSaldo" runat="server" Text="" class="value" Visible="true"></asp:Label>
+                            <asp:Label ID="labelSaldo" runat="server" class="value" Visible="true"></asp:Label>
+                            <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>--%>
+        </div>
+
+        <div class="col-md-12">
+            <div class="widget big-stats-container stacked">
+                <div class="widget-content">
+                    <div id="big_stats" class="cf">
+                        <div class="stat">
+                            <h4>Neto</h4>
+                            <asp:Label ID="labelNeto" runat="server" class="value"></asp:Label>
+                        </div>
+                        <div class="stat">
+                            <h4>Total</h4>
+                            <asp:Label ID="labelTotal" runat="server" class="value"></asp:Label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-md-12 col-xs-12">
             <div class="widget stacked widget-table action-table">
                 <div class="widget-header">
@@ -89,7 +108,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <button type="button" id="btnCerrarModalBusqueda" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Busqueda</h4>
                 </div>
                 <div class="modal-body">
@@ -97,13 +116,13 @@
                         <div class="form-group">
                             <label class="col-md-4">Desde</label>
                             <div class="col-md-6">
-                                <asp:TextBox ID="txtFechaDesde"  runat="server" class="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtFechaDesde" onchange="javascript:return ComprobacionFechaDesde()" runat="server" class="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4">Hasta</label>
                             <div class="col-md-6">
-                                <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtFechaHasta" onchange="javascript:return ComprobacionFechaHasta()" runat="server" class="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="form-group">
@@ -133,7 +152,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnBuscar" href="#" OnClientClick="Filtrar()" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack = "false"/>
+                    <asp:LinkButton ID="lbtnBuscar" href="#" OnClientClick="Filtrar(this)" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack = "false"/>
                 </div>
             </div>
         </div>
@@ -155,12 +174,19 @@
     <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
     <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>    --%>
+    <%--<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>--%>
+
+    <script src="../../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <link href="../../../css/pages/reports.css" rel="stylesheet">
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
     <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script src="Comisiones.js" type="text/javascript"></script>
+    <script src="../../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../../scripts/demo/notifications.js"></script>
+    <script src="Comisiones.js" type="text/javascript"></script>    
 
     <script>
         $(function ()
@@ -171,16 +197,15 @@
             var controlFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>');
             var controlDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>');
             var controlDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>');
-            <%--var controlBotonBuscar = document.getElementById('<%= lbtnBuscar.ClientID %>');--%>
 
             controlFechaDesde.value = fechaActual;
             controlFechaHasta.value = fechaActual;
 
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });            
+            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
-            controlFechaDesde.addEventListener("change", ComprobacionFechaDesde);
-            controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
+            //controlFechaDesde.addEventListener("change", ComprobacionFechaDesde);
+            //controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
             controlDropListEmpresa.addEventListener("change", CargarSucursales);
             controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
             controlDropListSucursal.addEventListener("change", CargarVendedores);
@@ -289,9 +314,6 @@
 
                 controlDropListSucursal.add(option);
             }
-
-            //CargarPuntosVenta();
-            //CargarVendedores();
         }
 
         function CargarPuntosVenta()
@@ -374,17 +396,18 @@
             }
         }
 
-        function Filtrar()
+        function Filtrar(obj)
         {
             var valorTxtFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>').value;
             var valorTxtFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>').value;
             var valorDropListEmpresa = document.getElementById('<%= DropListEmpresa.ClientID %>').value;
             var valorDropListSucursal = document.getElementById('<%= DropListSucursal.ClientID %>').value;
             var valorDropListPuntoVenta = document.getElementById('<%= DropListPuntoVenta.ClientID %>').value;
-            var valorDropListVendedor = document.getElementById('<%= DropListVendedor.ClientID %>').value;
+            var valorDropListVendedor = document.getElementById('<%= DropListVendedor.ClientID %>').value;            
 
             var fechaDesde = InvertirDiaPorMes(valorTxtFechaDesde);
             var fechaHasta = InvertirDiaPorMes(valorTxtFechaHasta);
+            $(obj).attr('disabled', 'disabled');
 
             $.ajax({
                 type: "POST",
@@ -395,25 +418,29 @@
                 error: (error) =>
                 {
                     //console.log(JSON.stringify(error));
-                    alert("No se pudo filtrar correctamente.");
+                    $.msgbox("No se pudo filtrar correctamente!", {type: "error"});
+                    $(obj).removeAttr('disabled');
                 }
                 ,
                 success: OnSuccessFiltro
-            });
+            });            
         }
 
         function OnSuccessFiltro(response)
         {
-            var controlLabelSaldo = document.getElementById('<%= labelSaldo.ClientID %>');
+            var controlLabelNeto = document.getElementById('<%= labelNeto.ClientID %>');
+            var controlLabelTotal = document.getElementById('<%= labelTotal.ClientID %>');
+            var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
 
             var data = response.d;
             var obj = JSON.parse(data);
 
-            $('#modalBusqueda').modal('hide');
+            document.getElementById('btnCerrarModalBusqueda').click();
             $("#tablaComisiones").dataTable().fnDestroy();
             $('#tablaComisiones').find("tr:gt(0)").remove();            
 
             var totalNeto = 0;
+            var total = 0;
 
             for (var i = 0; i < obj.length; i++) {
                 $('#tablaComisiones').append(
@@ -429,14 +456,18 @@
                     '<td style="text-align:right"> ' + obj[i].total + "</td>" +
                     "</tr> ");
 
-                var splitted = obj[i].precioSinIVA.split("$");
+                var splittedNeto = obj[i].precioSinIVA.split("$");
+                var splittedTotal = obj[i].total.split("$");
 
-                var numero = parseFloat(splitted[1]);
+                var numeroNeto = parseFloat(splittedNeto[1]);
+                var numeroTotal = parseFloat(splittedTotal[1]);
 
-                totalNeto += parseFloat(numero);
+                totalNeto += parseFloat(numeroNeto);
+                total += parseFloat(numeroTotal);
             };            
 
-            controlLabelSaldo.text = totalNeto.toFixed(2);
+            controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+            controlLabelTotal.innerHTML = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
 
             $('#tablaComisiones').dataTable(
                 {                    
@@ -450,6 +481,8 @@
                         { type: 'date-eu', targets: 5 }
                     ]
                 });
+
+            $(controlBotonFiltrar).removeAttr('disabled');
         }
     </script>
 
