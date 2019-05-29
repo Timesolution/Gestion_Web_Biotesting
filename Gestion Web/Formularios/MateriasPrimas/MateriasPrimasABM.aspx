@@ -8,7 +8,7 @@
 
                 <div class="widget stacked">
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i> Maestro > MateriasPrimas > MateriasPrimas</h5>
+                        <h5><i class="icon-map-marker"></i>Maestro > MateriasPrimas > MateriasPrimas</h5>
                         <asp:Label ID="lblFiltroAnterior" runat="server" Style="display: none;"></asp:Label>
                     </div>
                     <div class="widget-header">
@@ -87,7 +87,7 @@
                                                     <div class="form-group">
                                                         <label for="name" class="col-md-4">Importe</label>
                                                         <div class="col-md-4">
-                                                            <asp:TextBox ID="txtImporte" Text="0" runat="server" class="form-control" Style="text-align: right;" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            <asp:TextBox ID="txtImporte" Text="0" runat="server" class="form-control" Style="text-align: right;" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtImporte" ValidationGroup="MateriasPrimasGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -125,5 +125,28 @@
             </div>
         </div>
     </div>
+
+    <script>
+        //valida los campos solo numeros
+        function validarNro(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            if (key < 48 || key > 57) {
+                if (key == 46 || key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                { return true; }
+                else { return false; }
+            }
+            return true;
+        }
+    </script>
+
 
 </asp:Content>
