@@ -94,6 +94,15 @@ namespace Gestion_Web {
         protected global::System.Web.UI.WebControls.PlaceHolder phServicioTecnico;
         
         /// <summary>
+        /// phAceptarMercaderia control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phAceptarMercaderia;
+        
+        /// <summary>
         /// phOrdenReparacion control.
         /// </summary>
         /// <remarks>

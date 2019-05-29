@@ -304,10 +304,10 @@
                                                                 <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
 
                                                                 <span class="input-group-btn">
-                                                                    <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" /> <%--OnClientClick="BuscarArticulosPorDescripcion"--%>
-                                                                    <a class="btn btn-info" onclick="createA();">
+                                                                    <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" OnClientClick="CargarArticulos()"/> 
+                                                                    <%--<a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
-                                                                    </a>
+                                                                    </a>--%>
                                                                     <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />
                                                                     <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
                                                                         <%--<i class="btn-icon-only icon-check-sign"></i>--%>
@@ -1905,11 +1905,12 @@
         </div>
 
         <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
-            <asp:Panel ID="Panel2" runat="server" > <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
+            <asp:Panel ID="Panel2" runat="server">
+                <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
                 <div class="modal-dialog" style="width: 60%;">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <button type="button" id="btnCerrarModalBuscarArticulo" onclick="CerrarModalBuscarArticulo()" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h4 class="modal-title">Busqueda de Articulos</h4>
                         </div>
                         <div class="modal-body">
@@ -1922,7 +1923,7 @@
                                                 <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-1">
-                                                <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                                <asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />
                                             </div>
                                         </div>
                                     </div>
@@ -1945,7 +1946,7 @@
                             </div>
                             <div class="modal-footer">
                                 <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click" />--%>
-                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                                <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -1955,7 +1956,6 @@
         <%--Fin modalGrupo--%>
     </div>
     <!-- /main -->
-
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <!-- Core Scripts - Include with every page -->
@@ -2020,26 +2020,47 @@
 
     </script>
     <script>
-        $(function()
+        function BuscarArticulo(descripcion,idSucursal)
         {
-            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
-            var idSucursal = ddlSucursal.selectedOptions[0].value;
-
-            var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
-
-            $.ajax({
+            if (idSucursal <= 0)
+            {
+                CerrarModalBuscarArticulo();
+                //document.getElementById('btnCerrarModalBuscarArticulo').click();
+                //$('#modalBuscarArticuloDescripcion').modal('hide');
+                $.msgbox("Debe seleccionar una sucursal!", { type: "error" });
+                return false;
+            }
+            else
+            {
+                $.ajax({
                 type: "POST",
                 url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
-                data: '{codigoArticulo: "' + descripcionArticulo.value + '", idSucursal: "' + idSucursal + '"}',
+                data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function ()
                 {
-                    alert("No se pudieron cargar los articulos.");
+                    $.msgbox("No se pudo buscar el articulo!", { type: "error" });
+                    BuscarArticulo("",idSucursal);
                 },
                 success: OnSuccessBuscarArticulo
             });
-        });
+            }            
+        }
+
+        function CerrarModalBuscarArticulo()
+        {
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/CerrarModalBuscarArticulosPorDescripcion",
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo cerrar el modal!", { type: "error" });
+                }
+            });
+        }
 
         function OnSuccessBuscarArticulo(response)
         {
@@ -2051,21 +2072,77 @@
 
             for (var i = 0; i < obj.length; i++)
             {
-                var button = document.createElement('button');
-
                 $('#articulosTabla').append(
                     "<tr>" +
                     "<td> " + obj[i].codigo + "</td>" +
                     "<td> " + obj[i].descripcion + "</td>" +
                     "<td> " + obj[i].stock + "</td>" +
-                    "<td> " + obj[i].moneda + "</td>" +                    
+                    "<td> " + obj[i].moneda + "</td>" +
                     '<td style="text-align:right"> ' + obj[i].precioVenta + "</td>" +
-                    "<td> <span class='shortcut-icon icon-ok'></span> </td>" +
+                    "<td> " + CrearBotonTilde(obj[i].codigo) + "</td>" +
                     "</tr> ");
             };
+
+            $('#articulosTabla').on("click", ".btn-info", function (button)
+            {
+                AgregarArticuloBuscadoPorDescripcion(button);
+            });
         }
 
+        function CrearBotonTilde(codigo)
+        {
+            return "<button id=" + codigo + " class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+        }
+        
     </script>
+
+    <script type="text/javascript">
+        function CargarArticulos()
+        {
+            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+            var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+            var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
+
+            BuscarArticulo(descripcionArticulo.value,idSucursal);
+        }
+
+        function AgregarArticuloBuscadoPorDescripcion(button)
+        {
+            var descripcionArticulo = document.getElementById("MainContent_txtCodigo");            
+
+            descripcionArticulo.value = button.currentTarget.id;
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/AgregarArticulosPorDescripcion",
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo agregar el articulo!", {type: "error"});
+                }
+            });
+        }
+    </script>
+    <script>
+
+        $(function ()
+        {
+            var modal = document.getElementById('modalBuscarArticuloDescripcion');
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event)
+            {
+                if (event.target == modal)
+                {
+                    modal.style.display = "none";
+                    CerrarModalBuscarArticulo();
+                }
+            }
+        });
+
+    </script>
+
     <script type="text/javascript">
 
         function darclick() {
@@ -2202,7 +2279,11 @@
             $('#modalMutuales').modal('show');
         }
     </script>
-
+    <script>
+        function abrirModalBuscarArticulo() {
+            $('#modalBuscarArticuloDescripcion').modal('show');
+        }
+    </script>
     <script>
         function modalCalcularDescuentoConUnMonto() {
             $('#modal').modal('show');

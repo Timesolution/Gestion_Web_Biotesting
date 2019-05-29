@@ -70,6 +70,9 @@ namespace Gestion_Web.Formularios.Facturas
 
         private string _verificarEnvioMercaderiaSiNoHayStockOrNegativo;
 
+        private static bool _agregarArticuloPorDescripcion = false;
+        private static bool _buscarArticuloPorDescripcion = false;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -232,6 +235,9 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFechaPagareMutual.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaVtoCuotaMutual.Text = DateTime.Now.AddMonths(1).ToString("dd/MM/yyyy");
                     this.txtCodigo.Focus();
+
+                    _agregarArticuloPorDescripcion = false;
+                    _buscarArticuloPorDescripcion = false;
                 }
 
                 this.cargarTablaPAgos();
@@ -257,14 +263,29 @@ namespace Gestion_Web.Formularios.Facturas
 
                 }
                 //si viene de la pantalla de articulos, modal
-                if (Session["FacturasABM_ArticuloModal"] != null)
+                //if (Session["FacturasABM_ArticuloModal"] != null)
+                //{
+                //    //obtengo codigo
+                //    string CodArt = Session["FacturasABM_ArticuloModal"] as string;
+                //    this.txtCodigo.Text = CodArt;
+                //    this.cargarProducto(this.txtCodigo.Text);
+                //    this.actualizarTotales();
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                //}
+
+                if (_buscarArticuloPorDescripcion)
                 {
-                    //obtengo codigo
-                    string CodArt = Session["FacturasABM_ArticuloModal"] as string;
-                    this.txtCodigo.Text = CodArt;
-                    this.cargarProducto(this.txtCodigo.Text);
-                    this.actualizarTotales();
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    _buscarArticuloPorDescripcion = false;
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "abrirModalBuscarArticulo();", true);
+                }                    
+
+                if (_agregarArticuloPorDescripcion)
+                {
+                    _agregarArticuloPorDescripcion = false;
+                    cargarProducto(txtCodigo.Text);
+                    actualizarTotales();
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));                    
+                    //ScriptManager.RegisterStartupScript(updatePanelmodalBuscarArticuloDescripcion, updatePanelmodalBuscarArticuloDescripcion.GetType(), "abrirModalBuscarArticulo", "abrirModalBuscarArticulo();", true);
                 }
 
                 //Dejo editable el campo de descripcion del articulo o no
@@ -10688,6 +10709,9 @@ namespace Gestion_Web.Formularios.Facturas
         [WebMethod]
         public static string BuscarArticulosPorDescripcion(string codigoArticulo, int idSucursal)
         {
+            if (idSucursal <= 0)
+                return "";
+
             Configuracion configuracion = new Configuracion();
             List<Articulo> articulos = new List<Articulo>();
             controladorArticulo contArticulo = new controladorArticulo();
@@ -10729,6 +10753,9 @@ namespace Gestion_Web.Formularios.Facturas
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             string resultadoJSON = serializer.Serialize(articulosTemporal);
+
+            _buscarArticuloPorDescripcion = true;
+
             return resultadoJSON;
         }
 
@@ -10748,6 +10775,20 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
             return 0;
+        }
+
+        [WebMethod]
+        public static void AgregarArticulosPorDescripcion()
+        {
+            _agregarArticuloPorDescripcion = true;
+            _buscarArticuloPorDescripcion = false;
+        }
+
+        [WebMethod]
+        public static void CerrarModalBuscarArticulosPorDescripcion()
+        {
+            _agregarArticuloPorDescripcion = false;
+            _buscarArticuloPorDescripcion = false;
         }
 
         class ArticulosTemporal
