@@ -130,6 +130,10 @@ namespace Gestion_Web.Formularios.Reportes
                     {
                         this.generarReporte15(); // Reporte ventas. Por sucursales y puntos de venta
                     }
+                    if (valor == 16)
+                    {
+                        this.generarReporte16(); // Reporte ventas. Por sucursales grupo subgrupo marca
+                    }
                 }
             }
             catch (Exception ex)
@@ -1130,6 +1134,62 @@ namespace Gestion_Web.Formularios.Reportes
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                     String filename = string.Format("{0}.{1}", "Ventas_Por_Sucursales_y_puntos_de_venta", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas generarReporte15. " + ex.Message));
+            }
+        }
+
+        private void generarReporte16()
+        {
+            try
+            {
+                DataTable dtReporteSucursalesGrupoSubGrupoMarca = contFacturacion.obtenerVentasRealizadasAgrupadoPor_Sucursal_Grupo_SubGrupo_Marca(fechaD, fechaH);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("VentasAgrupadoSucursalGrupoSubGrupoMarca", dtReporteSucursalesGrupoSubGrupoMarca);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Ventas_Por_Sucursales_Grupo_SubGrupo_Marca", "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;

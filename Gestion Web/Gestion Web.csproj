@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\gestion_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -3153,8 +3153,12 @@
     <EmbeddedResource Include="Formularios\Reportes\SocioBeneficiosR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\TrazabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\ComprasVentasArticulosProv.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\VentasArticulosByCategoriaAndProveedor.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosGrupoR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosLista.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadSucursal.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosClientes.rdlc" />
