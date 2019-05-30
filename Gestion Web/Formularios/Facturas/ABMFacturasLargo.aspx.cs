@@ -48,7 +48,7 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
 
         //factura
-        Factura factura = new Factura();
+        Factura nuevaFactura = new Factura();
         Cliente cliente = new Cliente();
         TipoDocumento tp = new TipoDocumento();
 
@@ -72,6 +72,8 @@ namespace Gestion_Web.Formularios.Facturas
 
         private static bool _agregarArticuloPorDescripcion = false;
         private static bool _buscarArticuloPorDescripcion = false;
+        private static bool _agregarMultiplesArticulosPorDescripcion = false;
+        private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -238,6 +240,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                     _agregarArticuloPorDescripcion = false;
                     _buscarArticuloPorDescripcion = false;
+                    _agregarMultiplesArticulosPorDescripcion = false;
+                    _codigosArticulosMultiplesParaAgregar = new List<string>();
                 }
 
                 this.cargarTablaPAgos();
@@ -273,6 +277,21 @@ namespace Gestion_Web.Formularios.Facturas
                 //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                 //}
 
+                if (_agregarMultiplesArticulosPorDescripcion)
+                {
+                    _agregarMultiplesArticulosPorDescripcion = false;
+                    foreach (var codigoArticulo in _codigosArticulosMultiplesParaAgregar)
+                    {
+                        if (string.IsNullOrEmpty(codigoArticulo))
+                            continue;
+                        txtCodigo.Text = codigoArticulo;
+                        txtCantidad.Text = "1.00";
+                        cargarProducto(txtCodigo.Text);
+                        cargarProductoAFactura();
+                    }
+                    actualizarTotales();
+                }
+                
                 if (_buscarArticuloPorDescripcion)
                 {
                     _buscarArticuloPorDescripcion = false;
@@ -380,7 +399,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
                 Remito r = new Remito();
                 r = cr.obtenerRemitoId(id_rem);
 
@@ -419,7 +438,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
                 Configuracion config = new Configuracion();
                 Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));
@@ -490,7 +509,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.establecerIvaCliente(idIva, f.cliente.id);
                 }
 
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
                 this.cargarSucursal(f.empresa.id);
                 this.cargarPuntoVta(f.sucursal.id);
@@ -590,7 +609,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
                 Factura f = this.controlador.obtenerFacturaId(Convert.ToInt32(facturas));
                 var clienteAux = this.contCliente.obtenerClienteID(f.cliente.id);
                 if (!string.IsNullOrEmpty(idCLiente))//si cambiaron el cliente al momento de facturar
@@ -616,7 +635,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarItems();
                 this.actualizarTotales();
 
-                this.txtComentarios.Text += "\n Correspondiente a PRP Nº " + factura.numero + " Cliente PRP " + clienteAux.razonSocial;
+                this.txtComentarios.Text += "\n Correspondiente a PRP Nº " + nuevaFactura.numero + " Cliente PRP " + clienteAux.razonSocial;
 
                 if (tipoOriginal.Contains("Debito"))
                 {
@@ -1995,7 +2014,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     //si vengo de Factura-Accion-NotadeCredito me fijo en el tipo de doc del que vengo y no el tipo de IVA del cliente
-                    string tipoDoc = this.factura.tipo.tipo;
+                    string tipoDoc = this.nuevaFactura.tipo.tipo;
                     if (tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("PRP"))
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
@@ -3066,36 +3085,36 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
-                this.factura.tipo = this.cargarTiposFactura(lbl[0]);
+                this.nuevaFactura.tipo = this.cargarTiposFactura(lbl[0]);
 
                 //impuestos vta de combustible
                 decimal impuestosCombustible = 0;
-                this.factura.provCombustibles = Convert.ToInt32(this.ListProveedorCombustible.SelectedValue);
+                this.nuevaFactura.provCombustibles = Convert.ToInt32(this.ListProveedorCombustible.SelectedValue);
                 if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
                 {
-                    impuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
+                    impuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.nuevaFactura);
                     this.actualizarTotalesVentaCombustible();
 
                 }
                 else
                 {
                     //obtengo total de suma de item
-                    decimal totalC = this.factura.obtenerTotalNeto();
+                    decimal totalC = this.nuevaFactura.obtenerTotalNeto();
                     decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
-                    this.factura.neto = total;
+                    this.nuevaFactura.neto = total;
 
                     if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                     {
-                        this.txtPorcDescuento.Text = decimal.Round(this.factura.neto10, 2).ToString();
+                        this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                     }
 
                     //Subtotal = neto menos el descuento
-                    this.factura.descuento = decimal.Round((this.factura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
-                    this.factura.subTotal = decimal.Round((this.factura.neto - this.factura.descuento), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.descuento = decimal.Round((this.nuevaFactura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.subTotal = decimal.Round((this.nuevaFactura.neto - this.nuevaFactura.descuento), 2, MidpointRounding.AwayFromZero);
 
                     //del subtotal obtengo iva
                     //this.factura.neto21 = (this.factura.subTotal * Convert.ToDecimal(0.21));
@@ -3107,16 +3126,16 @@ namespace Gestion_Web.Formularios.Facturas
 
                         if (c.ivaArticulosPresupuesto == "1")
                         {
-                            this.factura.neto21 = decimal.Round((this.factura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.neto21 = decimal.Round((this.nuevaFactura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
                         }
                         else
                         {
-                            decimal iva = decimal.Round(this.factura.obtenerTotalIva(), 2);
+                            decimal iva = decimal.Round(this.nuevaFactura.obtenerTotalIva(), 2);
                             decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
                             //AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
-                            this.factura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                             //*/
-                            this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                         }
 
                     }
@@ -3124,62 +3143,62 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (lbl[0].Contains("Factura E") || lbl[0].Contains("Credito E") || lbl[0].Contains("Debito E"))
                         {
-                            this.factura.neto21 = 0;
+                            this.nuevaFactura.neto21 = 0;
                         }
                         else
                         {
-                            decimal iva = decimal.Round(this.factura.obtenerTotalIva(), 2);
+                            decimal iva = decimal.Round(this.nuevaFactura.obtenerTotalIva(), 2);
                             decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
 
                             //SI ES 'B' AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
                             if (lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B"))
                             {
-                                this.factura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                                this.nuevaFactura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                             }
 
-                            this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                         }
                     }
                     //TODO sumarle el neto21 y sacar el obtener total iva
-                    this.factura.totalSinDescuento = decimal.Round(this.factura.neto + this.factura.obtenerTotalIva(), 2);
+                    this.nuevaFactura.totalSinDescuento = decimal.Round(this.nuevaFactura.neto + this.nuevaFactura.obtenerTotalIva(), 2);
 
                     //retencion sobre el sub total
-                    this.factura.retencion = decimal.Round((this.factura.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.retencion = decimal.Round((this.nuevaFactura.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
 
                     //percepcion iva == checked
                     if (this.chkIvaNoInformado.Checked == true)
                     {
-                        this.factura.iva10 = decimal.Round(this.factura.neto * Convert.ToDecimal(0.105), 2);//iva 10.5%
+                        this.nuevaFactura.iva10 = decimal.Round(this.nuevaFactura.neto * Convert.ToDecimal(0.105), 2);//iva 10.5%
                     }
                     else
                     {
-                        this.factura.iva10 = 0;
+                        this.nuevaFactura.iva10 = 0;
                     }
 
-                    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.total = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.neto21 + this.nuevaFactura.iva10 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
                 }
 
-                this.txtTotalITC.Text = this.factura.totalITC.ToString();
-                this.txtTotalTasaHidrica.Text = this.factura.totalHidrica.ToString();
-                this.txtTotalTasaVial.Text = this.factura.totalVial.ToString();
-                this.txtTotalTasaMunicipal.Text = this.factura.totalMunicipal.ToString();
+                this.txtTotalITC.Text = this.nuevaFactura.totalITC.ToString();
+                this.txtTotalTasaHidrica.Text = this.nuevaFactura.totalHidrica.ToString();
+                this.txtTotalTasaVial.Text = this.nuevaFactura.totalVial.ToString();
+                this.txtTotalTasaMunicipal.Text = this.nuevaFactura.totalMunicipal.ToString();
                 this.txtTotalImpuestos.Text = impuestosCombustible.ToString();
 
-                string neto = decimal.Round(this.factura.neto, 2).ToString();
+                string neto = decimal.Round(this.nuevaFactura.neto, 2).ToString();
                 this.txtNeto.Text = neto;
 
-                this.txtDescuento.Text = decimal.Round(this.factura.descuento, 2).ToString();
+                this.txtDescuento.Text = decimal.Round(this.nuevaFactura.descuento, 2).ToString();
 
-                this.txtsubTotal.Text = decimal.Round(this.factura.subTotal, 2).ToString();
+                this.txtsubTotal.Text = decimal.Round(this.nuevaFactura.subTotal, 2).ToString();
 
-                this.txtIvaTotal.Text = decimal.Round(this.factura.neto21, 2).ToString();
+                this.txtIvaTotal.Text = decimal.Round(this.nuevaFactura.neto21, 2).ToString();
 
-                this.txtPercepcionCF.Text = decimal.Round(this.factura.iva10, 2).ToString();
+                this.txtPercepcionCF.Text = decimal.Round(this.nuevaFactura.iva10, 2).ToString();
 
-                this.txtRetencion.Text = decimal.Round(this.factura.retencion, 2).ToString();//PERCERPCION
+                this.txtRetencion.Text = decimal.Round(this.nuevaFactura.retencion, 2).ToString();//PERCERPCION
 
-                this.txtTotal.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.txtImporteFinanciar.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.txtTotal.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.txtImporteFinanciar.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
                 try
                 {
@@ -3192,7 +3211,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
                 catch { }
-                Factura f = this.factura;
+                Factura f = this.nuevaFactura;
                 Session.Add("Factura", f);
             }
             catch (Exception ex)
@@ -3578,7 +3597,7 @@ namespace Gestion_Web.Formularios.Facturas
                     fact.comentario = this.txtComentarios.Text;
                     if (this.chkIvaNoInformado.Checked == true)
                     {
-                        fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.factura.iva10 + ").";
+                        fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
                     }
                     fact.fechaEntrega = this.txtFechaEntrega.Text;
                     fact.horaEntrega = this.txtHorarioEntrega.Text;
@@ -3680,7 +3699,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
                     {
                         //total NetosNoGravados cuando es venta combustible los guardo en .iva21
-                        fact.iva21 = this.obtenerTotalImpuestosCombustibles(this.factura);
+                        fact.iva21 = this.obtenerTotalImpuestosCombustibles(this.nuevaFactura);
                     }
                     else
                     {
@@ -3700,7 +3719,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     //por si es venta entre sucursales y selecciono un cliente interno que no pueda ingresar cantidades en negativo
-                    if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(factura) == 0)
+                    if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(nuevaFactura) == 0)
                     {
                         return;
                     }
@@ -4087,6 +4106,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnAgregarArt_Click(object sender, EventArgs e)
         {
             this.cargarProductoAFactura();
+            this.actualizarTotales();
         }
 
 
@@ -4242,7 +4262,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ////si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
 
-                this.factura.items.Add(item);
+                this.nuevaFactura.items.Add(item);
                 //lo agrego al session
                 if (Session["Factura"] == null)
                 {
@@ -4265,7 +4285,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //agrego abajo
                 //this.factura.items.Add(item);
                 //actualizo totales
-                this.actualizarTotales();
+                //this.actualizarTotales();
 
                 //borro los campos
                 this.borrarCamposagregarItem();
@@ -4273,8 +4293,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtCodigo.Focus();
 
                 this.lblMontoOriginal.Text = f.total.ToString();
-                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
             }
             catch (Exception ex)
@@ -4363,8 +4383,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarItems();
                 this.actualizarTotales();
 
-                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
             }
             catch (Exception ex)
@@ -5647,7 +5667,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Configuracion c = new Configuracion();
                 decimal dto = Convert.ToDecimal(txtPorcDescuento.Text);
                 decimal dtoMax = Convert.ToDecimal(c.maxDtoFactura);
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
 
                 //si tiene seteado limite
                 if (dtoMax > 0)
@@ -5674,8 +5694,8 @@ namespace Gestion_Web.Formularios.Facturas
                 //    //this.actualizarTotales();
                 //}
                 this.actualizarTotales();
-                this.lblMontoOriginal.Text = this.factura.total.ToString();
-                Factura f = this.factura;
+                this.lblMontoOriginal.Text = this.nuevaFactura.total.ToString();
+                Factura f = this.nuevaFactura;
                 Session.Add("Factura", f);
 
                 return 1; //Puede poner ese dto en la fc,recalculo y sigo
@@ -9343,10 +9363,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 total = totalItc + totalHidrica + totalVial + totalMunicipal;
 
-                this.factura.totalITC = totalItc;
-                this.factura.totalHidrica = totalHidrica;
-                this.factura.totalMunicipal = totalMunicipal;
-                this.factura.totalVial = totalVial;
+                this.nuevaFactura.totalITC = totalItc;
+                this.nuevaFactura.totalHidrica = totalHidrica;
+                this.nuevaFactura.totalMunicipal = totalMunicipal;
+                this.nuevaFactura.totalVial = totalVial;
 
                 return total;
             }
@@ -9385,19 +9405,19 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
-                this.factura.tipo = this.cargarTiposFactura(lbl[0]);
+                this.nuevaFactura.tipo = this.cargarTiposFactura(lbl[0]);
                 decimal iva = 0;
 
                 #region impuestos combustibles
                 //Calculo los impuestos correspondiente a la venta de combustibles (ITC,CO2)
-                this.factura.totalImpuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
+                this.nuevaFactura.totalImpuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.nuevaFactura);
                 #endregion
 
 
                 #region obtener el neto de la factura
                 //obtengo total de suma de item
                 decimal totalC = 0;
-                foreach (var item in factura.items)
+                foreach (var item in nuevaFactura.items)
                 {
                     totalC += item.total;
                 }//el total va a ser el neto cuando es factura A, y va a ser el total final cuando es factura B
@@ -9405,12 +9425,12 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.factura.neto = total;
                 if (lbl[0].Contains("Factura A") || lbl[0].Contains("Nota de Credito A") || lbl[0].Contains("Nota de Debito A"))
                 {
-                    this.factura.neto = total;
+                    this.nuevaFactura.neto = total;
                 }
                 else
                 {
-                    this.factura.total = total;
-                    this.factura.neto = contArtEnt.obtenerNetoFacturaBVentaCombustible(this.factura);
+                    this.nuevaFactura.total = total;
+                    this.nuevaFactura.neto = contArtEnt.obtenerNetoFacturaBVentaCombustible(this.nuevaFactura);
                 }
                 #endregion
 
@@ -9418,12 +9438,12 @@ namespace Gestion_Web.Formularios.Facturas
                 #region obtener subtotal
                 if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                 {
-                    this.txtPorcDescuento.Text = decimal.Round(this.factura.neto10, 2).ToString();
+                    this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                 }
 
                 //Subtotal = neto menos el descuento
-                this.factura.descuento = decimal.Round((this.factura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
-                this.factura.subTotal = decimal.Round((this.factura.neto - this.factura.descuento), 2, MidpointRounding.AwayFromZero);
+                this.nuevaFactura.descuento = decimal.Round((this.nuevaFactura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                this.nuevaFactura.subTotal = decimal.Round((this.nuevaFactura.neto - this.nuevaFactura.descuento), 2, MidpointRounding.AwayFromZero);
                 #endregion
 
 
@@ -9434,15 +9454,15 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (c.ivaArticulosPresupuesto == "1")
                     {
-                        this.factura.neto21 = decimal.Round((this.factura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.neto21 = decimal.Round((this.nuevaFactura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
                     }
                     else
                     {
-                        iva = contArtEnt.obtenerTotalIvaCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
+                        iva = contArtEnt.obtenerTotalIvaCombustible(this.nuevaFactura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
                         decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
                         //AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
-                        this.factura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
-                        this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                     }
 
                 }
@@ -9450,29 +9470,29 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (lbl[0].Contains("Factura E") || lbl[0].Contains("Credito E") || lbl[0].Contains("Debito E"))
                     {
-                        this.factura.neto21 = 0;
+                        this.nuevaFactura.neto21 = 0;
                     }
                     else
                     {
-                        iva = contArtEnt.obtenerTotalIvaCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
+                        iva = contArtEnt.obtenerTotalIvaCombustible(this.nuevaFactura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
                         decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
 
                         //SI ES 'B' AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
                         if (lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B"))
                         {
-                            this.factura.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                         }
 
-                        this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                     }
                 }
                 #endregion
 
-                this.factura.totalSinDescuento = decimal.Round(this.factura.neto + iva);
+                this.nuevaFactura.totalSinDescuento = decimal.Round(this.nuevaFactura.neto + iva);
 
                 #region calculo de persepciones
                 //Las percepciones se hacen sobre el neto de la factura + impuestos de combustible
-                this.factura.retencion = decimal.Round(((this.factura.subTotal + this.factura.totalImpuestosCombustible) * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                this.nuevaFactura.retencion = decimal.Round(((this.nuevaFactura.subTotal + this.nuevaFactura.totalImpuestosCombustible) * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
                 //total NetosNoGravados cuando es venta combustible los guardo en .iva21
                 #endregion
 
@@ -9480,20 +9500,20 @@ namespace Gestion_Web.Formularios.Facturas
                 if ((lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B")))//para q no recalcule el total 
                 {
                     //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
-                    decimal totalAux = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
+                    decimal totalAux = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.totalImpuestosCombustible + this.nuevaFactura.neto21 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
                     //this.factura.total += this.factura.retencion;
-                    this.factura.total = totalAux;
-                    if (this.factura.total != totalAux)
+                    this.nuevaFactura.total = totalAux;
+                    if (this.nuevaFactura.total != totalAux)
                     {
-                        if (this.factura.total > totalAux)//ajuste redondeo
+                        if (this.nuevaFactura.total > totalAux)//ajuste redondeo
                         {
-                            decimal diferencia = this.factura.total - totalAux;
-                            this.factura.totalImpuestosCombustible += diferencia;
+                            decimal diferencia = this.nuevaFactura.total - totalAux;
+                            this.nuevaFactura.totalImpuestosCombustible += diferencia;
                         }
                         else
                         {
-                            decimal diferencia = totalAux - this.factura.total;
-                            this.factura.totalImpuestosCombustible -= diferencia;
+                            decimal diferencia = totalAux - this.nuevaFactura.total;
+                            this.nuevaFactura.totalImpuestosCombustible -= diferencia;
                         }
                     }
                     //this.factura.total = this.factura.subTotal;
@@ -9501,7 +9521,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
-                    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.total = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.totalImpuestosCombustible + this.nuevaFactura.neto21 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
                 }
                 #endregion
             }
@@ -10626,7 +10646,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
                 Configuracion config = new Configuracion();
                 Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));
@@ -10754,9 +10774,28 @@ namespace Gestion_Web.Formularios.Facturas
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             string resultadoJSON = serializer.Serialize(articulosTemporal);
 
-            _buscarArticuloPorDescripcion = true;
-
             return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static void AgregarMultiplesArticulosPorDescripcion(string codigosArticulos)
+        {
+            var codigosArticulosTemp = codigosArticulos.Split(';');
+            _codigosArticulosMultiplesParaAgregar = codigosArticulosTemp.ToList();
+
+            _agregarArticuloPorDescripcion = false;
+            _buscarArticuloPorDescripcion = false;
+            _agregarMultiplesArticulosPorDescripcion = true;
+            //string resultado = "";
+
+            //foreach (var codigoArticulo in codigosArticulosTemp)
+            //{
+            //    resultado += BuscarArticulosPorDescripcion(codigoArticulo, idSucursal);
+            //}
+
+            //JavaScriptSerializer serializer = new JavaScriptSerializer();
+            //string resultadoJSON = serializer.Serialize(resultado);
+            //return resultadoJSON;
         }
 
         static decimal obtenerStockArticuloBySucursal(string codigoArticulo, int idSucursal)
@@ -10782,6 +10821,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             _agregarArticuloPorDescripcion = true;
             _buscarArticuloPorDescripcion = false;
+            _agregarMultiplesArticulosPorDescripcion = false;
         }
 
         [WebMethod]
@@ -10789,6 +10829,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             _agregarArticuloPorDescripcion = false;
             _buscarArticuloPorDescripcion = false;
+            _agregarMultiplesArticulosPorDescripcion = false;
         }
 
         class ArticulosTemporal

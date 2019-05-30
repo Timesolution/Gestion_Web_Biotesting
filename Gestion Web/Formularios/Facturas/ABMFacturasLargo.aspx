@@ -1945,7 +1945,7 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click" />--%>
+                                <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
                                 <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
@@ -2016,19 +2016,15 @@
 
         $(function () {
             $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
-        });
+        });        
 
-    </script>
+    </script>    
     <script>
         function BuscarArticulo(descripcion,idSucursal)
         {
             if (idSucursal <= 0)
             {
-                CerrarModalBuscarArticulo();
-                //document.getElementById('btnCerrarModalBuscarArticulo').click();
-                //$('#modalBuscarArticuloDescripcion').modal('hide');
                 $.msgbox("Debe seleccionar una sucursal!", { type: "error" });
-                return false;
             }
             else
             {
@@ -2073,27 +2069,31 @@
             for (var i = 0; i < obj.length; i++)
             {
                 $('#articulosTabla').append(
-                    "<tr>" +
+                    "<tr> " +
                     "<td> " + obj[i].codigo + "</td>" +
                     "<td> " + obj[i].descripcion + "</td>" +
                     "<td> " + obj[i].stock + "</td>" +
                     "<td> " + obj[i].moneda + "</td>" +
                     '<td style="text-align:right"> ' + obj[i].precioVenta + "</td>" +
-                    "<td> " + CrearBotonTilde(obj[i].codigo) + "</td>" +
+                    "<td> " + CrearBotonesAccion(obj[i].codigo) + "</td>" +
                     "</tr> ");
             };
 
-            $('#articulosTabla').on("click", ".btn-info", function (button)
+            $('#articulosTabla').on("click", "button[name=\"btnAgregarArticulo\"]", function (button)
             {
                 AgregarArticuloBuscadoPorDescripcion(button);
             });
         }
 
-        function CrearBotonTilde(codigo)
+        function CrearBotonesAccion(codigo)
         {
-            return "<button id=" + codigo + " class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+            var accion = "";
+
+            accion += "<button id=btn_" + codigo + " name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id=input_" + codigo + " type=\"checkbox\"></span> "
+
+            return accion;
         }
-        
     </script>
 
     <script type="text/javascript">
@@ -2111,7 +2111,7 @@
         {
             var descripcionArticulo = document.getElementById("MainContent_txtCodigo");            
 
-            descripcionArticulo.value = button.currentTarget.id;
+            descripcionArticulo.value = button.currentTarget.id.replace("btn_","");
 
             $.ajax({
                 type: "POST",
@@ -2121,6 +2121,33 @@
                 error: function ()
                 {
                     $.msgbox("No se pudo agregar el articulo!", {type: "error"});
+                }
+            });
+        }
+
+        function AgregarArticulosMultiples()
+        {
+            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+            var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+            var checkedNodes = $('#articulosTabla').find('input[type="checkbox"]:checked');
+
+            var codigosArticulos = "";
+
+            for (var i = 0; i < checkedNodes.length; i++)
+            {
+                codigosArticulos += checkedNodes[i].id.replace("input_","") + ";";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/AgregarMultiplesArticulosPorDescripcion",
+                data: '{codigosArticulos: "' + codigosArticulos + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudieron agregar los articulos!", { type: "error" });
                 }
             });
         }
