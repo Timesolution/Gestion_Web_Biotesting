@@ -1904,7 +1904,7 @@
             </div>
         </div>
 
-        <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modalBuscarArticuloDescripcion" on class="modal fade" tabindex="-1" role="dialog">
             <asp:Panel ID="Panel2" runat="server">
                 <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
                 <div class="modal-dialog" style="width: 60%;">
@@ -2004,6 +2004,18 @@
             $("#<%= btnCierreZ.ClientID %>").tooltip();
             $("#<%= txtMailEntrega.ClientID %>").popover();
             $("#<%= txtCapitalSolicitudManual.ClientID %>").popover();
+
+            $(window).on('shown.bs.modal', function ()
+            {
+                var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+                var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+                if (idSucursal <= 0)
+                {
+                    document.getElementById('btnCerrarModalBuscarArticulo').click();
+                    CerrarModalBuscarArticulo();
+                }
+            });
         }
     </script>
     <script>
@@ -2024,7 +2036,7 @@
         {
             if (idSucursal <= 0)
             {
-                $.msgbox("Debe seleccionar una sucursal!", { type: "error" });
+                $.msgbox("Debe seleccionar una sucursal!", { type: "alert" });
             }
             else
             {
@@ -2100,11 +2112,12 @@
         function CargarArticulos()
         {
             var ddlSucursal = document.getElementById("MainContent_ListSucursal");
-            var idSucursal = ddlSucursal.selectedOptions[0].value;
+            var idSucursal = ddlSucursal.selectedOptions[0].value;            
 
             var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
 
-            BuscarArticulo(descripcionArticulo.value,idSucursal);
+            BuscarArticulo(descripcionArticulo.value, idSucursal);
+
         }
 
         function AgregarArticuloBuscadoPorDescripcion(button)
@@ -2309,6 +2322,9 @@
     <script>
         function abrirModalBuscarArticulo() {
             $('#modalBuscarArticuloDescripcion').modal('show');
+        }
+        function cerrarModalBuscarArticulo() {
+            $('#modalBuscarArticuloDescripcion').modal('hide');
         }
     </script>
     <script>

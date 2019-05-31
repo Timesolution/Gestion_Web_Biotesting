@@ -278,34 +278,18 @@ namespace Gestion_Web.Formularios.Facturas
                 //}
 
                 if (_agregarMultiplesArticulosPorDescripcion)
-                {
-                    _agregarMultiplesArticulosPorDescripcion = false;
-                    foreach (var codigoArticulo in _codigosArticulosMultiplesParaAgregar)
-                    {
-                        if (string.IsNullOrEmpty(codigoArticulo))
-                            continue;
-                        txtCodigo.Text = codigoArticulo;
-                        txtCantidad.Text = "1.00";
-                        cargarProducto(txtCodigo.Text);
-                        cargarProductoAFactura();
-                    }
-                    actualizarTotales();
-                }
-                
+                    AgregarArticulosMultiplesPorDescripcion();
+
                 if (_buscarArticuloPorDescripcion)
                 {
                     _buscarArticuloPorDescripcion = false;
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "abrirModalBuscarArticulo();", true);
-                }                    
+                }
 
                 if (_agregarArticuloPorDescripcion)
-                {
-                    _agregarArticuloPorDescripcion = false;
-                    cargarProducto(txtCodigo.Text);
-                    actualizarTotales();
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));                    
-                    //ScriptManager.RegisterStartupScript(updatePanelmodalBuscarArticuloDescripcion, updatePanelmodalBuscarArticuloDescripcion.GetType(), "abrirModalBuscarArticulo", "abrirModalBuscarArticulo();", true);
-                }
+                    AgregarArticuloPorDescripcion();
+
+                //CerrarModalBuscarArticuloPorDescripcion();
 
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
@@ -807,6 +791,10 @@ namespace Gestion_Web.Formularios.Facturas
                     idSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
                 }
                 Sucursal s = this.cs.obtenerSucursalID(idSucursal);
+
+                if (s == null)
+                    return;
+
                 string idCliente = s.clienteDefecto.ToString();
 
                 if (idCliente != "-1" && idCliente != null)
@@ -10786,16 +10774,24 @@ namespace Gestion_Web.Formularios.Facturas
             _agregarArticuloPorDescripcion = false;
             _buscarArticuloPorDescripcion = false;
             _agregarMultiplesArticulosPorDescripcion = true;
-            //string resultado = "";
+        }
 
-            //foreach (var codigoArticulo in codigosArticulosTemp)
-            //{
-            //    resultado += BuscarArticulosPorDescripcion(codigoArticulo, idSucursal);
-            //}
+        private void AgregarArticulosMultiplesPorDescripcion()
+        {
+            _agregarMultiplesArticulosPorDescripcion = false;
 
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //string resultadoJSON = serializer.Serialize(resultado);
-            //return resultadoJSON;
+            foreach (var codigoArticulo in _codigosArticulosMultiplesParaAgregar)
+            {
+                if (string.IsNullOrEmpty(codigoArticulo))
+                    continue;
+
+                txtCodigo.Text = codigoArticulo;
+                txtCantidad.Text = "1.00";
+                cargarProducto(txtCodigo.Text);
+                cargarProductoAFactura();
+            }
+
+            actualizarTotales();
         }
 
         static decimal obtenerStockArticuloBySucursal(string codigoArticulo, int idSucursal)
@@ -10824,12 +10820,26 @@ namespace Gestion_Web.Formularios.Facturas
             _agregarMultiplesArticulosPorDescripcion = false;
         }
 
+        private void AgregarArticuloPorDescripcion()
+        {
+            _agregarArticuloPorDescripcion = false;
+            cargarProducto(txtCodigo.Text);
+            actualizarTotales();
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+        }
+
         [WebMethod]
         public static void CerrarModalBuscarArticulosPorDescripcion()
         {
             _agregarArticuloPorDescripcion = false;
             _buscarArticuloPorDescripcion = false;
             _agregarMultiplesArticulosPorDescripcion = false;
+        }
+
+        private void CerrarModalBuscarArticuloPorDescripcion()
+        {
+            if(!_agregarArticuloPorDescripcion && !_buscarArticuloPorDescripcion && !_agregarMultiplesArticulosPorDescripcion)
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
         }
 
         class ArticulosTemporal
