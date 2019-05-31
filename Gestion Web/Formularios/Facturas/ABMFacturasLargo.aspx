@@ -1925,6 +1925,9 @@
                                             <div class="col-md-1">
                                                 <asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />
                                             </div>
+                                            <div class="col-md-12">
+                                                <label id="lblCargandoArticulo" class="col-md-4" >Cargando articulo por favor aguarde.</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1945,7 +1948,8 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
+                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>--%>
+                                <asp:Button ID="btnAgregarArticulosBuscadosATablaItems" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
                                 <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
@@ -2018,6 +2022,7 @@
             });
         }
     </script>
+
     <script>
         $(function () {
             $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -2095,6 +2100,11 @@
             {
                 AgregarArticuloBuscadoPorDescripcion(button);
             });
+                        
+            document.getElementById("MainContent_txtDescripcionArticulo").value = "";
+
+            var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
+            lblCargandoArticulo.value = "";
         }
 
         function CrearBotonesAccion(codigo)
@@ -2112,12 +2122,14 @@
         function CargarArticulos()
         {
             var ddlSucursal = document.getElementById("MainContent_ListSucursal");
-            var idSucursal = ddlSucursal.selectedOptions[0].value;            
+            var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+            var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
+            lblCargandoArticulo.value = "Cargando articulo por favor aguarde.";
 
             var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
 
             BuscarArticulo(descripcionArticulo.value, idSucursal);
-
         }
 
         function AgregarArticuloBuscadoPorDescripcion(button)
@@ -2140,6 +2152,10 @@
 
         function AgregarArticulosMultiples()
         {
+            var btnAgregarArticulosMultiple = document.getElementById("MainContent_btnAgregarArticulosBuscadosATablaItems");
+            btnAgregarArticulosMultiple.disabled = true;
+            btnAgregarArticulosMultiple.value = "Aguarde...";
+
             var ddlSucursal = document.getElementById("MainContent_ListSucursal");
             var idSucursal = ddlSucursal.selectedOptions[0].value;
 
