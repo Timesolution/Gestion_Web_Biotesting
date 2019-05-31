@@ -48,6 +48,8 @@ namespace Gestion_Web.Formularios.Reportes {
         
         private VentasBySucursalesAndPuntoDeVentaDataTable tableVentasBySucursalesAndPuntoDeVenta;
         
+        private VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable tableVentasAgrupadoSucursalGrupoSubGrupoMarca;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -111,6 +113,9 @@ namespace Gestion_Web.Formularios.Reportes {
                 }
                 if ((ds.Tables["VentasBySucursalesAndPuntoDeVenta"] != null)) {
                     base.Tables.Add(new VentasBySucursalesAndPuntoDeVentaDataTable(ds.Tables["VentasBySucursalesAndPuntoDeVenta"]));
+                }
+                if ((ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"] != null)) {
+                    base.Tables.Add(new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable(ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -252,6 +257,16 @@ namespace Gestion_Web.Formularios.Reportes {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable VentasAgrupadoSucursalGrupoSubGrupoMarca {
+            get {
+                return this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -352,6 +367,9 @@ namespace Gestion_Web.Formularios.Reportes {
                 }
                 if ((ds.Tables["VentasBySucursalesAndPuntoDeVenta"] != null)) {
                     base.Tables.Add(new VentasBySucursalesAndPuntoDeVentaDataTable(ds.Tables["VentasBySucursalesAndPuntoDeVenta"]));
+                }
+                if ((ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"] != null)) {
+                    base.Tables.Add(new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable(ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -458,6 +476,12 @@ namespace Gestion_Web.Formularios.Reportes {
                     this.tableVentasBySucursalesAndPuntoDeVenta.InitVars();
                 }
             }
+            this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca = ((VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable)(base.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"]));
+            if ((initTable == true)) {
+                if ((this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca != null)) {
+                    this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -492,6 +516,8 @@ namespace Gestion_Web.Formularios.Reportes {
             base.Tables.Add(this.tableArticulosCategoria);
             this.tableVentasBySucursalesAndPuntoDeVenta = new VentasBySucursalesAndPuntoDeVentaDataTable();
             base.Tables.Add(this.tableVentasBySucursalesAndPuntoDeVenta);
+            this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca = new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable();
+            base.Tables.Add(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -563,6 +589,12 @@ namespace Gestion_Web.Formularios.Reportes {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeVentasBySucursalesAndPuntoDeVenta() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeVentasAgrupadoSucursalGrupoSubGrupoMarca() {
             return false;
         }
         
@@ -656,6 +688,9 @@ namespace Gestion_Web.Formularios.Reportes {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void VentasBySucursalesAndPuntoDeVentaRowChangeEventHandler(object sender, VentasBySucursalesAndPuntoDeVentaRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEventHandler(object sender, VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -4128,6 +4163,323 @@ namespace Gestion_Web.Formularios.Reportes {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable : global::System.Data.TypedTableBase<VentasAgrupadoSucursalGrupoSubGrupoMarcaRow> {
+            
+            private global::System.Data.DataColumn columnSucursal;
+            
+            private global::System.Data.DataColumn columnGrupo;
+            
+            private global::System.Data.DataColumn columnSubGrupo;
+            
+            private global::System.Data.DataColumn columnMarca;
+            
+            private global::System.Data.DataColumn columncantidadFacturas;
+            
+            private global::System.Data.DataColumn columncantidadArticulos;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable() {
+                this.TableName = "VentasAgrupadoSucursalGrupoSubGrupoMarca";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SucursalColumn {
+                get {
+                    return this.columnSucursal;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn GrupoColumn {
+                get {
+                    return this.columnGrupo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SubGrupoColumn {
+                get {
+                    return this.columnSubGrupo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn MarcaColumn {
+                get {
+                    return this.columnMarca;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn cantidadFacturasColumn {
+                get {
+                    return this.columncantidadFacturas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn cantidadArticulosColumn {
+                get {
+                    return this.columncantidadArticulos;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasAgrupadoSucursalGrupoSubGrupoMarcaRow this[int index] {
+                get {
+                    return ((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEventHandler VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEventHandler VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEventHandler VentasAgrupadoSucursalGrupoSubGrupoMarcaRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEventHandler VentasAgrupadoSucursalGrupoSubGrupoMarcaRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddVentasAgrupadoSucursalGrupoSubGrupoMarcaRow(VentasAgrupadoSucursalGrupoSubGrupoMarcaRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasAgrupadoSucursalGrupoSubGrupoMarcaRow AddVentasAgrupadoSucursalGrupoSubGrupoMarcaRow(string Sucursal, string Grupo, string SubGrupo, string Marca, string cantidadFacturas, string cantidadArticulos) {
+                VentasAgrupadoSucursalGrupoSubGrupoMarcaRow rowVentasAgrupadoSucursalGrupoSubGrupoMarcaRow = ((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        Sucursal,
+                        Grupo,
+                        SubGrupo,
+                        Marca,
+                        cantidadFacturas,
+                        cantidadArticulos};
+                rowVentasAgrupadoSucursalGrupoSubGrupoMarcaRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowVentasAgrupadoSucursalGrupoSubGrupoMarcaRow);
+                return rowVentasAgrupadoSucursalGrupoSubGrupoMarcaRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable cln = ((VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnSucursal = base.Columns["Sucursal"];
+                this.columnGrupo = base.Columns["Grupo"];
+                this.columnSubGrupo = base.Columns["SubGrupo"];
+                this.columnMarca = base.Columns["Marca"];
+                this.columncantidadFacturas = base.Columns["cantidadFacturas"];
+                this.columncantidadArticulos = base.Columns["cantidadArticulos"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnSucursal = new global::System.Data.DataColumn("Sucursal", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSucursal);
+                this.columnGrupo = new global::System.Data.DataColumn("Grupo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGrupo);
+                this.columnSubGrupo = new global::System.Data.DataColumn("SubGrupo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSubGrupo);
+                this.columnMarca = new global::System.Data.DataColumn("Marca", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMarca);
+                this.columncantidadFacturas = new global::System.Data.DataColumn("cantidadFacturas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncantidadFacturas);
+                this.columncantidadArticulos = new global::System.Data.DataColumn("cantidadArticulos", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncantidadArticulos);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasAgrupadoSucursalGrupoSubGrupoMarcaRow NewVentasAgrupadoSucursalGrupoSubGrupoMarcaRow() {
+                return ((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new VentasAgrupadoSucursalGrupoSubGrupoMarcaRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(VentasAgrupadoSucursalGrupoSubGrupoMarcaRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChanged != null)) {
+                    this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChanged(this, new VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent(((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChanging != null)) {
+                    this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChanging(this, new VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent(((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowDeleted != null)) {
+                    this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowDeleted(this, new VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent(((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowDeleting != null)) {
+                    this.VentasAgrupadoSucursalGrupoSubGrupoMarcaRowDeleting(this, new VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent(((VentasAgrupadoSucursalGrupoSubGrupoMarcaRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveVentasAgrupadoSucursalGrupoSubGrupoMarcaRow(VentasAgrupadoSucursalGrupoSubGrupoMarcaRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                dsVentas ds = new dsVentas();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class TopArticulosCantRow : global::System.Data.DataRow {
@@ -5656,6 +6008,195 @@ namespace Gestion_Web.Formularios.Reportes {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class VentasAgrupadoSucursalGrupoSubGrupoMarcaRow : global::System.Data.DataRow {
+            
+            private VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable tableVentasAgrupadoSucursalGrupoSubGrupoMarca;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal VentasAgrupadoSucursalGrupoSubGrupoMarcaRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca = ((VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Sucursal {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SucursalColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Sucursal\' in table \'VentasAgrupadoSucursalGrupoSubGrupoMarc" +
+                                "a\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SucursalColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Grupo {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.GrupoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Grupo\' in table \'VentasAgrupadoSucursalGrupoSubGrupoMarca\' " +
+                                "is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.GrupoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SubGrupo {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SubGrupoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'SubGrupo\' in table \'VentasAgrupadoSucursalGrupoSubGrupoMarc" +
+                                "a\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SubGrupoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Marca {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.MarcaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Marca\' in table \'VentasAgrupadoSucursalGrupoSubGrupoMarca\' " +
+                                "is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.MarcaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string cantidadFacturas {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadFacturasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'cantidadFacturas\' in table \'VentasAgrupadoSucursalGrupoSubG" +
+                                "rupoMarca\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadFacturasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string cantidadArticulos {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadArticulosColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'cantidadArticulos\' in table \'VentasAgrupadoSucursalGrupoSub" +
+                                "GrupoMarca\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadArticulosColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSucursalNull() {
+                return this.IsNull(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SucursalColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSucursalNull() {
+                this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SucursalColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsGrupoNull() {
+                return this.IsNull(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.GrupoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetGrupoNull() {
+                this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.GrupoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSubGrupoNull() {
+                return this.IsNull(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SubGrupoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSubGrupoNull() {
+                this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.SubGrupoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsMarcaNull() {
+                return this.IsNull(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.MarcaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetMarcaNull() {
+                this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.MarcaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IscantidadFacturasNull() {
+                return this.IsNull(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadFacturasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetcantidadFacturasNull() {
+                this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadFacturasColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IscantidadArticulosNull() {
+                return this.IsNull(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadArticulosColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetcantidadArticulosNull() {
+                this[this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.cantidadArticulosColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -6049,6 +6590,40 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public VentasBySucursalesAndPuntoDeVentaRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent : global::System.EventArgs {
+            
+            private VentasAgrupadoSucursalGrupoSubGrupoMarcaRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent(VentasAgrupadoSucursalGrupoSubGrupoMarcaRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasAgrupadoSucursalGrupoSubGrupoMarcaRow Row {
                 get {
                     return this.eventRow;
                 }

@@ -3,20 +3,20 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
 
-        <%--<div class="container">--%><div>
+        <div>
 
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
-                    <div class="stat">                        
-                        <h5><i class="icon-map-marker"></i> Ventas > Cobros Realizados</h5>
+                    <div class="stat">
+                        <h5><i class="icon-map-marker"></i>Ventas > Cobros Realizados</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
 
                     <div class="widget-content">
+                        <asp:TextBox runat="server" Text="" ID="txtIDsCobros" Style="display: none" />
                         <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Always">
                             <ContentTemplate>
 
@@ -27,18 +27,18 @@
                                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click" >Exportar reporte</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar reporte</asp:LinkButton>
                                                     </li>
-                                                    <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cobranzas vendedores</a>  
-                                                        <ul class="dropdown-menu" >
+                                                    <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cobranzas vendedores</a>
+                                                        <ul class="dropdown-menu">
                                                             <li>
-                                                                <asp:LinkButton ID="lbtnReporteCobranza" runat="server" OnClick="lbtnReporteCobranza_Click" >
+                                                                <asp:LinkButton ID="lbtnReporteCobranza" runat="server" OnClick="lbtnReporteCobranza_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
                                                                 </asp:LinkButton>
                                                             </li>
                                                             <li>
-                                                                <asp:LinkButton ID="lbtnReporteCobranzaPDF" runat="server" OnClick="lbtnReporteCobranzaPDF_Click" >
+                                                                <asp:LinkButton ID="lbtnReporteCobranzaPDF" runat="server" OnClick="lbtnReporteCobranzaPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
                                                                 </asp:LinkButton>
@@ -46,16 +46,17 @@
                                                         </ul>
                                                     </li>
 
-                                                    <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Detalle Cobros</a>  
-                                                        <ul class="dropdown-menu" >
+                                                    <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Detalle Cobros</a>
+                                                        <ul class="dropdown-menu">
                                                             <li>
-                                                                <asp:LinkButton ID="lbtnReporteDetalleCobros" runat="server" OnClick="lbtnReporteDetalleCobros_Click" >
+                                                                <asp:LinkButton ID="lbtnReporteDetalleCobros" runat="server" OnClick="lbtnReporteDetalleCobros_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
                                                                 </asp:LinkButton>
                                                             </li>
                                                             <li>
-                                                                <asp:LinkButton ID="lbtnReporteDetalleCobrosPDF" runat="server" OnClick="lbtnReporteDetalleCobrosPDF_Click" >
+                                                                <%--<asp:LinkButton ID="lbtnReporteDetalleCobrosPDF" runat="server" OnClick="lbtnReporteDetalleCobrosPDF_Click">--%>
+                                                                <asp:LinkButton ID="lbtnReporteDetalleCobrosPDF" runat="server" OnClientClick="obtenerLosID_DeLosBotones();" OnClick="lbtnReporteDetalleCobrosPDF_Click">
                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
                                                                 </asp:LinkButton>
@@ -135,12 +136,12 @@
                         <table class="table table-bordered table-striped" id="dataTables-example">
                             <thead>
                                 <tr>
-                                    <th style="text-align: left;width:10%;">Fecha</th>
-                                    <th style="text-align: left;width:25%;">Numero</th>
-                                    <th style="text-align: left;width:20%;">Cliente</th>
-                                    <th style="text-align: right;width:10%;">Importe</th>
-                                    <th style="text-align: left;width:25%;">Comentarios</th>
-                                    <th style="text-align: left;width:10%;"></th>
+                                    <th style="text-align: left; width: 10%;">Fecha</th>
+                                    <th style="text-align: left; width: 25%;">Numero</th>
+                                    <th style="text-align: left; width: 20%;">Cliente</th>
+                                    <th style="text-align: right; width: 10%;">Importe</th>
+                                    <th style="text-align: left; width: 25%;">Comentarios</th>
+                                    <th style="text-align: left; width: 10%;"></th>
 
                                 </tr>
                             </thead>
@@ -331,7 +332,7 @@
     <script>
         function abrirdialog(valor) {
             document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
-            }
+        }
     </script>
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <!-- Core Scripts - Include with every page -->
@@ -363,6 +364,12 @@
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
     <script>
+        window.onload = function () {
+            obtenerLosID_DeLosBotones();
+        };
+    </script>
+
+    <script>
         function pageLoad() {
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
@@ -371,16 +378,48 @@
     </script>
 
     <script>
-
         $(function () {
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+        });
 
-            $(function () {
-                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
-
+        $(function () {
+            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
     </script>
+
+    <script type="text/javascript">
+        function obtenerLosID_DeLosBotones() {
+            var bt = document.getElementsByName("btnNombre");
+            var ids = ""
+
+            for (var i in bt) {
+                if (bt[i].id != undefined) {
+                    ids += parseInt(bt[i].id.split("_")[2]) + ",";
+                }
+            }
+            var texto = document.getElementById("MainContent_txtIDsCobros");
+            texto.value = ids;
+        }
+
+        function ImprimirCobros(ids) {
+            $.ajax({
+                type: "POST",
+                url: "ImpresionCobro.aspx/EnviarIdDeBotonesAlaSesion",
+                data: '{lista: "' + ids + '"  }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("Error.");
+                }
+            });
+        };
+    </script>
+
+    <script type="text/javascript">
+
+</script>
+
+
 
 </asp:Content>
 

@@ -28,7 +28,7 @@ namespace Gestion_Web.Formularios.Compras
         private string tipoDoc;
         private int puntoVenta;
         private int proveedor;
-        
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -74,17 +74,17 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         this.btnAnular.Visible = true;
                         DropListTipo.SelectedValue = tipoDoc.ToString();
-                        if(tipoDoc == "1")
+                        if (tipoDoc == "1")
                         {
                             btnCitiCompras.Visible = true;
                         }
-                    }                    
+                    }
                 }
                 if (!String.IsNullOrEmpty(fechaD) && !String.IsNullOrEmpty(fechaH) && !String.IsNullOrEmpty(tipoDoc))
                 {
-                    this.buscar(fechaD, fechaH, tipoDoc, suc, puntoVenta, proveedor,tipoFecha);
+                    this.buscar(fechaD, fechaH, tipoDoc, suc, puntoVenta, proveedor, tipoFecha);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -136,13 +136,13 @@ namespace Gestion_Web.Formularios.Compras
                                 this.DropListSucursal.Attributes.Remove("disabled");
                             }
                             else
-                            {                                
+                            {
                                 //this.DropListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                                 int i = this.verficarPermisoCambiarSucursal();
                                 if (i <= 0)
                                 {
                                     this.DropListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                                }                                
+                                }
                             }
 
                             valor = 1;
@@ -247,7 +247,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando empresas. " + ex.Message));
             }
-        }        
+        }
         public void cargarProveedores()
         {
             try
@@ -354,7 +354,7 @@ namespace Gestion_Web.Formularios.Compras
                     else
                     {
                         saldo += c.Total.Value;
-                    }                    
+                    }
                 }
 
                 this.labelSaldo.Text = "$" + saldo.ToString("N");
@@ -389,7 +389,7 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celFechaImputacion);
 
                 TableCell celTipo = new TableCell();
-                celTipo.Text = c.TipoDocumento; 
+                celTipo.Text = c.TipoDocumento;
                 celTipo.HorizontalAlign = HorizontalAlign.Center;
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
@@ -413,12 +413,12 @@ namespace Gestion_Web.Formularios.Compras
                 TableCell celNeto = new TableCell();
                 if (c.TipoDocumento.Contains("Crédito"))
                 {
-                    celNeto.Text = "$" + ((decimal)c.Total*-1).ToString("N");
+                    celNeto.Text = "$" + ((decimal)c.Total * -1).ToString("N");
                 }
                 else
                 {
                     celNeto.Text = "$" + ((decimal)c.Total).ToString("N");
-                }                
+                }
                 celNeto.VerticalAlign = VerticalAlign.Middle;
                 celNeto.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celNeto);
@@ -494,12 +494,12 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al editar Factura " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al editar Factura " + ex.Message);
             }
         }
 
-        private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor,int tipoFecha)
-        { 
+        private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor, int tipoFecha)
+        {
             try
             {
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
@@ -508,7 +508,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (tipoDoc == "0")
                     tipoDoc = null;
 
-                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, sucursal, puntoVenta,proveedor,tipoFecha);
+                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, sucursal, puntoVenta, proveedor, tipoFecha);
                 if (compras != null)
                 {
                     this.cargarComras(compras);
@@ -674,7 +674,7 @@ namespace Gestion_Web.Formularios.Compras
             this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
         }
 
-        
+
         protected void btnCitiCompras_Click(object sender, EventArgs e)
         {
             try
@@ -696,14 +696,17 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 string idtildado = "";
-                
+
                 foreach (Control C in phCompra.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
-                    if (ch.Checked == true)
+                    CheckBox ch = tr.Cells[6].Controls[4] as CheckBox;
+                    if (ch != null)
                     {
-                        idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        if (ch.Checked == true)
+                        {
+                            idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        }
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
@@ -711,7 +714,7 @@ namespace Gestion_Web.Formularios.Compras
                     foreach (String id in idtildado.Split(';'))
                     {
                         if (id != "" && id != null)
-                        {                            
+                        {
                             int i = this.contCompraEntity.anularCompra(Convert.ToInt64(id));
 
                             if (i > 0)
@@ -728,7 +731,7 @@ namespace Gestion_Web.Formularios.Compras
                                 {
                                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La compra seleccionada tiene pagos realizados. Por favor elimine los pagos realizados primero. "));
                                 }
-                                
+
 
                             }
                         }
