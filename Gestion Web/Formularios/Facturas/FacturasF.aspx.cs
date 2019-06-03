@@ -42,6 +42,7 @@ namespace Gestion_Web.Formularios.Facturas
         private string fechaH;
         private int tipo;
         private int cliente;
+        private int tipoCliente;
         private int tipofact;
         private int lista;
         private int anuladas;
@@ -61,6 +62,7 @@ namespace Gestion_Web.Formularios.Facturas
                 tipo = Convert.ToInt32(Request.QueryString["tipo"]);
                 tipofact = Convert.ToInt32(Request.QueryString["doc"]);
                 cliente = Convert.ToInt32(Request.QueryString["cl"]);
+                tipoCliente = Convert.ToInt32(Request.QueryString["tc"]);
                 lista = Convert.ToInt32(Request.QueryString["ls"]);
                 anuladas = Convert.ToInt32(Request.QueryString["e"]);
                 vendedor = Convert.ToInt32(Request.QueryString["vend"]);
@@ -80,13 +82,11 @@ namespace Gestion_Web.Formularios.Facturas
                         empresa = (int)Session["Login_EmpUser"];
                         this.cargarEmpresas();
                         this.cargarSucursalByEmpresa(empresa);
-                        //this.cargarSucursal();
                         fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         //tipo de documento??
                         tipo = 0;
                         tipofact = 0;
-                        cliente = 0;
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaDesdeDto.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -96,13 +96,13 @@ namespace Gestion_Web.Formularios.Facturas
                         this.cargarSucursal();
                         DropListSucursal.SelectedValue = suc.ToString();
                         DropListTipo.SelectedValue = tipo.ToString();
-
                     }
                     this.cargarEmpresas();
                     this.cargarSucursalByEmpresa(empresa);
                     this.cargarPuntosVenta(Convert.ToInt32(this.DropListSucursalAgregarFC.SelectedValue));
 
                     this.cargarClientes();
+                    this.cargarDropListTipoCliente();
                     this.cargarListaPrecio();
                     this.cargarFormaPago();
                     this.cargarChkListaPrecio();
@@ -116,6 +116,7 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListTipo.SelectedValue = tipo.ToString();
                     DropListDocumento.SelectedValue = tipofact.ToString();
                     DropListClientes.SelectedValue = cliente.ToString();
+                    DropListTipoCliente.SelectedValue = tipoCliente.ToString();
                     DropListListas.SelectedValue = lista.ToString();
                     DropListVendedor.SelectedValue = vendedor.ToString();
                     DropListFormasPago.SelectedValue = formaPago.ToString();
@@ -130,7 +131,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //verifico si el perfil tiene permiso para editar FC y agregar FC
                 this.verificarPermisoEditarFC();
                 this.verificarPermisoAgregarFC();
-                this.cargarFacturasRango2(fechaD, fechaH, suc, tipo, cliente, tipofact, lista, empresa, vendedor, formaPago);
+                this.cargarFacturasRango(fechaD, fechaH, suc, tipo, cliente, tipofact, lista, empresa, vendedor, formaPago, tipoCliente);
                 this.Form.DefaultButton = this.btnBuscarCod.UniqueID;
             }
             catch (Exception ex)
@@ -386,6 +387,29 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
+        public void cargarDropListTipoCliente()
+        {
+            try
+            {
+                controladorTipoCliente contTipoCliente = new controladorTipoCliente();
+                DataTable dt = contTipoCliente.obtenerTiposClientes();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["tipo"] = "Todos";
+                dr["id"] = 0;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListTipoCliente.DataSource = dt;
+                this.DropListTipoCliente.DataValueField = "id";
+                this.DropListTipoCliente.DataTextField = "tipo";
+                this.DropListTipoCliente.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargarDropListTipoCliente. " + ex.Message));
             }
         }
         public void cargarEmpresas()
@@ -713,66 +737,11 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
             }
         }
-        private void cargarFacturasRango(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago)
+        private void cargarFacturasRango(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago, int idTipoCliente)
         {
             try
             {
-                if (fechaD != null && fechaH != null && suc != 0 && tipo != 0 && idCliente != 0)
-                {
-                    List<Factura> Facturas = controlador.obtenerFacturasRango(fechaD, fechaH, idSuc, tipo, idCliente, tipofact, idLista, this.anuladas, idEmp, idVendedor, formaPago);
-                    decimal saldo = 0;
-                    decimal neto = 0;
-                    decimal iva = 0;
-                    decimal ib = 0;
-                    foreach (Factura f in Facturas)
-                    {
-                        this.cargarEnPh(f);
-                        if (f.estado == 1)
-                        {
-                            saldo += f.total;
-                            neto += f.netoNGrabado;
-                            iva += f.neto21;
-                            ib += f.retencion;
-                        }
-                    }
-
-                    labelSaldo.Text = "$" + saldo.ToString("N");
-
-                }
-                else
-                {
-                    List<Factura> Facturas = controlador.obtenerFacturasRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue));
-                    decimal saldo = 0;
-                    decimal neto = 0;
-                    decimal iva = 0;
-                    decimal ib = 0;
-                    foreach (Factura f in Facturas)
-                    {
-                        this.cargarEnPh(f);
-                        if (f.estado == 1)
-                        {
-                            saldo += f.total;
-                            neto += f.netoNGrabado;
-                            iva += f.neto21;
-                            ib += f.retencion;
-                        }
-                    }
-
-                    labelSaldo.Text = "$" + saldo.ToString("N");
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando facturas.  " + ex.Message));
-            }
-        }
-        private void cargarFacturasRango2(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago)
-        {
-            try
-            {
-                DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue));
+                DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue));
                 decimal saldo = 0;
 
                 foreach (DataRow row in dtFacturas.Rows)
@@ -783,9 +752,7 @@ namespace Gestion_Web.Formularios.Facturas
                         saldo += Convert.ToDecimal(row["total"].ToString());
                     }
                 }
-
                 labelSaldo.Text = "$" + saldo.ToString("N");
-
             }
             catch (Exception ex)
             {
@@ -1218,8 +1185,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (DropListSucursal.SelectedValue != "-1")
                     {
-                        //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        Response.Redirect("FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&tc=" + DropListTipoCliente.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                     }
                     else
                     {

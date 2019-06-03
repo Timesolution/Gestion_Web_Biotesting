@@ -342,8 +342,10 @@
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
+                                                    <asp:PlaceHolder ID="phAceptarMercaderia" Visible="true" runat="server">
                                                     <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
                                                     <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                                    </asp:PlaceHolder>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion2.aspx">Importar Ventas 2</a></li>
                                                 </ul>
