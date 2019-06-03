@@ -189,15 +189,16 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                 {
                     //verifico si puede cambiar preci0s
+                    string perfil = Session["Login_NombrePerfil"] as string;
                     string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
+                    string permisoCambioSuc = listPermisos.Where(x => x == "207").FirstOrDefault();
+
                     if (permiso2 != null)
                     {
                         this.phActualizacionPrecios.Visible = true;
                         this.permisoEliminar = 1;
                     }
-                    string perfil = Session["Login_NombrePerfil"] as string;
                     //verifico si puede cambiar sucursal
-                    string permisoCambioSuc = listPermisos.Where(x => x == "75").FirstOrDefault();
                     if (perfil == "SuperAdministrador" || perfil == "Stock" || permiso2 != null)
                     {
                         this.DropListSucursal_St2.Attributes.Remove("disabled");
@@ -209,6 +210,13 @@ namespace Gestion_Web.Formularios.Articulos
                         this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
                         this.DropListSucursalRef.SelectedValue = Session["Login_SucUser"].ToString();
                         this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
+                    }
+
+                    if (string.IsNullOrEmpty(permisoCambioSuc))
+                    {
+                        listSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                        listSucursal.Enabled = false;
+                        listSucursal.CssClass = "form-control";
                     }
 
                     if (listPermisos.Contains("179"))
@@ -223,19 +231,6 @@ namespace Gestion_Web.Formularios.Articulos
 
                     return 1;
                 }
-
-                //foreach (string s in listPermisos)
-                //{
-                //    if (!String.IsNullOrEmpty(s))
-                //    {
-                //        if (s == "14")
-                //        {
-                //            return 1;
-                //        }
-                //    }
-                //}
-
-                //return 0;
             }
             catch
             {

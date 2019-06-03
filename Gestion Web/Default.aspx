@@ -224,6 +224,12 @@
                                         <i class="shortcut-icon icon-bookmark"></i>
                                         <span class="shortcut-label">Articulos</span>
                                     </a>
+
+                                    <a href="Formularios/Facturas/ABMPedidos.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-plus"></i>
+                                        <span class="shortcut-label">Hacer Pedido</span>
+                                    </a>
+
                                     <a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-shopping-cart"></i>
                                         <span class="shortcut-label">Listado Pedidos</span>

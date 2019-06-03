@@ -64,7 +64,6 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cotizacion = Convert.ToInt32(Request.QueryString["c"]);
                 this.idCotizacion = (Request.QueryString["cot"]);
 
-                //dibujo los items en la tabla
                 if (Session["Pedido"] != null)
                 {
                     this.cargarItems();
@@ -72,8 +71,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (!IsPostBack)
                 {
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Pedido agregada", null));
-                    //genero la Pedido de la session
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     this.btnAgregar.Visible = true;
                     this.btnNuevo.Visible = false;
@@ -84,11 +81,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                     Pedido Pedido = new Pedido();
                     Session.Add("Pedido", Pedido);
-                    //listado de articulos a pedir
                     List <Articulos_PedirOC> artPedir = new List<Articulos_PedirOC>();
                     Session.Add("ArtPedir", artPedir);
 
-                    //this.cargarIva();
                     this.cargarEmpleados();
                     this.cargarTipoPedido();
                     this.cargarVendedor();
@@ -658,10 +653,17 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string perfil = Session["Login_NombrePerfil"] as string;
+                idSucursal = (int)Session["Login_SucUser"];
+
                 if (accion == 4)
                     return;
 
-                idSucursal = (int)Session["Login_SucUser"];
+                if (perfil == "Cliente")
+                {
+                    return;
+                }
+
                 if (IsPostBack)//Si cambio la sucursal en el list manualmente uso ese valor en lugar del de usuario.
                 {
                     idSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
