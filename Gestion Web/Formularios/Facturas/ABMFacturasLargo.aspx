@@ -1923,10 +1923,13 @@
                                                 <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-1">
-                                                <asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />
+                                                <%--<asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  
+                                                    ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />--%>                                                
+                                                <%--<asp:Button ID="btnBuscarArticuloDescripcion" href="#" UseSubmitBehavior="false" OnClientClick="CargarArticulos()" runat="server" class="btn btn-info" Text="<span class='shortcut-icon icon-search'></span>"/>--%>
+                                                <button ID="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
                                             </div>
-                                            <div class="col-md-12">
-                                                <label id="lblCargandoArticulo" class="col-md-4" >Cargando articulo por favor aguarde.</label>
+                                            <div class="col-md-4">
+                                                <label id="lblCargandoArticulo" class="col-md-10" >Cargando articulo por favor aguarde.</label>
                                             </div>
                                         </div>
                                     </div>
@@ -2045,6 +2048,9 @@
             }
             else
             {
+                var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
+                btnBuscarArticulosDescripcion.disabled = true;
+
                 $.ajax({
                 type: "POST",
                 url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
@@ -2077,6 +2083,9 @@
 
         function OnSuccessBuscarArticulo(response)
         {
+            var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
+            btnBuscarArticulosDescripcion.disabled = false;
+
             var data = response.d;
             var obj = JSON.parse(data);
 
@@ -2104,7 +2113,7 @@
             document.getElementById("MainContent_txtDescripcionArticulo").value = "";
 
             var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
-            lblCargandoArticulo.value = "";
+            lblCargandoArticulo.innerHTML = "";
         }
 
         function CrearBotonesAccion(codigo)
@@ -2125,7 +2134,7 @@
             var idSucursal = ddlSucursal.selectedOptions[0].value;
 
             var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
-            lblCargandoArticulo.value = "Cargando articulo por favor aguarde.";
+            lblCargandoArticulo.innerHTML = "Cargando articulos por favor aguarde.";
 
             var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
 
