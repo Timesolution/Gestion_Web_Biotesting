@@ -63,8 +63,8 @@ namespace Gestion_Web.Formularios.Reportes
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
-                        txtFechaDesde17.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaHasta17.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        txtFechaDesdeReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        txtFechaHastaReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
                         DropListSucursal.SelectedValue = suc.ToString();
                         this.idTipo = -1;
@@ -1219,17 +1219,33 @@ namespace Gestion_Web.Formularios.Reportes
 
         protected void lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS_Click(object sender, EventArgs e)
         {
-            string fd = this.txtFechaDesde17.Text.ToString();
-            string fh = this.txtFechaHasta17.Text.ToString();
+            string fd = this.txtFechaDesdeReporteVentasMarcaGrupoCantidad.Text.ToString();
+            string fh = this.txtFechaHastaReporteVentasMarcaGrupoCantidad.Text.ToString();
             Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=17&fd=" + fd + "&fh=" + fh + "&ex=1");
 
         }
 
         protected void lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF_Click(object sender, EventArgs e)
         {
-            string fd = this.txtFechaDesde17.Text.ToString();
-            string fh = this.txtFechaHasta17.Text.ToString();
+            string fd = this.txtFechaDesdeReporteVentasMarcaGrupoCantidad.Text.ToString();
+            string fh = this.txtFechaHastaReporteVentasMarcaGrupoCantidad.Text.ToString();
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=17&fd=" + fd + "&fh=" + fh + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+        }
+
+        protected void lbtnGenerarReporteVentasPorRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS(object sender, EventArgs e)
+        {
+            string fd = this.txtFechaDesdeReporteVentasPorRangoHorario.Text.ToString();
+            string fh = this.txtFechaHastaReporteVentasPorRangoHorario.Text.ToString();
+            int idEmpresa = Convert.ToInt32(this.DropListEmpresaReporteVentasPorRangoHorario.SelectedValue);
+            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&fh=" + fh + "&em=" + idEmpresa + "&ex=1");
+        }
+
+        protected void lbtnGenerarReporteVentasPorRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF(object sender, EventArgs e)
+        {
+            string fd = this.txtFechaDesdeReporteVentasPorRangoHorario.Text.ToString();
+            string fh = this.txtFechaHastaReporteVentasPorRangoHorario.Text.ToString();
+            int idEmpresa = Convert.ToInt32(this.DropListEmpresaReporteVentasPorRangoHorario.SelectedValue);
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&fh=" + fh + "&em" + idEmpresa + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
     }
 }
