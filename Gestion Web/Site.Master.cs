@@ -177,6 +177,12 @@ namespace Gestion_Web
                     }
                     
                 }
+
+                Configuracion configuracion = new Configuracion();
+
+                if(configuracion.MercaderiaEnTransito == "0")                
+                    phAceptarMercaderia.Visible = false;                
+
             }
             catch
             { }
