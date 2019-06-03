@@ -83,7 +83,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 5%">Fecha</th>
-                                        <th style="width: 5%">Documento</th>
+                                        <th style="width: 10%">Documento</th>
                                         <th style="width: 5%">Cod. Articulo</th>
                                         <th style="width: 15%">Descripcion</th>
                                         <th style="width: 5%">Vendedor</th>
@@ -437,7 +437,7 @@
 
             document.getElementById('btnCerrarModalBusqueda').click();
             $("#tablaComisiones").dataTable().fnDestroy();
-            $('#tablaComisiones').find("tr:gt(0)").remove();            
+            $('#tablaComisiones').find("tr:gt(0)").remove();
 
             var totalNeto = 0;
             var total = 0;
@@ -455,16 +455,22 @@
                     '<td style="text-align:right"> ' + obj[i].comision + "</td>" +
                     '<td style="text-align:right"> ' + obj[i].total + "</td>" +
                     "</tr> ");
-
+                
                 var splittedNeto = obj[i].precioSinIVA.split("$");
                 var splittedTotal = obj[i].total.split("$");
 
                 var numeroNeto = parseFloat(splittedNeto[1]);
                 var numeroTotal = parseFloat(splittedTotal[1]);
 
+                if (obj[i].tipo.toLowerCase().includes("nota"))
+                {
+                    numeroNeto = numeroNeto * (-1);
+                    numeroTotal = numeroTotal * (-1);
+                }
+
                 totalNeto += parseFloat(numeroNeto);
                 total += parseFloat(numeroTotal);
-            };            
+            };
 
             controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
             controlLabelTotal.innerHTML = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
