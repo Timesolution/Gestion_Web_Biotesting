@@ -134,6 +134,10 @@ namespace Gestion_Web.Formularios.Reportes
                     {
                         this.generarReporte16(); // Reporte ventas. Por sucursales grupo subgrupo marca
                     }
+                    if (valor == 17)
+                    {
+                        this.generarReporte17(); // Reporte compras y ventas de articulos. Por grupo marca cantidad
+                    }
                 }
             }
             catch (Exception ex)
@@ -1216,6 +1220,62 @@ namespace Gestion_Web.Formularios.Reportes
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas generarReporte15. " + ex.Message));
+            }
+        }
+
+        private void generarReporte17()
+        {
+            try
+            {
+                DataTable dtReporteComprasAndVentasByMarcaGrupo = contFacturacion.obtenerCantidadArticulosCompradosAndVendidosAgrupado_Marca_Grupo_Cantidad(fechaD, fechaH);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ComprasYVentasByGrupoMarcaCantidad.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("DataSetComprasAndVentas", dtReporteComprasAndVentasByMarcaGrupo);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Compras_Y_Ventas_Por_Marca_Grupo", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas generarReporte17. " + ex.Message));
             }
         }
 

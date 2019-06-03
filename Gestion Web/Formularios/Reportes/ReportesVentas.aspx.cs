@@ -62,6 +62,10 @@ namespace Gestion_Web.Formularios.Reportes
                         fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+                        txtFechaDesde17.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        txtFechaHasta17.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
                         DropListSucursal.SelectedValue = suc.ToString();
                         this.idTipo = -1;
                     }
@@ -1211,6 +1215,21 @@ namespace Gestion_Web.Formularios.Reportes
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
             Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=16&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "&ex=1");
+        }
+
+        protected void lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS_Click(object sender, EventArgs e)
+        {
+            string fd = this.txtFechaDesde17.Text.ToString();
+            string fh = this.txtFechaHasta17.Text.ToString();
+            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=17&fd=" + fd + "&fh=" + fh + "&ex=1");
+
+        }
+
+        protected void lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF_Click(object sender, EventArgs e)
+        {
+            string fd = this.txtFechaDesde17.Text.ToString();
+            string fh = this.txtFechaHasta17.Text.ToString();
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=17&fd=" + fd + "&fh=" + fh + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
     }
 }

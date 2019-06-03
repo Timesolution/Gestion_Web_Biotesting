@@ -50,6 +50,8 @@ namespace Gestion_Web.Formularios.Reportes {
         
         private VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable tableVentasAgrupadoSucursalGrupoSubGrupoMarca;
         
+        private VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -116,6 +118,9 @@ namespace Gestion_Web.Formularios.Reportes {
                 }
                 if ((ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"] != null)) {
                     base.Tables.Add(new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable(ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"]));
+                }
+                if ((ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"] != null)) {
+                    base.Tables.Add(new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable(ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -267,6 +272,16 @@ namespace Gestion_Web.Formularios.Reportes {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad {
+            get {
+                return this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -370,6 +385,9 @@ namespace Gestion_Web.Formularios.Reportes {
                 }
                 if ((ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"] != null)) {
                     base.Tables.Add(new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable(ds.Tables["VentasAgrupadoSucursalGrupoSubGrupoMarca"]));
+                }
+                if ((ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"] != null)) {
+                    base.Tables.Add(new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable(ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -482,6 +500,12 @@ namespace Gestion_Web.Formularios.Reportes {
                     this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca.InitVars();
                 }
             }
+            this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad = ((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable)(base.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"]));
+            if ((initTable == true)) {
+                if ((this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad != null)) {
+                    this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -518,6 +542,8 @@ namespace Gestion_Web.Formularios.Reportes {
             base.Tables.Add(this.tableVentasBySucursalesAndPuntoDeVenta);
             this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca = new VentasAgrupadoSucursalGrupoSubGrupoMarcaDataTable();
             base.Tables.Add(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca);
+            this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad = new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable();
+            base.Tables.Add(this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -595,6 +621,12 @@ namespace Gestion_Web.Formularios.Reportes {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeVentasAgrupadoSucursalGrupoSubGrupoMarca() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad() {
             return false;
         }
         
@@ -691,6 +723,9 @@ namespace Gestion_Web.Formularios.Reportes {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEventHandler(object sender, VentasAgrupadoSucursalGrupoSubGrupoMarcaRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEventHandler(object sender, VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -4480,6 +4515,295 @@ namespace Gestion_Web.Formularios.Reportes {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable : global::System.Data.TypedTableBase<VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow> {
+            
+            private global::System.Data.DataColumn columnMarca;
+            
+            private global::System.Data.DataColumn columnGrupo;
+            
+            private global::System.Data.DataColumn columnCantidadVendida;
+            
+            private global::System.Data.DataColumn columnCantidadComprada;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable() {
+                this.TableName = "VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn MarcaColumn {
+                get {
+                    return this.columnMarca;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn GrupoColumn {
+                get {
+                    return this.columnGrupo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CantidadVendidaColumn {
+                get {
+                    return this.columnCantidadVendida;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CantidadCompradaColumn {
+                get {
+                    return this.columnCantidadComprada;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow this[int index] {
+                get {
+                    return ((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEventHandler VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEventHandler VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEventHandler VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEventHandler VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow(VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow AddVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow(string Marca, string Grupo, string CantidadVendida, string CantidadComprada) {
+                VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow rowVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow = ((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        Marca,
+                        Grupo,
+                        CantidadVendida,
+                        CantidadComprada};
+                rowVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow);
+                return rowVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable cln = ((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnMarca = base.Columns["Marca"];
+                this.columnGrupo = base.Columns["Grupo"];
+                this.columnCantidadVendida = base.Columns["CantidadVendida"];
+                this.columnCantidadComprada = base.Columns["CantidadComprada"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnMarca = new global::System.Data.DataColumn("Marca", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMarca);
+                this.columnGrupo = new global::System.Data.DataColumn("Grupo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGrupo);
+                this.columnCantidadVendida = new global::System.Data.DataColumn("CantidadVendida", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCantidadVendida);
+                this.columnCantidadComprada = new global::System.Data.DataColumn("CantidadComprada", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCantidadComprada);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow NewVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow() {
+                return ((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChanged != null)) {
+                    this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChanged(this, new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent(((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChanging != null)) {
+                    this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChanging(this, new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent(((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowDeleted != null)) {
+                    this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowDeleted(this, new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent(((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowDeleting != null)) {
+                    this.VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowDeleting(this, new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent(((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveVentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow(VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                dsVentas ds = new dsVentas();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class TopArticulosCantRow : global::System.Data.DataRow {
@@ -6197,6 +6521,137 @@ namespace Gestion_Web.Formularios.Reportes {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow : global::System.Data.DataRow {
+            
+            private VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad = ((VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Marca {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.MarcaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Marca\' in table \'VentasYComprasArticulosAgrupadoByGrupoMarc" +
+                                "aCantidad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.MarcaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Grupo {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.GrupoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Grupo\' in table \'VentasYComprasArticulosAgrupadoByGrupoMarc" +
+                                "aCantidad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.GrupoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CantidadVendida {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadVendidaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CantidadVendida\' in table \'VentasYComprasArticulosAgrupadoB" +
+                                "yGrupoMarcaCantidad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadVendidaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CantidadComprada {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadCompradaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CantidadComprada\' in table \'VentasYComprasArticulosAgrupado" +
+                                "ByGrupoMarcaCantidad\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadCompradaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsMarcaNull() {
+                return this.IsNull(this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.MarcaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetMarcaNull() {
+                this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.MarcaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsGrupoNull() {
+                return this.IsNull(this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.GrupoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetGrupoNull() {
+                this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.GrupoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCantidadVendidaNull() {
+                return this.IsNull(this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadVendidaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCantidadVendidaNull() {
+                this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadVendidaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCantidadCompradaNull() {
+                return this.IsNull(this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadCompradaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCantidadCompradaNull() {
+                this[this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.CantidadCompradaColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -6624,6 +7079,40 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public VentasAgrupadoSucursalGrupoSubGrupoMarcaRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent : global::System.EventArgs {
+            
+            private VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent(VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow Row {
                 get {
                     return this.eventRow;
                 }

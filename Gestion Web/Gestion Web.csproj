@@ -775,6 +775,7 @@
     <Content Include="Formularios\Reportes\dsReportesBeneficios.xsc">
       <DependentUpon>dsReportesBeneficios.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Reportes\ComprasYVentasByGrupoMarcaCantidad.rdlc" />
     <None Include="Formularios\Reportes\dsReportesBeneficios.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>

@@ -102,21 +102,8 @@
                                                                 </li>
                                                             </ul>
                                                         </li>
-                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas sucursales grupo subgrupo marca</a>
-                                                            <ul class="dropdown-menu">
-                                                                <li>
-                                                                    <asp:LinkButton ID="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF" runat="server" OnClick="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF_Click">
-                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                                                    &nbsp Exportar
-                                                                    </asp:LinkButton>
-                                                                </li>
-                                                                <li>
-                                                                    <asp:LinkButton ID="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel" runat="server" OnClick="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel_Click">
-                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                                                    &nbsp Imprimir
-                                                                    </asp:LinkButton>
-                                                                </li>
-                                                            </ul>
+                                                        <li>
+                                                            <a data-toggle="modal" href="#modalReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad">Compras y Ventas de articulos grupo y marca</a>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -160,37 +147,37 @@
                             <div class="widget-content">
 
                                 <div id="big_stats" class="cf">
-                                    <div class="stat" style="width:10%">
+                                    <div class="stat" style="width: 10%">
                                         <h4>Pedidos Pendientes</h4>
                                         <asp:Label ID="lblPedidosPendientes" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat" style="width:10%">
+                                    <div class="stat" style="width: 10%">
                                         <h4>Ventas Realizadas</h4>
                                         <asp:Label ID="lblVentasRealizadas" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat" style="width:10%">
+                                    <div class="stat" style="width: 10%">
                                         <h4>Productos Vendidos</h4>
                                         <asp:Label ID="lblProductosVendidos" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat" style="width:8%">
+                                    <div class="stat" style="width: 8%">
                                         <h4>Devoluciones</h4>
                                         <asp:Label ID="lbDevoluciones" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                     <div class="stat" style="width:15%">
+                                    <div class="stat" style="width: 15%">
                                         <h4>Venta Promedio</h4>
                                         <asp:Label ID="lbVentaPromedio" runat="server" Text="" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
 
-                                    <div class="stat" style="width:10%">
+                                    <div class="stat" style="width: 10%">
                                         <h4>Articulos Por Venta</h4>
                                         <asp:Label ID="lbArticulosXVenta" runat="server" Text="" class="value"></asp:Label>
                                     </div>
@@ -624,235 +611,283 @@
 
             </div>
         </div>
-        <!-- /container -->
 
-    </div>
-    <!-- /main -->
+        <div id="modalReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Busqueda</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Desde</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtFechaDesde17" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Hasta</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtFechaHasta17" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group">
+                                    <asp:LinkButton ID="lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS" Class="btn btn-success" title="EXCEL" runat="server" OnClick="lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS_Click">Exportar a Excel</asp:LinkButton>
+                                </div>
+                                <div class="btn-group">
+                                    <asp:LinkButton ID="lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF" Class="btn btn-success" title="PDF" runat="server" OnClick="lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF_Click">Imprimir en PDF</asp:LinkButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main -->
+
+        <link href="../../css/pages/reports.css" rel="stylesheet">
+        <script src="../../Scripts/jquery-1.10.2.js"></script>
+        <script src="../../Scripts/bootstrap.min.js"></script>
+
+        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+        <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+        <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 
+        <script src="../../Scripts/Application.js"></script>
 
-    <link href="../../css/pages/reports.css" rel="stylesheet">
-    <script src="../../Scripts/jquery-1.10.2.js"></script>
-    <script src="../../Scripts/bootstrap.min.js"></script>
+        <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+        <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../Scripts/demo/notifications.js"></script>
 
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+        <script src="../../js/plugins/flot/jquery.flot.js"></script>
+        <script src="../../js/plugins/flot/jquery.flot.pie.js"></script>
+        <script src="../../js/plugins/flot/jquery.flot.resize.js"></script>
 
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-
-
-    <script src="../../Scripts/Application.js"></script>
-
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-    <script src="../../Scripts/demo/notifications.js"></script>
-
-    <script src="../../js/plugins/flot/jquery.flot.js"></script>
-    <script src="../../js/plugins/flot/jquery.flot.pie.js"></script>
-    <script src="../../js/plugins/flot/jquery.flot.resize.js"></script>
-
-    <script>
-        function pageLoad() {
-            $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-
+        <script>
+            function pageLoad() {
+                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-        }
-        function obtenerGrafico() {
+            $("#<%= txtFechaDesde17.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaHasta17.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            }
 
-            var btn = document.getElementById("btnGraficar");
-            btn.setAttribute("disabled", "disabled");
+            function obtenerGrafico() {
 
-            var parametros = document.getElementById("<%=lblParametrosUrl.ClientID %>");
-            var valor = parametros.textContent;
+                var btn = document.getElementById("btnGraficar");
+                btn.setAttribute("disabled", "disabled");
 
-            $.ajax({
-                type: "POST",
-                url: "ReportesVentas.aspx/cargarDatosChartVentas",
-                data: '{parametros: "' + valor + '"  }',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
+                var parametros = document.getElementById("<%=lblParametrosUrl.ClientID %>");
+                var valor = parametros.textContent;
+
+                $.ajax({
+                    type: "POST",
+                    url: "ReportesVentas.aspx/cargarDatosChartVentas",
+                    data: '{parametros: "' + valor + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        btn.removeAttribute("disabled");
+                        alert("No se pudo cargar grafico.");
+                    },
+                    success: OnSuccess
+                });
+
+                function OnSuccess(response) {
+
+                    //parse la info que traigo del server, la cargo en una variable y despues la seteo en el chart            
+                    var data = response.d;
+                    obj = JSON.parse(data);
+                    var infoChart = [];
+                    var ticksData = [];
+                    for (i = 0; i < obj.length; i++) {
+                        ticksData.push([i + 1, obj[i].mes]);
+                        //infoChart.push([new Date(obj[i].mes), obj[i].cantidad]);                    
+                        infoChart.push([i + 1, obj[i].cantidad]);
+                    }
+                    var options = {
+                        grid: { clickable: true, hoverable: true },
+                        points: { show: true },
+                        xaxis: { ticks: ticksData, min: 1, max: 15 },
+                        series: {
+                            bars: {
+                                show: true
+                            },
+                            lines: {
+                                show: true
+                            }
+                        },
+                        bars: {
+                            align: "center",
+                            barWidth: 0.5
+                        }
+                    };
+                    $.plot($("#bar-chart"), [{ data: infoChart, label: "Articulos" }], options);
+
+                    function showTooltip(x, y, contents) {
+                        $('<div id="tooltip">' + contents + '</div>').css({
+                            position: 'absolute',
+                            display: 'none',
+                            top: y - 25,
+                            left: x + 15,
+                            border: '1px solid #000000',
+                            padding: '2px',
+                            'background-color': '#42c8f4',
+                            'color': '#000000',
+                            opacity: 0.90
+                        }).appendTo("body").fadeIn(200);
+                    }
+                    var previousPoint = null;
+
+                    $("#bar-chart").bind("plothover", function (event, pos, item) {
+                        $("#x").text(pos.x.toFixed(2));
+                        $("#y").text(pos.y.toFixed(2));
+
+                        if (item) {
+                            if (previousPoint != item.dataIndex) {
+                                previousPoint = item.dataIndex;
+
+                                $("#tooltip").remove();
+                                var x = item.datapoint[0],
+                                    y = item.datapoint[1].toFixed(2);
+
+                                showTooltip(item.pageX, item.pageY, "Ventas " + item.series.xaxis.ticks[item.dataIndex].label + ": " + y);
+                            }
+                        }
+                        else {
+                            $("#tooltip").remove();
+                            previousPoint = null;
+                        }
+                    });
                     btn.removeAttribute("disabled");
-                    alert("No se pudo cargar grafico.");
-                },
-                success: OnSuccess
+                }
+            }
+
+            function obtenerGraficoImportes() {
+
+                var btn = document.getElementById("btnGraficarImportes");
+                btn.setAttribute("disabled", "disabled");
+
+                var parametros = document.getElementById("<%=lblParametrosUrl.ClientID %>");
+                var valor = parametros.textContent;
+
+                $.ajax({
+                    type: "POST",
+                    url: "ReportesVentas.aspx/cargarDatosChartVentasImportes",
+                    data: '{parametros: "' + valor + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        btn.removeAttribute("disabled");
+                        alert("No se pudo cargar grafico.");
+                    },
+                    success: OnSuccess
+                });
+
+                function OnSuccess(response) {
+
+                    //parse la info que traigo del server, la cargo en una variable y despues la seteo en el chart            
+                    var data = response.d;
+                    obj = JSON.parse(data);
+                    var infoChart = [];
+                    var ticksData = [];
+                    for (i = 0; i < obj.length; i++) {
+                        ticksData.push([i + 1, obj[i].mes]);
+                        infoChart.push([i + 1, obj[i].importe]);
+                    }
+                    var options = {
+                        grid: { clickable: true, hoverable: true },
+                        points: { show: true },
+                        xaxis: { ticks: ticksData, min: 1, max: 15 },
+                        series: {
+                            bars: {
+                                show: true
+                            },
+                            lines: {
+                                show: true
+                            }
+                        },
+                        bars: {
+                            align: "center",
+                            barWidth: 0.5
+                        }
+                    };
+                    $.plot($("#bar-chart"), [{ data: infoChart, label: "Articulos" }], options);
+
+                    function showTooltip(x, y, contents) {
+                        $('<div id="tooltip">' + contents + '</div>').css({
+                            position: 'absolute',
+                            display: 'none',
+                            top: y - 25,
+                            left: x + 15,
+                            border: '1px solid #000000',
+                            padding: '2px',
+                            'background-color': '#42c8f4',
+                            'color': '#000000',
+                            opacity: 0.90
+                        }).appendTo("body").fadeIn(200);
+                    }
+                    var previousPoint = null;
+
+                    $("#bar-chart").bind("plothover", function (event, pos, item) {
+                        $("#x").text(pos.x.toFixed(2));
+                        $("#y").text(pos.y.toFixed(2));
+
+                        if (item) {
+                            if (previousPoint != item.dataIndex) {
+                                previousPoint = item.dataIndex;
+
+                                $("#tooltip").remove();
+                                var x = item.datapoint[0],
+                                    y = item.datapoint[1].toFixed(2);
+
+                                showTooltip(item.pageX, item.pageY, "Ventas " + item.series.xaxis.ticks[item.dataIndex].label + ": " + y);
+                            }
+                        }
+                        else {
+                            $("#tooltip").remove();
+                            previousPoint = null;
+                        }
+                    });
+                    btn.removeAttribute("disabled");
+                }
+            }
+
+        </script>
+
+
+        <script>
+
+            $(function () {
+                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
 
-            function OnSuccess(response) {
-
-                //parse la info que traigo del server, la cargo en una variable y despues la seteo en el chart            
-                var data = response.d;
-                obj = JSON.parse(data);
-                var infoChart = [];
-                var ticksData = [];
-                for (i = 0; i < obj.length; i++) {
-                    ticksData.push([i + 1, obj[i].mes]);
-                    //infoChart.push([new Date(obj[i].mes), obj[i].cantidad]);                    
-                    infoChart.push([i + 1, obj[i].cantidad]);
-                }
-                var options = {
-                    grid: { clickable: true, hoverable: true },
-                    points: { show: true },
-                    xaxis: { ticks: ticksData, min: 1, max: 15 },
-                    series: {
-                        bars: {
-                            show: true
-                        },
-                        lines: {
-                            show: true
-                        }
-                    },
-                    bars: {
-                        align: "center",
-                        barWidth: 0.5
-                    }
-                };
-                $.plot($("#bar-chart"), [{ data: infoChart, label: "Articulos" }], options);
-
-                function showTooltip(x, y, contents) {
-                    $('<div id="tooltip">' + contents + '</div>').css({
-                        position: 'absolute',
-                        display: 'none',
-                        top: y - 25,
-                        left: x + 15,
-                        border: '1px solid #000000',
-                        padding: '2px',
-                        'background-color': '#42c8f4',
-                        'color': '#000000',
-                        opacity: 0.90
-                    }).appendTo("body").fadeIn(200);
-                }
-                var previousPoint = null;
-
-                $("#bar-chart").bind("plothover", function (event, pos, item) {
-                    $("#x").text(pos.x.toFixed(2));
-                    $("#y").text(pos.y.toFixed(2));
-
-                    if (item) {
-                        if (previousPoint != item.dataIndex) {
-                            previousPoint = item.dataIndex;
-
-                            $("#tooltip").remove();
-                            var x = item.datapoint[0],
-                                y = item.datapoint[1].toFixed(2);
-
-                            showTooltip(item.pageX, item.pageY, "Ventas " + item.series.xaxis.ticks[item.dataIndex].label + ": " + y);
-                        }
-                    }
-                    else {
-                        $("#tooltip").remove();
-                        previousPoint = null;
-                    }
-                });
-                btn.removeAttribute("disabled");
-            }
-        }
-
-        function obtenerGraficoImportes() {
-
-            var btn = document.getElementById("btnGraficarImportes");
-            btn.setAttribute("disabled", "disabled");
-
-            var parametros = document.getElementById("<%=lblParametrosUrl.ClientID %>");
-            var valor = parametros.textContent;
-
-            $.ajax({
-                type: "POST",
-                url: "ReportesVentas.aspx/cargarDatosChartVentasImportes",
-                data: '{parametros: "' + valor + '"  }',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    btn.removeAttribute("disabled");
-                    alert("No se pudo cargar grafico.");
-                },
-                success: OnSuccess
+            $(function () {
+                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
 
-            function OnSuccess(response) {
-
-                //parse la info que traigo del server, la cargo en una variable y despues la seteo en el chart            
-                var data = response.d;
-                obj = JSON.parse(data);
-                var infoChart = [];
-                var ticksData = [];
-                for (i = 0; i < obj.length; i++) {
-                    ticksData.push([i + 1, obj[i].mes]);
-                    infoChart.push([i + 1, obj[i].importe]);
-                }
-                var options = {
-                    grid: { clickable: true, hoverable: true },
-                    points: { show: true },
-                    xaxis: { ticks: ticksData, min: 1, max: 15 },
-                    series: {
-                        bars: {
-                            show: true
-                        },
-                        lines: {
-                            show: true
-                        }
-                    },
-                    bars: {
-                        align: "center",
-                        barWidth: 0.5
-                    }
-                };
-                $.plot($("#bar-chart"), [{ data: infoChart, label: "Articulos" }], options);
-
-                function showTooltip(x, y, contents) {
-                    $('<div id="tooltip">' + contents + '</div>').css({
-                        position: 'absolute',
-                        display: 'none',
-                        top: y - 25,
-                        left: x + 15,
-                        border: '1px solid #000000',
-                        padding: '2px',
-                        'background-color': '#42c8f4',
-                        'color': '#000000',
-                        opacity: 0.90
-                    }).appendTo("body").fadeIn(200);
-                }
-                var previousPoint = null;
-
-                $("#bar-chart").bind("plothover", function (event, pos, item) {
-                    $("#x").text(pos.x.toFixed(2));
-                    $("#y").text(pos.y.toFixed(2));
-
-                    if (item) {
-                        if (previousPoint != item.dataIndex) {
-                            previousPoint = item.dataIndex;
-
-                            $("#tooltip").remove();
-                            var x = item.datapoint[0],
-                                y = item.datapoint[1].toFixed(2);
-
-                            showTooltip(item.pageX, item.pageY, "Ventas " + item.series.xaxis.ticks[item.dataIndex].label + ": " + y);
-                        }
-                    }
-                    else {
-                        $("#tooltip").remove();
-                        previousPoint = null;
-                    }
-                });
-                btn.removeAttribute("disabled");
-            }
-        }
-
-    </script>
-
-
-    <script>
-
-        $(function () {
-            $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-        });
-
-        $(function () {
-            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-        });
-
-    </script>
-
+        </script>
 </asp:Content>
