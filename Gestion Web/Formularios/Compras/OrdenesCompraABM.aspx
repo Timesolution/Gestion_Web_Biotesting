@@ -6,8 +6,8 @@
     <div class="main">
 
         <div>
-            <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Always">
-                <ContentTemplate>
+<%--            <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Always">
+                <ContentTemplate>--%>
                     <div class="col-md-12 col-xs-12">
                         <div class="widget stacked">
 
@@ -44,17 +44,17 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Proveedor</label>
                                             <div class="col-md-3">
-                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
+                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return BuscarProveedor()" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
                                             </div>
                                             <div class="col-md-1">
                                                 <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click" />
                                             </div>
                                             <div class="col-md-4">
-                                                <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
+                                                <%--<asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
                                                     <ProgressTemplate>
                                                         <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Procesando cambios. Por favor aguarde.</span>
                                                     </ProgressTemplate>
-                                                </asp:UpdateProgress>
+                                                </asp:UpdateProgress>--%>
                                             </div>
 
                                         </div>
@@ -259,9 +259,9 @@
                         <!-- /widget -->
                     </div>
 
-                </ContentTemplate>
+<%--                </ContentTemplate>
 
-            </asp:UpdatePanel>
+            </asp:UpdatePanel>--%>
         </div>
 
         <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
@@ -353,6 +353,7 @@
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
         <script src="../../Scripts/demo/notifications.js"></script>
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="OrdenesCompra.js"></script>
 
         <!-- Page-Level Plugin Scripts - Tables -->
         <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
@@ -503,9 +504,80 @@
             }
         </script>
 
-        <%--<script type="text/javascript">
-            
-            function BuscarArticulo()
+        <script type="text/javascript">
+
+            function BuscarProveedor()
+            {
+                var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;                
+
+                LimpiarCamposDatosProveedor();
+                ObtenerAlertaProveedor(idProveedor);
+                CargarDatosProveedor(idProveedor);
+            }            
+
+            function CargarDatosProveedor(idProveedor)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: 'OrdenesCompraABM.aspx/CargarProveedor_OC',
+                    data: JSON.stringify(
+                        {
+                            'idProveedor': idProveedor
+                        }
+                    ),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccessCargarDatosProveedor,
+                    error: function (e)
+                    {
+                        $.msgbox("No se pudieron cargar los datos del proveedor correctamente!", { type: "error" });
+                        LimpiarCamposDatosProveedor();
+                    }
+                });
+            }
+
+            function OnSuccessCargarDatosProveedor(response)
+            {
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                var mailProveedor = document.getElementById('<%=this.lblMailOC.ClientID%>');
+                var requiereAnticipo = document.getElementById('<%=this.lblRequiereAnticipoOC.ClientID%>');
+                var requiereAutorizacion = document.getElementById('<%=this.lblRequiereAutorizacionOC.ClientID%>');
+                var montoAutorizacion = document.getElementById('<%=this.lblMontoAutorizacionOC.ClientID%>');
+                var observacionProveedor = document.getElementById('<%=this.lblObservacion.ClientID%>');
+                var formaDePago = document.getElementById('<%=this.txtFormaDePago.ClientID%>');
+
+                mailProveedor.innerHTML = obj.mail;
+                requiereAnticipo.innerHTML = "Si";
+                requiereAutorizacion.innerHTML = "Si";
+                montoAutorizacion.innerHTML = "$" + obj.montoAutorizacion;
+                observacionProveedor.innerHTML = obj.observaciones;
+                formaDePago.value = obj.formaDePago;
+
+                if (obj.requiereAnticipo == "0")
+                    requiereAnticipo.innerHTML = "No";
+                if (obj.requiereAutorizacion == "0")
+                    requiereAutorizacion.innerHTML = "No";
+            }
+
+            function LimpiarCamposDatosProveedor()
+            {
+                var mailProveedor = document.getElementById('<%=this.lblMailOC.ClientID%>');
+                var requiereAnticipo = document.getElementById('<%=this.lblRequiereAnticipoOC.ClientID%>');
+                var requiereAutorizacion = document.getElementById('<%=this.lblRequiereAutorizacionOC.ClientID%>');
+                var montoAutorizacion = document.getElementById('<%=this.lblMontoAutorizacionOC.ClientID%>');
+                var observacionProveedor = document.getElementById('<%=this.lblObservacion.ClientID%>');
+                var formaDePago = document.getElementById('<%=this.txtFormaDePago.ClientID%>');
+
+                mailProveedor.innerHTML = "";
+                requiereAnticipo.innerHTML = "";
+                requiereAutorizacion.innerHTML = "";
+                montoAutorizacion.innerHTML = "";
+                observacionProveedor.innerHTML = "";
+                formaDePago.value = "";
+            }
+            <%--function BuscarArticulo()
             {
                 var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value;
                 var json = null;
@@ -554,10 +626,10 @@
                     cell4.innerHTML = data[i].precioVenta;
                     cell5.innerHTML = "<asp:LinkButton ID=\"btnBuscarArticuloDescripcion_" + i + "Text=\" < span class='shortcut-icon icon-search' ></span > \" class=\"btn btn - info\"/>;"
                 }
-            }
+            }--%>
             function LimpiarTabla()
             {
                 $("#articulosTabla").find("tr:gt(0)").remove();
             }
-        </script>--%>
+        </script>
 </asp:Content>

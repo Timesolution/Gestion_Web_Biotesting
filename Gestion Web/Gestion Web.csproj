@@ -381,6 +381,7 @@
     <Content Include="Formularios\Compras\ImportacionesMonedasABM.aspx" />
     <Content Include="Formularios\Compras\ImportacionesTiposGastosABM.aspx" />
     <Content Include="Formularios\Compras\ImpresionCompras.aspx" />
+    <Content Include="Formularios\Compras\OrdenesCompra.js" />
     <Content Include="Formularios\Compras\OrdenesCompraABM.aspx" />
     <Content Include="Formularios\Compras\RemitoDetalleF.aspx" />
     <Content Include="Formularios\Compras\OrdenesCompraF.aspx" />

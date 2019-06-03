@@ -112,8 +112,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     if (dr["Codigo"].ToString() == this.txtCodigo.Text)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo con codigo  ya se encuentra en la grilla\", {type: \"error\"});", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El articulo con codigo " + this.txtCodigo.Text + " ya se encuentra en la grilla"));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo con codigo  ya se encuentra en la grilla\", {type: \"error\"});", true);
                         return;
                     }
                 }
@@ -544,7 +543,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 if (prov == null)
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
                     return;
                 }
 
@@ -612,23 +611,23 @@ namespace Gestion_Web.Formularios.Compras
                         string script = string.Empty;
                         script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
                         script += " $.msgbox(\"Orden de Compra agregada. \", {type: \"info\"}); location.href = 'OrdenesCompraABM.aspx?a=1';";
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                     }
                     else
                     {
                         if (i == -1)
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
                         }
                         else
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
                         }
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"La cantidad de Items de la Orden de compra debe ser mayor a 0.\", {type: \"warning\"}); ", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"La cantidad de Items de la Orden de compra debe ser mayor a 0.\", {type: \"warning\"}); ", true);
                 }
 
 
@@ -792,7 +791,7 @@ namespace Gestion_Web.Formularios.Compras
                 c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
                 if (!String.IsNullOrEmpty(c.alerta.descripcion))
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
                 }
             }
             catch (Exception Ex)
@@ -1105,7 +1104,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error obteniendo items " + ex.Message + "\", {type: \"warning\"}); ", true);
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error obteniendo items " + ex.Message + "\", {type: \"warning\"}); ", true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
                 return null;
             }
@@ -1624,6 +1623,61 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "ERROR", "Error agregando articulos buscados a tabla items " + ex.Message);
             }
         }
+
+        //[WebMethod]
+        //public static void CargarDatosProveedorYBuscarArticulos(string txtDescripcion)
+        //{
+        //    cargarAlertaProveedor();
+        //    phProductos.Controls.Clear();
+        //    cargarProveedor_OC();
+        //    ObtenerArticulosProveedor();
+        //    dtItems.Rows.Clear();
+        //    _articulosProveedorBuscados.Clear();
+        //    if (ListProveedor.SelectedIndex > 0)
+        //        lbtnBuscarArticulo.Visible = true;
+        //}
+
+        [WebMethod]
+        public static string CargarAlertaProveedor(int idProveedor)
+        {
+            controladorCliente contCliente = new controladorCliente();
+
+            Cliente c = contCliente.obtenerProveedorID(idProveedor);
+            c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = "";
+
+            if (!String.IsNullOrEmpty(c.alerta.descripcion))            
+                resultadoJSON = serializer.Serialize(c.alerta.descripcion);
+
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string CargarProveedor_OC(int idProveedor)
+        {
+            ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
+
+            var poc = contClienteEnt.obtenerProveedor_OC_PorProveedor(idProveedor);
+
+            DatosProveedorTemp datosProveedorTemp = new DatosProveedorTemp();
+
+            if (poc != null)
+            {
+                datosProveedorTemp.mail = poc.Mail;
+                datosProveedorTemp.montoAutorizacion = poc.MontoAutorizacion.ToString();
+                datosProveedorTemp.observaciones = poc.cliente.observaciones;
+                datosProveedorTemp.formaDePago = poc.FormaDePago;
+                datosProveedorTemp.requiereAnticipo = poc.RequiereAnticipo.ToString();
+                datosProveedorTemp.requiereAutorizacion = poc.RequiereAutorizacion.ToString();
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(datosProveedorTemp);
+            return resultadoJSON;
+        }
+
         //[WebMethod]
         //public static void AgregarArticulosBuscados(string txtDescripcion)
         //{
@@ -1673,6 +1727,16 @@ namespace Gestion_Web.Formularios.Compras
         //    return "";
         //}
 
+    }
+
+    public class DatosProveedorTemp
+    {
+        public string mail;
+        public string montoAutorizacion;
+        public string observaciones;
+        public string formaDePago;
+        public string requiereAnticipo;
+        public string requiereAutorizacion;
     }
 
     //public class ArticuloBuscado
