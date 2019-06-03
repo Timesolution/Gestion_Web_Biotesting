@@ -175,24 +175,6 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorPuntoDeVentaExcel;
         
         /// <summary>
-        /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF;
-        
-        /// <summary>
-        /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel;
-        
-        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>
@@ -533,5 +515,68 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
+        
+        /// <summary>
+        /// UpdatePanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        
+        /// <summary>
+        /// txtFechaDesde17 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaDesde17;
+        
+        /// <summary>
+        /// RequiredFieldValidator10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator10;
+        
+        /// <summary>
+        /// txtFechaHasta17 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaHasta17;
+        
+        /// <summary>
+        /// RequiredFieldValidator11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
+        
+        /// <summary>
+        /// lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS;
+        
+        /// <summary>
+        /// lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF;
     }
 }
