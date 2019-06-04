@@ -1939,11 +1939,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10%">Codigo</th>
-                                            <th style="width: 30%">Descripcion</th>
+                                            <th style="width: 20%">Descripcion</th>
                                             <th style="width: 10%">Stock</th>
                                             <th style="width: 10%">Moneda</th>
                                             <th style="width: 10%">P.Venta</th>
-                                            <th style="width: 10%"></th>
+                                            <th style="width: 20%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1996,9 +1996,9 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10%">Codigo</th>
-                                            <th style="width: 30%">Razon Social</th>
-                                            <th style="width: 10%">Alias</th>
-                                            <th style="width: 10%"></th>
+                                            <th style="width: 20%">Razon Social</th>
+                                            <th style="width: 20%">Alias</th>
+                                            <th style="width: 5%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -2008,7 +2008,6 @@
                             </div>
                             <div class="modal-footer">
                                 <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>--%>
-                                <asp:Button ID="btnAgregarCliente" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
                                 <button type="button" onclick="CerrarModalBuscarCliente()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
@@ -2203,7 +2202,7 @@
 
             $('#clientesTabla').on("click", "button[name=\"btnAgregarCliente\"]", function (button)
             {
-                AgregarClienteBuscadoPorDescripcion(button);
+                AgregarCliente(button);
             });
                         
             document.getElementById("MainContent_txtDescripcionCliente").value = "";
@@ -2285,11 +2284,46 @@
             });
         }
 
+        function AgregarCliente(button)
+        {
+            var idCliente = button.currentTarget.id.replace("btn_","");
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/AgregarCliente",
+                data: '{idCliente: "' + idCliente + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo agregar el cliente!", {type: "error"});
+                }
+            });
+        }
+
         function CargarClientes()
         {
             $.ajax({
                 type: "POST",
                 url: "ABMFacturasLargo.aspx/CargarClientes",
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo buscar el cliente!", { type: "error" });
+                },
+                success: OnSuccessCargarClientes
+            });
+        }
+
+        function BuscarClientes()
+        {
+            var descripcionCliente = document.getElementById("MainContent_txtDescripcionCliente").value;
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/BuscarCliente",
+                data: '{idCliente: "' + descripcionCliente + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function ()
