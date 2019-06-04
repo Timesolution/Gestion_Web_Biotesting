@@ -10841,6 +10841,30 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
         }
 
+        [WebMethod]
+        public static string CargarClientes()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesReduc(1);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
         class ArticulosTemporal
         {
             public string codigo;
@@ -10848,6 +10872,14 @@ namespace Gestion_Web.Formularios.Facturas
             public string stock;
             public string moneda;
             public string precioVenta;
+        }
+
+        class ClientesTemporal
+        {
+            public string id;
+            public string codigo;
+            public string razonSocial;
+            public string alias;
         }
     }
 }

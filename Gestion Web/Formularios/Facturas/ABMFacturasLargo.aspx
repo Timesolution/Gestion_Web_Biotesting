@@ -32,9 +32,10 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <asp:Panel ID="panelBusquedaCliente" runat="server">
-                                                                    <a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
+                                                                    <asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>
+                                                                    <%--<a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
-                                                                    </a>
+                                                                    </a>--%>
                                                                     <asp:LinkButton ID="lbtnVerCtaCte" runat="server" OnClick="lbtnVerCtaCte_Click" class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Ver cta cte">
                                                                         <i class="shortcut-icon icon-th-list"></i>
                                                                     </asp:LinkButton>
@@ -1960,6 +1961,61 @@
                 </div>
             </asp:Panel>
         </div>
+
+        <div id="modalBuscarClienteDescripcion" on class="modal fade" tabindex="-1" role="dialog">
+            <asp:Panel ID="Panel1" runat="server">
+                <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
+                <div class="modal-dialog" style="width: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" id="btnCerrarModalBuscarCliente" onclick="CerrarModalBuscarCliente()" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Busqueda de Clientes</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-4">Buscar Cliente</label>
+                                            <div class="col-md-3">
+                                                <asp:TextBox ID="txtDescripcionCliente" class="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <%--<asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  
+                                                    ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />--%>                                                
+                                                <%--<asp:Button ID="btnBuscarArticuloDescripcion" href="#" UseSubmitBehavior="false" OnClientClick="CargarArticulos()" runat="server" class="btn btn-info" Text="<span class='shortcut-icon icon-search'></span>"/>--%>
+                                                <button ID="btnBuscarClienteDescripcion" type="button" onclick="CargarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label id="lblCargandoCliente" class="col-md-10" >Cargando cliente por favor aguarde.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-bordered" id="clientesTabla">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">Codigo</th>
+                                            <th style="width: 30%">Razon Social</th>
+                                            <th style="width: 10%">Alias</th>
+                                            <th style="width: 10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phBuscarCliente" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>--%>
+                                <asp:Button ID="btnAgregarCliente" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
+                                <button type="button" onclick="CerrarModalBuscarCliente()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:Panel>
+        </div>
         <%--Fin modalGrupo--%>
     </div>
     <!-- /main -->
@@ -2120,8 +2176,47 @@
         {
             var accion = "";
 
-            accion += "<button id=btn_" + codigo + " name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
-            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id=input_" + codigo + " type=\"checkbox\"></span> "
+            accion += "<button id='btn_" + codigo + "' name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='input_" + codigo + "' type=\"checkbox\"></span> "
+
+            return accion;
+        }
+
+        function OnSuccessCargarClientes(response)
+        {
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            $("#clientesTabla").dataTable().fnDestroy();
+            $('#clientesTabla').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++)
+            {
+                $('#clientesTabla').append(
+                    "<tr> " +
+                    "<td> " + obj[i].codigo + "</td>" +
+                    "<td> " + obj[i].razonSocial + "</td>" +
+                    "<td> " + obj[i].alias + "</td>" +
+                    "<td> " + CrearBotonesAccionCliente(obj[i].id) + "</td>" +
+                    "</tr> ");
+            };
+
+            $('#clientesTabla').on("click", "button[name=\"btnAgregarCliente\"]", function (button)
+            {
+                AgregarClienteBuscadoPorDescripcion(button);
+            });
+                        
+            document.getElementById("MainContent_txtDescripcionCliente").value = "";
+
+            var lblCargandoArticulo = document.getElementById("lblCargandoCliente");
+            lblCargandoArticulo.innerHTML = "";
+        }
+
+        function CrearBotonesAccionCliente(id)
+        {
+            var accion = "";
+
+            accion += "<button id='btn_" + id + "' name='btnAgregarCliente' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
 
             return accion;
         }
@@ -2187,6 +2282,21 @@
                 {
                     $.msgbox("No se pudieron agregar los articulos!", { type: "error" });
                 }
+            });
+        }
+
+        function CargarClientes()
+        {
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/CargarClientes",
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo buscar el cliente!", { type: "error" });
+                },
+                success: OnSuccessCargarClientes
             });
         }
     </script>
