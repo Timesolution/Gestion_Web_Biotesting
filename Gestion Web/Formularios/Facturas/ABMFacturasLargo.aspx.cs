@@ -272,8 +272,6 @@ namespace Gestion_Web.Formularios.Facturas
                 if (_agregarArticuloPorDescripcion)
                     AgregarArticuloPorDescripcion();
 
-                //CerrarModalBuscarArticuloPorDescripcion();
-
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
                 //Si se egresa Stock por Remito, oculto el Boton 'Facturar' para evitar que se olviden de bajar stock.
@@ -10874,16 +10872,17 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
             string resultadoJSON = serializer.Serialize(clientesTemporal);
             return resultadoJSON;
         }
 
         [WebMethod]
-        public static string BuscarCliente()
+        public static string BuscarCliente(string razonSocial)
         {
             List<Cliente> clientes = new List<Cliente>();
             controladorCliente controladorCliente = new controladorCliente();
-            clientes = controladorCliente.obtenerClientesReduc(1);
+            clientes = controladorCliente.obtenerClientesAlias(razonSocial);
 
             List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
 
@@ -10898,6 +10897,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
             string resultadoJSON = serializer.Serialize(clientesTemporal);
             return resultadoJSON;
         }

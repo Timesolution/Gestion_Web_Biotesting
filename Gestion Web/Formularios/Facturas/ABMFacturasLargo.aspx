@@ -1924,9 +1924,6 @@
                                                 <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-1">
-                                                <%--<asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  
-                                                    ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />--%>                                                
-                                                <%--<asp:Button ID="btnBuscarArticuloDescripcion" href="#" UseSubmitBehavior="false" OnClientClick="CargarArticulos()" runat="server" class="btn btn-info" Text="<span class='shortcut-icon icon-search'></span>"/>--%>
                                                 <button ID="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
                                             </div>
                                             <div class="col-md-4">
@@ -1952,7 +1949,6 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>--%>
                                 <asp:Button ID="btnAgregarArticulosBuscadosATablaItems" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
                                 <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
@@ -1964,11 +1960,10 @@
 
         <div id="modalBuscarClienteDescripcion" on class="modal fade" tabindex="-1" role="dialog">
             <asp:Panel ID="Panel1" runat="server">
-                <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
                 <div class="modal-dialog" style="width: 60%;">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" id="btnCerrarModalBuscarCliente" onclick="CerrarModalBuscarCliente()" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <button type="button" id="btnCerrarModalBuscarCliente" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h4 class="modal-title">Busqueda de Clientes</h4>
                         </div>
                         <div class="modal-body">
@@ -1981,10 +1976,7 @@
                                                 <asp:TextBox ID="txtDescripcionCliente" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-1">
-                                                <%--<asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  
-                                                    ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />--%>                                                
-                                                <%--<asp:Button ID="btnBuscarArticuloDescripcion" href="#" UseSubmitBehavior="false" OnClientClick="CargarArticulos()" runat="server" class="btn btn-info" Text="<span class='shortcut-icon icon-search'></span>"/>--%>
-                                                <button ID="btnBuscarClienteDescripcion" type="button" onclick="CargarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
+                                                <button ID="btnBuscarClienteDescripcion" type="button" onclick="BuscarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
                                             </div>
                                             <div class="col-md-4">
                                                 <label id="lblCargandoCliente" class="col-md-10" >Cargando cliente por favor aguarde.</label>
@@ -2007,8 +1999,7 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>--%>
-                                <button type="button" onclick="CerrarModalBuscarCliente()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -2183,6 +2174,12 @@
 
         function OnSuccessCargarClientes(response)
         {
+            var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
+            btnBuscarClienteDescripcion.disabled = false;
+
+            var lblCargandoArticulo = document.getElementById("lblCargandoCliente");
+            lblCargandoArticulo.innerHTML = "";
+
             var data = response.d;
             var obj = JSON.parse(data);
 
@@ -2310,7 +2307,7 @@
                 dataType: 'json',
                 error: function ()
                 {
-                    $.msgbox("No se pudo buscar el cliente!", { type: "error" });
+                    $.msgbox("No se pudo cargar el cliente!", { type: "error" });
                 },
                 success: OnSuccessCargarClientes
             });
@@ -2318,12 +2315,18 @@
 
         function BuscarClientes()
         {
+            var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
+            btnBuscarClienteDescripcion.disabled = true;
+
+            var lblCargandoArticulo = document.getElementById("lblCargandoCliente");
+            lblCargandoArticulo.innerHTML = "Cargando cliente por favor aguarde.";
+
             var descripcionCliente = document.getElementById("MainContent_txtDescripcionCliente").value;
 
             $.ajax({
                 type: "POST",
                 url: "ABMFacturasLargo.aspx/BuscarCliente",
-                data: '{idCliente: "' + descripcionCliente + '"}',
+                data: '{razonSocial: "' + descripcionCliente + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function ()
