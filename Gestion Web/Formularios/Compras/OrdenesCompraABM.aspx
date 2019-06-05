@@ -3,20 +3,17 @@
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="main">
 
+    <div class="main">
         <div>
 <%--            <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Always">
                 <ContentTemplate>--%>
                     <div class="col-md-12 col-xs-12">
                         <div class="widget stacked">
-
                             <div class="widget-header">
                                 <i class="icon-wrench"></i>
                                 <h3>Herramientas</h3>
                             </div>
-                            <!-- /widget-header -->
-
                             <div class="widget-content">
                                 <div id="validation-form" role="form" class="form-horizontal col-md-8">
                                     <fieldset>
@@ -44,7 +41,7 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Proveedor</label>
                                             <div class="col-md-3">
-                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return BuscarProveedor()" OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"></asp:DropDownList>
+                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return BuscarProveedor()" ></asp:DropDownList> <%--OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"--%>
                                             </div>
                                             <div class="col-md-1">
                                                 <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click" />
@@ -56,9 +53,7 @@
                                                     </ProgressTemplate>
                                                 </asp:UpdateProgress>--%>
                                             </div>
-
                                         </div>
-
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Numero</label>
 
@@ -84,11 +79,9 @@
                                                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
                                                     <asp:TextBox ID="txtFecha" runat="server" class="form-control"></asp:TextBox>
                                                 </div>
-
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:RequiredFieldValidator ControlToValidate="txtFecha" ID="RequiredFieldValidator42" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -99,11 +92,9 @@
                                                     <span class="input-group-addon"><i class="icon-calendar"></i></span>
                                                     <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
                                                 </div>
-
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:RequiredFieldValidator ControlToValidate="txtFechaEntrega" ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -197,9 +188,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </fieldset>
-
                                 </div>
 
                                 <div id="validation-form3" role="form" class="form-horizontal col-md-8">
@@ -218,12 +207,10 @@
                                             <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
                                         </div>
                                     </div>
-
                                     <br />
                                 </div>
 
-
-                                <table class="table table-striped table-bordered">
+                                <table class="table table-striped table-bordered" id="articulosTablaProveedor">
                                     <thead>
                                         <tr>
                                             <th style="width: 20%">Codigo</th>
@@ -231,11 +218,11 @@
                                             <th style="width: 5%">Precio</th>
                                             <th style="width: 10%">Precio Mas IVA</th>
                                             <th style="width: 5%">Cantidad</th>
-                                            <th style="width: 10%">Stock Sucursal</th>
+<%--                                            <th style="width: 10%">Stock Sucursal</th>
                                             <th style="width: 10%">Stock Minimo Sucursal</th>
                                             <th style="width: 10%">Stock Total</th>
-                                            <th style="width: 10%">Stock Minimo</th>
-                                            <th></th>
+                                            <th style="width: 10%">Stock Minimo</th>--%>
+                                            <%--<th></th>--%>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -251,16 +238,10 @@
                                         <asp:Label ID="lblCartelTotal" runat="server" Text="asd"/>
                                     </div>--%>
                                 </div>
-
                             </div>
-                            <!-- /widget-content -->
-
                         </div>
-                        <!-- /widget -->
                     </div>
-
 <%--                </ContentTemplate>
-
             </asp:UpdatePanel>--%>
         </div>
 
@@ -508,12 +489,14 @@
 
             function BuscarProveedor()
             {
-                var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;                
+                var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;
+                var idSucursal = document.getElementById('<%=this.ListSucursal.ClientID%>').selectedOptions[0].value;
 
                 LimpiarCamposDatosProveedor();
                 ObtenerAlertaProveedor(idProveedor);
                 CargarDatosProveedor(idProveedor);
-            }            
+                CargarArticulosProveedor(idProveedor, idSucursal);
+            }
 
             function CargarDatosProveedor(idProveedor)
             {
@@ -536,6 +519,28 @@
                 });
             }
 
+            function CargarArticulosProveedor(idProveedor,idSucursal)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: 'OrdenesCompraABM.aspx/ObtenerArticulosProveedor',
+                    data: '{idProveedor: "' + idProveedor + '", idSucursal: "' + idSucursal + '"}',
+                    data: JSON.stringify(
+                        {
+                            'idProveedor': idProveedor,
+                            'idSucursal': idSucursal
+                        }                        
+                    ),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: OnSuccessCargarArticulosProveedor,
+                    error: function (e)
+                    {
+                        $.msgbox("No se pudieron cargar los articulos del proveedor correctamente!", { type: "error" });
+                    }
+                });
+            }
+
             function OnSuccessCargarDatosProveedor(response)
             {
                 var data = response.d;
@@ -548,12 +553,18 @@
                 var observacionProveedor = document.getElementById('<%=this.lblObservacion.ClientID%>');
                 var formaDePago = document.getElementById('<%=this.txtFormaDePago.ClientID%>');
 
-                mailProveedor.innerHTML = obj.mail;
-                requiereAnticipo.innerHTML = "Si";
-                requiereAutorizacion.innerHTML = "Si";
-                montoAutorizacion.innerHTML = "$" + obj.montoAutorizacion;
-                observacionProveedor.innerHTML = obj.observaciones;
-                formaDePago.value = obj.formaDePago;
+                if (obj.mail != null)
+                    mailProveedor.innerHTML = obj.mail;
+                if (obj.requiereAnticipo != null)
+                    requiereAnticipo.innerHTML = "Si";
+                if (obj.requiereAutorizacion != null)
+                    requiereAutorizacion.innerHTML = "Si";
+                if (obj.montoAutorizacion != null)
+                    montoAutorizacion.innerHTML = "$" + obj.montoAutorizacion;
+                if (obj.observaciones != null)
+                    observacionProveedor.innerHTML = obj.observaciones;
+                if (obj.formaDePago != null)
+                    formaDePago.value = obj.formaDePago;
 
                 if (obj.requiereAnticipo == "0")
                     requiereAnticipo.innerHTML = "No";
@@ -576,6 +587,42 @@
                 montoAutorizacion.innerHTML = "";
                 observacionProveedor.innerHTML = "";
                 formaDePago.value = "";
+            }
+
+            function OnSuccessCargarArticulosProveedor(response)
+            {
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                $("#articulosTablaProveedor").dataTable().fnDestroy();
+                $('#articulosTablaProveedor').find("tr:gt(0)").remove();
+
+                for (var i = 0; i < obj.length; i++)
+                {
+                    $('#articulosTablaProveedor').append(
+                        "<tr> " +
+                        "<td> " + obj[i].codigo + "</td>" +
+                        "<td> " + obj[i].descripcion + "</td>" +
+                        "<td><input name=\"txtPrecio\" type=\"string\" value=" + obj[i].precio + " style=\"text-align: right;\"></td>" +
+                        "<td> " + obj[i].precioMasIVA + "</td>" +
+                        "<td><input name=\"txtCantidad\" type=\"number\" value=\"0\" style=\"text-align: right;\"></td>" +
+                        //"<td> " + obj[i].stockSucursal + "</td>" +
+                        //"<td> " + obj[i].stockMinimoSucursal + "</td>" +
+                        //"<td> " + obj[i].stockTotal + "</td>" +
+                        //"<td> " + obj[i].stockMinimo + "</td>" +
+                        //"<td> " + CrearAlerta(obj[i].alerta) + "</td>" +
+                        "</tr> ");
+                };
+            }
+
+            function CrearAlerta(alerta)
+            {
+                var alertaTemp = "";
+
+                if (alerta !== "" && alerta != null)
+                    alertaTemp = alerta;
+
+                return alertaTemp;
             }
             <%--function BuscarArticulo()
             {

@@ -1678,6 +1678,68 @@ namespace Gestion_Web.Formularios.Compras
             return resultadoJSON;
         }
 
+        [WebMethod]
+        public static string ObtenerArticulosProveedor(int idProveedor,int idSucursal)
+        {
+            controladorArticulo controladorArticulo = new controladorArticulo();
+            ControladorArticulosEntity controladorArticulosEntity = new ControladorArticulosEntity();            
+
+            var articulos = controladorArticulo.obtenerArticulosByProveedor(idProveedor);
+
+            List<ArticulosProveedorTemp> articulosProveedorTemp = new List<ArticulosProveedorTemp>();            
+
+            foreach (var articulo in articulos)
+            {
+                ArticulosProveedorTemp articuloProveedorTemp = new ArticulosProveedorTemp();
+
+                //int posParentesis = articulo.codigo.IndexOf('(');
+                //string codigoSinParentesis = articulo.codigo;
+                //if (posParentesis > 0)
+                //{
+                //    codigoSinParentesis = articulo.codigo.Substring(0, posParentesis).Trim();
+                //}
+
+                articuloProveedorTemp.codigo = articulo.codigo;
+                articuloProveedorTemp.descripcion = articulo.descripcion;
+                articuloProveedorTemp.precio = "$" + articulo.precioSinIva;
+                articuloProveedorTemp.precioMasIVA = "$" + articulo.precioVenta;
+
+                //Articulo A = controladorArticulo.obtenerArticuloCodigo(codigoSinParentesis);
+
+                //if (A != null && A.descripcion == articulo.descripcion)
+                //{
+                //    var stockMinimoSucursalByArticulo = controladorArticulosEntity.getAllStockMinimoSucursalesByArticulo(A.id);
+                //    var list = controladorArticulo.obtenerStockArticuloReduc(A.id);
+
+                //    articuloProveedorTemp.stockMinimo = A.stockMinimo.ToString();
+                //    articuloProveedorTemp.stockTotal = list.Sum(x => x.cantidad).ToString();
+
+                //    var stockMinimoSucursal = stockMinimoSucursalByArticulo.Where(x => x.sucursal == idSucursal).Select(x => x.stockMinimo).FirstOrDefault().ToString();
+
+                //    if (!String.IsNullOrEmpty(stockMinimoSucursal))
+                //        articuloProveedorTemp.stockMinimoSucursal = stockMinimoSucursal;
+                //    else
+                //    {
+                //        stockMinimoSucursal = "0";
+                //        articuloProveedorTemp.stockMinimoSucursal = "-";
+                //    }
+
+                //    articuloProveedorTemp.stockSucursal = list.Where(x => x.sucursal.id == idSucursal).Sum(x => x.cantidad).ToString();
+
+                //    if (A.stockMinimo > Convert.ToDecimal(articuloProveedorTemp.stockTotal) || Convert.ToDecimal(stockMinimoSucursal) > Convert.ToDecimal(articuloProveedorTemp.stockTotal))
+                //    {
+                //        articuloProveedorTemp.alerta = "<span>   <span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
+                //    }
+                //}
+
+                articulosProveedorTemp.Add(articuloProveedorTemp);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(articulosProveedorTemp);
+            return resultadoJSON;
+        }
         //[WebMethod]
         //public static void AgregarArticulosBuscados(string txtDescripcion)
         //{
@@ -1737,6 +1799,19 @@ namespace Gestion_Web.Formularios.Compras
         public string formaDePago;
         public string requiereAnticipo;
         public string requiereAutorizacion;
+    }
+
+    public class ArticulosProveedorTemp
+    {
+        public string codigo;
+        public string descripcion;
+        public string precio;
+        public string precioMasIVA;
+        public string stockSucursal;
+        public string stockMinimoSucursal;
+        public string stockTotal;
+        public string stockMinimo;
+        public string alerta;
     }
 
     //public class ArticuloBuscado
