@@ -218,11 +218,10 @@
                                             <th style="width: 5%">Precio</th>
                                             <th style="width: 10%">Precio Mas IVA</th>
                                             <th style="width: 5%">Cantidad</th>
-<%--                                            <th style="width: 10%">Stock Sucursal</th>
-                                            <th style="width: 10%">Stock Minimo Sucursal</th>
+                                            <th style="width: 10%">Stock Sucursal</th>
                                             <th style="width: 10%">Stock Total</th>
-                                            <th style="width: 10%">Stock Minimo</th>--%>
-                                            <%--<th></th>--%>
+                                            <th style="width: 10%">Stock Minimo</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -603,24 +602,23 @@
                         "<tr> " +
                         "<td> " + obj[i].codigo + "</td>" +
                         "<td> " + obj[i].descripcion + "</td>" +
-                        "<td><input name=\"txtPrecio\" type=\"string\" value=" + obj[i].precio + " style=\"text-align: right;\"></td>" +
-                        "<td> " + obj[i].precioMasIVA + "</td>" +
-                        "<td><input name=\"txtCantidad\" type=\"number\" value=\"0\" style=\"text-align: right;\"></td>" +
-                        //"<td> " + obj[i].stockSucursal + "</td>" +
-                        //"<td> " + obj[i].stockMinimoSucursal + "</td>" +
-                        //"<td> " + obj[i].stockTotal + "</td>" +
-                        //"<td> " + obj[i].stockMinimo + "</td>" +
-                        //"<td> " + CrearAlerta(obj[i].alerta) + "</td>" +
+                        "<td><input name=\"txtPrecio\" type=\"string\" value=" + obj[i].precioSinIva.toFixed(2) + " style=\"text-align: right;\"></td>" +
+                        "<td style=\"text-align: right;\"> " + obj[i].precioventa.toFixed(2) + "</td>" +
+                        "<td><input name=\"txtCantidad\" type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
+                        "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
+                        "<td style=\"text-align: right;\"> " + obj[i].StockTotal.toFixed(2) + "</td>" +
+                        "<td style=\"text-align: right;\"> " + obj[i].stockMinimo.toFixed(2) + "</td>" +                        
+                        "<td> " + CrearAlerta(obj[i].stockMinimo,obj[i].StockTotal) + "</td>" +
                         "</tr> ");
                 };
             }
 
-            function CrearAlerta(alerta)
+            function CrearAlerta(stockMinimo,stockTotal)
             {
                 var alertaTemp = "";
 
-                if (alerta !== "" && alerta != null)
-                    alertaTemp = alerta;
+                if (parseFloat(stockMinimo.toFixed(2)) > parseFloat(stockTotal.toFixed(2)))
+                    alertaTemp = "<span><span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
 
                 return alertaTemp;
             }

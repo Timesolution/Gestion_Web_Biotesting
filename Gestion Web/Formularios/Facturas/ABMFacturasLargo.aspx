@@ -1926,9 +1926,14 @@
                                             <div class="col-md-1">
                                                 <button ID="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label id="lblCargandoArticulo" class="col-md-10" >Cargando articulo por favor aguarde.</label>
-                                            </div>
+                                            <asp:UpdateProgress ID="UpdateProgress3" runat="server">
+                                                <ProgressTemplate>
+                                                    <div class="col-md-4">
+                                                            <i class="fa fa-spinner fa-spin" id="spinnerCargandoArticulos"></i>
+                                                        <label id="lblCargandoArticulo" class="col-md-10">Cargando articulo por favor aguarde.</label>
+                                                    </div>
+                                                </ProgressTemplate>
+                                            </asp:UpdateProgress>
                                         </div>
                                     </div>
                                 </div>
@@ -1978,9 +1983,14 @@
                                             <div class="col-md-1">
                                                 <button ID="btnBuscarClienteDescripcion" type="button" onclick="BuscarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label id="lblCargandoCliente" class="col-md-10" >Cargando cliente por favor aguarde.</label>
-                                            </div>
+                                            <asp:UpdateProgress ID="UpdateProgress4" runat="server">
+                                                <ProgressTemplate>
+                                                    <div class="col-md-4">
+                                                            <i class="fa fa-spinner fa-spin" id="spinnerCargandoClientes"></i>
+                                                        <label id="lblCargandoCliente" class="col-md-10">Cargando cliente por favor aguarde.</label>
+                                                    </div>
+                                                </ProgressTemplate>
+                                            </asp:UpdateProgress>
                                         </div>
                                     </div>
                                 </div>
@@ -2069,6 +2079,30 @@
                     CerrarModalBuscarArticulo();
                 }
             });
+
+            var updateProgress3 = $get('<%= UpdateProgress3.ClientID %>');
+            var dynamicLayout3 = '<%= UpdateProgress3.DynamicLayout.ToString().ToLower() %>';
+
+            if (dynamicLayout3)
+            {
+                updateProgress3.style.display = "block";
+            }
+            else
+            {
+                updateProgress3.style.visibility = "visible";
+            }
+
+            var updateProgress4 = $get('<%= UpdateProgress4.ClientID %>');
+            var dynamicLayout4 = '<%= UpdateProgress4.DynamicLayout.ToString().ToLower() %>';
+
+            if (dynamicLayout4)
+            {
+                updateProgress4.style.display = "block";
+            }
+            else
+            {
+                updateProgress4.style.visibility = "visible";
+            }
         }
     </script>
 
@@ -2098,18 +2132,17 @@
                 btnBuscarArticulosDescripcion.disabled = true;
 
                 $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
-                data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function ()
-                {
-                    $.msgbox("No se pudo buscar el articulo!", { type: "error" });
-                    BuscarArticulo("",idSucursal);
-                },
-                success: OnSuccessBuscarArticulo
-            });
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
+                    data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudo buscar el articulo!", { type: "error" });
+                        BuscarArticulo("", idSucursal);
+                    },
+                    success: OnSuccessBuscarArticulo
+                });
             }            
         }
 
@@ -2130,10 +2163,10 @@
         function OnSuccessBuscarArticulo(response)
         {
             var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
-            btnBuscarArticulosDescripcion.disabled = false;
+            btnBuscarArticulosDescripcion.disabled = false;            
 
             var data = response.d;
-            var obj = JSON.parse(data);
+            var obj = JSON.parse(data);            
 
             $("#articulosTabla").dataTable().fnDestroy();
             $('#articulosTabla').find("tr:gt(0)").remove();
@@ -2155,11 +2188,13 @@
             {
                 AgregarArticuloBuscadoPorDescripcion(button);
             });
-                        
+
             document.getElementById("MainContent_txtDescripcionArticulo").value = "";
 
             var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
             lblCargandoArticulo.innerHTML = "";
+
+            $("#spinnerCargandoArticulos").hide();
         }
 
         function CrearBotonesAccion(codigo)
@@ -2176,9 +2211,6 @@
         {
             var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
             btnBuscarClienteDescripcion.disabled = false;
-
-            var lblCargandoArticulo = document.getElementById("lblCargandoCliente");
-            lblCargandoArticulo.innerHTML = "";
 
             var data = response.d;
             var obj = JSON.parse(data);
@@ -2204,8 +2236,10 @@
                         
             document.getElementById("MainContent_txtDescripcionCliente").value = "";
 
-            var lblCargandoArticulo = document.getElementById("lblCargandoCliente");
-            lblCargandoArticulo.innerHTML = "";
+            var lblCargandoCliente = document.getElementById("lblCargandoCliente");
+            lblCargandoCliente.innerHTML = "";
+
+            $("#spinnerCargandoClientes").hide();
         }
 
         function CrearBotonesAccionCliente(id)
@@ -2227,6 +2261,8 @@
             var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
             lblCargandoArticulo.innerHTML = "Cargando articulos por favor aguarde.";
 
+            $("#spinnerCargandoArticulos").show();
+            
             var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
 
             BuscarArticulo(descripcionArticulo.value, idSucursal);
@@ -2318,8 +2354,10 @@
             var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
             btnBuscarClienteDescripcion.disabled = true;
 
-            var lblCargandoArticulo = document.getElementById("lblCargandoCliente");
-            lblCargandoArticulo.innerHTML = "Cargando cliente por favor aguarde.";
+            var lblCargandoCliente = document.getElementById("lblCargandoCliente");
+            lblCargandoCliente.innerHTML = "Cargando cliente por favor aguarde.";
+
+            $("#spinnerCargandoClientes").show();
 
             var descripcionCliente = document.getElementById("MainContent_txtDescripcionCliente").value;
 
