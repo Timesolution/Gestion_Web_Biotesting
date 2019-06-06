@@ -183,7 +183,7 @@ namespace Gestion_Web.Formularios.Articulos
                 btnEliminar.Attributes.Add("href", "#modalConfirmacion");
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
                 btnEliminar.OnClientClick = "abrirdialog(" + sg.id + ");";
-                btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
+                //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
                 celAction.Controls.Add(btnEliminar);
                 celAction.Width = Unit.Percentage(10);
                 celAction.VerticalAlign = VerticalAlign.Middle;
