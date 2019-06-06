@@ -22,6 +22,7 @@ namespace Gestion_Web.Formularios.Reportes
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
         controladorUsuario contUser = new controladorUsuario();
+        controladorSucursal contSucursal = new controladorSucursal();
         Mensajes m = new Mensajes();
         private int suc;
         private string fechaD;
@@ -34,6 +35,12 @@ namespace Gestion_Web.Formularios.Reportes
         private int idProveedor;
         private string listas;
         private int idTipo;
+
+        class SucursalesTemporal
+        {
+            public string id;
+            public string nombre;
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -63,8 +70,7 @@ namespace Gestion_Web.Formularios.Reportes
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
-                        txtFechaDesdeReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaHastaReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        llenarTxtAndDropListDeLosModalesParaGenerarReportes();
 
                         DropListSucursal.SelectedValue = suc.ToString();
                         this.idTipo = -1;
@@ -148,6 +154,78 @@ namespace Gestion_Web.Formularios.Reportes
             }
         }
 
+        private void llenarTxtAndDropListDeLosModalesParaGenerarReportes()
+        {
+            try
+            {
+                asignarFechasAlDiaDeHoyALosTxtDeLosModales();
+                asignarEmpresaALosDropListDeLosModales();
+                asignarLasSucursalesALosDropListDeLosModales();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en llenarTxtAndDropListDeLosModalesParaGenerarReportes. " + ex.Message));
+            }
+        }
+
+        private void asignarEmpresaALosDropListDeLosModales()
+        {
+            try
+            {
+                DataTable dt = contSucursal.obtenerEmpresas();
+
+                DropListEmpresaReporteVentasPorRangoHorario.DataSource = dt;
+                DropListEmpresaReporteVentasPorRangoHorario.DataValueField = "Id";
+                DropListEmpresaReporteVentasPorRangoHorario.DataTextField = "Razon Social";
+
+                DropListEmpresaReporteVentasPorRangoHorario.DataBind();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private void asignarLasSucursalesALosDropListDeLosModales()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursales();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Todas";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListSucursalReporteVentasPorRangoHorario.DataSource = dt;
+                this.DropListSucursalReporteVentasPorRangoHorario.DataValueField = "id";
+                this.DropListSucursalReporteVentasPorRangoHorario.DataTextField = "nombre";
+
+                this.DropListSucursalReporteVentasPorRangoHorario.DataBind();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private void asignarFechasAlDiaDeHoyALosTxtDeLosModales()
+        {
+            try
+            {
+                txtFechaDesdeReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                txtFechaHastaReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+                txtFechaDesdeReporteVentasPorRangoHorario.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public void cargarSucursal()
         {
             try
@@ -172,7 +250,6 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();
-
             }
             catch (Exception ex)
             {
@@ -305,6 +382,7 @@ namespace Gestion_Web.Formularios.Reportes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
+
         public void cargarListaPrecio()
         {
             try
@@ -1175,6 +1253,39 @@ namespace Gestion_Web.Formularios.Reportes
         }
         #endregion
 
+        [WebMethod]
+        public static string RecargarSucursales(int empresa)
+        {
+            controladorSucursal controladorSucursal = new controladorSucursal();
+
+            DataTable dt = null;
+
+            if (empresa > 0)
+                dt = controladorSucursal.obtenerSucursalesDT(empresa);
+            else
+                dt = controladorSucursal.obtenerSucursales();
+
+            DataRow dr = dt.NewRow();
+            dr["nombre"] = "Todas";
+            dr["Id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
+
+            List<SucursalesTemporal> sucursales = new List<SucursalesTemporal>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                SucursalesTemporal sucursalesTemporal = new SucursalesTemporal();
+                sucursalesTemporal.id = row["Id"].ToString();
+                sucursalesTemporal.nombre = row["nombre"].ToString();
+                sucursales.Add(sucursalesTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(sucursales);
+            return resultadoJSON;
+        }
+
+        #region LinkButtons para generar reportes
         protected void lbtnReporteArticulosPorCategoriaAndProveedorXLS_Click(object sender, EventArgs e)
         {
             string fd = this.txtFechaDesde.Text.ToString();
@@ -1232,20 +1343,27 @@ namespace Gestion_Web.Formularios.Reportes
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=17&fd=" + fd + "&fh=" + fh + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
 
-        protected void lbtnGenerarReporteVentasPorRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS(object sender, EventArgs e)
+        protected void lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS_Click(object sender, EventArgs e)
         {
-            string fd = this.txtFechaDesdeReporteVentasPorRangoHorario.Text.ToString();
-            string fh = this.txtFechaHastaReporteVentasPorRangoHorario.Text.ToString();
-            int idEmpresa = Convert.ToInt32(this.DropListEmpresaReporteVentasPorRangoHorario.SelectedValue);
-            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&fh=" + fh + "&em=" + idEmpresa + "&ex=1");
+            try
+            {
+                string fd = this.txtFechaDesdeReporteVentasPorRangoHorario.Text.ToString();
+                int idSucursal = Convert.ToInt32(this.DropListSucursalReporteVentasPorRangoHorario.SelectedValue);
+                Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&s=" + idSucursal + "&ex=1");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
-        protected void lbtnGenerarReporteVentasPorRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF(object sender, EventArgs e)
+        protected void lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF_Click(object sender, EventArgs e)
         {
             string fd = this.txtFechaDesdeReporteVentasPorRangoHorario.Text.ToString();
-            string fh = this.txtFechaHastaReporteVentasPorRangoHorario.Text.ToString();
-            int idEmpresa = Convert.ToInt32(this.DropListEmpresaReporteVentasPorRangoHorario.SelectedValue);
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&fh=" + fh + "&em" + idEmpresa + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            int idSucursal = Convert.ToInt32(this.DropListSucursalReporteVentasPorRangoHorario.SelectedValue);
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&s=" + idSucursal + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
+        #endregion
     }
 }

@@ -631,7 +631,7 @@
                                             <asp:TextBox ID="txtFechaDesdeReporteVentasMarcaGrupoCantidad" runat="server" class="form-control"></asp:TextBox>
                                         </div>
                                         <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesdeReporteVentasMarcaGrupoCantidad" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -640,7 +640,7 @@
                                             <asp:TextBox ID="txtFechaHastaReporteVentasMarcaGrupoCantidad" runat="server" class="form-control"></asp:TextBox>
                                         </div>
                                         <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHastaReporteVentasMarcaGrupoCantidad" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </ContentTemplate>
@@ -682,34 +682,19 @@
                                             <asp:TextBox ID="txtFechaDesdeReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:TextBox>
                                         </div>
                                         <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4">Hasta</label>
-                                        <div class="col-md-4">
-                                            <asp:TextBox ID="txtFechaHastaReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:TextBox>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesdeReporteVentasPorRangoHorario" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4">Empresa</label>
-                                        <div class="col-md-4">
+                                        <div class="col-md-8">
                                             <asp:DropDownList ID="DropListEmpresaReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:DropDownList>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4">Sucursal</label>
-                                        <div class="col-md-4">
-                                            <asp:TextBox ID="txtSucursal18" runat="server" class="form-control"></asp:TextBox>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        <div class="col-md-8">
+                                            <asp:DropDownList ID="DropListSucursalReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:DropDownList>
                                         </div>
                                     </div>
                                 </ContentTemplate>
@@ -759,8 +744,14 @@
             function pageLoad() {
                 $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
                 $("#<%= txtFechaDesdeReporteVentasMarcaGrupoCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaHastaReporteVentasMarcaGrupoCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+                $("#<%= txtFechaDesdeReporteVentasPorRangoHorario.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+                var controlDropListEmpresa = document.getElementById('<%= DropListEmpresaReporteVentasPorRangoHorario.ClientID %>');
+                controlDropListEmpresa.addEventListener("change", CargarSucursales);
             }
 
             function obtenerGrafico() {
@@ -944,6 +935,40 @@
                 }
             }
 
+            function CargarSucursales() {
+                var controlDropListEmpresa = document.getElementById('<%= DropListEmpresaReporteVentasPorRangoHorario.ClientID %>').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "ReportesVentas.aspx/RecargarSucursales",
+                    data: '{empresa: "' + controlDropListEmpresa + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudieron cargar las sucursales.");
+                    },
+                    success: OnSuccessSucursal
+                });
+            };
+
+            function OnSuccessSucursal(response) {
+                var controlDropListSucursal = document.getElementById('<%= DropListSucursalReporteVentasPorRangoHorario.ClientID %>');
+
+                while (controlDropListSucursal.options.length > 0) {
+                    controlDropListSucursal.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombre;
+
+                    controlDropListSucursal.add(option);
+                }
+            }
         </script>
 
 

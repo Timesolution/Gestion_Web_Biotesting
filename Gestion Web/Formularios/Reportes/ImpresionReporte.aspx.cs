@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -30,8 +31,8 @@ namespace Gestion_Web.Formularios.Reportes
         controladorCliente contCliente = new controladorCliente();
         controladorUsuario contUser = new controladorUsuario();
         controladorCompraEntity controladorCompraEntity = new controladorCompraEntity();
-        
-        private int valor;        
+
+        private int valor;
         private int excel;
         private string fechaD;
         private string fechaH;
@@ -54,7 +55,7 @@ namespace Gestion_Web.Formularios.Reportes
                 if (!IsPostBack)
                 {
 
-                    this.valor = Convert.ToInt32(Request.QueryString["valor"]);                    
+                    this.valor = Convert.ToInt32(Request.QueryString["valor"]);
                     this.excel = Convert.ToInt32(Request.QueryString["ex"]);
                     this.fechaD = Request.QueryString["fd"] as string;
                     this.fechaH = Request.QueryString["fh"] + " 23:59:59.000";
@@ -138,11 +139,15 @@ namespace Gestion_Web.Formularios.Reportes
                     {
                         this.generarReporte17(); // Reporte compras y ventas de articulos. Por grupo marca cantidad
                     }
+                    if (valor == 18)
+                    {
+                        this.generarReporte18(); // Reporte ventas por rango horario
+                    }
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de ventas. " + ex.Message));                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de ventas. " + ex.Message));
             }
         }
 
@@ -158,9 +163,9 @@ namespace Gestion_Web.Formularios.Reportes
                 DataTable dtArticulosCant = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
                 DataTable dtClientesCant = contFacturacion.obtenerTopClientesCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
                 DataTable dtVendedoresCant = contFacturacion.obtenerTopVendedoresCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
-                
-                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;               
-                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasR.rdlc");                                
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasR.rdlc");
 
                 //ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
                 ReportDataSource rds = new ReportDataSource("ArticulosCant", dtArticulosCant);
@@ -211,11 +216,11 @@ namespace Gestion_Web.Formularios.Reportes
                     this.Response.End();
                 }
 
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas. " + ex.Message));
             }
         }
 
@@ -366,18 +371,18 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                
+
                 DataTable dtSucursalesImporte = contFacturacion.obtenerTopSucursalesImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor);
-                
+
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasSucursalesR.rdlc");
 
                 ReportDataSource rds = new ReportDataSource("SucursalesImporte", dtSucursalesImporte);
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                
+
 
                 this.ReportViewer1.LocalReport.Refresh();
 
@@ -431,18 +436,18 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                
+
                 DataTable dtArticulosClientes = contFacturacion.obtenerCantidadArticulosCliente(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor);
-                
+
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosClientes.rdlc");
 
                 ReportDataSource rds = new ReportDataSource("ArticulosClientes", dtArticulosClientes);
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                
+
 
                 this.ReportViewer1.LocalReport.Refresh();
 
@@ -563,7 +568,7 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 controladorListaPrecio contListas = new controladorListaPrecio();
-                                
+
                 string nombreLista = "";
                 string listasElegidas = "";
                 if (listas != "")
@@ -582,8 +587,8 @@ namespace Gestion_Web.Formularios.Reportes
                     }
                 }
 
-                DataTable dtImporte = contFacturacion.obtenerTopImporteArticulosListaSucursal(fechaD, fechaH, idSuc, idArticulo, listasElegidas,this.idProveedor);
-                DataTable dtCantidad = contFacturacion.obtenerTopCantidadArticulosListaSucursal(fechaD, fechaH, idSuc, idArticulo, listasElegidas,this.idProveedor);
+                DataTable dtImporte = contFacturacion.obtenerTopImporteArticulosListaSucursal(fechaD, fechaH, idSuc, idArticulo, listasElegidas, this.idProveedor);
+                DataTable dtCantidad = contFacturacion.obtenerTopCantidadArticulosListaSucursal(fechaD, fechaH, idSuc, idArticulo, listasElegidas, this.idProveedor);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosLista.rdlc");
@@ -596,7 +601,7 @@ namespace Gestion_Web.Formularios.Reportes
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
-                
+
                 this.ReportViewer1.LocalReport.SetParameters(param);
 
                 this.ReportViewer1.LocalReport.Refresh();
@@ -658,7 +663,7 @@ namespace Gestion_Web.Formularios.Reportes
                 DataTable dtDatos = new DataTable();
 
                 dtDatos.Columns.Add("Codigo");
-                dtDatos.Columns.Add("Articulo");                
+                dtDatos.Columns.Add("Articulo");
 
                 List<Trazabilidad_Campos> lstCampos = this.contArticulo.obtenerCamposTrazabilidadByGrupo(this.idGrupo);
                 foreach (Trazabilidad_Campos campo in lstCampos)
@@ -683,11 +688,11 @@ namespace Gestion_Web.Formularios.Reportes
                         dr = dtDatos.NewRow();
                         Articulo arti = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(row["idArticulo"]));
                         dr["Codigo"] = arti.codigo;
-                        dr["Articulo"] = arti.descripcion;                        
+                        dr["Articulo"] = arti.descripcion;
                         dr["Numero"] = row["Traza"].ToString();
                     }
 
-                    if (columnas < dtDatos.Columns.Count )
+                    if (columnas < dtDatos.Columns.Count)
                     {
 
                         dr[columnas + 2] = row["valor"];
@@ -718,7 +723,7 @@ namespace Gestion_Web.Formularios.Reportes
                 string archivo = contReport.exportarTrazabilidad(dtDatos, path);
 
                 Response.Redirect("/Formularios/Reportes/Trazabildad/Excel/" + archivo);
-                
+
             }
             catch (Exception ex)
             {
@@ -733,11 +738,11 @@ namespace Gestion_Web.Formularios.Reportes
                 controladorReportes contReport = new controladorReportes();
                 Articulo art = this.contArticulo.obtenerArticuloByID(this.idArticulo);
 
-                DataTable dtDetalle = contReport.generarDetalleTrazabilidad(this.idArticulo,this.idTraza,this.idGrupo,this.idSuc);
+                DataTable dtDetalle = contReport.generarDetalleTrazabilidad(this.idArticulo, this.idTraza, this.idGrupo, this.idSuc);
 
                 String path = HttpContext.Current.Server.MapPath("/Formularios/Reportes/Trazabildad/Excel/");
 
-                string archivo = contReport.exportarTrazabilidad(dtDetalle, path,"DetalleTrazabilidad_" + art.codigo);
+                string archivo = contReport.exportarTrazabilidad(dtDetalle, path, "DetalleTrazabilidad_" + art.codigo);
 
                 Response.Redirect("/Formularios/Reportes/Trazabildad/Excel/" + archivo);
 
@@ -772,7 +777,7 @@ namespace Gestion_Web.Formularios.Reportes
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
-         
+
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -903,7 +908,7 @@ namespace Gestion_Web.Formularios.Reportes
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosListaXFecha.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("CantArtGroupByFecha", dtArticulosFecha);           
+                ReportDataSource rds = new ReportDataSource("CantArtGroupByFecha", dtArticulosFecha);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -971,7 +976,7 @@ namespace Gestion_Web.Formularios.Reportes
                         listas += lista[0] + ",";
                     }
                 }
-                listas = listas.Remove(listas.Length-1,1);
+                listas = listas.Remove(listas.Length - 1, 1);
                 DataTable dtVentas = contFacturacion.obtenerTopArticulosCantidadByProveedor(fechaD, fechaH, idSuc, idProveedor, listas, 0);
                 //compras
                 DateTime fechaDesde = Convert.ToDateTime(fechaD, new CultureInfo("es-AR"));
@@ -984,7 +989,7 @@ namespace Gestion_Web.Formularios.Reportes
                 dtVentas.Merge(dtVentasArtEnOferta, true);
 
                 var result = from row in dtVentas.AsEnumerable()
-                             where row.Field<decimal ?>("cantidadComprada") > 0 ||
+                             where row.Field<decimal?>("cantidadComprada") > 0 ||
                                    row.Field<decimal?>("cantidadVendida") > 0 ||
                                    row.Field<decimal?>("cantidadVendidaOferta") > 0
                              group row by new { razonSocial = row.Field<string>("razonSocial") } into grp
@@ -1002,7 +1007,7 @@ namespace Gestion_Web.Formularios.Reportes
 
                 //Lo ordeno por cantidad
                 DataView dv = dtFinal.DefaultView;
-                
+
                 DataTable sortedDT = dv.ToTable();
 
                 var dtComprasVentasProveedores = dtVentas;
@@ -1250,6 +1255,125 @@ namespace Gestion_Web.Formularios.Reportes
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                     String filename = string.Format("{0}.{1}", "Compras_Y_Ventas_Por_Marca_Grupo", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas generarReporte17. " + ex.Message));
+            }
+        }
+
+        private DataTable procesarDataTableYObtenerloParaReporteVentasAgrupadoPorRangoHorario(DataTable tablaConRegistrosDeRangoHorario)
+        {
+            try
+            {
+                string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
+                bool restoHoras = false;
+
+                if (Convert.ToInt32(modificoHora) == 1)
+                {
+                    restoHoras = true;
+                }
+
+                string fd = this.fechaD.ToString();
+
+                DateTime fechaAFiltrar = Convert.ToDateTime(fd);
+                string fechaAFiltrarString = fechaAFiltrar.ToString("dd/MM/yyyy") + " 06:00 AM";
+                DateTime horaPorVenta = Convert.ToDateTime(fechaAFiltrarString);
+
+                DataTable tablaConHorasSinCantidad = new DataTable();
+                tablaConHorasSinCantidad.Columns.Add("fechaDateTime");
+                tablaConHorasSinCantidad.Columns.Add("rangoHorario");
+                tablaConHorasSinCantidad.Columns.Add("facturasRealizadas",typeof (decimal));
+
+                for (int i = 0; i < 17; i++)
+                {
+                    tablaConHorasSinCantidad.Rows.Add();
+
+                    tablaConHorasSinCantidad.Rows[i]["fechaDateTime"] = horaPorVenta;
+                    tablaConHorasSinCantidad.Rows[i]["rangoHorario"] = horaPorVenta.ToString("dd/MM/yyyy") + " " + horaPorVenta.ToShortTimeString() + " A " + horaPorVenta.AddHours(1).ToShortTimeString();
+                    tablaConHorasSinCantidad.Rows[i]["facturasRealizadas"] = 0;
+
+                    horaPorVenta = horaPorVenta.AddHours(1);
+                }
+
+                foreach (DataRow dr in tablaConRegistrosDeRangoHorario.Rows)
+                {
+                    DateTime fechaDelRegistroDeLaBase = Convert.ToDateTime(dr["fecha"]);
+
+                    if (restoHoras)//si es azure resto 3 horas
+                    {
+                        fechaDelRegistroDeLaBase = fechaDelRegistroDeLaBase.AddHours(-3);
+                    }
+
+                    for (int i = 0; i < 17; i++)
+                    {
+                        DateTime fechaDeLaTablaSinCantidad = Convert.ToDateTime(tablaConHorasSinCantidad.Rows[i]["fechaDateTime"]);
+
+                        if (fechaDelRegistroDeLaBase == fechaDeLaTablaSinCantidad)
+                        {
+                            tablaConHorasSinCantidad.Rows[i]["facturasRealizadas"] = dr["facturasRealizadas"];
+                        }
+                    }
+                }
+                return tablaConHorasSinCantidad;
+            }
+            catch (Exception ex)
+            {
+                return new DataTable();
+            }
+        }
+
+        private void generarReporte18()
+        {
+            try
+            {
+                DataTable dtReporteVentasByRangoHorario = contFacturacion.obtenerFacturasVendidasPorSucursalesEnRangosDeHora(fechaD, idSuc);
+
+                DataTable dtFinal = procesarDataTableYObtenerloParaReporteVentasAgrupadoPorRangoHorario(dtReporteVentasByRangoHorario);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasDeFacturasBySucursalesByRangoHorario.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("VentasDeFacturasAgrupadoPorRangoHorario", dtFinal);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "VentasPorFacturasRangoHorario", "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;

@@ -52,6 +52,8 @@ namespace Gestion_Web.Formularios.Reportes {
         
         private VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad;
         
+        private VentasDeFacturasAgrupadoPorRangoHorarioDataTable tableVentasDeFacturasAgrupadoPorRangoHorario;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -121,6 +123,9 @@ namespace Gestion_Web.Formularios.Reportes {
                 }
                 if ((ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"] != null)) {
                     base.Tables.Add(new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable(ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"]));
+                }
+                if ((ds.Tables["VentasDeFacturasAgrupadoPorRangoHorario"] != null)) {
+                    base.Tables.Add(new VentasDeFacturasAgrupadoPorRangoHorarioDataTable(ds.Tables["VentasDeFacturasAgrupadoPorRangoHorario"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -282,6 +287,16 @@ namespace Gestion_Web.Formularios.Reportes {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public VentasDeFacturasAgrupadoPorRangoHorarioDataTable VentasDeFacturasAgrupadoPorRangoHorario {
+            get {
+                return this.tableVentasDeFacturasAgrupadoPorRangoHorario;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.BrowsableAttribute(true)]
         [global::System.ComponentModel.DesignerSerializationVisibilityAttribute(global::System.ComponentModel.DesignerSerializationVisibility.Visible)]
         public override global::System.Data.SchemaSerializationMode SchemaSerializationMode {
@@ -388,6 +403,9 @@ namespace Gestion_Web.Formularios.Reportes {
                 }
                 if ((ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"] != null)) {
                     base.Tables.Add(new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable(ds.Tables["VentasYComprasArticulosAgrupadoByGrupoMarcaCantidad"]));
+                }
+                if ((ds.Tables["VentasDeFacturasAgrupadoPorRangoHorario"] != null)) {
+                    base.Tables.Add(new VentasDeFacturasAgrupadoPorRangoHorarioDataTable(ds.Tables["VentasDeFacturasAgrupadoPorRangoHorario"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -506,6 +524,12 @@ namespace Gestion_Web.Formularios.Reportes {
                     this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad.InitVars();
                 }
             }
+            this.tableVentasDeFacturasAgrupadoPorRangoHorario = ((VentasDeFacturasAgrupadoPorRangoHorarioDataTable)(base.Tables["VentasDeFacturasAgrupadoPorRangoHorario"]));
+            if ((initTable == true)) {
+                if ((this.tableVentasDeFacturasAgrupadoPorRangoHorario != null)) {
+                    this.tableVentasDeFacturasAgrupadoPorRangoHorario.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -544,6 +568,8 @@ namespace Gestion_Web.Formularios.Reportes {
             base.Tables.Add(this.tableVentasAgrupadoSucursalGrupoSubGrupoMarca);
             this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad = new VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadDataTable();
             base.Tables.Add(this.tableVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad);
+            this.tableVentasDeFacturasAgrupadoPorRangoHorario = new VentasDeFacturasAgrupadoPorRangoHorarioDataTable();
+            base.Tables.Add(this.tableVentasDeFacturasAgrupadoPorRangoHorario);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -627,6 +653,12 @@ namespace Gestion_Web.Formularios.Reportes {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeVentasYComprasArticulosAgrupadoByGrupoMarcaCantidad() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeVentasDeFacturasAgrupadoPorRangoHorario() {
             return false;
         }
         
@@ -726,6 +758,9 @@ namespace Gestion_Web.Formularios.Reportes {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEventHandler(object sender, VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEventHandler(object sender, VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -4804,6 +4839,281 @@ namespace Gestion_Web.Formularios.Reportes {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class VentasDeFacturasAgrupadoPorRangoHorarioDataTable : global::System.Data.TypedTableBase<VentasDeFacturasAgrupadoPorRangoHorarioRow> {
+            
+            private global::System.Data.DataColumn columnfechaDateTime;
+            
+            private global::System.Data.DataColumn columnrangoHorario;
+            
+            private global::System.Data.DataColumn columnfacturasRealizadas;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasDeFacturasAgrupadoPorRangoHorarioDataTable() {
+                this.TableName = "VentasDeFacturasAgrupadoPorRangoHorario";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal VentasDeFacturasAgrupadoPorRangoHorarioDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected VentasDeFacturasAgrupadoPorRangoHorarioDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn fechaDateTimeColumn {
+                get {
+                    return this.columnfechaDateTime;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn rangoHorarioColumn {
+                get {
+                    return this.columnrangoHorario;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn facturasRealizadasColumn {
+                get {
+                    return this.columnfacturasRealizadas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasDeFacturasAgrupadoPorRangoHorarioRow this[int index] {
+                get {
+                    return ((VentasDeFacturasAgrupadoPorRangoHorarioRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEventHandler VentasDeFacturasAgrupadoPorRangoHorarioRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEventHandler VentasDeFacturasAgrupadoPorRangoHorarioRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEventHandler VentasDeFacturasAgrupadoPorRangoHorarioRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEventHandler VentasDeFacturasAgrupadoPorRangoHorarioRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddVentasDeFacturasAgrupadoPorRangoHorarioRow(VentasDeFacturasAgrupadoPorRangoHorarioRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasDeFacturasAgrupadoPorRangoHorarioRow AddVentasDeFacturasAgrupadoPorRangoHorarioRow(string fechaDateTime, string rangoHorario, string facturasRealizadas) {
+                VentasDeFacturasAgrupadoPorRangoHorarioRow rowVentasDeFacturasAgrupadoPorRangoHorarioRow = ((VentasDeFacturasAgrupadoPorRangoHorarioRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        fechaDateTime,
+                        rangoHorario,
+                        facturasRealizadas};
+                rowVentasDeFacturasAgrupadoPorRangoHorarioRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowVentasDeFacturasAgrupadoPorRangoHorarioRow);
+                return rowVentasDeFacturasAgrupadoPorRangoHorarioRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                VentasDeFacturasAgrupadoPorRangoHorarioDataTable cln = ((VentasDeFacturasAgrupadoPorRangoHorarioDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new VentasDeFacturasAgrupadoPorRangoHorarioDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnfechaDateTime = base.Columns["fechaDateTime"];
+                this.columnrangoHorario = base.Columns["rangoHorario"];
+                this.columnfacturasRealizadas = base.Columns["facturasRealizadas"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnfechaDateTime = new global::System.Data.DataColumn("fechaDateTime", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnfechaDateTime);
+                this.columnrangoHorario = new global::System.Data.DataColumn("rangoHorario", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnrangoHorario);
+                this.columnfacturasRealizadas = new global::System.Data.DataColumn("facturasRealizadas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnfacturasRealizadas);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasDeFacturasAgrupadoPorRangoHorarioRow NewVentasDeFacturasAgrupadoPorRangoHorarioRow() {
+                return ((VentasDeFacturasAgrupadoPorRangoHorarioRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new VentasDeFacturasAgrupadoPorRangoHorarioRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(VentasDeFacturasAgrupadoPorRangoHorarioRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.VentasDeFacturasAgrupadoPorRangoHorarioRowChanged != null)) {
+                    this.VentasDeFacturasAgrupadoPorRangoHorarioRowChanged(this, new VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent(((VentasDeFacturasAgrupadoPorRangoHorarioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.VentasDeFacturasAgrupadoPorRangoHorarioRowChanging != null)) {
+                    this.VentasDeFacturasAgrupadoPorRangoHorarioRowChanging(this, new VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent(((VentasDeFacturasAgrupadoPorRangoHorarioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.VentasDeFacturasAgrupadoPorRangoHorarioRowDeleted != null)) {
+                    this.VentasDeFacturasAgrupadoPorRangoHorarioRowDeleted(this, new VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent(((VentasDeFacturasAgrupadoPorRangoHorarioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.VentasDeFacturasAgrupadoPorRangoHorarioRowDeleting != null)) {
+                    this.VentasDeFacturasAgrupadoPorRangoHorarioRowDeleting(this, new VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent(((VentasDeFacturasAgrupadoPorRangoHorarioRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveVentasDeFacturasAgrupadoPorRangoHorarioRow(VentasDeFacturasAgrupadoPorRangoHorarioRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                dsVentas ds = new dsVentas();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "VentasDeFacturasAgrupadoPorRangoHorarioDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class TopArticulosCantRow : global::System.Data.DataRow {
@@ -6652,6 +6962,108 @@ namespace Gestion_Web.Formularios.Reportes {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class VentasDeFacturasAgrupadoPorRangoHorarioRow : global::System.Data.DataRow {
+            
+            private VentasDeFacturasAgrupadoPorRangoHorarioDataTable tableVentasDeFacturasAgrupadoPorRangoHorario;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal VentasDeFacturasAgrupadoPorRangoHorarioRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableVentasDeFacturasAgrupadoPorRangoHorario = ((VentasDeFacturasAgrupadoPorRangoHorarioDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string fechaDateTime {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.fechaDateTimeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'fechaDateTime\' in table \'VentasDeFacturasAgrupadoPorRangoHo" +
+                                "rario\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.fechaDateTimeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string rangoHorario {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.rangoHorarioColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'rangoHorario\' in table \'VentasDeFacturasAgrupadoPorRangoHor" +
+                                "ario\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.rangoHorarioColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string facturasRealizadas {
+                get {
+                    try {
+                        return ((string)(this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.facturasRealizadasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'facturasRealizadas\' in table \'VentasDeFacturasAgrupadoPorRa" +
+                                "ngoHorario\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.facturasRealizadasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsfechaDateTimeNull() {
+                return this.IsNull(this.tableVentasDeFacturasAgrupadoPorRangoHorario.fechaDateTimeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetfechaDateTimeNull() {
+                this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.fechaDateTimeColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsrangoHorarioNull() {
+                return this.IsNull(this.tableVentasDeFacturasAgrupadoPorRangoHorario.rangoHorarioColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetrangoHorarioNull() {
+                this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.rangoHorarioColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsfacturasRealizadasNull() {
+                return this.IsNull(this.tableVentasDeFacturasAgrupadoPorRangoHorario.facturasRealizadasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetfacturasRealizadasNull() {
+                this[this.tableVentasDeFacturasAgrupadoPorRangoHorario.facturasRealizadasColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -7113,6 +7525,40 @@ namespace Gestion_Web.Formularios.Reportes {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public VentasYComprasArticulosAgrupadoByGrupoMarcaCantidadRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent : global::System.EventArgs {
+            
+            private VentasDeFacturasAgrupadoPorRangoHorarioRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasDeFacturasAgrupadoPorRangoHorarioRowChangeEvent(VentasDeFacturasAgrupadoPorRangoHorarioRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public VentasDeFacturasAgrupadoPorRangoHorarioRow Row {
                 get {
                     return this.eventRow;
                 }
