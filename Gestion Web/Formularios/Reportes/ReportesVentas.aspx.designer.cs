@@ -157,6 +157,24 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorCategoriaAndProveedorPDF;
         
         /// <summary>
+        /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel;
+        
+        /// <summary>
+        /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF_Click control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF;
+        
+        /// <summary>
         /// lbtnReporteVentasPorPuntoDeVentaPDF control.
         /// </summary>
         /// <remarks>

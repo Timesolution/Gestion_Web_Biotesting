@@ -40,12 +40,39 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
         
         /// <summary>
-        /// btnGenerarDiferenciasStock control.
+        /// DropListProveedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGenerarDiferenciasStock;
+        protected global::System.Web.UI.WebControls.DropDownList DropListProveedor;
+        
+        /// <summary>
+        /// DropListGrupo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListGrupo;
+        
+        /// <summary>
+        /// DropListSubGrupo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListSubGrupo;
+        
+        /// <summary>
+        /// DropListMarca control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListMarca;
     }
 }
