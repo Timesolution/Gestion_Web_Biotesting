@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\gestion_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -426,6 +426,7 @@
     <Content Include="Formularios\Herramientas\InformeBTBF.aspx" />
     <Content Include="Formularios\Herramientas\PanelAlertasSMS.aspx" />
     <Content Include="Formularios\Herramientas\AsuntosSMS.aspx" />
+    <Content Include="Formularios\Herramientas\ResetearStock.aspx" />
     <Content Include="Formularios\Herramientas\Soporte.aspx" />
     <Content Include="Formularios\Herramientas\TareasF.aspx" />
     <Content Include="Formularios\Herramientas\RegistroSMS.aspx" />
@@ -775,7 +776,9 @@
     <Content Include="Formularios\Reportes\dsReportesBeneficios.xsc">
       <DependentUpon>dsReportesBeneficios.xsd</DependentUpon>
     </Content>
-    <Content Include="Formularios\Reportes\ComprasYVentasByGrupoMarcaCantidad.rdlc" />
+    <Content Include="Formularios\Reportes\ComprasYVentasByGrupoMarcaCantidad.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Formularios\Reportes\dsReportesBeneficios.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -791,6 +794,9 @@
     </None>
     <Content Include="Formularios\Reportes\dsReportesCompras.xss">
       <DependentUpon>dsReportesCompras.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\Reportes\VentasDeFacturasBySucursalesByRangoHorario.rdlc">
+      <SubType>Designer</SubType>
     </Content>
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
@@ -1682,6 +1688,13 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\AsuntosSMS.aspx.designer.cs">
       <DependentUpon>AsuntosSMS.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\ResetearStock.aspx.cs">
+      <DependentUpon>ResetearStock.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\ResetearStock.aspx.designer.cs">
+      <DependentUpon>ResetearStock.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Herramientas\Soporte.aspx.cs">
       <DependentUpon>Soporte.aspx</DependentUpon>
