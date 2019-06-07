@@ -309,7 +309,7 @@
                                                                     <%--<a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>--%>
-                                                                    <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />
+                                                                    <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" /> 
                                                                     <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
                                                                         <%--<i class="btn-icon-only icon-check-sign"></i>--%>
                                                                 </span>
@@ -1906,8 +1906,7 @@
         </div>
 
         <div id="modalBuscarArticuloDescripcion" on class="modal fade" tabindex="-1" role="dialog">
-            <asp:Panel ID="Panel2" runat="server">
-                <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
+            <asp:Panel ID="Panel2" runat="server">                
                 <div class="modal-dialog" style="width: 60%;">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -2118,6 +2117,14 @@
             $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
         });        
 
+        $(function ()
+        {
+            var controltxtDescripcionCliente = document.getElementById('<%= txtDescripcionCliente.ClientID %>');
+            controltxtDescripcionCliente.addEventListener("keypress", BuscarClienteDefaultButton, false);
+            var controltxtDescripcionArticulo = document.getElementById('<%= txtDescripcionArticulo.ClientID %>');
+            controltxtDescripcionArticulo.addEventListener("keypress", BuscarArticuloDefaultButton, false);
+        });
+        
     </script>    
     <script>
         function BuscarArticulo(descripcion,idSucursal)
@@ -2373,6 +2380,15 @@
                 },
                 success: OnSuccessCargarClientes
             });
+            }
+
+        function BuscarClienteDefaultButton()
+        {
+            $("#btnBuscarClienteDescripcion").click();
+        }
+        function BuscarArticuloDefaultButton()
+        {
+            $("#btnBuscarArticuloDescripcion").click();
         }
     </script>
     <script>
@@ -2415,14 +2431,21 @@
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
             }
-        }        
+        }
 
-        function foco() {
-            document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
-            var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
-            var screenPosition = note.getBoundingClientRect();
+        function foco()
+        {
+            var modalArticulosVisible = $('#modalBuscarArticuloDescripcion').is(':visible');
+            var modalClientesVisible = $('#modalBuscarClienteDescripcion').is(':visible');
 
-            window.scrollTo(0, screenPosition.bottom / 2);
+            if (!modalArticulosVisible && !modalClientesVisible)
+            {
+                document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
+                var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
+                var screenPosition = note.getBoundingClientRect();
+
+                window.scrollTo(0, screenPosition.bottom / 2);
+            }            
         }
 
         function focoDesc() {
