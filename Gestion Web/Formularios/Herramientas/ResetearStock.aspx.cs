@@ -1,5 +1,7 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
+using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
 using System.Collections.Generic;
@@ -81,7 +83,7 @@ namespace Gestion_Web.Formularios.Herramientas
             return poseePermiso;
         }
 
-        #region cargar drop list
+        #region cargas drop list
         private void CargarDropLists()
         {
             CargarEmpresasEnLista();
@@ -315,5 +317,48 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
         #endregion
+
+        public void ProcesarReinicioDeStock()
+        {
+            try
+            {
+                //Stock st = contArticulo.obtenerStockID(idStock);
+                //stockMovimiento s = new stockMovimiento();
+                //txtAgregarStock.Text = txtAgregarStock.Text.Replace(',', '.');
+
+                ////Agrego el movimiento de stock                  
+                //s.IdUsuario = (int)Session["Login_IdUser"];
+                //s.Cantidad = Convert.ToDecimal(this.txtAgregarStock.Text);
+                //s.Articulo = st.articulo.id;
+                //s.IdSucursal = st.sucursal.id;
+                //s.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
+                //s.TipoMovimiento = "Inventario";
+                //s.Comentarios = this.txtComentarios.Text;
+
+                //int j = contArticulo.AgregarMovimientoStock(s);
+                //if (j > 0)
+                //{
+                //    int i = contArticulo.ActualizarStock(this.idStock, Convert.ToDecimal(txtAgregarStock.Text));
+                //    if (i > 0)
+                //    {
+                //        Modal.Close(this, "OK");
+                //    }
+                //    else
+                //    {
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al actualizar el stock del producto. "));
+                //    }
+                //}
+                //else
+                //{
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al agregar movimiento de stock. "));
+                //}
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
     }
 }
