@@ -75,6 +75,9 @@ namespace Gestion_Web.Formularios.Facturas
         private static bool _agregarMultiplesArticulosPorDescripcion = false;
         private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
 
+        static int _idCliente = 0;
+        private static bool _agregarCliente = false;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -104,6 +107,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["CobroAnticipo"] = null;
                     Session["PagoCuentaAnticipo"] = null;
                     Session["PagoCuentaAnticipoMutual"] = null;
+                    Session["Factura"] = null;
+                    phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
 
@@ -221,6 +226,8 @@ namespace Gestion_Web.Formularios.Facturas
                     _buscarArticuloPorDescripcion = false;
                     _agregarMultiplesArticulosPorDescripcion = false;
                     _codigosArticulosMultiplesParaAgregar = new List<string>();
+                    _idCliente = 0;
+                    _agregarCliente = false;
                 }
 
                 this.cargarTablaPAgos();
@@ -232,11 +239,11 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 }
 
-                if (Session["FacturasABM_ClienteModal"] != null)
-                {
-                    this.flag_clienteModal = 1;
-                    this.cargarClienteDesdeModal();
-                }
+                //if (Session["FacturasABM_ClienteModal"] != null)
+                //{
+                //    this.flag_clienteModal = 1;
+                //    this.cargarClienteDesdeModal();
+                //}
                 //si viene de la pantalla de articulos, modal
                 if (Session["FacturasABM_ArticuloModal"] != null)
                 {
@@ -246,6 +253,13 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarProducto(this.txtCodigo.Text,false);
                     this.ActualizarTotales();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                }
+
+                if (_agregarCliente)
+                {
+                    _agregarCliente = false;
+                    this.flag_clienteModal = 1;
+                    this.cargarClienteDesdeModal();
                 }
 
                 if (_agregarMultiplesArticulosPorDescripcion)
@@ -259,8 +273,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (_agregarArticuloPorDescripcion)
                     AgregarArticuloPorDescripcion();
-
-                //CerrarModalBuscarArticuloPorDescripcion();
 
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
@@ -1844,7 +1856,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //obtengo codigo
-                int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                //int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                int idCliente = _idCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();
@@ -10847,6 +10860,63 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
         }
 
+        [WebMethod]
+        public static string CargarClientes()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesReduc(1);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string BuscarCliente(string razonSocial)
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesAlias(razonSocial);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static void AgregarCliente(int idCliente)
+        {
+            _idCliente = idCliente;
+            _agregarCliente = true;
+        }
+
         class ArticulosTemporal
         {
             public string codigo;
@@ -10854,6 +10924,14 @@ namespace Gestion_Web.Formularios.Facturas
             public string stock;
             public string moneda;
             public string precioVenta;
+        }
+
+        class ClientesTemporal
+        {
+            public string id;
+            public string codigo;
+            public string razonSocial;
+            public string alias;
         }
     }
 }

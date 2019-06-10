@@ -21,6 +21,7 @@ using System.Web.Services;
 using System.Web.Script.Services;
 using System.Web.Script.Serialization;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace Gestion_Web.Formularios.Compras
 {
@@ -87,10 +88,10 @@ namespace Gestion_Web.Formularios.Compras
                         this.cargarOrdenCompra();
                     }
 
-                    lbtnBuscarArticulo.Visible = false;
+                    //lbtnBuscarArticulo.Visible = false;
                 }
 
-                RecorrerArticulosBuscados();
+                //RecorrerArticulosBuscados();
                 this.actualizarTotales();                
             }
             catch (Exception ex)
@@ -112,8 +113,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     if (dr["Codigo"].ToString() == this.txtCodigo.Text)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo con codigo  ya se encuentra en la grilla\", {type: \"error\"});", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El articulo con codigo " + this.txtCodigo.Text + " ya se encuentra en la grilla"));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo con codigo  ya se encuentra en la grilla\", {type: \"error\"});", true);
                         return;
                     }
                 }
@@ -260,7 +260,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.cargarProveedor_OC();
                     _articulosProveedorBuscados.Clear();
                     ObtenerArticulosProveedor();
-                    lbtnBuscarArticulo.Visible = true;
+                    //lbtnBuscarArticulo.Visible = true;
                 }
 
             }
@@ -544,7 +544,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 if (prov == null)
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
                     return;
                 }
 
@@ -612,23 +612,23 @@ namespace Gestion_Web.Formularios.Compras
                         string script = string.Empty;
                         script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
                         script += " $.msgbox(\"Orden de Compra agregada. \", {type: \"info\"}); location.href = 'OrdenesCompraABM.aspx?a=1';";
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                     }
                     else
                     {
                         if (i == -1)
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
                         }
                         else
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
                         }
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"La cantidad de Items de la Orden de compra debe ser mayor a 0.\", {type: \"warning\"}); ", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"La cantidad de Items de la Orden de compra debe ser mayor a 0.\", {type: \"warning\"}); ", true);
                 }
 
 
@@ -792,7 +792,7 @@ namespace Gestion_Web.Formularios.Compras
                 c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
                 if (!String.IsNullOrEmpty(c.alerta.descripcion))
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
                 }
             }
             catch (Exception Ex)
@@ -1105,7 +1105,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error obteniendo items " + ex.Message + "\", {type: \"warning\"}); ", true);
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error obteniendo items " + ex.Message + "\", {type: \"warning\"}); ", true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
                 return null;
             }
@@ -1444,8 +1444,8 @@ namespace Gestion_Web.Formularios.Compras
                 ObtenerArticulosProveedor();
                 dtItems.Rows.Clear();
                 _articulosProveedorBuscados.Clear();
-                if (ListProveedor.SelectedIndex > 0)
-                    lbtnBuscarArticulo.Visible = true;
+                //if (ListProveedor.SelectedIndex > 0)
+                //    lbtnBuscarArticulo.Visible = true;
             }
             catch (Exception Ex)
             {
@@ -1458,93 +1458,93 @@ namespace Gestion_Web.Formularios.Compras
             _articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
         }
 
-        private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
-        {
-            TableRow tr = new TableRow();
+        //private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
+        //{
+        //    TableRow tr = new TableRow();
 
-            TableCell celCodigo = new TableCell();
-            celCodigo.Text = articulo.codigo;
-            celCodigo.Width = Unit.Percentage(15);
-            celCodigo.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celCodigo);
+        //    TableCell celCodigo = new TableCell();
+        //    celCodigo.Text = articulo.codigo;
+        //    celCodigo.Width = Unit.Percentage(15);
+        //    celCodigo.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celCodigo);
 
-            TableCell celDescripcion = new TableCell();
-            celDescripcion.Text = articulo.descripcion;
-            celDescripcion.Width = Unit.Percentage(15);
-            celDescripcion.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celDescripcion);
+        //    TableCell celDescripcion = new TableCell();
+        //    celDescripcion.Text = articulo.descripcion;
+        //    celDescripcion.Width = Unit.Percentage(15);
+        //    celDescripcion.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celDescripcion);
 
-            TableCell celCosto = new TableCell();
-            celCosto.Text = articulo.costo.ToString();
-            celCosto.Width = Unit.Percentage(15);
-            celCosto.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celCosto);
+        //    TableCell celCosto = new TableCell();
+        //    celCosto.Text = articulo.costo.ToString();
+        //    celCosto.Width = Unit.Percentage(15);
+        //    celCosto.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celCosto);
 
-            TableCell celPrecioVenta = new TableCell();
-            celPrecioVenta.Text = articulo.precioVenta.ToString();
-            celPrecioVenta.Width = Unit.Percentage(15);
-            celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celPrecioVenta);
+        //    TableCell celPrecioVenta = new TableCell();
+        //    celPrecioVenta.Text = articulo.precioVenta.ToString();
+        //    celPrecioVenta.Width = Unit.Percentage(15);
+        //    celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celPrecioVenta);
 
-            TableCell celAction = new TableCell();
-            LinkButton btnEliminar = new LinkButton();
-            btnEliminar.ID = "btnEliminar_" + articulo.id;
-            btnEliminar.CssClass = "btn btn-info";
-            btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-            btnEliminar.Click += new EventHandler(EliminarArticuloBuscado);
-            celAction.Controls.Add(btnEliminar);
-            tr.Cells.Add(celAction);
+        //    TableCell celAction = new TableCell();
+        //    LinkButton btnEliminar = new LinkButton();
+        //    btnEliminar.ID = "btnEliminar_" + articulo.id;
+        //    btnEliminar.CssClass = "btn btn-info";
+        //    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+        //    btnEliminar.Click += new EventHandler(EliminarArticuloBuscado);
+        //    celAction.Controls.Add(btnEliminar);
+        //    tr.Cells.Add(celAction);
 
-            phBuscarArticulo.Controls.Add(tr);
-            UpdatePanel7.Update();
-        }
+        //    phBuscarArticulo.Controls.Add(tr);
+        //    UpdatePanel7.Update();
+        //}
 
-        private void EliminarArticuloBuscado(object sender, EventArgs e)
-        {
-            try
-            {
-                string id = (sender as LinkButton).ID;
-                int idArticulo = Convert.ToInt32(id.Split('_')[1]);
+        //private void EliminarArticuloBuscado(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string id = (sender as LinkButton).ID;
+        //        int idArticulo = Convert.ToInt32(id.Split('_')[1]);
 
-                var articulo = _articulosProveedorBuscados.Where(x => x.id == idArticulo).FirstOrDefault();
-                _articulosProveedorBuscados.Remove(articulo);
+        //        var articulo = _articulosProveedorBuscados.Where(x => x.id == idArticulo).FirstOrDefault();
+        //        _articulosProveedorBuscados.Remove(articulo);
 
-                RecorrerArticulosBuscados();
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error eliminando articulo de articulos buscados " + ex.Message);
-            }
+        //        RecorrerArticulosBuscados();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error eliminando articulo de articulos buscados " + ex.Message);
+        //    }
 
-        }
+        //}
 
-        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e)
-        {
-            ObtenerDatosArticuloYDibujarlosEnPantalla(txtDescripcionArticulo.Text);
-        }
+        //protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e)
+        //{
+        //    ObtenerDatosArticuloYDibujarlosEnPantalla(txtDescripcionArticulo.Text);
+        //}
 
-        public void ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
-        {
-            if (string.IsNullOrEmpty(txtDescripcion))
-                return;
+        //public void ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
+        //{
+        //    if (string.IsNullOrEmpty(txtDescripcion))
+        //        return;
 
-            AgregarArticulosBuscados(txtDescripcion);
+        //    AgregarArticulosBuscados(txtDescripcion);
 
-            RecorrerArticulosBuscados();
-        }
+        //    RecorrerArticulosBuscados();
+        //}
 
-        public void RecorrerArticulosBuscados()
-        {
-            if (_articulosProveedorBuscados.Count > 0)
-            {
-                phBuscarArticulo.Controls.Clear();
+        //public void RecorrerArticulosBuscados()
+        //{
+        //    if (_articulosProveedorBuscados.Count > 0)
+        //    {
+        //        phBuscarArticulo.Controls.Clear();
 
-                foreach (var articulo in _articulosProveedorBuscados)
-                {
-                    CargarEnPHBusquedaDeArticulos(articulo);
-                }
-            }
-        }
+        //        foreach (var articulo in _articulosProveedorBuscados)
+        //        {
+        //            CargarEnPHBusquedaDeArticulos(articulo);
+        //        }
+        //    }
+        //}
 
         public void AgregarArticulosBuscados(string txtDescripcion)
         {
@@ -1624,6 +1624,74 @@ namespace Gestion_Web.Formularios.Compras
                 Log.EscribirSQL(1, "ERROR", "Error agregando articulos buscados a tabla items " + ex.Message);
             }
         }
+
+        //[WebMethod]
+        //public static void CargarDatosProveedorYBuscarArticulos(string txtDescripcion)
+        //{
+        //    cargarAlertaProveedor();
+        //    phProductos.Controls.Clear();
+        //    cargarProveedor_OC();
+        //    ObtenerArticulosProveedor();
+        //    dtItems.Rows.Clear();
+        //    _articulosProveedorBuscados.Clear();
+        //    if (ListProveedor.SelectedIndex > 0)
+        //        lbtnBuscarArticulo.Visible = true;
+        //}
+
+        [WebMethod]
+        public static string CargarAlertaProveedor(int idProveedor)
+        {
+            controladorCliente contCliente = new controladorCliente();
+
+            Cliente c = contCliente.obtenerProveedorID(idProveedor);
+            c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = "";
+
+            if (!String.IsNullOrEmpty(c.alerta.descripcion))            
+                resultadoJSON = serializer.Serialize(c.alerta.descripcion);
+
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string CargarProveedor_OC(int idProveedor)
+        {
+            ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
+
+            var poc = contClienteEnt.obtenerProveedor_OC_PorProveedor(idProveedor);
+
+            DatosProveedorTemp datosProveedorTemp = new DatosProveedorTemp();
+
+            if (poc != null)
+            {
+                datosProveedorTemp.mail = poc.Mail;
+                datosProveedorTemp.montoAutorizacion = poc.MontoAutorizacion.ToString();
+                datosProveedorTemp.observaciones = poc.cliente.observaciones;
+                datosProveedorTemp.formaDePago = poc.FormaDePago;
+                datosProveedorTemp.requiereAnticipo = poc.RequiereAnticipo.ToString();
+                datosProveedorTemp.requiereAutorizacion = poc.RequiereAutorizacion.ToString();
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(datosProveedorTemp);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string ObtenerArticulosProveedor(int idProveedor,int idSucursal)
+        {
+            controladorArticulo controladorArticulo = new controladorArticulo();
+            ControladorArticulosEntity controladorArticulosEntity = new ControladorArticulosEntity();            
+
+            var articulos = controladorArticulo.ObtenerArticulosProveedorOrdenCompra(idProveedor,idSucursal);            
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = JsonConvert.SerializeObject(articulos);
+            return resultadoJSON;
+        }
         //[WebMethod]
         //public static void AgregarArticulosBuscados(string txtDescripcion)
         //{
@@ -1673,6 +1741,29 @@ namespace Gestion_Web.Formularios.Compras
         //    return "";
         //}
 
+    }
+
+    public class DatosProveedorTemp
+    {
+        public string mail;
+        public string montoAutorizacion;
+        public string observaciones;
+        public string formaDePago;
+        public string requiereAnticipo;
+        public string requiereAutorizacion;
+    }
+
+    public class ArticulosProveedorTemp
+    {
+        public string codigo;
+        public string descripcion;
+        public string precio;
+        public string precioMasIVA;
+        public string stockSucursal;
+        public string stockMinimoSucursal;
+        public string stockTotal;
+        public string stockMinimo;
+        public string alerta;
     }
 
     //public class ArticuloBuscado
