@@ -105,6 +105,9 @@
                                                         <li>
                                                             <a data-toggle="modal" href="#modalReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad">Compras y Ventas de articulos grupo y marca</a>
                                                         </li>
+                                                        <li>
+                                                            <a data-toggle="modal" href="#modalReporteVentasPorRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad">Ventas por rango horario</a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </asp:PlaceHolder>
@@ -625,19 +628,19 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Desde</label>
                                         <div class="col-md-4">
-                                            <asp:TextBox ID="txtFechaDesde17" runat="server" class="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtFechaDesdeReporteVentasMarcaGrupoCantidad" runat="server" class="form-control"></asp:TextBox>
                                         </div>
                                         <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesdeReporteVentasMarcaGrupoCantidad" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4">Hasta</label>
                                         <div class="col-md-4">
-                                            <asp:TextBox ID="txtFechaHasta17" runat="server" class="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtFechaHastaReporteVentasMarcaGrupoCantidad" runat="server" class="form-control"></asp:TextBox>
                                         </div>
                                         <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta17" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHastaReporteVentasMarcaGrupoCantidad" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                 </ContentTemplate>
@@ -661,9 +664,59 @@
                     </div>
                 </div>
             </div>
-            <!-- /container -->
         </div>
-        <!-- /main -->
+
+        <div id="modalReporteVentasPorRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Busqueda</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel2" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Desde</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtFechaDesdeReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesdeReporteVentasPorRangoHorario" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Empresa</label>
+                                        <div class="col-md-8">
+                                            <asp:DropDownList ID="DropListEmpresaReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="col-md-8">
+                                            <asp:DropDownList ID="DropListSucursalReporteVentasPorRangoHorario" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group">
+                                    <asp:LinkButton ID="lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS" Class="btn btn-success" title="EXCEL" runat="server" OnClick="lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS_Click">Exportar a Excel</asp:LinkButton>
+                                </div>
+                                <div class="btn-group">
+                                    <asp:LinkButton ID="lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF" Class="btn btn-success" title="PDF" runat="server" OnClick="lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF_Click">Imprimir en PDF</asp:LinkButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <link href="../../css/pages/reports.css" rel="stylesheet">
         <script src="../../Scripts/jquery-1.10.2.js"></script>
@@ -690,9 +743,15 @@
         <script>
             function pageLoad() {
                 $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            $("#<%= txtFechaDesde17.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            $("#<%= txtFechaHasta17.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+                $("#<%= txtFechaDesdeReporteVentasMarcaGrupoCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= txtFechaHastaReporteVentasMarcaGrupoCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+                $("#<%= txtFechaDesdeReporteVentasPorRangoHorario.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+                var controlDropListEmpresa = document.getElementById('<%= DropListEmpresaReporteVentasPorRangoHorario.ClientID %>');
+                controlDropListEmpresa.addEventListener("change", CargarSucursales);
             }
 
             function obtenerGrafico() {
@@ -876,6 +935,40 @@
                 }
             }
 
+            function CargarSucursales() {
+                var controlDropListEmpresa = document.getElementById('<%= DropListEmpresaReporteVentasPorRangoHorario.ClientID %>').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "ReportesVentas.aspx/RecargarSucursales",
+                    data: '{empresa: "' + controlDropListEmpresa + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudieron cargar las sucursales.");
+                    },
+                    success: OnSuccessSucursal
+                });
+            };
+
+            function OnSuccessSucursal(response) {
+                var controlDropListSucursal = document.getElementById('<%= DropListSucursalReporteVentasPorRangoHorario.ClientID %>');
+
+                while (controlDropListSucursal.options.length > 0) {
+                    controlDropListSucursal.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombre;
+
+                    controlDropListSucursal.add(option);
+                }
+            }
         </script>
 
 
