@@ -39,9 +39,6 @@ namespace Gestion_Web.Formularios.Compras
         int accion;
         long orden;
 
-        static List<Articulo> _articulosProveedor = new List<Articulo>();
-        static List<Articulo> _articulosProveedorBuscados = new List<Articulo>();
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -66,17 +63,14 @@ namespace Gestion_Web.Formularios.Compras
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaEntrega.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
-                    this.cargarProveedores();
-                    this.cargarSucursal();
-                    _articulosProveedor.Clear();
-                    _articulosProveedorBuscados.Clear();
-                    ObtenerArticulosProveedor();
-                    //cargo sucursal
+                    this.CargarProveedores();
+                    this.CargarSucursal();
+
                     this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                     if (this.ListSucursal.SelectedValue != "")
                     {
                         this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                        this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+                        this.CargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
                     }
 
                     this.dtItemsTemp = new DataTable();
@@ -157,33 +151,33 @@ namespace Gestion_Web.Formularios.Compras
 
         }
         
-        protected void btnFiltrar_Click(object sender, EventArgs e)
-        {
-            this.filtrarItems();
-        }
-        protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
-            }
-            catch
-            {
+        //protected void btnFiltrar_Click(object sender, EventArgs e)
+        //{
+        //    this.filtrarItems();
+        //}
+        //protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        CargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
-        protected void ListPtoVenta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.obtenerNroOrden(Convert.ToInt32(ListPtoVenta.SelectedValue), "Orden de Compra");
-            }
-            catch
-            {
+        //    }
+        //}
+        //protected void ListPtoVenta_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.obtenerNroOrden(Convert.ToInt32(ListPtoVenta.SelectedValue), "Orden de Compra");
+        //    }
+        //    catch
+        //    {
 
-            }
+        //    }
 
-        }
+        //}
         protected void btnVerOC_Click(object sender, EventArgs e)
         {
             try
@@ -235,40 +229,40 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        protected void btnBuscarCodigoProveedor_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                controladorCliente contrCliente = new controladorCliente();
-                String buscar = this.txtCodProveedor.Text.Replace(' ', '%');
-                DataTable dtClientes = contrCliente.obtenerProveedorNombreDT(buscar);
-                this.phProductos.Controls.Clear();
-                this.limpiarCamposProveedor_OC();
+        //protected void btnBuscarCodigoProveedor_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        controladorCliente contrCliente = new controladorCliente();
+        //        String buscar = this.txtCodProveedor.Text.Replace(' ', '%');
+        //        DataTable dtClientes = contrCliente.obtenerProveedorNombreDT(buscar);
+        //        this.phProductos.Controls.Clear();
+        //        this.limpiarCamposProveedor_OC();
 
-                //cargo la lista
-                this.ListProveedor.DataSource = dtClientes;
-                this.ListProveedor.DataValueField = "id";
-                this.ListProveedor.DataTextField = "alias";
-                this.ListProveedor.DataBind();
+        //        //cargo la lista
+        //        this.ListProveedor.DataSource = dtClientes;
+        //        this.ListProveedor.DataValueField = "id";
+        //        this.ListProveedor.DataTextField = "alias";
+        //        this.ListProveedor.DataBind();
 
-                //Cargo los articulos del primer proveedor que me quede seleccionado en el DropDownList, ya que no se ejecuta el evento SelectedIndexChanged del mismo.
-                if (dtClientes.Rows.Count > 0 && buscar.Length > 0)
-                {
+        //        //Cargo los articulos del primer proveedor que me quede seleccionado en el DropDownList, ya que no se ejecuta el evento SelectedIndexChanged del mismo.
+        //        if (dtClientes.Rows.Count > 0 && buscar.Length > 0)
+        //        {
 
-                    this.cargarAlertaProveedor();
-                    //this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
-                    this.cargarProveedor_OC();
-                    _articulosProveedorBuscados.Clear();
-                    ObtenerArticulosProveedor();
-                    //lbtnBuscarArticulo.Visible = true;
-                }
+        //            //this.cargarAlertaProveedor();
+        //            //this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+        //            //this.cargarProveedor_OC();
+        //            //_articulosProveedorBuscados.Clear();
+        //            //ObtenerArticulosProveedor();
+        //            //lbtnBuscarArticulo.Visible = true;
+        //        }
 
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. Excepción: " + Ex.Message));
-            }
-        }
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. Excepción: " + Ex.Message));
+        //    }
+        //}
         
         #endregion
 
@@ -326,7 +320,7 @@ namespace Gestion_Web.Formularios.Compras
                 return -1;
             }
         }
-        public void cargarProveedores()
+        public void CargarProveedores()
         {
             try
             {
@@ -351,7 +345,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
-        public void cargarSucursal()
+        public void CargarSucursal()
         {
             try
             {
@@ -376,7 +370,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
-        public void cargarPuntoVta(int sucu)
+        public void CargarPuntoVta(int sucu)
         {
             try
             {
@@ -647,7 +641,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.txtFecha.Text = Convert.ToDateTime(oc.Fecha).ToString("dd/MM/yyyy");
                 this.txtFechaEntrega.Text = Convert.ToDateTime(oc.FechaEntrega).ToString("dd/MM/yyyy");
                 this.ListSucursal.SelectedValue = oc.IdSucursal.ToString();
-                cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+                CargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
 
                 this.ListPtoVenta.SelectedValue = oc.IdPtoVenta.ToString();
 
@@ -784,22 +778,6 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void cargarAlertaProveedor()
-        {
-            try
-            {
-                Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
-                c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
-                if (!String.IsNullOrEmpty(c.alerta.descripcion))
-                {
-                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
-                }
-            }
-            catch (Exception Ex)
-            {
-
-            }
-        }
         private string obtenerCodigo(string codigo)
         {
             try
@@ -1110,33 +1088,33 @@ namespace Gestion_Web.Formularios.Compras
                 return null;
             }
         }
-        private List<RemitosCompras_Items> filtrarItems()
-        {
-            try
-            {
-                List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
+        //private List<RemitosCompras_Items> filtrarItems()
+        //{
+        //    try
+        //    {
+        //        List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
 
-                foreach (var c in this.phProductos.Controls)
-                {
-                    TableRow tr = c as TableRow;
-                    TextBox txt = tr.Cells[3].Controls[0] as TextBox;
-                    if (!String.IsNullOrEmpty(txt.Text))
-                    {
-                        tr.Visible = true;
-                    }
-                    else
-                    {
-                        tr.Visible = false;
-                    }
-                }
-                return items;
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
-                return null;
-            }
-        }
+        //        foreach (var c in this.phProductos.Controls)
+        //        {
+        //            TableRow tr = c as TableRow;
+        //            TextBox txt = tr.Cells[3].Controls[0] as TextBox;
+        //            if (!String.IsNullOrEmpty(txt.Text))
+        //            {
+        //                tr.Visible = true;
+        //            }
+        //            else
+        //            {
+        //                tr.Visible = false;
+        //            }
+        //        }
+        //        return items;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
+        //        return null;
+        //    }
+        //}
         private void filtrarItemsByStock(int tipo)
         {
             try
@@ -1417,46 +1395,46 @@ namespace Gestion_Web.Formularios.Compras
         }
         #endregion
 
-        protected void lbtnCargarArticulos_Click(object sender, EventArgs e) 
-        {
-            try
-            {
-                this.cargarAlertaProveedor();
-                this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
-                this.cargarProveedor_OC();
-                _articulosProveedorBuscados.Clear();
-                phBuscarArticulo.Controls.Clear();
-                txtDescripcionArticulo.Text = "";
-            }
-            catch (Exception Ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error cargando cargando articulos del proveedor " + Ex.Message);
-            }
-        }
+        //protected void lbtnCargarArticulos_Click(object sender, EventArgs e) 
+        //{
+        //    try
+        //    {
+        //        this.cargarAlertaProveedor();
+        //        this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
+        //        this.cargarProveedor_OC();
+        //        _articulosProveedorBuscados.Clear();
+        //        phBuscarArticulo.Controls.Clear();
+        //        txtDescripcionArticulo.Text = "";
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error cargando cargando articulos del proveedor " + Ex.Message);
+        //    }
+        //}
 
-        protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e) 
-        {
-            try
-            {
-                cargarAlertaProveedor();
-                phProductos.Controls.Clear();
-                cargarProveedor_OC();
-                ObtenerArticulosProveedor();
-                dtItems.Rows.Clear();
-                _articulosProveedorBuscados.Clear();
-                //if (ListProveedor.SelectedIndex > 0)
-                //    lbtnBuscarArticulo.Visible = true;
-            }
-            catch (Exception Ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error cargando cambiando de proveedor " + Ex.Message);
-            }
-        }
+        //protected void ListProveedor_SelectedIndexChanged(object sender, EventArgs e) 
+        //{
+        //    try
+        //    {
+        //        cargarAlertaProveedor();
+        //        phProductos.Controls.Clear();
+        //        cargarProveedor_OC();
+        //        ObtenerArticulosProveedor();
+        //        dtItems.Rows.Clear();
+        //        _articulosProveedorBuscados.Clear();
+        //        //if (ListProveedor.SelectedIndex > 0)
+        //        //    lbtnBuscarArticulo.Visible = true;
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error cargando cambiando de proveedor " + Ex.Message);
+        //    }
+        //}
 
-        private void ObtenerArticulosProveedor()
-        {
-            _articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
-        }
+        //private void ObtenerArticulosProveedor()
+        //{
+        //    _articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
+        //}
 
         //private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
         //{
@@ -1546,96 +1524,83 @@ namespace Gestion_Web.Formularios.Compras
         //    }
         //}
 
-        public void AgregarArticulosBuscados(string txtDescripcion)
-        {
-            if (!_articulosProveedorBuscados.Exists(j => j.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim() || j.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()))
-            {
-                _articulosProveedorBuscados.Add(_articulosProveedor.Where
-                (
-                    x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
-                    ||
-                    x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
-                );
-            }
-        }
-
-        public void AgregarArticulosATablaDeItems()
-        {
-            foreach (var articulo in _articulosProveedorBuscados)
-            {
-                DataTable dt = this.dtItems;
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    if (dr[1].ToString() == articulo.descripcion)
-                        return;
-                }
-
-                DataRow drFila = dt.NewRow();
-
-                List<ProveedorArticulo> ProvArticulo = this.contArticulos.obtenerProveedorArticulosByArticulo(Convert.ToInt32(articulo.id));
-                string codArtProveedor = "";
-                
-                foreach (var p in ProvArticulo)
-                {
-                    codArtProveedor += p.codigoProveedor + " - ";
-                }
-
-                if (codArtProveedor.Length > 0)//saco el ultimo guion
-                {
-                    codArtProveedor = codArtProveedor.Substring(0, codArtProveedor.Length - 3);
-                }
-
-                drFila["Codigo"] = articulo.codigo.ToString() + " (" + codArtProveedor + ") ";
-
-                drFila["Descripcion"] = articulo.descripcion;
-                drFila["Cant"] = 0;
-                drFila["Costo"] = Convert.ToDecimal(articulo.costo);
-
-                decimal porcentajeIvaArticulo = Convert.ToDecimal(articulo.porcentajeIva);
-                decimal ivaArticulo = Convert.ToDecimal(articulo.porcentajeIva);
-
-                if (porcentajeIvaArticulo > 0)                
-                    ivaArticulo = (porcentajeIvaArticulo / 100) + 1;                
-                else
-                    ivaArticulo = 0;
-
-                drFila["CostoMasIva"] = Decimal.Round(Convert.ToDecimal(articulo.costoImponible) * ivaArticulo, 2);
-
-                dt.Rows.Add(drFila);
-
-                this.dtItems = dt;
-            }
-
-            this.CargarItems();
-        }
-
-        protected void lbtnAgregarArticulosBuscadosATablaItems_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                phBuscarArticulo.Controls.Clear();
-                txtDescripcionArticulo.Text = "";
-                AgregarArticulosATablaDeItems();
-                _articulosProveedorBuscados.Clear();
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error agregando articulos buscados a tabla items " + ex.Message);
-            }
-        }
-
-        //[WebMethod]
-        //public static void CargarDatosProveedorYBuscarArticulos(string txtDescripcion)
+        //public void AgregarArticulosBuscados(string txtDescripcion)
         //{
-        //    cargarAlertaProveedor();
-        //    phProductos.Controls.Clear();
-        //    cargarProveedor_OC();
-        //    ObtenerArticulosProveedor();
-        //    dtItems.Rows.Clear();
-        //    _articulosProveedorBuscados.Clear();
-        //    if (ListProveedor.SelectedIndex > 0)
-        //        lbtnBuscarArticulo.Visible = true;
+        //    if (!_articulosProveedorBuscados.Exists(j => j.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim() || j.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()))
+        //    {
+        //        _articulosProveedorBuscados.Add(_articulosProveedor.Where
+        //        (
+        //            x => x.descripcion.ToLower().Trim() == txtDescripcion.ToLower().Trim()
+        //            ||
+        //            x.codigo.ToLower().Trim() == txtDescripcion.ToLower().Trim()).FirstOrDefault()
+        //        );
+        //    }
+        //}
+
+        //public void AgregarArticulosATablaDeItems()
+        //{
+        //    foreach (var articulo in _articulosProveedorBuscados)
+        //    {
+        //        DataTable dt = this.dtItems;
+
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            if (dr[1].ToString() == articulo.descripcion)
+        //                return;
+        //        }
+
+        //        DataRow drFila = dt.NewRow();
+
+        //        List<ProveedorArticulo> ProvArticulo = this.contArticulos.obtenerProveedorArticulosByArticulo(Convert.ToInt32(articulo.id));
+        //        string codArtProveedor = "";
+                
+        //        foreach (var p in ProvArticulo)
+        //        {
+        //            codArtProveedor += p.codigoProveedor + " - ";
+        //        }
+
+        //        if (codArtProveedor.Length > 0)//saco el ultimo guion
+        //        {
+        //            codArtProveedor = codArtProveedor.Substring(0, codArtProveedor.Length - 3);
+        //        }
+
+        //        drFila["Codigo"] = articulo.codigo.ToString() + " (" + codArtProveedor + ") ";
+
+        //        drFila["Descripcion"] = articulo.descripcion;
+        //        drFila["Cant"] = 0;
+        //        drFila["Costo"] = Convert.ToDecimal(articulo.costo);
+
+        //        decimal porcentajeIvaArticulo = Convert.ToDecimal(articulo.porcentajeIva);
+        //        decimal ivaArticulo = Convert.ToDecimal(articulo.porcentajeIva);
+
+        //        if (porcentajeIvaArticulo > 0)                
+        //            ivaArticulo = (porcentajeIvaArticulo / 100) + 1;                
+        //        else
+        //            ivaArticulo = 0;
+
+        //        drFila["CostoMasIva"] = Decimal.Round(Convert.ToDecimal(articulo.costoImponible) * ivaArticulo, 2);
+
+        //        dt.Rows.Add(drFila);
+
+        //        this.dtItems = dt;
+        //    }
+
+        //    this.CargarItems();
+        //}
+
+        //protected void lbtnAgregarArticulosBuscadosATablaItems_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        phBuscarArticulo.Controls.Clear();
+        //        txtDescripcionArticulo.Text = "";
+        //        AgregarArticulosATablaDeItems();
+        //        _articulosProveedorBuscados.Clear();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error agregando articulos buscados a tabla items " + ex.Message);
+        //    }
         //}
 
         [WebMethod]
@@ -1692,6 +1657,64 @@ namespace Gestion_Web.Formularios.Compras
             string resultadoJSON = JsonConvert.SerializeObject(articulos);
             return resultadoJSON;
         }
+
+        [WebMethod]
+        public static string CargarPuntoVenta(int sucursal)
+        {
+            controladorSucursal controladorSucursal = new controladorSucursal();
+
+            DataTable dt = null;
+
+            if (sucursal > 0)
+                dt = controladorSucursal.obtenerPuntoVentaDT(sucursal);
+            else
+                dt = controladorSucursal.obtenerPuntoVenta();
+
+            List<PuntoVentaTemporal> puntosVenta = new List<PuntoVentaTemporal>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                PuntoVentaTemporal puntoVentaTemporal = new PuntoVentaTemporal();
+                puntoVentaTemporal.id = row["Id"].ToString();
+                puntoVentaTemporal.nombreFantasia = row["NombreFantasia"].ToString();
+                puntosVenta.Add(puntoVentaTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(puntosVenta);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string ObtenerNumeroOrden(int puntoVenta)
+        {
+            controladorSucursal controladorSucursal = new controladorSucursal();
+            controladorFacturacion controladorFacturacion = new controladorFacturacion();
+            PuntoVenta puntoDeVenta = controladorSucursal.obtenerPtoVentaId(puntoVenta);
+            int numero = controladorFacturacion.obtenerFacturaNumero(puntoVenta, "Orden de Compra");
+
+            NumeroOrdenTemporal numeroOrdenTemporal = new NumeroOrdenTemporal();
+            numeroOrdenTemporal.puntoVenta = puntoDeVenta.puntoVenta;
+            numeroOrdenTemporal.numero = numero.ToString("D8");
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(numeroOrdenTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string BuscarProveedor(string codigoProveedor)
+        {
+            controladorCliente controladorCliente = new controladorCliente();
+            String buscar = codigoProveedor.Replace(' ', '%');
+            DataTable dtClientes = controladorCliente.obtenerProveedorNombreDT(buscar);
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = JsonConvert.SerializeObject(dtClientes);
+            return resultadoJSON;
+        }
+        
+
         //[WebMethod]
         //public static void AgregarArticulosBuscados(string txtDescripcion)
         //{
@@ -1765,7 +1788,21 @@ namespace Gestion_Web.Formularios.Compras
         public string stockMinimo;
         public string alerta;
     }
-
+    class PuntoVentaTemporal
+    {
+        public string id;
+        public string nombreFantasia;
+    }
+    class NumeroOrdenTemporal
+    {
+        public string puntoVenta;
+        public string numero;
+    }
+    class DropListProveedorTemporal
+    {
+        public string id;
+        public string alias;
+    }
     //public class ArticuloBuscado
     //{
     //    public int id;

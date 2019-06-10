@@ -20,13 +20,13 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Sucursal</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="ListSucursal" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListSucursal_SelectedIndexChanged"></asp:DropDownList>
+                                                <asp:DropDownList ID="ListSucursal" class="form-control" runat="server"></asp:DropDownList> <%--OnSelectedIndexChanged="ListSucursal_SelectedIndexChanged"--%>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Pto Venta</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="ListPtoVenta" class="form-control" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ListPtoVenta_SelectedIndexChanged"></asp:DropDownList>
+                                                <asp:DropDownList ID="ListPtoVenta" class="form-control" runat="server"></asp:DropDownList>  <%--OnSelectedIndexChanged="ListPtoVenta_SelectedIndexChanged"--%>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -35,13 +35,13 @@
                                                 <asp:TextBox ID="txtCodProveedor" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:LinkButton ID="btnBuscarCodigoProveedor" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodigoProveedor_Click" />
+                                                <asp:LinkButton ID="btnBuscarCodigoProveedor" href="#" runat="server" Text="<span class='shortcut-icon icon-search'></span>" OnClientClick="BuscarProveedor()" class="btn btn-info" AutoPostBack = "false"/> <%--OnClick="btnBuscarCodigoProveedor_Click"--%>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Proveedor</label>
                                             <div class="col-md-3">
-                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return BuscarProveedor()" ></asp:DropDownList> <%--OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"--%>
+                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return SeleccionarProveedor()" ></asp:DropDownList> <%--OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"--%>
                                             </div>
                                             <%--<div class="col-md-1">
                                                 <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click" />
@@ -245,25 +245,23 @@
         </div>
 
         <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
-            <asp:UpdatePanel ID="UpdatePanel7" ChildrenAsTriggers="true" UpdateMode="Conditional" runat="server">
-                <ContentTemplate>
-                    <asp:Panel ID="Panel2" runat="server" DefaultButton="btnBuscarArticuloDescripcion">
-                        <div class="modal-dialog" style="width: 60%;">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h4 class="modal-title">Busqueda de Articulos</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div role="form" class="form-horizontal col-md-12">
+            <asp:Panel ID="Panel2" runat="server">
+                <div class="modal-dialog" style="width: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Busqueda de Articulos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
                                         <div class="form-group">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="name" class="col-md-4">Buscar Articulo</label>
-                                                    <div class="col-md-3">
-                                                        <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
-                                                    </div>
-                                                    <div class="col-md-1">
+                                            <label for="name" class="col-md-4">Buscar Articulo</label>
+                                            <div class="col-md-3">
+                                                <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                            <%--<div class="col-md-1">
                                                         <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
                                                     </div>
                                                     <div class="col-md-3">
@@ -283,45 +281,51 @@
                                                             <i class="shortcut-icon icon-trash"></i>
                                                         </a>
                                                     </div>--%>
-                                                </div>
-                                            </div>
                                         </div>
-                                        <table class="table table-striped table-bordered" id="articulosTabla">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 10%">Codigo</th>
-                                                    <th style="width: 30%">Descripcion</th>
-                                                    <th style="width: 10%">Costo</th>
-                                                    <th style="width: 10%">Precio de Venta</th>
-                                                    <th style="width: 10%"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click" />
-                                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                                     </div>
                                 </div>
+                                <table class="table table-striped table-bordered" id="articulosTabla">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">Codigo</th>
+                                            <th style="width: 30%">Descripcion</th>
+                                            <th style="width: 10%">Costo</th>
+                                            <th style="width: 10%">Precio de Venta</th>
+                                            <th style="width: 10%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" /> <%--OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click"--%>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
-                        </div>
-                    </asp:Panel>
-                </ContentTemplate>
-                <Triggers>
-                    <asp:AsyncPostBackTrigger ControlID="btnBuscarArticuloDescripcion" EventName="Click" />
-                </Triggers>
-            </asp:UpdatePanel>
+                    </div>
+                </div>
+            </asp:Panel>
         </div>
 
         <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
         </rsweb:ReportViewer>
 
         <!-- Core Scripts - Include with every page -->
-        <script src="../../Scripts/jquery-1.10.2.js"></script>
+        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+        <link href="../../css/pages/reports.css" rel="stylesheet">
+        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+        <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../scripts/demo/notifications.js"></script>
+        <script src="OrdenesCompra.js"></script>
+
+        <%--<script src="../../Scripts/jquery-1.10.2.js"></script>
         <script src="../../Scripts/bootstrap.min.js"></script>
         <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
         <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
@@ -332,14 +336,15 @@
         <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
         <script src="../../Scripts/demo/notifications.js"></script>
-        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-        <script src="OrdenesCompra.js"></script>
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>--%>
+        
 
         <!-- Page-Level Plugin Scripts - Tables -->
-        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <%--<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>--%>
         <%--<script src="prueba.js" type="text/javascript"></script>--%>
-        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+        <%--<script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />--%>
+
         <script>
             $(function () {
                 $("#<%= txtFecha.ClientID %>").datepicker(
@@ -386,7 +391,7 @@
             }
         </script>
 
-        <script>
+        <%--<script>
             $(document).ready(function () {
                 $('#dataTables-example').dataTable({
                     "paging": false,
@@ -419,9 +424,9 @@
 
                 });
             });
-        </script>
+        </script>--%>
 
-        <script type="text/javascript">
+        <%--<script type="text/javascript">
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
             function endReq(sender, args) {
                 $('#dataTables-example').dataTable({
@@ -457,36 +462,137 @@
 
                 });
             }
-        </script>
+        </script>--%>
 
         <script>
-            //valida los campos solo numeros
-            function validarNro(e) {
-                var key;
-                if (window.event) // IE
-                {
-                    key = e.keyCode;
-                }
-                else if (e.which) // Netscape/Firefox/Opera
-                {
-                    key = e.which;
-                }
-                if (key < 48 || key > 57) {
-                    if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
-                    {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-                return true;
-            }
+            $(function ()
+            {
+                var controlDropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>');
+                var controlDropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>');
+
+                controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
+                controlDropListPuntoVenta.addEventListener("change", CargarNumeroOrden);
+            });
         </script>
+
+        <script type="text/javascript">
+            function CargarPuntosVenta()
+            {
+                var DropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "OrdenesCompraABM.aspx/CargarPuntoVenta",
+                    data: '{sucursal: "' + DropListSucursal + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudieron cargar los puntos de venta.");
+                    },
+                    success: OnSuccessPuntoVenta
+                });
+            };
+
+            function OnSuccessPuntoVenta(response)
+            {
+                var controlDropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>');
+
+                while (controlDropListPuntoVenta.options.length > 0)
+                {
+                    controlDropListPuntoVenta.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombreFantasia;
+
+                    controlDropListPuntoVenta.add(option);
+                }
+
+                CargarNumeroOrden();
+            }
+
+            function CargarNumeroOrden()
+            {
+                var DropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "OrdenesCompraABM.aspx/ObtenerNumeroOrden",
+                    data: '{puntoVenta: "' + DropListPuntoVenta + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudieron obtener los numeros de orden.");
+                    },
+                    success: OnSuccessObtenerNumeroOrden
+                });
+            };
+
+            function OnSuccessObtenerNumeroOrden(response)
+            {
+                var controlTextNumeroOrden = document.getElementById('<%= txtNumero.ClientID %>');
+                var controlTextPuntoVenta = document.getElementById('<%= txtPVenta.ClientID %>');
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                controlTextNumeroOrden.value = obj.numero;
+                controlTextPuntoVenta.value = obj.puntoVenta;
+            }
+        </script>       
 
         <script type="text/javascript">
 
             function BuscarProveedor()
+            {
+                var txtCodigoProveedor = document.getElementById('<%= txtCodProveedor.ClientID %>').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "OrdenesCompraABM.aspx/BuscarProveedor",
+                    data: '{codigoProveedor: "' + txtCodigoProveedor + '"  }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudo buscar el proveedor.");
+                    },
+                    success: OnSuccessBuscarProveedor
+                });
+            }
+
+            function OnSuccessBuscarProveedor(response)
+            {
+                LimpiarTabla();
+                LimpiarCamposDatosProveedor();
+
+                var controlDropListProveedor = document.getElementById('<%= ListProveedor.ClientID %>');
+
+                while (controlDropListProveedor.options.length > 0)
+                {
+                    controlDropListProveedor.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++)
+                {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].alias;
+
+                    controlDropListProveedor.add(option);
+                }
+
+                SeleccionarProveedor();
+            }
+
+            function SeleccionarProveedor()
             {
                 var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;
                 var idSucursal = document.getElementById('<%=this.ListSucursal.ClientID%>').selectedOptions[0].value;
@@ -495,50 +601,7 @@
                 ObtenerAlertaProveedor(idProveedor);
                 CargarDatosProveedor(idProveedor);
                 CargarArticulosProveedor(idProveedor, idSucursal);
-            }
-
-            function CargarDatosProveedor(idProveedor)
-            {
-                $.ajax({
-                    type: "POST",
-                    url: 'OrdenesCompraABM.aspx/CargarProveedor_OC',
-                    data: JSON.stringify(
-                        {
-                            'idProveedor': idProveedor
-                        }
-                    ),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: OnSuccessCargarDatosProveedor,
-                    error: function (e)
-                    {
-                        $.msgbox("No se pudieron cargar los datos del proveedor correctamente!", { type: "error" });
-                        LimpiarCamposDatosProveedor();
-                    }
-                });
-            }
-
-            function CargarArticulosProveedor(idProveedor,idSucursal)
-            {
-                $.ajax({
-                    type: "POST",
-                    url: 'OrdenesCompraABM.aspx/ObtenerArticulosProveedor',
-                    data: '{idProveedor: "' + idProveedor + '", idSucursal: "' + idSucursal + '"}',
-                    data: JSON.stringify(
-                        {
-                            'idProveedor': idProveedor,
-                            'idSucursal': idSucursal
-                        }                        
-                    ),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: OnSuccessCargarArticulosProveedor,
-                    error: function (e)
-                    {
-                        $.msgbox("No se pudieron cargar los articulos del proveedor correctamente!", { type: "error" });
-                    }
-                });
-            }
+            }            
 
             function OnSuccessCargarDatosProveedor(response)
             {
@@ -622,59 +685,35 @@
 
                 return alertaTemp;
             }
-            <%--function BuscarArticulo()
-            {
-                var textbox = document.getElementById('<%=this.txtDescripcionArticulo.ClientID%>').value;
-                var json = null;
-
-                $.ajax({
-                    type: "POST",
-                    url: 'OrdenesCompraABM.aspx/ObtenerDatosArticuloYDibujarlosEnPantalla',
-                    data: JSON.stringify(
-                        {
-                            'txtDescripcion': textbox
-                        }
-                    ),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data)
-                    {
-                        json = JSON.parse(data.d);
-                        addHtmlTableRow(json);
-                    },
-                    error: function (e)
-                    {
-                        $("#divResult").html("Something Wrong.");
-                    }
-                });
-            }
-
-            function addHtmlTableRow(data)
-            {
-                var table = document.getElementById("articulosTabla");
-                //var temp = table.outerHTML;
-                LimpiarTabla();
-                for (var i = 0; i <= data.length - 1; i++)
-                {
-                    newRow = table.insertRow(table.length);
-
-                    cell1 = newRow.insertCell(0),
-                    cell2 = newRow.insertCell(1),
-                    cell3 = newRow.insertCell(2),
-                    cell4 = newRow.insertCell(3),
-                    cell5 = newRow.insertCell(4);
-
-                    //table.rows[i + 1].id = data[i].id;
-                    cell1.innerHTML = data[i].codigo;
-                    cell2.innerHTML = data[i].descripcion;
-                    cell3.innerHTML = data[i].costo;
-                    cell4.innerHTML = data[i].precioVenta;
-                    cell5.innerHTML = "<asp:LinkButton ID=\"btnBuscarArticuloDescripcion_" + i + "Text=\" < span class='shortcut-icon icon-search' ></span > \" class=\"btn btn - info\"/>;"
-                }
-            }--%>
+            
             function LimpiarTabla()
             {
                 $("#articulosTabla").find("tr:gt(0)").remove();
+            }
+        </script>
+
+        <script>
+            //valida los campos solo numeros
+            function validarNro(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
+                if (key < 48 || key > 57) {
+                    if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                    {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                return true;
             }
         </script>
 </asp:Content>
