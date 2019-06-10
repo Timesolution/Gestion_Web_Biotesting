@@ -91,7 +91,7 @@ namespace Gestion_Web.Formularios.Compras
                     //lbtnBuscarArticulo.Visible = false;
                 }
 
-                RecorrerArticulosBuscados();
+                //RecorrerArticulosBuscados();
                 this.actualizarTotales();                
             }
             catch (Exception ex)
@@ -1458,93 +1458,93 @@ namespace Gestion_Web.Formularios.Compras
             _articulosProveedor = contArticulos.obtenerArticulosByProveedor(Convert.ToInt32(ListProveedor.SelectedValue));
         }
 
-        private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
-        {
-            TableRow tr = new TableRow();
+        //private void CargarEnPHBusquedaDeArticulos(Articulo articulo)
+        //{
+        //    TableRow tr = new TableRow();
 
-            TableCell celCodigo = new TableCell();
-            celCodigo.Text = articulo.codigo;
-            celCodigo.Width = Unit.Percentage(15);
-            celCodigo.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celCodigo);
+        //    TableCell celCodigo = new TableCell();
+        //    celCodigo.Text = articulo.codigo;
+        //    celCodigo.Width = Unit.Percentage(15);
+        //    celCodigo.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celCodigo);
 
-            TableCell celDescripcion = new TableCell();
-            celDescripcion.Text = articulo.descripcion;
-            celDescripcion.Width = Unit.Percentage(15);
-            celDescripcion.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celDescripcion);
+        //    TableCell celDescripcion = new TableCell();
+        //    celDescripcion.Text = articulo.descripcion;
+        //    celDescripcion.Width = Unit.Percentage(15);
+        //    celDescripcion.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celDescripcion);
 
-            TableCell celCosto = new TableCell();
-            celCosto.Text = articulo.costo.ToString();
-            celCosto.Width = Unit.Percentage(15);
-            celCosto.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celCosto);
+        //    TableCell celCosto = new TableCell();
+        //    celCosto.Text = articulo.costo.ToString();
+        //    celCosto.Width = Unit.Percentage(15);
+        //    celCosto.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celCosto);
 
-            TableCell celPrecioVenta = new TableCell();
-            celPrecioVenta.Text = articulo.precioVenta.ToString();
-            celPrecioVenta.Width = Unit.Percentage(15);
-            celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
-            tr.Cells.Add(celPrecioVenta);
+        //    TableCell celPrecioVenta = new TableCell();
+        //    celPrecioVenta.Text = articulo.precioVenta.ToString();
+        //    celPrecioVenta.Width = Unit.Percentage(15);
+        //    celPrecioVenta.VerticalAlign = VerticalAlign.Middle;
+        //    tr.Cells.Add(celPrecioVenta);
 
-            TableCell celAction = new TableCell();
-            LinkButton btnEliminar = new LinkButton();
-            btnEliminar.ID = "btnEliminar_" + articulo.id;
-            btnEliminar.CssClass = "btn btn-info";
-            btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-            btnEliminar.Click += new EventHandler(EliminarArticuloBuscado);
-            celAction.Controls.Add(btnEliminar);
-            tr.Cells.Add(celAction);
+        //    TableCell celAction = new TableCell();
+        //    LinkButton btnEliminar = new LinkButton();
+        //    btnEliminar.ID = "btnEliminar_" + articulo.id;
+        //    btnEliminar.CssClass = "btn btn-info";
+        //    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+        //    btnEliminar.Click += new EventHandler(EliminarArticuloBuscado);
+        //    celAction.Controls.Add(btnEliminar);
+        //    tr.Cells.Add(celAction);
 
-            phBuscarArticulo.Controls.Add(tr);
-            UpdatePanel7.Update();
-        }
+        //    phBuscarArticulo.Controls.Add(tr);
+        //    UpdatePanel7.Update();
+        //}
 
-        private void EliminarArticuloBuscado(object sender, EventArgs e)
-        {
-            try
-            {
-                string id = (sender as LinkButton).ID;
-                int idArticulo = Convert.ToInt32(id.Split('_')[1]);
+        //private void EliminarArticuloBuscado(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string id = (sender as LinkButton).ID;
+        //        int idArticulo = Convert.ToInt32(id.Split('_')[1]);
 
-                var articulo = _articulosProveedorBuscados.Where(x => x.id == idArticulo).FirstOrDefault();
-                _articulosProveedorBuscados.Remove(articulo);
+        //        var articulo = _articulosProveedorBuscados.Where(x => x.id == idArticulo).FirstOrDefault();
+        //        _articulosProveedorBuscados.Remove(articulo);
 
-                RecorrerArticulosBuscados();
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error eliminando articulo de articulos buscados " + ex.Message);
-            }
+        //        RecorrerArticulosBuscados();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error eliminando articulo de articulos buscados " + ex.Message);
+        //    }
 
-        }
+        //}
 
-        protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e)
-        {
-            ObtenerDatosArticuloYDibujarlosEnPantalla(txtDescripcionArticulo.Text);
-        }
+        //protected void btnBuscarArticuloDescripcion_Click(object sender, EventArgs e)
+        //{
+        //    ObtenerDatosArticuloYDibujarlosEnPantalla(txtDescripcionArticulo.Text);
+        //}
 
-        public void ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
-        {
-            if (string.IsNullOrEmpty(txtDescripcion))
-                return;
+        //public void ObtenerDatosArticuloYDibujarlosEnPantalla(string txtDescripcion)
+        //{
+        //    if (string.IsNullOrEmpty(txtDescripcion))
+        //        return;
 
-            AgregarArticulosBuscados(txtDescripcion);
+        //    AgregarArticulosBuscados(txtDescripcion);
 
-            RecorrerArticulosBuscados();
-        }
+        //    RecorrerArticulosBuscados();
+        //}
 
-        public void RecorrerArticulosBuscados()
-        {
-            if (_articulosProveedorBuscados.Count > 0)
-            {
-                phBuscarArticulo.Controls.Clear();
+        //public void RecorrerArticulosBuscados()
+        //{
+        //    if (_articulosProveedorBuscados.Count > 0)
+        //    {
+        //        phBuscarArticulo.Controls.Clear();
 
-                foreach (var articulo in _articulosProveedorBuscados)
-                {
-                    CargarEnPHBusquedaDeArticulos(articulo);
-                }
-            }
-        }
+        //        foreach (var articulo in _articulosProveedorBuscados)
+        //        {
+        //            CargarEnPHBusquedaDeArticulos(articulo);
+        //        }
+        //    }
+        //}
 
         public void AgregarArticulosBuscados(string txtDescripcion)
         {
