@@ -13,15 +13,6 @@ namespace Gestion_Web.Formularios.Compras {
     public partial class OrdenesCompraABM {
         
         /// <summary>
-        /// UpdatePanel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
-        /// <summary>
         /// ListSucursal control.
         /// </summary>
         /// <remarks>
@@ -65,15 +56,6 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListProveedor;
-        
-        /// <summary>
-        /// lbtnCargarArticulos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnCargarArticulos;
         
         /// <summary>
         /// txtPVenta control.
@@ -155,15 +137,6 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodigo;
-        
-        /// <summary>
-        /// lbtnBuscarArticulo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscarArticulo;
         
         /// <summary>
         /// txtDescripcion control.
