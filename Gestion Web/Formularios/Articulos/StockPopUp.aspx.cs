@@ -88,7 +88,6 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al agregar movimiento de stock. "));
                     }
-                    
                 }
             }
             catch(Exception ex)

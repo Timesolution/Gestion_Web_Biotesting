@@ -440,8 +440,6 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         cantidad = cantidad * -1;    
                     }
-                    
-
                     this.cargarMovimientoStock(dr, cantidad);
                     saldo += cantidad;
                 }

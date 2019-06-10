@@ -86,6 +86,22 @@
                                                                 </li>
                                                             </ul>
                                                         </li>
+                                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas por sucursal subgrupo marca</a>
+                                                            <ul class="dropdown-menu">
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel" runat="server" OnClick="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel_Click">                                                                    
+                                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp Exportar
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF" runat="server" OnClick="lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF_Click">
+                                                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Imprimir
+                                                                    </asp:LinkButton>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
                                                         <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Ventas por Punto de venta</a>
                                                             <ul class="dropdown-menu">
                                                                 <li>
