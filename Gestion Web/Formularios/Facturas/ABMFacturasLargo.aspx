@@ -311,6 +311,9 @@
                                                                     <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />
                                                                     <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
                                                                         <%--<i class="btn-icon-only icon-check-sign"></i>--%>
+                                                                    <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
+                                                                        <i class="btn-icon-only icon-check-sign"></i>
+                                                                    </button>--%>
                                                                 </span>
                                                             </div>
                                                             <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtCodigo" ErrorMessage="El campo es obligatorio" SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
@@ -924,7 +927,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-6">
-                                            <asp:DropDownList ID="ListMonedas" runat="server" class="form-control"></asp:DropDownList>
+                                            <asp:DropDownList ID="ListMonedas" runat="server" AutoPostBack="true" class="form-control" OnSelectedIndexChanged="ListMonedas_SelectedIndexChanged"></asp:DropDownList>
                                             <label>Restan / Efectivo</label>
                                         </div>
                                         <div class="col-md-4">
@@ -2120,8 +2123,8 @@
         {
             var accion = "";
 
-            accion += "<button id=btn_" + codigo + " name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
-            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id=input_" + codigo + " type=\"checkbox\"></span> "
+            accion += "<button id='btn_" + codigo + "' name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='input_" + codigo + "' type=\"checkbox\"></span> "
 
             return accion;
         }
@@ -2315,7 +2318,7 @@
             }
             else {
                 document.getElementById('<%= txtNroSolicitud.ClientID %>').value = "";
-                document.getElementById('<%=txtAnticipo.ClientID%>').value = "";
+                document.getElementById('<%=txtAnticipo.ClientID %>').value = "";
                 <%--document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = ""--%>;
             }
 
