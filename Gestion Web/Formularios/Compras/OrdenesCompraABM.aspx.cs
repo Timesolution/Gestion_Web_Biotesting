@@ -88,7 +88,7 @@ namespace Gestion_Web.Formularios.Compras
                         this.cargarOrdenCompra();
                     }
 
-                    lbtnBuscarArticulo.Visible = false;
+                    //lbtnBuscarArticulo.Visible = false;
                 }
 
                 RecorrerArticulosBuscados();
@@ -260,7 +260,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.cargarProveedor_OC();
                     _articulosProveedorBuscados.Clear();
                     ObtenerArticulosProveedor();
-                    lbtnBuscarArticulo.Visible = true;
+                    //lbtnBuscarArticulo.Visible = true;
                 }
 
             }
@@ -1444,8 +1444,8 @@ namespace Gestion_Web.Formularios.Compras
                 ObtenerArticulosProveedor();
                 dtItems.Rows.Clear();
                 _articulosProveedorBuscados.Clear();
-                if (ListProveedor.SelectedIndex > 0)
-                    lbtnBuscarArticulo.Visible = true;
+                //if (ListProveedor.SelectedIndex > 0)
+                //    lbtnBuscarArticulo.Visible = true;
             }
             catch (Exception Ex)
             {

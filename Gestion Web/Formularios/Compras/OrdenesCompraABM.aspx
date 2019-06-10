@@ -43,16 +43,16 @@
                                             <div class="col-md-3">
                                                 <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return BuscarProveedor()" ></asp:DropDownList> <%--OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"--%>
                                             </div>
-                                            <div class="col-md-1">
+                                            <%--<div class="col-md-1">
                                                 <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click" />
-                                            </div>
-                                            <div class="col-md-4">
-                                                <%--<asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
+                                            </div>--%>
+                                            <%--<div class="col-md-4">
+                                                <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
                                                     <ProgressTemplate>
                                                         <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Procesando cambios. Por favor aguarde.</span>
                                                     </ProgressTemplate>
-                                                </asp:UpdateProgress>--%>
-                                            </div>
+                                                </asp:UpdateProgress>
+                                            </div>--%>
                                         </div>
                                         <div class="form-group">
                                             <label for="name" class="col-md-2">Numero</label>
@@ -123,9 +123,9 @@
                                                                         <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-2">
+                                                                <%--<div class="col-md-2">
                                                                     <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" />
-                                                                </div>
+                                                                </div>--%>
                                                             </div>
                                                         </td>
                                                         <td style="width: 30%">

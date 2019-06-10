@@ -107,6 +107,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["CobroAnticipo"] = null;
                     Session["PagoCuentaAnticipo"] = null;
                     Session["PagoCuentaAnticipoMutual"] = null;
+                    Session["Factura"] = null;
+                    phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
 
