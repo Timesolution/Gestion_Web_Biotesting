@@ -75,6 +75,9 @@ namespace Gestion_Web.Formularios.Facturas
         private static bool _agregarMultiplesArticulosPorDescripcion = false;
         private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
 
+        static int _idCliente = 0;
+        private static bool _agregarCliente = false;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -104,6 +107,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["CobroAnticipo"] = null;
                     Session["PagoCuentaAnticipo"] = null;
                     Session["PagoCuentaAnticipoMutual"] = null;
+                    Session["Factura"] = null;
+                    phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
 
@@ -221,6 +226,8 @@ namespace Gestion_Web.Formularios.Facturas
                     _buscarArticuloPorDescripcion = false;
                     _agregarMultiplesArticulosPorDescripcion = false;
                     _codigosArticulosMultiplesParaAgregar = new List<string>();
+                    _idCliente = 0;
+                    _agregarCliente = false;
                 }
 
                 this.cargarTablaPAgos();
@@ -232,21 +239,28 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 }
 
-                if (Session["FacturasABM_ClienteModal"] != null)
+                //if (Session["FacturasABM_ClienteModal"] != null)
+                //{
+                //    this.flag_clienteModal = 1;
+                //    this.cargarClienteDesdeModal();
+                //}
+                //si viene de la pantalla de articulos, modal
+                if (Session["FacturasABM_ArticuloModal"] != null)
                 {
+                    //obtengo codigo
+                    string CodArt = Session["FacturasABM_ArticuloModal"] as string;
+                    this.txtCodigo.Text = CodArt;
+                    this.cargarProducto(this.txtCodigo.Text,false);
+                    this.ActualizarTotales();
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                }
+
+                if (_agregarCliente)
+                {
+                    _agregarCliente = false;
                     this.flag_clienteModal = 1;
                     this.cargarClienteDesdeModal();
                 }
-                //si viene de la pantalla de articulos, modal
-                //if (Session["FacturasABM_ArticuloModal"] != null)
-                //{
-                //    //obtengo codigo
-                //    string CodArt = Session["FacturasABM_ArticuloModal"] as string;
-                //    this.txtCodigo.Text = CodArt;
-                //    this.cargarProducto(this.txtCodigo.Text);
-                //    this.actualizarTotales();
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
-                //}
 
                 if (_agregarMultiplesArticulosPorDescripcion)
                     AgregarArticulosMultiplesPorDescripcion();
@@ -259,8 +273,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (_agregarArticuloPorDescripcion)
                     AgregarArticuloPorDescripcion();
-
-                //CerrarModalBuscarArticuloPorDescripcion();
 
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
@@ -1844,7 +1856,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //obtengo codigo
-                int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                //int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                int idCliente = _idCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();
@@ -2809,15 +2822,6 @@ namespace Gestion_Web.Formularios.Facturas
                         this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
-                    if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
-                    {
-                        if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
-                        {
-                            this.txtPUnitario.Text = Decimal.Round(art.precioVenta / (1 + (art.porcentajeIva / 100)), 2).ToString();
-
-                        }
-                    }
-
                     this.verificarAlertaArticulo(art);
 
                     Session["FacturasABM_ArticuloModal"] = null;
@@ -2843,8 +2847,10 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 this.TxtDescuentoArri.Text = "0";
                             }
-                            this.CargarProductoAFactura();
-                            this.txtCodigo.Text = "";
+
+                            CargarProductoAFactura();
+                            ActualizarTotales();
+                            txtCodigo.Text = "";
                         }
                     }
                 }
@@ -3555,8 +3561,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (fact.items.Count > 0)
                 {
-                    FormatearPrecioUnitarioAndTotalItems(fact);
-
                     int datosExtras = this.validarDatosExtrasCargadosFactura(fact);
                     if (datosExtras < 1)
                     {
@@ -3944,29 +3948,6 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void FormatearPrecioUnitarioAndTotalItems(Factura factura)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
-                {
-                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
-                    {
-                        foreach (var item in factura.items)
-                        {
-                            item.precioUnitario = item.precioUnitario * (1 + (item.porcentajeIva / 100));
-                            item.total = item.total * (1 + (item.porcentajeIva / 100));
-                            item.descuento = item.descuento * (1 + (item.porcentajeIva / 100));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Ocurrió un error en FormatearPrecioUnitarioAndTotalItems. Excepción: " + ex.Message);
-            }
-        }
-
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
         {
             try
@@ -4198,14 +4179,6 @@ namespace Gestion_Web.Formularios.Facturas
                 item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
                 //en base al precio unitario calculo iva del item
                 item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
-                {
-                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
-                    {
-                        item.precioSinIva = item.precioUnitario;
-                    }
-                }
 
                 //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
                 item.precioSinRecargo = item.precioSinIva;
@@ -5222,6 +5195,35 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void ListTarjetas_SelectedIndexChanged(object sender, EventArgs e)
         {
+            MostrarMontoA_PagarModalTarjetas();
+        }
+
+        protected void ListMonedas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = lstPago;
+                decimal resta = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    resta += Convert.ToDecimal(row["Neto"]);
+                }
+
+                this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text) - resta).ToString();
+                this.txtImporteEfectivo.Text = (Convert.ToDecimal(this.txtTotal.Text) - resta).ToString();
+
+                //solo cuando es pago total con una sola tarjeta dejo la promocion
+                if (resta == 0)
+                    this.verificarPromocionTarjeta();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void MostrarMontoA_PagarModalTarjetas()
+        {
             try
             {
                 DataTable dt = lstPago;
@@ -5930,8 +5932,13 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int idListTarjetas = 0;
+                if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue))
+                {
+                    idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
+                }
                 //genero la clase
-                Tarjeta t = ct.obtenerTarjetaID(Convert.ToInt32(this.ListTarjetas.SelectedValue));
+                Tarjeta t = ct.obtenerTarjetaID(idListTarjetas);
                 //obtengo parametro si usa recargos o no
                 string recargo = WebConfigurationManager.AppSettings.Get("Recargo");
                 if (recargo == "1")
@@ -6496,10 +6503,21 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 //miro si esta en alguna promocion 
                 ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
-                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToInt32(ListTarjetas.SelectedValue));
+                int idListEmpresa = 0;
+                int idListSucursal = 0;
+                int idDropListFormaPago = 0;
+                int idDropListLista = 0;
+                int idListTarjetas = 0;
+
+                if (!string.IsNullOrWhiteSpace(ListEmpresa.SelectedValue)) idListEmpresa = Convert.ToInt32(ListEmpresa.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(ListSucursal.SelectedValue)) idListSucursal = Convert.ToInt32(ListSucursal.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(DropListFormaPago.SelectedValue)) idDropListFormaPago = Convert.ToInt32(DropListFormaPago.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(DropListLista.SelectedValue)) idDropListLista = Convert.ToInt32(DropListLista.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue)) idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
+
+                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(idListEmpresa, idListSucursal, idDropListFormaPago, idDropListLista, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), idListTarjetas);
                 if (p != null)
                 {
                     ValidarExisteArticuloEnPromoTarjeta(p);
@@ -10785,7 +10803,7 @@ namespace Gestion_Web.Formularios.Facturas
                     continue;
 
                 txtCodigo.Text = codigoArticulo;
-                txtCantidad.Text = "1.00";
+                txtCantidad.Text = "1";
                 cargarProducto(txtCodigo.Text, true);
                 CargarProductoAFactura();
             }
@@ -10830,6 +10848,7 @@ namespace Gestion_Web.Formularios.Facturas
         [WebMethod]
         public static void CerrarModalBuscarArticulosPorDescripcion()
         {
+            AgregarArticulosPorDescripcion();
             _agregarArticuloPorDescripcion = false;
             _buscarArticuloPorDescripcion = false;
             _agregarMultiplesArticulosPorDescripcion = false;
@@ -10841,6 +10860,63 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
         }
 
+        [WebMethod]
+        public static string CargarClientes()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesReduc(1);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string BuscarCliente(string razonSocial)
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesAlias(razonSocial);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static void AgregarCliente(int idCliente)
+        {
+            _idCliente = idCliente;
+            _agregarCliente = true;
+        }
+
         class ArticulosTemporal
         {
             public string codigo;
@@ -10848,6 +10924,14 @@ namespace Gestion_Web.Formularios.Facturas
             public string stock;
             public string moneda;
             public string precioVenta;
+        }
+
+        class ClientesTemporal
+        {
+            public string id;
+            public string codigo;
+            public string razonSocial;
+            public string alias;
         }
     }
 }

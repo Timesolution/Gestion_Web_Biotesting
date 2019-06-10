@@ -32,9 +32,10 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <asp:Panel ID="panelBusquedaCliente" runat="server">
-                                                                    <a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
+                                                                    <asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>
+                                                                    <%--<a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
-                                                                    </a>
+                                                                    </a>--%>
                                                                     <asp:LinkButton ID="lbtnVerCtaCte" runat="server" OnClick="lbtnVerCtaCte_Click" class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Ver cta cte">
                                                                         <i class="shortcut-icon icon-th-list"></i>
                                                                     </asp:LinkButton>
@@ -308,7 +309,7 @@
                                                                     <%--<a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>--%>
-                                                                    <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />
+                                                                    <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" /> 
                                                                     <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
                                                                         <%--<i class="btn-icon-only icon-check-sign"></i>--%>
                                                                 </span>
@@ -1905,8 +1906,7 @@
         </div>
 
         <div id="modalBuscarArticuloDescripcion" on class="modal fade" tabindex="-1" role="dialog">
-            <asp:Panel ID="Panel2" runat="server">
-                <%--DefaultButton="btnBuscarArticuloDescripcion"--%>
+            <asp:Panel ID="Panel2" runat="server">                
                 <div class="modal-dialog" style="width: 60%;">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1923,14 +1923,16 @@
                                                 <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-1">
-                                                <%--<asp:LinkButton ID="btnBuscarArticuloDescripcion" href="#" OnClientClick="CargarArticulos()"  
-                                                    ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" AutoPostBack = "false" />--%>                                                
-                                                <%--<asp:Button ID="btnBuscarArticuloDescripcion" href="#" UseSubmitBehavior="false" OnClientClick="CargarArticulos()" runat="server" class="btn btn-info" Text="<span class='shortcut-icon icon-search'></span>"/>--%>
                                                 <button ID="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label id="lblCargandoArticulo" class="col-md-10" >Cargando articulo por favor aguarde.</label>
-                                            </div>
+                                            <asp:UpdateProgress ID="UpdateProgress3" runat="server">
+                                                <ProgressTemplate>
+                                                    <div class="col-md-4">
+                                                            <i class="fa fa-spinner fa-spin" id="spinnerCargandoArticulos"></i>
+                                                        <label id="lblCargandoArticulo" class="col-md-10">Cargando articulo por favor aguarde.</label>
+                                                    </div>
+                                                </ProgressTemplate>
+                                            </asp:UpdateProgress>
                                         </div>
                                     </div>
                                 </div>
@@ -1938,11 +1940,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10%">Codigo</th>
-                                            <th style="width: 30%">Descripcion</th>
+                                            <th style="width: 20%">Descripcion</th>
                                             <th style="width: 10%">Stock</th>
                                             <th style="width: 10%">Moneda</th>
                                             <th style="width: 10%">P.Venta</th>
-                                            <th style="width: 10%"></th>
+                                            <th style="width: 20%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1951,9 +1953,62 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <%--<asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>--%>
                                 <asp:Button ID="btnAgregarArticulosBuscadosATablaItems" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success"/>
                                 <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </asp:Panel>
+        </div>
+
+        <div id="modalBuscarClienteDescripcion" on class="modal fade" tabindex="-1" role="dialog">
+            <asp:Panel ID="Panel1" runat="server">
+                <div class="modal-dialog" style="width: 60%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" id="btnCerrarModalBuscarCliente" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Busqueda de Clientes</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-4">Buscar Cliente</label>
+                                            <div class="col-md-3">
+                                                <asp:TextBox ID="txtDescripcionCliente" class="form-control" runat="server"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button ID="btnBuscarClienteDescripcion" type="button" onclick="BuscarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
+                                            </div>
+                                            <asp:UpdateProgress ID="UpdateProgress4" runat="server">
+                                                <ProgressTemplate>
+                                                    <div class="col-md-4">
+                                                            <i class="fa fa-spinner fa-spin" id="spinnerCargandoClientes"></i>
+                                                        <label id="lblCargandoCliente" class="col-md-10">Cargando cliente por favor aguarde.</label>
+                                                    </div>
+                                                </ProgressTemplate>
+                                            </asp:UpdateProgress>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-bordered" id="clientesTabla">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%">Codigo</th>
+                                            <th style="width: 20%">Razon Social</th>
+                                            <th style="width: 20%">Alias</th>
+                                            <th style="width: 5%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phBuscarCliente" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -2023,6 +2078,30 @@
                     CerrarModalBuscarArticulo();
                 }
             });
+
+            var updateProgress3 = $get('<%= UpdateProgress3.ClientID %>');
+            var dynamicLayout3 = '<%= UpdateProgress3.DynamicLayout.ToString().ToLower() %>';
+
+            if (dynamicLayout3)
+            {
+                updateProgress3.style.display = "block";
+            }
+            else
+            {
+                updateProgress3.style.visibility = "visible";
+            }
+
+            var updateProgress4 = $get('<%= UpdateProgress4.ClientID %>');
+            var dynamicLayout4 = '<%= UpdateProgress4.DynamicLayout.ToString().ToLower() %>';
+
+            if (dynamicLayout4)
+            {
+                updateProgress4.style.display = "block";
+            }
+            else
+            {
+                updateProgress4.style.visibility = "visible";
+            }
         }
     </script>
 
@@ -2038,6 +2117,14 @@
             $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
         });        
 
+        $(function ()
+        {
+            var controltxtDescripcionCliente = document.getElementById('<%= txtDescripcionCliente.ClientID %>');
+            controltxtDescripcionCliente.addEventListener("keypress", BuscarClienteDefaultButton, false);
+            var controltxtDescripcionArticulo = document.getElementById('<%= txtDescripcionArticulo.ClientID %>');
+            controltxtDescripcionArticulo.addEventListener("keypress", BuscarArticuloDefaultButton, false);
+        });
+        
     </script>    
     <script>
         function BuscarArticulo(descripcion,idSucursal)
@@ -2052,18 +2139,17 @@
                 btnBuscarArticulosDescripcion.disabled = true;
 
                 $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
-                data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function ()
-                {
-                    $.msgbox("No se pudo buscar el articulo!", { type: "error" });
-                    BuscarArticulo("",idSucursal);
-                },
-                success: OnSuccessBuscarArticulo
-            });
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
+                    data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudo buscar el articulo!", { type: "error" });
+                        BuscarArticulo("", idSucursal);
+                    },
+                    success: OnSuccessBuscarArticulo
+                });
             }            
         }
 
@@ -2084,10 +2170,10 @@
         function OnSuccessBuscarArticulo(response)
         {
             var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
-            btnBuscarArticulosDescripcion.disabled = false;
+            btnBuscarArticulosDescripcion.disabled = false;            
 
             var data = response.d;
-            var obj = JSON.parse(data);
+            var obj = JSON.parse(data);            
 
             $("#articulosTabla").dataTable().fnDestroy();
             $('#articulosTabla').find("tr:gt(0)").remove();
@@ -2109,19 +2195,65 @@
             {
                 AgregarArticuloBuscadoPorDescripcion(button);
             });
-                        
+
             document.getElementById("MainContent_txtDescripcionArticulo").value = "";
 
             var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
             lblCargandoArticulo.innerHTML = "";
+
+            $("#spinnerCargandoArticulos").hide();
         }
 
         function CrearBotonesAccion(codigo)
         {
             var accion = "";
 
-            accion += "<button id=btn_" + codigo + " name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
-            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id=input_" + codigo + " type=\"checkbox\"></span> "
+            accion += "<button id='btn_" + codigo + "' name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='input_" + codigo + "' type=\"checkbox\"></span> "
+
+            return accion;
+        }
+
+        function OnSuccessCargarClientes(response)
+        {
+            var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
+            btnBuscarClienteDescripcion.disabled = false;
+
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            $("#clientesTabla").dataTable().fnDestroy();
+            $('#clientesTabla').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++)
+            {
+                $('#clientesTabla').append(
+                    "<tr> " +
+                    "<td> " + obj[i].codigo + "</td>" +
+                    "<td> " + obj[i].razonSocial + "</td>" +
+                    "<td> " + obj[i].alias + "</td>" +
+                    "<td> " + CrearBotonesAccionCliente(obj[i].id) + "</td>" +
+                    "</tr> ");
+            };
+
+            $('#clientesTabla').on("click", "button[name=\"btnAgregarCliente\"]", function (button)
+            {
+                AgregarCliente(button);
+            });
+                        
+            document.getElementById("MainContent_txtDescripcionCliente").value = "";
+
+            var lblCargandoCliente = document.getElementById("lblCargandoCliente");
+            lblCargandoCliente.innerHTML = "";
+
+            $("#spinnerCargandoClientes").hide();
+        }
+
+        function CrearBotonesAccionCliente(id)
+        {
+            var accion = "";
+
+            accion += "<button id='btn_" + id + "' name='btnAgregarCliente' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
 
             return accion;
         }
@@ -2136,6 +2268,8 @@
             var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
             lblCargandoArticulo.innerHTML = "Cargando articulos por favor aguarde.";
 
+            $("#spinnerCargandoArticulos").show();
+            
             var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
 
             BuscarArticulo(descripcionArticulo.value, idSucursal);
@@ -2189,6 +2323,73 @@
                 }
             });
         }
+
+        function AgregarCliente(button)
+        {
+            var idCliente = button.currentTarget.id.replace("btn_","");
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/AgregarCliente",
+                data: '{idCliente: "' + idCliente + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo agregar el cliente!", {type: "error"});
+                }
+            });
+        }
+
+        function CargarClientes()
+        {
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/CargarClientes",
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo cargar el cliente!", { type: "error" });
+                },
+                success: OnSuccessCargarClientes
+            });
+        }
+
+        function BuscarClientes()
+        {
+            var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
+            btnBuscarClienteDescripcion.disabled = true;
+
+            var lblCargandoCliente = document.getElementById("lblCargandoCliente");
+            lblCargandoCliente.innerHTML = "Cargando cliente por favor aguarde.";
+
+            $("#spinnerCargandoClientes").show();
+
+            var descripcionCliente = document.getElementById("MainContent_txtDescripcionCliente").value;
+
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasLargo.aspx/BuscarCliente",
+                data: '{razonSocial: "' + descripcionCliente + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function ()
+                {
+                    $.msgbox("No se pudo buscar el cliente!", { type: "error" });
+                },
+                success: OnSuccessCargarClientes
+            });
+            }
+
+        function BuscarClienteDefaultButton()
+        {
+            $("#btnBuscarClienteDescripcion").click();
+        }
+        function BuscarArticuloDefaultButton()
+        {
+            $("#btnBuscarArticuloDescripcion").click();
+        }
     </script>
     <script>
 
@@ -2230,14 +2431,21 @@
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
             }
-        }        
+        }
 
-        function foco() {
-            document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
-            var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
-            var screenPosition = note.getBoundingClientRect();
+        function foco()
+        {
+            var modalArticulosVisible = $('#modalBuscarArticuloDescripcion').is(':visible');
+            var modalClientesVisible = $('#modalBuscarClienteDescripcion').is(':visible');
 
-            window.scrollTo(0, screenPosition.bottom / 2);
+            if (!modalArticulosVisible && !modalClientesVisible)
+            {
+                document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
+                var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
+                var screenPosition = note.getBoundingClientRect();
+
+                window.scrollTo(0, screenPosition.bottom / 2);
+            }            
         }
 
         function focoDesc() {
