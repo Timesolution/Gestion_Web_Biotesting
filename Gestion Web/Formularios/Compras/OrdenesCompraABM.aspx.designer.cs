@@ -229,40 +229,22 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.TextBox txtFormaDePago;
         
         /// <summary>
-        /// btnVerStockMinimo control.
+        /// lbtnVerStockMinimo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerStockMinimo;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVerStockMinimo;
         
         /// <summary>
-        /// btnVerStockMinimoSucursal control.
+        /// lbtnVerOC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerStockMinimoSucursal;
-        
-        /// <summary>
-        /// btnVerOC control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerOC;
-        
-        /// <summary>
-        /// lblVerCargados control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblVerCargados;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVerOC;
         
         /// <summary>
         /// btnVerTodos control.

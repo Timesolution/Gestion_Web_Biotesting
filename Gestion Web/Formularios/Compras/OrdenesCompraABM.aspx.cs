@@ -47,11 +47,11 @@ namespace Gestion_Web.Formularios.Compras
                 this.orden = Convert.ToInt32(Request.QueryString["oc"]);
 
                 #region btnAguarde
-                btnVerStockMinimo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimo, null) + ";");
-                btnVerStockMinimoSucursal.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimoSucursal, null) + ";");
+                //btnVerStockMinimo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimo, null) + ";");
+                //btnVerStockMinimoSucursal.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimoSucursal, null) + ";");
                 btnVerOC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerOC, null) + ";");
-                btnVerTodos.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerTodos, null) + ";");
-                btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+                //btnVerTodos.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerTodos, null) + ";");
+                //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 #endregion
 
                 this.VerificarLogin();
@@ -96,47 +96,47 @@ namespace Gestion_Web.Formularios.Compras
         }
 
         #region Eventos Controles
-        protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e)
-        {
-            try
-            {
+        //protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
 
-                DataTable dt = this.dtItems;
-                //verifico que no este agregado a la grilla
-                foreach (DataRow dr in dt.Rows)
-                {
-                    if (dr["Codigo"].ToString() == this.txtCodigo.Text)
-                    {
-                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo con codigo  ya se encuentra en la grilla\", {type: \"error\"});", true);
-                        return;
-                    }
-                }
+        //        DataTable dt = this.dtItems;
+        //        //verifico que no este agregado a la grilla
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            if (dr["Codigo"].ToString() == this.txtCodigo.Text)
+        //            {
+        //                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo con codigo  ya se encuentra en la grilla\", {type: \"error\"});", true);
+        //                return;
+        //            }
+        //        }
 
-                DataRow drFila = dt.NewRow();
+        //        DataRow drFila = dt.NewRow();
 
-                drFila["Codigo"] = this.txtCodigo.Text;
-                drFila["Descripcion"] = this.txtDescripcion.Text;
-                drFila["Costo"] = this.txtPrecio.Text;
-                drFila["Cant"] = this.txtCantidad.Text;
-                drFila["CostoMasIva"] = "0.00";
+        //        drFila["Codigo"] = this.txtCodigo.Text;
+        //        drFila["Descripcion"] = this.txtDescripcion.Text;
+        //        drFila["Costo"] = this.txtPrecio.Text;
+        //        drFila["Cant"] = this.txtCantidad.Text;
+        //        drFila["CostoMasIva"] = "0.00";
 
-                dt.Rows.Add(drFila);
+        //        dt.Rows.Add(drFila);
 
-                this.dtItems = dt;
+        //        this.dtItems = dt;
 
-                this.agregarItemATabla(drFila["Codigo"].ToString(), drFila["Descripcion"].ToString(), Convert.ToDecimal(drFila["Cant"]), Convert.ToDecimal(drFila["Costo"]), Convert.ToDecimal(drFila["CostoMasIva"]));
-                //this.CargarItems();
-                //limpio los campos
-                this.txtCodigo.Text = "";
-                this.txtCantidad.Text = "";
-                this.txtDescripcion.Text = "";
-                this.txtPrecio.Text = "";
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando items. " + ex.Message));
-            }
-        }
+        //        this.agregarItemATabla(drFila["Codigo"].ToString(), drFila["Descripcion"].ToString(), Convert.ToDecimal(drFila["Cant"]), Convert.ToDecimal(drFila["Costo"]), Convert.ToDecimal(drFila["CostoMasIva"]));
+        //        //this.CargarItems();
+        //        //limpio los campos
+        //        this.txtCodigo.Text = "";
+        //        this.txtCantidad.Text = "";
+        //        this.txtDescripcion.Text = "";
+        //        this.txtPrecio.Text = "";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando items. " + ex.Message));
+        //    }
+        //}
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
             try
@@ -207,28 +207,28 @@ namespace Gestion_Web.Formularios.Compras
             }
 
         }
-        protected void btnVerStockMinimo_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.filtrarItemsByStock(1);
-            }
-            catch (Exception Ex)
-            {
+        //protected void btnVerStockMinimo_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.filtrarItemsByStock(1);
+        //    }
+        //    catch (Exception Ex)
+        //    {
 
-            }
-        }
-        protected void btnVerStockMinimoSucursal_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.filtrarItemsByStock(2);
-            }
-            catch (Exception Ex)
-            {
+        //    }
+        //}
+        //protected void btnVerStockMinimoSucursal_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.filtrarItemsByStock(2);
+        //    }
+        //    catch (Exception Ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
         //protected void btnBuscarCodigoProveedor_Click(object sender, EventArgs e)
         //{
         //    try
@@ -539,6 +539,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (prov == null)
                 {
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", " $.msgbox(\"Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion. \");", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe completar los datos de Orden de Compra correspondiente al Proveedor desde la pantalla de edicion"));
                     return;
                 }
 
@@ -606,6 +607,7 @@ namespace Gestion_Web.Formularios.Compras
                         string script = string.Empty;
                         script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
                         script += " $.msgbox(\"Orden de Compra agregada. \", {type: \"info\"}); location.href = 'OrdenesCompraABM.aspx?a=1';";
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script,true);
                         //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                     }
                     else
@@ -613,16 +615,19 @@ namespace Gestion_Web.Formularios.Compras
                         if (i == -1)
                         {
                             //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo guardar Orden de compra. Reintente"));
                         }
                         else
                         {
                             //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar Orden de compra. Reintente\", {type: \"warning\"});", true);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo guardar Orden de compra. Reintente"));
                         }
                     }
                 }
                 else
                 {
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"La cantidad de Items de la Orden de compra debe ser mayor a 0.\", {type: \"warning\"}); ", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La cantidad de Items de la Orden de compra debe ser mayor a 0"));
                 }
 
 
@@ -654,10 +659,11 @@ namespace Gestion_Web.Formularios.Compras
                 //cargo productos
                 Cliente c = contCliente.obtenerProveedorID(Convert.ToInt32(this.ListProveedor.SelectedValue));
                 c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
-                //if (!String.IsNullOrEmpty(c.alerta.descripcion))
-                //{
-                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
-                //}
+                if (!String.IsNullOrEmpty(c.alerta.descripcion))
+                {
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Alerta Proveedor: " + c.alerta.descripcion + ". \");", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Alerta Proveedor: " + c.alerta.descripcion));
+                }
                 this.cargarArticulosProveedor(Convert.ToInt32(this.ListProveedor.SelectedValue));
 
                 //cargar items
@@ -1084,7 +1090,7 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error obteniendo items " + ex.Message + "\", {type: \"warning\"}); ", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo items. " + ex.Message));
                 return null;
             }
         }

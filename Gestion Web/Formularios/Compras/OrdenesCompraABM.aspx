@@ -6,242 +6,215 @@
 
     <div class="main">
         <div>
-<%--            <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Always">
-                <ContentTemplate>--%>
-                    <div class="col-md-12 col-xs-12">
-                        <div class="widget stacked">
-                            <div class="widget-header">
-                                <i class="icon-wrench"></i>
-                                <h3>Herramientas</h3>
+            <div class="col-md-12 col-xs-12">
+                <div class="widget stacked">
+                    <div class="widget-header">
+                        <i class="icon-wrench"></i>
+                        <h3>Herramientas</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div id="validation-form" role="form" class="form-horizontal col-md-8">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Sucursal</label>
+                                    <div class="col-md-4">
+                                        <asp:DropDownList ID="ListSucursal" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Pto Venta</label>
+                                    <div class="col-md-4">
+                                        <asp:DropDownList ID="ListPtoVenta" class="form-control" runat="server"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Cod. Proveedor</label>
+                                    <div class="col-md-3">
+                                        <asp:TextBox ID="txtCodProveedor" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="btnBuscarCodigoProveedor" href="#" runat="server" Text="<span class='shortcut-icon icon-search'></span>" OnClientClick="BuscarProveedor()" class="btn btn-info" AutoPostBack="false" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Proveedor</label>
+                                    <div class="col-md-3">
+                                        <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return SeleccionarProveedor()"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Numero</label>
+
+                                    <div class="col-md-2">
+                                        <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" disabled onchange="completar4Ceros(this, this.value)"></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled onchange="completar8Ceros(this, this.value)"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Fecha</label>
+
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                            <asp:TextBox ID="txtFecha" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ControlToValidate="txtFecha" ID="RequiredFieldValidator42" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Fecha Entrega</label>
+
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                            <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ControlToValidate="txtFechaEntrega" ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-2">Observaciones</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <asp:Panel ID="Panel1" Visible="true" runat="server" class="col-md-12" Style="padding: 0px; margin-left: -1%;">
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                            <tr>
+                                                <th>Codigo</th>
+                                                <th>Descripcion</th>
+                                                <th>Costo</th>
+                                                <th>Cantidad</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 20%">
+                                                    <div class="form-group">
+                                                        <div class="col-md-8">
+                                                            <div class="input-group">
+                                                                <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 30%">
+                                                    <div style="width: 100%">
+                                                        <asp:TextBox ID="txtDescripcion" runat="server" class="form-control" Style="text-align: right"></asp:TextBox>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 10%">
+                                                    <asp:TextBox ID="txtPrecio" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                </td>
+                                                <td style="width: 10%">
+                                                    <asp:TextBox ID="txtCantidad" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                </td>
+                                                <td style="width: 5%">
+                                                    <asp:LinkButton ID="lbtnAgregarArticuloASP" href="#" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClientClick="AgregarArticuloNuevo()" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </asp:Panel>
+                            </fieldset>
+                        </div>
+                        <div id="validation-form2" role="form" class="form-horizontal col-md-4">
+                            <fieldset>
+                                <div>
+                                    <div class="form-group alert alert-info">
+                                        <label class="col-md-5">Mail:</label>
+                                        <div class="col-md-7">
+                                            <asp:Label ID="lblMailOC" Text="" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group alert alert-info">
+                                        <label class="col-md-5">Requiere Autorización:</label>
+                                        <div class="col-md-7">
+                                            <asp:Label ID="lblRequiereAutorizacionOC" Text="" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group alert alert-info">
+                                        <label class="col-md-5">Monto Autorización:</label>
+                                        <div class="col-md-7">
+                                            <asp:Label ID="lblMontoAutorizacionOC" Text="" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group alert alert-info">
+                                        <label class="col-md-5">Requiere Anticipo:</label>
+                                        <div class="col-md-7">
+                                            <asp:Label ID="lblRequiereAnticipoOC" Text="" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group alert alert-info">
+                                        <label class="col-md-5">Observaciones:</label>
+                                        <div class="col-md-7">
+                                            <asp:Label ID="lblObservacion" Text="" runat="server" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group alert alert-info">
+                                        <label class="col-md-5">Forma de pago:</label>
+                                        <div class="col-md-7">
+                                            <asp:TextBox ID="txtFormaDePago" TextMode="MultiLine" Rows="4" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div id="validation-form3" role="form" class="form-horizontal col-md-8">
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    <%--<asp:Button ID="btnVerStockMinimo" type="button" runat="server" Text="Stock Minimo" class="btn btn-info" OnClientClick="FiltrarStockMinimo()" />--%> <%--OnClick="btnVerStockMinimo_Click"--%>
+                                    <asp:LinkButton ID="lbtnVerStockMinimo" href="#" OnClientClick="FiltrarStockMinimo()" runat="server" Text="Stock Minimo" class="btn btn-info"/>
+                                </div>
+                                <div class="btn-group">
+                                    <%--<asp:Button ID="btnVerOC" type="button" runat="server" Text="Ver OC" class="btn btn-info" OnClick="btnVerOC_Click" />
+                                    <asp:Label ID="lblVerCargados" Text="0" runat="server" Visible="false" />--%>
+                                    <asp:LinkButton ID="lbtnVerOC" href="#" OnClientClick="FiltrarVerOrdenCompra()" runat="server" Text="Ver OC" class="btn btn-info"/>
+                                </div>
+                                <div class="btn-group">
+                                    <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
+                                </div>
                             </div>
-                            <div class="widget-content">
-                                <div id="validation-form" role="form" class="form-horizontal col-md-8">
-                                    <fieldset>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Sucursal</label>
-                                            <div class="col-md-4">
-                                                <asp:DropDownList ID="ListSucursal" class="form-control" runat="server"></asp:DropDownList> <%--OnSelectedIndexChanged="ListSucursal_SelectedIndexChanged"--%>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Pto Venta</label>
-                                            <div class="col-md-4">
-                                                <asp:DropDownList ID="ListPtoVenta" class="form-control" runat="server"></asp:DropDownList>  <%--OnSelectedIndexChanged="ListPtoVenta_SelectedIndexChanged"--%>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Cod. Proveedor</label>
-                                            <div class="col-md-3">
-                                                <asp:TextBox ID="txtCodProveedor" class="form-control" runat="server"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <asp:LinkButton ID="btnBuscarCodigoProveedor" href="#" runat="server" Text="<span class='shortcut-icon icon-search'></span>" OnClientClick="BuscarProveedor()" class="btn btn-info" AutoPostBack = "false"/> <%--OnClick="btnBuscarCodigoProveedor_Click"--%>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Proveedor</label>
-                                            <div class="col-md-3">
-                                                <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return SeleccionarProveedor()" ></asp:DropDownList> <%--OnSelectedIndexChanged="ListProveedor_SelectedIndexChanged"--%>
-                                            </div>
-                                            <%--<div class="col-md-1">
-                                                <asp:LinkButton ID="lbtnCargarArticulos" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" class="btn btn-info" OnClick="lbtnCargarArticulos_Click" />
-                                            </div>--%>
-                                            <%--<div class="col-md-4">
-                                                <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel1">
-                                                    <ProgressTemplate>
-                                                        <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Procesando cambios. Por favor aguarde.</span>
-                                                    </ProgressTemplate>
-                                                </asp:UpdateProgress>
-                                            </div>--%>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Numero</label>
+                            <br />
+                        </div>
 
-                                            <div class="col-md-2">
-                                                <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" disabled onchange="completar4Ceros(this, this.value)"></asp:TextBox>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled onchange="completar8Ceros(this, this.value)"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <%-- <asp:RequiredFieldValidator ControlToValidate="txtPVenta" ID="RequiredFieldValidator30" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <%--<asp:RequiredFieldValidator ControlToValidate="txtNumero" ID="RequiredFieldValidator6" runat="server" ErrorMessage="*" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha</label>
-
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                                    <asp:TextBox ID="txtFecha" runat="server" class="form-control"></asp:TextBox>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <asp:RequiredFieldValidator ControlToValidate="txtFecha" ID="RequiredFieldValidator42" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Fecha Entrega</label>
-
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
-                                                    <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <asp:RequiredFieldValidator ControlToValidate="txtFechaEntrega" ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-2">Observaciones</label>
-                                            <div class="col-md-6">
-                                                <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
-                                            </div>
-                                        </div>
-                                        <asp:Panel ID="Panel1" Visible="true" runat="server" class="col-md-12" Style="padding: 0px; margin-left: -1%;">
-                                            <table class="table table-bordered ">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Codigo</th>
-                                                        <th>Descripcion</th>
-                                                        <th>Costo</th>
-                                                        <th>Cantidad</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="width: 20%">
-                                                            <div class="form-group">
-                                                                <div class="col-md-8">
-                                                                    <div class="input-group">
-                                                                        <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
-                                                                    </div>
-                                                                </div>
-                                                                <%--<div class="col-md-2">
-                                                                    <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" />
-                                                                </div>--%>
-                                                            </div>
-                                                        </td>
-                                                        <td style="width: 30%">
-                                                            <div style="width: 100%">
-                                                                <asp:TextBox ID="txtDescripcion" runat="server" class="form-control" Style="text-align: right"></asp:TextBox>
-                                                            </div>
-                                                        </td>
-                                                        <td style="width: 10%">
-                                                            <asp:TextBox ID="txtPrecio" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-                                                        </td>
-                                                        <td style="width: 10%">
-                                                            <asp:TextBox ID="txtCantidad" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-                                                        </td>
-                                                        <td style="width: 5%">
-                                                            <asp:LinkButton ID="lbtnAgregarArticuloASP" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarArticuloASP_Click" />
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </asp:Panel>
-                                    </fieldset>
-                                </div>
-                                <div id="validation-form2" role="form" class="form-horizontal col-md-4">
-                                    <fieldset>
-                                        <div>
-                                            <div class="form-group alert alert-info">
-                                                <label class="col-md-5">Mail:</label>
-                                                <div class="col-md-7">
-                                                    <asp:Label ID="lblMailOC" Text="" runat="server" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group alert alert-info">
-                                                <label class="col-md-5">Requiere Autorización:</label>
-                                                <div class="col-md-7">
-                                                    <asp:Label ID="lblRequiereAutorizacionOC" Text="" runat="server" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group alert alert-info">
-                                                <label class="col-md-5">Monto Autorización:</label>
-                                                <div class="col-md-7">
-                                                    <asp:Label ID="lblMontoAutorizacionOC" Text="" runat="server" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group alert alert-info">
-                                                <label class="col-md-5">Requiere Anticipo:</label>
-                                                <div class="col-md-7">
-                                                    <asp:Label ID="lblRequiereAnticipoOC" Text="" runat="server" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group alert alert-info">
-                                                <label class="col-md-5">Observaciones:</label>
-                                                <div class="col-md-7">
-                                                    <asp:Label ID="lblObservacion" Text="" runat="server" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group alert alert-info">
-                                                <label class="col-md-5">Forma de pago:</label>
-                                                <div class="col-md-7">
-                                                    <asp:TextBox ID="txtFormaDePago" TextMode="MultiLine" Rows="4" runat="server" class="form-control"></asp:TextBox>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </div>
-
-                                <div id="validation-form3" role="form" class="form-horizontal col-md-8">
-                                    <div class="btn-toolbar">
-                                        <div class="btn-group">
-                                            <asp:Button ID="btnVerStockMinimo" type="button" runat="server" Text="Stock Minimo" class="btn btn-info" OnClick="btnVerStockMinimo_Click" />
-                                        </div>
-                                        <div class="btn-group">
-                                            <asp:Button ID="btnVerStockMinimoSucursal" type="button" runat="server" Text="Stock Minimo Sucursal" class="btn btn-info" OnClick="btnVerStockMinimoSucursal_Click" />
-                                        </div>
-                                        <div class="btn-group">
-                                            <asp:Button ID="btnVerOC" type="button" runat="server" Text="Ver OC" class="btn btn-info" OnClick="btnVerOC_Click" />
-                                            <asp:Label ID="lblVerCargados" Text="0" runat="server" Visible="false" />
-                                        </div>
-                                        <div class="btn-group">
-                                            <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
-                                        </div>
-                                    </div>
-                                    <br />
-                                </div>
-
-                                <table class="table table-striped table-bordered" id="articulosTablaProveedor">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 20%">Codigo</th>
-                                            <th style="width: 20%">Descripcion</th>
-                                            <th style="width: 5%">Precio</th>
-                                            <th style="width: 10%">Precio Mas IVA</th>
-                                            <th style="width: 5%">Cantidad</th>
-                                            <th style="width: 10%">Stock Sucursal</th>
-                                            <th style="width: 10%">Stock Total</th>
-                                            <th style="width: 10%">Stock Minimo</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <asp:PlaceHolder ID="phProductos" runat="server"></asp:PlaceHolder>
-                                    </tbody>
-                                </table>
-                                <br />
-                                <div class="btn-toolbar">
-                                    <div class="btn-group">
-                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />
-                                    </div>
-                                    <%--<div class="alert alert-info alert-dismissable col-md-2">
-                                        <asp:Label ID="lblCartelTotal" runat="server" Text="asd"/>
-                                    </div>--%>
-                                </div>
+                        <table class="table table-striped table-bordered" id="articulosTablaProveedor">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">Codigo</th>
+                                    <th style="width: 20%">Descripcion</th>
+                                    <th style="width: 5%">Precio</th>
+                                    <th style="width: 10%">Precio Mas IVA</th>
+                                    <th style="width: 5%">Cantidad</th>
+                                    <th style="width: 10%">Stock Sucursal</th>
+                                    <th style="width: 10%">Stock Total</th>
+                                    <th style="width: 10%">Stock Minimo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <asp:PlaceHolder ID="phProductos" runat="server"></asp:PlaceHolder>
+                            </tbody>
+                        </table>
+                        <br />
+                        <div class="btn-toolbar">
+                            <div class="btn-group">
+                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />
                             </div>
                         </div>
                     </div>
-<%--                </ContentTemplate>
-            </asp:UpdatePanel>--%>
+                </div>
+            </div>
         </div>
 
         <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
@@ -261,26 +234,6 @@
                                             <div class="col-md-3">
                                                 <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
                                             </div>
-                                            <%--<div class="col-md-1">
-                                                        <asp:LinkButton ID="btnBuscarArticuloDescripcion" ClientIDMode="AutoID" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarArticuloDescripcion_Click" />
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <asp:UpdateProgress runat="server" AssociatedUpdatePanelID="UpdatePanel7">
-                                                            <ProgressTemplate>
-                                                                <i class="fa fa-spinner fa-spin"></i><span>&nbsp;&nbsp;Procesando cambios. Por favor aguarde.</span>
-                                                            </ProgressTemplate>
-                                                        </asp:UpdateProgress>
-                                                    </div>
-                                                    <%--<div class="col-md-3">
-                                                        <a class="btn btn-info" onclick="BuscarArticulo();">
-                                                            <i class="shortcut-icon icon-refresh"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <a class="btn btn-info" onclick="LimpiarTabla();">
-                                                            <i class="shortcut-icon icon-trash"></i>
-                                                        </a>
-                                                    </div>--%>
                                         </div>
                                     </div>
                                 </div>
@@ -300,7 +253,7 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" /> <%--OnClick="lbtnAgregarArticulosBuscadosATablaItems_Click"--%>
+                                <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" />
                                 <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                             </div>
                         </div>
@@ -309,6 +262,7 @@
             </asp:Panel>
         </div>
 
+    </div>
         <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
         </rsweb:ReportViewer>
 
@@ -476,6 +430,80 @@
         </script>
 
         <script type="text/javascript">
+
+            function FiltrarStockMinimo()
+            {
+                var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true });
+
+                var data = table.rows().data();
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+                    var stockTotal = data[i];
+                    var stockMinimo = data[i];
+
+                    if (stockMinimo[7] < stockTotal[6])
+                    {
+                        var row = document.getElementById("articulo_"+codigo[0]);
+                        row.style.display = 'none';
+                    }
+                }
+            };
+
+            function AgregarArticuloNuevo()
+            {
+                var controlTxtCodigo = document.getElementById('<%= txtCodigo.ClientID %>');
+                var controlTxtDescripcion = document.getElementById('<%= txtDescripcion.ClientID %>');
+                var controlTxtPrecio = document.getElementById('<%= txtPrecio.ClientID %>');
+                var controlTxtCantidad = document.getElementById('<%= txtCantidad.ClientID %>');
+
+                if (controlTxtCodigo.value != "" && controlTxtDescripcion.value != "" && controlTxtPrecio.value != "" && controlTxtCantidad.value != "")
+                {
+                    var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true});
+                    var data = table.rows().data();
+
+                    var existeArticulo = false;
+
+                    for (var i = 0; i < data.length; i++)
+                    {
+                        var codigo = data[0];
+
+                        if (controlTxtCodigo.value == codigo[i])
+                        {
+                            $.msgbox("El codigo del articulo ya se encuentra ingresado!", { type: "alert" });
+                            existeArticulo = true;
+                            break;
+                        }
+                    }
+
+                    if (!existeArticulo)
+                    {
+                        $('#articulosTablaProveedor').append(
+                            "<tr id='articulo_" + controlTxtCodigo.value + "'> " +
+                            "<td> " + controlTxtCodigo.value + "</td>" +
+                            "<td> " + controlTxtDescripcion.value + "</td>" +
+                            "<td><input name=\"txtPrecio\" type=\"string\" value=" + parseInt(controlTxtPrecio.value).toFixed(2) + " style=\"text-align: right;\"></td>" +
+                            "<td style=\"text-align: right;\">0.00</td>" +
+                            "<td><input name=\"txtCantidad\" type=\"number\" value=" + parseInt(controlTxtCantidad.value).toFixed(2) + " style=\"text-align: right;\"></td>" +
+                            "<td style=\"text-align: right;\">0.00</td>" +
+                            "<td style=\"text-align: right;\">0.00</td>" +
+                            "<td style=\"text-align: right;\">0.00</td>" +
+                            "<td></td>" +
+                            "</tr> ");
+
+                        controlTxtCodigo.value = "";
+                        controlTxtDescripcion.value = "";
+                        controlTxtPrecio.value = "";
+                        controlTxtCantidad.value = "";
+
+                        $.msgbox("Articulo agregado correctamente!", { type: "info" });
+                    }
+                }
+                else
+                    $.msgbox("Todos los campos deben estar completos para agregar un nuevo articulo!", { type: "alert" });
+            };
+
             function CargarPuntosVenta()
             {
                 var DropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>').value;
@@ -544,9 +572,6 @@
                 controlTextNumeroOrden.value = obj.numero;
                 controlTextPuntoVenta.value = obj.puntoVenta;
             }
-        </script>       
-
-        <script type="text/javascript">
 
             function BuscarProveedor()
             {
@@ -662,7 +687,7 @@
                 for (var i = 0; i < obj.length; i++)
                 {
                     $('#articulosTablaProveedor').append(
-                        "<tr> " +
+                        "<tr id='articulo_" + obj[i].codigo + "'> " +
                         "<td> " + obj[i].codigo + "</td>" +
                         "<td> " + obj[i].descripcion + "</td>" +
                         "<td><input name=\"txtPrecio\" type=\"string\" value=" + obj[i].precioSinIva.toFixed(2) + " style=\"text-align: right;\"></td>" +
