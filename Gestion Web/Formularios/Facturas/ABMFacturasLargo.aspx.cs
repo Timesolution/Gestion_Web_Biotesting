@@ -423,6 +423,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarCliente(f.cliente.id);
                 //this.DropListClientes.SelectedValue = f.cliente.id.ToString();
                 //cargocliente
+                _idCliente = f.cliente.id;
                 Session.Add("FacturasABM_ClienteModal", f.cliente.id);
                 this.cargarClienteDesdeModal();
 
@@ -470,6 +471,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
                 Session.Add("FacturasABM_ClienteModal", f.cliente.id);
+                _idCliente = f.cliente.id;
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
@@ -10674,6 +10676,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
+                _idCliente = this.idClientePadre;
                 Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
                 this.DropListClientes.Attributes.Add("disabled", "disabled");
                 this.cargarClienteDesdeModal();
