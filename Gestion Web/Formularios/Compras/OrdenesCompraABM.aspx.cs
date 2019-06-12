@@ -49,7 +49,7 @@ namespace Gestion_Web.Formularios.Compras
                 #region btnAguarde
                 //btnVerStockMinimo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimo, null) + ";");
                 //btnVerStockMinimoSucursal.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimoSucursal, null) + ";");
-                btnVerOC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerOC, null) + ";");
+                //btnVerOC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerOC, null) + ";");
                 //btnVerTodos.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerTodos, null) + ";");
                 //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 #endregion
@@ -178,35 +178,35 @@ namespace Gestion_Web.Formularios.Compras
         //    }
 
         //}
-        protected void btnVerOC_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.lblVerCargados.Text = "1";
-                this.CargarItems();
-                //this.btnVerOC.Visible = false;
-                //this.btnVerTodos.Visible = true;
-            }
-            catch
-            {
+        //protected void btnVerOC_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.lblVerCargados.Text = "1";
+        //        this.CargarItems();
+        //        //this.btnVerOC.Visible = false;
+        //        //this.btnVerTodos.Visible = true;
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
-        protected void btnVerTodos_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.lblVerCargados.Text = "0";
-                this.CargarItems();
-                //this.btnVerOC.Visible = true;
-                //this.btnVerTodos.Visible = false;
-            }
-            catch
-            {
+        //    }
+        //}
+        //protected void btnVerTodos_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.lblVerCargados.Text = "0";
+        //        this.CargarItems();
+        //        //this.btnVerOC.Visible = true;
+        //        //this.btnVerTodos.Visible = false;
+        //    }
+        //    catch
+        //    {
 
-            }
+        //    }
 
-        }
+        //}
         //protected void btnVerStockMinimo_Click(object sender, EventArgs e)
         //{
         //    try
@@ -465,8 +465,8 @@ namespace Gestion_Web.Formularios.Compras
                 this.txtPVenta.Text = "";
                 this.txtNumero.Text = "";
                 this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                this.txtCodigo.Text = "";
-                this.txtCantidad.Text = "";
+                //this.txtCodigo.Text = "";
+                //this.txtCantidad.Text = "";
             }
             catch (Exception ex)
             {
@@ -1004,23 +1004,23 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 Log.EscribirSQL(1, "INFO", "Inicio cargar items en pantalla");
-                int verCargados = Convert.ToInt32(this.lblVerCargados.Text);
+                //int verCargados = Convert.ToInt32(this.lblVerCargados.Text);
                 this.phProductos.Controls.Clear();
                 if (this.dtItems != null)
                 {
                     foreach (DataRow item in this.dtItems.Rows)
                     {
-                        if (verCargados > 0)
-                        {
-                            if (item["Cant"].ToString() != "0" && !String.IsNullOrEmpty(item["Cant"].ToString()))
-                            {
-                                this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
-                            }
-                        }
-                        else
-                        {
+                        //if (verCargados > 0)
+                        //{
+                        //    if (item["Cant"].ToString() != "0" && !String.IsNullOrEmpty(item["Cant"].ToString()))
+                        //    {
+                        //        this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
+                        //    }
+                        //}
+                        //else
+                        //{
                             this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
-                        }
+                        //}
                     }
                 }
                 Log.EscribirSQL(1, "INFO", "Finalizo cargar items en pantalla");
@@ -1612,6 +1612,9 @@ namespace Gestion_Web.Formularios.Compras
         [WebMethod]
         public static string CargarAlertaProveedor(int idProveedor)
         {
+            if (idProveedor <= 0)
+                return "";
+
             controladorCliente contCliente = new controladorCliente();
 
             Cliente c = contCliente.obtenerProveedorID(idProveedor);
@@ -1629,6 +1632,9 @@ namespace Gestion_Web.Formularios.Compras
         [WebMethod]
         public static string CargarProveedor_OC(int idProveedor)
         {
+            if (idProveedor <= 0)
+                return "";
+
             ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
 
             var poc = contClienteEnt.obtenerProveedor_OC_PorProveedor(idProveedor);
@@ -1653,6 +1659,9 @@ namespace Gestion_Web.Formularios.Compras
         [WebMethod]
         public static string ObtenerArticulosProveedor(int idProveedor,int idSucursal)
         {
+            if (idProveedor <= 0 || idSucursal <= 0)
+                return "";
+
             controladorArticulo controladorArticulo = new controladorArticulo();
             ControladorArticulosEntity controladorArticulosEntity = new ControladorArticulosEntity();            
 
@@ -1667,6 +1676,9 @@ namespace Gestion_Web.Formularios.Compras
         [WebMethod]
         public static string CargarPuntoVenta(int sucursal)
         {
+            if (sucursal <= 0)
+                return "";
+
             controladorSucursal controladorSucursal = new controladorSucursal();
 
             DataTable dt = null;
@@ -1694,6 +1706,9 @@ namespace Gestion_Web.Formularios.Compras
         [WebMethod]
         public static string ObtenerNumeroOrden(int puntoVenta)
         {
+            if (puntoVenta <= 0)
+                return "";
+
             controladorSucursal controladorSucursal = new controladorSucursal();
             controladorFacturacion controladorFacturacion = new controladorFacturacion();
             PuntoVenta puntoDeVenta = controladorSucursal.obtenerPtoVentaId(puntoVenta);
@@ -1711,6 +1726,9 @@ namespace Gestion_Web.Formularios.Compras
         [WebMethod]
         public static string BuscarProveedor(string codigoProveedor)
         {
+            if (string.IsNullOrEmpty(codigoProveedor))
+                return "";
+
             controladorCliente controladorCliente = new controladorCliente();
             String buscar = codigoProveedor.Replace(' ', '%');
             DataTable dtClientes = controladorCliente.obtenerProveedorNombreDT(buscar);

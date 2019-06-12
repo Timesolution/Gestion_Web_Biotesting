@@ -85,7 +85,7 @@
                                         <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                     </div>
                                 </div>
-                                <asp:Panel ID="Panel1" Visible="true" runat="server" class="col-md-12" Style="padding: 0px; margin-left: -1%;">
+                                <%--<asp:Panel ID="Panel1" Visible="true" runat="server" class="col-md-12" Style="padding: 0px; margin-left: -1%;">
                                     <table class="table table-bordered ">
                                         <thead>
                                             <tr>
@@ -124,7 +124,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </asp:Panel>
+                                </asp:Panel>--%>
                             </fieldset>
                         </div>
                         <div id="validation-form2" role="form" class="form-horizontal col-md-4">
@@ -182,7 +182,8 @@
                                     <asp:LinkButton ID="lbtnVerOC" href="#" OnClientClick="FiltrarVerOrdenCompra()" runat="server" Text="Ver OC" class="btn btn-info"/>
                                 </div>
                                 <div class="btn-group">
-                                    <asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />
+                                    <%--<asp:Button ID="btnVerTodos" type="button" runat="server" Text="Ver Todos" class="btn btn-info" OnClick="btnVerTodos_Click" Visible="true" />--%>
+                                    <asp:LinkButton ID="lbtnVerTodos" href="#" OnClientClick="VerTodosLosArticulos()" runat="server" Text="Ver Todos" class="btn btn-info"/>
                                 </div>
                             </div>
                             <br />
@@ -215,51 +216,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div id="modalBuscarArticuloDescripcion" class="modal fade" tabindex="-1" role="dialog">
-            <asp:Panel ID="Panel2" runat="server">
-                <div class="modal-dialog" style="width: 60%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Busqueda de Articulos</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div role="form" class="form-horizontal col-md-12">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-4">Buscar Articulo</label>
-                                            <div class="col-md-3">
-                                                <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <table class="table table-striped table-bordered" id="articulosTabla">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 10%">Codigo</th>
-                                            <th style="width: 30%">Descripcion</th>
-                                            <th style="width: 10%">Costo</th>
-                                            <th style="width: 10%">Precio de Venta</th>
-                                            <th style="width: 10%"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <asp:LinkButton ID="lbtnAgregarArticulosBuscadosATablaItems" runat="server" Text="Guardar" class="btn btn-success" />
-                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </asp:Panel>
         </div>
 
     </div>
@@ -431,9 +387,9 @@
 
         <script type="text/javascript">
 
-            function FiltrarStockMinimo()
+            function VerTodosLosArticulos()
             {
-                var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true });
+                var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
 
                 var data = table.rows().data();
 
@@ -442,16 +398,86 @@
                     var codigo = data[i];
                     var stockTotal = data[i];
                     var stockMinimo = data[i];
+                    var row = document.getElementById("articulo_"+codigo[0]);
+                    row.style.display = 'none';                    
+                }
 
-                    if (stockMinimo[7] < stockTotal[6])
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+
+                    var row = document.getElementById("articulo_" + codigo[0]);
+                    row.style.display = '';
+                }
+            }
+
+            function FiltrarVerOrdenCompra()
+            {
+                var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
+
+                var data = table.rows().data();
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+                    var stockTotal = data[i];
+                    var stockMinimo = data[i];
+                    var row = document.getElementById("articulo_"+codigo[0]);
+                    row.style.display = 'none';                    
+                }
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+                    var stockTotal = data[i];
+                    var stockMinimo = data[i];
+
+                    var codigo = data[i];
+
+                    var txtCantidad = document.getElementsByName("txtCantidad_" + codigo[0]);
+                    var row = document.getElementById("articulo_" + codigo[0]);
+
+                    if (parseInt(txtCantidad[0].value) > 0)
                     {
-                        var row = document.getElementById("articulo_"+codigo[0]);
+                        row.style.display = '';
+                    }
+                    else
+                    {
                         row.style.display = 'none';
                     }
                 }
             };
 
-            function AgregarArticuloNuevo()
+            function FiltrarStockMinimo()
+            {
+                var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
+
+                var data = table.rows().data();
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+                    var stockTotal = data[i];
+                    var stockMinimo = data[i];
+                    var row = document.getElementById("articulo_"+codigo[0]);
+                    row.style.display = 'none';                    
+                }
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+                    var stockTotal = data[i];
+                    var stockMinimo = data[i];
+
+                    if (stockMinimo[7] > stockTotal[6])
+                    {
+                        var row = document.getElementById("articulo_"+codigo[0]);
+                        row.style.display = '';
+                    }
+                }
+            };
+
+            <%--function AgregarArticuloNuevo()
             {
                 var controlTxtCodigo = document.getElementById('<%= txtCodigo.ClientID %>');
                 var controlTxtDescripcion = document.getElementById('<%= txtDescripcion.ClientID %>');
@@ -460,16 +486,16 @@
 
                 if (controlTxtCodigo.value != "" && controlTxtDescripcion.value != "" && controlTxtPrecio.value != "" && controlTxtCantidad.value != "")
                 {
-                    var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true});
+                    var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
                     var data = table.rows().data();
 
                     var existeArticulo = false;
 
                     for (var i = 0; i < data.length; i++)
                     {
-                        var codigo = data[0];
+                        var codigo = data[i];
 
-                        if (controlTxtCodigo.value == codigo[i])
+                        if (controlTxtCodigo.value == codigo[0])
                         {
                             $.msgbox("El codigo del articulo ya se encuentra ingresado!", { type: "alert" });
                             existeArticulo = true;
@@ -478,19 +504,19 @@
                     }
 
                     if (!existeArticulo)
-                    {
-                        $('#articulosTablaProveedor').append(
-                            "<tr id='articulo_" + controlTxtCodigo.value + "'> " +
-                            "<td> " + controlTxtCodigo.value + "</td>" +
-                            "<td> " + controlTxtDescripcion.value + "</td>" +
-                            "<td><input name=\"txtPrecio\" type=\"string\" value=" + parseInt(controlTxtPrecio.value).toFixed(2) + " style=\"text-align: right;\"></td>" +
-                            "<td style=\"text-align: right;\">0.00</td>" +
-                            "<td><input name=\"txtCantidad\" type=\"number\" value=" + parseInt(controlTxtCantidad.value).toFixed(2) + " style=\"text-align: right;\"></td>" +
-                            "<td style=\"text-align: right;\">0.00</td>" +
-                            "<td style=\"text-align: right;\">0.00</td>" +
-                            "<td style=\"text-align: right;\">0.00</td>" +
-                            "<td></td>" +
-                            "</tr> ");
+                    {                        
+                        table.row.add(
+                            [
+                                controlTxtCodigo.value,
+                                controlTxtDescripcion.value,
+                                "<td><input name=\"txtPrecio\" type=\"string\" value=" + parseInt(controlTxtPrecio.value).toFixed(2) + " style=\"text-align: right;\"></td>",
+                                "<td style=\"text-align: right;\" value='0.00'></td>",
+                                "<td><input name='txtCantidad_" + controlTxtCantidad.value + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>",
+                                "<td style=\"text-align: right;\"> " + 0.00 + "</td>",
+                                "<td style=\"text-align: right;\"> " + 0.00 + "</td>",
+                                "<td style=\"text-align: right;\"> " + 0.00 + "</td>",
+                                "<td></td>"
+                            ]).draw();
 
                         controlTxtCodigo.value = "";
                         controlTxtDescripcion.value = "";
@@ -502,7 +528,7 @@
                 }
                 else
                     $.msgbox("Todos los campos deben estar completos para agregar un nuevo articulo!", { type: "alert" });
-            };
+            };--%>
 
             function CargarPuntosVenta()
             {
@@ -524,24 +550,35 @@
             function OnSuccessPuntoVenta(response)
             {
                 var controlDropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>');
+                var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;
+                var idSucursal = document.getElementById('<%=this.ListSucursal.ClientID%>').selectedOptions[0].value;
 
                 while (controlDropListPuntoVenta.options.length > 0)
                 {
                     controlDropListPuntoVenta.remove(0);
                 }
 
-                var data = response.d;
-                obj = JSON.parse(data);
+                $("#articulosTablaProveedor").find("tr:gt(0)").remove();
 
-                for (i = 0; i < obj.length; i++) {
-                    option = document.createElement('option');
-                    option.value = obj[i].id;
-                    option.text = obj[i].nombreFantasia;
+                if (idSucursal > 0 && idSucursal != null)
+                {
+                    var data = response.d;
+                    obj = JSON.parse(data);
 
-                    controlDropListPuntoVenta.add(option);
-                }
+                    for (i = 0; i < obj.length; i++)
+                    {
+                        option = document.createElement('option');
+                        option.value = obj[i].id;
+                        option.text = obj[i].nombreFantasia;
 
-                CargarNumeroOrden();
+                        controlDropListPuntoVenta.add(option);
+                    }
+
+                    CargarNumeroOrden();                    
+
+                    if (idSucursal > 0 && idSucursal != null && idProveedor > 0 && idProveedor != null)
+                        CargarArticulosProveedor(idProveedor, idSucursal);
+                }                
             }
 
             function CargarNumeroOrden()
@@ -592,7 +629,6 @@
 
             function OnSuccessBuscarProveedor(response)
             {
-                LimpiarTabla();
                 LimpiarCamposDatosProveedor();
 
                 var controlDropListProveedor = document.getElementById('<%= ListProveedor.ClientID %>');
@@ -622,10 +658,22 @@
                 var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;
                 var idSucursal = document.getElementById('<%=this.ListSucursal.ClientID%>').selectedOptions[0].value;
 
+                $("#articulosTablaProveedor").find("tr:gt(0)").remove();
+
                 LimpiarCamposDatosProveedor();
-                ObtenerAlertaProveedor(idProveedor);
-                CargarDatosProveedor(idProveedor);
-                CargarArticulosProveedor(idProveedor, idSucursal);
+
+                if (idProveedor > 0 && idProveedor != null)
+                {
+                    ObtenerAlertaProveedor(idProveedor);
+                    CargarDatosProveedor(idProveedor);
+
+                    if(idSucursal > 0 && idSucursal != null)
+                        CargarArticulosProveedor(idProveedor, idSucursal);
+                    else
+                        $.msgbox("Debe seleccionar una sucursal para cargar los articulos!", { type: "alert" });
+                }
+                else
+                    $.msgbox("Debe seleccionar un proveedor!", { type: "alert" });
             }            
 
             function OnSuccessCargarDatosProveedor(response)
@@ -682,7 +730,7 @@
                 obj = JSON.parse(data);
 
                 $("#articulosTablaProveedor").dataTable().fnDestroy();
-                $('#articulosTablaProveedor').find("tr:gt(0)").remove();
+                $("#articulosTablaProveedor").find("tr:gt(0)").remove();
 
                 for (var i = 0; i < obj.length; i++)
                 {
@@ -692,7 +740,7 @@
                         "<td> " + obj[i].descripcion + "</td>" +
                         "<td><input name=\"txtPrecio\" type=\"string\" value=" + obj[i].precioSinIva.toFixed(2) + " style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].precioventa.toFixed(2) + "</td>" +
-                        "<td><input name=\"txtCantidad\" type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
+                        "<td><input name='txtCantidad_" + obj[i].codigo + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockTotal.toFixed(2) + "</td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].stockMinimo.toFixed(2) + "</td>" +                        
@@ -709,11 +757,6 @@
                     alertaTemp = "<span><span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
 
                 return alertaTemp;
-            }
-            
-            function LimpiarTabla()
-            {
-                $("#articulosTabla").find("tr:gt(0)").remove();
             }
         </script>
 
