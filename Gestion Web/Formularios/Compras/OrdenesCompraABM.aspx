@@ -203,9 +203,6 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <asp:PlaceHolder ID="phProductos" runat="server"></asp:PlaceHolder>
-                            </tbody>
                         </table>
                         <br />
                         <div class="btn-toolbar">
