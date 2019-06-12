@@ -154,11 +154,6 @@ namespace Gestion_Web.Formularios.Herramientas
             else
                 dt = controladorSucursal.obtenerSucursales();
 
-            DataRow dr = dt.NewRow();
-            dr["nombre"] = "Todas";
-            dr["Id"] = -1;
-            dt.Rows.InsertAt(dr, 0);
-
             List<ListItemTemporal> listaTemporal = new List<ListItemTemporal>();
 
             foreach (DataRow row in dt.Rows)
@@ -207,7 +202,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 //agrego todos
                 DataRow dr = dt.NewRow();
                 dr["descripcion"] = "Todos";
-                dr["id"] = -1;
+                dr["id"] = 0;
                 dt.Rows.InsertAt(dr, 0);
 
                 this.DropListGrupo.DataSource = dt;
@@ -239,7 +234,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     //agrego todos
                     DataRow dr = dt.NewRow();
                     dr["descripcion"] = "Todos";
-                    dr["id"] = -1;
+                    dr["id"] = 0;
                     dt.Rows.InsertAt(dr, 0);
 
                     this.DropListSubGrupo.DataSource = dt;
@@ -268,7 +263,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     dt = contArticulo.obtenerSubGrupoDT(grupo);
                     DataRow dr = dt.NewRow();
                     dr["descripcion"] = "Todos";
-                    dr["Id"] = -1;
+                    dr["Id"] = 0;
                     dt.Rows.InsertAt(dr, 0);
                     foreach (DataRow row in dt.Rows)
                     {
@@ -281,7 +276,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 else
                 {
                     ListItemTemporal listItemTemporal = new ListItemTemporal();
-                    listItemTemporal.id = "-1";
+                    listItemTemporal.id = "0";
                     listItemTemporal.nombre = "Todos";
                     listaTemporal.Add(listItemTemporal);
                 }
@@ -302,7 +297,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 //agrego todos
                 DataRow dr = dt.NewRow();
                 dr["marca"] = "Todas";
-                dr["id"] = -1;
+                dr["id"] = 0;
                 dt.Rows.InsertAt(dr, 0);
 
                 this.DropListMarca.DataSource = dt;
@@ -318,47 +313,33 @@ namespace Gestion_Web.Formularios.Herramientas
         }
         #endregion
 
-        public void ProcesarReinicioDeStock()
+        protected void ProcesarReinicioDeStock_Click(object sender, EventArgs e)
         {
             try
             {
-                //Stock st = contArticulo.obtenerStockID(idStock);
-                //stockMovimiento s = new stockMovimiento();
-                //txtAgregarStock.Text = txtAgregarStock.Text.Replace(',', '.');
+                int IdUsuario = (int)Session["Login_IdUser"];
+                int IdSucursal = Convert.ToInt32(DropListSucursal.SelectedValue);
+                int IdProveedor = Convert.ToInt32(DropListProveedor.SelectedValue);
+                int IdGrupo = Convert.ToInt32(DropListGrupo.SelectedValue);
+                int IdSubGrupo = Convert.ToInt32(DropListSubGrupo.SelectedValue);
+                int IdMarca = Convert.ToInt32(DropListMarca.SelectedValue);
 
-                ////Agrego el movimiento de stock                  
-                //s.IdUsuario = (int)Session["Login_IdUser"];
-                //s.Cantidad = Convert.ToDecimal(this.txtAgregarStock.Text);
-                //s.Articulo = st.articulo.id;
-                //s.IdSucursal = st.sucursal.id;
-                //s.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
-                //s.TipoMovimiento = "Inventario";
-                //s.Comentarios = this.txtComentarios.Text;
+                int respuesta =  contArticulo.ReiniciarStock(IdUsuario, IdSucursal, IdProveedor, IdGrupo, IdSubGrupo, IdMarca);
 
-                //int j = contArticulo.AgregarMovimientoStock(s);
-                //if (j > 0)
-                //{
-                //    int i = contArticulo.ActualizarStock(this.idStock, Convert.ToDecimal(txtAgregarStock.Text));
-                //    if (i > 0)
-                //    {
-                //        Modal.Close(this, "OK");
-                //    }
-                //    else
-                //    {
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al actualizar el stock del producto. "));
-                //    }
-                //}
-                //else
-                //{
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al agregar movimiento de stock. "));
-                //}
+                if (respuesta > 0)
+                {
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel, UpdatePanel.GetType(), "alert", m.mensajeBoxError("Stock reiniciado correctamente."), true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Stock reiniciado correctamente.", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Hubo un problema al reiniciar el Stock."));
+                }
             }
             catch (Exception ex)
             {
 
             }
         }
-
-
     }
 }
