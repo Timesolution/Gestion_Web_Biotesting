@@ -203,11 +203,15 @@
                                     <th></th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <asp:PlaceHolder ID="phProductos" runat="server"></asp:PlaceHolder>
+                            </tbody>
                         </table>
                         <br />
                         <div class="btn-toolbar">
                             <div class="btn-group">
-                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />
+                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="AgregarOrdenCompra()" OnClick="btnAgregar_Click" />
+                                <asp:Label ID="lblCodigosOrdenCompra" runat="server" visible="true"></asp:Label>
                             </div>
                         </div>
                     </div>
@@ -384,6 +388,30 @@
 
         <script type="text/javascript">
 
+            function AgregarOrdenCompra()
+            {
+                var labelCodigosOrdenCompra = document.getElementById('<%= lblCodigosOrdenCompra.ClientID %>');
+                labelCodigosOrdenCompra.value = "";
+                labelCodigosOrdenCompra.text = "";
+
+                var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
+
+                var data = table.rows().data();
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var codigo = data[i];
+
+                    var txtCantidad = document.getElementsByName("txtCantidad_" + codigo[0]);
+
+                    if (parseInt(txtCantidad[0].value) > 0)
+                    {
+                        labelCodigosOrdenCompra.value += codigo[0] + ";"
+                        labelCodigosOrdenCompra.text += codigo[0] + ";"
+                    }
+                }
+            }
+
             function VerTodosLosArticulos()
             {
                 var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
@@ -393,8 +421,6 @@
                 for (var i = 0; i < data.length; i++)
                 {
                     var codigo = data[i];
-                    var stockTotal = data[i];
-                    var stockMinimo = data[i];
                     var row = document.getElementById("articulo_"+codigo[0]);
                     row.style.display = 'none';                    
                 }
@@ -402,7 +428,6 @@
                 for (var i = 0; i < data.length; i++)
                 {
                     var codigo = data[i];
-
                     var row = document.getElementById("articulo_" + codigo[0]);
                     row.style.display = '';
                 }
@@ -417,18 +442,12 @@
                 for (var i = 0; i < data.length; i++)
                 {
                     var codigo = data[i];
-                    var stockTotal = data[i];
-                    var stockMinimo = data[i];
                     var row = document.getElementById("articulo_"+codigo[0]);
                     row.style.display = 'none';                    
                 }
 
                 for (var i = 0; i < data.length; i++)
                 {
-                    var codigo = data[i];
-                    var stockTotal = data[i];
-                    var stockMinimo = data[i];
-
                     var codigo = data[i];
 
                     var txtCantidad = document.getElementsByName("txtCantidad_" + codigo[0]);

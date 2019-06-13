@@ -1038,52 +1038,55 @@ namespace Gestion_Web.Formularios.Compras
             {
                 List<OrdenesCompra_Items> items = new List<OrdenesCompra_Items>();
 
-                foreach (var c in this.phProductos.Controls)
+                var codigos = lblCodigosOrdenCompra.Text.Split(';');
+
+                foreach (var c in codigos)
                 {
-                    TableRow tr = c as TableRow;
-                    TextBox txt = tr.Cells[4].Controls[0] as TextBox;
-                    if (txt.Text != "0" && !String.IsNullOrEmpty(txt.Text))
-                    {
-                        string codigo = this.obtenerCodigo((tr.Cells[0]).Text);
-                        Articulo a = contArticulos.obtenerArticuloCodigoAparece(codigo);
-                        OrdenesCompra_Items item = controlador.OrdenCompra_ItemGetOne(orden, a.id.ToString());
+                    if (string.IsNullOrEmpty(c))
+                        continue;
 
-                        if (item == null)
-                        {
-                            item = new OrdenesCompra_Items();
+                    //TableRow tr = c as TableRow;
+                    //TextBox txt = tr.Cells[4].Controls[0] as TextBox;
+                    string codigo = obtenerCodigo(c);
+                    Articulo a = contArticulos.obtenerArticuloCodigoAparece(codigo);
+                    OrdenesCompra_Items item = controlador.OrdenCompra_ItemGetOne(orden, a.id.ToString());
 
-                            if (a == null)
-                            {
-                                item.Codigo = codigo;
-                                item.PrecioConIVA = 0.00m;
-                            }
-                            else
-                            {
-                                item.PrecioConIVA = decimal.Round(a.costo * (1 + (a.porcentajeIva / 100)), 2);
-                                item.Codigo = a.id.ToString();
-                            }
+                    //if (item == null)
+                    //{
+                    //    item = new OrdenesCompra_Items();
 
-                            item.Descripcion = tr.Cells[1].Text;
+                    //    if (a == null)
+                    //    {
+                    //        item.Codigo = codigo;
+                    //        item.PrecioConIVA = 0.00m;
+                    //    }
+                    //    else
+                    //    {
+                    //        item.PrecioConIVA = decimal.Round(a.costo * (1 + (a.porcentajeIva / 100)), 2);
+                    //        item.Codigo = a.id.ToString();
+                    //    }
 
-                            var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
+                    //    item.Descripcion = tr.Cells[1].Text;
 
-                            item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
-                            item.Cantidad = Convert.ToDecimal(txt.Text);
-                            item.Estado = 2;
-                        }
-                        else
-                        {
-                            var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
+                    //    var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
 
-                            if (item.Cantidad != Convert.ToDecimal(txt.Text))
-                                item.Cantidad = Convert.ToDecimal(txt.Text);
+                    //    item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
+                    //    item.Cantidad = Convert.ToDecimal(txt.Text);
+                    //    item.Estado = 2;
+                    //}
+                    //else
+                    //{
+                    //    var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
 
-                            if(item.Precio != Convert.ToDecimal(nuevoPrecio.Text))
-                                item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
-                            
-                        }
-                        items.Add(item);
-                    }
+                    //    if (item.Cantidad != Convert.ToDecimal(txt.Text))
+                    //        item.Cantidad = Convert.ToDecimal(txt.Text);
+
+                    //    if (item.Precio != Convert.ToDecimal(nuevoPrecio.Text))
+                    //        item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
+
+                    //}
+                    items.Add(item);
+
                 }
                 return items;
             }
