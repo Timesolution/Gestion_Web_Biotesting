@@ -39,54 +39,53 @@ namespace Gestion_Web.Formularios.Compras
         int accion;
         long orden;
 
+        static List<ArticulosProveedorTemp> _articulosOrdenCompra = new List<ArticulosProveedorTemp>();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                this.accion = Convert.ToInt32(Request.QueryString["a"]);
-                this.orden = Convert.ToInt32(Request.QueryString["oc"]);
+                accion = Convert.ToInt32(Request.QueryString["a"]);
+                orden = Convert.ToInt32(Request.QueryString["oc"]);
 
                 #region btnAguarde
                 //btnVerStockMinimo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimo, null) + ";");
                 //btnVerStockMinimoSucursal.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimoSucursal, null) + ";");
                 //btnVerOC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerOC, null) + ";");
                 //btnVerTodos.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerTodos, null) + ";");
-                //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+                btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 #endregion
 
                 this.VerificarLogin();
+
                 this.CargarItems();
 
                 if (!IsPostBack)
                 {
+                    _articulosOrdenCompra = new List<ArticulosProveedorTemp>();
                     //cargo fecha de hoy
-                    this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    this.txtFechaEntrega.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaEntrega.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
-                    this.CargarProveedores();
-                    this.CargarSucursal();
+                    CargarProveedores();
+                    CargarSucursal();
 
-                    this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                    if (this.ListSucursal.SelectedValue != "")
-                    {
-                        this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                        this.CargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
-                    }
+                    AsignarSucursalPorDefault();
 
-                    this.dtItemsTemp = new DataTable();
-                    this.CrearTablaItems();
+                    dtItemsTemp = new DataTable();
+                    CrearTablaItems();
 
                     if (this.accion == 2)
                     {
                         //cargar orden
-                        this.cargarOrdenCompra();
+                        cargarOrdenCompra();
                     }
 
                     //lbtnBuscarArticulo.Visible = false;
                 }
 
                 //RecorrerArticulosBuscados();
-                this.actualizarTotales();                
+                //this.actualizarTotales();                
             }
             catch (Exception ex)
             {
@@ -95,6 +94,15 @@ namespace Gestion_Web.Formularios.Compras
 
         }
 
+        public void AsignarSucursalPorDefault()
+        {
+            this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+            if (this.ListSucursal.SelectedValue != "")
+            {
+                this.ListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                this.CargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+            }
+        }
         #region Eventos Controles
         //protected void lbtnAgregarArticuloASP_Click(object sender, EventArgs e)
         //{
@@ -137,11 +145,10 @@ namespace Gestion_Web.Formularios.Compras
         //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando items. " + ex.Message));
         //    }
         //}
-        protected void btnAgregar_Click(object sender, EventArgs e)
+        protected void lbtnAgregar_Click(object sender, EventArgs e)
         {
             try
             {
-                //if (this.accion == 1)
                 this.guardarOrden();
             }
             catch (Exception ex)
@@ -477,7 +484,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                List<OrdenesCompra_Items> items = this.obtenerItems();
+                List<OrdenesCompra_Items> items = this.ObtenerItems();
                 decimal total = 0;
                 if (items != null)
                 {
@@ -555,7 +562,7 @@ namespace Gestion_Web.Formularios.Compras
                 //obtengo items los borro y los leo de la pagina
                 oc.OrdenesCompra_Items.Clear();
                 oc.MailProveedor = this.lblMailOC.Text;
-                oc.OrdenesCompra_Items = this.obtenerItems();
+                oc.OrdenesCompra_Items = this.ObtenerItems();
                 decimal tempTotal = 0;
                 foreach (var item in oc.OrdenesCompra_Items)
                 {
@@ -605,10 +612,14 @@ namespace Gestion_Web.Formularios.Compras
                         }
 
                         string script = string.Empty;
-                        script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
-                        script += " $.msgbox(\"Orden de Compra agregada. \", {type: \"info\"}); location.href = 'OrdenesCompraABM.aspx?a=1';";
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script,true);
+                        //script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', '_blank');";
+                        script = "window.open('ImpresionCompras.aspx?a=3&oc=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                        //script += "$.msgbox(\"Orden de Compra agregada. \", {type: \"info\"}); location.href = 'OrdenesCompraABM.aspx?accion=3';";
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script,true);
+                        //Response.Redirect("OrdenesCompraF.aspx?accion=1");
+                        ScriptManager.RegisterStartupScript(this, GetType(), "alert", script, true);
                         //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
+                        ResetearCampos();
                     }
                     else
                     {
@@ -636,6 +647,14 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando  Orden de compra. " + ex.Message));
             }
+        }
+        public void ResetearCampos()
+        {
+            ListProveedor.SelectedValue = "-1";
+            txtObservaciones.Text = "";
+            txtFormaDePago.Text = "";
+            AsignarSucursalPorDefault();
+            _articulosOrdenCompra.Clear();
         }
         public void cargarOrdenCompra()
         {
@@ -1032,59 +1051,31 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
             }
         }
-        private List<OrdenesCompra_Items> obtenerItems()
+        private List<OrdenesCompra_Items> ObtenerItems()
         {
             try
             {
                 List<OrdenesCompra_Items> items = new List<OrdenesCompra_Items>();
 
-                var codigos = lblCodigosOrdenCompra.Text.Split(';');
-
-                foreach (var c in codigos)
+                foreach (var articulo in _articulosOrdenCompra)
                 {
-                    if (string.IsNullOrEmpty(c))
-                        continue;
-
-                    //TableRow tr = c as TableRow;
-                    //TextBox txt = tr.Cells[4].Controls[0] as TextBox;
-                    string codigo = obtenerCodigo(c);
+                    string codigo = obtenerCodigo(articulo.codigo);
                     Articulo a = contArticulos.obtenerArticuloCodigoAparece(codigo);
                     OrdenesCompra_Items item = controlador.OrdenCompra_ItemGetOne(orden, a.id.ToString());
 
-                    //if (item == null)
-                    //{
-                    //    item = new OrdenesCompra_Items();
+                    item = new OrdenesCompra_Items();
 
-                    //    if (a == null)
-                    //    {
-                    //        item.Codigo = codigo;
-                    //        item.PrecioConIVA = 0.00m;
-                    //    }
-                    //    else
-                    //    {
-                    //        item.PrecioConIVA = decimal.Round(a.costo * (1 + (a.porcentajeIva / 100)), 2);
-                    //        item.Codigo = a.id.ToString();
-                    //    }
+                    item.Codigo = codigo;
+                    item.PrecioConIVA = 0.00m;
+                    item.PrecioConIVA = decimal.Round(Convert.ToDecimal(articulo.precio) * (1 + (a.porcentajeIva / 100)), 2);
+                    item.Codigo = a.id.ToString();
 
-                    //    item.Descripcion = tr.Cells[1].Text;
+                    item.Descripcion = articulo.descripcion;
 
-                    //    var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
+                    item.Precio = Convert.ToDecimal(articulo.precio);
+                    item.Cantidad = Convert.ToDecimal(articulo.cantidad);
+                    item.Estado = 2;
 
-                    //    item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
-                    //    item.Cantidad = Convert.ToDecimal(txt.Text);
-                    //    item.Estado = 2;
-                    //}
-                    //else
-                    //{
-                    //    var nuevoPrecio = tr.Cells[2].Controls[0] as TextBox;
-
-                    //    if (item.Cantidad != Convert.ToDecimal(txt.Text))
-                    //        item.Cantidad = Convert.ToDecimal(txt.Text);
-
-                    //    if (item.Precio != Convert.ToDecimal(nuevoPrecio.Text))
-                    //        item.Precio = Convert.ToDecimal(nuevoPrecio.Text);
-
-                    //}
                     items.Add(item);
 
                 }
@@ -1124,47 +1115,47 @@ namespace Gestion_Web.Formularios.Compras
         //        return null;
         //    }
         //}
-        private void filtrarItemsByStock(int tipo)
-        {
-            try
-            {
-                foreach (var c in this.phProductos.Controls)
-                {
-                    TableRow tr = c as TableRow;
-                    TableCell tcStockSucursal = tr.Cells[4] as TableCell;
-                    TableCell tcStockTotal = tr.Cells[5] as TableCell;
-                    TableCell tcStockMinimo = tr.Cells[6] as TableCell;
+        //private void filtrarItemsByStock(int tipo)
+        //{
+        //    try
+        //    {
+        //        foreach (var c in this.phProductos.Controls)
+        //        {
+        //            TableRow tr = c as TableRow;
+        //            TableCell tcStockSucursal = tr.Cells[4] as TableCell;
+        //            TableCell tcStockTotal = tr.Cells[5] as TableCell;
+        //            TableCell tcStockMinimo = tr.Cells[6] as TableCell;
 
-                    if (tipo == 1)
-                    {
-                        if (Convert.ToDecimal(tcStockMinimo.Text) > Convert.ToDecimal(tcStockTotal.Text))
-                        {
-                            tr.Visible = true;
-                        }
-                        else
-                        {
-                            tr.Visible = false;
-                        }
-                    }
-                    if (tipo == 2)
-                    {
-                        if (Convert.ToDecimal(tcStockMinimo.Text) > Convert.ToDecimal(tcStockSucursal.Text))
-                        {
-                            tr.Visible = true;
-                        }
-                        else
-                        {
-                            tr.Visible = false;
-                        }
-                    }
+        //            if (tipo == 1)
+        //            {
+        //                if (Convert.ToDecimal(tcStockMinimo.Text) > Convert.ToDecimal(tcStockTotal.Text))
+        //                {
+        //                    tr.Visible = true;
+        //                }
+        //                else
+        //                {
+        //                    tr.Visible = false;
+        //                }
+        //            }
+        //            if (tipo == 2)
+        //            {
+        //                if (Convert.ToDecimal(tcStockMinimo.Text) > Convert.ToDecimal(tcStockSucursal.Text))
+        //                {
+        //                    tr.Visible = true;
+        //                }
+        //                else
+        //                {
+        //                    tr.Visible = false;
+        //                }
+        //            }
 
-                }
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error filtrando items. Excepción: " + Ex.Message));
-            }
-        }
+        //        }
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error filtrando items. Excepción: " + Ex.Message));
+        //    }
+        //}
         private void cargarCantidadItem(object sender, EventArgs e)
         {
             try
@@ -1183,17 +1174,17 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        private void actualizarTotalItem(object sender, EventArgs e)
-        {
-            try
-            {
-                this.actualizarTotales();
-            }
-            catch
-            {
+        //private void actualizarTotalItem(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.actualizarTotales();
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
+        //    }
+        //}
         #endregion
 
         #region Envio Mail
@@ -1740,7 +1731,24 @@ namespace Gestion_Web.Formularios.Compras
             string resultadoJSON = JsonConvert.SerializeObject(dtClientes);
             return resultadoJSON;
         }
-        
+
+        [WebMethod]
+        public static void ObtenerArticulosParaGenerarOrdenCompra(string[] articulos)
+        {
+            foreach (var articulo in articulos)
+            {
+                var articuloTemp = articulo.Split(';');
+
+                ArticulosProveedorTemp articuloProveedorTemp = new ArticulosProveedorTemp();
+                articuloProveedorTemp.codigo = articuloTemp[0];
+                articuloProveedorTemp.descripcion = articuloTemp[1];
+                articuloProveedorTemp.precio = articuloTemp[2];
+                articuloProveedorTemp.precioMasIVA = articuloTemp[3];
+                articuloProveedorTemp.cantidad = articuloTemp[4];
+
+                _articulosOrdenCompra.Add(articuloProveedorTemp);
+            }
+        }
 
         //[WebMethod]
         //public static void AgregarArticulosBuscados(string txtDescripcion)
@@ -1810,10 +1818,10 @@ namespace Gestion_Web.Formularios.Compras
         public string precio;
         public string precioMasIVA;
         public string stockSucursal;
-        public string stockMinimoSucursal;
         public string stockTotal;
         public string stockMinimo;
         public string alerta;
+        public string cantidad;
     }
     class PuntoVentaTemporal
     {

@@ -205,13 +205,15 @@
                             </thead>
                             <tbody>
                                 <asp:PlaceHolder ID="phProductos" runat="server"></asp:PlaceHolder>
+                                <asp:Panel runat="server" ID="panelProductos"></asp:Panel>
                             </tbody>
                         </table>
                         <br />
                         <div class="btn-toolbar">
                             <div class="btn-group">
-                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="AgregarOrdenCompra()" OnClick="btnAgregar_Click" />
-                                <asp:Label ID="lblCodigosOrdenCompra" runat="server" visible="true"></asp:Label>
+                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="AgregarOrdenCompra()" OnClick="lbtnAgregar_Click"/>
+                                <%--<asp:LinkButton ID="lbtnAgregar" OnClientClick="AgregarOrdenCompra()" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregar_Click"/>--%>
+                                <%--<asp:Label ID="lblCodigosOrdenCompra" runat="server" visible="true"></asp:Label>--%>
                             </div>
                         </div>
                     </div>
@@ -390,26 +392,41 @@
 
             function AgregarOrdenCompra()
             {
-                var labelCodigosOrdenCompra = document.getElementById('<%= lblCodigosOrdenCompra.ClientID %>');
-                labelCodigosOrdenCompra.value = "";
-                labelCodigosOrdenCompra.text = "";
+                var controlPanelroductos = document.getElementById('<%= panelProductos.ClientID %>');
 
                 var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
 
                 var data = table.rows().data();
 
+                var articulos = new Array();
+
                 for (var i = 0; i < data.length; i++)
                 {
-                    var codigo = data[i];
+                    var articulo = data[i];
 
-                    var txtCantidad = document.getElementsByName("txtCantidad_" + codigo[0]);
+                    var txtCantidad = document.getElementsByName("txtCantidad_" + articulo[0]);
+                    var txtPrecio = document.getElementsByName("txtPrecio_" + articulo[0]);
 
                     if (parseInt(txtCantidad[0].value) > 0)
                     {
-                        labelCodigosOrdenCompra.value += codigo[0] + ";"
-                        labelCodigosOrdenCompra.text += codigo[0] + ";"
+                        var articuloDatos = articulo[0] + ";" + articulo[1] + ";" + txtPrecio[0].value + ";" + articulo[3] + ";" + txtCantidad[0].value;
+                        articulos.push(articuloDatos);
                     }
                 }
+
+                var articulosOrdenCompra = JSON.stringify(articulos);
+
+                $.ajax({
+                    type: "POST",
+                    url: "OrdenesCompraABM.aspx/ObtenerArticulosParaGenerarOrdenCompra",
+                    data: JSON.stringify({articulos: articulos}),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function ()
+                    {
+                        $.msgbox("Error agregando orden de compra.", { type: "alert" });
+                    }
+                });
             }
 
             function VerTodosLosArticulos()
@@ -556,8 +573,9 @@
                     data: '{sucursal: "' + DropListSucursal + '"  }',
                     contentType: "application/json",
                     dataType: 'json',
-                    error: function () {
-                        alert("No se pudieron cargar los puntos de venta.");
+                    error: function ()
+                    {
+                        $.msgbox("No se pudieron cargar los puntos de venta.", { type: "alert" });
                     },
                     success: OnSuccessPuntoVenta
                 });
@@ -607,8 +625,9 @@
                     data: '{puntoVenta: "' + DropListPuntoVenta + '"  }',
                     contentType: "application/json",
                     dataType: 'json',
-                    error: function () {
-                        alert("No se pudieron obtener los numeros de orden.");
+                    error: function ()
+                    {
+                        $.msgbox("No se pudieron obtener los numeros de orden.", { type: "alert" });
                     },
                     success: OnSuccessObtenerNumeroOrden
                 });
@@ -636,8 +655,9 @@
                     data: '{codigoProveedor: "' + txtCodigoProveedor + '"  }',
                     contentType: "application/json",
                     dataType: 'json',
-                    error: function () {
-                        alert("No se pudo buscar el proveedor.");
+                    error: function ()
+                    {
+                        $.msgbox("No se pudo buscar el proveedor!", { type: "alert" });
                     },
                     success: OnSuccessBuscarProveedor
                 });
@@ -754,7 +774,7 @@
                         "<tr id='articulo_" + obj[i].codigo + "'> " +
                         "<td> " + obj[i].codigo + "</td>" +
                         "<td> " + obj[i].descripcion + "</td>" +
-                        "<td><input name=\"txtPrecio\" type=\"string\" value=" + obj[i].precioSinIva.toFixed(2) + " style=\"text-align: right;\"></td>" +
+                        "<td><input name='txtPrecio_" + obj[i].codigo + "'type=\"string\" value=" + obj[i].precioSinIva.toFixed(2) + " style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].precioventa.toFixed(2) + "</td>" +
                         "<td><input name='txtCantidad_" + obj[i].codigo + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
