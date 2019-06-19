@@ -74,6 +74,7 @@ namespace Gestion_Web.Formularios.Facturas
         private static bool _buscarArticuloPorDescripcion = false;
         private static bool _agregarMultiplesArticulosPorDescripcion = false;
         private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
+        private static string _codigoArticuloParaAgregar = "";
 
         static int _idCliente = 0;
         private static bool _agregarCliente = false;
@@ -228,6 +229,7 @@ namespace Gestion_Web.Formularios.Facturas
                     _codigosArticulosMultiplesParaAgregar = new List<string>();
                     _idCliente = 0;
                     _agregarCliente = false;
+                    _codigoArticuloParaAgregar = "";
                 }
 
                 this.cargarTablaPAgos();
@@ -2523,7 +2525,8 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void btnBuscarProducto_Click(object sender, EventArgs e)
         {
-            this.cargarProducto(this.txtCodigo.Text, false);
+            _codigoArticuloParaAgregar = txtCodigo.Text;
+            this.cargarProducto(_codigoArticuloParaAgregar, false);
         }
         /// <summary>
         /// cuando hace clic en guardar y se genera la factura
@@ -2839,7 +2842,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (config.commitante == "1" && !seleccionoArticuloDesdeModal)
                     {
-                        if (!String.IsNullOrEmpty(this.txtCodigo.Text))
+                        if (!String.IsNullOrEmpty(codigo))
                         {
                             if (String.IsNullOrEmpty(this.txtCantidad.Text))
                             {
@@ -4087,6 +4090,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnAgregarArt_Click(object sender, EventArgs e)
         {
+            _codigoArticuloParaAgregar = txtCodigo.Text;
             this.CargarProductoAFactura();
             this.ActualizarTotales();
         }
@@ -4112,7 +4116,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtTotalArri.Text = "0";
                 }
 
-                ActualizarStockAlAgregarItem(this.txtCodigo.Text);
+                ActualizarStockAlAgregarItem(_codigoArticuloParaAgregar);
 
                 if (this.verificarNoEnviarMercaderiaNegativa() == 0)
                     return;
@@ -4120,7 +4124,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
                     return;
 
-                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(_codigoArticuloParaAgregar, Convert.ToInt32(this.DropListLista.SelectedValue));
 
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
                 if (p != null && p.FormaPago != 8)
@@ -4151,7 +4155,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //item
                 ItemFactura item = new ItemFactura();
-                item.articulo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                item.articulo = contArticulo.obtenerArticuloFacturar(_codigoArticuloParaAgregar, Convert.ToInt32(this.DropListLista.SelectedValue));
                 item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
                 decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
                 item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
@@ -10790,7 +10794,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             var codigosArticulosTemp = codigosArticulos.Split(';');
             _codigosArticulosMultiplesParaAgregar = codigosArticulosTemp.ToList();
-
+            _codigoArticuloParaAgregar = "";
             _agregarArticuloPorDescripcion = false;
             _buscarArticuloPorDescripcion = false;
             _agregarMultiplesArticulosPorDescripcion = true;
@@ -10805,10 +10809,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (string.IsNullOrEmpty(codigoArticulo))
                     continue;
 
-                txtCodigo.Text = codigoArticulo;
+                //txtCodigo.Text = codigoArticulo;
+                _codigoArticuloParaAgregar = codigoArticulo;
                 txtCantidad.Text = "1";
-                cargarProducto(txtCodigo.Text, true);
+                cargarProducto(_codigoArticuloParaAgregar, true);
                 CargarProductoAFactura();
+                _codigoArticuloParaAgregar = "";
             }
 
             ActualizarTotales();
@@ -10833,25 +10839,27 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         [WebMethod]
-        public static void AgregarArticulosPorDescripcion()
+        public static void AgregarArticulosPorDescripcion(string codigoArticulo)
         {
             _agregarArticuloPorDescripcion = true;
             _buscarArticuloPorDescripcion = false;
             _agregarMultiplesArticulosPorDescripcion = false;
+            _codigoArticuloParaAgregar = codigoArticulo;
         }
 
         private void AgregarArticuloPorDescripcion()
         {
             _agregarArticuloPorDescripcion = false;
-            cargarProducto(txtCodigo.Text, true);
+            cargarProducto(_codigoArticuloParaAgregar, true);
             ActualizarTotales();
+            _codigoArticuloParaAgregar = "";
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
         }
 
         [WebMethod]
         public static void CerrarModalBuscarArticulosPorDescripcion()
         {
-            AgregarArticulosPorDescripcion();
+            //AgregarArticulosPorDescripcion();
             _agregarArticuloPorDescripcion = false;
             _buscarArticuloPorDescripcion = false;
             _agregarMultiplesArticulosPorDescripcion = false;

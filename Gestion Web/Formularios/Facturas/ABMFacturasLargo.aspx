@@ -2276,6 +2276,7 @@
             $.ajax({
                 type: "POST",
                 url: "ABMFacturasLargo.aspx/AgregarArticulosPorDescripcion",
+                data: '{codigoArticulo: "' + descripcionArticulo.value + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function ()

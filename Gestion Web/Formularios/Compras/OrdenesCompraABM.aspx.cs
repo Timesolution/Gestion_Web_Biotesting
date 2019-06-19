@@ -58,7 +58,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 this.VerificarLogin();
 
-                this.CargarItems();
+                //this.CargarItems();
 
                 if (!IsPostBack)
                 {
@@ -464,22 +464,21 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        private void limpiarCampos()
-        {
-            try
-            {
-                this.ListProveedor.SelectedIndex = 0;
-                this.txtPVenta.Text = "";
-                this.txtNumero.Text = "";
-                this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                //this.txtCodigo.Text = "";
-                //this.txtCantidad.Text = "";
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error limpiando campos. " + ex.Message));
-            }
-        }
+        //private void limpiarCampos()
+        //{
+        //    try
+        //    {
+        //        ListProveedor.SelectedIndex = 0;
+        //        txtPVenta.Text = "";
+        //        txtNumero.Text = "";
+        //        txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+        //        txtCodProveedor.Text = "";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error limpiando campos. " + ex.Message));
+        //    }
+        //}
         private void actualizarTotales()
         {
             try
@@ -620,6 +619,9 @@ namespace Gestion_Web.Formularios.Compras
                         ScriptManager.RegisterStartupScript(this, GetType(), "alert", script, true);
                         //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                         ResetearCampos();
+                        CargarProveedores();
+                        CargarSucursal();
+                        AsignarSucursalPorDefault();
                     }
                     else
                     {
@@ -655,6 +657,7 @@ namespace Gestion_Web.Formularios.Compras
             txtFormaDePago.Text = "";
             AsignarSucursalPorDefault();
             _articulosOrdenCompra.Clear();
+            txtCodProveedor.Text = "";
         }
         public void cargarOrdenCompra()
         {
@@ -741,7 +744,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     //cargo otros proveedores, si lo tiene configuraco
                     string codProveedor = WebConfigurationManager.AppSettings.Get("CodProveedorCompras");
-                    Log.EscribirSQL(1, "INFO", "obtuve el codigo de provedor webConfig = "+codProveedor);
+                    Log.EscribirSQL(1, "INFO", "obtuve el codigo de provedor webConfig = " + codProveedor);
                     if (codProveedor == "1" && !String.IsNullOrEmpty(codProveedor))
                     {
                         List<ProveedorArticulo> ProvArticulo = this.contArticulos.obtenerProveedorArticulosByArticulo(Convert.ToInt32(a["id"]));
@@ -762,7 +765,7 @@ namespace Gestion_Web.Formularios.Compras
                     else
                     {
                         drFila["Codigo"] = a["codigo"].ToString();
-                        Log.EscribirSQL(1, "INFO", "Obtuve un codigo= "+ a["codigo"].ToString());
+                        Log.EscribirSQL(1, "INFO", "Obtuve un codigo= " + a["codigo"].ToString());
                     }
 
                     drFila["Descripcion"] = a["descripcion"];
@@ -779,7 +782,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "Error cargando articulos (cargarArticulosProveedor)"+ex.Message);
+                Log.EscribirSQL(1, "ERROR", "Error cargando articulos (cargarArticulosProveedor)" + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos del proveedor. " + ex.Message));
             }
         }
@@ -858,198 +861,198 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio, decimal costoMasIva)
-        {
-            try
-            {
+        //private void agregarItemATabla(string codigo, string Descripcion, decimal cant, decimal precio, decimal costoMasIva)
+        //{
+        //    try
+        //    {
 
-                Articulo articulo = new Articulo();
-                //articulo = contArticulosEntity.(codigo);
+        //        Articulo articulo = new Articulo();
+        //        //articulo = contArticulosEntity.(codigo);
 
 
-                Log.EscribirSQL(1, "INFO", "TODO agregarItemATabla()");
-                //fila
-                TableRow tr = new TableRow();
+        //        Log.EscribirSQL(1, "INFO", "TODO agregarItemATabla()");
+        //        //fila
+        //        TableRow tr = new TableRow();
 
-                //Celdas
-                TableCell celCodigo = new TableCell();
-                celCodigo.Text = codigo;
-                celCodigo.VerticalAlign = VerticalAlign.Middle;
-                celCodigo.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celCodigo);
+        //        //Celdas
+        //        TableCell celCodigo = new TableCell();
+        //        celCodigo.Text = codigo;
+        //        celCodigo.VerticalAlign = VerticalAlign.Middle;
+        //        celCodigo.HorizontalAlign = HorizontalAlign.Left;
+        //        tr.Cells.Add(celCodigo);
 
-                TableCell celCant = new TableCell();
-                celCant.Text = Descripcion;
-                celCant.VerticalAlign = VerticalAlign.Middle;
-                celCant.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celCant);
+        //        TableCell celCant = new TableCell();
+        //        celCant.Text = Descripcion;
+        //        celCant.VerticalAlign = VerticalAlign.Middle;
+        //        celCant.HorizontalAlign = HorizontalAlign.Left;
+        //        tr.Cells.Add(celCant);
 
-                TableCell celPrecio = new TableCell();
-                celPrecio.HorizontalAlign = HorizontalAlign.Right;
+        //        TableCell celPrecio = new TableCell();
+        //        celPrecio.HorizontalAlign = HorizontalAlign.Right;
 
-                TextBox txtCantidadPrecio = new TextBox();
-                txtCantidadPrecio.Text = precio.ToString();
-                txtCantidadPrecio.TextMode = TextBoxMode.Number;
-                txtCantidadPrecio.Attributes.Add("Style", "text-align: right;");
-                celPrecio.Controls.Add(txtCantidadPrecio);
-                tr.Cells.Add(celPrecio);
+        //        TextBox txtCantidadPrecio = new TextBox();
+        //        txtCantidadPrecio.Text = precio.ToString();
+        //        txtCantidadPrecio.TextMode = TextBoxMode.Number;
+        //        txtCantidadPrecio.Attributes.Add("Style", "text-align: right;");
+        //        celPrecio.Controls.Add(txtCantidadPrecio);
+        //        tr.Cells.Add(celPrecio);
 
-                TableCell celPrecioMasIva = new TableCell();
-                celPrecioMasIva.Text = "$ " + costoMasIva;
-                celPrecioMasIva.VerticalAlign = VerticalAlign.Middle;
-                celPrecioMasIva.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celPrecioMasIva);
+        //        TableCell celPrecioMasIva = new TableCell();
+        //        celPrecioMasIva.Text = "$ " + costoMasIva;
+        //        celPrecioMasIva.VerticalAlign = VerticalAlign.Middle;
+        //        celPrecioMasIva.HorizontalAlign = HorizontalAlign.Right;
+        //        tr.Cells.Add(celPrecioMasIva);
 
-                TableCell celCantidad = new TableCell();
-                celCantidad.HorizontalAlign = HorizontalAlign.Right;
+        //        TableCell celCantidad = new TableCell();
+        //        celCantidad.HorizontalAlign = HorizontalAlign.Right;
 
-                TextBox txtCantidad = new TextBox();
-                txtCantidad.ID = codigo;
-                if (cant > 0)
-                {
-                    txtCantidad.Text = cant.ToString();
-                }
-                else
-                {
-                    txtCantidad.Text = "";
-                }
-                txtCantidad.TextMode = TextBoxMode.Number;
-                txtCantidad.Attributes.Add("Style", "text-align: right;");
-                txtCantidad.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
-                txtCantidad.AutoPostBack = true;
-                txtCantidad.TextChanged += new EventHandler(this.cargarCantidadItem);
-                celCantidad.Controls.Add(txtCantidad);
-                tr.Cells.Add(celCantidad);
+        //        TextBox txtCantidad = new TextBox();
+        //        txtCantidad.ID = codigo;
+        //        if (cant > 0)
+        //        {
+        //            txtCantidad.Text = cant.ToString();
+        //        }
+        //        else
+        //        {
+        //            txtCantidad.Text = "";
+        //        }
+        //        txtCantidad.TextMode = TextBoxMode.Number;
+        //        txtCantidad.Attributes.Add("Style", "text-align: right;");
+        //        txtCantidad.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
+        //        txtCantidad.AutoPostBack = true;
+        //        txtCantidad.TextChanged += new EventHandler(this.cargarCantidadItem);
+        //        celCantidad.Controls.Add(txtCantidad);
+        //        tr.Cells.Add(celCantidad);
 
-                TableCell celStockSucursal = new TableCell();
-                celStockSucursal.Text = "0.00";
-                celStockSucursal.VerticalAlign = VerticalAlign.Middle;
-                celStockSucursal.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celStockSucursal);
+        //        TableCell celStockSucursal = new TableCell();
+        //        celStockSucursal.Text = "0.00";
+        //        celStockSucursal.VerticalAlign = VerticalAlign.Middle;
+        //        celStockSucursal.HorizontalAlign = HorizontalAlign.Right;
+        //        tr.Cells.Add(celStockSucursal);
 
-                TableCell celStockMinimoSucursal = new TableCell();
-                celStockMinimoSucursal.Text = "0.00";
-                celStockMinimoSucursal.VerticalAlign = VerticalAlign.Middle;
-                celStockMinimoSucursal.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celStockMinimoSucursal);
+        //        TableCell celStockMinimoSucursal = new TableCell();
+        //        celStockMinimoSucursal.Text = "0.00";
+        //        celStockMinimoSucursal.VerticalAlign = VerticalAlign.Middle;
+        //        celStockMinimoSucursal.HorizontalAlign = HorizontalAlign.Right;
+        //        tr.Cells.Add(celStockMinimoSucursal);
 
-                TableCell celStockTotal = new TableCell();
-                celStockTotal.Text = "0.00";
-                celStockTotal.VerticalAlign = VerticalAlign.Middle;
-                celStockTotal.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celStockTotal);
+        //        TableCell celStockTotal = new TableCell();
+        //        celStockTotal.Text = "0.00";
+        //        celStockTotal.VerticalAlign = VerticalAlign.Middle;
+        //        celStockTotal.HorizontalAlign = HorizontalAlign.Right;
+        //        tr.Cells.Add(celStockTotal);
 
-                TableCell celStockMinimo = new TableCell();
-                celStockMinimo.Text = "0.00";
-                celStockMinimo.VerticalAlign = VerticalAlign.Middle;
-                celStockMinimo.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celStockMinimo);
+        //        TableCell celStockMinimo = new TableCell();
+        //        celStockMinimo.Text = "0.00";
+        //        celStockMinimo.VerticalAlign = VerticalAlign.Middle;
+        //        celStockMinimo.HorizontalAlign = HorizontalAlign.Right;
+        //        tr.Cells.Add(celStockMinimo);
 
-                TableCell celAccion = new TableCell();
+        //        TableCell celAccion = new TableCell();
 
-                LinkButton btnDetails = new LinkButton();
-                //btnDetails.ID = art.id.ToString();
-                btnDetails.CssClass = "btn btn-info ui-tooltip";
-                btnDetails.Attributes.Add("data-toggle", "tooltip");
-                btnDetails.Attributes.Add("title data-original-title", "Ver y/o Editar");
-                btnDetails.Text = "<span class='shortcut-icon icon-search'></span>";
-                //btnDetails.Attributes.Add("onclick", "window.open('../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo+"')");
+        //        LinkButton btnDetails = new LinkButton();
+        //        //btnDetails.ID = art.id.ToString();
+        //        btnDetails.CssClass = "btn btn-info ui-tooltip";
+        //        btnDetails.Attributes.Add("data-toggle", "tooltip");
+        //        btnDetails.Attributes.Add("title data-original-title", "Ver y/o Editar");
+        //        btnDetails.Text = "<span class='shortcut-icon icon-search'></span>";
+        //        //btnDetails.Attributes.Add("onclick", "window.open('../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo+"')");
 
-                //btnDetails.Attributes.Add("target", "_blank");
-                //btnDetails.PostBackUrl = "../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo;
-                //fa-exclamation-triangle
+        //        //btnDetails.Attributes.Add("target", "_blank");
+        //        //btnDetails.PostBackUrl = "../Articulos/ArticulosABM.aspx?accion=2&id=" + idArticulo;
+        //        //fa-exclamation-triangle
 
-                celAccion.Controls.Add(btnDetails);
+        //        celAccion.Controls.Add(btnDetails);
 
-                Literal l3 = new Literal();
-                l3.Text = "&nbsp";
-                celAccion.Controls.Add(l3);
+        //        Literal l3 = new Literal();
+        //        l3.Text = "&nbsp";
+        //        celAccion.Controls.Add(l3);
 
-                //Stock Articulo: stock minimo, stock total (todas las sucursales), stock por sucursal seleccionada en el DropDownList
-                //cortar los parentesis cuando trae el codigo
-                int posParentesis = codigo.IndexOf('(');
-                string codigoSinParentesis = codigo;
-                if (posParentesis > 0)
-                {
-                    codigoSinParentesis = codigo.Substring(0, posParentesis).Trim();
-                }
+        //        //Stock Articulo: stock minimo, stock total (todas las sucursales), stock por sucursal seleccionada en el DropDownList
+        //        //cortar los parentesis cuando trae el codigo
+        //        int posParentesis = codigo.IndexOf('(');
+        //        string codigoSinParentesis = codigo;
+        //        if (posParentesis > 0)
+        //        {
+        //            codigoSinParentesis = codigo.Substring(0, posParentesis).Trim();
+        //        }
                 
-                Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);                
+        //        Articulo A = this.contArticulos.obtenerArticuloCodigo(codigoSinParentesis);                
 
-                if (A != null && A.descripcion == Descripcion)
-                {
-                    var stockMinimoSucursalByArticulo = contArticulosEntity.getAllStockMinimoSucursalesByArticulo(A.id);
-                    var list = this.contArticulos.obtenerStockArticuloReduc(A.id);
+        //        if (A != null && A.descripcion == Descripcion)
+        //        {
+        //            var stockMinimoSucursalByArticulo = contArticulosEntity.getAllStockMinimoSucursalesByArticulo(A.id);
+        //            var list = this.contArticulos.obtenerStockArticuloReduc(A.id);
 
-                    celStockMinimo.Text = A.stockMinimo.ToString();
-                    celStockTotal.Text = list.Sum(x => x.cantidad).ToString();
+        //            celStockMinimo.Text = A.stockMinimo.ToString();
+        //            celStockTotal.Text = list.Sum(x => x.cantidad).ToString();
 
-                    var stockMinimoSucursal = stockMinimoSucursalByArticulo.Where(x => x.sucursal == Convert.ToInt32(ListSucursal.SelectedValue)).Select(x => x.stockMinimo).FirstOrDefault().ToString();
+        //            var stockMinimoSucursal = stockMinimoSucursalByArticulo.Where(x => x.sucursal == Convert.ToInt32(ListSucursal.SelectedValue)).Select(x => x.stockMinimo).FirstOrDefault().ToString();
 
-                    if (!String.IsNullOrEmpty(stockMinimoSucursal))
-                        celStockMinimoSucursal.Text = stockMinimoSucursal;
-                    else
-                    {
-                        stockMinimoSucursal = "0";
-                        celStockMinimoSucursal.Text = "-";
-                    }                        
+        //            if (!String.IsNullOrEmpty(stockMinimoSucursal))
+        //                celStockMinimoSucursal.Text = stockMinimoSucursal;
+        //            else
+        //            {
+        //                stockMinimoSucursal = "0";
+        //                celStockMinimoSucursal.Text = "-";
+        //            }                        
 
-                    celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
-                    //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono                    
+        //            celStockSucursal.Text = list.Where(x => x.sucursal.id == Convert.ToInt32(ListSucursal.SelectedValue)).Sum(x => x.cantidad).ToString();
+        //            //Si el stock total del articulo es menor al stock minimo de ese articulo, muestro un icono                    
 
-                    if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text) || Convert.ToDecimal(stockMinimoSucursal) > Convert.ToDecimal(celStockTotal.Text))
-                    {
-                        Literal ltAviso = new Literal();
-                        ltAviso.Text = "<span>   <span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
-                        celAccion.Controls.Add(ltAviso);
-                    }
-                }
+        //            if (A.stockMinimo > Convert.ToDecimal(celStockTotal.Text) || Convert.ToDecimal(stockMinimoSucursal) > Convert.ToDecimal(celStockTotal.Text))
+        //            {
+        //                Literal ltAviso = new Literal();
+        //                ltAviso.Text = "<span>   <span><i class=\"fa fa-exclamation-triangle text-danger\"></i>";
+        //                celAccion.Controls.Add(ltAviso);
+        //            }
+        //        }
 
-                celAccion.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celAccion);
+        //        celAccion.HorizontalAlign = HorizontalAlign.Left;
+        //        tr.Cells.Add(celAccion);
 
-                this.phProductos.Controls.Add(tr);
+        //        this.phProductos.Controls.Add(tr);
 
-                Log.EscribirSQL(1, "INFO", "cargue el item al ph");
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error cargando al ph " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando item a tabla. " + ex.Message));
-            }
-        }
+        //        Log.EscribirSQL(1, "INFO", "cargue el item al ph");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "Error cargando al ph " + ex.Message);
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando item a tabla. " + ex.Message));
+        //    }
+        //}
         private void CargarItems()
         {
-            try
-            {
-                Log.EscribirSQL(1, "INFO", "Inicio cargar items en pantalla");
-                //int verCargados = Convert.ToInt32(this.lblVerCargados.Text);
-                this.phProductos.Controls.Clear();
-                if (this.dtItems != null)
-                {
-                    foreach (DataRow item in this.dtItems.Rows)
-                    {
-                        //if (verCargados > 0)
-                        //{
-                        //    if (item["Cant"].ToString() != "0" && !String.IsNullOrEmpty(item["Cant"].ToString()))
-                        //    {
-                        //        this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
-                        //    }
-                        //}
-                        //else
-                        //{
-                            this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
-                        //}
-                    }
-                }
-                Log.EscribirSQL(1, "INFO", "Finalizo cargar items en pantalla");
-                //this.UpdatePanel1.Update();
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error cargando items en pantalla " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
-            }
+            //try
+            //{
+            //    Log.EscribirSQL(1, "INFO", "Inicio cargar items en pantalla");
+            //    //int verCargados = Convert.ToInt32(this.lblVerCargados.Text);
+            //    this.phProductos.Controls.Clear();
+            //    if (this.dtItems != null)
+            //    {
+            //        foreach (DataRow item in this.dtItems.Rows)
+            //        {
+            //            //if (verCargados > 0)
+            //            //{
+            //            //    if (item["Cant"].ToString() != "0" && !String.IsNullOrEmpty(item["Cant"].ToString()))
+            //            //    {
+            //            //        this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
+            //            //    }
+            //            //}
+            //            //else
+            //            //{
+            //                this.agregarItemATabla(item["Codigo"].ToString(), item["Descripcion"].ToString(), Convert.ToDecimal(item["Cant"]), Convert.ToDecimal(item["Costo"]), Convert.ToDecimal(item["CostoMasIva"]));
+            //            //}
+            //        }
+            //    }
+            //    Log.EscribirSQL(1, "INFO", "Finalizo cargar items en pantalla");
+            //    //this.UpdatePanel1.Update();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log.EscribirSQL(1, "ERROR", "Error cargando items en pantalla " + ex.Message);
+            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando items. " + ex.Message));
+            //}
         }
         private List<OrdenesCompra_Items> ObtenerItems()
         {
@@ -1158,21 +1161,21 @@ namespace Gestion_Web.Formularios.Compras
         //}
         private void cargarCantidadItem(object sender, EventArgs e)
         {
-            try
-            {
-                string id = (sender as TextBox).ID;
-                foreach (DataRow row in this.dtItems.Rows)
-                {
-                    if (row["codigo"] == id)
-                    {
-                        row["Cant"] = (sender as TextBox).Text;
-                    }
-                }
-            }
-            catch
-            {
+            //try
+            //{
+            //    string id = (sender as TextBox).ID;
+            //    foreach (DataRow row in this.dtItems.Rows)
+            //    {
+            //        if (row["codigo"] == id)
+            //        {
+            //            row["Cant"] = (sender as TextBox).Text;
+            //        }
+            //    }
+            //}
+            //catch
+            //{
 
-            }
+            //}
         }
         //private void actualizarTotalItem(object sender, EventArgs e)
         //{
@@ -1833,11 +1836,11 @@ namespace Gestion_Web.Formularios.Compras
         public string puntoVenta;
         public string numero;
     }
-    class DropListProveedorTemporal
-    {
-        public string id;
-        public string alias;
-    }
+    //class DropListProveedorTemporal
+    //{
+    //    public string id;
+    //    public string alias;
+    //}
     //public class ArticuloBuscado
     //{
     //    public int id;

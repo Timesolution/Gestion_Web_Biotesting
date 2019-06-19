@@ -85,51 +85,16 @@
                                         <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                     </div>
                                 </div>
-                                <%--<asp:Panel ID="Panel1" Visible="true" runat="server" class="col-md-12" Style="padding: 0px; margin-left: -1%;">
-                                    <table class="table table-bordered ">
-                                        <thead>
-                                            <tr>
-                                                <th>Codigo</th>
-                                                <th>Descripcion</th>
-                                                <th>Costo</th>
-                                                <th>Cantidad</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td style="width: 20%">
-                                                    <div class="form-group">
-                                                        <div class="col-md-8">
-                                                            <div class="input-group">
-                                                                <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td style="width: 30%">
-                                                    <div style="width: 100%">
-                                                        <asp:TextBox ID="txtDescripcion" runat="server" class="form-control" Style="text-align: right"></asp:TextBox>
-                                                    </div>
-                                                </td>
-                                                <td style="width: 10%">
-                                                    <asp:TextBox ID="txtPrecio" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-                                                </td>
-                                                <td style="width: 10%">
-                                                    <asp:TextBox ID="txtCantidad" runat="server" class="form-control" Style="text-align: right" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-                                                </td>
-                                                <td style="width: 5%">
-                                                    <asp:LinkButton ID="lbtnAgregarArticuloASP" href="#" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClientClick="AgregarArticuloNuevo()" />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </asp:Panel>--%>
                             </fieldset>
                         </div>
                         <div id="validation-form2" role="form" class="form-horizontal col-md-4">
                             <fieldset>
                                 <div>
+                                    <div class="form-group alert alert-info">
+                                        <h3 style="text-align: center">
+                                            <label>Datos del Proveedor</label>
+                                        </h3>
+                                    </div>
                                     <div class="form-group alert alert-info">
                                         <label class="col-md-5">Mail:</label>
                                         <div class="col-md-7">
@@ -211,7 +176,7 @@
                         <br />
                         <div class="btn-toolbar">
                             <div class="btn-group">
-                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="AgregarOrdenCompra()" OnClick="lbtnAgregar_Click"/>
+                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="return AgregarOrdenCompra()" OnClick="lbtnAgregar_Click"/>
                                 <%--<asp:LinkButton ID="lbtnAgregar" OnClientClick="AgregarOrdenCompra()" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregar_Click"/>--%>
                                 <%--<asp:Label ID="lblCodigosOrdenCompra" runat="server" visible="true"></asp:Label>--%>
                             </div>
@@ -392,6 +357,12 @@
 
             function AgregarOrdenCompra()
             {
+                if (!ComprobarDatosProveedor())
+                {
+                    $.msgbox("Los datos del proveedor no se encuentran cargados, por favor acceda al proveedor y carguelos para continuar.", { type: "alert" });
+                    return false;
+                }                    
+
                 var controlPanelroductos = document.getElementById('<%= panelProductos.ClientID %>');
 
                 var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
@@ -427,6 +398,28 @@
                         $.msgbox("Error agregando orden de compra.", { type: "alert" });
                     }
                 });
+
+                return true;
+            }
+
+            function ComprobarDatosProveedor()
+            {
+                var mailProveedor = document.getElementById('<%=this.lblMailOC.ClientID%>');
+                var requiereAnticipo = document.getElementById('<%=this.lblRequiereAnticipoOC.ClientID%>');
+                var requiereAutorizacion = document.getElementById('<%=this.lblRequiereAutorizacionOC.ClientID%>');
+                var montoAutorizacion = document.getElementById('<%=this.lblMontoAutorizacionOC.ClientID%>');
+                var observacionProveedor = document.getElementById('<%=this.lblObservacion.ClientID%>');
+                var formaDePago = document.getElementById('<%=this.txtFormaDePago.ClientID%>');
+
+                if (mailProveedor.innerHTML == "" ||
+                    requiereAnticipo.innerHTML == "" ||
+                    requiereAutorizacion.innerHTML == "" ||
+                    montoAutorizacion.innerHTML == "" ||
+                    observacionProveedor.innerHTML == "" ||
+                    formaDePago.value == "")
+                    return false;
+
+                return true;
             }
 
             function VerTodosLosArticulos()
@@ -509,59 +502,6 @@
                     }
                 }
             };
-
-            <%--function AgregarArticuloNuevo()
-            {
-                var controlTxtCodigo = document.getElementById('<%= txtCodigo.ClientID %>');
-                var controlTxtDescripcion = document.getElementById('<%= txtDescripcion.ClientID %>');
-                var controlTxtPrecio = document.getElementById('<%= txtPrecio.ClientID %>');
-                var controlTxtCantidad = document.getElementById('<%= txtCantidad.ClientID %>');
-
-                if (controlTxtCodigo.value != "" && controlTxtDescripcion.value != "" && controlTxtPrecio.value != "" && controlTxtCantidad.value != "")
-                {
-                    var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
-                    var data = table.rows().data();
-
-                    var existeArticulo = false;
-
-                    for (var i = 0; i < data.length; i++)
-                    {
-                        var codigo = data[i];
-
-                        if (controlTxtCodigo.value == codigo[0])
-                        {
-                            $.msgbox("El codigo del articulo ya se encuentra ingresado!", { type: "alert" });
-                            existeArticulo = true;
-                            break;
-                        }
-                    }
-
-                    if (!existeArticulo)
-                    {                        
-                        table.row.add(
-                            [
-                                controlTxtCodigo.value,
-                                controlTxtDescripcion.value,
-                                "<td><input name=\"txtPrecio\" type=\"string\" value=" + parseInt(controlTxtPrecio.value).toFixed(2) + " style=\"text-align: right;\"></td>",
-                                "<td style=\"text-align: right;\" value='0.00'></td>",
-                                "<td><input name='txtCantidad_" + controlTxtCantidad.value + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>",
-                                "<td style=\"text-align: right;\"> " + 0.00 + "</td>",
-                                "<td style=\"text-align: right;\"> " + 0.00 + "</td>",
-                                "<td style=\"text-align: right;\"> " + 0.00 + "</td>",
-                                "<td></td>"
-                            ]).draw();
-
-                        controlTxtCodigo.value = "";
-                        controlTxtDescripcion.value = "";
-                        controlTxtPrecio.value = "";
-                        controlTxtCantidad.value = "";
-
-                        $.msgbox("Articulo agregado correctamente!", { type: "info" });
-                    }
-                }
-                else
-                    $.msgbox("Todos los campos deben estar completos para agregar un nuevo articulo!", { type: "alert" });
-            };--%>
 
             function CargarPuntosVenta()
             {
