@@ -4,9 +4,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
-
         <div>
-
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
@@ -16,10 +14,7 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
-
                     <div class="widget-content">
-
                         <table style="width: 100%">
                             <tr>
                                 <td style="width: 20%">
@@ -61,13 +56,35 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                                <td style="width: 5%"></td>
-
+                                <td style="width: 2%">
+                                    <div class="btn-group pull-right" style="width: 100%">
+                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" data-original-title="listados" data-toggle="dropdown">
+                                            <i class="shortcut-icon icon-print"></i>&nbsp                                       
+                                        <asp:Literal ID="literal1" runat="server"></asp:Literal>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownmenu">
+                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cantidad en pendientes</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <asp:LinkButton runat="server">  <%--OnClick="btnexportarexcel_click"--%>
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp exportar
+                                                        </asp:LinkButton>
+                                                    </li>
+                                                    <li>
+                                                        <asp:LinkButton runat="server" > <%--OnClick="btnimprimirivaventas_click"--%>
+                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                        &nbsp imprimir
+                                                        </asp:LinkButton>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
-
-
-
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                             <i class="shortcut-icon icon-filter"></i>
                                         </a>
@@ -81,15 +98,10 @@
                                         </a>
                                     </div>
                                 </td>
-
                             </tr>
-
                         </table>
                     </div>
-                    <!-- /widget-content -->
-
                 </div>
-                <!-- /widget -->
             </div>
         </div>
     </div>
