@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraF.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraF" %>
+﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraF.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraF" %>
 
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
@@ -48,6 +48,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnGenerarFacturaCompra" runat="server" OnClick="lbtnGenerarFacturaCompra_Click">Agregar FC de Compra</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <a data-toggle="modal" href="#modalOrdenesCompraConsolidado">Consolidados</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -55,33 +58,6 @@
                                     <h5>
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
-                                </td>
-                                <td style="width: 2%">
-                                    <div class="btn-group pull-right" style="width: 100%">
-                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" data-original-title="listados" data-toggle="dropdown">
-                                            <i class="shortcut-icon icon-print"></i>&nbsp                                       
-                                        <asp:Literal ID="literal1" runat="server"></asp:Literal>
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownmenu">
-                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cantidad en pendientes</a>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <asp:LinkButton runat="server">  <%--OnClick="btnexportarexcel_click"--%>
-                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                                        &nbsp exportar
-                                                        </asp:LinkButton>
-                                                    </li>
-                                                    <li>
-                                                        <asp:LinkButton runat="server" > <%--OnClick="btnimprimirivaventas_click"--%>
-                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                                        &nbsp imprimir
-                                                        </asp:LinkButton>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
@@ -130,7 +106,9 @@
                                         <th style="width:15%">Sucursal</th>
                                         <th style="width:10%">Estado</th>
                                         <th style="width:10%">Estado General</th>
-                                        <th style="width:15%"></th>
+                                        <th style="width:15%">
+                                            <asp:LinkButton ID="lbtnTildarTodas" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-info" OnClientClick="return TildarTodas()"></asp:LinkButton>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -327,6 +305,38 @@
         </div>
     </div>
 
+    <div id="modalOrdenesCompraConsolidado" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Que Productos Desea Exportar?</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <asp:RadioButton ID="rbtnTodosLosItems" Checked ="true" runat="server" GroupName="ordenCompra" Text="&nbsp TODOS LOS ITEMS" />
+                                </div>
+                                <div class="input-group">
+                                    <asp:RadioButton ID="rbtnItemsPendientes" runat="server" GroupName="ordenCompra" Text="&nbsp ITEMS PENDIENTES" />
+                                </div>
+                                <div class="input-group">
+                                    <asp:RadioButton ID="rbtnItemsRecibidos" runat="server" GroupName="ordenCompra" Text="&nbsp ITEMS RECIBIDOS" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton runat="server" Text="Generar PDF" class="btn btn-success" OnClick="lbtnConsolidadosPDF_Click" />
+                        <asp:LinkButton runat="server" Text="Generar Excel" class="btn btn-success" OnClick="ltbnConsolidados_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modalAutorizar" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -413,6 +423,33 @@
         $(function () {
             $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
+
+        function TildarTodas()
+        {
+            var checkboxes = document.getElementsByName('checkbox');
+            var btnTildarTodas = document.getElementById('MainContent_lbtnTildarTodas');
+
+            if (btnTildarTodas.className == 'btn btn-info')
+            {
+                btnTildarTodas.className = 'btn btn-danger';
+
+                for (var i = 0; i < checkboxes.length; i++)
+                {
+                    checkboxes[i].childNodes[0].checked = true;
+                }
+            }
+            else
+            {
+                btnTildarTodas.className = 'btn btn-info';
+
+                for (var i = 0; i < checkboxes.length; i++)
+                {
+                    checkboxes[i].childNodes[0].checked = false;
+                }
+            }
+
+            return false;
+        }
 
     </script>
 

@@ -423,6 +423,7 @@ namespace Gestion_Web.Formularios.Compras
                 cbSeleccion.ID = "cbSeleccion_" + oc.Id;
                 cbSeleccion.CssClass = "btn btn-info";
                 cbSeleccion.Font.Size = 12;
+                cbSeleccion.Attributes.Add("name", "checkbox");
                 celAccion.Controls.Add(cbSeleccion);
                 //celAccion.Controls.Add(btnEliminar);
 
@@ -596,6 +597,81 @@ namespace Gestion_Web.Formularios.Compras
         //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando el estado de una Orden de Compra. Excepción: " + Ex.Message));
         //    }
         //}
+
+        protected void ltbnConsolidados_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                int estadoItems = 1;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    if (rbtnItemsPendientes.Checked)
+                        estadoItems = 2;
+                    else if (rbtnItemsRecibidos.Checked)
+                        estadoItems = 4;
+                    else
+                        estadoItems = 0;
+
+                    Response.Redirect("ImpresionCompras.aspx?a=12&ex=1&" + "ordenesCompra=" + idtildado + "&estadoItems=" + estadoItems);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una orden de compra"));
+                }
+            }
+            catch
+            {
+
+            }
+
+        }
+
+        protected void lbtnConsolidadosPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                int estadoItems = 0;
+                foreach (Control C in phOrdenes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    if (rbtnItemsPendientes.Checked)
+                        estadoItems = 2;
+                    else if (rbtnItemsRecibidos.Checked)
+                        estadoItems = 1;
+                    else
+                        estadoItems = 0;
+
+                    Response.Redirect("ImpresionCompras.aspx?a=12&ex=0&" + "ordenesCompra=" + idtildado + "&estadoItems=" + estadoItems);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una orden de compra"));
+                }
+            }
+            catch
+            {
+
+            }
+        }
 
         protected void btnAutorizar_Click(object sender, EventArgs e)
         {

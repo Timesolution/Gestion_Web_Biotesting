@@ -157,7 +157,7 @@
                         <table class="table table-striped table-bordered" id="articulosTablaProveedor">
                             <thead>
                                 <tr>
-                                    <th style="width: 20%">Codigo</th>
+                                    <th style="width: 10%">Codigo</th>
                                     <th style="width: 20%">Descripcion</th>
                                     <th style="width: 5%">Precio</th>
                                     <th style="width: 10%">Precio Mas IVA</th>
@@ -722,7 +722,7 @@
                         "<td style=\"text-align: right;\"> " + obj[i].stockMinimo.toFixed(2) + "</td>" +                        
                         "<td> " + CrearAlerta(obj[i].stockMinimo,obj[i].StockTotal) + "</td>" +
                         "</tr> ");
-                };
+                };                
             }
 
             function CrearAlerta(stockMinimo,stockTotal)

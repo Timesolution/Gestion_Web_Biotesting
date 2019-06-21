@@ -3104,6 +3104,7 @@
     <EmbeddedResource Include="Formularios\Compras\EtiquetasTrazas.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\ImpagasProvR.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\DetalleRemitoR.rdlc" />
+    <EmbeddedResource Include="Formularios\Compras\OrdenesCompraConsolidado.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\OrdenesCompraR.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RemitosCompraR.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\RetencionListado.rdlc" />
