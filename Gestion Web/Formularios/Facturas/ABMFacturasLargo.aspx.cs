@@ -83,10 +83,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                accion = Convert.ToInt32(Request.QueryString["accion"]);
+
                 VerificarLogin();
                 ConfigurarModoCredito();
-
-                accion = Convert.ToInt32(Request.QueryString["accion"]);
+                
                 idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
 
                 _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
@@ -721,6 +722,9 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListLista.Enabled = false;
                     DropListLista.CssClass = "form-control";
                 }
+
+                if (!listPermisos.Contains("209") && accion == 9)
+                    phRefacturacion.Visible = false;
 
                 foreach (string s in listPermisos)
                 {

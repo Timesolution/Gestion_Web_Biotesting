@@ -315,7 +315,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.txtVencimiento.Attributes.Add("disabled", "true");
                 this.txtTotal.Attributes.Add("disabled", "true");
                 this.ListTipoCompra.Attributes.Add("disabled", "true");
-                this.txtImputacionCont.Attributes.Add("disabled", "true");
+                //this.txtImputacionCont.Attributes.Add("disabled", "true");
                 this.btnAgregarPagar.Visible = false;
             }
             catch
