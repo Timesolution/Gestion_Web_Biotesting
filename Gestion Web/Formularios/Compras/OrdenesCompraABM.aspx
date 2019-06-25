@@ -39,18 +39,18 @@
                                 <div class="form-group">
                                     <label for="name" class="col-md-2">Proveedor</label>
                                     <div class="col-md-3">
-                                        <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" AutoPostBack="True" onchange="javascript:return SeleccionarProveedor()"></asp:DropDownList>
+                                        <asp:DropDownList ID="ListProveedor" class="form-control" runat="server" onchange="javascript:return SeleccionarProveedor()"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="name" class="col-md-2">Numero</label>
 
                                     <div class="col-md-2">
-                                        <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" disabled onchange="completar4Ceros(this, this.value)"></asp:TextBox>
+                                        <asp:TextBox ID="txtPVenta" MaxLength="4" runat="server" class="form-control" onkeydown="return validarNro(this)"></asp:TextBox>
                                     </div>
 
                                     <div class="col-md-3">
-                                        <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled onchange="completar8Ceros(this, this.value)"></asp:TextBox>
+                                        <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" onkeydown="return validarNro(this)"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -99,6 +99,7 @@
                                         <label class="col-md-5">Mail:</label>
                                         <div class="col-md-7">
                                             <asp:Label ID="lblMailOC" Text="" runat="server" />
+                                            <asp:HiddenField id="hfLabelMailOC" runat="server"/>
                                         </div>
                                     </div>
                                     <div class="form-group alert alert-info">
@@ -361,9 +362,7 @@
                 {
                     $.msgbox("Los datos del proveedor no se encuentran cargados, por favor acceda al proveedor y carguelos para continuar.", { type: "alert" });
                     return false;
-                }                    
-
-                var controlPanelroductos = document.getElementById('<%= panelProductos.ClientID %>');
+                }
 
                 var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
 
@@ -384,7 +383,7 @@
                         articulos.push(articuloDatos);
                     }
                 }
-
+                var controlDropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>');
                 var articulosOrdenCompra = JSON.stringify(articulos);
 
                 $.ajax({
@@ -505,12 +504,13 @@
 
             function CargarPuntosVenta()
             {
-                var DropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>').value;
+                var DropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>');
+                var listSucursalValue = DropListSucursal.options[DropListSucursal.selectedIndex].value;
 
                 $.ajax({
                     type: "POST",
                     url: "OrdenesCompraABM.aspx/CargarPuntoVenta",
-                    data: '{sucursal: "' + DropListSucursal + '"  }',
+                    data: '{sucursal: "' + listSucursalValue + '"  }',
                     contentType: "application/json",
                     dataType: 'json',
                     error: function ()
@@ -523,7 +523,7 @@
 
             function OnSuccessPuntoVenta(response)
             {
-                var controlDropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>');
+                var controlDropListPuntoVenta = document.getElementById('<%= this.ListPtoVenta.ClientID %>');
                 var idProveedor = document.getElementById('<%=this.ListProveedor.ClientID%>').value;
                 var idSucursal = document.getElementById('<%=this.ListSucursal.ClientID%>').selectedOptions[0].value;
 
@@ -548,11 +548,11 @@
                         controlDropListPuntoVenta.add(option);
                     }
 
-                    CargarNumeroOrden();                    
+                    CargarNumeroOrden();
 
                     if (idSucursal > 0 && idSucursal != null && idProveedor > 0 && idProveedor != null)
                         CargarArticulosProveedor(idProveedor, idSucursal);
-                }                
+                }
             }
 
             function CargarNumeroOrden()
@@ -580,7 +580,7 @@
 
                 var data = response.d;
                 obj = JSON.parse(data);
-
+               
                 controlTextNumeroOrden.value = obj.numero;
                 controlTextPuntoVenta.value = obj.puntoVenta;
             }
@@ -658,6 +658,7 @@
                 obj = JSON.parse(data);
 
                 var mailProveedor = document.getElementById('<%=this.lblMailOC.ClientID%>');
+                var hiddenMail = document.getElementById('<%=this.hfLabelMailOC.ClientID%>');
                 var requiereAnticipo = document.getElementById('<%=this.lblRequiereAnticipoOC.ClientID%>');
                 var requiereAutorizacion = document.getElementById('<%=this.lblRequiereAutorizacionOC.ClientID%>');
                 var montoAutorizacion = document.getElementById('<%=this.lblMontoAutorizacionOC.ClientID%>');
@@ -665,7 +666,10 @@
                 var formaDePago = document.getElementById('<%=this.txtFormaDePago.ClientID%>');
 
                 if (obj.mail != null)
+                {
+                    hiddenMail.value = obj.mail;
                     mailProveedor.innerHTML = obj.mail;
+                }
                 if (obj.requiereAnticipo != null)
                     requiereAnticipo.innerHTML = "Si";
                 if (obj.requiereAutorizacion != null)
@@ -738,26 +742,31 @@
 
         <script>
             //valida los campos solo numeros
-            function validarNro(e) {
-                var key;
-                if (window.event) // IE
-                {
-                    key = e.keyCode;
-                }
-                else if (e.which) // Netscape/Firefox/Opera
-                {
-                    key = e.which;
-                }
-                if (key < 48 || key > 57) {
-                    if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
-                    {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-                return true;
+            function validarNro(e)
+            {
+                var key = event.keyCode || event.charCode;
+
+                if (key == 8 || key == 46)
+                    return false;
+
+                //if (window.event) // IE
+                //{
+                //    key = e.keyCode;
+                //}
+                //else if (e.which) // Netscape/Firefox/Opera
+                //{
+                //    key = e.which;
+                //}
+                //if (key < 48 || key > 57) {
+                //    if (key == 46 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
+                //    {
+                //        return true;
+                //    }
+                //    else {
+                //        return false;
+                //    }
+                //}
+                return false;
             }
         </script>
 </asp:Content>

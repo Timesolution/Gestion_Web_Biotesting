@@ -41,7 +41,6 @@ function CargarArticulosProveedor(idProveedor, idSucursal) {
     $.ajax({
         type: "POST",
         url: 'OrdenesCompraABM.aspx/ObtenerArticulosProveedor',
-        data: '{idProveedor: "' + idProveedor + '", idSucursal: "' + idSucursal + '"}',
         data: JSON.stringify(
             {
                 'idProveedor': idProveedor,

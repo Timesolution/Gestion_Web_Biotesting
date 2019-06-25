@@ -47,7 +47,6 @@ namespace Gestion_Web.Formularios.Compras
             {
                 accion = Convert.ToInt32(Request.QueryString["a"]);
                 orden = Convert.ToInt32(Request.QueryString["oc"]);
-
                 #region btnAguarde
                 //btnVerStockMinimo.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimo, null) + ";");
                 //btnVerStockMinimoSucursal.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnVerStockMinimoSucursal, null) + ";");
@@ -69,15 +68,12 @@ namespace Gestion_Web.Formularios.Compras
 
                     CargarProveedores();
                     CargarSucursal();
-
                     AsignarSucursalPorDefault();
-
-                    dtItemsTemp = new DataTable();
-                    CrearTablaItems();
 
                     if (this.accion == 2)
                     {
-                        //cargar orden
+                        dtItemsTemp = new DataTable();
+                        CrearTablaItems();
                         cargarOrdenCompra();
                     }
 
@@ -384,24 +380,14 @@ namespace Gestion_Web.Formularios.Compras
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
-                //agrego todos
-                DataRow dr = dt.NewRow();
-                dr["NombreFantasia"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
                 this.ListPtoVenta.DataSource = dt;
                 this.ListPtoVenta.DataValueField = "Id";
                 this.ListPtoVenta.DataTextField = "NombreFantasia";
 
                 this.ListPtoVenta.DataBind();
 
-                if (dt.Rows.Count == 2)
-                {
-                    this.ListPtoVenta.SelectedIndex = 1;
+                if(Convert.ToInt32(ListPtoVenta.SelectedValue) > 0)
                     this.obtenerNroOrden(Convert.ToInt32(ListPtoVenta.SelectedValue), "Orden de Compra");
-                }
-
 
             }
             catch (Exception ex)
@@ -503,10 +489,10 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                int ptoVenta = Convert.ToInt32(this.ListPtoVenta.SelectedValue);
-                PuntoVenta pv = this.contSuc.obtenerPtoVentaId(Convert.ToInt32(ListPtoVenta.SelectedValue));
+                //int ptoVenta = Convert.ToInt32(this.ListPtoVenta.SelectedValue);
+                PuntoVenta pv = this.contSuc.obtenerPtoVentaId(idPtoVta);
                 //como estoy en cotizacion pido el ultimo numero de este documento
-                int nro = this.contFact.obtenerFacturaNumero(ptoVenta, "Orden de Compra");
+                int nro = this.contFact.obtenerFacturaNumero(idPtoVta, "Orden de Compra");
                 this.txtPVenta.Text = pv.puntoVenta;
                 if (accion != 2)
                 {
@@ -528,6 +514,10 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
 
+                var puntoVenta = Convert.ToInt32(Request.Form[ListPtoVenta.UniqueID]);
+                var proveedor = Convert.ToInt32(Request.Form[ListProveedor.UniqueID]);
+                var sucursal = Convert.ToInt32(Request.Form[ListSucursal.UniqueID]);
+
                 OrdenesCompra oc = null;
                 if (this.accion == 2)
                 {
@@ -538,7 +528,7 @@ namespace Gestion_Web.Formularios.Compras
                     oc = new OrdenesCompra();
                 }
 
-                oc.IdProveedor = Convert.ToInt32(this.ListProveedor.SelectedValue);
+                oc.IdProveedor = Convert.ToInt32(proveedor);
 
                 var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
 
@@ -551,16 +541,16 @@ namespace Gestion_Web.Formularios.Compras
 
                 oc.Fecha = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
                 oc.FechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
-                oc.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                oc.IdSucursal = Convert.ToInt32(sucursal);
                 oc.Observaciones = this.txtObservaciones.Text;
-                oc.IdPtoVenta = Convert.ToInt32(this.ListPtoVenta.SelectedValue);
+                oc.IdPtoVenta = Convert.ToInt32(puntoVenta);
                 oc.TipoDocumento = 27;
-                this.obtenerNroOrden(Convert.ToInt32(this.ListPtoVenta.SelectedValue), "Orden de Compra");
+                this.obtenerNroOrden(Convert.ToInt32(puntoVenta), "Orden de Compra");
                 oc.Numero = this.txtPVenta.Text + "-" + this.txtNumero.Text;
                 oc.FormaDePago = this.txtFormaDePago.Text;
                 //obtengo items los borro y los leo de la pagina
                 oc.OrdenesCompra_Items.Clear();
-                oc.MailProveedor = this.lblMailOC.Text;
+                oc.MailProveedor = hfLabelMailOC.Value;
                 oc.OrdenesCompra_Items = this.ObtenerItems();
                 decimal tempTotal = 0;
                 foreach (var item in oc.OrdenesCompra_Items)
@@ -570,16 +560,6 @@ namespace Gestion_Web.Formularios.Compras
                 }
 
                 oc.Total = tempTotal;
-
-                //TODO esto queda o vuela?
-                //Agrego Estado
-                //if (prov.RequiereAutorizacion < 1)
-                //    oc.Estado = 1;
-                //else
-                //    if(prov.MontoAutorizacion > 0 && oc.Total < prov.MontoAutorizacion)
-                //    oc.Estado = 1;
-                //    else
-                //    oc.Estado = 8;
 
                 oc.Estado = 1;
                 oc.EstadoGeneral = 11;
@@ -655,7 +635,6 @@ namespace Gestion_Web.Formularios.Compras
             ListProveedor.SelectedValue = "-1";
             txtObservaciones.Text = "";
             txtFormaDePago.Text = "";
-            AsignarSucursalPorDefault();
             _articulosOrdenCompra.Clear();
             txtCodProveedor.Text = "";
         }
@@ -1697,6 +1676,30 @@ namespace Gestion_Web.Formularios.Compras
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             string resultadoJSON = serializer.Serialize(puntosVenta);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string ObtenerSucursales()
+        {
+            controladorSucursal contSucu = new controladorSucursal();
+            DataTable sucursales = contSucu.obtenerSucursales();
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = JsonConvert.SerializeObject(sucursales);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string ObtenerProveedores()
+        {
+            controladorCliente contCliente = new controladorCliente();
+            DataTable proveedores = contCliente.obtenerProveedoresReducDT();
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = JsonConvert.SerializeObject(proveedores);
             return resultadoJSON;
         }
 
