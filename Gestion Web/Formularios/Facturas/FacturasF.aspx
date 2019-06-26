@@ -73,7 +73,7 @@
                                                 <asp:LinkButton ID="btnForm12" runat="server" OnClick="btnForm12_Click">Formulario 12</asp:LinkButton>
                                             </li>
                                         </asp:PlaceHolder>
-                                        <asp:PlaceHolder runat="server" ID="phNotaDebitoCreditoDiferenciaCambio" Visible="true">
+                                        <asp:PlaceHolder runat="server" ID="phNotaDebitoCreditoDiferenciaCambio" Visible="false">
                                             <li>
                                                 <asp:LinkButton runat="server" ID="lbtnDebitoCreditoDiferenciaCambio" OnClick="lbtnDebitoCreditoDiferenciaCambio_Click">ND/C Diferencia Cambio</asp:LinkButton>
                                             </li>

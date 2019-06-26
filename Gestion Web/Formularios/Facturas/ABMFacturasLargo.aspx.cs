@@ -3114,7 +3114,7 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
                     this.nuevaFactura.neto = total;
 
-                    if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
+                    if (this.accion == 5 || this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                     {
                         this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                     }
@@ -3731,6 +3731,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //para saber si se va a imprimir el ticket de cambio con la factura
                     fact.imprimirTicketDeCambio = this.chkImprimirTicketDeCambio.Checked;
+
+                    //si es nota de credito guarda en facturas el/los id de las facturas q pertenecen a esta nota de credito
+                    if (this.accion == 6)
+                    {
+                        fact.idFacturasParaLaNotaDeCredito = Request.QueryString["facturas"];
+                    }
 
                     //facturo
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);

@@ -174,7 +174,7 @@ namespace Gestion_Web.Formularios.Herramientas
             {
                 DataTable dt = new DataTable();
 
-                dt = contCliente.obtenerProveedoresDT();
+                dt = contCliente.obtenerProveedoresReducDT();
 
                 //agrego todos
                 DataRow dr = dt.NewRow();

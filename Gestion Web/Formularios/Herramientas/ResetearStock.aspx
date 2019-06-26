@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" EnableEventValidation = "false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ResetearStock.aspx.cs" Inherits="Gestion_Web.Formularios.Herramientas.ResetearStock" %>
+﻿<%@ Page Title="" EnableEventValidation="false" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ResetearStock.aspx.cs" Inherits="Gestion_Web.Formularios.Herramientas.ResetearStock" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
@@ -55,7 +55,9 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <asp:Button runat="server" ID="ProcesarReinicioDeStock" OnClientClick="return ValidateForm();" Text="Generar Diferencias" class="btn btn-success" OnClick="ProcesarReinicioDeStock_Click" />
+                                    <asp:PlaceHolder ID="phAcciones" runat="server">
+                                        <asp:Button runat="server" ID="ProcesarReinicioDeStock" OnClientClick="return ValidateForm();" Text="Generar Diferencias" class="btn btn-success" OnClick="ProcesarReinicioDeStock_Click" />
+                                    </asp:PlaceHolder>
                                 </div>
                             </div>
                         </div>
@@ -64,6 +66,12 @@
             </div>
         </div>
     </div>
+
+        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../Scripts/demo/notifications.js"></script>
 
     <script>
         var controlDropListEmpresa;

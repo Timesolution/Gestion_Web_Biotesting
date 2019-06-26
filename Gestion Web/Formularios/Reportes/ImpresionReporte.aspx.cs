@@ -1298,14 +1298,14 @@ namespace Gestion_Web.Formularios.Reportes
 
                 string fd = this.fechaD.ToString();
 
-                DateTime fechaAFiltrar = Convert.ToDateTime(fd);
+                DateTime fechaAFiltrar = Convert.ToDateTime(fd, new CultureInfo("es-AR"));
                 string fechaAFiltrarString = fechaAFiltrar.ToString("dd/MM/yyyy") + " 06:00 AM";
-                DateTime horaPorVenta = Convert.ToDateTime(fechaAFiltrarString);
+                DateTime horaPorVenta = Convert.ToDateTime(fechaAFiltrarString, new CultureInfo("es-AR"));
 
                 DataTable tablaConHorasSinCantidad = new DataTable();
                 tablaConHorasSinCantidad.Columns.Add("fechaDateTime");
                 tablaConHorasSinCantidad.Columns.Add("rangoHorario");
-                tablaConHorasSinCantidad.Columns.Add("facturasRealizadas",typeof (decimal));
+                tablaConHorasSinCantidad.Columns.Add("facturasRealizadas", typeof(decimal));
 
                 for (int i = 0; i < 17; i++)
                 {
