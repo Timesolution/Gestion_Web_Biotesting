@@ -62,6 +62,7 @@ namespace Gestion_Web.Formularios.Valores
                         //this.cargarTiposPago();
                         this.fechaD = DateTime.Today.ToString("dd/MM/yyyy");
                         this.fechaH = DateTime.Today.ToString("dd/MM/yyyy");
+                        this.txtFechaModalAgregarCaja.Text = DateTime.Today.ToString("dd/MM/yyyy");
                         this.tipoPago = 1;
                         this.tipoMovimiento = 0;
                         this.txtFechaDesde.Text = this.fechaD;

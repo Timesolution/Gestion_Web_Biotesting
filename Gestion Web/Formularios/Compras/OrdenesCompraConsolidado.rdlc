@@ -16,7 +16,7 @@
                 </Style>
               </TextRun>
               <TextRun>
-                <Value>Pedidos Consolidados</Value>
+                <Value>Ordenes Compra Consolidados</Value>
                 <Style>
                   <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -30,10 +30,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox15</rd:DefaultName>
-        <Top>0.37469cm</Top>
-        <Left>0.89959cm</Left>
+        <Top>0.15045cm</Top>
+        <Left>0.22225cm</Left>
         <Height>1.10271cm</Height>
-        <Width>17.85749cm</Width>
+        <Width>19.04812cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -48,10 +48,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>9.17718cm</Width>
+              <Width>9.20364cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.23908cm</Width>
+              <Width>2.74179cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -67,7 +67,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Detalle Pedido</Value>
+                              <Value>Detalle Ordenes Compra</Value>
                               <Style>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -211,7 +211,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Pedido.Value</Value>
+                              <Value>=Fields!OrdenCompra.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -386,7 +386,7 @@
           <TablixMembers>
             <TablixMember>
               <TablixHeader>
-                <Size>6.44122cm</Size>
+                <Size>8.55789cm</Size>
                 <CellContents>
                   <Textbox Name="Textbox150">
                     <CanGrow>true</CanGrow>
@@ -395,7 +395,7 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>Código / Ubicación / Descripción / Stock Real</Value>
+                            <Value>Código / Descripción / Stock Real</Value>
                             <Style>
                               <FontSize>11pt</FontSize>
                               <FontWeight>Bold</FontWeight>
@@ -436,7 +436,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>6.44122cm</Size>
+                <Size>8.55789cm</Size>
                 <CellContents>
                   <Textbox Name="Codigo1">
                     <CanGrow>true</CanGrow>
@@ -445,7 +445,7 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>=Fields!Codigo.Value &amp; " / " &amp; Fields!Ubicacion.Value  &amp; " / " &amp; Fields!Descripcion.Value &amp; " / " &amp; Fields!Stock.Value</Value>
+                            <Value>=Fields!Codigo.Value &amp; " / " &amp; Fields!Descripcion.Value &amp; " / " &amp; Fields!Stock.Value</Value>
                             <Style />
                           </TextRun>
                         </TextRuns>
@@ -480,11 +480,11 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>dsDatosPedidos</DataSetName>
-        <Top>1.84891cm</Top>
-        <Left>0.89959cm</Left>
+        <DataSetName>dsCompras</DataSetName>
+        <Top>1.62467cm</Top>
+        <Left>0.22225cm</Left>
         <Height>2.79688cm</Height>
-        <Width>17.85748cm</Width>
+        <Width>20.50332cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -496,11 +496,11 @@
     <Height>1.82905in</Height>
     <Style />
   </Body>
-  <Width>7.70759in</Width>
+  <Width>8.23884in</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
-    <LeftMargin>1cm</LeftMargin>
+    <LeftMargin>0cm</LeftMargin>
     <RightMargin>0cm</RightMargin>
     <TopMargin>0.5cm</TopMargin>
     <BottomMargin>0cm</BottomMargin>
@@ -509,18 +509,18 @@
   </Page>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="dsListadoPedidos">
+    <DataSource Name="dsCompras">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>62dcc949-6db7-4710-a332-d00e906de745</rd:DataSourceID>
+      <rd:DataSourceID>53e7595f-5a6f-4380-a7d8-14209a4103c4</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="dsDatosPedidos">
+    <DataSet Name="dsCompras">
       <Query>
-        <DataSourceName>dsListadoPedidos</DataSourceName>
+        <DataSourceName>dsCompras</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -536,12 +536,8 @@
           <DataField>Cantidad</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Pedido">
-          <DataField>Pedido</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Ubicacion">
-          <DataField>Ubicacion</DataField>
+        <Field Name="OrdenCompra">
+          <DataField>OrdenCompra</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Stock">
@@ -550,9 +546,9 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>dsListadoPedidos</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\times\Google Drive\Proyectos\Git_2\Gestion\Gestion_Web\Gestion Web\Formularios\Facturas\dsListadoPedidos.xsd</rd:SchemaPath>
-        <rd:TableName>DatosPedidosNeto</rd:TableName>
+        <rd:DataSetName>dsCompras</rd:DataSetName>
+        <rd:SchemaPath>C:\Proyectos\Repositorios\Repositorio WEB\Gestion Web\Formularios\Compras\dsCompras.xsd</rd:SchemaPath>
+        <rd:TableName>OrdenesCompraConsolidado</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
         <rd:TableAdapterName />
@@ -560,5 +556,5 @@
     </DataSet>
   </DataSets>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>6d4aae58-91b5-4069-9981-36ab1924d837</rd:ReportID>
+  <rd:ReportID>e4953865-6006-4da0-8c2b-7d01e6242d45</rd:ReportID>
 </Report>

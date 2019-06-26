@@ -1,12 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraF.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraF" %>
+﻿<%@ Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdenesCompraF.aspx.cs" Inherits="Gestion_Web.Formularios.Compras.OrdenesCompraF" %>
 
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
-
         <div>
-
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
@@ -16,10 +14,7 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
-
                     <div class="widget-content">
-
                         <table style="width: 100%">
                             <tr>
                                 <td style="width: 20%">
@@ -31,7 +26,7 @@
                                             </li>
                                             <asp:PlaceHolder runat="server" ID="phCambiarEstadoOC" Visible="false">
                                                 <li>
-                                                    <asp:LinkButton ID="ltbnCambiarEstado" runat="server" Visible="false" Enabled="false" data-toggle="modal" href="#modalCambiarEstado">Cambiar estado</asp:LinkButton>
+                                                    <asp:LinkButton runat="server" data-toggle="modal" href="#modalAutorizar">Autorizar</asp:LinkButton>
                                                 </li>
                                             </asp:PlaceHolder>
                                             <asp:PlaceHolder runat="server" ID="lbtnEntregasPH" Visible="false">
@@ -53,6 +48,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnGenerarFacturaCompra" runat="server" OnClick="lbtnGenerarFacturaCompra_Click">Agregar FC de Compra</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <a data-toggle="modal" href="#modalOrdenesCompraConsolidado">Consolidados</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -61,13 +59,8 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                                <td style="width: 5%"></td>
-
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
-
-
-
                                         <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                             <i class="shortcut-icon icon-filter"></i>
                                         </a>
@@ -81,15 +74,10 @@
                                         </a>
                                     </div>
                                 </td>
-
                             </tr>
-
                         </table>
                     </div>
-                    <!-- /widget-content -->
-
                 </div>
-                <!-- /widget -->
             </div>
         </div>
     </div>
@@ -118,7 +106,9 @@
                                         <th style="width:15%">Sucursal</th>
                                         <th style="width:10%">Estado</th>
                                         <th style="width:10%">Estado General</th>
-                                        <th style="width:15%"></th>
+                                        <th style="width:15%">
+                                            <asp:LinkButton ID="lbtnTildarTodas" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-info" OnClientClick="return TildarTodas()"></asp:LinkButton>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -315,39 +305,61 @@
         </div>
     </div>
 
-    <div id="modalCambiarEstado" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalOrdenesCompraConsolidado" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Cambiar estado</h4>
+                    <h4 class="modal-title">Que Productos Desea Exportar?</h4>
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
-                            <label class="col-md-3">Estados</label>
                             <div class="col-md-6">
-                                <asp:DropDownList ID="DropListEstados" runat="server" class="form-control"></asp:DropDownList>
-                            </div>
-                            <div class="col-md-2">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstados" InitialValue="-1" ValidationGroup="ImputarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                <div class="input-group">
+                                    <asp:RadioButton ID="rbtnTodosLosItems" Checked ="true" runat="server" GroupName="ordenCompra" Text="&nbsp TODOS LOS ITEMS" />
+                                </div>
+                                <div class="input-group">
+                                    <asp:RadioButton ID="rbtnItemsPendientes" runat="server" GroupName="ordenCompra" Text="&nbsp ITEMS PENDIENTES" />
+                                </div>
+                                <div class="input-group">
+                                    <asp:RadioButton ID="rbtnItemsRecibidos" runat="server" GroupName="ordenCompra" Text="&nbsp ITEMS RECIBIDOS" />
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton runat="server" Text="Generar PDF" class="btn btn-success" OnClick="lbtnConsolidadosPDF_Click" />
+                        <asp:LinkButton runat="server" Text="Generar Excel" class="btn btn-success" OnClick="ltbnConsolidados_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalAutorizar" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Autorizar Orden de Compra</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
-                            <label class="col-md-3">Observaciones</label>
-                            <div class="col-md-6">
-                                <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" Text="Desea autorizar la orden de compra?" Style="text-align: center"></asp:Label>
+                                </h5>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer">
-                    <asp:LinkButton ID="btnCambiarEstado" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="btnCambiarEstado_Click" class="btn btn-success" ValidationGroup="ImputarGroup" />
+                    <asp:LinkButton ID="btnAutorizar" runat="server" Text="Autorizar" OnClick="btnAutorizar_Click" class="btn btn-success" ValidationGroup="ImputarGroup" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -411,6 +423,33 @@
         $(function () {
             $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
+
+        function TildarTodas()
+        {
+            var checkboxes = document.getElementsByName('checkbox');
+            var btnTildarTodas = document.getElementById('MainContent_lbtnTildarTodas');
+
+            if (btnTildarTodas.className == 'btn btn-info')
+            {
+                btnTildarTodas.className = 'btn btn-danger';
+
+                for (var i = 0; i < checkboxes.length; i++)
+                {
+                    checkboxes[i].childNodes[0].checked = true;
+                }
+            }
+            else
+            {
+                btnTildarTodas.className = 'btn btn-info';
+
+                for (var i = 0; i < checkboxes.length; i++)
+                {
+                    checkboxes[i].childNodes[0].checked = false;
+                }
+            }
+
+            return false;
+        }
 
     </script>
 

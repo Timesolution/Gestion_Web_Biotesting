@@ -204,13 +204,9 @@
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
-            //controlFechaDesde.addEventListener("change", ComprobacionFechaDesde);
-            //controlFechaHasta.addEventListener("change", ComprobacionFechaHasta);
             controlDropListEmpresa.addEventListener("change", CargarSucursales);
             controlDropListSucursal.addEventListener("change", CargarPuntosVenta);
             controlDropListSucursal.addEventListener("change", CargarVendedores);
-            //controlBotonBuscar.addEventListener("click", Filtrar);
-
         });
     </script>
 

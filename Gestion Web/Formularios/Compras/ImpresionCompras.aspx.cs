@@ -38,6 +38,8 @@ namespace Gestion_Web.Formularios.Compras
         private int idGrupo;
         private int tipo;//Remito compra
         private string idsRemitos;
+        private string idOrdenesCompra;
+        private int estadoItems;
         private int tipoDocumento;
 
         controladorCompraEntity contCompraEntity = new controladorCompraEntity();
@@ -69,6 +71,8 @@ namespace Gestion_Web.Formularios.Compras
                     this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
                     this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
                     this.tipoDocumento = Convert.ToInt32(Request.QueryString["td"]);
+                    this.idOrdenesCompra = Request.QueryString["ordenesCompra"];
+                    this.estadoItems = Convert.ToInt32(Request.QueryString["estadoItems"]);
 
                     if (accion == 1)
                     {
@@ -113,6 +117,10 @@ namespace Gestion_Web.Formularios.Compras
                     if (accion == 11)
                     {
                         this.generarReporte11();//Remito Compra Etiquetas
+                    }
+                    if(accion == 12)
+                    {
+                        GenerarReporte12();
                     }
                 }
             }
@@ -1184,6 +1192,112 @@ namespace Gestion_Web.Formularios.Compras
 
             }
             catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void GenerarReporte12()
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Codigo");
+                dt.Columns.Add("Descripcion");
+                dt.Columns.Add("Cantidad", typeof(decimal));
+                dt.Columns.Add("OrdenCompra");
+                dt.Columns.Add("Stock");
+
+                string[] ordenesCompra = idOrdenesCompra.Split(';');
+                foreach (string ordenCompra in ordenesCompra)
+                {
+                    if (!String.IsNullOrEmpty(ordenCompra))
+                    {
+                        OrdenesCompra or = this.contCompraEntity.obtenerOrden(Convert.ToInt32(ordenCompra));
+                        if (or != null)
+                        {
+                            foreach (var item in or.OrdenesCompra_Items)
+                            {
+                                if(estadoItems == 0 || item.Estado == estadoItems)
+                                {
+                                    DataRow row = dt.NewRow();
+                                    if (!string.IsNullOrEmpty(item.Codigo))
+                                    {
+                                        row["Codigo"] = item.Codigo;
+                                    }
+                                    if (!string.IsNullOrEmpty(item.Descripcion))
+                                    {
+                                        row["Descripcion"] = item.Descripcion;
+                                    }
+                                    else
+                                    {
+                                        Articulo a = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(item.Id));
+                                        if (a != null)
+                                        {
+                                            row["Descripcion"] = a.descripcion;
+                                        }
+                                    }
+                                    if (item.Cantidad >= 0)
+                                    {
+                                        row["Cantidad"] = item.Cantidad;
+                                    }
+
+                                    row["OrdenCompra"] = or.Numero + ", " + or.cliente.razonSocial;
+                                    row["Stock"] = this.contArticulo.obtenerStockTotalArticulo(Convert.ToInt32(item.Id)).ToString("G");
+
+                                    dt.Rows.Add(row);
+                                }                                
+                            }
+                        }
+
+                    }
+                }
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenesCompraConsolidado.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("dsCompras", dt);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+                string mimeType, encoding, fileNameExtension;
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Consolidado Pedidos", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception Ex)
             {
 
             }

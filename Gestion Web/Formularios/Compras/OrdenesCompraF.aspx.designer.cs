@@ -40,15 +40,6 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.PlaceHolder phCambiarEstadoOC;
         
         /// <summary>
-        /// ltbnCambiarEstado control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton ltbnCambiarEstado;
-        
-        /// <summary>
         /// lbtnEntregasPH control.
         /// </summary>
         /// <remarks>
@@ -110,6 +101,15 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSaldo;
+        
+        /// <summary>
+        /// lbtnTildarTodas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnTildarTodas;
         
         /// <summary>
         /// phOrdenes control.
@@ -391,40 +391,40 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
         
         /// <summary>
-        /// DropListEstados control.
+        /// rbtnTodosLosItems control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListEstados;
+        protected global::System.Web.UI.WebControls.RadioButton rbtnTodosLosItems;
         
         /// <summary>
-        /// RequiredFieldValidator10 control.
+        /// rbtnItemsPendientes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator10;
+        protected global::System.Web.UI.WebControls.RadioButton rbtnItemsPendientes;
         
         /// <summary>
-        /// txtObservaciones control.
+        /// rbtnItemsRecibidos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
+        protected global::System.Web.UI.WebControls.RadioButton rbtnItemsRecibidos;
         
         /// <summary>
-        /// btnCambiarEstado control.
+        /// btnAutorizar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCambiarEstado;
+        protected global::System.Web.UI.WebControls.LinkButton btnAutorizar;
         
         /// <summary>
         /// ReportViewer1 control.
