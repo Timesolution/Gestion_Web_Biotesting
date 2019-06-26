@@ -130,6 +130,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListSucServiceOficial.SelectedValue = configuracion.SucursalServiceOficial;
                 this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue = configuracion.ColumnaUnidadMedidaEnTrazabilidad;
                 this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
+                this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue = configuracion.ModificarCantidadEnVentaEntreSucursales;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1257,6 +1258,30 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Columna Unidad Medida En Trazabilidad.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: " + nombreConfiguracion + " modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion:  " + nombreConfiguracion + "!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion:  " + nombreConfiguracion + "!. \", {type: \"info\"});", true);
+            }
+        }
+
+        protected void lbtnModificarCantidadEnVentaEntreSucursales_Click(object sender, EventArgs e)
+        {
+            string nombreConfiguracion = "Modificar cantidad en Venta entre Sucursales";
+            try
+            {
+                configuracion.ModificarCantidadEnVentaEntreSucursales = this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue;
+
+                int resultado = configuracion.ActualizarModificarCantidadEnVentaEntreSucursales();
+                
+                if (resultado > 0)
+                {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: " + nombreConfiguracion + " modificada con exito!. \", {type: \"info\"});", true);
                 }
                 else
