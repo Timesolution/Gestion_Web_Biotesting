@@ -507,7 +507,7 @@
                                                     <li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>
                                                 </ul>
                                             </li>
-                                            <li class="dropdown-submenu" style="display:none">
+                                            <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Stock</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Herramientas/ResetearStock.aspx">Resetear Stock</a></li>

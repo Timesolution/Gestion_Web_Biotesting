@@ -26,6 +26,7 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorPedido controlador = new ControladorPedido();
         controladorUsuario contUser = new controladorUsuario();
         controladorArticulo contArticulo = new controladorArticulo();
+        ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
         controladorZona contZona = new controladorZona();
@@ -81,7 +82,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     Pedido Pedido = new Pedido();
                     Session.Add("Pedido", Pedido);
-                    List <Articulos_PedirOC> artPedir = new List<Articulos_PedirOC>();
+                    List<Articulos_PedirOC> artPedir = new List<Articulos_PedirOC>();
                     Session.Add("ArtPedir", artPedir);
 
                     this.cargarEmpleados();
@@ -105,7 +106,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListPuntoVenta.SelectedValue = this.idPtoVentaUser.ToString();
                     // edicion pedido
                     if (this.accion == 2)
-                    {                        
+                    {
                         cargarPedidoEditar(this.idPedido);
                     }
                     // se genera pedido desde la cotizacion
@@ -143,7 +144,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -222,7 +223,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.Pedido = Session["Pedido"] as Pedido;
 
                 Pedido p = controlador.obtenerPedidoId(idpedido);
-                
+
                 Session.Add("Pedido", p);
                 this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
                 this.cargarSucursal(p.empresa.id);
@@ -247,9 +248,9 @@ namespace Gestion_Web.Formularios.Facturas
         /// </summary>
         public void GenerarPuntoVenta()
         {
-              PuntoVenta pv = new PuntoVenta();
-              pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
-              //txtPtoVenta.Text = pv.puntoVenta;
+            PuntoVenta pv = new PuntoVenta();
+            pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+            //txtPtoVenta.Text = pv.puntoVenta;
         }
 
         /// <summary>
@@ -291,7 +292,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.actualizarTotales();
                 this.obtenerNroPedido();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos cotizacion a pedido " + ex.Message));
             }
@@ -417,7 +418,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.ListPuntoVenta.SelectedIndex = 0;
                 }
-                
+
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
@@ -511,7 +512,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #endregion
-       
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             //this.cargarCliente(this.txtBusquedaCliente.Text);
@@ -570,7 +571,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando empresas. " + ex.Message));
             }
         }
-        
+
         public void cargarClientes()
         {
             try
@@ -684,7 +685,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error verificando cliente por defecto. " + ex.Message));             
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error verificando cliente por defecto. " + ex.Message));
             }
         }
         public void verficarConfiguracionEditar()
@@ -707,7 +708,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                string perfil = Session["Login_NombrePerfil"] as string;                
+                string perfil = Session["Login_NombrePerfil"] as string;
                 Cliente cl = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
 
                 try
@@ -721,14 +722,14 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (perfil == "Vendedor" || perfil == "Cliente")
                 {
-                    
+
                     this.DropListVendedor.Attributes.Add("disabled", "true");
-                    this.DropListLista.Attributes.Add("disabled","true");
+                    this.DropListLista.Attributes.Add("disabled", "true");
                     this.DropListFormaPago.Attributes.Add("disabled", "true");
                     this.ListEmpresa.Attributes.Add("disabled", "true");
                     this.ListSucursal.Attributes.Add("disabled", "true");
                     this.ListPuntoVenta.Attributes.Add("disabled", "true");
-                    this.PanelBuscar.Visible = false;                   
+                    this.PanelBuscar.Visible = false;
 
                     this.DropListLista.SelectedValue = cl.lisPrecio.id.ToString();
                     this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
@@ -892,7 +893,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (this.flag_clienteModal > 0)//si vienen desde modal uso un script sino uso el otro.
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion(alerta1  + alerta2 + alerta3));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion(alerta1 + alerta2 + alerta3));
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion(alerta.Split(';')[1]));
                     }
                     else
@@ -905,7 +906,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "Error en verificar alerta. Ex: "+ ex.Message, true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "Error en verificar alerta. Ex: " + ex.Message, true);
             }
         }
         private void verificarAlertaArticulo(Articulo art)
@@ -954,7 +955,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void cargarVendedorPerfilCliente(int idvendedor)
         {
             try
-            {                             
+            {
                 controladorVendedor contVendedor = new controladorVendedor();
 
                 Vendedor vend = contVendedor.obtenerVendedorID(idvendedor);
@@ -991,7 +992,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //pongo en cero por si eligieron un cliente con desc o percepciones y dps lo cambiaron
                     this.txtPorcDescuento.Text = "0";
                     this.txtPorcRetencion.Text = "0";
-                    
+
                     //cargo el descuento
                     if (this.cliente.descFC > 0)
                     {
@@ -1012,12 +1013,12 @@ namespace Gestion_Web.Formularios.Facturas
                         this.txtHorarioEntrega.Text = entrega.HorarioEntrega;
                         this.DropListZonaEntrega.SelectedValue = entrega.ZonaEntrega.ToString();
                     }
-                    
+
                     var dire = cliente.direcciones.Where(x => x.nombre == "Entrega").FirstOrDefault();
                     if (dire != null)
                     {
-                        this.txtDomicilioEntrega.Text = dire.direc + " " + dire.codPostal+ "" + dire.localidad + " " + dire.provincia + " " + dire.pais;
-                    }                    
+                        this.txtDomicilioEntrega.Text = dire.direc + " " + dire.codPostal + "" + dire.localidad + " " + dire.provincia + " " + dire.pais;
+                    }
                     else
                     {
                         var legal = cliente.direcciones.Where(x => x.nombre == "Legal").FirstOrDefault();
@@ -1173,7 +1174,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.labelNroPedido.Text = "Pedido N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                     }
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -1197,7 +1198,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Articulo art = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
                 if (art != null)
                 {
-                    
+
                     //agrego los txt
                     this.txtDescripcion.Text = art.descripcion;
                     List<Stock> stocks = this.contArticulo.obtenerStockArticulo(art.id);
@@ -1221,7 +1222,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //si tiene datos de despacho se los cargo
                     Configuracion config = new Configuracion();
-                    if(config.infoImportacionPedidos == "1")
+                    if (config.infoImportacionPedidos == "1")
                         this.agregarInfoDespachoItem(art);
 
                     Session["PedidosABM_ArticuloModal"] = null;
@@ -1278,9 +1279,9 @@ namespace Gestion_Web.Formularios.Facturas
                 //item.total = Convert.ToDecimal(this.txtTotalArri.Text);
                 //decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text);
                 //item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text);
-                
+
                 if (desc > 0)
-                {   
+                {
                     decimal tot = item.precioUnitario * item.cantidad;
                     decimal totDesc = tot * (desc / 100);
                     item.descuento = decimal.Round(totDesc, 2);
@@ -1288,7 +1289,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     item.descuento = 0;
-                }                
+                }
 
                 //si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
@@ -1403,10 +1404,12 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (ItemPedido item in c.items)
                 {
                     pos = c.items.IndexOf(item);
-                    this.agregarItemPedido(item,pos, cont);
+                    this.agregarItemPedido(item, pos, cont);
                     cont++;
                 }
-                
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "openPopover();", true);
+
             }
             catch (Exception ex)
             {
@@ -1417,7 +1420,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// <summary>
         /// Carga el item en la tabla items
         /// </summary>
-        private void agregarItemPedido(ItemPedido item,int pos, int numero)
+        private void agregarItemPedido(ItemPedido item, int pos, int numero)
         {
             try
             {
@@ -1426,9 +1429,7 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.ID = item.articulo.codigo.ToString() + pos;
 
                 //Celdas
-
                 TableCell celCodigo = new TableCell();
-                //celCodigo.Text = numero + " - " + item.articulo.codigo;
                 celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
                 celCodigo.Width = Unit.Percentage(15);
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
@@ -1437,43 +1438,39 @@ namespace Gestion_Web.Formularios.Facturas
                 TableCell celCantidad = new TableCell();
                 TextBox txtCant = new TextBox();
                 txtCant.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
-                //txtCant.ID = "Text_" + pos.ToString();
-                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad; 
+                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad;
                 txtCant.CssClass = "form-control";
                 txtCant.Style.Add("text-align", "Right");
-                //txtCant.TextMode = TextBoxMode.Number;
                 txtCant.Text = item.cantidad.ToString();
                 txtCant.TextChanged += new EventHandler(ActualizarTotalPH);
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
-                celCantidad.Width = Unit.Percentage(10);
+                celCantidad.Width = Unit.Percentage(5);
                 tr.Cells.Add(celCantidad);
 
-
                 TableCell celDescripcion = new TableCell();
-                //celDescripcion.Text = item.articulo.descripcion;
                 celDescripcion.Text = item.descripcion;
-                celDescripcion.Width = Unit.Percentage(40);
+                celDescripcion.Width = Unit.Percentage(35);
                 celDescripcion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDescripcion);
 
                 TableCell celPrecio = new TableCell();
                 celPrecio.Text = "$" + item.precioUnitario.ToString();
-                celPrecio.Width = Unit.Percentage(10);
+                celPrecio.Width = Unit.Percentage(8);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celPrecio);
 
                 TableCell celDescuento = new TableCell();
                 celDescuento.Text = "$" + item.descuento.ToString();
-                celDescuento.Width = Unit.Percentage(10);
+                celDescuento.Width = Unit.Percentage(8);
                 celDescuento.VerticalAlign = VerticalAlign.Middle;
                 celDescuento.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celDescuento);
 
                 TableCell celTotal = new TableCell();
                 celTotal.Text = "$" + item.total.ToString();
-                celTotal.Width = Unit.Percentage(10);
+                celTotal.Width = Unit.Percentage(8);
                 celTotal.VerticalAlign = VerticalAlign.Middle;
                 celTotal.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celTotal);
@@ -1486,18 +1483,84 @@ namespace Gestion_Web.Formularios.Facturas
                 btnEliminar.ID = "btnEliminar_" + item.articulo.codigo + "_" + pos;
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
                 btnEliminar.Click += new EventHandler(this.QuitarItem);
+
                 celAccion.Controls.Add(btnEliminar);
-                celAccion.Width = Unit.Percentage(10);
+                celAccion.Width = Unit.Percentage(21);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
+
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+
+                celAccion.Controls.Add(l1);
+
+                if (item.stockCompleto != null)
+                {
+                    AgregarLabelsDeStockToCelda(celAccion, item);
+                }
+
                 tr.Cells.Add(celAccion);
 
                 phArticulos.Controls.Add(tr);
-                //ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "alert", m.mensajeGrowlSucces("Exito", "Articulos agregado con exito"), true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Exito", "Articulos agregado con exito"));
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+            }
+        }
+
+        public void AgregarLabelsDeStockToCelda(TableCell celda, ItemPedido item)
+        {
+            try
+            {
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+
+                Label lbStockFisico = new Label();
+                lbStockFisico.CssClass = "badge ui-tooltip";
+                lbStockFisico.Attributes.Add("name", "Stock_Tooltip");
+                lbStockFisico.Attributes.Add("data-toggle", "tooltip");
+                lbStockFisico.Attributes.Add("data-placement", "top");
+                lbStockFisico.Attributes.Add("title", "Stock Fisico");
+                lbStockFisico.Attributes.Add("data-original-title", "Stock Fisico");
+                lbStockFisico.Text = decimal.Round(item.stockCompleto.StockFisico, 0).ToString();
+
+                Label lbStockComprometido = new Label();
+                lbStockComprometido.CssClass = "badge ui-tooltip";
+                lbStockFisico.Attributes.Add("name", "Stock_Tooltip");
+                lbStockComprometido.Attributes.Add("data-toggle", "tooltip");
+                lbStockComprometido.Attributes.Add("data-placement", "top");
+                lbStockComprometido.Attributes.Add("title", "Stock Comprometido");
+                lbStockComprometido.Attributes.Add("data-original-title", "Stock Comprometido");
+                lbStockComprometido.Text = decimal.Round(item.stockCompleto.StockComprometido, 0).ToString();
+
+                Label lbStockReal = new Label();
+                lbStockReal.CssClass = "badge ui-tooltip";
+                lbStockFisico.Attributes.Add("name", "Stock_Tooltip");
+                lbStockReal.Attributes.Add("data-toggle", "tooltip");
+                lbStockReal.Attributes.Add("data-placement", "top");
+                lbStockReal.Attributes.Add("title", "Stock Real");
+                lbStockReal.Attributes.Add("data-original-title", "Stock Real");
+                lbStockReal.Text = decimal.Round(item.stockCompleto.StockReal, 0).ToString();
+
+                celda.Controls.Add(l1);
+                celda.Controls.Add(lbStockFisico);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+
+                celda.Controls.Add(l2);
+                celda.Controls.Add(lbStockComprometido);
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celda.Controls.Add(l3);
+
+                celda.Controls.Add(lbStockReal);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en AgregarLabelsDeStockToCelda. " + ex.Message));
             }
         }
 
@@ -1590,9 +1653,6 @@ namespace Gestion_Web.Formularios.Facturas
                 this.Pedido.descuento = this.Pedido.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100);
                 this.Pedido.subTotal = this.Pedido.neto - this.Pedido.descuento;
 
-                //del subtotal obtengo iva
-                //this.factura.neto21 = (this.factura.subTotal * Convert.ToDecimal(0.21));
-                //decimal totalIva = this.factura.obtenerTotalIva();
                 string[] lbl = this.labelNroPedido.Text.Split('°');
                 string perfil = Session["Login_NombrePerfil"] as string;
 
@@ -1605,8 +1665,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     decimal iva = decimal.Round(this.Pedido.obtenerTotalIva(), 2);
                     decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
-                    //this.Pedido.descuento += descuento;
-                    this.Pedido.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);                     
+                    this.Pedido.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                     this.Pedido.neto21 = iva - decimal.Round(descuento, 2);
                 }
 
@@ -1618,10 +1677,8 @@ namespace Gestion_Web.Formularios.Facturas
                 //total: subtotal + iva + retencion 
                 this.Pedido.total = this.Pedido.subTotal + this.Pedido.neto21 + this.Pedido.retencion;
 
-
                 //cargo en pantalla
                 string neto = decimal.Round(this.Pedido.neto, 2).ToString();
-                //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
                 this.txtNeto.Text = neto;
 
                 this.txtDescuento.Text = decimal.Round(this.Pedido.descuento, 2).ToString();
@@ -1632,9 +1689,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.txtRetencion.Text = decimal.Round(this.Pedido.retencion, 2).ToString();
 
-                //string Stotal = .ToString();
                 this.txtTotal.Text = decimal.Round(this.Pedido.total, 2).ToString();
-                //this.txtImporteEfectivo.Text = decimal.Round(this.Pedido.total, 2).ToString();
 
                 Pedido p = this.Pedido;
 
@@ -1645,88 +1700,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando totales. " + ex.Message));
             }
-            //try
-            //{   
-            //    this.Pedido = Session["Pedido"] as Pedido;
-            //    //obtengo total de suma de item
-            //    decimal totalC = this.Pedido.obtenerTotalNeto();
-            //    decimal total = decimal.Round(totalC, 2);
-            //    this.Pedido.neto = total;
-
-            //    //Subtotal = neto menos el descuento
-            //    //this.Pedido.descuento = this.Pedido.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100);
-            //    //this.Pedido.subTotal = this.Pedido.neto - this.Pedido.descuento;
-
-            //    //del subtotal obtengo iva
-            //    //this.factura.neto21 = (this.factura.subTotal * Convert.ToDecimal(0.21));
-            //    //decimal totalIva = this.factura.obtenerTotalIva();
-            //    string[] lbl = this.labelNroPedido.Text.Split('°');
-            //    if (lbl[0] == "Presupuesto N")
-            //    {
-            //        Configuracion c = new Configuracion();
-            //        //this.Pedido.neto21 = (this.Pedido.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100);
-            //        this.Pedido.neto21 = decimal.Round((this.Pedido.neto * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2);
-            //    }
-            //    else
-            //    {
-            //        //decimal iva = decimal.Round(this.Pedido.obtenerTotalIva(), 2);
-            //        //decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
-            //        //this.Pedido.neto21 = iva - decimal.Round(descuento, 2);
-
-            //        decimal iva = decimal.Round(this.Pedido.obtenerTotalIva(), 2);
-            //        //decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
-            //        this.Pedido.neto21 = iva;
-            //    }
-
-            //    //this.Pedido.totalSinDescuento = this.Pedido.neto + this.Pedido.obtenerTotalIva();
-
-            //    ////retencion sobre el sub total
-            //    //this.Pedido.retencion = this.Pedido.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100);
-
-            //    ////total: subtotal + iva + retencion 
-            //    //this.Pedido.total = this.Pedido.subTotal + this.Pedido.neto21 + this.Pedido.retencion;
-
-            //    //retencion sobre el neto
-            //    this.Pedido.retencion = decimal.Round(this.Pedido.neto * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100), 2);
-            //    //sumo neto mas iva mas retenciones
-            //    this.Pedido.totalSinDescuento = this.Pedido.neto + this.Pedido.neto21 + this.Pedido.retencion;
-
-            //    //obtengo descuentos sobre el neto mas ivad
-            //    this.Pedido.descuento = this.Pedido.totalSinDescuento * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100);
-            //    //Aplico el descuento
-            //    this.Pedido.subTotal = this.Pedido.totalSinDescuento; ;
-
-            //    //total: subtotal + iva + retencion 
-            //    //this.factura.total = this.factura.subTotal + this.factura.neto21 + this.factura.retencion;
-            //    //toal menos descuento mas IIBB
-            //    this.Pedido.total = this.Pedido.subTotal - this.Pedido.descuento;
-
-            //    //cargo en pantalla
-            //    string neto = decimal.Round(this.Pedido.neto, 2).ToString();
-            //    //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
-            //    this.txtNeto.Text = neto;
-
-            //    this.txtDescuento.Text = decimal.Round(this.Pedido.descuento, 2).ToString();
-
-            //    this.txtsubTotal.Text = decimal.Round(this.Pedido.subTotal, 2).ToString();
-
-            //    this.txtIvaTotal.Text = decimal.Round(this.Pedido.neto21, 2).ToString();
-
-            //    this.txtRetencion.Text = decimal.Round(this.Pedido.retencion, 2).ToString();
-
-            //    //string Stotal = .ToString();
-            //    //this.txtTotal.Text = decimal.Round(this.factura.total,2).ToString();
-            //    this.txtTotal.Text = decimal.Round(this.Pedido.total, 2).ToString();
-            //    //this.txtImporteEfectivo.Text = decimal.Round(this.factura.total, 2).ToString();
-
-            //   Pedido f = this.Pedido;
-
-            //    Session.Add("Pedido", f);
-            //}
-            //catch (Exception ex)
-            //{
-            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando totales. " + ex.Message));
-            //}
         }
 
         private void agregarArticuloaPedir(int idArticulo)
@@ -1750,7 +1723,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("ArtPedir", artPedir);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando item a artiulos a pedir. " + ex.Message));
             }
@@ -1787,7 +1760,7 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El tipo de moneda de los items no puede ser distinto, verifíquelo. "));
                     return;
                 }
-                    
+
 
                 if (p.cliente.id > 0)
                 {
@@ -1800,7 +1773,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.sucursal.id = Convert.ToInt32(this.ListSucursal.SelectedValue);
                         p.ptoV = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                         p.fecha = DateTime.Now;
-                        p.cotizacion.id = Convert.ToInt32(this.ListFormaVenta.SelectedValue);               
+                        p.cotizacion.id = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                         p.vendedor.id = cl.vendedor.id;
                         p.formaPAgo.id = cl.formaPago.id;
                         p.listaP.id = cl.lisPrecio.id;
@@ -1847,14 +1820,14 @@ namespace Gestion_Web.Formularios.Facturas
                             ControladorPedidoEntity contPedEnt = new ControladorPedidoEntity();
                             if (accion == 4)//agrego el dato de la cotizacion y el pedido generado
                             {
-                                int t = contPedEnt.agregarPedidoCotizacion(i, Convert.ToInt32(this.idCotizacion.Replace(";","")));
+                                int t = contPedEnt.agregarPedidoCotizacion(i, Convert.ToInt32(this.idCotizacion.Replace(";", "")));
                                 //cambio estado a cotizacion
                                 t = contPedEnt.cambiarEstadoPedido(Convert.ToInt32(this.idCotizacion.Replace(";", "")), 6);
                             }
                             //Verifico si utiliza modo distribución (Cliente_Referidos, Pedidos_Referidos)
-                            if(WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
+                            if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
                             {
-                                int j = contPedEnt.agregarPedidoReferido(i,p.cliente.id);
+                                int j = contPedEnt.agregarPedidoReferido(i, p.cliente.id);
                             }
 
                             //guardo los articulos a pedir
@@ -1871,7 +1844,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
                             }
-                            
+
                             //Response.Redirect("ABMPedidos.aspx");
                         }
                         else
@@ -1897,7 +1870,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void modificarPedido()
         {
             try
-            {   
+            {
                 Pedido p = Session["Pedido"] as Pedido;
                 Cliente cl = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
 
@@ -1916,9 +1889,9 @@ namespace Gestion_Web.Formularios.Facturas
                         p.sucursal.id = Convert.ToInt32(this.ListSucursal.SelectedValue);
                         p.ptoV = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                         p.fecha = DateTime.Now;
-                        p.vendedor.id = Convert.ToInt32(this.DropListVendedor.SelectedValue);                        
+                        p.vendedor.id = Convert.ToInt32(this.DropListVendedor.SelectedValue);
                         p.formaPAgo.id = cl.formaPago.id;
-                        p.listaP.id = cl.lisPrecio.id;                        
+                        p.listaP.id = cl.lisPrecio.id;
                         p.comentario = this.txtComentarios.Text;
                         p.neto10 = Convert.ToDecimal(this.txtPorcDescuento.Text);
                         //datos entrega
@@ -2035,7 +2008,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 Session.Remove("ArtPedir");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando articulos a pedir. " + ex.Message));
             }
@@ -2393,7 +2366,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch
             {
- 
+
             }
         }
 
@@ -2404,16 +2377,16 @@ namespace Gestion_Web.Formularios.Facturas
                 Pedido c = Session["Pedido"] as Pedido;
                 int idCli = c.cliente.id;
                 String senia = this.txtSenia.Text;
-                
-                string filtro = "a=1&cliente="+idCli+"&empresa="+ListEmpresa.SelectedValue+"&sucursal="+ListSucursal.SelectedValue+"&puntoVenta="+ListPuntoVenta.SelectedValue+"&tipo=1&s="+senia;
-            
-                ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "alert","window.open('../Cobros/CobranzaF.aspx?"+filtro+"','_blank')", true);
+
+                string filtro = "a=1&cliente=" + idCli + "&empresa=" + ListEmpresa.SelectedValue + "&sucursal=" + ListSucursal.SelectedValue + "&puntoVenta=" + ListPuntoVenta.SelectedValue + "&tipo=1&s=" + senia;
+
+                ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Cobros/CobranzaF.aspx?" + filtro + "','_blank')", true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando seña a pedido  - " + ex.Message + "\", {type: \"error\"});", true);
             }
-            
+
 
         }
 
@@ -2468,7 +2441,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             itemsFactura ultimoFacturado = contFactEntity.obtenerDetalleUltimaFacturaByArticulo(ultima.id, a.id);
 
-                            datos += "Ultimo precio facturado: " + ultimoFacturado.precioUnitario.Value.ToString("C") + " - " + ultima.fecha.ToString("dd/MM/yyyy") + " / "; 
+                            datos += "Ultimo precio facturado: " + ultimoFacturado.precioUnitario.Value.ToString("C") + " - " + ultima.fecha.ToString("dd/MM/yyyy") + " / ";
                         }
                     }
 
@@ -2501,7 +2474,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.lblDatosReferenciaArt.Text = "";
                 this.lblDatosReferenciaArt.Visible = false;
@@ -2534,7 +2507,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 int contador = 1;
                                 foreach (var item in desc)
                                 {
-                                    datos += "Descuento " + contador + " Desde " + item.Desde + " - " + item.Hasta + " = " + item.Descuento.ToString() + "% / ";                                    
+                                    datos += "Descuento " + contador + " Desde " + item.Desde + " - " + item.Hasta + " = " + item.Descuento.ToString() + "% / ";
                                     contador++;
                                 }
 
@@ -2542,7 +2515,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 this.lblDescuentoCantidad.Text = datos;
                             }
                         }
-                    }                 
+                    }
                 }
                 else
                 {
@@ -2571,7 +2544,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.LabelPendientes.Text = "El cliente posee el articulo en pedidos pendientes. Cantidad pendiente: " + resp + ".  " + "<a href=\"#\" onclick=\"imprimirCantidadPendientesCliente('" + link + "')\">Ver</a>";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -2648,7 +2621,7 @@ namespace Gestion_Web.Formularios.Facturas
                                     {
                                         if (Convert.ToDecimal(datos[4]) > 0)
                                         {
-                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]),0);
+                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]), 0);
                                             if (i < 0)
                                             {
                                                 contador++;
@@ -2763,7 +2736,7 @@ namespace Gestion_Web.Formularios.Facturas
                                     {
                                         if (Convert.ToDecimal(datos[4]) > 0)
                                         {
-                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]),0);
+                                            int i = this.AgregarItemImportadoAPedido(datos[0], Convert.ToDecimal(datos[4]), 0);
                                             if (i < 0)
                                             {
                                                 contador++;
@@ -2867,14 +2840,16 @@ namespace Gestion_Web.Formularios.Facturas
                     var pedidoExcel = new PedidoExcel();
                     var pedidos = pedidoExcel.traerDatos(path + FileUpload1.FileName);
 
-                    if(pedidos != null)
+                    if (pedidos != null)
                     {
+                        List<StockCompleto> stockCompletoByArticulos = new List<StockCompleto>();
+                        Session.Add("ListaDeStockCompletoByArticulo", stockCompletoByArticulos);
                         int contador = 0;
                         foreach (var item in pedidos)
                         {
                             if (Convert.ToDecimal(item.Cantidad) > 0)
                             {
-                                int i = this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad),item.Precio);
+                                int i = this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad), item.Precio);
                                 if (i < 0)
                                 {
                                     contador++;
@@ -2908,11 +2883,10 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .xlsx"));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Error procesando excel " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error procesando excel " + ex.Message));
-                
             }
         }
         private int AgregarItemImportadoAPedido(string codigo, decimal cantidad, decimal precio)
@@ -2920,34 +2894,37 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Pedido p = Session["Pedido"] as Pedido;
-                Articulo a = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
-                if (a != null)
+                Articulo articulo = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
+                if (articulo != null)
                 {
                     if (precio > 0)
-                        a.precioVenta = precio;
+                        articulo.precioVenta = precio;
 
                     ItemPedido item = new ItemPedido();
 
-                    item.articulo = a;
+                    item.articulo = articulo;
                     item.cantidad = cantidad;
                     item.descuento = 0;
                     item.porcentajeDescuento = 0;
-                    item.precioUnitario = decimal.Round(a.precioVenta, 2);
+                    item.precioUnitario = decimal.Round(articulo.precioVenta, 2);
 
                     try
                     {
-                        item.descripcion = a.descripcion;
+                        item.descripcion = articulo.descripcion;
                         item.nroRenglon = p.items.Count() + 1;
                     }
                     catch { }
 
-                    decimal total = (a.precioVenta * cantidad);
+                    decimal total = (articulo.precioVenta * cantidad);
                     total = total - (total * (item.porcentajeDescuento / 100));
                     item.total = decimal.Round(total, 2);
+
+                    AsignarStockCompletoAlItem(item);
 
                     p.items.Add(item);
 
                     Session.Add("Pedido", p);
+
                     return 1;
                 }
                 else
@@ -2959,6 +2936,22 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error importando items pedido."));
                 return -1;
+            }
+        }
+        public void AsignarStockCompletoAlItem(ItemPedido item)
+        {
+            try
+            {
+                int idSucursal = Convert.ToInt32(ListSucursal.SelectedValue);
+                decimal stockFisico = (decimal)contArticulosEntity.obtenerStockArticuloLocal(item.articulo.id, idSucursal).stock1;
+                decimal stockComprometido = contArticulo.obtenerStockComprometidoByArticuloAndSucursal(item.articulo.id, idSucursal);
+                decimal stockReal = stockFisico - stockComprometido;
+
+                item.stockCompleto = new StockCompleto(stockFisico, stockComprometido, stockReal);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error en AsignarStockCompletoAlItem. Ex: " + ex.Message));
             }
         }
         protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)

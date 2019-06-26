@@ -13,15 +13,6 @@ namespace Gestion_Web.Formularios.Herramientas {
     public partial class ResetearStock {
         
         /// <summary>
-        /// upArticulosDiferenciasStock control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upArticulosDiferenciasStock;
-        
-        /// <summary>
         /// DropListEmpresa control.
         /// </summary>
         /// <remarks>
@@ -31,6 +22,15 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.DropDownList DropListEmpresa;
         
         /// <summary>
+        /// lbDropListEmpresaError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbDropListEmpresaError;
+        
+        /// <summary>
         /// DropListSucursal control.
         /// </summary>
         /// <remarks>
@@ -38,6 +38,15 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
+        
+        /// <summary>
+        /// lbDropListSucursalError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbDropListSucursalError;
         
         /// <summary>
         /// DropListProveedor control.
@@ -74,5 +83,23 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListMarca;
+        
+        /// <summary>
+        /// phAcciones control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phAcciones;
+        
+        /// <summary>
+        /// ProcesarReinicioDeStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ProcesarReinicioDeStock;
     }
 }

@@ -18,7 +18,7 @@ using System.Transactions;
 using Gestion_Api.Entitys;
 using System.Globalization;
 using System.Web.Configuration;
-
+using Gestion_Api.Modelo.Enums;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -238,6 +238,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("Ambos"));
                     this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("PRP"));
+                }
+                if (listPermisos.Contains("208"))//permiso habilitar accion ND/NC diferencia de cambio
+                {
+                    this.phNotaDebitoCreditoDiferenciaCambio.Visible = true;
                 }
                 return valor;
             }
@@ -3804,6 +3808,17 @@ namespace Gestion_Web.Formularios.Facturas
                     return;
                 }
 
+                var factura = this.controlador.obtenerFacturaId(Convert.ToInt32(idTildado));
+                if (factura == null)
+                {
+                    return;
+                }
+                if (!controlador.DevuelveTrueSiLaFacturaEsA_B_C_E(factura.tipo.id))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una factura A,B,C o E"));
+                    return;
+                }
+
                 var facturasIvas = this.contFactEntity.obtenerDatosIvasFactura(Convert.ToInt32(idTildado));
 
                 if (facturasIvas != null)
@@ -3868,9 +3883,11 @@ namespace Gestion_Web.Formularios.Facturas
                     var factura = this.controlador.obtenerFacturaId(Convert.ToInt32(lblIdFacturaNotaDebitoCreditoDiferenciaCambio.Text));
                     if (factura != null)
                     {
-                        var divMonedaOriginal = factura.total / Convert.ToDecimal(lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio.Text);
+                        decimal totalItemsMonedaExtranjera = controlador.ObtenerTotalEnPesosDeLosItemsQueSeanMonedaExtrangeraByFactura(factura.items);
+
+                        var divMonedaOriginal = totalItemsMonedaExtranjera / Convert.ToDecimal(lblTipoCambioOriginalNotaDebitoCreditoDiferenciaCambio.Text);
                         var prodMonedaNueva = divMonedaOriginal * Convert.ToDecimal(txtNuevoCambioNotaDebitoCreditoDiferenciaCambio.Text);
-                        var diferencia = prodMonedaNueva - factura.total;
+                        var diferencia = prodMonedaNueva - totalItemsMonedaExtranjera;
 
                         if (diferencia > 0)
                         {
