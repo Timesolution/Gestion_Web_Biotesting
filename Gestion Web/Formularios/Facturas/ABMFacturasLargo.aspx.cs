@@ -2959,7 +2959,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
                 if (ListSucursalCliente.SelectedIndex > 0)
-                    txtCant.Enabled = false;
+                    txtCant.Enabled = PuedeModificarCantidadDeItemSegunConfiguracion();
                 else
                     txtCant.Enabled = true;
                 tr.Cells.Add(celCantidad);
@@ -3095,6 +3095,20 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
             }
         }
+
+        private bool PuedeModificarCantidadDeItemSegunConfiguracion()
+        {
+            if (!string.IsNullOrEmpty(configuracion.ModificarCantidadEnVentaEntreSucursales))
+            {
+                if (configuracion.ModificarCantidadEnVentaEntreSucursales == "1")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void ActualizarTotales()
         {
             try
@@ -3121,7 +3135,7 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
                     this.nuevaFactura.neto = total;
 
-                    if (this.accion == 5 || this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
+                    if (this.accion == 5 || this.accion == 6 || this.accion == 9 || this.accion == 5)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                     {
                         this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                     }
