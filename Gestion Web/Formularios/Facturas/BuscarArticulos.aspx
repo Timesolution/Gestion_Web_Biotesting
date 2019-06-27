@@ -59,7 +59,7 @@
                 <div class="navbar navbar-inverse navbar-fixed-top hidden-print">
                     <div class="container">
                         <div class="navbar-header">
-                            <asp:LinkButton runat="server" ID="btnCerrar" class="navbar-toggle" OnClick="btnCerrar_Click" Text="<span class='icon-remove icon-white'></span>" enabled="false"/>
+                            <%--<asp:LinkButton runat="server" ID="btnCerrar" class="navbar-toggle" OnClick="btnCerrar_Click" Text="<span class='icon-remove icon-white'></span>" enabled="false"/>--%>
                             <asp:Label CssClass="navbar-brand" runat="server" ID="LabelInicio" Text="Busqueda"></asp:Label>
                         </div>
 
@@ -106,12 +106,26 @@
 
                     </div>
                     <div class="widget widget-table">
-
                         <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Descripcion</th>
+                                    <th>Stock</th>
+                                    <th>Moneda</th>
+                                    <th>Precio</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <asp:PlaceHolder ID="phArticulos" runat="server"></asp:PlaceHolder>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="widget-content">
+                        <div style="text-align:right;">
+                            <asp:LinkButton ID="lbtnAgregarArticulosMultiples" runat="server" Text="Agregar" class="btn btn-success" OnClick="lbtnAgregarArticulosMultiples_Click"></asp:LinkButton>
+                        </div>
                     </div>
                 </div>
             </div>
