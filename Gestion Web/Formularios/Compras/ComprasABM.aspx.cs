@@ -92,7 +92,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                var remitosCompra = contEntity.ObtenerRemitoComprasPorOrdenCompra(idOrdenCompra);
+                var remitosCompra = contEntity.ObtenerRemitoComprasDiferenciasPorOrdenCompra(idOrdenCompra);
                 string numerosRemitos = string.Empty;
 
                 txtObservaciones.Text = "Remitos relacionados con orden de compra: ";

@@ -144,7 +144,7 @@ namespace Gestion_Web.Formularios.Compras
                 txtFechaMercaderiaArribo.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 txtFechaOC.Text = oc.FechaEntrega.Value.ToString("dd/MM/yyyy");
                 txtFechaMercaderiaIngresada.Text = DateTime.Now.ToString("dd/MM/yyyy");
-
+                txtObservaciones.Text = "Orden de Compra: " + oc.Numero;
                 //this.txtNumero.Text = oc.Numero.ToString().PadLeft(8, '0');
             }
             catch (Exception ex)
@@ -299,7 +299,7 @@ namespace Gestion_Web.Formularios.Compras
                 TextBox celCantidadRecibida = new TextBox();
                 celCantidadRecibida.TextMode = TextBoxMode.Number;
                 celCantidadRecibida.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
-                celCantidadRecibida.Text = (cantidad - cantidadYaRecibidas).ToString();
+                celCantidadRecibida.Text = "0";/* (cantidad - cantidadYaRecibidas).ToString();*/
 
                 celAccion.Controls.Add(celCantidadRecibida);
 

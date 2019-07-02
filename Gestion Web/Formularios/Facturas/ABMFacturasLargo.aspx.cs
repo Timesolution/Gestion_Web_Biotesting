@@ -254,10 +254,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (Session["FacturasABM_ArticuloModal"] != null)
                 {
                     string CodArt = Session["FacturasABM_ArticuloModal"] as string;
-                    this.txtCodigo.Text = CodArt;
-                    this.cargarProducto(this.txtCodigo.Text,false);
-                    this.ActualizarTotales();
+                    txtCodigo.Text = CodArt;
+                    cargarProducto(txtCodigo.Text);
+                    ActualizarTotales();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
                 }
 
                 if (Session["FacturasABM_ArticuloModalMultiple"] != null)
@@ -267,10 +269,12 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         Session["FacturasABM_ArticuloModal"] = codigoArticulo;
                         txtCodigo.Text = codigoArticulo;
-                        cargarProducto(txtCodigo.Text, false);
-                        //ActualizarTotales();
+                        txtCantidad.Text = "1";
+                        cargarProducto(txtCodigo.Text);
+                        CargarProductoAFactura();                        
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     }
+                    ActualizarTotales();
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
                 }
@@ -2547,7 +2551,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnBuscarProducto_Click(object sender, EventArgs e)
         {
             _codigoArticuloParaAgregar = txtCodigo.Text;
-            this.cargarProducto(_codigoArticuloParaAgregar, false);
+            this.cargarProducto(_codigoArticuloParaAgregar);
         }
         /// <summary>
         /// cuando hace clic en guardar y se genera la factura
@@ -2759,7 +2763,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
-        private void cargarProducto(string codigo, bool seleccionoArticuloDesdeModal)
+        private void cargarProducto(string codigo)
         {
             try
             {
@@ -2861,7 +2865,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //Si tiene configuracion CON COMMITANTE
                     //agrego automaticamente el articulo a la FC con la cant y dto que este escrito
 
-                    if (config.commitante == "1" && !seleccionoArticuloDesdeModal)
+                    if (config.commitante == "1")
                     {
                         if (!String.IsNullOrEmpty(codigo))
                         {
@@ -4267,7 +4271,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.descuento = 0;
                 }
 
-                ////si es importado cargo los datos de despacho si tiene alguno cargado
+                //si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
 
                 this.nuevaFactura.items.Add(item);
@@ -4286,6 +4290,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.nroRenglon = f.items.Count() + 1;
 
                 f.items.Add(item);
+                f.items = f.items.Distinct().ToList();
                 Session.Add("Factura", f);
 
                 this.cargarItems();
@@ -10853,7 +10858,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //txtCodigo.Text = codigoArticulo;
                 _codigoArticuloParaAgregar = codigoArticulo;
                 txtCantidad.Text = "1";
-                cargarProducto(_codigoArticuloParaAgregar, true);
+                cargarProducto(_codigoArticuloParaAgregar);
                 CargarProductoAFactura();
                 _codigoArticuloParaAgregar = "";
             }
@@ -10891,7 +10896,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void AgregarArticuloPorDescripcion()
         {
             _agregarArticuloPorDescripcion = false;
-            cargarProducto(_codigoArticuloParaAgregar, true);
+            cargarProducto(_codigoArticuloParaAgregar);
             ActualizarTotales();
             _codigoArticuloParaAgregar = "";
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
