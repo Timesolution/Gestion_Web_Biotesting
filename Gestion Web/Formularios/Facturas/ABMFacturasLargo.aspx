@@ -306,10 +306,10 @@
                                                                 <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
 
                                                                 <span class="input-group-btn">
-                                                                    <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" OnClientClick="CargarArticulos()"/> 
-                                                                    <%--<a class="btn btn-info" onclick="createA();">
+                                                                    <%--<asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" data-toggle="modal" class="btn btn-info" href="#modalBuscarArticuloDescripcion" OnClientClick="CargarArticulos()"/> --%>
+                                                                    <a class="btn btn-info" onclick="createA();">
                                                                         <i class="shortcut-icon icon-search"></i>
-                                                                    </a>--%>
+                                                                    </a>
                                                                     <asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" /> 
                                                                     <%--<button runat="server" style="display: none" id="btnRun" onserverclick="btnBuscarProducto_Click" onclick="foco();" class="btn btn-info" title="Search">
                                                                         <%--<i class="btn-icon-only icon-check-sign"></i>--%>

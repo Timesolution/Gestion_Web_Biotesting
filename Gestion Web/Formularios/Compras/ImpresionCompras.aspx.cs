@@ -1201,62 +1201,14 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                DataTable dt = new DataTable();
-                dt.Columns.Add("Codigo");
-                dt.Columns.Add("Descripcion");
-                dt.Columns.Add("Cantidad", typeof(decimal));
-                dt.Columns.Add("OrdenCompra");
-                dt.Columns.Add("Stock");
+                idOrdenesCompra = idOrdenesCompra.Replace(';', ',');
 
-                string[] ordenesCompra = idOrdenesCompra.Split(';');
-                foreach (string ordenCompra in ordenesCompra)
-                {
-                    if (!String.IsNullOrEmpty(ordenCompra))
-                    {
-                        OrdenesCompra or = this.contCompraEntity.obtenerOrden(Convert.ToInt32(ordenCompra));
-                        if (or != null)
-                        {
-                            foreach (var item in or.OrdenesCompra_Items)
-                            {
-                                if(estadoItems == 0 || item.Estado == estadoItems)
-                                {
-                                    DataRow row = dt.NewRow();
-                                    if (!string.IsNullOrEmpty(item.Codigo))
-                                    {
-                                        row["Codigo"] = item.Codigo;
-                                    }
-                                    if (!string.IsNullOrEmpty(item.Descripcion))
-                                    {
-                                        row["Descripcion"] = item.Descripcion;
-                                    }
-                                    else
-                                    {
-                                        Articulo a = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(item.Id));
-                                        if (a != null)
-                                        {
-                                            row["Descripcion"] = a.descripcion;
-                                        }
-                                    }
-                                    if (item.Cantidad >= 0)
-                                    {
-                                        row["Cantidad"] = item.Cantidad;
-                                    }
-
-                                    row["OrdenCompra"] = or.Numero + ", " + or.cliente.razonSocial;
-                                    row["Stock"] = this.contArticulo.obtenerStockTotalArticulo(Convert.ToInt32(item.Id)).ToString("G");
-
-                                    dt.Rows.Add(row);
-                                }                                
-                            }
-                        }
-
-                    }
-                }
+                var ordenesCompraConsolidadas = contCompraEntity.ObtenerOrdenesDeCompraConsolidado(idOrdenesCompra);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenesCompraConsolidado.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("dsCompras", dt);
+                ReportDataSource rds = new ReportDataSource("dsCompras", ordenesCompraConsolidadas);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);

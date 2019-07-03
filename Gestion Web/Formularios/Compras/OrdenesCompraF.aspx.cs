@@ -87,10 +87,10 @@ namespace Gestion_Web.Formularios.Compras
                     DropListProveedor.SelectedValue = proveedor.ToString();
                     DropListEstadoFiltro.SelectedValue = estado.ToString();
                     DropListEstadoGeneralFiltro.SelectedValue = estadoGeneral.ToString();
-                }                
+                }
 
                 if(proveedor > 0)
-                    lbtnEntregasPH.Visible = true;              
+                    lbtnEntregasPH.Visible = true;
 
                 this.cargarEstadosFiltro();
                 //this.cargarEstados();
@@ -622,7 +622,7 @@ namespace Gestion_Web.Formularios.Compras
                     else
                         estadoItems = 0;
 
-                    Response.Redirect("ImpresionCompras.aspx?a=12&ex=1&" + "ordenesCompra=" + idtildado + "&estadoItems=" + estadoItems);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=12&ex=1&" + "ordenesCompra=" + idtildado + "&estadoItems=" + estadoItems + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 }
                 else
                 {
@@ -660,7 +660,7 @@ namespace Gestion_Web.Formularios.Compras
                     else
                         estadoItems = 0;
 
-                    Response.Redirect("ImpresionCompras.aspx?a=12&ex=0&" + "ordenesCompra=" + idtildado + "&estadoItems=" + estadoItems);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=12&ex=0&" + "ordenesCompra=" + idtildado + "&estadoItems=" + estadoItems + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 }
                 else
                 {

@@ -110,6 +110,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["PagoCuentaAnticipo"] = null;
                     Session["PagoCuentaAnticipoMutual"] = null;
                     Session["Factura"] = null;
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
                     phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
@@ -247,15 +249,34 @@ namespace Gestion_Web.Formularios.Facturas
                 //    this.flag_clienteModal = 1;
                 //    this.cargarClienteDesdeModal();
                 //}
+
                 //si viene de la pantalla de articulos, modal
                 if (Session["FacturasABM_ArticuloModal"] != null)
                 {
-                    //obtengo codigo
                     string CodArt = Session["FacturasABM_ArticuloModal"] as string;
-                    this.txtCodigo.Text = CodArt;
-                    this.cargarProducto(this.txtCodigo.Text,false);
-                    this.ActualizarTotales();
+                    txtCodigo.Text = CodArt;
+                    cargarProducto(txtCodigo.Text);
+                    ActualizarTotales();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
+                }
+
+                if (Session["FacturasABM_ArticuloModalMultiple"] != null)
+                {
+                    List<string> CodigosArticulos = Session["FacturasABM_ArticuloModalMultiple"] as List<string>;
+                    foreach (var codigoArticulo in CodigosArticulos)
+                    {
+                        Session["FacturasABM_ArticuloModal"] = codigoArticulo;
+                        txtCodigo.Text = codigoArticulo;
+                        txtCantidad.Text = "1";
+                        cargarProducto(txtCodigo.Text);
+                        CargarProductoAFactura();                        
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    }
+                    ActualizarTotales();
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
                 }
 
                 if (_agregarCliente)
@@ -2530,7 +2551,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnBuscarProducto_Click(object sender, EventArgs e)
         {
             _codigoArticuloParaAgregar = txtCodigo.Text;
-            this.cargarProducto(_codigoArticuloParaAgregar, false);
+            this.cargarProducto(_codigoArticuloParaAgregar);
         }
         /// <summary>
         /// cuando hace clic en guardar y se genera la factura
@@ -2742,7 +2763,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
-        private void cargarProducto(string codigo, bool seleccionoArticuloDesdeModal)
+        private void cargarProducto(string codigo)
         {
             try
             {
@@ -2844,7 +2865,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //Si tiene configuracion CON COMMITANTE
                     //agrego automaticamente el articulo a la FC con la cant y dto que este escrito
 
-                    if (config.commitante == "1" && !seleccionoArticuloDesdeModal)
+                    if (config.commitante == "1")
                     {
                         if (!String.IsNullOrEmpty(codigo))
                         {
@@ -4123,7 +4144,6 @@ namespace Gestion_Web.Formularios.Facturas
         private void CargarProductoAFactura()
         {
             try
-
             {
                 ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
 
@@ -4140,7 +4160,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtTotalArri.Text = "0";
                 }
 
-                ActualizarStockAlAgregarItem(_codigoArticuloParaAgregar);
+                ActualizarStockAlAgregarItem(txtCodigo.Text);
 
                 if (this.verificarNoEnviarMercaderiaNegativa() == 0)
                     return;
@@ -4148,7 +4168,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
                     return;
 
-                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(_codigoArticuloParaAgregar, Convert.ToInt32(this.DropListLista.SelectedValue));
+                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
 
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
                 if (p != null && p.FormaPago != 8)
@@ -4179,7 +4199,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //item
                 ItemFactura item = new ItemFactura();
-                item.articulo = contArticulo.obtenerArticuloFacturar(_codigoArticuloParaAgregar, Convert.ToInt32(this.DropListLista.SelectedValue));
+                item.articulo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
                 item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
                 decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
                 item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
@@ -4251,7 +4271,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.descuento = 0;
                 }
 
-                ////si es importado cargo los datos de despacho si tiene alguno cargado
+                //si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
 
                 this.nuevaFactura.items.Add(item);
@@ -4261,6 +4281,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Factura fac = new Factura();
                     Session.Add("Factura", fac);
                 }
+
                 Factura f = Session["Factura"] as Factura;
 
                 if (!String.IsNullOrEmpty(this.txtRenglon.Text))
@@ -4269,6 +4290,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.nroRenglon = f.items.Count() + 1;
 
                 f.items.Add(item);
+                f.items = f.items.Distinct().ToList();
                 Session.Add("Factura", f);
 
                 this.cargarItems();
@@ -10836,7 +10858,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //txtCodigo.Text = codigoArticulo;
                 _codigoArticuloParaAgregar = codigoArticulo;
                 txtCantidad.Text = "1";
-                cargarProducto(_codigoArticuloParaAgregar, true);
+                cargarProducto(_codigoArticuloParaAgregar);
                 CargarProductoAFactura();
                 _codigoArticuloParaAgregar = "";
             }
@@ -10874,7 +10896,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void AgregarArticuloPorDescripcion()
         {
             _agregarArticuloPorDescripcion = false;
-            cargarProducto(_codigoArticuloParaAgregar, true);
+            cargarProducto(_codigoArticuloParaAgregar);
             ActualizarTotales();
             _codigoArticuloParaAgregar = "";
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
