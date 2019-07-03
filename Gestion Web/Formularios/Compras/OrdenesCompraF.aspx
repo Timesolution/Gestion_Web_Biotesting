@@ -310,24 +310,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Que Productos Desea Exportar?</h4>
+                    <h4 class="modal-title">En Que Formato Desea Exportar ?</h4>
                 </div>
                 <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <asp:RadioButton ID="rbtnTodosLosItems" Checked ="true" runat="server" GroupName="ordenCompra" Text="&nbsp TODOS LOS ITEMS" />
-                                </div>
-                                <div class="input-group">
-                                    <asp:RadioButton ID="rbtnItemsPendientes" runat="server" GroupName="ordenCompra" Text="&nbsp ITEMS PENDIENTES" />
-                                </div>
-                                <div class="input-group">
-                                    <asp:RadioButton ID="rbtnItemsRecibidos" runat="server" GroupName="ordenCompra" Text="&nbsp ITEMS RECIBIDOS" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="modal-footer">
                         <asp:LinkButton runat="server" Text="Generar PDF" class="btn btn-success" OnClick="lbtnConsolidadosPDF_Click" />
                         <asp:LinkButton runat="server" Text="Generar Excel" class="btn btn-success" OnClick="ltbnConsolidados_Click" />

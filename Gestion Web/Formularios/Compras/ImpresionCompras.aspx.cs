@@ -39,7 +39,6 @@ namespace Gestion_Web.Formularios.Compras
         private int tipo;//Remito compra
         private string idsRemitos;
         private string idOrdenesCompra;
-        private int estadoItems;
         private int tipoDocumento;
 
         controladorCompraEntity contCompraEntity = new controladorCompraEntity();
@@ -72,7 +71,6 @@ namespace Gestion_Web.Formularios.Compras
                     this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
                     this.tipoDocumento = Convert.ToInt32(Request.QueryString["td"]);
                     this.idOrdenesCompra = Request.QueryString["ordenesCompra"];
-                    this.estadoItems = Convert.ToInt32(Request.QueryString["estadoItems"]);
 
                     if (accion == 1)
                     {
@@ -1224,7 +1222,7 @@ namespace Gestion_Web.Formularios.Compras
                     //get xls content
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
-                    String filename = string.Format("{0}.{1}", "Consolidado Pedidos", "xls");
+                    String filename = string.Format("{0}.{1}", "Consolidado Ordenes Compras", "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;

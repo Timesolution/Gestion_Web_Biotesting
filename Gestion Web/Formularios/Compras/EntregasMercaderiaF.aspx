@@ -120,9 +120,12 @@
                                         <tr>
                                             <th>Codigo</th>
                                             <th>Descripcion</th>
-                                            <%--<th>Cantidad Pedida</th>--%>
+                                            <asp:PlaceHolder ID="phCantidadPedida" runat="server">
+                                            <th>Cantidad Pedida</th>
+                                            </asp:PlaceHolder>
                                             <th>Cantidad ya Recibida</th>
                                             <th>Cantidad Recibida</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -131,8 +134,10 @@
                                 </table>
                                 <br />
                                 <div class="btn-toolbar">
-                                    <div class="btn-group">
-                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />
+                                    <div role="form" class="form-horizontal col-md-12 text-right">
+                                        <%--<asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />--%>
+                                        <asp:Button ID="btnRecibirTodo" type="button" runat="server" Text="Recibir todo" class="btn btn-success" OnClick="btnRecibirTodo_Click" />
+                                        <asp:Button ID="btnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
                                     </div>
                                 </div>
 
@@ -150,7 +155,7 @@
     </div>
 
 
-    <div id="modalSeleccionarOpcion" class="modal fade" tabindex="-1" role="dialog">
+    <%--<div id="modalSeleccionarOpcion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -177,7 +182,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--%>
 
     <div id="modalCerrarOrden" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">

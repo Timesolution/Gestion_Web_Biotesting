@@ -24,6 +24,7 @@ namespace Gestion_Web.Formularios.Compras
         controladorArticulo contArticulos = new controladorArticulo();
         Mensajes m = new Mensajes();
         long ordenCompra = 0;
+        bool _verCantidadPedida = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -45,10 +46,10 @@ namespace Gestion_Web.Formularios.Compras
 
         private void ConfigurarBotonesAguarde()
         {
-            btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirSoloLoSolicitado.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
-            btnRecibirSoloLoSolicitado.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirSoloLoSolicitado, null) + ";");
-            btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRecibirSoloLoSolicitado.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
-            btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
+            //btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirSoloLoSolicitado.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
+            //btnRecibirSoloLoSolicitado.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirSoloLoSolicitado, null) + ";");
+            //btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRecibirSoloLoSolicitado.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
+            //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
             btnGuardar.Attributes.Add("onclick", " this.disabled = true; " + btnCerrar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGuardar, null) + ";");
             btnCerrar.Attributes.Add("onclick", " this.disabled = true; " + btnGuardar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCerrar, null) + ";");
         }
@@ -99,6 +100,10 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (s == "168")
                             cambiarPuntovta = 1;
+
+                        if (s == "210")
+                            _verCantidadPedida = true;
+
                     }
                 }
 
@@ -280,7 +285,11 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidad.Text = cantidad.ToString();
                 celCantidad.HorizontalAlign = HorizontalAlign.Left;
                 celCantidad.VerticalAlign = VerticalAlign.Middle;
-                celCantidad.Visible = false;
+                if (!_verCantidadPedida)
+                {
+                    phCantidadPedida.Visible = false;
+                    celCantidad.Visible = false;
+                }                    
                 tr.Cells.Add(celCantidad);
 
                 TableCell celCantidadYaRecibida = new TableCell();
@@ -302,6 +311,20 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidadRecibida.Text = "0";/* (cantidad - cantidadYaRecibidas).ToString();*/
 
                 celAccion.Controls.Add(celCantidadRecibida);
+
+                DropDownList celDropDownList = new DropDownList();
+                DataTable dt = new DataTable();
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Todos";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                celDropDownList.DataSource = dt;
+                celDropDownList.DataValueField = "id";
+                celDropDownList.DataTextField = "alias";
+
+                this.ListProveedor.DataBind();
+
 
                 tr.Cells.Add(celAccion);
 
@@ -577,7 +600,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 script += " $.msgbox(\"Entrega generada. \", {type: \"info\"}); location.href = 'RemitoF.aspx';";
 
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", script, true);
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", script, true);
             }
             catch (Exception ex)
             {

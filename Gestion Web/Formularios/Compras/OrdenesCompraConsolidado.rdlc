@@ -487,7 +487,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Pedida.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <Format>0.00</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -519,7 +521,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Recibida.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <Format>0.00</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -557,7 +561,9 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Sum(Fields!Pedida.Value-Fields!Recibida.Value)</Value>
-                                  <Style />
+                                  <Style>
+                                    <Format>0.00</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
