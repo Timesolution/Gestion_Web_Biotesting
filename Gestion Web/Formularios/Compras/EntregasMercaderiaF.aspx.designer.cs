@@ -148,6 +148,15 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
         
         /// <summary>
+        /// phCantidadPedida control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCantidadPedida;
+        
+        /// <summary>
         /// phProductos control.
         /// </summary>
         /// <remarks>
@@ -157,24 +166,6 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.PlaceHolder phProductos;
         
         /// <summary>
-        /// btnAgregar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAgregar;
-        
-        /// <summary>
-        /// UpdatePanel3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel3;
-        
-        /// <summary>
         /// btnRecibirTodo control.
         /// </summary>
         /// <remarks>
@@ -182,15 +173,6 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnRecibirTodo;
-        
-        /// <summary>
-        /// btnRecibirSoloLoSolicitado control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRecibirSoloLoSolicitado;
         
         /// <summary>
         /// btnRechazarTodo control.
