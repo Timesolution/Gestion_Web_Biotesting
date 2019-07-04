@@ -46,9 +46,9 @@ namespace Gestion_Web.Formularios.Compras
 
         private void ConfigurarBotonesAguarde()
         {
-            //btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirSoloLoSolicitado.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
-            //btnRecibirSoloLoSolicitado.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirSoloLoSolicitado, null) + ";");
-            //btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRecibirSoloLoSolicitado.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
+            btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnIngresoManual.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
+            btnIngresoManual.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnIngresoManual, null) + ";");
+            btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnIngresoManual.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
             //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
             btnGuardar.Attributes.Add("onclick", " this.disabled = true; " + btnCerrar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGuardar, null) + ";");
             btnCerrar.Attributes.Add("onclick", " this.disabled = true; " + btnGuardar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCerrar, null) + ";");
@@ -103,7 +103,6 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (s == "210")
                             _verCantidadPedida = true;
-
                     }
                 }
 
@@ -308,7 +307,8 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidadRecibida.CssClass = "form-control";
                 celCantidadRecibida.TextMode = TextBoxMode.Number;
                 celCantidadRecibida.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
-                celCantidadRecibida.Text = "0";/* (cantidad - cantidadYaRecibidas).ToString();*/
+                celCantidadRecibida.TextChanged += new EventHandler(ValidarCampo);
+                celCantidadRecibida.Text = "0";
                 
                 celAccionCantidadRecibida.Controls.Add(celCantidadRecibida);
                 tr.Cells.Add(celAccionCantidadRecibida);
@@ -350,6 +350,22 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun cargarEnPh EntregasMercaderiaF. Ex: " + ex.Message));
+            }
+        }
+
+        private void ValidarCampo(object sender, EventArgs e)
+        {
+            try
+            {
+                TextBox textBox = (sender as TextBox);
+
+                if(string.IsNullOrEmpty(textBox.Text))
+                    textBox.Text = "0";
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al validar el campo. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error validando campo. " + ex.Message);
             }
         }
 
@@ -616,12 +632,25 @@ namespace Gestion_Web.Formularios.Compras
 
                 script += " $.msgbox(\"Entrega generada. \", {type: \"info\"}); location.href = 'RemitoF.aspx';";
 
-                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", script, true);
+                ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir remito. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "Error al imprimir remito. " + ex.Message, true);
             }
+        }
+
+        private bool ValidarCampoNumero()
+        {
+            if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
+            {
+                btnRecibirTodo.Attributes.Remove("Disabled");
+                btnRechazarTodo.Attributes.Remove("Disabled");
+                btnIngresoManual.Attributes.Remove("Disabled");
+                btnIngresoManual.Text = "Ingreso manual";
+                return false;
+            }
+            return true;
         }
 
         protected void btnRecibirTodo_Click(object sender, EventArgs e)
@@ -630,6 +659,18 @@ namespace Gestion_Web.Formularios.Compras
             {
                 if (!Page.IsValid)
                     return;
+
+                if (!ValidarCampoNumero())
+                    return;
+
+                if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
+                {
+                    btnRecibirTodo.Attributes.Remove("Disabled");
+                    btnRechazarTodo.Attributes.Remove("Disabled");
+                    btnIngresoManual.Attributes.Remove("Disabled");
+                    btnIngresoManual.Text = "Ingreso manual";
+                    return;
+                }
 
                 var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
 
@@ -744,9 +785,6 @@ namespace Gestion_Web.Formularios.Compras
                     TableCell cantidadYaRecibidaTB = cantidades.Item5;
                     decimal cantidadYaRecibida = cantidades.Item6;
 
-                    if (cantidadRecibida <= 0)
-                        continue;
-
                     if (!String.IsNullOrEmpty(idArticulo))
                     {
                         var remitoCompra_Items = new RemitosCompras_Items();
@@ -812,7 +850,10 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 if (!Page.IsValid)
-                    return;                
+                    return;
+
+                if (!ValidarCampoNumero())
+                    return;
 
                 var resp = GenerarEntregaRechazada();
 
@@ -989,6 +1030,9 @@ namespace Gestion_Web.Formularios.Compras
                 if (!Page.IsValid)
                     return;
 
+                if (!ValidarCampoNumero())
+                    return;
+
                 var resp = GenerarEntregaIngresoManual();
 
                 if (resp.resultadoProcesarEntrega)
@@ -1005,19 +1049,13 @@ namespace Gestion_Web.Formularios.Compras
         private ProcesarEntregaResponse GenerarEntregaIngresoManual()
         {
             var ordenDeCompra = contComprasEnt.obtenerOrden(ordenCompra);
-
-            RemitosCompra remitoCompraDevolucion = new RemitosCompra();
+            RemitosCompra remitoCompraDevolucion = null;
             RemitosCompra remitoCompra = new RemitosCompra();
             List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
             List<RemitosCompras_Items> itemsDevolucion = new List<RemitosCompras_Items>();
             List<RemitoCompraOrdenCompra_Diferencias> itemsConDiferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
 
-            ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompra);
-            ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompraDevolucion);
-
-            remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
-            remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
-            remitoCompraDevolucion.Devolucion = 1;
+            ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompra);            
 
             foreach (var c in phProductos.Controls)
             {
@@ -1059,8 +1097,18 @@ namespace Gestion_Web.Formularios.Compras
                     }
                 }
             }
+
             remitoCompra.RemitosCompras_Items = items;
-            remitoCompraDevolucion.RemitosCompras_Items = itemsDevolucion;
+
+            if(itemsDevolucion.Count > 0)
+            {
+                remitoCompraDevolucion = new RemitosCompra();
+                ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompraDevolucion);
+                remitoCompraDevolucion.RemitosCompras_Items = itemsDevolucion;
+                remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
+                remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
+                remitoCompraDevolucion.Devolucion = 1;
+            }            
 
             itemsConDiferencias = ObtenerDiferencias(remitoCompra, false);
 

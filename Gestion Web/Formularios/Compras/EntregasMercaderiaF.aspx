@@ -8,13 +8,10 @@
                 <ContentTemplate>
                     <div class="col-md-12 col-xs-12">
                         <div class="widget stacked">
-
                             <div class="widget-header">
                                 <i class="icon-wrench"></i>
                                 <h3>Herramientas</h3>
                             </div>
-                            <!-- /widget-header -->
-
                             <div class="widget-content">
                                 <div id="validation-form" role="form" class="form-horizontal col-md-8">
                                     <fieldset>
