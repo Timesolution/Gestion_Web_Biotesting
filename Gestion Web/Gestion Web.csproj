@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -105,7 +105,7 @@
     </Reference>
     <Reference Include="Millas_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio Millas API\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+      <HintPath>..\..\..\Millas API\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -355,6 +355,7 @@
     <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
     <Content Include="Formularios\Articulos\ReporteAF.aspx" />
@@ -1369,6 +1370,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
+      <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.designer.cs">
+      <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\ImpresionMovStock.aspx.cs">
       <DependentUpon>ImpresionMovStock.aspx</DependentUpon>
