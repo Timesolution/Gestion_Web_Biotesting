@@ -176,7 +176,7 @@
                                                     <li class="dropdown-submenu">
                                                         <a tabindex="-1" href="#">Grupos</a>
                                                         <ul class="dropdown-menu">
-                                                            <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposArticulos.aspx">Grupos</a></li>                                                            
+                                                            <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposArticulos.aspx">Grupos</a></li>
                                                         </ul>
                                                     </li>
                                                     <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
@@ -215,6 +215,9 @@
                                                     <li><a tabindex="-1" href="/../../Formularios/Listas/AdminListas.aspx">Administrador</a></li>
                                                     <li><a href="/../../Formularios/Listas/ListasABM.aspx">Listas</a></li>
                                                     <li><a href="/../../Formularios/Listas/ABMSubListas.aspx">Categorias</a></li>
+                                                    <asp:PlaceHolder ID="phImportarListaDePrecio" Visible="false" runat="server">
+                                                        <li><a href="/../../Formularios/Listas/ImportarListaDePrecio.aspx">Importar Lista De Precio</a></li>
+                                                    </asp:PlaceHolder>
                                                 </ul>
                                             </li>
                                             <li>
@@ -343,8 +346,8 @@
                                                     <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
                                                     <asp:PlaceHolder ID="phAceptarMercaderia" Visible="true" runat="server">
-                                                    <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
-                                                    <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                                        <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
+                                                        <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
                                                     </asp:PlaceHolder>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion2.aspx">Importar Ventas 2</a></li>
@@ -355,7 +358,7 @@
                                             <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
                                             <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
                                             <asp:PlaceHolder ID="phOrdenReparacion" Visible="false" runat="server">
-                                            <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
+                                                <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
                                             </asp:PlaceHolder>
                                             <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
                                                 <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
