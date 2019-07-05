@@ -342,12 +342,11 @@ namespace Gestion_Web.Formularios.Articulos
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerSucursales();
 
-                ////agrego Seleccione...
+                //agrego Seleccione...
                 //DataRow dr = dt.NewRow();
                 //dr["nombre"] = "Seleccione...";
                 //dr["id"] = -1;
                 //dt.Rows.InsertAt(dr, 0);
-
 
                 this.lstSucursal.DataSource = dt;
                 this.lstSucursal.DataValueField = "Id";
@@ -415,7 +414,6 @@ namespace Gestion_Web.Formularios.Articulos
 
         private void cargarMovimientoStock()
         {
-            
             try
             {
                 phMovimientoStock.Controls.Clear();
@@ -513,7 +511,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 if (dr["Tipo"].ToString() == "Egreso")
                 {                     
-                    celDescripcion.Text = dr["Numero"].ToString(); 
+                    celDescripcion.Text = "Remito " + dr["Numero"].ToString(); 
                 }
                 if (dr["Tipo"].ToString().Contains("RemitoCompra") || dr["Tipo"].ToString().Contains("Baja"))
                 {

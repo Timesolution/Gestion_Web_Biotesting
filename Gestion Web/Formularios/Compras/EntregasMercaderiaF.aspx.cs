@@ -359,7 +359,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 TextBox textBox = (sender as TextBox);
 
-                if(string.IsNullOrEmpty(textBox.Text))
+                if(string.IsNullOrEmpty(textBox.Text) || Convert.ToInt32(textBox.Text) < 0)
                     textBox.Text = "0";
             }
             catch (Exception ex)
@@ -653,6 +653,25 @@ namespace Gestion_Web.Formularios.Compras
             return true;
         }
 
+        private bool ValidarEntregaConValoresMayoresACero()
+        {
+            bool valoresMayoresACero = false;
+
+            foreach (var c in phProductos.Controls)
+            {
+                TableRow tr = c as TableRow;
+                TextBox cantidadRecibidaTB = tr.Cells[4].Controls[0] as TextBox;
+                decimal cantidadRecibida = Convert.ToDecimal(cantidadRecibidaTB.Text);
+
+                if(cantidadRecibida > 0)
+                {
+                    valoresMayoresACero = true;
+                }
+
+            }
+            return valoresMayoresACero;
+        }
+
         protected void btnRecibirTodo_Click(object sender, EventArgs e)
         {
             try
@@ -663,6 +682,12 @@ namespace Gestion_Web.Formularios.Compras
                 if (!ValidarCampoNumero())
                     return;
 
+                if (!ValidarEntregaConValoresMayoresACero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
                 {
                     btnRecibirTodo.Attributes.Remove("Disabled");
@@ -672,7 +697,7 @@ namespace Gestion_Web.Formularios.Compras
                     return;
                 }
 
-                var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
+                var ordenDeCompra = contComprasEnt.obtenerOrden(ordenCompra);
 
                 var nuevoRemitoCompra = GenerarEntrega(true,false,true);
 
@@ -785,6 +810,9 @@ namespace Gestion_Web.Formularios.Compras
                     TableCell cantidadYaRecibidaTB = cantidades.Item5;
                     decimal cantidadYaRecibida = cantidades.Item6;
 
+                    if (cantidadRecibida <= 0)
+                        continue;
+
                     if (!String.IsNullOrEmpty(idArticulo))
                     {
                         var remitoCompra_Items = new RemitosCompras_Items();
@@ -854,6 +882,12 @@ namespace Gestion_Web.Formularios.Compras
 
                 if (!ValidarCampoNumero())
                     return;
+
+                if (!ValidarEntregaConValoresMayoresACero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
 
                 var resp = GenerarEntregaRechazada();
 
@@ -942,6 +976,9 @@ namespace Gestion_Web.Formularios.Compras
                 decimal cantidadRecibida = cantidades.Item4;
                 TableCell cantidadYaRecibidaTB = cantidades.Item5;
                 decimal cantidadYaRecibida = cantidades.Item6;
+
+                if (cantidadRecibida <= 0)
+                    continue;
 
                 if (!String.IsNullOrEmpty(idArticulo))
                 {
@@ -1033,6 +1070,12 @@ namespace Gestion_Web.Formularios.Compras
                 if (!ValidarCampoNumero())
                     return;
 
+                if (!ValidarEntregaConValoresMayoresACero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
+
                 var resp = GenerarEntregaIngresoManual();
 
                 if (resp.resultadoProcesarEntrega)
@@ -1068,6 +1111,9 @@ namespace Gestion_Web.Formularios.Compras
                 string idArticulo = cantidades.Item1;
                 decimal cantidadPedida = cantidades.Item2;
                 decimal cantidadRecibida = cantidades.Item4;
+
+                if (cantidadRecibida <= 0)
+                    continue;
 
                 if (condicion == "agregar")
                 {
