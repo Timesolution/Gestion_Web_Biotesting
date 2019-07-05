@@ -1342,7 +1342,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #region datos despacho
-
         private void agregarInfoDespachoItem(Articulo articulo)
         {
             try
@@ -1370,7 +1369,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return;
             }
         }
-
         #endregion
 
         private void borrarCamposagregarItem()
@@ -1561,80 +1559,6 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en AgregarLabelsDeStockToCelda. " + ex.Message));
-            }
-        }
-
-        private void agregarItemPedidoCot(ItemCotizacion item, int pos)
-        {
-            try
-            {
-                //fila
-                TableRow tr = new TableRow();
-                tr.ID = item.articulo.codigo.ToString();
-
-                //Celdas
-
-                TableCell celCodigo = new TableCell();
-                celCodigo.Text = item.articulo.codigo;
-                celCodigo.Width = Unit.Percentage(15);
-                celCodigo.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celCodigo);
-
-                TableCell celCantidad = new TableCell();
-                celCantidad.Text = item.cantidad.ToString();
-                celCantidad.Width = Unit.Percentage(10);
-                celCantidad.HorizontalAlign = HorizontalAlign.Center;
-                celCantidad.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celCantidad);
-
-
-                TableCell celDescripcion = new TableCell();
-                celDescripcion.Text = item.articulo.descripcion;
-                celDescripcion.Width = Unit.Percentage(40);
-                celDescripcion.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celDescripcion);
-
-                TableCell celPrecio = new TableCell();
-                celPrecio.Text = "$" + item.articulo.precioVenta.ToString();
-                celPrecio.Width = Unit.Percentage(10);
-                celPrecio.VerticalAlign = VerticalAlign.Middle;
-                celPrecio.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celPrecio);
-
-                TableCell celDescuento = new TableCell();
-                celDescuento.Text = "$" + item.descuento.ToString();
-                celDescuento.Width = Unit.Percentage(10);
-                celDescuento.VerticalAlign = VerticalAlign.Middle;
-                celDescuento.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celDescuento);
-
-                TableCell celTotal = new TableCell();
-                celTotal.Text = "$" + item.total.ToString();
-                celTotal.Width = Unit.Percentage(10);
-                celTotal.VerticalAlign = VerticalAlign.Middle;
-                celTotal.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celTotal);
-                //arego fila a tabla
-
-                TableCell celAccion = new TableCell();
-
-                LinkButton btnEliminar = new LinkButton();
-                btnEliminar.CssClass = "btn btn-info";
-                btnEliminar.ID = "btnEliminar_" + item.articulo.codigo + "_" + pos;
-                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                btnEliminar.Click += new EventHandler(this.QuitarItem);
-                celAccion.Controls.Add(btnEliminar);
-                celAccion.Width = Unit.Percentage(10);
-                celAccion.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celAccion);
-
-                phArticulos.Controls.Add(tr);
-                ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "alert", m.mensajeGrowlSucces("Exito", "Articulos agregado con exito"), true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Exito", "Articulos agregado con exito"));
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
             }
         }
 
@@ -2013,7 +1937,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando articulos a pedir. " + ex.Message));
             }
         }
-
         private void QuitarItem(object sender, EventArgs e)
         {
             try
@@ -2047,30 +1970,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando item a la Pedido. " + ex.Message));
             }
         }
-
-        private List<ItemPedido> obtenerItems()
-        {
-            List<ItemPedido> items = new List<ItemPedido>();
-
-            foreach (Control cr in this.phArticulos.Controls)
-            {
-                //item
-                ItemPedido item = new ItemPedido();
-                TableRow tr = cr as TableRow;
-                item.articulo = this.contArticulo.obtenerArticuloCodigo(tr.Cells[0].ToString());
-                item.cantidad = Convert.ToDecimal(tr.Cells[1]);
-                item.descuento = 0;
-                item.precioUnitario = Convert.ToDecimal(tr.Cells[3]);
-                item.total = Convert.ToDecimal(tr.Cells[4]);
-
-                items.Add(item);
-            }
-
-            return items;
-
-
-        }
-
         protected void txtCantidad_TextChanged(object sender, EventArgs e)
         {
             try
@@ -2087,7 +1986,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total. Verifique que ingreso numeros en cantidad" + ex.Message));
             }
         }
-
         protected void TxtDescuentoArri_TextChanged(object sender, EventArgs e)
         {
             try

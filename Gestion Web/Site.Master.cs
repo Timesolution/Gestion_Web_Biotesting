@@ -175,13 +175,20 @@ namespace Gestion_Web
                             }
                         }
                     }
-                    
                 }
 
                 Configuracion configuracion = new Configuracion();
 
                 if(configuracion.MercaderiaEnTransito == "0")                
-                    phAceptarMercaderia.Visible = false;                
+                    phAceptarMercaderia.Visible = false;
+
+                //ImportarListasDePrecios
+                string ImportarListasDePrecios = WebConfigurationManager.AppSettings.Get("ImportarListasDePrecios");
+
+                if (ImportarListasDePrecios == "1" && !String.IsNullOrEmpty(ImportarListasDePrecios))
+                {
+                    this.phImportarListaDePrecio.Visible = true;
+                }
 
             }
             catch
