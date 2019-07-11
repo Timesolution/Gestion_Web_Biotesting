@@ -499,6 +499,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.txtPorcDescuento.Text = decimal.Round(nuevaFactura.neto10, 2).ToString();
 
                 if (config.infoImportacionFacturas == "1")
                 {
@@ -744,8 +745,8 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListLista.CssClass = "form-control";
                 }
 
-                if (!listPermisos.Contains("209") && accion == 9)
-                    phRefacturacion.Visible = false;
+                if (!listPermisos.Contains("209") && accion == 9 || !listPermisos.Contains("211") && accion == 6)
+                    phAgregarItems.Visible = false;
 
                 foreach (string s in listPermisos)
                 {
@@ -3156,7 +3157,7 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
                     this.nuevaFactura.neto = total;
 
-                    if (this.accion == 5 || this.accion == 6 || this.accion == 9 || this.accion == 5)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
+                    if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                     {
                         this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                     }
