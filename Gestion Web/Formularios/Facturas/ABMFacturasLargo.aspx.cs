@@ -485,7 +485,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //antes de cargar cliente me guardo temporalmente el descuento y subtotal
                 decimal subtotal = f.subTotal;
                 decimal descuento = f.descuento;
-
+                this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                 this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
                 this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
@@ -3156,7 +3156,7 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
                     this.nuevaFactura.neto = total;
 
-                    if (this.accion == 5 || this.accion == 6 || this.accion == 9 || this.accion == 5)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
+                    if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                     {
                         this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                     }

@@ -1549,7 +1549,7 @@ namespace Gestion_Web.Formularios.Articulos
                     if (i > 0)
                     {
                         //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros,null));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se actualizaron: " + i + " articulos ",null));
                     }
                     else
                     {

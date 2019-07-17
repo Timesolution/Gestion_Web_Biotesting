@@ -1753,6 +1753,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
+
                 string idtildado = "";
                 foreach (Control C in phFacturas.Controls)
                 {
@@ -1765,33 +1767,30 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "Inicio EDITAR factura id: " + idtildado);
                     this.lblIdFact.Text = idtildado;
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "Obtengo fc desde la base");
                     Factura FC = this.controlador.obtenerFacturaId(Convert.ToInt32(idtildado));
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo id");
                     this.lblIdFactura.Text = FC.id.ToString();
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo numero factura");
                     this.lblNroFactura.Text = FC.numero;
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo importe neto");
                     this.lblNetoFactura.Text = FC.subTotal.ToString("'$'#,0.00");
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo importe Iva");
                     this.lblIvaFactura.Text = FC.neto21.ToString("'$'#,0.00");
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo importe total");
                     this.lblTotalFactura.Text = FC.total.ToString("'$'#,0.00");
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo numero punto de venta en el campo del nuevo punto de venta");
                     this.txtNuevoPuntoVenta.Text = FC.numero.Substring(0, 4);
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo numero factura en el campo del nuevo numero de factura");
                     this.txtNuevoNumeroFactura.Text = FC.numero.Substring(5, 8);
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo fecha");
-                    this.lblFechaFactura.Text = FC.fecha.ToString("dd/MM/yyyy");
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo fecha en el campo de la nueva fecha de factura");
-                    this.txtNuevaFecha.Text = FC.fecha.ToString("dd/MM/yyyy");
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo importe neto en el campo del nuevo importe neto de factura");
+
+                    if (modificoHora == "1")
+                    {
+                        string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+                        this.lblFechaFactura.Text = FC.fecha.AddHours(Convert.ToInt32(restaHoras)).ToString("dd/MM/yyyy hh:mm");
+                        this.txtNuevaFecha.Text = FC.fecha.AddHours(Convert.ToInt32(restaHoras)).ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        this.lblFechaFactura.Text = FC.fecha.ToString("dd/MM/yyyy hh:mm");
+                        this.txtNuevaFecha.Text = FC.fecha.ToString("dd/MM/yyyy");
+                    }
+                    
                     this.txtNuevoNetoFactura.Text = FC.subTotal.ToString();
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo importe iva en el campo del nuevo importe iva de factura");
                     this.txtNuevoIvaFactura.Text = FC.neto21.ToString();
-                    Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "cargo importe total en el campo del nuevo importe total de factura");
                     this.txtNuevoTotalFactura.Text = FC.total.ToString();
                     ScriptManager.RegisterStartupScript(UpdatePanel4, UpdatePanel4.GetType(), "openModalEditarFactura", "openModalEditarFactura();", true);
                 }
@@ -3622,9 +3621,31 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
+
                 int idFact = Convert.ToInt32(this.lblIdFact.Text);
                 string puntoVenta = this.txtNuevoPuntoVenta.Text;
-                string fecha = this.txtNuevaFecha.Text;
+
+                DateTime horaFactura;
+                string horaFacturaFinal;
+
+                string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+                horaFactura = DateTime.ParseExact(lblFechaFactura.Text, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
+                horaFacturaFinal = horaFactura.ToString("hh:mm");
+
+                if (modificoHora == "1")
+                {
+                    this.lblFechaFactura.Text = horaFactura.AddHours(Convert.ToInt32(restaHoras) * -1).ToString("dd/MM/yyyy hh:mm");
+                    this.txtNuevaFecha.Text = horaFactura.AddHours(Convert.ToInt32(restaHoras) * -1).ToString("dd/MM/yyyy");
+                }
+                else
+                {
+                    this.lblFechaFactura.Text = horaFactura.ToString("dd/MM/yyyy hh:mm");
+                    this.txtNuevaFecha.Text = horaFactura.ToString("dd/MM/yyyy");
+                }
+                
+                string fecha = this.txtNuevaFecha.Text  + " " + horaFacturaFinal;
+
                 string numero = this.txtNuevoNumeroFactura.Text;
                 string neto = this.txtNuevoNetoFactura.Text;
                 string iva = this.txtNuevoIvaFactura.Text;
@@ -3643,13 +3664,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("No se pudo modificar la factura. ", "FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue)));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar la factura."));
                 }
             }
             catch (Exception ex)
             {
                 Gestion_Api.Modelo.Log.EscribirSQL(1, "ERROR", "Error modificando datos de factura " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("No se pudo modificar la factura. ", "FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue)));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar la factura."));
             }
         }
 
