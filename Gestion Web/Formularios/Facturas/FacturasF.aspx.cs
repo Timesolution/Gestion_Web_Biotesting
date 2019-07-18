@@ -3626,26 +3626,22 @@ namespace Gestion_Web.Formularios.Facturas
                 int idFact = Convert.ToInt32(this.lblIdFact.Text);
                 string puntoVenta = this.txtNuevoPuntoVenta.Text;
 
-                DateTime horaFactura;
-                string horaFacturaFinal;
-
-                string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
-                horaFactura = DateTime.ParseExact(lblFechaFactura.Text, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
-                horaFacturaFinal = horaFactura.ToString("hh:mm");
+                DateTime horaFactura = new DateTime();
+                string horaFacturaFinal = "";                
 
                 if (modificoHora == "1")
                 {
-                    this.lblFechaFactura.Text = horaFactura.AddHours(Convert.ToInt32(restaHoras) * -1).ToString("dd/MM/yyyy hh:mm");
-                    this.txtNuevaFecha.Text = horaFactura.AddHours(Convert.ToInt32(restaHoras) * -1).ToString("dd/MM/yyyy");
+                    string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+                    horaFactura = DateTime.ParseExact(lblFechaFactura.Text, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
+                    horaFacturaFinal = horaFactura.AddHours(Convert.ToInt32(restaHoras) * -1).ToString("hh:mm");
                 }
                 else
                 {
-                    this.lblFechaFactura.Text = horaFactura.ToString("dd/MM/yyyy hh:mm");
-                    this.txtNuevaFecha.Text = horaFactura.ToString("dd/MM/yyyy");
+                    horaFactura = DateTime.ParseExact(lblFechaFactura.Text, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
+                    horaFacturaFinal = horaFactura.ToString("hh:mm");
                 }
                 
                 string fecha = this.txtNuevaFecha.Text  + " " + horaFacturaFinal;
-
                 string numero = this.txtNuevoNumeroFactura.Text;
                 string neto = this.txtNuevoNetoFactura.Text;
                 string iva = this.txtNuevoIvaFactura.Text;
