@@ -79,6 +79,13 @@ namespace Gestion_Web.Formularios.Facturas
                         string urlNueva = urlActual.Replace("ABMFacturas", "ABMFacturasLargo");
                         Response.Redirect(urlNueva);
                     }
+                    if (pantalla == "2")
+                    {
+                        //obtengo la url para salvar los parametros que tenga asi los envio al prox formulario
+                        string urlActual = Request.Url.ToString();
+                        string urlNueva = urlActual.Replace("ABMFacturas", "ABMFacturasUnidadMedida");
+                        Response.Redirect(urlNueva);
+                    }
                     //genero la factura de la session
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
@@ -2553,6 +2560,47 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private bool VerificarDescripcionDeItems()
+        {
+            try
+            {
+                Factura factura = Session["Factura"] as Factura;
+
+                foreach (var item in factura.items)
+                {
+                    if (string.IsNullOrEmpty(item.articulo.descripcion))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool VerificarFacturaEnCero()
+        {
+            try
+            {
+                Factura factura = Session["Factura"] as Factura;
+
+                if (factura.EsFactura() && factura.total <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// cuando hace clic en guardar y se genera la factura
         /// </summary>
@@ -2564,6 +2612,18 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (IsValid)
                 {
+                    if (!VerificarFacturaEnCero())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarDescripcionDeItems())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
+                        return;
+                    }
+
                     if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
                     {
 
@@ -2639,6 +2699,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             
         }
+
         protected void btnAgregarFactE_Click(object sender, EventArgs e)
         {
             try
@@ -2674,6 +2735,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
         protected void btnRefacturar_Click(object sender, EventArgs e)
         {
             try
@@ -2865,6 +2927,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+
         private int validarItemsEnCero()
         {
             try
@@ -2890,6 +2953,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return 1;
             }
         }
+
         private int validarFacturacionPorcentual()
         {
             try
@@ -2922,6 +2986,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+
         private int validarFacturarTotalCero(Factura f)
         {
             try
@@ -2946,6 +3011,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+
         protected void btnAgregarRemitir_Click(object sender, EventArgs e)
         {
             //if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
@@ -3039,6 +3105,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             
         }
+
         private void generarFactura(int generaRemito)
         {
             try
@@ -3215,6 +3282,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando facturas. " + ex.Message));
             }
         }
+
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user)
         {
             try
@@ -3259,6 +3327,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return;
             }
         }
+
         private int validarTotalConsumidorFinal(Factura f)
         {
             try
@@ -3350,6 +3419,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+
         private int validarIdImpositivoCliente()
         {
             try
@@ -3376,6 +3446,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+
         private int validarDescuentoFactura()
         {
             try
@@ -3421,9 +3492,9 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        
 
         #region items factura
+
         private void QuitarItem(object sender, EventArgs e)
         {
             try
@@ -3490,6 +3561,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar trazabilidad item factura. " + ex.Message));                
             }
         }
+
         private void EditarItem(object sender, EventArgs e)
         {
             try

@@ -267,6 +267,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-4">Empresa</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListEmpresa" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListEmpresa_SelectedIndexChanged"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEmpresa" InitialValue="-1" ValidationGroup="ArticuloGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-4">Sucursal</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListSucursal" runat="server" disabled="true" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListSucursal_SelectedIndexChanged"></asp:DropDownList>

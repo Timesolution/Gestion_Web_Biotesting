@@ -440,7 +440,7 @@ namespace Gestion_Web.Formularios.Facturas
                     cuadroImagen.Linkbutton1.ID = item.id.ToString();
                     cuadroImagen.Label1.Text = item.descripcion;
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.mostrarArticulosGrupo);
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(MostrarSubGruposArticulos);
                     String path = Server.MapPath("../../images/Grupos/" + item.id + "/");
                     if (Directory.Exists(path))
                     {
@@ -452,7 +452,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
 
-                    cargarArticulosPh(item.id);
+                    CargarSubGruposPh(item.id);
 
                     this.phImagenCuadroGrupos.Controls.Add(cuadroImagen);
                 }
@@ -463,23 +463,71 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarArticulosPh(int idGrupo)
+        private void CargarSubGruposPh(int idGrupo)
         {
             try
             {
-                PlaceHolder placeHolder = new PlaceHolder();
-                placeHolder.ID = "phGrupo_" + idGrupo;
-                placeHolder.Visible = false;
+                PlaceHolder phSubGruposArticulos = new PlaceHolder();
+                phSubGruposArticulos.ID = "phSubGrupo_" + idGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
+                phSubGruposArticulos.Visible = false;
 
-                //cargo el primer boton de volver
                 CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
                 cuadroImagenVolver.Linkbutton1.ID = idGrupo.ToString();
                 cuadroImagenVolver.Label1.Text = "volver";
                 cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
-                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(this.ocultarArticulosGrupo);
+                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(OcultarSubGrupos);
+                phSubGruposArticulos.Controls.Add(cuadroImagenVolver);
+
+                var subGruposArticulos = contArticulo.obtenerSubGrupoByGrupo(idGrupo);
+                foreach (var item in subGruposArticulos)
+                {
+                    CuadroImagen imagenSubGrupo = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    imagenSubGrupo.Linkbutton1.ID = "_" + item.id.ToString();
+                    imagenSubGrupo.Label1.Text = item.descripcion;
+                    imagenSubGrupo.Image1.ImageUrl = "/images/no_picture.jpg";
+                    imagenSubGrupo.Linkbutton1.Click += new EventHandler(mostrarArticulosSubGrupo);
+
+                    string path = Server.MapPath("../../images/SubGrupos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            imagenSubGrupo.Image1.ImageUrl = "../../images/SubGrupos/" + item.id + "/" + f.Name;
+                        }
+                    }
+
+                    cargarArticulosPh(item.id);
+
+                    phSubGruposArticulos.Controls.Add(imagenSubGrupo);
+                }
+
+                phImagenCuadroSubGruposGrupos.Controls.Add(phSubGruposArticulos);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void cargarArticulosPh(int idSubGrupo)
+        {
+            try
+            {
+                PlaceHolder placeHolder = new PlaceHolder();
+                placeHolder.ID = "phArticulo_" + idSubGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
+                placeHolder.Visible = false;
+
+                //cargo el primer boton de volver
+                CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                cuadroImagenVolver.Linkbutton1.ID = idSubGrupo.ToString();
+                cuadroImagenVolver.Label1.Text = "volver";
+                cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
+                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(this.ocultarArticulosSubGrupo);
                 placeHolder.Controls.Add(cuadroImagenVolver);
 
-                var articulos = contArticuloEntity.obtenerArticulosEntityByIdGrupo(Convert.ToInt32(idGrupo)).ToList();
+                var articulos = contArticuloEntity.obtenerArticulosEntityByIdSubGrupo(Convert.ToInt32(idSubGrupo)).ToList();
                 foreach (var item in articulos)
                 {
                     CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
@@ -511,26 +559,58 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void mostrarArticulosGrupo(object sender, EventArgs e)
+        private void MostrarSubGruposArticulos(object sender, EventArgs e)
+        {
+            var idGrupo = (sender as LinkButton).ID;
+
+            phImagenCuadroSubGruposGrupos.Visible = true;
+
+            foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
+            {
+                var idPlaceHolder = item.ID.Split('_')[1];
+                if (idGrupo == idPlaceHolder)
+                {
+                    item.Visible = true;
+                }
+                else
+                {
+                    item.Visible = false;
+                }
+            }
+
+            phImagenCuadroGrupos.Visible = false;
+        }
+
+        private void OcultarSubGrupos(object sender, EventArgs e)
+        {
+            phImagenCuadroSubGruposGrupos.Visible = false;
+            phImagenCuadroArt.Visible = false;
+            phImagenCuadroGrupos.Visible = true;
+        }
+
+        private void mostrarArticulosSubGrupo(object sender, EventArgs e)
         {
             try
             {
-                reproducirSonido();
-                var idGrupo = (sender as LinkButton).ID;
+                var idSubGrupo = (sender as LinkButton).ID.Split('_')[1];
+
+                phImagenCuadroArt.Visible = true;
 
                 foreach (Control item in phImagenCuadroArt.Controls)
                 {
                     var idPlaceHolder = item.ID.Split('_')[1];
-                    if (idGrupo == idPlaceHolder)
+                    if (idSubGrupo == idPlaceHolder)
                     {
                         item.Visible = true;
-                        phImagenCuadroGrupos.Visible = false;
                     }
                     else
                     {
                         item.Visible = false;
                     }
                 }
+
+                phImagenCuadroGrupos.Visible = false;
+                phImagenCuadroSubGruposGrupos.Visible = false;
             }
             catch (Exception ex)
             {
@@ -538,23 +618,30 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void ocultarArticulosGrupo(object sender, EventArgs e)
+        private void ocultarArticulosSubGrupo(object sender, EventArgs e)
         {
             try
             {
-                reproducirSonido();
+                var idSubGrupo = (sender as LinkButton).ID;
 
-                var idGrupo = (sender as LinkButton).ID;
+                var grupo = contArticulo.obtenerSubGrupoID(Convert.ToInt32(idSubGrupo)).grupo.id;
 
-                foreach (Control item in phImagenCuadroArt.Controls)
+                phImagenCuadroSubGruposGrupos.Visible = true;
+
+                foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
                 {
                     var idPlaceHolder = item.ID.Split('_')[1];
-                    if (idGrupo == idPlaceHolder)
+                    if (grupo.ToString() == idPlaceHolder)
+                    {
+                        item.Visible = true;
+                    }
+                    else
                     {
                         item.Visible = false;
                     }
                 }
-                phImagenCuadroGrupos.Visible = true;
+                phImagenCuadroArt.Visible = false;
+                phImagenCuadroGrupos.Visible = false;
             }
             catch (Exception)
             {
@@ -784,7 +871,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos remito a factura " + ex.Message));
             }
         }
-
         public void GenerarFacturaPedido(string pedidos)
         {
             try
@@ -841,7 +927,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
             }
         }
-
         public void GenerarNotaCredito(string facturas)
         {
             try
@@ -1005,7 +1090,6 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-
         #endregion
 
         #region verificaciones iniciales
@@ -1389,32 +1473,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private void verificarPermisoSeleccionarCtaCte()
-        {
-            try
-            {
-                //verifico si el cliente tiene la forma de pago cta cte por defecto la dejo, sino la saco
-                if (this.DropListFormaPago.SelectedItem.Text != "Cuenta Corriente")
-                {
-                    string permisos = Session["Login_Permisos"] as string;
-                    string[] listPermisos = permisos.Split(';');
-                    string permiso2 = listPermisos.Where(x => x == "103").FirstOrDefault();
-                    if (permiso2 == null)
-                    {
-                        try
-                        {
-                            this.DropListFormaPago.Items.Remove(this.DropListFormaPago.Items.FindByText("Cuenta Corriente"));
-                        }
-                        catch { }
-                    }
-                }
-
-            }
-            catch
-            {
-
-            }
-        }
+        
         private void verificarVtaCombustible()
         {
             try
@@ -1434,29 +1493,6 @@ namespace Gestion_Web.Formularios.Facturas
 
         #region cargar Datos iniciales
 
-        //public void cargarTipoFactura()
-        //{
-        //    try
-        //    {
-        //        //DataTable dt = controlador.obtenerTipoFactura();
-
-        //        ////agrego todos
-        //        //DataRow dr = dt.NewRow();
-        //        //dr["tipo"] = "Seleccione...";
-        //        //dr["id"] = -1;
-        //        //dt.Rows.InsertAt(dr, 0);
-
-        //        //this.DropListTipoDoc.DataSource = dt;
-        //        //this.DropListTipoDoc.DataValueField = "id";
-        //        //this.DropListTipoDoc.DataTextField = "tipo";
-
-        //        //this.DropListTipoDoc.DataBind();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando tipos Factura. " + ex.Message));
-        //    }
-        //}
         public void cargarVendedor()
         {
             try
@@ -1919,7 +1955,6 @@ namespace Gestion_Web.Formularios.Facturas
                         this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
                     }
                     catch { }
-                    //this.verificarPermisoSeleccionarCtaCte();
                     //verifico si el PERFIL tiene permitido vender en Cta Cte
                     this.verificarPermisoVentaCtaCte();
                     if (this.cliente.iva == "Consumidor Final")
@@ -3657,9 +3692,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //Obtengo items
-                //List<ItemFactura> items = this.obtenerItems();
                 Factura fact = Session["Factura"] as Factura;
-                //List<ItemFactura> items = fact.items;
 
                 //agrego info traza a los items
                 fact.items = this.agregarInfoTrazaFactura(fact);
@@ -4472,49 +4505,6 @@ namespace Gestion_Web.Formularios.Facturas
                 throw;
             }
         }
-        private bool verificarArticulosEnPromocion(Articulo art)
-        {
-            try
-            {
-                ControladorArticulosEntity contArticulosEnt = new ControladorArticulosEntity();
-                bool flagArticulosPromocion = false;
-
-                //Si existen articulos abajo, realizo la verificación. Si es el primero, que siga de largo
-                if (this.phArticulos.Controls.Count > 0)
-                {
-                    //Recorro todos los items, si encuentro alguno con promocion, cambio la flag de articulos con promocion
-                    Factura f = Session["Factura"] as Factura;
-                    foreach (var item in f.items)
-                    {
-                        Gestion_Api.Entitys.Promocione promo = contArticulosEnt.obtenerPromocionValidaArticulo(item.articulo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-
-                        if (promo != null)
-                            flagArticulosPromocion = true;
-                    }
-
-                    //Verifico si el articulo a agregar tiene promocion
-                    Gestion_Api.Entitys.Promocione p = contArticulosEnt.obtenerPromocionValidaArticulo(art.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-
-                    //Si el articulo tiene promocion y los articulos ya seleccionados tienen promocion, retorno true
-                    if (p != null && flagArticulosPromocion)
-                        return true;
-                    //Si el articulo no tiene promocion y los articulos ya seleccionados tampoco tienen, retorno true
-                    if (p == null && !flagArticulosPromocion)
-                        return true;
-
-                    //Si no se cumple ninguna de las condiciones, retorno false
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception Ex)
-            {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrió un error verificando promoción de los Artículos. Excepción: " + Ex.Message + " \", {type: \"error\"});", true);
-                return false;
-            }
-        }
-
         private void QuitarItem(ItemFactura itemFactura)
         {
             try
@@ -4677,29 +4667,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-        }
-        private List<ItemFactura> obtenerItems()
-        {
-            List<ItemFactura> items = new List<ItemFactura>();
-
-            foreach (Control cr in this.phArticulos.Controls)
-            {
-                //item
-                ItemFactura item = new ItemFactura();
-                TableRow tr = cr as TableRow;
-                item.articulo = this.contArticulo.obtenerArticuloCodigo(tr.Cells[0].ToString());
-                item.cantidad = Convert.ToDecimal(tr.Cells[1]);
-                item.descuento = 0;
-                item.precioUnitario = Convert.ToDecimal(tr.Cells[3]);
-                item.total = Convert.ToDecimal(tr.Cells[4]);
-
-                items.Add(item);
-
-            }
-
-            return items;
-
-
         }
         private int validarTrazaCargadaItemFactura(ItemFactura item)
         {
@@ -5509,30 +5476,6 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private void calcularTotalItemsImagenes()
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(this.txtCantidad.Text))
-                {
-                    decimal cantidad = Convert.ToDecimal(this.txtCantidad.Text);
-                    decimal precio = Convert.ToDecimal(this.txtPUnitario.Text);
-                    decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text);
-
-                    decimal total = decimal.Round((cantidad * precio), 2);
-
-                    total = total - (total * (desc / 100));
-
-                    total = decimal.Round(total, 2);
-
-                    this.txtTotalArri.Text = decimal.Round(total, 2).ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total " + ex.Message));
-            }
-        }
         #endregion
 
         #region validaciones fin
@@ -5967,7 +5910,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
-
         private int validarDatosExtrasCargadosFactura(Factura f)
         {
             try
@@ -5991,7 +5933,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-
         private bool validarNotaCreditoFactura()
         {
             try
@@ -9291,41 +9232,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private void cargarDatosProveedorCombustible()
-        {
-            try
-            {
-                //ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
-                //Gestion_Api.Entitys.Articulos_Combustible datos = contArtEntity.obtenerDatosCombustibleByProveedor(Convert.ToInt32(ListProveedorCombustible.SelectedValue));
-
-                //if (datos != null)
-                //{
-                //    this.txtValorITC.Text = datos.ITC.ToString();
-                //    this.txtValorTasaHidrica.Text = datos.TasaHidrica.ToString();
-                //    this.txtValorTasaMunicipal.Text = datos.TasaMunicipal.ToString();
-                //    this.txtValorTasaVial.Text = datos.TasaVial.ToString();
-                //}
-                //else
-                //{
-                //    this.txtValorITC.Text = "0.00";
-                //    this.txtValorTasaHidrica.Text = "0.00";
-                //    this.txtValorTasaMunicipal.Text = "0.00";
-                //    this.txtValorTasaVial.Text = "0.00";
-
-                //    this.txtTotalITC.Text = "0.00";
-                //    this.txtTotalTasaHidrica.Text = "0.00";
-                //    this.txtTotalTasaMunicipal.Text = "0.00";
-                //    this.txtTotalTasaVial.Text = "0.00";
-
-                //    this.txtTotalImpuestos.Text = "0.00";
-                //}
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
         protected void ListProveedorCombustible_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -9537,7 +9443,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error actualizando precio de items de factura de combustible. Excepción: " + Ex.Message));
             }
         }
-
         #endregion
 
         #region datos Cliente
@@ -9587,7 +9492,6 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-
         #endregion
 
         #region MUTUALES
@@ -10895,7 +10799,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando fun: cargarGrupoClientes. Ex: " + ex.Message));
             }
         }
-        
         #endregion
 
     }

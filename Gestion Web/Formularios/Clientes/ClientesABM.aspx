@@ -1147,7 +1147,6 @@
                                                         <div class="input-group">
                                                             <span class="input-group-addon">$</span>
                                                             <asp:TextBox ID="txtMontoAutorizacionOC" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0" Style="text-align: right"></asp:TextBox>
-
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
@@ -1167,7 +1166,15 @@
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <label class="col-md-4">Forma de Pago</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtFormaDePago_OC" runat="server" TextMode="MultiLine" Rows="4" class="form-control"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator41" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" ControlToValidate="txtFormaDePago_OC" ValidationGroup="OrdenesCompraGroup" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </ContentTemplate>
                                         <Triggers>
@@ -1358,41 +1365,6 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtNombreLista" ValidationGroup="ListaGroup"></asp:RequiredFieldValidator>
                             </div>
                         </div>
-                        <%--<div class="form-group">
-                        <label for="validateSelect" class="col-md-4">Descuento</label>
-                        <div class="col-md-4">
-                            <asp:TextBox ID="txtDtoLista" runat="server" class="form-control" style="text-align:right" onkeypress="javascript:return validarNro(event)" ></asp:TextBox>
-                        </div>
-                        <div class="col-md-4">
-                              <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDtoLista" ValidationGroup="ListaGroup"></asp:RequiredFieldValidator>
-                         </div>
-                    </div>                    
-                        <div class="form-group">
-                            <label for="validateSelect" class="col-md-4">Aumento/Descuento</label>
-                            <div class="col-md-4">
-                                <asp:DropDownList ID="ListAumentoDescuento" runat="server" class="form-control">
-                                    <asp:ListItem Value="-1"> Seleccione... </asp:ListItem>
-                                    <asp:ListItem Value="1"> Aumento </asp:ListItem>
-                                    <asp:ListItem Value="2"> Descuento </asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ErrorMessage="Seleccione un tipo" ControlToValidate="ListAumentoDescuento" InitialValue="-1" ValidationGroup="ListaGroup"></asp:RequiredFieldValidator>
-                            </div>
-                        </div>                    
-                        <div class="form-group">
-                            <label for="validateSelect" class="col-md-4">Costo/Venta</label>
-                            <div class="col-md-4">
-                                <asp:DropDownList ID="ListCostoVenta" runat="server" class="form-control">
-                                    <asp:ListItem Value="-1"> Seleccione... </asp:ListItem>
-                                    <asp:ListItem Value="1"> Costo </asp:ListItem>
-                                    <asp:ListItem Value="2"> Venta </asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ErrorMessage="Seleccione un tipo" ControlToValidate="ListCostoVenta" InitialValue="-1" ValidationGroup="ListaGroup"></asp:RequiredFieldValidator>
-                            </div>
-                        </div>--%>
                     </div>
                 </div>
                 <div class="modal-footer">

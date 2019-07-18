@@ -28,7 +28,7 @@ namespace Gestion_Web.Formularios.Compras
         private string tipoDoc;
         private int puntoVenta;
         private int proveedor;
-        
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,8 +58,11 @@ namespace Gestion_Web.Formularios.Compras
                         //txtFechaHasta.Text = fechaH;
                         //DropListSucursal.SelectedValue = suc.ToString();
                     }
-                    this.cargarSucursal();
-                    this.cargarProveedores();
+
+                    //this.cargarSucursal();
+                    cargarEmpresas();
+                    cargarSucursalByEmpresa((int)Session["Login_EmpUser"]);
+                    cargarProveedores();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                     txtFechaDesdeImp.Text = fechaD;
@@ -71,17 +74,17 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         this.btnAnular.Visible = true;
                         DropListTipo.SelectedValue = tipoDoc.ToString();
-                        if(tipoDoc == "1")
+                        if (tipoDoc == "1")
                         {
                             btnCitiCompras.Visible = true;
                         }
-                    }                    
+                    }
                 }
                 if (!String.IsNullOrEmpty(fechaD) && !String.IsNullOrEmpty(fechaH) && !String.IsNullOrEmpty(tipoDoc))
                 {
-                    this.buscar(fechaD, fechaH, tipoDoc, suc, puntoVenta, proveedor,tipoFecha);
+                    this.buscar(fechaD, fechaH, tipoDoc, suc, puntoVenta, proveedor, tipoFecha);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -133,13 +136,13 @@ namespace Gestion_Web.Formularios.Compras
                                 this.DropListSucursal.Attributes.Remove("disabled");
                             }
                             else
-                            {                                
+                            {
                                 //this.DropListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
                                 int i = this.verficarPermisoCambiarSucursal();
                                 if (i <= 0)
                                 {
                                     this.DropListSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                                }                                
+                                }
                             }
 
                             valor = 1;
@@ -184,36 +187,65 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
+        protected void DropListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int idEmpresa = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
+                this.cargarSucursalByEmpresa(idEmpresa);
+            }
+            catch
+            {
 
-        public void cargarSucursal()
+            }
+        }
+
+        public void cargarSucursalByEmpresa(int idEmpresa)
         {
             try
             {
                 controladorSucursal contSucu = new controladorSucursal();
-                DataTable dt = contSucu.obtenerSucursales();
+                DataTable dt = contSucu.obtenerSucursalesDT(idEmpresa);
 
-                //agrego seleccione
-                DataRow dr = dt.NewRow();
-                dr["nombre"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
-                //agrego todos
-                DataRow dr2 = dt.NewRow();
-                dr2["nombre"] = "Todas";
-                dr2["id"] = 0;
-                dt.Rows.InsertAt(dr2, 1);
+                DataRow dr1 = dt.NewRow();
+                dr1["nombre"] = "Todas";
+                dr1["id"] = 0;
+                dt.Rows.InsertAt(dr1, 0);
 
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
                 this.DropListSucursal.DataTextField = "nombre";
-
                 this.DropListSucursal.DataBind();
-
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        public void cargarEmpresas()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerEmpresas();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["Razon Social"] = "Seleccione...";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListEmpresa.DataSource = dt;
+                this.DropListEmpresa.DataValueField = "Id";
+                this.DropListEmpresa.DataTextField = "Razon Social";
+                this.DropListEmpresa.DataBind();
+
+                DropListEmpresa.SelectedValue = Session["Login_EmpUser"].ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando empresas. " + ex.Message));
             }
         }
         public void cargarProveedores()
@@ -322,7 +354,7 @@ namespace Gestion_Web.Formularios.Compras
                     else
                     {
                         saldo += c.Total.Value;
-                    }                    
+                    }
                 }
 
                 this.labelSaldo.Text = "$" + saldo.ToString("N");
@@ -357,7 +389,7 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celFechaImputacion);
 
                 TableCell celTipo = new TableCell();
-                celTipo.Text = c.TipoDocumento; 
+                celTipo.Text = c.TipoDocumento;
                 celTipo.HorizontalAlign = HorizontalAlign.Center;
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
@@ -381,12 +413,12 @@ namespace Gestion_Web.Formularios.Compras
                 TableCell celNeto = new TableCell();
                 if (c.TipoDocumento.Contains("Crédito"))
                 {
-                    celNeto.Text = "$" + ((decimal)c.Total*-1).ToString("N");
+                    celNeto.Text = "$" + ((decimal)c.Total * -1).ToString("N");
                 }
                 else
                 {
                     celNeto.Text = "$" + ((decimal)c.Total).ToString("N");
-                }                
+                }
                 celNeto.VerticalAlign = VerticalAlign.Middle;
                 celNeto.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celNeto);
@@ -407,6 +439,21 @@ namespace Gestion_Web.Formularios.Compras
                 Literal l2 = new Literal();
                 l2.Text = "&nbsp";
                 celAccion.Controls.Add(l2);
+
+                LinkButton btnEditar = new LinkButton();
+                btnEditar.CssClass = "btn btn-info ui-tooltip";
+                btnEditar.Attributes.Add("data-toggle", "tooltip");
+                btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                btnEditar.ID = "btnEdit_" + c.Id + "_";
+                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                btnEditar.Font.Size = 12;
+                //btnEditar.PostBackUrl = "ComprasABM.aspx?a=5&c=" + c.Id;
+                btnEditar.Click += new EventHandler(EditarFactura);
+                celAccion.Controls.Add(btnEditar);
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
 
                 CheckBox cbSeleccion = new CheckBox();
                 //cbSeleccion.Text = "&nbsp;Imputar";
@@ -429,10 +476,30 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando comra a la tabla. " + ex.Message));
             }
         }
-        
 
-        private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor,int tipoFecha)
-        { 
+        protected void EditarFactura(object sender, EventArgs e)
+        {
+            try
+            {
+                string idCompra = (sender as LinkButton).ID;
+                string[] atributos = idCompra.Split('_');
+                idCompra = atributos[1];
+
+                var tienePago = contCompraEntity.ComprobarSiCompraTienePagoImputado(Convert.ToInt32(idCompra));
+
+                if (tienePago)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se puede editar la compra porque tiene un pago imputado!"));
+                else
+                    Response.Redirect("ComprasABM.aspx?a=5&c=" + idCompra);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al editar Factura " + ex.Message);
+            }
+        }
+
+        private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor, int tipoFecha)
+        {
             try
             {
                 DateTime desde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
@@ -441,7 +508,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (tipoDoc == "0")
                     tipoDoc = null;
 
-                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, sucursal, puntoVenta,proveedor,tipoFecha);
+                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, sucursal, puntoVenta, proveedor, tipoFecha);
                 if (compras != null)
                 {
                     this.cargarComras(compras);
@@ -607,7 +674,7 @@ namespace Gestion_Web.Formularios.Compras
             this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
         }
 
-        
+
         protected void btnCitiCompras_Click(object sender, EventArgs e)
         {
             try
@@ -629,14 +696,17 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 string idtildado = "";
-                
+
                 foreach (Control C in phCompra.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
-                    if (ch.Checked == true)
+                    CheckBox ch = tr.Cells[6].Controls[4] as CheckBox;
+                    if (ch != null)
                     {
-                        idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        if (ch.Checked == true)
+                        {
+                            idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        }
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
@@ -644,7 +714,7 @@ namespace Gestion_Web.Formularios.Compras
                     foreach (String id in idtildado.Split(';'))
                     {
                         if (id != "" && id != null)
-                        {                            
+                        {
                             int i = this.contCompraEntity.anularCompra(Convert.ToInt64(id));
 
                             if (i > 0)
@@ -661,7 +731,7 @@ namespace Gestion_Web.Formularios.Compras
                                 {
                                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La compra seleccionada tiene pagos realizados. Por favor elimine los pagos realizados primero. "));
                                 }
-                                
+
 
                             }
                         }

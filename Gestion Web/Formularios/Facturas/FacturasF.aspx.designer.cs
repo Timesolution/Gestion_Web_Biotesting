@@ -94,6 +94,15 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnReimprimirFiscal;
         
         /// <summary>
+        /// lbtnPatentamiento control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnPatentamiento;
+        
+        /// <summary>
         /// phEditarFC control.
         /// </summary>
         /// <remarks>
@@ -164,6 +173,24 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// phImprimirTicketDeCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phImprimirTicketDeCambio;
+        
+        /// <summary>
+        /// lbtnImprimirTicketDeCambio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirTicketDeCambio;
         
         /// <summary>
         /// lblParametros control.
@@ -517,6 +544,15 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.DropDownList DropListClientes;
         
         /// <summary>
+        /// DropListTipoCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListTipoCliente;
+        
+        /// <summary>
         /// DropListTipo control.
         /// </summary>
         /// <remarks>
@@ -731,6 +767,33 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGenerarNotaDebitoCreditoDiferenciaCambio;
+        
+        /// <summary>
+        /// dropDownListProveedoresPatentamiento control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList dropDownListProveedoresPatentamiento;
+        
+        /// <summary>
+        /// txtTotalPatentamiento control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTotalPatentamiento;
+        
+        /// <summary>
+        /// btnGenerarPatentamiento control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGenerarPatentamiento;
         
         /// <summary>
         /// UpdatePanel3 control.

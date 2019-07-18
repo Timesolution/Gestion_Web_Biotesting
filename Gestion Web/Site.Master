@@ -21,7 +21,7 @@
     <link href="./css/bootstrap.min.css" rel="stylesheet">
     <link href="./css/bootstrap-responsive.min.css" rel="stylesheet">
 
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
     <link href="./css/font-awesome.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -177,7 +177,6 @@
                                                         <a tabindex="-1" href="#">Grupos</a>
                                                         <ul class="dropdown-menu">
                                                             <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposArticulos.aspx">Grupos</a></li>
-                                                            <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposComisiones.aspx">Comisiones por Grupo</a></li>
                                                         </ul>
                                                     </li>
                                                     <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
@@ -216,13 +215,16 @@
                                                     <li><a tabindex="-1" href="/../../Formularios/Listas/AdminListas.aspx">Administrador</a></li>
                                                     <li><a href="/../../Formularios/Listas/ListasABM.aspx">Listas</a></li>
                                                     <li><a href="/../../Formularios/Listas/ABMSubListas.aspx">Categorias</a></li>
+                                                    <asp:PlaceHolder ID="phImportarListaDePrecio" Visible="false" runat="server">
+                                                        <li><a href="/../../Formularios/Listas/ImportarListaDePrecio.aspx">Importar Lista De Precio</a></li>
+                                                    </asp:PlaceHolder>
                                                 </ul>
                                             </li>
                                             <li>
                                                 <asp:Literal Text="" ID="litMillas" runat="server" />
                                             </li>
-                                            <li><a href="/../../Formularios/Valores/MovimientoCajaF.aspx">Movimientos de Caja</a></li>
-
+                                            <li><a tabindex="-1" href="/../../Formularios/MateriasPrimas/MateriasPrimasF.aspx">Materias Primas</a></li>
+                                            <li><a href="/../../Formularios/Valores/MovimientoCajaF.aspx">Movimientos de caja</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Mutuales</a>
                                                 <ul class="dropdown-menu">
@@ -277,7 +279,19 @@
                                                 </ul>
                                             </li>
 
-                                            <li><a href="/../../Formularios/Vendedores/Vendedores.aspx">Vendedores</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Vendedores</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Vendedores/Vendedores.aspx">Vendedores</a></li>
+                                                    <li class="dropdown-submenu">
+                                                        <a tabindex="-1" href="#">Comisiones</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="/../../Formularios/Vendedores/Comisiones/ComisionesPorGrupoF.aspx">Comisiones por Vendedores</a></li>
+                                                            <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposComisiones.aspx">Comisiones por Grupo</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
                                             <li><a href="/../../Formularios/Zonas/ZonasF.aspx">Zonas</a></li>
                                             <%-- <li><a href="http://138.36.238.80/store/backend/default.aspx">Red Club</a></li>--%>
                                         </ul>
@@ -305,6 +319,7 @@
                                             <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
                                             <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
                                             <li><a href="/../../Formularios/Compras/DiferenciaCompraMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                            <li><a href="/../../Formularios/Compras/Entregas/EntregasF.aspx">Entregas Mercaderia</a></li>
                                             <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
@@ -330,8 +345,10 @@
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
-                                                    <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
-                                                    <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                                    <asp:PlaceHolder ID="phAceptarMercaderia" Visible="true" runat="server">
+                                                        <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
+                                                        <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                                    </asp:PlaceHolder>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
                                                     <li><a href="/../../Formularios/Facturas/FacturasImportacion2.aspx">Importar Ventas 2</a></li>
                                                 </ul>
@@ -341,7 +358,7 @@
                                             <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
                                             <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
                                             <asp:PlaceHolder ID="phOrdenReparacion" Visible="false" runat="server">
-                                            <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
+                                                <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
                                             </asp:PlaceHolder>
                                             <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
                                                 <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
@@ -425,6 +442,24 @@
                                                     <li><a href="/../../Formularios/Reportes/ReportesCompras.aspx">Articulos</a></li>
                                                 </ul>
                                             </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Saldos</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReporteSaldosProveedores.aspx">Proveedores</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Articulos</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReporteListaDePreciosF.aspx">Lista De Precios</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Sistema Beneficios</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ImpresionReporteBeneficios.aspx?a=1">Lista De Socios</a></li>
+                                                </ul>
+                                            </li>
                                             <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <asp:PlaceHolder ID="phRentabilidad" Visible="false" runat="server">
                                                 <%--<li><a href="/../../Formularios/Reportes/RentabilidadF.aspx">Rentabilidad Costo</a></li>--%>
@@ -473,6 +508,12 @@
                                                     <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Stock</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Herramientas/ResetearStock.aspx">Resetear Stock</a></li>
                                                 </ul>
                                             </li>
                                             <asp:PlaceHolder ID="phTapice" runat="server" Visible="false">

@@ -55,6 +55,9 @@
                                         <li>
                                             <asp:LinkButton ID="lbtnReimprimirFiscal" runat="server" Visible="false" OnClick="lbtnReimprimirFiscal_Click">Reimprimir Fiscal</asp:LinkButton>
                                         </li>
+                                        <li>
+                                            <asp:LinkButton ID="lbtnPatentamiento" runat="server" Visible="false" data-toggle="modal" href="#modalPatentamiento">Patentamiento</asp:LinkButton>
+                                        </li>
                                         <asp:PlaceHolder runat="server" ID="phEditarFC" Visible="false">
                                             <li>
                                                 <asp:LinkButton ID="btnEditarFC" runat="server" OnClick="btnEditarDatosFC_Click">Editar FC</asp:LinkButton>
@@ -70,9 +73,14 @@
                                                 <asp:LinkButton ID="btnForm12" runat="server" OnClick="btnForm12_Click">Formulario 12</asp:LinkButton>
                                             </li>
                                         </asp:PlaceHolder>
-                                        <asp:PlaceHolder runat="server" ID="phNotaDebitoCreditoDiferenciaCambio" Visible="true">
+                                        <asp:PlaceHolder runat="server" ID="phNotaDebitoCreditoDiferenciaCambio" Visible="false">
                                             <li>
                                                 <asp:LinkButton runat="server" ID="lbtnDebitoCreditoDiferenciaCambio" OnClick="lbtnDebitoCreditoDiferenciaCambio_Click">ND/C Diferencia Cambio</asp:LinkButton>
+                                            </li>
+                                        </asp:PlaceHolder>
+                                        <asp:PlaceHolder runat="server" ID="phImprimirTicketDeCambio" Visible="true">
+                                            <li>
+                                                <asp:LinkButton ID="lbtnImprimirTicketDeCambio" runat="server" OnClick="lbtnImprimirTicketDeCambio_Click">Imprimir Ticket De Cambio</asp:LinkButton>
                                             </li>
                                         </asp:PlaceHolder>
                                     </ul>
@@ -446,7 +454,12 @@
                                         <label class="col-md-4">Cliente</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
-                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Tipo Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListTipoCliente" runat="server" class="form-control"></asp:DropDownList>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -548,9 +561,6 @@
                                     <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
-                            <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                         </div>
 
 
@@ -558,10 +568,8 @@
                             <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
-                            <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -647,7 +655,40 @@
             </div>
         </div>
 
-    <div id="modalFacturar" class="modal fade" tabindex="-1" role="dialog">
+        <div id="modalPatentamiento" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Generar Patentamiento</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-4">Proveedor</label>
+                                <div class="col-md-6">
+                                    <h5>
+                                        <asp:DropDownList ID="dropDownListProveedoresPatentamiento" runat="server" InitialValue="-1" class="form-control"></asp:DropDownList>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4">Total Patentamiento</label>
+                                <div class="input-group col-md-6">
+                                    <span class="input-group-addon">$</span>
+                                    <asp:TextBox ID="txtTotalPatentamiento" Text="0" runat="server" Style="text-align: right;" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <asp:Button ID="btnGenerarPatentamiento" runat="server" Text="Generar" class="btn btn-success" OnClick="btnGenerarPatentamiento_Click"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalFacturar" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

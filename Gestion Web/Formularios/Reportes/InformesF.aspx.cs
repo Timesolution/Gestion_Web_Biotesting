@@ -135,7 +135,6 @@ namespace Gestion_Web.Formularios.Reportes
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Informes Pedidos. " + ex.Message));
             }
-
         }
         private void cargarEnPh(Informes_Pedidos ip)
         {
@@ -144,8 +143,6 @@ namespace Gestion_Web.Formularios.Reportes
                 //Obtengo el nombre de usuario
                 controladorUsuario contUsua = new controladorUsuario();
                 Usuario user = contUsua.obtenerUsuariosID(Convert.ToInt32(ip.Usuario));
-                //Obtengo el nombre del informe
-                Informe i = this.controlador.obtenerInformePorId((long)ip.Informe);
 
                 //Filas
                 TableRow tr = new TableRow();
@@ -159,7 +156,7 @@ namespace Gestion_Web.Formularios.Reportes
                 tr.Cells.Add(celFechaD);
 
                 TableCell celInforme = new TableCell();
-                celInforme.Text = i.Nombre;
+                celInforme.Text = ip.NombreInforme;
                 celInforme.VerticalAlign = VerticalAlign.Middle;
                 celInforme.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celInforme);
@@ -187,10 +184,12 @@ namespace Gestion_Web.Formularios.Reportes
 
                     if (ip.Informe1.Id == 1)
                         hpDetalles.NavigateUrl += ".zip";
-                    if (ip.Informe1.Id == 2)
+                    if (ip.Informe1.Id == 2 || ip.Informe1.Id == 5)
                         hpDetalles.NavigateUrl += ".xls";
                     if (ip.Informe1.Id == 3 || ip.Informe1.Id == 4)
                         hpDetalles.NavigateUrl += ".xlsx";
+                    if (ip.Informe1.Id == 6)
+                        hpDetalles.NavigateUrl += ".pdf"; 
 
                     celEstado.Controls.Add(hpDetalles);
                     tr.Controls.Add(celEstado);

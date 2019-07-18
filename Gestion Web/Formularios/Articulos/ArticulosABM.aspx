@@ -24,7 +24,7 @@
                                 <li class="active"><a href="#home" data-toggle="tab">Detalle</a></li>
                                 <li class=""><a href="#profile" data-toggle="tab" runat="server" id="linkProv" visible="false">Otros Proveedores</a></li>
                                 <li class=""><a href="#Image" data-toggle="tab" runat="server" id="linkImg" visible="false">Imagenes</a></li>
-                                <li class=""><a href="#Composition" data-toggle="tab" runat="server" id="linkCompo" visible="false">Composicion</a></li>
+                                <li class=""><a href="#Composition" data-toggle="tab" runat="server" id="linkCompo" visible="false">Kit</a></li>
                                 <li class=""><a href="#Descuentos" runat="server" id="linkDesc" visible="false" data-toggle="tab">Descuentos</a></li>
                                 <li class=""><a href="#Store" runat="server" id="linkStore" visible="false" data-toggle="tab">Store</a></li>
                                 <li class=""><a href="#Combustible" runat="server" id="linkCombustible" visible="false" data-toggle="tab">Datos Combustible</a></li>
@@ -601,7 +601,8 @@
 
                                                         <div class="widget-header">
                                                             <span class="icon-group"></span>
-                                                            <h3>Otros Proveedores</h3>
+                                                            <%--<h3>Otros Proveedores</h3>--%>
+                                                            <h3><asp:Label ID="lblNombreArticulo" runat="server"></asp:Label></h3>
                                                         </div>
                                                         <!-- .widget-header -->
 

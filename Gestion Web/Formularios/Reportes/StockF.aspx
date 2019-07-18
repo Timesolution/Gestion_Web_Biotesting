@@ -26,7 +26,7 @@
                                         <div class="form-group">
                                             <label class="col-md-2">Empresa</label>
                                             <div class="col-md-3">
-                                                <asp:DropDownList ID="ListEmpresa" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListEmpresa_SelectedIndexChanged" />
+                                                <asp:DropDownList ID="ListEmpresa" runat="server" class="form-control" AutoPostBack="true" />
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:RequiredFieldValidator ErrorMessage="* Seleccione empresa" InitialValue="-1" ControlToValidate="ListEmpresa" runat="server" ForeColor="Red" Font-Bold="true" ValidationGroup="StockGroup" />

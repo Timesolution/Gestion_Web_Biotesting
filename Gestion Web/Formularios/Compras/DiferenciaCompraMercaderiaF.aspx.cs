@@ -5,6 +5,7 @@ using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -21,6 +22,8 @@ namespace Gestion_Web.Formularios.Compras
         int sucursalDestino = 0;
         string fechaD = "";
         string fechaH = "";
+        string numeroRemitoCompra = "";
+        string numeroOrdenCompra = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,22 +33,34 @@ namespace Gestion_Web.Formularios.Compras
             sucursalDestino = Convert.ToInt32(Request.QueryString["sd"]);
             fechaD = Request.QueryString["fd"];
             fechaH = Request.QueryString["fh"];
-
-            if (accion == 0)
-            {
-                PrimeraCarga();
-            }
+            numeroRemitoCompra = Request.QueryString["nrc"];
+            numeroOrdenCompra = Request.QueryString["noc"];
 
             if (!IsPostBack)
             {
-                this.txtFechaDesde.Text = fechaD;
-                this.txtFechaHasta.Text = fechaH;
-
                 cargarSucursales();
+
+                if (fechaD == null && fechaH == null)
+                {
+                    txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    sucursalDestino = 0;
+                    DropListSucursalDestino.SelectedValue = sucursalDestino.ToString();
+                    fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                }
+                else
+                {
+                    txtFechaDesde.Text = fechaD;
+                    txtFechaHasta.Text = fechaH;
+                    DropListSucursalDestino.SelectedValue = sucursalDestino.ToString();
+                }                
             }
 
             if (accion == 1)
-                CargarFacturasMercaderiasDiferencias();
+                Buscar(fechaD,fechaH,sucursalDestino);
+            else if (accion == 2)
+                BuscarPorNumero(numeroRemitoCompra,numeroOrdenCompra);
         }
 
         private void VerificarLogin()
@@ -118,11 +133,6 @@ namespace Gestion_Web.Formularios.Compras
                 dr["id"] = 0;
                 dt.Rows.InsertAt(dr, 0);
 
-                this.DropListSucursalOrigen.DataSource = dt;
-                this.DropListSucursalOrigen.DataValueField = "Id";
-                this.DropListSucursalOrigen.DataTextField = "nombre";
-                this.DropListSucursalOrigen.DataBind();
-
                 this.DropListSucursalDestino.DataSource = dt;
                 this.DropListSucursalDestino.DataValueField = "Id";
                 this.DropListSucursalDestino.DataTextField = "nombre";
@@ -134,43 +144,44 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
-        }
+        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
-        protected void PrimeraCarga()
+        private void Buscar(string fDesde, string fHasta, int sucursalDestino)
         {
             try
             {
-                fechaD = DateTime.Now.ToString("dd/MM/yyyy");
-                fechaH = DateTime.Now.ToString("dd/MM/yyyy");
-                sucursalDestino = Convert.ToInt32(Session["Login_SucUser"]);
+                DateTime fechaDesde = Convert.ToDateTime(fDesde, new CultureInfo("es-AR"));
+                DateTime fechaHasta = Convert.ToDateTime(fHasta, new CultureInfo("es-AR"));
 
-                FiltrarDiferenciaMercaderia();
+                var diferencias = contCompraEntity.ObtenerRemitosOrdenesCompraMercaderiasDiferencias(fechaDesde, fechaHasta, sucursalDestino);
+
+                CargarFacturasMercaderiasDiferencias(diferencias);
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "Error al hacer la primera carga de compras diferencias mercaderias. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando compras. " + ex.Message));
             }
         }
 
-        protected void FiltrarDiferenciaMercaderia()
+        private void BuscarPorNumero(string numeroRemitoCompra, string numeroOrdenCompra)
         {
             try
             {
-                Response.Redirect("DiferenciaCompraMercaderiaF.aspx?a=1&sd=" + sucursalDestino + "&fd=" + fechaD + "&fh=" + fechaH);
+                var diferencias = contCompraEntity.ObtenerDiferenciasPorNumeroRemitoYOrdenCompra(numeroRemitoCompra, numeroOrdenCompra);                
+
+                CargarFacturasMercaderiasDiferencias(diferencias);
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "Error al filtrar. " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando compras. " + ex.Message));
             }
         }
 
-        public void CargarFacturasMercaderiasDiferencias()
+        public void CargarFacturasMercaderiasDiferencias(List<RemitoCompraOrdenCompra_Diferencias> diferencias)
         {
             try
             {
                 phFacturas.Controls.Clear();
-
-                var diferencias = contCompraEntity.ObtenerRemitosOrdenesCompraMercaderiasDiferencias();
 
                 foreach (var diferencia in diferencias)
                 {
@@ -190,28 +201,29 @@ namespace Gestion_Web.Formularios.Compras
             {
                 controladorSucursal contSucursal = new controladorSucursal();
                 controladorArticulo contArt = new controladorArticulo();
-                //controladorFacturacion contFacturacion = new controladorFacturacion();
-                //var ordenCompra = f.OrdenesCompra;//contFacturacion.obtenerFacturaId((int)f.FacturasMercaderias_Detalle.Facturas_Mercaderias.Factura);
+
                 //fila
                 TableRow tr = new TableRow();
                 //tr.ID = f["id"].ToString();
 
                 //Celdas
                 TableCell celFecha = new TableCell();
-                DateTime date = Convert.ToDateTime(f.OrdenesCompra.Fecha);
+                DateTime date = Convert.ToDateTime(f.RemitosCompra.Fecha);
                 celFecha.Text = date.ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
 
                 TableCell celSucursalDestino = new TableCell();
-                celSucursalDestino.Text = contSucursal.obtenerSucursalID((int)f.OrdenesCompra.IdSucursal).nombre;
+                celSucursalDestino.Text = contSucursal.obtenerSucursalID((int)f.RemitosCompra.IdSucursal).nombre;
                 celSucursalDestino.HorizontalAlign = HorizontalAlign.Left;
                 celSucursalDestino.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celSucursalDestino);
 
                 TableCell celNumeroRemito = new TableCell();
-                celNumeroRemito.Text = f.RemitosCompra.Numero;
+                string ptoVenta = f.RemitosCompra.Numero.Substring(0, 4).ToString();
+                string numero = f.RemitosCompra.Numero.Substring(4, 8).ToString();
+                celNumeroRemito.Text = ptoVenta + "-" + numero;
                 celNumeroRemito.HorizontalAlign = HorizontalAlign.Left;
                 celNumeroRemito.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumeroRemito);
@@ -223,7 +235,8 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celOrdenCompra);
 
                 TableCell celArticulo = new TableCell();
-                celArticulo.Text = contArt.obtenerArticuloByID((int)f.Articulo).descripcion;
+                var articulo = contArt.obtenerArticuloByID((int)f.Articulo);
+                celArticulo.Text = articulo.codigo + " - " + articulo.descripcion;
                 celArticulo.HorizontalAlign = HorizontalAlign.Left;
                 celArticulo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celArticulo);
@@ -241,7 +254,13 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celCantidadRecibida);
 
                 TableCell celDiferencia = new TableCell();
-                celDiferencia.Text = f.Diferencia.ToString();
+                decimal diferencia = Convert.ToDecimal(f.Diferencia);
+
+                if (diferencia > 0)
+                    celDiferencia.Text = (diferencia * -1).ToString();
+                else
+                    celDiferencia.Text = (Math.Abs(diferencia)).ToString();
+
                 celDiferencia.HorizontalAlign = HorizontalAlign.Left;
                 celDiferencia.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDiferencia);
@@ -294,6 +313,30 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
+            }
+        }
+
+        protected void lbtnBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("DiferenciaCompraMercaderiaF.aspx?a=1&sd=" + DropListSucursalDestino.SelectedValue + "&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al filtrar diferencias de mercaderia " + ex.Message);
+            }
+        }
+
+        protected void lbtnBuscarNumero_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("DiferenciaCompraMercaderiaF.aspx?a=2&nrc=" + txtNumeroRemito.Text + "&noc=" + txtNumeroOrdenCompra.Text);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al buscar diferencias de mercaderia por numero de remito u orden de compra" + ex.Message);
             }
         }
     }

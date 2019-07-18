@@ -25,6 +25,16 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="ComprasVentasProveedor" msprop:Generator_TableClassName="ComprasVentasProveedorDataTable" msprop:Generator_TableVarName="tableComprasVentasProveedor" msprop:Generator_RowChangedName="ComprasVentasProveedorRowChanged" msprop:Generator_TablePropName="ComprasVentasProveedor" msprop:Generator_RowDeletingName="ComprasVentasProveedorRowDeleting" msprop:Generator_RowChangingName="ComprasVentasProveedorRowChanging" msprop:Generator_RowEvHandlerName="ComprasVentasProveedorRowChangeEventHandler" msprop:Generator_RowDeletedName="ComprasVentasProveedorRowDeleted" msprop:Generator_RowClassName="ComprasVentasProveedorRow" msprop:Generator_UserTableName="ComprasVentasProveedor" msprop:Generator_RowEvArgName="ComprasVentasProveedorRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="razonSocial" msprop:Generator_ColumnVarNameInTable="columnrazonSocial" msprop:Generator_ColumnPropNameInRow="razonSocial" msprop:Generator_ColumnPropNameInTable="razonSocialColumn" msprop:Generator_UserColumnName="razonSocial" type="xs:string" minOccurs="0" />
+              <xs:element name="cantidadComprada" msprop:Generator_ColumnVarNameInTable="columncantidadComprada" msprop:Generator_ColumnPropNameInRow="cantidadComprada" msprop:Generator_ColumnPropNameInTable="cantidadCompradaColumn" msprop:Generator_UserColumnName="cantidadComprada" type="xs:string" minOccurs="0" />
+              <xs:element name="cantidadVendida" msprop:Generator_ColumnVarNameInTable="columncantidadVendida" msprop:Generator_ColumnPropNameInRow="cantidadVendida" msprop:Generator_ColumnPropNameInTable="cantidadVendidaColumn" msprop:Generator_UserColumnName="cantidadVendida" type="xs:string" minOccurs="0" />
+              <xs:element name="cantidadVendidaOferta" msprop:Generator_ColumnVarNameInTable="columncantidadVendidaOferta" msprop:Generator_ColumnPropNameInRow="cantidadVendidaOferta" msprop:Generator_ColumnPropNameInTable="cantidadVendidaOfertaColumn" msprop:Generator_UserColumnName="cantidadVendidaOferta" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

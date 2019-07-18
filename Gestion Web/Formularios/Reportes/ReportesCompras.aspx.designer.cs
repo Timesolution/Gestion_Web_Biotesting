@@ -49,6 +49,24 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorProveedorPDF;
         
         /// <summary>
+        /// lbtnExportarExcelReporteArtCompradosVendidos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnExportarExcelReporteArtCompradosVendidos;
+        
+        /// <summary>
+        /// lbtnImprimirPDFReporteArtCompradosVendidos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirPDFReporteArtCompradosVendidos;
+        
+        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>
@@ -83,6 +101,15 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopArticulosCantidad;
+        
+        /// <summary>
+        /// phTopProveedoresCantidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phTopProveedoresCantidad;
         
         /// <summary>
         /// UpdatePanelBusqueda control.

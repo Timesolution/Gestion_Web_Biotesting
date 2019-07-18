@@ -25,6 +25,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFacturacion controladorF = new controladorFacturacion();
         controladorSucursal controlSucursal = new controladorSucursal();
         controladorCliente controlCliente = new controladorCliente();
+        ControladorRemitoEntity contRemitoEntity = new ControladorRemitoEntity();
         Mensajes m = new Mensajes();
         Configuracion c = new Configuracion();
         private int suc;
@@ -602,6 +603,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         idtildado = ch.ID.Split('_')[1];
                     }
+                }
+                if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(idtildado)))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Este remito ya fue facturado"));
+                    return;
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {

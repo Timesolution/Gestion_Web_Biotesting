@@ -336,3 +336,8 @@ Gestion Web/Facturas/6/144/72/Fact_0005_178547.xml
 Gestion Web/OtrosProveedores/SOCH.csv
 Gestion Web/OtrosProveedores/SOCH (1).csv
 Gestion Web/OtrosProveedores/Lista_de_preciosFATE.csv
+Gestion Web/Facturas/
+Gestion Web/XML/
+*.bmp
+*.csv
+Gestion Web/Formularios/Facturas/FacturaR(parker).rdlc

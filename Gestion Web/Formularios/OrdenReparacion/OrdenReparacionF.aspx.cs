@@ -1062,7 +1062,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                             //string script = "window.open('ABMRemitos.aspx?accion=5&cliente=" + or.Cliente + "&articulo=" + or.Producto + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
                             //script += " $.msgbox(\"Se envio la orden de reparacion al service oficial correctamente!. \", {type: \"info\"}); location.href = '" + ParametrosFiltrar() + "';";
                             //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se envio la orden de reparacion al service oficial correctamente!", "../Facturas/ABMRemitos.aspx?accion=5&cliente=" + or.Cliente + "&articulo=" + or.Producto));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se envio la orden de reparacion al service oficial correctamente!", "../Facturas/ABMRemitos.aspx?accion=5&cliente=" + servTecnico.Cliente + "&articulo=" + or.Producto));
                         }
                         else if (temp == -1)
                         {

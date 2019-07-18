@@ -365,7 +365,6 @@ namespace Gestion_Web.Formularios.Compras
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error creando tabla de item. " + ex.Message));
             }
-
         }
         protected DataTable dtItems
         {
