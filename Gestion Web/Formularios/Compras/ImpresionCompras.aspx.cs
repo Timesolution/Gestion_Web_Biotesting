@@ -26,7 +26,7 @@ namespace Gestion_Web.Formularios.Compras
         private int suc;
         private string fechaD;
         private string fechaH;
-        private string tipoDoc;
+        private string tipoDoc; 
         private int puntoVenta;
         private int accion;
         private int excel;
@@ -38,11 +38,15 @@ namespace Gestion_Web.Formularios.Compras
         private int idGrupo;
         private int tipo;//Remito compra
         private string idsRemitos;
+        private string idOrdenesCompra;
+        private int tipoDocumento;
 
         controladorCompraEntity contCompraEntity = new controladorCompraEntity();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
         ControladorCCProveedor controladorCCP = new ControladorCCProveedor();
         controladorArticulo contArticulo = new controladorArticulo();
+        controladorPagos controladorPagos = new controladorPagos();
+        controladorCliente controladorCliente = new controladorCliente();
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -65,6 +69,8 @@ namespace Gestion_Web.Formularios.Compras
                     this.idsRemitos = Request.QueryString["ids"];
                     this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
                     this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
+                    this.tipoDocumento = Convert.ToInt32(Request.QueryString["td"]);
+                    this.idOrdenesCompra = Request.QueryString["ordenesCompra"];
 
                     if (accion == 1)
                     {
@@ -106,6 +112,14 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         this.generarReporte10();//Remito Compra Etiquetas
                     }
+                    if (accion == 11)
+                    {
+                        this.generarReporte11();//Remito Compra Etiquetas
+                    }
+                    if(accion == 12)
+                    {
+                        GenerarReporte12();
+                    }
                 }
             }
             catch(Exception ex)
@@ -117,6 +131,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
                 controladorCliente cont = new controladorCliente();
 
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
@@ -130,6 +145,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
                 dtCompras.Columns.Add("razonSocial", typeof(string));
+                dtCompras.Columns.Add("PlanDeCuentas", typeof(string));
 
                 decimal saldoTotal = 0;
 
@@ -152,11 +168,18 @@ namespace Gestion_Web.Formularios.Compras
                         row["PIva"] = Convert.ToDecimal(row["PIva"]) * -1;
                         row["ImpuestosInternos"] = Convert.ToDecimal(row["ImpuestosInternos"]) * -1;
                         row["Otros"] = Convert.ToDecimal(row["Otros"]) * -1;
-                        row["Total"] = Convert.ToDecimal(row["Total"]) * -1;
+                        row["Total"] = Convert.ToDecimal(row["Total"]) * -1;                        
                     }
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
                     row["razonSocial"] = p.razonSocial;
+                    long temp = Convert.ToInt64(row["Id"].ToString());
+
+                    try
+                    {
+                        row["PlanDeCuentas"] = contPlanCuentas.obtenerCuentaContableCompra(temp).Cuentas_Contables.Codigo + " - " + contPlanCuentas.obtenerCuentaContableCompra(temp).Cuentas_Contables.Descripcion;
+                    }
+                    catch { };
                 }   
 
 
@@ -299,20 +322,23 @@ namespace Gestion_Web.Formularios.Compras
 
                 foreach (DataRow row in dtItems.Rows)
                 {
-                    ProveedorArticulo codProv = this.contArticulo.obtenerProveedorArticuloByArticulo(Convert.ToInt32(row["Codigo"]));
-
-                    Articulo art = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(Convert.ToInt32(row["Codigo"])));
-
-                    if (art != null)
+                    try
                     {
-                        row["Codigo"] = art.codigo;
+                        ProveedorArticulo codProv = this.contArticulo.obtenerProveedorArticuloByArticulo(Convert.ToInt32(row["Codigo"]));
+
+                        Articulo art = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(Convert.ToInt32(row["Codigo"])));
+
+                        if (art != null)
+                        {
+                            row["Codigo"] = art.codigo;
+                        }
+                        if (codProv != null)
+                        {
+                            row["CodProv"] = codProv.codigoProveedor;
+                        }
                     }
-                    if (codProv != null)
-                    {
-                        row["CodProv"] = codProv.codigoProveedor;
-                    }
+                    catch { }
                 }
-                
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenesCompraR.rdlc");
@@ -394,8 +420,29 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                //DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRango(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
                 DataTable dtImpagas = this.controladorCCP.obtenerMovimientosProveedorRangoDetallado(this.fechaH, this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
+                dtImpagas.Columns.Add("Telefono");
+
+                foreach (DataRow documentoImpago in dtImpagas.Rows)
+                {
+                    if (documentoImpago["documento"].ToString() == "Pago")
+                    {
+                        var pago = this.controladorPagos.obtenerPagoById(Convert.ToInt64(documentoImpago["DocumentoId"]));
+                        if (pago != null)
+                        {
+                            if (pago.Ftp == 0)
+                            {
+                                documentoImpago["documento"] = "Pago FC";
+                            }
+                            if (pago.Ftp == 1)
+                            {
+                                documentoImpago["documento"] = "Pago PRP";
+                            }
+                        }
+                    }
+
+                    ObtenerContactoProveedorDeDocumentoImpago(documentoImpago);
+                }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ImpagasProvR.rdlc");
@@ -530,7 +577,7 @@ namespace Gestion_Web.Formularios.Compras
                 DateTime fdesde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                List<MovimientosCCP> listCuentaProv = this.controladorCCP.obtenerMovimientosProveedor(this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc),fdesde,fhasta);
+                List<MovimientosCCP> listCuentaProv = this.controladorCCP.obtenerMovimientosProveedorByBN(this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc), fdesde, fhasta, Convert.ToInt32(this.tipoDocumento));
                 listCuentaProv = listCuentaProv.OrderBy(x => x.Fecha).ToList();
                 DataTable dtDetalleCuenta = new DataTable();
 
@@ -544,10 +591,26 @@ namespace Gestion_Web.Formularios.Compras
                 decimal saldoAcumulado = 0;
                 foreach (DataRow row in dtDetalleCuenta.Rows)
                 {
-                    if(row["TipoDocumento"].ToString() == "19")
-                        row["Tipo"] = listCuentaProv.Where(x => x.Id == Convert.ToInt32(row["Id"])).FirstOrDefault().Compra.TipoDocumento + " Nº";
+                    string tipoDocumento = " FC ";
+                    int idFact = Convert.ToInt32(row["Id"]);
+                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();                    
+
+                    if (m.Ftp == 1)
+                        tipoDocumento = " PRP ";
+                    if (m.Ftp == 2)
+                        tipoDocumento = " ";
+                    
+                    if (row["TipoDocumento"].ToString() == "19")
+                    {
+                        if (m.Compra.TipoDocumento.ToLower().Contains("credito") || m.Compra.TipoDocumento.ToLower().Contains("crédito"))
+                            tipoDocumento = " NC ";
+
+                        row["Tipo"] =  tipoDocumento + "  Nº";
+                    }
                     if (row["TipoDocumento"].ToString() == "21")
-                        row["Tipo"] = "Pago Nº";
+                    {
+                        row["Tipo"] = tipoDocumento + "Pago Nº";
+                    }
                     if (Convert.ToDecimal(row["Debe"]) > 0)
                     {
                         saldoAcumulado += Convert.ToDecimal(row["Debe"]);                        
@@ -591,7 +654,6 @@ namespace Gestion_Web.Formularios.Compras
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/ms-excel";
                     this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
-                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                     this.Response.BinaryWrite(xlsContent);
 
                     this.Response.End();
@@ -621,6 +683,7 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 controladorCliente cont = new controladorCliente();
+                ControladorPlanCuentas contPlanCtas = new ControladorPlanCuentas();
 
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime Hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));
@@ -633,6 +696,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
                 dtCompras.Columns.Add("razonSocial", typeof(string));
+                dtCompras.Columns.Add("PlanDeCuentas", typeof(string));
 
                 decimal saldoTotal = 0;
 
@@ -653,17 +717,21 @@ namespace Gestion_Web.Formularios.Compras
                         row["Otros"] = Convert.ToDecimal(row["Otros"]) * -1;
                         row["Total"] = Convert.ToDecimal(row["Total"]) * -1;
                     }
+
+                    var cuentaContable = contPlanCtas.obtenerCuentaContableCompra(Convert.ToInt64(row["Id"]));
+
+                    if (cuentaContable != null)
+                        row["PlanDeCuentas"] = cuentaContable.Cuentas_Contables.Codigo + " " + cuentaContable.Cuentas_Contables.Descripcion;
+                    
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
                     row["razonSocial"] = p.razonSocial;
                 }
 
-
-
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleComprasR.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("DatosCompras", dtCompras);
+                ReportDataSource rds = new ReportDataSource("DatosCompras", dtCompras); //guarda el dataset en un datasource para el report viewer
                 ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
@@ -712,7 +780,6 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-
         private void generarReporte8()
         {
             try
@@ -957,7 +1024,6 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-
         private void generarReporte10()
         {
             try
@@ -1065,6 +1131,123 @@ namespace Gestion_Web.Formularios.Compras
 
             }
             catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void generarReporte11()
+        {
+            try
+            {
+                DataTable dtSaldos = this.controladorCCP.obtenerSaldosProveedor(Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), this.proveedor, this.suc, Convert.ToInt32(this.tipoDoc));
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("SaldosProvR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+
+                ReportDataSource rds = new ReportDataSource("DatosSaldos", dtSaldos);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Impagas_Proveedores", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void GenerarReporte12()
+        {
+            try
+            {
+                idOrdenesCompra = idOrdenesCompra.Replace(';', ',');
+
+                var ordenesCompraConsolidadas = contCompraEntity.ObtenerOrdenesDeCompraConsolidado(idOrdenesCompra);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("OrdenesCompraConsolidado.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("dsCompras", ordenesCompraConsolidadas);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+                string mimeType, encoding, fileNameExtension;
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Consolidado Ordenes Compras", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception Ex)
             {
 
             }
@@ -1193,6 +1376,24 @@ namespace Gestion_Web.Formularios.Compras
                 return null;
             }
 
+        }
+        public void ObtenerContactoProveedorDeDocumentoImpago(DataRow filaProveedor)
+        {
+            try
+            {
+                string numerosTelefonicos = string.Empty;
+                
+                List<contacto> contactosCliente = controladorCliente.obtenerContactos(Convert.ToInt32(filaProveedor["id"]));
+                foreach (var contacto in contactosCliente)
+                {
+                    numerosTelefonicos += contacto.numero + " | ";
+                }
+
+                filaProveedor["Telefono"] = numerosTelefonicos.Substring(0,numerosTelefonicos.Length - 2);
+            }
+            catch
+            {
+            }
         }
 
     }

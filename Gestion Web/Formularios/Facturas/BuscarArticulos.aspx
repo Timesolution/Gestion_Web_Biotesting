@@ -49,38 +49,29 @@
 </head>
 <body>
 
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" onkeypress='javascript:return validarEnter(event)'>
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
             </asp:ScriptManager>
-
 
             <div class="container">
                 <div class="navbar navbar-inverse navbar-fixed-top hidden-print">
                     <div class="container">
                         <div class="navbar-header">
-                            <asp:LinkButton runat="server" ID="btnCerrar" class="navbar-toggle" OnClick="btnCerrar_Click" Text="<span class='icon-remove icon-white'></span>" />
-
-
+                            <%--<asp:LinkButton runat="server" ID="btnCerrar" class="navbar-toggle" OnClick="btnCerrar_Click" Text="<span class='icon-remove icon-white'></span>" enabled="false"/>--%>
                             <asp:Label CssClass="navbar-brand" runat="server" ID="LabelInicio" Text="Busqueda"></asp:Label>
                         </div>
-
                     </div>
                 </div>
-
                 <br />
                 <br />
 
                 <div class="col-md-12 col-xs-12 ">
-
                     <div class="widget stacked">
-
                         <div class="widget-header">
                             <i class="icon-wrench"></i>
                             <h3>Herramientas</h3>
                         </div>
-                        <!-- /widget-header -->
-
                         <div class="widget-content">
                             <table style="width: 100%">
                                 <tr>
@@ -88,35 +79,30 @@
                                         <div class="col-md-12">
                                             <div class="imput-group">
                                                 <asp:TextBox ID="txtBuscarArticulos" runat="server" class="form-control" Text=""></asp:TextBox>
-
                                             </div>
                                         </div>
-                                        <!-- /input-group -->
                                     </td>
                                     <td style="width: 20%">
                                         <span class="input-group-btn">
+                                            <%--<button id="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>--%>
                                             <asp:LinkButton ID="lbBuscarArticulos" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscarArticulos_Click">
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
-                                            <%--<button class="btn btn-primary" type="button">Buscar!</button>--%>
                                         </span>
                                     </td>
-
-
                                 </tr>
                             </table>
                         </div>
-                        <!-- /widget-content -->
-
                     </div>
                     <div class="widget widget-table">
-                        <table class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered" id="articulosTabla">
                             <thead>
                                 <tr>
-                                    <th style="width: 20%; text-align: left">Codigo</th>
-                                    <th style="width: 40%; text-align: left">Descripcion</th>
-                                    <th style="width: 15%; text-align: left">Moneda</th>
-                                    <th style="width: 15%; text-align: left">P.Venta</th>
-                                    <th class="td-actions" style="width: 10%"></th>
+                                    <th>Codigo</th>
+                                    <th>Descripcion</th>
+                                    <th>Stock</th>
+                                    <th>Moneda</th>
+                                    <th>Precio</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,88 +110,18 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <%--                    </div>
-                </div>
-            </div>
-        </div>--%>
-
-        <%--        <div class="container">
-            <div class="col-md-12 col-xs-12 ">
-                <div class="widget widget-table">--%>
-
-        <%--                    <div class="widget-header">
-                        <i class="icon-wrench"></i>
-                        <h3>Actualizar Stock
-
-                        </h3>
-                    </div>--%>
-        <%--<div class="widget-content">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <label class="col-md-4">Codigo</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtCodigo" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Sucursal</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtSucursal" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Articulo</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtArticulo" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Stock Actual</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtStockActual" runat="server" class="form-control" Disabled=""></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Agregar</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtAgregarStock" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <asp:Button ID="btn_Agregar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btn_Agregar_Click"/>
-                                </div>
-                            </div>--%>
-        <%--<div class="form-group">
-                                <label class="col-md-4">Recibo</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtRecibo" runat="server" class="form-control"></asp:TextBox>
-                                </div>
-                            </div>--%>
-        <%--                        </div>
+                    <div class="widget-content">
+                        <div style="text-align:right;">
+                            <asp:LinkButton ID="lbtnAgregarArticulosMultiples" runat="server" Visible="false" Text="Agregar" class="btn btn-success" OnClick="lbtnAgregarArticulosMultiples_Click"></asp:LinkButton>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>--%>
-
+        </div>
         <br />
         <div class="row">
         </div>
 
-
-        <%--</ContentTemplate>
-                                <Triggers>
-                      
-                                </Triggers>
-                            </asp:UpdatePanel>--%>
-    </div>
     </form>
 
     <script>
@@ -224,27 +140,52 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44 || key == 45) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
     </script>
 
-    <!-- Page-Level Plugin Scripts - Tables -->
+    <%--<script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
     <script src="../../Scripts/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="../../Scripts/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="../../Scripts/plugins/dataTables/dataTables.bootstrap.js"></script>--%>
 
-    <script>
+    <%--<script>
         $(document).ready(function () {
             $('#dataTables-example').dataTable();
         });
-    </script>
+    </script>--%>
 
     <script type="text/javascript">
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-        function endReq(sender, args) {
-            $('#dataTables-example').dataTable();
+        //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+        //function endReq(sender, args) {
+        //    $('#dataTables-example').dataTable();
+        //}
+
+        function validarEnter(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            if (key == 13) {
+                var btnBuscarArticulo = document.getElementById("lbBuscarArticulos");
+                btnBuscarArticulo.click();
+                return false;
+            }
+            return true;
         }
     </script>
 

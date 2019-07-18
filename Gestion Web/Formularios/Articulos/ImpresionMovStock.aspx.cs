@@ -32,7 +32,7 @@ namespace Gestion_Web.Formularios.Articulos
         private int tipofiltro;
         private int grupo;
         private int subgrupo;
-        private int dias;        
+        private int dias;
         private int proveedor;
         private int diasCero;
 
@@ -46,6 +46,10 @@ namespace Gestion_Web.Formularios.Articulos
         private int movStock;
         int marca;
         string descSubGrupo;
+        int categoria;
+
+        private int artInactivos;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -71,13 +75,15 @@ namespace Gestion_Web.Formularios.Articulos
                     this.movStock = Convert.ToInt32(Request.QueryString["movStk"]);
                     this.marca = Convert.ToInt32(Request.QueryString["m"]);
                     this.descSubGrupo = Request.QueryString["dsg"];
+                    this.categoria = Convert.ToInt32(Request.QueryString["c"]);
 
                     //listado stock unico en una suc
                     this.sucCentral = Convert.ToInt32(Request.QueryString["sCentral"]);
                     this.sucCompara = Convert.ToInt32(Request.QueryString["sCompara"]);
 
-
                     this.listas = Request.QueryString["listas"];
+
+                    this.artInactivos = Convert.ToInt32(Request.QueryString["ai"]);
 
                     if (accion == 1)
                     {
@@ -109,9 +115,13 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         generarReporte7();//Movimiento stock de sucursal
                     }
-                    if(accion == 8)
+                    if (accion == 8)
                     {
                         generarReporte8();//Ingresos egresos por articulo
+                    }
+                    if (accion == 9)
+                    {
+                        generarReporte9();//Nomina de Articulos
                     }
                 }
             }
@@ -126,9 +136,10 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                DateTime fechaHasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59).AddSeconds(59);
                 Articulo articulo = this.controlador.obtenerArticuloId(this.idArticulo);
-                DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.suc));
-                DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.suc));
+                DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), fechaHasta, Convert.ToInt32(this.suc));
+                DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), fechaHasta, Convert.ToInt32(this.suc));
                 DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(this.idArticulo.ToString(), Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.suc));
 
                 dt.Merge(dt2);
@@ -141,14 +152,14 @@ namespace Gestion_Web.Formularios.Articulos
                 foreach (DataRow dr in dt.Rows)
                 {
                     CantidadAux = Convert.ToDecimal(dr["Cantidad"]);
-                    
+
                     if (dr["Tipo"].ToString() == "Ingreso")
                     {
                         dr["Numero"] = "Remito " + dr["Numero"].ToString();
                     }
                     if (dr["Tipo"].ToString() == "Inventario")
                     {
-                        dr["Numero"] = "Correcion stock " + dr["Numero"].ToString().PadLeft(4,'0');
+                        dr["Numero"] = "Correcion stock " + dr["Numero"].ToString().PadLeft(4, '0');
                     }
                     //si es nota de credito cambio cantidad y ingreso
                     if (dr["Numero"].ToString().Contains("Credito"))
@@ -157,7 +168,7 @@ namespace Gestion_Web.Formularios.Articulos
                         dr["Cantidad"] = CantidadAux;
                         dr["Tipo"] = "Ingreso";
                     }
-                    
+
                     Cantidad += CantidadAux;
                 }
 
@@ -167,7 +178,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ReportDataSource rds = new ReportDataSource("MovStock", dt);
 
                 ReportParameter param = new ReportParameter("ParamCantidad", Cantidad.ToString());
-                ReportParameter param2 = new ReportParameter("ParamArticulo", articulo.codigo+", "+articulo.descripcion);
+                ReportParameter param2 = new ReportParameter("ParamArticulo", articulo.codigo + ", " + articulo.descripcion);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
 
@@ -252,7 +263,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ReportDataSource rds = new ReportDataSource("DatosStock", dt);
 
                 ReportParameter param = new ReportParameter("ParamSucursal", s.nombre);
-                ReportParameter param2 = new ReportParameter("ParamFecha", this.fechaH);                
+                ReportParameter param2 = new ReportParameter("ParamFecha", this.fechaH);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
 
@@ -276,7 +287,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.Response.Clear();
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/ms-excel";
-                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);                    
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
                     this.Response.BinaryWrite(xlsContent);
 
                     this.Response.End();
@@ -295,7 +306,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                     this.Response.End();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -313,11 +324,11 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (this.costoValorizado == 1)
                 {
-                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoR.rdlc");
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoImponibleR.rdlc");
                 }
                 else
                 {
-                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoImponibleR.rdlc");
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockValorizadoR.rdlc");
                 }
 
                 ReportDataSource rds = new ReportDataSource("DatosValorizado", dtStockValorizado);
@@ -325,7 +336,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ReportViewer1.LocalReport.DataSources.Clear();
 
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                
+
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -375,7 +386,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 controladorListaPrecio contListas = new controladorListaPrecio();
                 DataTable dt = new DataTable();
-                string listasElegidas = this.listas.Remove(listas.Length-1);
+                string listasElegidas = this.listas.Remove(listas.Length - 1);
                 string[] l = listasElegidas.Split(',');
 
                 string nombresListas = "";
@@ -398,7 +409,7 @@ namespace Gestion_Web.Formularios.Articulos
                     nombresucursal = s.nombre;
                 }
 
-                dt = this.controlador.obtenerStockArticulosAPedir(this.fechaD, this.fechaH, listasElegidas, this.proveedor, this.suc, this.dias, this.grupo, this.subgrupo);
+                dt = this.controlador.obtenerStockArticulosAPedir(this.fechaD, this.fechaH, listasElegidas, this.proveedor, this.suc, this.dias, this.grupo, this.subgrupo, this.categoria);
 
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -554,11 +565,12 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
         private void generarReporte6()
         {
             try
             {
-                DataTable dt = this.controlador.obtenerStockUnicoSucursalCompara(this.sucCentral,this.sucCompara);
+                DataTable dt = this.controlador.obtenerStockUnicoSucursalCompara(this.sucCentral, this.sucCompara);
                 Sucursal central = this.contSucursal.obtenerSucursalID(this.sucCentral);
                 Sucursal compara = this.contSucursal.obtenerSucursalID(this.sucCompara);
 
@@ -586,7 +598,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //get xls content
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
-                    String filename = string.Format("{0}.{1}", "Stock_Unico","xls");
+                    String filename = string.Format("{0}.{1}", "Stock_Unico", "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;
@@ -616,6 +628,7 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
         private void generarReporte7()
         {
             try
@@ -636,7 +649,7 @@ namespace Gestion_Web.Formularios.Articulos
                     DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(this.idArticulo.ToString(), desde, hasta, this.suc);
                     dt.Merge(dt2);
                     dt.Merge(dt3);
-                }                
+                }
 
                 dt.DefaultView.Sort = "Fecha";
                 dt = dt.DefaultView.ToTable();
@@ -789,10 +802,67 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        private decimal obtnerStock(string art,string fechaH,int suc)
+        private void generarReporte9()
         {
             try
-            {   
+            {
+                DataTable dt = this.controlador.obtenerNominaDeArticulos(artInactivos);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("NominaArticulosR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("NominaArticulos", dt);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Nomina_Articulos", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al generar reporte de nomina de articulos. Error: " + ex.Message);
+            }
+        }
+
+        private decimal obtnerStock(string art, string fechaH, int suc)
+        {
+            try
+            {
                 DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(art, Convert.ToDateTime("01/01/2000", new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
                 DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(art, Convert.ToDateTime("01/01/2000", new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
                 DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(art, Convert.ToDateTime("01/01/2000", new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);

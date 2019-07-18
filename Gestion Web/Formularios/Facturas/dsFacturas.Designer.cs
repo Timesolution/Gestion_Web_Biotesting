@@ -483,6 +483,8 @@ namespace Gestion_Web.Formularios.Facturas {
             
             private global::System.Data.DataColumn columnTotalTasaMunicipal;
             
+            private global::System.Data.DataColumn columnCostoSinIva;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DetalleFacturasDataTable() {
@@ -774,6 +776,14 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CostoSinIvaColumn {
+                get {
+                    return this.columnCostoSinIva;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -841,7 +851,8 @@ namespace Gestion_Web.Formularios.Facturas {
                         string TotalTasaHidrica, 
                         string TotalTasaVial, 
                         string ptoVenta, 
-                        string TotalTasaMunicipal) {
+                        string TotalTasaMunicipal, 
+                        string CostoSinIva) {
                 DetalleFacturasRow rowDetalleFacturasRow = ((DetalleFacturasRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         fecha,
@@ -875,7 +886,8 @@ namespace Gestion_Web.Formularios.Facturas {
                         TotalTasaHidrica,
                         TotalTasaVial,
                         ptoVenta,
-                        TotalTasaMunicipal};
+                        TotalTasaMunicipal,
+                        CostoSinIva};
                 rowDetalleFacturasRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDetalleFacturasRow);
                 return rowDetalleFacturasRow;
@@ -930,6 +942,7 @@ namespace Gestion_Web.Formularios.Facturas {
                 this.columnTotalTasaVial = base.Columns["TotalTasaVial"];
                 this.columnptoVenta = base.Columns["ptoVenta"];
                 this.columnTotalTasaMunicipal = base.Columns["TotalTasaMunicipal"];
+                this.columnCostoSinIva = base.Columns["CostoSinIva"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -999,6 +1012,8 @@ namespace Gestion_Web.Formularios.Facturas {
                 base.Columns.Add(this.columnptoVenta);
                 this.columnTotalTasaMunicipal = new global::System.Data.DataColumn("TotalTasaMunicipal", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTotalTasaMunicipal);
+                this.columnCostoSinIva = new global::System.Data.DataColumn("CostoSinIva", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCostoSinIva);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2865,6 +2880,22 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CostoSinIva {
+                get {
+                    try {
+                        return ((string)(this[this.tableDetalleFacturas.CostoSinIvaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CostoSinIva\' in table \'DetalleFacturas\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDetalleFacturas.CostoSinIvaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsfechaNull() {
                 return this.IsNull(this.tableDetalleFacturas.fechaColumn);
             }
@@ -3245,6 +3276,18 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetTotalTasaMunicipalNull() {
                 this[this.tableDetalleFacturas.TotalTasaMunicipalColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCostoSinIvaNull() {
+                return this.IsNull(this.tableDetalleFacturas.CostoSinIvaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCostoSinIvaNull() {
+                this[this.tableDetalleFacturas.CostoSinIvaColumn] = global::System.Convert.DBNull;
             }
         }
         

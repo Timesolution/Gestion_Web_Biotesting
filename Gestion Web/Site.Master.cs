@@ -61,21 +61,29 @@ namespace Gestion_Web
 
         protected void master_Page_PreLoad(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            try
             {
-                // Establecer token Anti-XSRF
-                ViewState[AntiXsrfTokenKey] = Page.ViewStateUserKey;
-                ViewState[AntiXsrfUserNameKey] = Context.User.Identity.Name ?? String.Empty;
-            }
-            else
-            {
-                // Validar el token Anti-XSRF
-                if ((string)ViewState[AntiXsrfTokenKey] != _antiXsrfTokenValue
-                    || (string)ViewState[AntiXsrfUserNameKey] != (Context.User.Identity.Name ?? String.Empty))
+                if (!IsPostBack)
                 {
-                    throw new InvalidOperationException("Error de validación del token Anti-XSRF.");
+                    // Establecer token Anti-XSRF
+                    ViewState[AntiXsrfTokenKey] = Page.ViewStateUserKey;
+                    ViewState[AntiXsrfUserNameKey] = Context.User.Identity.Name ?? String.Empty;
+                }
+                else
+                {
+                    // Validar el token Anti-XSRF
+                    if ((string)ViewState[AntiXsrfTokenKey] != _antiXsrfTokenValue
+                        || (string)ViewState[AntiXsrfUserNameKey] != (Context.User.Identity.Name ?? String.Empty))
+                    {
+                        throw new InvalidOperationException("Error de validación del token Anti-XSRF.");
+                    }
                 }
             }
+            catch
+            {
+                Response.Redirect("/Account/Login.aspx?cerrar=si");
+            }
+            
              
         }
 
@@ -91,7 +99,11 @@ namespace Gestion_Web
                     this.Label2.Text = s.nombre;
                     this.Label3.Text = Session["Login_NombrePerfil"] as string;
                     this.cargarIniciales();
-
+                }
+                System.Uri asd = Request.Url;// poner .contains = mi formulario
+                if (asd.AbsolutePath.Contains("ABMFacturasImagenes.aspx"))
+                {
+                    phMenuCompleto.Visible = false;
                 }
             }
             catch { }
@@ -119,6 +131,13 @@ namespace Gestion_Web
                 {
                     this.phCombustible.Visible = true;
                 }
+
+                string facturarImagenes = WebConfigurationManager.AppSettings.Get("FacturarImagenes");
+                if (facturarImagenes == "1" && !String.IsNullOrEmpty(facturarImagenes))
+                {
+                    this.phImagenes.Visible = true;
+                }
+
                 //tapice
                 string tapice = WebConfigurationManager.AppSettings.Get("Tapice");
                
@@ -128,6 +147,14 @@ namespace Gestion_Web
                     this.phTapice.Visible = true;
                 }
 
+                //Orden Reparacion
+                string ordenReparacion = WebConfigurationManager.AppSettings.Get("OrdenReparacion");
+
+                if (ordenReparacion == "1" && !String.IsNullOrEmpty(ordenReparacion))
+                {
+                    this.phOrdenReparacion.Visible = true;
+                    this.phServicioTecnico.Visible = true;
+                }
 
                 string millas = WebConfigurationManager.AppSettings.Get("Millas");
                 if (!String.IsNullOrEmpty(millas))
@@ -148,8 +175,21 @@ namespace Gestion_Web
                             }
                         }
                     }
-                    
                 }
+
+                Configuracion configuracion = new Configuracion();
+
+                if(configuracion.MercaderiaEnTransito == "0")                
+                    phAceptarMercaderia.Visible = false;
+
+                //ImportarListasDePrecios
+                string ImportarListasDePrecios = WebConfigurationManager.AppSettings.Get("ImportarListasDePrecios");
+
+                if (ImportarListasDePrecios == "1" && !String.IsNullOrEmpty(ImportarListasDePrecios))
+                {
+                    this.phImportarListaDePrecio.Visible = true;
+                }
+
             }
             catch
             { }

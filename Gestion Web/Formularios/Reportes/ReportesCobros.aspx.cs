@@ -466,7 +466,7 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
-        private void enviarAvisoSaldoCtaCte()
+        private void enviarAvisoSaldoCtaCte()//TODO fun de envio sms
         {
             try
             {
@@ -598,29 +598,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                //DataTable dtDatos = new DataTable();
-                //dtDatos.Columns.Add("id");
-                //dtDatos.Columns.Add("nombre");
-                //dtDatos.Columns.Add("importeAcumulado");
-
-                //foreach (var control in this.phTopClientes.Controls)
-                //{
-                //    DataRow drDatos = dtDatos.NewRow();
-                //    TableRow tr = control as TableRow;
-
-                //    drDatos[0] = 1;
-                //    drDatos[1] = tr.Cells[0].Text;
-                //    drDatos[2] = tr.Cells[1].Text;
-                //    dtDatos.Rows.Add(drDatos);
-
-                //}
-                //Session.Add("datosMov", dtDatos);
-                //Session.Add("saldoMov", lblDocumentosImpagos.Text);
-
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?Cobro=" + 0 + "&valor=3', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?Cobro=" + 0 + "&valor=3&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&suc=" + DropListSucursal.SelectedValue + "&cli=" + DropListClientes.SelectedValue + "&ven=" + DropListVendedores.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&vencida=" + this.ListEstado.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-
-
             }
             catch (Exception ex)
             {
@@ -637,7 +615,6 @@ namespace Gestion_Web.Formularios.Reportes
                     fechaD = txtFechaDesde.Text;
                     fechaH = txtFechaHasta.Text;
                 }
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?Cobro=" + 0 + "&valor=5', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&vencida=" + this.ListEstado.SelectedValue + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=5");
             }
             catch
@@ -655,14 +632,12 @@ namespace Gestion_Web.Formularios.Reportes
                     fechaD = txtFechaDesde.Text;
                     fechaH = txtFechaHasta.Text;
                 }
-                //Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&Cobro=" + 0 + "&valor=4");
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=4', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {
 
             }
-
         }
 
         protected void lbtnExportar2_Click(object sender, EventArgs e)
@@ -754,7 +729,6 @@ namespace Gestion_Web.Formularios.Reportes
                     fechaD = txtFechaDesde.Text;
                     fechaH = txtFechaHasta.Text;
                 }
-                //Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&Cobro=" + 0 + "&valor=4");
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=9', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
@@ -762,9 +736,6 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
-
-
-        #endregion
 
         protected void btnExpImpagasVendedor_Click(object sender, EventArgs e)
         {
@@ -775,7 +746,6 @@ namespace Gestion_Web.Formularios.Reportes
                     fechaD = txtFechaDesde.Text;
                     fechaH = txtFechaHasta.Text;
                 }
-                //Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&Cobro=" + 0 + "&valor=4");
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?ex=1&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=9', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
@@ -783,5 +753,43 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
+
+        protected void lbtnImprimirDetalleNotaDebito_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fechaD == null && fechaH == null)
+                {
+                    fechaD = txtFechaDesde.Text;
+                    fechaH = txtFechaHasta.Text;
+                }
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=4&nd=1', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnExportarImpagasDetallado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fechaD == null && fechaH == null)
+                {
+                    fechaD = txtFechaDesde.Text;
+                    fechaH = txtFechaHasta.Text;
+                }
+                Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&ven=" + this.idVendedor + "&t=" + this.tipo + "&Cobro=" + 0 + "&valor=4&ex=1");
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en lbtnExportarImpagasDetallado_Click. Ex: " + ex.Message));
+            }
+        }
+
+        #endregion
+
+
     }
 }

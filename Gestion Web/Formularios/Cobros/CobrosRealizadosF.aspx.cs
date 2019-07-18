@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -164,7 +165,7 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     int idVendedor = (int)Session["Login_Vendedor"];
                     dt = contCliente.obtenerClientesByVendedorDT(idVendedor);
-                    
+
                     DataRow dr = dt.NewRow();
                     dr["alias"] = "Seleccione...";
                     dr["id"] = -1;
@@ -185,7 +186,7 @@ namespace Gestion_Web.Formularios.Cobros
                     dt.Rows.InsertAt(dr2, 1);
                 }
 
-                
+
 
                 this.DropListClientes.DataSource = dt;
                 this.DropListClientes.DataValueField = "id";
@@ -214,7 +215,7 @@ namespace Gestion_Web.Formularios.Cobros
                     this.fechaH = this.txtFechaHasta.Text;
                     //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                     //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
-                    List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(fechaD,fechaH,idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal,idTipo,this.vendedor);
+                    List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
                     foreach (Movimiento_Cobro m in Movimiento)
@@ -231,7 +232,7 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(idCliente));
                     //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
-                    List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, puntoVenta, idEmpresa, idSucursal, idTipo,this.vendedor);
+                    List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, puntoVenta, idEmpresa, idSucursal, idTipo, this.vendedor);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
                     foreach (Movimiento_Cobro m in Movimiento)
@@ -254,7 +255,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                string label = fechaD + ","  + fechaH + ",";
+                string label = fechaD + "," + fechaH + ",";
                 if (idCliente > 0)
                 {
                     label += DropListClientes.Items.FindByValue(idCliente.ToString()).Text + ",";
@@ -455,9 +456,9 @@ namespace Gestion_Web.Formularios.Cobros
                 btnDetalles.CssClass = "btn btn-info ui-tooltip";
                 btnDetalles.Attributes.Add("data-toggle", "tooltip");
                 btnDetalles.Attributes.Add("title data-original-title", "Detalles");
+                btnDetalles.Attributes.Add("name", "btnNombre");
                 btnDetalles.ID = "btnSelec_" + movV.id_doc;
                 btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
-                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
                 btnDetalles.Click += new EventHandler(this.detalleCobro);
                 celAccion.Controls.Add(btnDetalles);
 
@@ -471,18 +472,12 @@ namespace Gestion_Web.Formularios.Cobros
                 btnEliminar.Attributes.Add("data-toggle", "modal");
                 btnEliminar.Attributes.Add("href", "#modalConfirmacion");
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                //btnEliminar.Font.Size = 9;
-                //btnEliminar.Click += new EventHandler(this.eliminarCobro);
-                //btnEliminar.Attributes.Add("onclientclick", "abrirdialog("+ movV.id +")");
                 btnEliminar.OnClientClick = "abrirdialog(" + movV.id + ");";
-                //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
                 celAccion.Controls.Add(btnEliminar);
                 celAccion.Width = Unit.Percentage(10);
                 tr.Cells.Add(celAccion);
 
                 phCobrosRealizados.Controls.Add(tr);
-                //ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "alert", m.mensajeGrowlSucces("Exito", "Articulos agregado con exito"), true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Exito", "Articulos agregado con exito"));
             }
             catch (Exception ex)
             {
@@ -529,7 +524,7 @@ namespace Gestion_Web.Formularios.Cobros
                 string[] atributos = idBoton.Split('_');
                 string idCobro = atributos[1];
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idCobro + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                
+
             }
             catch (Exception ex)
             {
@@ -547,7 +542,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 string[] atributos = idBoton.Split('_');
                 string idCobro = atributos[1];
-                
+
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "document.getElementById('abreDialog').click();", true);
 
             }
@@ -572,7 +567,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 //int i = this.contCobranza.ProcesoEliminarCobro(idMovimiento);
                 int i = this.contCobranza.ProcesoEliminarCobroCompensacion(idMovimiento);
-                if(i > 0)
+                if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Recibo de Cobro. id mov: " + idMovimiento);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Cobro eliminado con exito", "CobrosRealizadosF.aspx"));
@@ -645,13 +640,13 @@ namespace Gestion_Web.Formularios.Cobros
                 Session.Add("saldoRc", labelSaldo.Text);
 
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=6&fd="+this.fechaD+"&fh="+this.fechaH+"&cli="+this.idCliente+"&suc="+this.idSucursal+"&pv="+this.puntoVenta+"&e="+this.idEmpresa+"&t="+this.idTipo+"', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                Response.Redirect("ImpresionCobro.aspx?valor=6&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);                
+                Response.Redirect("ImpresionCobro.aspx?valor=6&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);
             }
             catch (Exception ex)
             {
-                
+
             }
-            
+
         }
         private int verificarCierreCaja(int idMov)
         {
@@ -696,7 +691,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                
+
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "','_blank');", true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
@@ -715,17 +710,20 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     TableRow tr = C as TableRow;
                     LinkButton lbtn = tr.Cells[5].Controls[0] as LinkButton;
-                    listaCobros += lbtn.ID.Split('_')[1] + ";";
+                    listaCobros += lbtn.ID.Split('_')[1] + ",";
                 }
+
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
-                    Response.Redirect("ImpresionCobro.aspx?valor=10&ex=1&lc=" + listaCobros);
+                    Response.Cookies["listaReporteDetalleCobros"].Value = listaCobros;
+                    Response.Cookies["listaReporteDetalleCobros"].Expires = DateTime.Now.AddMinutes(10);
+                    Response.Redirect("ImpresionCobro.aspx?valor=10&ex=1");
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Debe filtrar por algún movimiento!" + "\", {type: \"error\"});", true);
                 }
-                    
+
             }
             catch (Exception Ex)
             {
@@ -737,16 +735,16 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                string listaCobros = string.Empty;
-                foreach (Control C in phCobrosRealizados.Controls)
+                string listaCobros = String.Empty;
+                if (!String.IsNullOrWhiteSpace(txtIDsCobros.Text))
                 {
-                    TableRow tr = C as TableRow;
-                    LinkButton lbtn = tr.Cells[5].Controls[0] as LinkButton;
-                    listaCobros += lbtn.ID.Split('_')[1] + ";";
+                    listaCobros = txtIDsCobros.Text;
                 }
+
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=10&lc=" + listaCobros + "','_blank');", true);
+                    Session.Add("listaReporteDetalleCobros", listaCobros);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=10','_blank');", true);
                 }
                 else
                 {
@@ -758,5 +756,6 @@ namespace Gestion_Web.Formularios.Cobros
 
             }
         }
+
     }
 }

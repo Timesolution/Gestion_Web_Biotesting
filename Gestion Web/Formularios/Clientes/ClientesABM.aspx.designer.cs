@@ -121,6 +121,15 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkOrdenesCompra;
         
         /// <summary>
+        /// linkCodigoBTB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor linkCodigoBTB;
+        
+        /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
         /// <remarks>
@@ -1426,6 +1435,24 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.DropDownList ListRequiereAnticipoOC;
         
         /// <summary>
+        /// txtFormaDePago_OC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFormaDePago_OC;
+        
+        /// <summary>
+        /// RequiredFieldValidator41 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator41;
+        
+        /// <summary>
         /// lbtnAgregarProveedorOC control.
         /// </summary>
         /// <remarks>
@@ -1433,6 +1460,42 @@ namespace Gestion_Web.Formularios.Clientes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarProveedorOC;
+        
+        /// <summary>
+        /// txtCodigoBTB1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCodigoBTB1;
+        
+        /// <summary>
+        /// phCodigoBTB2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCodigoBTB2;
+        
+        /// <summary>
+        /// txtCodigoBTB2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCodigoBTB2;
+        
+        /// <summary>
+        /// lbtnCodigoBTB control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnCodigoBTB;
         
         /// <summary>
         /// txtTipoCliente2 control.

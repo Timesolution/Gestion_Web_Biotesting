@@ -1277,7 +1277,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int okNroCheque = contCobranza.validarChequeManualExiste(this.txtNumeroCh.Text, Convert.ToInt32(DropListBancoCh.SelectedValue), this.txtCuentaCh.Text);
                 if (okNroCheque <= 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El nro de cheque ya fue ingresado previamente!."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"El nro de cheque ya fue ingresado previamente! \", {type: \"error\"});", true);
                     return;
                 }
                 if (contCobranza.validateCuit(this.txtCuitCh.Text))//&& 
@@ -1978,15 +1978,17 @@ namespace Gestion_Web.Formularios.Facturas
 
                                 //Verifico si hay que liquidar pagarés. Si no hay que liquidar, el entero es = 0
                                 int l = this.liquidarPagares(i);
-
+                               
+                                int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
+                                
                                 if (l > 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se liquidaron correctamente los pagarés en el cobro \", {type: \"info\"}); location.href = '../Valores/PagaresF.aspx';", true);
                                 if (l < 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudieron liquidar los pagarés en el cobro. \", {type: \"alert\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
 
-
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
-
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
+                                mostrarMensaje(c, cobro.id,i);
                             }
                             else
                             {
@@ -2017,6 +2019,37 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error generando cobro. " + ex.Message), true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("No se pudo agregar cobro  " + ex.Message));
             }
+        }
+
+        /*smsCobro devuelve > que 0 si pudo enviar el mensaje y 
+         * procesaCobro devuelve > 0 tambien si pudo realizar correctamente el cobro
+         * cobro es el numero id del cobro realizado
+         * */
+        private void mostrarMensaje(int smsCorrecto,int idCobro, int cobroCorrecto)
+        {
+            try
+            {
+                if (cobroCorrecto > 0)//si pudo realizarse el pago
+                {
+                    if (smsCorrecto > 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se ha enviado correctamente el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx';", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Ocurrió un error enviando el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx';", true);
+                    }
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro no realizado. \", {type: \"info\"})');location.href = 'CobranzaF.aspx';", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Ocurrio un error en la funcion: mostrarMensaje. Ex: "+ex.Message+" \");", true);
+            }
+            
         }
 
         private void hacerCobroPagoCuenta()
@@ -2110,9 +2143,10 @@ namespace Gestion_Web.Formularios.Facturas
                                 this.btnNuevo.Visible = true;
                                 this.btnFinalizarPago.Visible = false;
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Genero el Recibo de Cobro N°" + this.txtNumeroCobro.Text);
-                                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
 
+                                int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                                this.mostrarMensaje(c, cobro.id, i);
                             }
                             else
                             {
@@ -2173,7 +2207,6 @@ namespace Gestion_Web.Formularios.Facturas
             catch(Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error actualizando totales. " + ex.Message));
-
             }
         }
 
@@ -2317,6 +2350,11 @@ namespace Gestion_Web.Formularios.Facturas
                 
         protected void txtCuentaCh_Disposed(object sender, EventArgs e)
         {
+            obtenerCuitYCuenta();
+        }
+
+        protected void obtenerCuitYCuenta()
+        {
             try
             {
                 if (this.DropListBancoCh.SelectedValue != "-1")
@@ -2331,14 +2369,13 @@ namespace Gestion_Web.Formularios.Facturas
                             this.txtCuitCh.Text = chq.cuit;
                             this.txtLibradorCh.Text = chq.librador;
                         }
-
                     }
                 }
                 //this.txtCuitCh.Focus();
             }
-            catch
+            catch(Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error en obtenerCuitYCuenta. " + ex.Message));
             }
         }
 
@@ -2422,11 +2459,12 @@ namespace Gestion_Web.Formularios.Facturas
                     List<Banco> listBcos = this.contCobranza.obtenerBancosList();
                     var bco = listBcos.Where(x => x.codigo == Convert.ToInt32(codBanco).ToString()).FirstOrDefault();
                     this.DropListBancoCh.SelectedValue = bco.id.ToString();
+                    obtenerCuitYCuenta();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error en txtCodBarraCh_TextChanged. " + ex.Message));
             }
         }
 

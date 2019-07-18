@@ -5,8 +5,10 @@ using Gestor_Solution.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -39,6 +41,8 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         grupo sg = this.controlador.obtenerGrupoID(this.idGrupo);
                         txtGrupo.Text = sg.descripcion;
+                        //carga la imagen
+                        cargarImagenGrupo(idGrupo.ToString());
                     }
                 }
             }
@@ -127,6 +131,7 @@ namespace Gestion_Web.Formularios.Articulos
                 tr.Cells.Add(celDescripcion);
 
                 TableCell celAction = new TableCell();
+
                 LinkButton btnEditar = new LinkButton();
                 btnEditar.ID = sg.id.ToString();
                 btnEditar.CssClass = "btn btn-info ui-tooltip";
@@ -154,10 +159,37 @@ namespace Gestion_Web.Formularios.Articulos
                 btnEliminar.OnClientClick = "abrirdialog(" + sg.id + ");";
                 //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
                 celAction.Controls.Add(btnEliminar);
-                celAction.Width = Unit.Percentage(10);
                 celAction.VerticalAlign = VerticalAlign.Middle;
                 celAction.HorizontalAlign = HorizontalAlign.Center;
                 tr.Cells.Add(celAction);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAction.Controls.Add(l2);
+
+                LinkButton btnImagen = new LinkButton();
+                btnImagen.ID = "btnImagen_" + sg.id;
+                btnImagen.CssClass = "btn btn-info ui-tooltip";
+                btnImagen.Attributes.Add("data-toggle", "tooltip");
+                btnImagen.Text = "<span class='shortcut-icon icon-picture'></span>";
+                btnImagen.Click += new EventHandler(this.abrirModalImagen);
+                celAction.Controls.Add(btnImagen);
+                celAction.Width = Unit.Percentage(20);
+                celAction.VerticalAlign = VerticalAlign.Middle;
+                celAction.HorizontalAlign = HorizontalAlign.Center;
+                tr.Cells.Add(celAction);
+
+                //LinkButton btnImagen = new LinkButton();
+                //btnImagen.ID = "btnImagen_" + sg.id;
+                //btnImagen.CssClass = "btn btn-info";
+                //btnImagen.Attributes.Add("data-toggle", "modal");
+                //btnImagen.Text = "<span class='shortcut-icon icon-picture'></span>";
+                //btnImagen.Click += new EventHandler(this.abrirModalImagen);
+                //celAction.Controls.Add(btnImagen);
+                //celAction.Width = Unit.Percentage(20);
+                //celAction.VerticalAlign = VerticalAlign.Middle;
+                //celAction.HorizontalAlign = HorizontalAlign.Center;
+                //tr.Cells.Add(celAction);
 
                 phGruposArticulos.Controls.Add(tr);
 
@@ -253,7 +285,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-
         protected void btnSi_Click(object sender, EventArgs e)
         {
             try
@@ -279,6 +310,152 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error al eliminar Grupo. " + ex.Message));
             }
+        }
+
+        protected void lbtnAgregarImagen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.subirImagen1();
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+
+        public void subirImagen1()
+        {
+            if (IsPostBack)
+            {
+                Boolean fileOK = false;
+                String tipoExt = "";
+                String path = Server.MapPath("../../images/Grupos/" + Convert.ToInt32(this.lblIdGrupo.Text) + "/");
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension = System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".jpg", ".png", "jpeg" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                            tipoExt = fileExtension;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    try
+                    {
+                        //creo el directorio si no existe y subo la foto
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            f.Delete();
+                        }
+                        //guardo nombre archivo
+                        string imagen = FileUpload1.FileName;
+
+                        //lo subo
+                        FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
+                        string fechaHoy = DateTime.Now.ToString("ddMMyy_hhmmss");
+                        this.modificarNombre(FileUpload1.FileName, this.lblIdGrupo.Text + fechaHoy + tipoExt);
+
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Imagen agregada con exito ", null));
+                        Response.Redirect("ABMGruposArticulos.aspx?valor=2&id=" + this.lblIdGrupo.Text);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error actualizando imagen " + ex.Message));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El archivo debe ser JPG o PNG "));
+                }
+            }
+            else
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe ingresar el Codigo de Articulo para poder Subir Imagenes"));
+            }
+        }
+
+        private string modificarNombre(string pathFile, string id)
+        {
+            try
+            {
+                string imagenCodigo = Server.MapPath("../../images/Grupos/" + id + "//") + id + ".jpg";
+                File.Copy(pathFile, imagenCodigo, true);
+                File.Delete(pathFile);
+                return imagenCodigo;
+            }
+            catch (Exception ex)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertBox", "alert('Error cambiando nombre de Imagen. " + ex.Message + " ');", true);
+                return String.Empty;
+            }
+        }
+
+        private void cargarImagenGrupo(string idGrupo)
+        {
+            try
+            {
+                string[] imagenes = Directory.GetFiles(Server.MapPath("../../images/Grupos/" + idGrupo + "/"));
+                TableRow tr = new TableRow();
+                //limpio el placeholder
+                this.phImagenGrupo.Controls.Clear();
+                FileInfo fi = new FileInfo(imagenes[0]);
+                if (fi == null) {
+                    phImagenGrupo.Visible = false;
+                    return;
+                }
+                TableCell celImagen = new TableCell();
+                Label gallery = new Label();
+                gallery.Text += @"<li>";
+                gallery.Text += @"<a href=../../images/Grupos/" + idGrupo + "/" + fi.Name + " class=\"ui-lightbox\" >";
+                gallery.Text += "<img height=\"100\" width = \"100\" src=\"/images/Grupos/" + idGrupo + "/" + fi.Name + "\" alt=\"\" />";
+                gallery.Text += @"</a>";
+                gallery.Text += @"<a href=../../images/Grupos/" + idGrupo + "/" + fi.Name + " class=\"preview\"></a>";
+                gallery.Text += @" </li>";
+                gallery.Text += "<br/>";
+                celImagen.Controls.Add(gallery);
+                tr.Cells.Add(celImagen);
+                phImagenGrupo.Controls.Add(tr);
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void abrirModalImagen(object sender, EventArgs e)
+        {
+            try
+            {
+                string id = (sender as LinkButton).ID;
+                var grupo = id.Split('_');
+                string idGrupo = grupo[1];
+
+                this.lblIdGrupo.Text = idGrupo;
+                ScriptManager.RegisterStartupScript(updatePanelAgregarImagen, updatePanelAgregarImagen.GetType(), "openModalImagen", "openModalImagen();", true);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

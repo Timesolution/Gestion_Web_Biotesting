@@ -10,6 +10,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -28,17 +29,16 @@ namespace Gestion_Web.Formularios.Reportes
         private int idGrupo;
         private int idArticulo;
         private int estado;
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-
                 this.idGrupo = Convert.ToInt32(Request.QueryString["g"]);
                 this.idSucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
                 this.estado = Convert.ToInt32(Request.QueryString["e"]);
-
+                this.mostrarWidgetCantidadRegistros();
                 this.VerificarLogin();
 
                 if (!IsPostBack)
@@ -53,10 +53,10 @@ namespace Gestion_Web.Formularios.Reportes
                 {
                     this.cargarCamposGrupo();
                     this.CargarItems();
-                }  
-                    
+                }
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
@@ -85,7 +85,6 @@ namespace Gestion_Web.Formularios.Reportes
                 Response.Redirect("../../Account/Login.aspx");
             }
         }
-
         private int verificarAcceso()
         {
             try
@@ -112,7 +111,6 @@ namespace Gestion_Web.Formularios.Reportes
                         }
                     }
                 }
-
                 return 0;
             }
             catch
@@ -137,7 +135,7 @@ namespace Gestion_Web.Formularios.Reportes
             {
                 ViewState["dtItems"] = value;
             }
-        }    
+        }
         public void cargarSucursal()
         {
             try
@@ -163,7 +161,6 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListSucursal.DataBind();
 
                 this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
-
             }
             catch (Exception ex)
             {
@@ -174,7 +171,6 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-
                 DataTable dt = this.contArticulos.obtenerGruposArticulos();
 
                 //agrego todos
@@ -188,9 +184,6 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListGrupo.DataTextField = "descripcion";
 
                 this.DropListGrupo.DataBind();
-
-
-
             }
             catch (Exception ex)
             {
@@ -204,28 +197,24 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListArticulos.Items.Clear();
                 if (Convert.ToInt32(this.DropListGrupo.SelectedValue) > 0)
                 {
-                    int grupo = Convert.ToInt32(this.DropListGrupo.SelectedValue) ;
-                    List<Articulo> lstArticulos = this.contArticulos.filtrarArticulosGrupoSubGrupo(grupo,0,0,"",0,"");
-                    
-                    ListItem todos = new ListItem("Todos","-1");
+                    int grupo = Convert.ToInt32(this.DropListGrupo.SelectedValue);
+                    List<Articulo> lstArticulos = this.contArticulos.filtrarArticulosGrupoSubGrupo(grupo, 0, 0, "", 0, "");
+
+                    ListItem todos = new ListItem("Todos", "-1");
                     DropListArticulos.Items.Add(todos);
 
                     foreach (Articulo art in lstArticulos)
-                    {                        
+                    {
                         ListItem item = new ListItem(art.descripcion, art.id.ToString());
                         DropListArticulos.Items.Add(item);
                     }
-
-                    
                 }
-
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos a la lista. " + ex.Message));
             }
         }
-
         private void cargarLabel()
         {
             try
@@ -263,7 +252,23 @@ namespace Gestion_Web.Formularios.Reportes
 
             }
         }
+        private void mostrarWidgetCantidadRegistros()
+        {
+            try
+            {
+                string formaFacturar = WebConfigurationManager.AppSettings.Get("FormularioFC");
+                if (formaFacturar == "2")
+                {
+                    this.phCantidadDeRegistros.Visible = true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
         #endregion
+
         private void cargarCamposGrupo()
         {
             try
@@ -275,16 +280,15 @@ namespace Gestion_Web.Formularios.Reportes
                     TableHeaderCell th = new TableHeaderCell();
                     th.Text = campos.nombre;
                     phTabla.Controls.Add(th);
-
                 }
                 this.CrearTablaItems(lstCampos);
-
             }
             catch (Exception ex)
             {
 
             }
         }
+
         private void CrearTablaItems(List<Trazabilidad_Campos> campos)
         {
             try
@@ -311,15 +315,21 @@ namespace Gestion_Web.Formularios.Reportes
             try
             {
                 this.phTrazabilidad.Controls.Clear();
-                DataTable dt = this.contCompra.obtenerTrazabilidadItemByArticuloGrupo(this.idGrupo,this.idArticulo, this.idSucursal,this.estado);
+                DataTable dt = this.contCompra.obtenerTrazabilidadItemByArticuloGrupo(this.idGrupo, this.idArticulo, this.idSucursal, this.estado);
                 int pos = 0;
                 int columnas = 0;
                 TableRow tr = new TableRow();
                 string idTrazas = "";
+                decimal cantTotalRegistros = 0;
+                decimal cantTotales = 0;
+                Configuracion configuracion = new Configuracion();
+                string nombreColumna = contArticulos.obtenerNombreDeLaColumnaSeleccionadaUnidadDeMedida(configuracion, idGrupo);
+                lbNombreColumnaTrazaUnidadMedida.Text = "Total " + nombreColumna;
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    //this.cargarEnPH(row, pos);                    
+
+                    cantTotales = contArticulos.cargarCantidadesDeRegistrosParaWidget(row, columnas, cantTotales, configuracion.ColumnaUnidadMedidaEnTrazabilidad);
                     if (columnas == 0)
                     {
                         tr = new TableRow();
@@ -365,10 +375,14 @@ namespace Gestion_Web.Formularios.Reportes
                         {
                             celEstado.Text = "TOMADA PEDIDO";
                         }
+                        if (row["estado"].ToString() == "4")
+                        {
+                            celEstado.Text = "DEVUELTO";
+                        }
                         tr.Cells.Add(celEstado);
 
                         TableCell celSucursal = new TableCell();
-                        celSucursal.Text = row["sucursal"].ToString();                        
+                        celSucursal.Text = row["sucursal"].ToString();
                         tr.Cells.Add(celSucursal);
 
                         TableCell celAccion = new TableCell();
@@ -386,7 +400,7 @@ namespace Gestion_Web.Formularios.Reportes
 
                         LinkButton btnEditar = new LinkButton();
                         btnEditar.CssClass = "btn btn-info";
-                        btnEditar.ID = "btnEditar_" + row["idArticulo"].ToString()+ "_" + row["traza"].ToString() + "_" + row["id"].ToString();
+                        btnEditar.ID = "btnEditar_" + row["idArticulo"].ToString() + "_" + row["traza"].ToString() + "_" + row["id"].ToString();
                         btnEditar.Text = "<span class='shortcut-icon icon-edit'></span>";
                         btnEditar.Click += new EventHandler(this.EditarTraza);
                         celAccion.Controls.Add(btnEditar);
@@ -399,9 +413,11 @@ namespace Gestion_Web.Formularios.Reportes
                         idTrazas = "";
                         phTrazabilidad.Controls.Add(tr);
 
+                        cantTotalRegistros++;
                     }
                 }
-
+                lbCantidadRegistros.Text = cantTotalRegistros.ToString();
+                lbCantidadTotal.Text = decimal.Round(cantTotales, 2).ToString();
             }
             catch (Exception ex)
             {
@@ -418,11 +434,11 @@ namespace Gestion_Web.Formularios.Reportes
                 string traza = codigo[2];
                 string art = codigo[1];
 
-                Response.Redirect("TrazabilidadABM.aspx?t=" + traza + "&g=" + this.idGrupo + "&a=" + art +"&s="+this.idSucursal);
+                Response.Redirect("TrazabilidadABM.aspx?t=" + traza + "&g=" + this.idGrupo + "&a=" + art + "&s=" + this.idSucursal);
 
             }
             catch (Exception ex)
-            {                
+            {
             }
         }
 
@@ -447,7 +463,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                Response.Redirect("ReportesTrazabilidad.aspx?g=" + this.DropListGrupo.SelectedValue + "&s=" + this.DropListSucursal.SelectedValue + "&art=" + this.DropListArticulos.SelectedValue + "&e="+this.DropListEstado.SelectedValue);
+                Response.Redirect("ReportesTrazabilidad.aspx?g=" + this.DropListGrupo.SelectedValue + "&s=" + this.DropListSucursal.SelectedValue + "&art=" + this.DropListArticulos.SelectedValue + "&e=" + this.DropListEstado.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -490,9 +506,9 @@ namespace Gestion_Web.Formularios.Reportes
 
         protected void lbtnImprimir_Click(object sender, EventArgs e)
         {
-            Response.Redirect("ImpresionReporte.aspx?valor=8&g="+this.idGrupo+"&a="+this.idArticulo+"&s="+this.idSucursal+"&es="+this.estado);
+            Response.Redirect("ImpresionReporte.aspx?valor=8&g=" + this.idGrupo + "&a=" + this.idArticulo + "&s=" + this.idSucursal + "&es=" + this.estado);
         }
 
-        
+
     }
 }

@@ -39,7 +39,7 @@
                         <div class="bs-example">
                             <ul id="myTab" class="nav nav-tabs">
                                 <li class="active"><a href="#home" data-toggle="tab">Cierre</a></li>
-                                <li><a href="#mercaderia" data-toggle="tab">Mercaderia</a></li>
+                                <%--<li><a href="#mercaderia" data-toggle="tab">Mercaderia</a></li>--%>
                                 <li><a href="#turnos" data-toggle="tab">Cierre Turno</a></li>
                             </ul>
                             <div class="tab-content">

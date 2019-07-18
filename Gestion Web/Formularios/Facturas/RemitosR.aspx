@@ -9,8 +9,8 @@
             <div class="col-md-12 col-xs-12 hidden-print">
                 <div class="widget stacked">
 
-                    <div class="stat">                        
-                        <h5><i class="icon-map-marker"></i> Ventas > Remitos</h5>
+                    <div class="stat">
+                        <h5><i class="icon-map-marker"></i>Ventas > Remitos</h5>
                     </div>
 
                     <div class="widget-header">
@@ -47,27 +47,27 @@
                                     </div>
                                 </td>--%>
                                 <td style="width: 2%">
-                                <div class="btn-group pull-right" style="width: 100%">
-                                    <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
-                                        <i class="shortcut-icon icon-print"></i>&nbsp
+                                    <div class="btn-group pull-right" style="width: 100%">
+                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
+                                            <i class="shortcut-icon icon-print"></i>&nbsp
                                        
                                         <asp:Literal ID="Literal1" runat="server"></asp:Literal>
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
-                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Todo</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <asp:LinkButton ID="lbtnImprimirTodo" runat="server" OnClick="lbtnImprimirTodo_Click">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
+                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Todo</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <asp:LinkButton ID="lbtnImprimirTodo" runat="server" OnClick="lbtnImprimirTodo_Click">
                                                         <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                         &nbsp Imprimir
-                                                    </asp:LinkButton>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
+                                                        </asp:LinkButton>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
@@ -133,8 +133,7 @@
                                     </a>
                                                 </div>
                                         </td>--%>
-                                
-                            </tr>                            
+                            </tr>
                         </table>
                     </div>
                     <!-- /widget-content -->
@@ -143,22 +142,22 @@
                 <!-- /widget -->
             </div>
             <div class="col-md-12">
-            <div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <asp:PlaceHolder ID="phSaldo" runat="server" Visible="true">
-                        <div id="big_stats" class="cf">
-                            <div class="stat">
-                                <h4>Saldo</h4>
-                                <asp:Label ID="lblSaldo" runat="server" Text="" class="value" Visible="false"></asp:Label>
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <asp:PlaceHolder ID="phSaldo" runat="server" Visible="true">
+                            <div id="big_stats" class="cf">
+                                <div class="stat">
+                                    <h4>Saldo</h4>
+                                    <asp:Label ID="lblSaldo" runat="server" Text="" class="value" Visible="false"></asp:Label>
+                                </div>
+                                <!-- .stat -->
                             </div>
-                            <!-- .stat -->
-                        </div>
-                    </asp:PlaceHolder>
+                        </asp:PlaceHolder>
+                    </div>
+                    <!-- /widget-content -->
                 </div>
-                <!-- /widget-content -->
+                <!-- /widget -->
             </div>
-            <!-- /widget -->
-        </div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget widget-table">
 
@@ -431,41 +430,71 @@
                         <h4 class="modal-title">Busqueda</h4>
                     </div>
                     <div class="modal-body">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <label class="col-md-4">Desde</label>
-                                <div class="col-md-4">
+                        <asp:UpdatePanel runat="server" ID="asdasd">
+                            <ContentTemplate>
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-md-4">Desde</label>
+                                        <div class="col-md-4">
 
-                                    <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
 
-                                    <!-- /input-group -->
-                                </div>
-                                <div class="col-md-4">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Hasta</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
-                                </div>
-                                <div class="col-md-4">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                </div>
-                                <!-- /input-group -->
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Hasta</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <!-- /input-group -->
 
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4">Sucursal</label>
-                                <div class="col-md-6">
-                                    <asp:DropDownList ID="DropListSucursal" runat="server" class="form-control"></asp:DropDownList>
-                                    <!-- /input-group -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListSucursal" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cod Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Mostrar remitos sin facturas asociadas </label>
+                                        <div class="col-md-6">
+                                            <asp:CheckBox ID="chkRemSinFacturas" runat="server" />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                </div>
-                            </div>
-                        </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+
                     </div>
 
 
@@ -558,10 +587,10 @@
 
             $(function () {
                 $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                                        });
+            });
 
-                                        $(function () {
-                                            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
 
         </script>

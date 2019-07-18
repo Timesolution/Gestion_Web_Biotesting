@@ -3,8 +3,11 @@ using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -13,21 +16,28 @@ namespace Gestion_Web.Formularios.Facturas
     public partial class BuscarArticulos : System.Web.UI.Page
     {
         private controladorArticulo controlador = new controladorArticulo();
+        private ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
         private Mensajes m = new Mensajes();
-        private int accion;
+        private static int accion = 0;
+        private static int idSucursal = 0;
         private string buscarText;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                this.accion = Convert.ToInt32(Request.QueryString["accion"]);
-                this.buscarText = Request.QueryString["b"];
-                
-                this.txtBuscarArticulos.Focus();
+                accion = Convert.ToInt32(Request.QueryString["accion"]);
+                buscarText = Request.QueryString["b"];
+                idSucursal = Convert.ToInt32(Request.QueryString["suc"]);
 
-                this.buscar();
+                txtBuscarArticulos.Focus();                   
+                    
+                Buscar();                              
 
-                this.Form.DefaultButton = lbBuscarArticulos.UniqueID;
+                Form.DefaultButton = lbBuscarArticulos.UniqueID;
+
+                if (accion == 1)
+                    lbtnAgregarArticulosMultiples.Visible = true;
             }
             catch (Exception ex)
             {
@@ -36,7 +46,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarArticulos()
+        private void CargarArticulos()
         {
             try
             {
@@ -44,66 +54,6 @@ namespace Gestion_Web.Formularios.Facturas
                 List<Articulo> articulos = new List<Articulo>();
                 articulos = this.controlador.obtenerArticulosReduc();
                 this.cargarArticulosTabla(articulos);
-                //Table table = new Table();
-                //table.CssClass = "table table-striped table-bordered";
-                //table.Width = Unit.Percentage(100);
-
-                ////para cargar el articulo
-                //int i = 0;
-
-                //foreach (Articulo art in articulos)
-                //{
-                //    //Celdas
-                //    TableCell celCodigo = new TableCell();
-                //    celCodigo.Text = art.codigo;
-                //    celCodigo.Width = Unit.Percentage(15);
-                //    celCodigo.VerticalAlign = VerticalAlign.Middle;
-
-                //    TableCell celDescripcion = new TableCell();
-                //    celDescripcion.Text = art.descripcion;
-                //    celDescripcion.Width = Unit.Percentage(40);
-                //    celDescripcion.VerticalAlign = VerticalAlign.Middle;
-
-                //    TableCell celMoneda = new TableCell();
-                //    celMoneda.Text = art.monedaVenta.moneda;
-                //    celMoneda.Width = Unit.Percentage(15);
-                //    celMoneda.VerticalAlign = VerticalAlign.Middle;
-                //    celMoneda.HorizontalAlign = HorizontalAlign.Right;
-
-                //    TableCell celPrecio = new TableCell();
-                //    celPrecio.Text = "$" + art.precioVenta.ToString();
-                //    celPrecio.Width = Unit.Percentage(20);
-                //    celPrecio.VerticalAlign = VerticalAlign.Middle;
-
-                //    LinkButton btnDetails = new LinkButton();
-                //    TableCell celAction = new TableCell();
-                //    btnDetails.ID = art.codigo.ToString();
-                //    btnDetails.CssClass = "btn btn-info";
-                //    btnDetails.Text = "<span class='shortcut-icon icon-ok'></span>";
-                //    //btnDetails.Height = Unit.Pixel(30);
-                //    btnDetails.Font.Size = 9;
-                //    btnDetails.Click += new EventHandler(this.RedireccionarArticulos);
-                //    celAction.Controls.Add(btnDetails);
-                //    celAction.Width = Unit.Percentage(10);
-                //    celAction.VerticalAlign = VerticalAlign.Middle;
-
-
-                //    TableRow tr = new TableRow();
-                //    tr.ID = art.id + "1";
-
-                //    //arego fila a tabla
-
-                //    tr.Cells.Add(celCodigo);
-                //    tr.Cells.Add(celDescripcion);
-                //    tr.Cells.Add(celMoneda);
-                //    tr.Cells.Add(celPrecio);
-                //    tr.Cells.Add(celAction);
-
-                //    table.Controls.Add(tr);
-
-                //}
-                ////agrego la tabla al placeholder
-                //this.phArticulos.Controls.Add(table);
             }
             catch (Exception ex)
             {
@@ -120,18 +70,12 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //vacio place holder
-                this.phArticulos.Controls.Clear();
-
-                Table table = new Table();
-                table.CssClass = "table table-striped table-bordered";
-                //table.Width = Unit.Percentage(100);
-
-                //para cargar el cliente
-                int i = 0;
-
                 foreach (Articulo art in articulos)
                 {
+                    if (art.apareceLista == 0)
+                    {
+                        continue;
+                    }
 
                     //Celdas
                     TableCell celCodigo = new TableCell();
@@ -146,6 +90,10 @@ namespace Gestion_Web.Formularios.Facturas
                     celDescripcion.VerticalAlign = VerticalAlign.Middle;
                     celDescripcion.HorizontalAlign = HorizontalAlign.Left;
 
+                    TableCell celStock = new TableCell();
+                    celStock.Text = this.obtenerStockArticuloBySucursal(art.codigo).ToString();//traer el stock de ese articulo en esa sucursal
+                    celStock.VerticalAlign = VerticalAlign.Middle;
+                    celStock.HorizontalAlign = HorizontalAlign.Right;
 
                     TableCell celMoneda = new TableCell();
                     celMoneda.Text = art.monedaVenta.moneda;
@@ -162,57 +110,99 @@ namespace Gestion_Web.Formularios.Facturas
                     LinkButton btnDetails = new LinkButton();
                     TableCell celAction = new TableCell();
                     btnDetails.ID = "btn_" + art.codigo.ToString();
-                   btnDetails.CssClass = "btn btn-info";
-                   btnDetails.Text = "<span class='shortcut-icon icon-ok'></span>";
-                   //btnDetails.Height = Unit.Pixel(30);
-                   btnDetails.Font.Size = 9;
-                   btnDetails.Click += new EventHandler(this.RedireccionarArticulos);
+                    btnDetails.CssClass = "btn btn-info";
+                    btnDetails.Text = "<span class='shortcut-icon icon-ok'></span>";
+                    //btnDetails.Height = Unit.Pixel(30);
+                    btnDetails.Font.Size = 9;
+                    btnDetails.Click += new EventHandler(this.RedireccionarArticulos);
                     celAction.Controls.Add(btnDetails);
                     //celAction.Width = Unit.Percentage(10);
                     celAction.VerticalAlign = VerticalAlign.Middle;
 
+                    if(accion == 1)
+                    {
+                        Literal l1 = new Literal();
+                        l1.Text = "&nbsp";
+                        celAction.Controls.Add(l1);
+
+                        CheckBox cbSeleccion = new CheckBox();
+                        cbSeleccion.ID = "cbSeleccion_" + art.codigo.ToString();
+                        cbSeleccion.CssClass = "btn btn-info";
+                        cbSeleccion.Font.Size = 1;
+                        celAction.Controls.Add(cbSeleccion);
+                    }                    
 
                     TableRow tr = new TableRow();
-                    tr.ID = "TR_" + art.id + "1";
+                    //tr.ID = "TR_" + art.id + "1";
 
-                    if (art.apareceLista == 1)
-                    {
-                        //arego fila a tabla
-                        table.Controls.Add(tr);
-                        tr.Cells.Add(celCodigo);
-                        tr.Cells.Add(celDescripcion);
-                        tr.Cells.Add(celMoneda);
-                        tr.Cells.Add(celPrecio);
-                        tr.Cells.Add(celAction);
-                        //arego fila a tabla
-                        //table.Controls.Add(tr);
-                    }
+                    tr.Cells.Add(celCodigo);
+                    tr.Cells.Add(celDescripcion);
+                    tr.Cells.Add(celStock);
+                    tr.Cells.Add(celMoneda);
+                    tr.Cells.Add(celPrecio);
+                    tr.Cells.Add(celAction);
 
+                    this.phArticulos.Controls.Add(tr);
                 }
                 //agrego la tabla al placeholder
-                this.phArticulos.Controls.Add(table);
+                
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Articulo en la Lista. " + ex.Message));
-
             }
         }
 
-        private void buscar()
+        private decimal obtenerStockArticuloBySucursal(string codigoArticulo)//obtenerStockArticuloBySucursal
         {
             try
             {
+                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+                decimal stock = 0;
+                Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(codigoArticulo);
+                if (artEnt != null)
+                {
+                    int idSuc = idSucursal;
+                    var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, idSuc);
+                    stock = 0;
+
+                    stock = stocks.stock1.Value;
+                    return stock;
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo stock de articulo por sucursal. " + ex.Message));
+            }
+            return 0;
+        }
+
+        private void Buscar()
+        {
+            try
+            {
+                Configuracion configuracion = new Configuracion();
                 List<Articulo> articulos = new List<Articulo>();
                 if (String.IsNullOrEmpty(this.buscarText))
                 {
-                    
                     articulos = this.controlador.obtenerArticulosReduc();
-                    
+                    //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                    if (configuracion.FiltroArticulosSucursal == "1")
+                    {
+                        articulos = this.controlador.obtenerArticulosReduc_Sucursales(idSucursal);
+                    }
                 }
                 else
                 {
-                    articulos = this.controlador.buscarArticuloList(this.buscarText);
+                    //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                    if (configuracion.FiltroArticulosSucursal == "1")
+                    {
+                        articulos = this.controlador.buscarArticuloListReduc_Sucursales(this.buscarText, idSucursal);
+                    }
+                    else
+                    {
+                        articulos = this.controlador.buscarArticuloList(this.buscarText);
+                    }
                 }
                 this.cargarArticulosTabla(articulos);
             }
@@ -226,9 +216,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(!String.IsNullOrEmpty(this.txtBuscarArticulos.Text))
+                if (!String.IsNullOrEmpty(this.txtBuscarArticulos.Text))
                 {
-                    Response.Redirect("BuscarArticulos.aspx?accion="+this.accion + "&b=" + this.txtBuscarArticulos.Text );
+                    Response.Redirect("BuscarArticulos.aspx?accion=" + accion + "&b=" + this.txtBuscarArticulos.Text + "&suc=" + idSucursal);
                 }
             }
             catch (Exception ex)
@@ -237,18 +227,17 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-
         protected void RedireccionarArticulos(object sender, EventArgs e)
         {
             try
             {
                 String id = (sender as LinkButton).ID.ToString().Split('_')[1];
+
                 if (accion == 1)
                 {
                     Session.Add("FacturasABM_ArticuloModal", id);
                     Modal.Close(this, "OK");
                     //Response.Redirect("ABMFacturas.aspx?accion=3&cliente=" + (sender as Button).ID);
-
                 }
                 if (accion == 2)
                 {
@@ -281,13 +270,28 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        protected void btnCerrar_Click(object sender, EventArgs e)
+        protected void lbtnAgregarArticulosMultiples_Click(object sender, EventArgs e)
         {
             try
             {
-                Modal.Close(this, "OK");
+                List<string> idMultiple = new List<string>();
+
+                foreach (Control control in phArticulos.Controls)
+                {
+                    TableRow tr = control as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+
+                    if (ch.Checked == true)
+                        idMultiple.Add(ch.ID.Split('_')[1]);
+                }
+
+                if (accion == 1)
+                {
+                    Session.Add("FacturasABM_ArticuloModalMultiple", idMultiple);
+                    Modal.Close(this, "OK");
+                }
             }
-            catch
+            catch (Exception ex)
             {
 
             }

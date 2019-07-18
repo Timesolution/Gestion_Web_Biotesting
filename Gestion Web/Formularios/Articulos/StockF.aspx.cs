@@ -15,7 +15,7 @@ namespace Gestion_Web.Formularios.Articulos
 {
     public partial class StockF : System.Web.UI.Page
     {
-        controladorArticulo controlador = new controladorArticulo();
+        controladorArticulo contArticulo = new controladorArticulo();
         controladorUsuario contUser = new controladorUsuario();
         controladorSucursal contSucu = new controladorSucursal();
         Mensajes m = new Mensajes();
@@ -160,7 +160,7 @@ namespace Gestion_Web.Formularios.Articulos
                     else
                     {
                         //o si tiene permiso cambio suc                        
-                        string permiso4 = listPermisos.Where(x => x == "75").FirstOrDefault();
+                        string permiso4 = listPermisos.Where(x => x == "153").FirstOrDefault();
                         if (permiso4 != null)
                         {
                             this.lstSucursal.Attributes.Remove("disabled");
@@ -189,7 +189,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int suc = (int)Session["Login_SucUser"];
                 phStock.Controls.Clear();
-                List<Stock> stocks = this.controlador.obtenerStockArticulo(this.idArticulo);
+                List<Stock> stocks = this.contArticulo.obtenerStockArticulo(this.idArticulo);
                 stocks = stocks.OrderBy(x => x.sucursal.nombre).ToList();
                 foreach (Stock s in stocks)
                 {
@@ -204,6 +204,7 @@ namespace Gestion_Web.Formularios.Articulos
                     
                 }
             }
+
             catch
             {
 
@@ -216,7 +217,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 if (this.idArticulo > 0)
                 {
-                    var list = this.controlador.obtenerStockArticulo(this.idArticulo);
+                    var list = this.contArticulo.obtenerStockArticulo(this.idArticulo);
                     decimal total = 0;
 
                     if (list != null)
@@ -254,6 +255,7 @@ namespace Gestion_Web.Formularios.Articulos
                 celStock.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celStock);
 
+                //cargarVisualizacionTablaStock(tr, s);
                 TableCell celAccion = new TableCell();
 
                 LinkButton btnHistorico = new LinkButton();
@@ -297,6 +299,41 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando stock en la lista. " + ex.Message));
             }
         }
+        void cargarVisualizacionTablaStock(TableRow tr, Stock s)//carga las columnas dinamicamente
+        {
+            VisualizacionStock visualizacionStock = new VisualizacionStock();
+            var stockImpPendiente = contArticulo.obtenerStockImportacionesPendientesBySuc(s.articulo.id, s.sucursal.id);//asigna el dato; 
+            var stockRemitoPendiente = contArticulo.obtenerStockRemitosPendientesBySuc(s.articulo.id, s.sucursal.id);//asigna el dato 
+            if (visualizacionStock.columnaImportacionesPendientes == 1)
+            {
+                TableCell celStock = new TableCell();
+                celStock.Text = stockImpPendiente.ToString("N");
+                celStock.VerticalAlign = VerticalAlign.Middle;
+                celStock.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celStock);
+                phImportacionesPendientes.Visible = true;
+            }
+            if (visualizacionStock.columnaRemitosPendientes == 1)
+            {
+                TableCell celStock = new TableCell();
+                celStock.Text = stockRemitoPendiente.ToString("N");
+                celStock.VerticalAlign = VerticalAlign.Middle;
+                celStock.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celStock);
+                phRemitosPendientes.Visible = true;
+            }
+            if (visualizacionStock.columnaStockReal == 1)
+            {
+                TableCell celStock = new TableCell();
+                celStock.Text = (stockImpPendiente + stockRemitoPendiente).ToString("N");
+                celStock.VerticalAlign = VerticalAlign.Middle;
+                celStock.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celStock);
+                phStockReal.Visible = true;
+            }
+
+
+        }
 
         public void cargarSucursal()
         {
@@ -305,12 +342,11 @@ namespace Gestion_Web.Formularios.Articulos
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerSucursales();
 
-                ////agrego Seleccione...
+                //agrego Seleccione...
                 //DataRow dr = dt.NewRow();
                 //dr["nombre"] = "Seleccione...";
                 //dr["id"] = -1;
                 //dt.Rows.InsertAt(dr, 0);
-
 
                 this.lstSucursal.DataSource = dt;
                 this.lstSucursal.DataValueField = "Id";
@@ -337,7 +373,7 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 phStockAgrupado.Controls.Clear();
-                DataTable dt = this.controlador.obtenerStockSucursalesDT(this.idArticulo);
+                DataTable dt = this.contArticulo.obtenerStockSucursalesDT(this.idArticulo);
                 foreach (DataRow dr in dt.Rows)
                 {
                     this.cargarStockSucursal(dr);
@@ -378,16 +414,15 @@ namespace Gestion_Web.Formularios.Articulos
 
         private void cargarMovimientoStock()
         {
-            
             try
             {
                 phMovimientoStock.Controls.Clear();
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23);
 
-                DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(this.idArticulo.ToString(), desde, hasta, this.suc);
-                DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(this.idArticulo.ToString(), desde, hasta, this.suc);
-                DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(this.idArticulo.ToString(), desde, hasta, this.suc);
+                DataTable dt = this.contArticulo.obtenerMovimientoStockArticuloCompra(this.idArticulo.ToString(), desde, hasta, this.suc);
+                DataTable dt2 = this.contArticulo.obtenerMovimientoStockArticuloVenta(this.idArticulo.ToString(), desde, hasta, this.suc);
+                DataTable dt3 = this.contArticulo.obtenerMovimientoStockArticulo(this.idArticulo.ToString(), desde, hasta, this.suc);
                 dt.Merge(dt2);
                 dt.Merge(dt3);
 
@@ -403,8 +438,6 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         cantidad = cantidad * -1;    
                     }
-                    
-
                     this.cargarMovimientoStock(dr, cantidad);
                     saldo += cantidad;
                 }
@@ -478,7 +511,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 if (dr["Tipo"].ToString() == "Egreso")
                 {                     
-                    celDescripcion.Text = dr["Numero"].ToString(); 
+                    celDescripcion.Text = "Remito " + dr["Numero"].ToString(); 
                 }
                 if (dr["Tipo"].ToString().Contains("RemitoCompra") || dr["Tipo"].ToString().Contains("Baja"))
                 {
@@ -577,9 +610,9 @@ namespace Gestion_Web.Formularios.Articulos
                 //DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.lstSucursal.SelectedValue));
                 //DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.lstSucursal.SelectedValue));
                 //DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), Convert.ToInt32(this.lstSucursal.SelectedValue));
-                DataTable dt = this.controlador.obtenerMovimientoStockArticuloCompra(art,ddesde, Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
-                DataTable dt2 = this.controlador.obtenerMovimientoStockArticuloVenta(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
-                DataTable dt3 = this.controlador.obtenerMovimientoStockArticulo(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
+                DataTable dt = this.contArticulo.obtenerMovimientoStockArticuloCompra(art,ddesde, Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
+                DataTable dt2 = this.contArticulo.obtenerMovimientoStockArticuloVenta(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
+                DataTable dt3 = this.contArticulo.obtenerMovimientoStockArticulo(art, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), suc);
                 dt.Merge(dt2);
                 dt.Merge(dt3);
 
@@ -621,13 +654,13 @@ namespace Gestion_Web.Formularios.Articulos
                 int suc = this.suc;//(int)Session["Login_SucUser"];
                 StreamWriter sw = new StreamWriter(Server.MapPath("ArchivoStockHistorico.txt"));
                 //List<Articulo> articulos = this.controlador.buscarArticuloList("%");
-                List<Articulo> articulos = this.controlador.buscarArticuloListReduc("%");
+                List<Articulo> articulos = this.contArticulo.buscarArticuloListReduc("%");
                 Sucursal sucursal = this.contSucu.obtenerSucursalID(suc);
 
                 foreach (var a in articulos)                
                 {
                     //List<Stock> stocks = this.controlador.obtenerStockArticulo(a.id);// obtengo stocks del art en todas las suc
-                    List<Stock> stocks = this.controlador.obtenerStockArticuloReduc(a.id);// obtengo stocks del art en todas las suc
+                    List<Stock> stocks = this.contArticulo.obtenerStockArticuloReduc(a.id);// obtengo stocks del art en todas las suc
                     if (stocks != null && stocks.Count > 0)
                     {
                         Stock s = stocks.Where(x => x.sucursal.id == sucursal.id).FirstOrDefault();//filtro y obtengo id stock en esta suc      
@@ -638,7 +671,7 @@ namespace Gestion_Web.Formularios.Articulos
                             //if (stock > 0)
                             if (stock != s.cantidad)
                             {
-                                this.controlador.ActualizarStock(s.id, stock);//corrigo el stock segun lo que me dio el historico.
+                                this.contArticulo.ActualizarStock(s.id, stock);//corrigo el stock segun lo que me dio el historico.
                                 //string query = "update stock set stock =" + stock + " where Id=" + s.id + " and local=" + suc;//query que ejecuto
                                 //string query = a.codigo + ";" + sucursal.id + ";" + s.cantidad + ";" + stock;
                                 //sw.WriteLine(query);
@@ -685,7 +718,7 @@ namespace Gestion_Web.Formularios.Articulos
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23);
 
-                DataTable dt = this.controlador.obtenerArticulosVentasPF(this.idArticulo, desde, hasta, this.suc);
+                DataTable dt = this.contArticulo.obtenerArticulosVentasPF(this.idArticulo, desde, hasta, this.suc);
                 
                 dt.DefaultView.Sort = "Fecha";
                 dt = dt.DefaultView.ToTable();
@@ -792,7 +825,7 @@ namespace Gestion_Web.Formularios.Articulos
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23);
 
-                DataTable dt = this.controlador.obtenerArticulosComprasPF(this.idArticulo, desde, hasta, this.suc);
+                DataTable dt = this.contArticulo.obtenerArticulosComprasPF(this.idArticulo, desde, hasta, this.suc);
 
                 dt.DefaultView.Sort = "Fecha";
                 dt = dt.DefaultView.ToTable();

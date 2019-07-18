@@ -7,6 +7,7 @@
             <asp:UpdatePanel runat="server" ID="UpdatePanel1">
                 <ContentTemplate>
                     <div class="col-md-12 col-xs-12">
+
                         <div class="widget stacked">
                             <div class="stat">
                                 <h5><i class="icon-map-marker"></i>Compras > Remitos > Trazabilidad</h5>
@@ -32,18 +33,33 @@
                                     </table>
                                 </div>
                             </div>
-                            <!-- /widget-content -->
-
                         </div>
-                        <!-- /widget -->
 
                         <div class="widget stacked">
+
+                            <asp:PlaceHolder ID="phCantidadDeRegistros" runat="server" Visible="false">
+                                <div class="col-md-12">
+                                    <div class="widget big-stats-container stacked">
+                                        <div class="widget-content">
+                                            <div id="big_stats" class="cf">
+
+                                                <div class="stat">
+                                                    <h3><asp:Label runat="server" ID="lbNombreColumnaTrazaUnidadMedida"></asp:Label></h3>
+                                                    <span class="value">
+                                                        <asp:Label runat="server" ID="lbCantidadTotal"></asp:Label>
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:PlaceHolder>
 
                             <div class="widget-header">
                                 <i class="icon-road"></i>
                                 <h3>Trazabilidad</h3>
                             </div>
-                            <!-- /widget-header -->
 
                             <div class="widget-content">
                                 <div id="validation-form" role="form" class="form-horizontal col-md-10">
@@ -61,6 +77,9 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:Button ID="btnCargarPorCantidad" runat="server" Text="Agregar por Cantidad" class="btn btn-success" OnClick="btnCargarPorCantidad_Click" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:Button ID="btnImportarPorCSV" runat="server" Text="Importar por CSV" class="btn btn-success" href="#modalImportarCSV" data-toggle="modal" />
                                             </div>
                                         </div>
                                     </fieldset>
@@ -112,6 +131,33 @@
                 </ContentTemplate>
 
             </asp:UpdatePanel>
+        </div>
+    </div>
+
+    <div id="modalImportarCSV" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Importar CSV</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Always">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label for="validateSelect" class="col-md-2">Archivo:</label>
+                                    <div class="col-md-6">
+                                        <asp:FileUpload ID="FileUpload" runat="server" />
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:Button ID="btnImportarTrazasByExcel" runat="server" Text="Importar" class="btn btn-success" OnClick="btnImportarTrazasByExcel_Click" />
+                </div>
+            </div>
         </div>
     </div>
 

@@ -59,6 +59,8 @@ namespace Gestion_Web.Formularios.Clientes
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
                 string perfil = Session["Login_NombrePerfil"] as string;
 
+                this.verificarPermisos();
+
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
                 if (!IsPostBack)
@@ -99,6 +101,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarEntregas();
                     this.cargarZonas();
                     this.cargarClientesReferir();
+                    this.cargarBTB();
                     //this.cargarTipoContacto();
 
                     this.asignarNombreLabel(accion);
@@ -117,6 +120,7 @@ namespace Gestion_Web.Formularios.Clientes
                         this.linkEntregas.Visible = true;
                         this.linkEventos.Visible = true;
                         this.linkFamilia.Visible = true;
+                        this.linkCodigoBTB.Visible = true;
                         //this.linkEmpleado.Visible = true;
                         //this.linkExportacion.Visible = true;//lo muestro solo si el cliente es iva del exteriros
                     }
@@ -124,11 +128,13 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         this.linkGanancias.Visible = true;
                         this.linkOrdenesCompra.Visible = true;
+                        this.linkCodigoBTB.Visible = true;
+                        this.phCodigoBTB2.Visible = true;
                         this.cargarCuentas();
                         this.cargarGanancias();
                         this.cargarProveedor_OC();
                         this.cargarDatosCuentaProveedor();                        
-                        this.cargarProveedor(this.idCliente);                        
+                        this.cargarProveedor(this.idCliente); 
                     }
                     //si es nuevo genero codigo
                     if (this.accion == 1 || this.accion == 3)
@@ -266,6 +272,35 @@ namespace Gestion_Web.Formularios.Clientes
             catch
             {
 
+            }
+        }
+        private void verificarPermisos()
+        {
+            try
+            {
+                this.verificarPermisoModificarEstadoCliente();
+            }
+            catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en verificarPermisoModificarEstadoCliente. ex: " + ex.Message));
+            }
+        }
+        private void verificarPermisoModificarEstadoCliente()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                string permiso = listPermisos.Where(x => x == "170").FirstOrDefault();
+                if (permiso == null)
+                {
+                    DropListEstado.Enabled = false;
+                    DropListEstado.CssClass = "form-control";
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando verificarPermisoModificarEstadoCliente. Ex: " + ex.Message));
             }
         }
         private void asignarNombreLabel(int accion)
@@ -743,6 +778,22 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        private void cargarBTB()//
+        {
+            try
+            {
+                var btb = contClienteEntity.obtenerCodigoBTBbyIdClienteProveedor(this.idCliente);
+                if (btb != null)
+                {
+                    txtCodigoBTB1.Text = btb.CodigoBTB1;
+                    txtCodigoBTB2.Text = btb.CodigoBTB2;
+                }
+            }
+            catch
+            {
+                
+            }
+        }
         #endregion
 
         #region datos clientes
@@ -2677,7 +2728,6 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando sucursal a lista." + ex.Message));
             }
-
         }
 
         protected void btnQuitarSucursal_Click(object sender, EventArgs e)
@@ -3784,10 +3834,11 @@ namespace Gestion_Web.Formularios.Clientes
                 poc.RequiereAutorizacion = Convert.ToInt32(this.ListRequiereAutorizacionOC.SelectedValue);
                 poc.MontoAutorizacion = Convert.ToDecimal(this.txtMontoAutorizacionOC.Text);
                 poc.RequiereAnticipo = Convert.ToInt32(this.ListRequiereAnticipoOC.SelectedValue);
+                poc.FormaDePago = this.txtFormaDePago_OC.Text;
                 int i = this.contClienteEntity.agregarProveedor_OC(poc);
                 if (i > 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se cargaron los datos para las Ordenes de Compra correctamente."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se cargaron los datos para las Ordenes de Compra correctamente.",null));
                 }
             }
             catch (Exception Ex)
@@ -3807,11 +3858,38 @@ namespace Gestion_Web.Formularios.Clientes
                     this.ListRequiereAutorizacionOC.SelectedValue = poc.RequiereAutorizacion.ToString();
                     this.txtMontoAutorizacionOC.Text = poc.MontoAutorizacion.ToString();
                     this.ListRequiereAnticipoOC.SelectedValue = poc.RequiereAnticipo.ToString();
+                    this.txtFormaDePago_OC.Text = poc.FormaDePago;
                 }
             }
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos para las  Ordenes de Compra de proveedor. Excepción: " + Ex.Message));
+            }
+        }
+        #endregion
+
+        #region codigo BTB
+        protected void lbtnCodigoBTB_Click(object sender, EventArgs e)//Guarda los nuevos valores de BTB
+        {
+            try
+            {
+                Clientes_CodigoBTB cliBTB = new Clientes_CodigoBTB();
+                cliBTB.Cliente = this.idCliente;
+                cliBTB.CodigoBTB1 = this.txtCodigoBTB1.Text.PadLeft(5,'0');
+                cliBTB.CodigoBTB2 = this.txtCodigoBTB2.Text.PadLeft(5, '0');
+                int ok = contClienteEntity.generarCodigoBTB(cliBTB);
+                if(ok >= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Codigo BTB actualizado con exito.",null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando codigo BTB." ));
+                }
+            }
+            catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("SE ha producido un error en ClientesABM. Metodo: lbtnCodigoBTB_Click. Exception: " + ex.Message));
             }
         }
         #endregion

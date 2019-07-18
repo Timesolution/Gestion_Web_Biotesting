@@ -310,13 +310,13 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnNumArt;
         
         /// <summary>
-        /// txtMaxApertura control.
+        /// txtMaxDiasSinAceptarMercaderia control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMaxApertura;
+        protected global::System.Web.UI.WebControls.TextBox txtMaxDiasSinAceptarMercaderia;
         
         /// <summary>
         /// lbtnMaxApertura control.
@@ -463,6 +463,249 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnRefacturarPRP;
         
         /// <summary>
+        /// DropListSucGarantia control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListSucGarantia;
+        
+        /// <summary>
+        /// lbtnSucGarantia control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnSucGarantia;
+        
+        /// <summary>
+        /// DropListSucServiceOficial control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListSucServiceOficial;
+        
+        /// <summary>
+        /// lbtnSucServiceOficial control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnSucServiceOficial;
+        
+        /// <summary>
+        /// DropListEstadoPedidos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListEstadoPedidos;
+        
+        /// <summary>
+        /// lbtnEstadoIniPedidos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEstadoIniPedidos;
+        
+        /// <summary>
+        /// DropListEstadoPendienteRefacturar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListEstadoPendienteRefacturar;
+        
+        /// <summary>
+        /// lbtnEstadoPendienteRefacturar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEstadoPendienteRefacturar;
+        
+        /// <summary>
+        /// txtMinutosLineas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMinutosLineas;
+        
+        /// <summary>
+        /// txtSegundosLineas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSegundosLineas;
+        
+        /// <summary>
+        /// lbtnTiempoLineas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnTiempoLineas;
+        
+        /// <summary>
+        /// DropListVerSaldoClienteObservacionesPRP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListVerSaldoClienteObservacionesPRP;
+        
+        /// <summary>
+        /// lbtnVerSaldoClienteObservacionesPRP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVerSaldoClienteObservacionesPRP;
+        
+        /// <summary>
+        /// DropListIncidenciaObligatoria control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListIncidenciaObligatoria;
+        
+        /// <summary>
+        /// lbtnIncidenciaObligatoria control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnIncidenciaObligatoria;
+        
+        /// <summary>
+        /// DropListMargenObligatorio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListMargenObligatorio;
+        
+        /// <summary>
+        /// lbtnMargenObligatorio control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnMargenObligatorio;
+        
+        /// <summary>
+        /// DropListActualizarCompuestos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListActualizarCompuestos;
+        
+        /// <summary>
+        /// lbtnActualizarCompuestos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarCompuestos;
+        
+        /// <summary>
+        /// DropListFiltroArticulosSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListFiltroArticulosSucursal;
+        
+        /// <summary>
+        /// lbtnFiltroArticulosSucursal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnFiltroArticulosSucursal;
+        
+        /// <summary>
+        /// DropListColumnaUnidadMedidaEnTrazabilidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListColumnaUnidadMedidaEnTrazabilidad;
+        
+        /// <summary>
+        /// lbtnColumnaUnidadMedidaEnTrazabilidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnColumnaUnidadMedidaEnTrazabilidad;
+        
+        /// <summary>
+        /// DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
+        
+        /// <summary>
+        /// lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
+        
+        /// <summary>
+        /// DropListModificarCantidadEnVentaEntreSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListModificarCantidadEnVentaEntreSucursales;
+        
+        /// <summary>
+        /// lbtnModificarCantidadEnVentaEntreSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnModificarCantidadEnVentaEntreSucursales;
+        
+        /// <summary>
         /// lbtnPersonalizar control.
         /// </summary>
         /// <remarks>
@@ -479,6 +722,15 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizarCheques;
+        
+        /// <summary>
+        /// lbtnPersonalizarStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizarStock;
         
         /// <summary>
         /// lbtnModoSeguro control.
@@ -650,5 +902,50 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGuardarPersonalizarCheques;
+        
+        /// <summary>
+        /// UpdatePanelVisualizacionStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanelVisualizacionStock;
+        
+        /// <summary>
+        /// CheckBoxStockRemitosP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockRemitosP;
+        
+        /// <summary>
+        /// CheckBoxStockImportacionesP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockImportacionesP;
+        
+        /// <summary>
+        /// CheckBoxStockReal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockReal;
+        
+        /// <summary>
+        /// lbtnGuardarPersonalizarStock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGuardarPersonalizarStock;
     }
 }

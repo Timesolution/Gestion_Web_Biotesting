@@ -1,5 +1,4 @@
-﻿
-using Disipar.Models;
+﻿using Disipar.Models;
 using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
@@ -15,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -22,7 +22,6 @@ namespace Gestion_Web.Formularios.Facturas
 {
     public partial class ImpresionPresupuesto : System.Web.UI.Page
     {
-        Mensajes m = new Mensajes();
         private int idPresupuesto;
         private int accion;
         private int original;
@@ -33,8 +32,9 @@ namespace Gestion_Web.Formularios.Facturas
         controladorSucursal controlSucursal = new controladorSucursal();
         controladorCobranza contCobranza = new controladorCobranza();
         ControladorPedido contPedidos = new ControladorPedido();
+        controladorFactEntity controladorFactEntity = new controladorFactEntity();
 
-        Configuracion c = new Configuracion();
+        Configuracion configuracion = new Configuracion();
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -49,7 +49,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte2(idPresupuesto);
                     }
-                    //factura a-e
+                    //factura a,e
                     if(accion==1)
                     {
                         this.generarReporte3(idPresupuesto);
@@ -73,7 +73,6 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de Presupuesto. " + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error al mostrar detalle de Presupuesto. " + ex.Message);
             }
         }
@@ -145,7 +144,10 @@ namespace Gestion_Web.Formularios.Facturas
                     DataTable dt = this.contCobranza.obtenerTablaTopClientes(DateTime.Today.ToString("dd/MM/yyyy"), fact.fecha.AddHours(23).ToString("dd/MM/yyyy"), fact.cliente.id, 0, fact.sucursal.id, 1,0);
                     saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
                 }
-                catch { }
+                catch(Exception ex)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en generarReporte2. " + ex.Message);
+                }
 
                 String cotizacionFecha = String.Empty;
 
@@ -327,8 +329,11 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
-                //obtengo detalle de items
-                DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);                
+
+                DataTable dtDatos = new DataTable();
+
+                dtDatos = this.obtenerDTarticulos(dtDatos);
+
                 //datos de encabezado y pie
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
                 //nro remito factura
@@ -374,8 +379,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     sucursalFact = " ";
                 }
-
-
 
                 //datos empresa emisora
                 DataTable dtEmpresa = controlEmpresa.obtenerEmpresaById((int)drDatosFactura["Empresa"]);
@@ -447,6 +450,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //DataTable dtTotal = controlador.obtenerTotalPresupuesto(idPresupuesto);
                 DataTable dtTotales = controlador.obtenerTotalPresupuesto2(idPresupuesto);
+
+                AgregarIvasToTotalesDeFactura(dtTotales,fact);
+
                 DataRow dr = dtTotales.Rows[0];
 
                 //obtengo el saldo de la cuenta corriente del cliente                
@@ -456,7 +462,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
                 }
-                catch { }
+                catch(Exception ex)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error buscando saldoCtaCte. " + ex.Message);
+                }
 
                 //neto no grabado
                 decimal subtotal = Convert.ToDecimal(dr[4]);
@@ -476,6 +485,9 @@ namespace Gestion_Web.Formularios.Facturas
                 //string totalS = Numalet.ToCardinal("18.25");
                 //cant unidades
                 decimal cant = 2;
+                decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
+                decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
+                decimal totalIva27 = Convert.ToDecimal(dr["TotalIva27"]);
 
                 //Total equivalente en dolares
                 controladorMoneda contMoneda = new controladorMoneda();
@@ -526,13 +538,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 //Remito Relacionado
                 Remito remitoFc = this.controlador.obtenerRemitoByFactura(idPresupuesto);
-                if (remitoFc != null)
+                if (remitoFc != null && !string.IsNullOrEmpty(remitoFc.numero))
                 {
                     nroRemito = remitoFc.numero;
                 }
 
                 //Comentario factura
-                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);                
+                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
 
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
@@ -641,8 +653,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter param42 = new ReportParameter("ParamCondicionPago", condicionPago);
 
-                //ReportParameter param16 = new ReportParameter("ParamRazonSoc", nroFactura);
-
+                ReportParameter param43 = new ReportParameter("ParamTotalIva105", totalIva105.ToString("C"));
+                ReportParameter param44 = new ReportParameter("ParamTotalIva21", totalIva21.ToString("C"));
+                ReportParameter param45 = new ReportParameter("ParamTotalIva27", totalIva27.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -695,6 +708,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param41);
                 this.ReportViewer1.LocalReport.SetParameters(param42);
 
+                this.ReportViewer1.LocalReport.SetParameters(param43);
+                this.ReportViewer1.LocalReport.SetParameters(param44);
+                this.ReportViewer1.LocalReport.SetParameters(param45);
+
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -720,6 +737,44 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private void AgregarIvasToTotalesDeFactura(DataTable totalesFactura, Factura factura)
+        {
+            try
+            {
+                totalesFactura.Columns.Add("TotalIva105", typeof(decimal));
+                totalesFactura.Columns.Add("TotalIva21", typeof(decimal));
+                totalesFactura.Columns.Add("TotalIva27", typeof(decimal));
+
+                var facturaIvas = controladorFactEntity.obtenerDatosIvasFactura(factura.id);
+
+                if (facturaIvas != null && totalesFactura.Rows.Count > 0)
+                {
+                    var filaTotales = totalesFactura.Rows[0];
+
+                    filaTotales["TotalIva105"] = "0.00";
+                    filaTotales["TotalIva21"] = "0.00";
+                    filaTotales["TotalIva27"] = "0.00";
+
+                    if (facturaIvas.TotalIva105 != null)
+                    {
+                        filaTotales["TotalIva105"] = facturaIvas.TotalIva105;
+                    }
+                    if (facturaIvas.TotalNeto21 != null)
+                    {
+                        filaTotales["TotalIva21"] = facturaIvas.TotalIva21;
+                    }
+                    if (facturaIvas.TotalIva27 != null)
+                    {
+                        filaTotales["TotalIva27"] = facturaIvas.TotalIva27;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Ocurrió un error en AgregarIvasToTotalesDeFactura. Excepción: " + ex.Message);
+            }
+        }
+
         //factura b
         private void generarReporte4(int idFactura)
         {
@@ -727,6 +782,9 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
                 DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
+
+                dtDatos = agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(dtDatos);
+
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
 
                 //nro remito factura
@@ -766,7 +824,7 @@ namespace Gestion_Web.Formularios.Facturas
                 nroFactura = auxNro.Substring(auxNro.Length - 13, 13);
 
                 tipoDoc = auxNro.Substring(0, auxNro.Length - 16);
-                if(c.monotributo == "1")
+                if(configuracion.monotributo == "1")
                 {
                     if(tipoDoc.Contains("Debito"))
                     {
@@ -1100,6 +1158,12 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDetalle = controlador.obtenerDatosRemito(idRemito);
 
                 DataTable dtNroFacturas = controlador.obtenerNroFacturaByRemito(idRemito);
+
+                controladorMoneda contMoneda = new controladorMoneda();
+
+                List<Moneda> dtMonedas = contMoneda.obtenerMonedas();
+
+                decimal euro = 0;
                 int sucursalFacturada = 0;
                 Sucursal sucursalOrigen = new Sucursal();
                 Sucursal sucursalRemitida = new Sucursal();
@@ -1152,6 +1216,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //neto no grabado
                 decimal subtotal = Convert.ToDecimal(dr[4]);
+                decimal neto = Convert.ToDecimal(dr[4]);
 
                 decimal descuento = Convert.ToDecimal(dr[1]);
 
@@ -1210,10 +1275,14 @@ namespace Gestion_Web.Formularios.Facturas
                     var pv = this.controlSucursal.obtenerPuntoVentaPV(r.ptoV.puntoVenta.PadLeft(4, '0'), r.sucursal.id, r.empresa.id);
                     cai = pv.caiRemito;
                     fechaVencCai = pv.caiVencimiento.ToString("dd/MM/yyyy");
+
+                    euro = dtMonedas.Where(x => x.moneda == "Euro").FirstOrDefault().cambio;
                 }
                 catch
-                { }                
+                { }
+
                 
+
                 DataTable dtComentarios = contRemito.obtenerComentarioRemito(idRemito);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -1224,6 +1293,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds3 = new ReportDataSource("DetalleComentarios", dtComentarios);
                 ReportDataSource rds4 = new ReportDataSource("NumerosFacturas", dtNroFacturas);
                 ReportDataSource rds5 = new ReportDataSource("DetalleComentariosFactura", dtComentariosFactura);
+
                 //ReportDataSource rds3 = new ReportDataSource("TotalPresupuesto", dtTotal);
                 ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
@@ -1255,7 +1325,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter param33 = new ReportParameter();
                 //cot
-                if (c.cot == "1")
+                if (configuracion.cot == "1")
                 {
                     try
                     {
@@ -1274,7 +1344,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter param35 = new ReportParameter("CAI", cai);
 
-                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);
+                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);     
+                           
+                ReportParameter param37 = new ReportParameter("Neto", neto.ToString("C"));
+
+                ReportParameter param38 = new ReportParameter("Euro", euro.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -1309,6 +1383,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param34);
                 this.ReportViewer1.LocalReport.SetParameters(param35);
                 this.ReportViewer1.LocalReport.SetParameters(param36);
+                this.ReportViewer1.LocalReport.SetParameters(param37);
+                this.ReportViewer1.LocalReport.SetParameters(param38);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
@@ -1525,6 +1601,66 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private DataTable obtenerDTarticulos(DataTable dataTable)
+        {
+            try
+            {
+                dataTable = this.traerDataTableSiEsModoFacturaUnidadDeMedida(dataTable);
+                dataTable = this.agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(dataTable);
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: obtenerDTarticulos. " + ex.Message);
+                return dataTable;
+            }
+        }
 
+        private DataTable traerDataTableSiEsModoFacturaUnidadDeMedida(DataTable dataTable)
+        {
+            try
+            {
+                string facturaPorUnidadDeMedida = WebConfigurationManager.AppSettings.Get("FormularioFC");
+                if (!string.IsNullOrEmpty(facturaPorUnidadDeMedida) && facturaPorUnidadDeMedida == "2")
+                {
+                    dataTable = controlador.obtenerDatosPresupuestoUnidadDeMedida(idPresupuesto);
+                    return dataTable;
+                }
+                else
+                {
+                    //obtengo detalle de items por defecto
+                    dataTable = controlador.obtenerDatosPresupuesto(idPresupuesto);
+                    return dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: traerDataTableSiEsModoFacturaUnidadDeMedida. " + ex.Message);
+                return null;
+            }
+        }
+
+        private DataTable agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(DataTable tablaArticulos)
+        {
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(this.configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas)
+                    && this.configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas == "1")
+                {
+                    ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
+                    foreach (DataRow row in tablaArticulos.Rows)
+                    {
+                        Gestion_Api.Entitys.articulo articulo = contArticulosEntity.obtenerArticuloEntityByCod(row["Codigo"].ToString());
+                        row["Descripcion"] += " (" + articulo.porcentajeIva.ToString() + ")";
+                    }
+                }
+                return tablaArticulos;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: agregarAlicuotaIVAEnLaDescripcionDeLosArticulos. " + ex.Message);
+                return tablaArticulos;
+            }
+        }       
     }
 }

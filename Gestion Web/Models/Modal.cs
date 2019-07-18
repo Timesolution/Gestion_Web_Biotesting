@@ -13,9 +13,7 @@ public class Modal
 {
     public Modal()
     {
-        //
-        // TODO: Add constructor logic here
-        //
+        
     }
 
     public static void Close(Page page)

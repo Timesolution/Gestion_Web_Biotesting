@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
 
-        <div >
+        <div>
 
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
@@ -32,6 +32,9 @@
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnImprimirEtiquetas" runat="server" OnClick="lbtnImprimirEtiquetas_Click" >Imprimir Etiquetas</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnGenerarCompra" runat="server" OnClick="lbtnGenerarCompra_Click" >Generar Compra</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>

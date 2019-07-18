@@ -329,6 +329,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DatosStockRef</DataSetName>
+        <SortExpressions>
+          <SortExpression>
+            <Value>=Fields!Sucursal.Value</Value>
+          </SortExpression>
+        </SortExpressions>
         <Top>0.52543cm</Top>
         <Left>0.59372cm</Left>
         <Height>1.04125cm</Height>

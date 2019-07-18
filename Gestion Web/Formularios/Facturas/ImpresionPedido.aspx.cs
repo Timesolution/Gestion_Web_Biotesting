@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Facturas
         private int proveedor;
         private int monedaOriginal = 0;
         private long zonaEntrega;
+        private int estadoPedido;
 
         DataTable dtPedidosTemp;
 
@@ -64,6 +65,7 @@ namespace Gestion_Web.Formularios.Facturas
                     idPedidos = Request.QueryString["pedidos"];
                     cotizacion = Convert.ToInt32(Request.QueryString["co"]);
                     zonaEntrega = Convert.ToInt64(Request.QueryString["ze"]);
+                    estadoPedido = Convert.ToInt32(Request.QueryString["ep"]);
 
                     //Obtengo la configuracion para ver los pedidos en moneda original o no.
                     string pmo = WebConfigurationManager.AppSettings.Get("PedidosMonedaOriginal");
@@ -210,6 +212,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorZona controlZona = new controladorZona();
                 controladorCliente controlCliente = new controladorCliente();
                 ControladorEmpresa controlEmpresa = new ControladorEmpresa();
+                Configuracion configuracion = new Configuracion();
 
                 DataTable dtDatos = controlador.obtenerDatosPedido(idPedido);
                 DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
@@ -229,6 +232,18 @@ namespace Gestion_Web.Formularios.Facturas
                         rowDatos["codigoBarra"] = "";
                     }
                 }
+
+                var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                dtDetalle.Columns.Add("TiempoLineasPedido");
+                try
+                {
+                    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * dtDatos.Rows.Count);
+                    dtDetalle.Rows[0]["TiempoLineasPedido"] = tiempoPorLinea.ToString(@"hh\:mm\:ss");
+                }
+                catch { }
+
+
 
                 int suc = Convert.ToInt32(dtDetalle.Rows[0]["Id_suc"]);
 
@@ -446,7 +461,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                DataTable dt = this.controlador.obtenerCantidadArticulosEnPedidos(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente,this.articulo,this.proveedor,this.zonaEntrega);
+                DataTable dt = this.controlador.obtenerCantidadArticulosEnPedidos(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente,this.articulo,this.proveedor,this.zonaEntrega, this.estadoPedido);
 
                 //Sucursal s = this.contSucursal.obtenerSucursalID(this.sucursal);
                 Sucursal s = new Sucursal();
@@ -611,6 +626,9 @@ namespace Gestion_Web.Formularios.Facturas
                 dt.Columns.Add("Codigo");
                 dt.Columns.Add("Descripcion");
                 dt.Columns.Add("Cantidad",typeof(decimal));
+                dt.Columns.Add("Ubicacion");
+                dt.Columns.Add("Pedido");
+                dt.Columns.Add("Stock");
 
                 string[] pedidos = idPedidos.Split(';');
                 foreach (string ped in pedidos)
@@ -623,10 +641,13 @@ namespace Gestion_Web.Formularios.Facturas
                             foreach (var item in p.items)
                             {
                                 DataRow row = dt.NewRow();
-                                //row["Pedido"] = p.numero;
                                 if (!string.IsNullOrEmpty(item.articulo.codigo))
                                 {
                                     row["Codigo"] = item.articulo.codigo;
+                                }
+                                if (!string.IsNullOrEmpty(item.articulo.ubicacion))
+                                {
+                                    row["Ubicacion"] = item.articulo.ubicacion;
                                 }
                                 if (!string.IsNullOrEmpty(item.descripcion))
                                 {
@@ -645,18 +666,11 @@ namespace Gestion_Web.Formularios.Facturas
                                     row["Cantidad"] = item.cantidad;
                                 }
 
+                                row["Pedido"] = p.numero + ", " + p.cliente.razonSocial;
+                                row["Stock"] = this.contArt.obtenerStockTotalArticulo(item.articulo.id).ToString("G");
+
                                 dt.Rows.Add(row);
                             }
-
-                            //dt = dt.AsEnumerable()
-                            //    .GroupBy(x => x.Field<string>("Codigo"))
-                            //        .Select(r =>
-                            //        {
-                            //            var dr = dt.NewRow();
-                            //            dr["Codigo"] = r.Key;
-                            //            dr["Cantidad"] = r.Sum(x => x.Field<decimal>("Cantidad"));
-                            //            return dr;       
-                            //        }).CopyToDataTable();
                         }
                         
                     }
@@ -871,21 +885,27 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDatos = controlador.obtenerDatosPedidoMO(idPedido);
                 DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
                 DataTable dtTotal = controlador.obtenerTotalPedidoMO(idPedido);
+                DataTable dtTotalPesos = controlador.obtenerTotalPedido(idPedido);
 
-                dtDatos.Columns.Add("codigoBarra");
-                Articulo a = new Articulo();
+                dtDatos.Columns.Add("CodigoBarra");
+                dtDatos.Columns.Add("PorcentajeIVA");
+                dtDatos.Columns.Add("TotalSinIVA", typeof(decimal));
                 foreach (DataRow rowDatos in dtDatos.Rows)
                 {
+                    Articulo a = new Articulo();
                     a = this.contArt.obtenerArticuloByID(Convert.ToInt32(rowDatos["Id"]));
+                    rowDatos["CodigoBarra"] = "";
+                    rowDatos["PorcentajeIVA"] = "";
+                    rowDatos["TotalSinIVA"] = rowDatos["Total"];
                     if (a != null)
                     {
-                        rowDatos["codigoBarra"] = a.codigoBarra;
-                    }
-                    else
-                    {
-                        rowDatos["codigoBarra"] = "";
+                        rowDatos["CodigoBarra"] = a.codigoBarra;
+                        rowDatos["PorcentajeIVA"] = a.porcentajeIva;
+                        rowDatos["TotalSinIVA"] = decimal.Round(Convert.ToDecimal(rowDatos["Total"]) / ((a.porcentajeIva / 100) + 1), 2);
                     }
                 }
+
+                decimal tipoDeCambio = ObtenerMontoTipoDeCambioDePedido(dtDatos);
 
                 int suc = Convert.ToInt32(dtDetalle.Rows[0]["Id_suc"]);
 
@@ -950,6 +970,8 @@ namespace Gestion_Web.Formularios.Facturas
                     zona = "-";
                 }
 
+                
+
                 dtDatos = contArtEntity.obtenerPresentacionesArtDT(dtDatos);
                 dtDatos = contArtEntity.obtenerStockArtDT(dtDatos, suc);
 
@@ -972,7 +994,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param7 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
-
+                ReportParameter paramTipoDeCambio = new ReportParameter("ParamTipoDeCambio", tipoDeCambio.ToString());
 
                 string imagen = this.generarCodigo(idPedido);
                 ReportParameter param10 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
@@ -985,11 +1007,13 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds = new ReportDataSource("DatosDetalle", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosPedidoMO", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("TotalPedidoMO", dtTotal);
+                ReportDataSource rds4 = new ReportDataSource("TotalPedidoPesos", dtTotalPesos);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
                 this.ReportViewer1.LocalReport.SetParameters(paramZona);
                 this.ReportViewer1.LocalReport.SetParameters(paramTel);
                 this.ReportViewer1.LocalReport.SetParameters(param1);
@@ -1002,11 +1026,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param8);
                 this.ReportViewer1.LocalReport.SetParameters(param9);
                 this.ReportViewer1.LocalReport.SetParameters(param10);
+                this.ReportViewer1.LocalReport.SetParameters(paramTipoDeCambio);
 
                 //this.ReportViewer1.LocalReport.SetParameters(rpHora);
                 //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
-
 
                 Warning[] warnings;
 
@@ -1029,6 +1053,20 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+        private decimal ObtenerMontoTipoDeCambioDePedido(DataTable dtDatos)
+        {
+            try
+            {
+                decimal monto = Convert.ToDecimal(dtDatos.Rows[0]["CotizacionMO"]); 
+                return monto;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error en fun: ObtenerMontoTipoDeCambioDePedido. " + ex.Message);
+                return 0;
             }
         }
 

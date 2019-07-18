@@ -34,7 +34,7 @@ namespace Gestion_Web.Formularios.Reportes
                 this.sucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.cliente = Convert.ToInt32(Request.QueryString["c"]);
                 this.desde = Request.QueryString["d"];
-                this.hasta = Request.QueryString["h"];                
+                this.hasta = Request.QueryString["h"];
                 this.producto = Request.QueryString["p"];
 
                 if (!IsPostBack)
@@ -50,15 +50,15 @@ namespace Gestion_Web.Formularios.Reportes
                     this.txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
                     this.DropListSucursal.SelectedValue = sucursal.ToString();
-                }                
+                }
 
-                
-                
+
+
                 //cargo el informe
                 if (this.accion == 2 || this.accion == 3)
                 {
                     this.generarInformeCosto();
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -190,7 +190,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                DateTime desde = Convert.ToDateTime(this.desde, new CultureInfo("es-AR"));                
+                DateTime desde = Convert.ToDateTime(this.desde, new CultureInfo("es-AR"));
                 DateTime hasta = Convert.ToDateTime(this.hasta, new CultureInfo("es-AR"));
                 hasta = hasta.AddHours(23).AddMinutes(59).AddSeconds(59);//23:59:59 hs
                 int sucursal = Convert.ToInt32(this.sucursal);
@@ -214,44 +214,46 @@ namespace Gestion_Web.Formularios.Reportes
                     datos = this.cont.Reportes_Rentabilidad_CostosImponibleByDesc(sucursal, this.producto, this.cliente);
                 }
                 else
-                {   
-                    datos =this.cont.Reportes_Rentabilidad_CostosImponible(Desde, Hasta, sucursal,this.cliente);
+                {
+                    datos = this.cont.Reportes_Rentabilidad_CostosImponible(Desde, Hasta, sucursal, this.cliente);
                 }
 
-                decimal costoT = 0;
-                decimal precioT = 0;
+                decimal totalVendidoConIva = 0;
+                decimal costoTotalConIVA = 0;
+                decimal costoTotalSinIVA = 0;
+                decimal totalVendidoSinIVA = 0;
 
                 foreach (DataRow dr in datos.Rows)
                 {
-                    if (Convert.ToDecimal(dr["Costo"]) <= 0)
-                    {
-                        costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(0.01);
-                    }
-                    else
-                    {
-                        costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible"]);
-                    }
-                    //costoT += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo"]);
-                    precioT += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario"]), 4);
+                    costoTotalSinIVA += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible"]);
+                    costoTotalConIVA += Convert.ToDecimal(dr["Cantidad"]) * Convert.ToDecimal(dr["Costo Imponible Con Iva"]);
+                    totalVendidoConIva += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario"]), 4);//es sin iva
+                    totalVendidoSinIVA += Convert.ToDecimal(dr["Cantidad"]) * Decimal.Round(Convert.ToDecimal(dr["Precio Unitario Sin Iva"]), 4);
                 }
 
-                //ganancia
-                decimal ganancia = decimal.Round(precioT - costoT, 4);
-                //porcentaje
-                decimal porGanancia = decimal.Round((((precioT / costoT) - 1) * 100), 4);
+                decimal markUp = decimal.Round(totalVendidoSinIVA - costoTotalSinIVA, 4);
+                decimal porcentajeMarkUp = decimal.Round(((totalVendidoSinIVA / costoTotalSinIVA) - 1) * 100, 4);
 
-                this.labelTotalVendido.Text = "$ " + decimal.Round(precioT, 4).ToString("N");
-                this.labelTotalCosto.Text = "$ " + decimal.Round(costoT, 4).ToString("N");
+                decimal utilidad = decimal.Round(totalVendidoConIva - costoTotalConIVA, 4);
+                decimal porcentajeUtilidad = decimal.Round(((costoTotalConIVA / totalVendidoConIva) - 1) * 100, 4);
 
-                this.labelRentabilidad.Text = "$ " + decimal.Round(ganancia, 4).ToString("N");
-                this.labelPorRentabilidad.Text = decimal.Round(porGanancia, 4).ToString("N") + "%";
+                this.labelTotalVendidoConIva.Text = "$ " + decimal.Round(totalVendidoConIva, 4).ToString("N");
+                this.labelTotalCostoSinIva.Text = "$ " + decimal.Round(costoTotalSinIVA, 4).ToString("N");
+
+                this.labelTotalCostoConIva.Text = "$ " + decimal.Round(costoTotalConIVA, 4).ToString("N");
+
+                this.labelTotalVendidoSinIva.Text = "$ " + decimal.Round(totalVendidoSinIVA, 4).ToString("N");
+
+                this.lblMarkUp.Text = "$ " + decimal.Round(markUp, 4).ToString("N");
+                this.lblPorcentajeMarkUp.Text = decimal.Round(porcentajeMarkUp, 4).ToString("N") + "%";
+
+                this.lblUtilidad.Text = "$ " + decimal.Round(utilidad, 4).ToString("N");
+                this.lblPorcentajeUtilidad.Text = decimal.Round(porcentajeUtilidad * -1, 4).ToString("N") + "%";
 
                 this.GridInforme.DataSource = datos;
-                
-                //sumo saldos
+
                 var sum = datos.Compute("Sum([Rentabilidad Costo])", "");
-                this.labelSaldo.Text = "$ " + decimal.Round(Convert.ToDecimal(sum),2).ToString("N");
-                //GridView2.DataSource = dtVictimario;
+                this.labelSaldo.Text = "$ " + decimal.Round(Convert.ToDecimal(sum), 2).ToString("N");
                 this.GridInforme.DataBind();
             }
             catch (Exception ex)
@@ -327,7 +329,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                string parametros = this.labelPorRentabilidad.Text + ";" + this.labelRentabilidad.Text + ";" + this.labelTotalCosto.Text + ";" + this.labelTotalVendido.Text;
+                string parametros = this.lblPorcentajeMarkUp.Text + ";" + this.lblMarkUp.Text + ";" + this.labelTotalCostoConIva.Text + ";" + this.labelTotalVendidoSinIva.Text;
                 if (this.accion == 2)
                     Response.Redirect("ImpresionRentabilidadD.aspx?a=3&fd=" + this.desde + "&fh=" + this.hasta + "&suc=" + this.sucursal + "&c=" + this.cliente + "&ex=1" + "&p=" + parametros);
 
@@ -348,8 +350,8 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                string parametros = this.labelPorRentabilidad.Text + ";" + this.labelRentabilidad.Text + ";" + this.labelTotalCosto.Text + ";" + this.labelTotalVendido.Text;
-                
+                string parametros = this.lblPorcentajeMarkUp.Text + ";" + this.lblMarkUp.Text + ";" + this.labelTotalCostoConIva.Text + ";" + this.labelTotalVendidoSinIva.Text;
+
                 if (this.accion == 2)
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionRentabilidadD.aspx?a=3&fd=" + this.desde + "&fh=" + this.hasta + "&suc=" + this.sucursal + "&c=" + this.cliente + "&ex=0" + "&p=" + parametros + "','_blank');", true);
 

@@ -22,7 +22,6 @@ namespace Gestion_Web.Formularios.Facturas
         Mensajes m = new Mensajes();
         controladorFacturacion controlador = new controladorFacturacion();
         controladorUsuario contUser = new controladorUsuario();
-        //
         controladorArticulo contArticulo = new controladorArticulo();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
@@ -212,6 +211,10 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if (!listPermisos.Contains("173"))
+                    return 0;
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))

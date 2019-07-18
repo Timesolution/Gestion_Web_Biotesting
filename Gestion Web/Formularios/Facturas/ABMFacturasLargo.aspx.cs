@@ -20,6 +20,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Task_Api;
@@ -40,12 +42,13 @@ namespace Gestion_Web.Formularios.Facturas
         controladorSucursal cs = new controladorSucursal();
         ControladorPedido cp = new ControladorPedido();
         controladorTarjeta ct = new controladorTarjeta();
+        controladorCobranza contCobranza = new controladorCobranza();
         Configuracion configuracion = new Configuracion();
 
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
 
         //factura
-        Factura factura = new Factura();
+        Factura nuevaFactura = new Factura();
         Cliente cliente = new Cliente();
         TipoDocumento tp = new TipoDocumento();
 
@@ -55,7 +58,7 @@ namespace Gestion_Web.Formularios.Facturas
         int idEmpresa;
         int idSucursal;
         int idPtoVentaUser;
-        int idClientePadre;    
+        int idClientePadre;
 
         //flag si cambio la fecha de la factura
         int flag_cambioFecha = 0;
@@ -65,14 +68,29 @@ namespace Gestion_Web.Formularios.Facturas
         DataTable lstPagosTemp;
         DataTable dtTrazasTemp;
 
+        private string _verificarEnvioMercaderiaSiNoHayStockOrNegativo;
+
+        private static bool _agregarArticuloPorDescripcion = false;
+        private static bool _buscarArticuloPorDescripcion = false;
+        private static bool _agregarMultiplesArticulosPorDescripcion = false;
+        private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
+        private static string _codigoArticuloParaAgregar = "";
+
+        static int _idCliente = 0;
+        private static bool _agregarCliente = false;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                                
-                this.VerificarLogin();
-                this.accion = Convert.ToInt32(Request.QueryString["accion"]);
-                this.idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
+                accion = Convert.ToInt32(Request.QueryString["accion"]);
+
+                VerificarLogin();
+                ConfigurarModoCredito();
+                
+                idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
+
+                _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true;  " + btnAgregarRemitir.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 btnAgregarRemitir.Attributes.Add("onclick", " this.disabled = true; " + btnAgregar.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarRemitir, null) + ";");
@@ -91,9 +109,13 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["CobroAnticipo"] = null;
                     Session["PagoCuentaAnticipo"] = null;
                     Session["PagoCuentaAnticipoMutual"] = null;
+                    Session["Factura"] = null;
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
+                    phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
-                    
+
                     //genero la factura de la session
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
@@ -102,15 +124,14 @@ namespace Gestion_Web.Formularios.Facturas
                     lstPagosTemp = new DataTable();
                     this.InicializarListaPagos();
 
-                    dtTrazasTemp = new DataTable();                    
+
+                    dtTrazasTemp = new DataTable();
                     //this.InicializarListaTrazas();
 
                     Factura fac = new Factura();
                     Session.Add("Factura", fac);
 
-                    //cargas iniciales listas
                     this.cargarEmpleados();
-                    //this.cargarTipoFactura();
                     this.cargarVendedor();
                     this.cargarFormaPAgo();
                     this.cargarFormasVenta();
@@ -118,14 +139,14 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarClientes();
                     this.cargarProveedoresCombustible();
                     this.cargarEmpresas();
-                    //this.cargarTarjetas();
                     this.cargarOperadores();
                     this.cargarMutuales();
                     this.ListEmpresa.SelectedValue = this.idEmpresa.ToString();
                     this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));
                     this.ListSucursal.SelectedValue = this.idSucursal.ToString();
-                    this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));                    
-                    
+                    this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+                    this.cargarMonedasModalTarjetas();
+
                     if (accion != 6 && accion != 7 && accion != 9)
                     {
                         //si el usuario tiene pto vta selecciono la del user
@@ -136,23 +157,6 @@ namespace Gestion_Web.Formularios.Facturas
                         //selecciono punto de venta por defecto
                         this.ListPuntoVenta.SelectedIndex = 1;
                     }
-                    
-                    //si es punto fical muesto el boton cierre Z
-                    PuntoVenta pv = this.cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
-                    if (pv.formaFacturar == "Fiscal")
-                    {
-                        this.btnCierreZ.Visible = true;
-                    }
-                    else
-                    {
-                        this.btnCierreZ.Visible = false;
-                    }
-
-                    if (pv.formaFacturar == "Electronica")
-                    {                        
-                        //cargo Paises para exportacion
-                        this.cargarPaisesExportacion();
-                    }                    
 
                     //verifico que no este cerrada la caja para el punto de venta
                     this.verificarCierreCaja();
@@ -160,7 +164,6 @@ namespace Gestion_Web.Formularios.Facturas
                     if (accion != 6 && accion != 7)
                     {
                         this.obtenerNroFacturaInicio();
-                        //Me fijo si hay que cargar un cliente por defecto
                         this.verificarClienteDefecto();
                     }
                     else
@@ -174,29 +177,29 @@ namespace Gestion_Web.Formularios.Facturas
                         int idRemito = Convert.ToInt32(Request.QueryString["id_rem"]);
                         GenerarFacturaRemito(idRemito);
                     }
+                    
                     //vengo desde pedidos y voy a facturar
                     if (this.accion == 5)
                     {
                         string pedidos = Request.QueryString["pedidos"];
                         GenerarFacturaPedido(pedidos);
                     }
+                    
                     //genero nota de creditos desde facturas
                     if (this.accion == 6)
                     {
                         string facturas = Request.QueryString["facturas"];
                         this.GenerarNotaCredito(facturas);
-                        //habilito panel comentarios
                         this.phDatosEntrega.Visible = true;
                     }
 
                     //genero factura desde refacturacion PRP
                     if (this.accion == 9)
                     {
-                        string clientePrp = Request.QueryString["prpsc"]; 
+                        string clientePrp = Request.QueryString["prpsc"];
                         string presupuestos = Request.QueryString["prps"];
                         this.GenerarRefacturacion(presupuestos, clientePrp);
                         this.panelBusquedaCliente.Visible = false;
-                        //this.lbtnAccion.Visible = false;
                     }
 
                     //si vengo del modulo de mascotas para facturar agenda
@@ -217,45 +220,83 @@ namespace Gestion_Web.Formularios.Facturas
                         string pedidos = Request.QueryString["pedidos"];
                         GenerarFacturaPedidoPorPadre(pedidos);
                     }
-                    
+
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaPagareMutual.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtFechaVtoCuotaMutual.Text = DateTime.Now.AddMonths(1).ToString("dd/MM/yyyy");
                     this.txtCodigo.Focus();
+
+                    _agregarArticuloPorDescripcion = false;
+                    _buscarArticuloPorDescripcion = false;
+                    _agregarMultiplesArticulosPorDescripcion = false;
+                    _codigosArticulosMultiplesParaAgregar = new List<string>();
+                    _idCliente = 0;
+                    _agregarCliente = false;
+                    _codigoArticuloParaAgregar = "";
                 }
 
                 this.cargarTablaPAgos();
 
-                //si es punto preimpresa dejo modificar fecha                
-                PuntoVenta ptovta = this.cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
-                if (ptovta.formaFacturar == "Preimpresa")
-                {
-                    //dejo modificar fecha
-                    this.txtFecha.Attributes.Remove("Disabled");
-                }
+                CargarInformacionSegunPuntoDeVentaSeleccionado();
+
                 if (this.txtFecha.Text == "")
                 {
-                    this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");    
+                    this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 }
-                
-                //si viene de la pantalla de clientes, modal
-                if (Session["FacturasABM_ClienteModal"] != null)
-                {
-                    //seleccion cliente desde modal
-                    this.flag_clienteModal = 1;
-                    this.cargarClienteDesdeModal();
-                    
-                }
+
+                //if (Session["FacturasABM_ClienteModal"] != null)
+                //{
+                //    this.flag_clienteModal = 1;
+                //    this.cargarClienteDesdeModal();
+                //}
+
                 //si viene de la pantalla de articulos, modal
                 if (Session["FacturasABM_ArticuloModal"] != null)
                 {
-                    //obtengo codigo
                     string CodArt = Session["FacturasABM_ArticuloModal"] as string;
-                    this.txtCodigo.Text = CodArt;
-                    this.cargarProducto(this.txtCodigo.Text);
-                    this.actualizarTotales();
+                    txtCodigo.Text = CodArt;
+                    cargarProducto(txtCodigo.Text);
+                    ActualizarTotales();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
                 }
+
+                if (Session["FacturasABM_ArticuloModalMultiple"] != null)
+                {
+                    List<string> CodigosArticulos = Session["FacturasABM_ArticuloModalMultiple"] as List<string>;
+                    foreach (var codigoArticulo in CodigosArticulos)
+                    {
+                        Session["FacturasABM_ArticuloModal"] = codigoArticulo;
+                        txtCodigo.Text = codigoArticulo;
+                        txtCantidad.Text = "1";
+                        cargarProducto(txtCodigo.Text);
+                        CargarProductoAFactura();                        
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    }
+                    ActualizarTotales();
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
+                }
+
+                if (_agregarCliente)
+                {
+                    _agregarCliente = false;
+                    this.flag_clienteModal = 1;
+                    this.cargarClienteDesdeModal();
+                }
+
+                if (_agregarMultiplesArticulosPorDescripcion)
+                    AgregarArticulosMultiplesPorDescripcion();
+
+                if (_buscarArticuloPorDescripcion)
+                {
+                    _buscarArticuloPorDescripcion = false;
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "abrirModalBuscarArticulo();", true);
+                }
+
+                if (_agregarArticuloPorDescripcion)
+                    AgregarArticuloPorDescripcion();
 
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
@@ -286,7 +327,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarCamposGrupo(item.articulo);
                     this.cargarTrazasAgregadas();
                 }
-                
+
                 //verifico si es postback y tengo que llenar la tabla de las solicitudes para poder obtener el estado de los rbtn
                 if (this.lblMovSolicitud.Text == "OK")
                 {
@@ -299,10 +340,6 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.rbtnPagoCuentaMutual.Checked)
                 {
                     this.cargarPagosCuentaMutualCliente();
-                }
-                if (this.DropListFormaPago.SelectedItem.Text == "Credito")
-                {
-                    this.verificarCobroAnticipo();
                 }
 
                 if (this.accion == 9)
@@ -317,16 +354,357 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     catch { }
                 }
-                //cargo el numero de remito
-                //this.obtenerNroFactura();
-                
-                
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
         }
+
+        private void CargarInformacionSegunPuntoDeVentaSeleccionado()
+        {
+            var idPuntoDeVenta = Convert.ToInt32(ListPuntoVenta.SelectedValue);
+
+            if (idPuntoDeVenta <= 0)
+            {
+                return;
+            }
+
+            PuntoVenta puntoDeVenta = this.cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+
+            if (puntoDeVenta == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(puntoDeVenta.formaFacturar))
+            {
+                return;
+            }
+
+            if (puntoDeVenta.formaFacturar == "Fiscal")
+            {
+                this.btnCierreZ.Visible = true;
+            }
+            else
+            {
+                this.btnCierreZ.Visible = false;
+            }
+
+            if (puntoDeVenta.formaFacturar == "Electronica")
+            {
+                this.cargarPaisesExportacion();
+            }
+
+            if (puntoDeVenta.formaFacturar == "Preimpresa")
+            {
+                this.txtFecha.Attributes.Remove("Disabled");
+            }
+        }
+
+        private void ConfigurarModoCredito()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple == "1")
+                {
+                    chkCreditoManual.Checked = true;
+                    phCreditoModoAvanzado.Visible = false;
+                }
+                else
+                {
+                    phCreditoModoAvanzado.Visible = true;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        #region Generacion de facuras desde otros documentos
+        /// <summary>
+        /// Genera el remito con los datos recibidos del pedido
+        /// </summary>
+        /// 
+        public void GenerarFacturaRemito(int id_rem)
+        {
+            try
+            {
+                this.nuevaFactura = Session["Factura"] as Factura;
+                Remito r = new Remito();
+                r = cr.obtenerRemitoId(id_rem);
+
+                //Obtengo los comentarios ingresados en el remito.
+                DataTable dtComentariosRemito = cr.obtenerComentarioRemito(r.id);
+                r.comentario = dtComentariosRemito.Rows[0]["observaciones"].ToString();
+
+                Factura f = controlador.AsignarRemito(r);
+                Session.Add("Factura", f);
+                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
+                this.cargarSucursal(f.empresa.id);
+                this.cargarPuntoVta(f.sucursal.id);
+                this.cargarCliente(f.cliente.id);
+                //this.DropListClientes.SelectedValue = f.cliente.id.ToString();
+                //cargocliente
+                _idCliente = f.cliente.id;
+                Session.Add("FacturasABM_ClienteModal", f.cliente.id);
+                this.cargarClienteDesdeModal();
+
+                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
+                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
+                this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
+                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                this.cargarItems();
+                this.ActualizarTotales();
+                this.obtenerNroFactura();
+                this.cargarComentariosDeRemito();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos remito a factura " + ex.Message));
+            }
+        }
+
+        public void GenerarFacturaPedido(string pedidos)
+        {
+            try
+            {
+                this.nuevaFactura = Session["Factura"] as Factura;
+                string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
+                Configuracion config = new Configuracion();
+                Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));
+                Session.Add("Factura", f);
+                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
+                this.ListSucursal.SelectedValue = "-1";
+                this.ListPuntoVenta.SelectedValue = "-1";
+                this.cargarSucursal(f.empresa.id);
+                this.cargarPuntoVta(f.sucursal.id);
+
+                //antes de cargar cliente me guardo temporalmente el descuento y subtotal
+                decimal subtotal = f.subTotal;
+                decimal descuento = f.descuento;
+                this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
+                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
+                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
+                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                //cargo los datos de entrega del pedido.
+                this.txtFechaEntrega.Text = f.pedidos[0].fechaEntrega.ToString("dd/MM/yyyy");
+                this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
+                this.txtBultosEntrega.Text = f.bultosEntrega;
+                //cargocliente
+                Session.Add("FacturasABM_ClienteModal", f.cliente.id);
+                _idCliente = f.cliente.id;
+                this.cargarClienteDesdeModal();
+                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
+                this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.txtPorcDescuento.Text = decimal.Round(nuevaFactura.neto10, 2).ToString();
+
+                if (config.infoImportacionFacturas == "1")
+                {
+                    foreach (ItemFactura item in f.items)
+                    {
+                        this.AgregarInfoDespachoItem(item.articulo);
+                    }
+                }
+
+                this.cargarItems();
+                this.ActualizarTotales();
+                this.obtenerNroFactura();
+
+                var itemCero = f.items.Where(x => x.total == 0).FirstOrDefault();
+                if (itemCero != null)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Existe/n item/s en la factura con precio final cero."));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
+            }
+        }
+
+        public void GenerarNotaCredito(string facturas)
+        {
+            try
+            {
+                Configuracion config = new Configuracion();
+                Factura f = controlador.GenerarNotaCredito(facturas);
+
+                Session.Add("Factura", f);
+
+                //pongo el iva del cliente que tenia al momento en que se le hizo esa fc
+                if (config.siemprePRP == "1")
+                {
+                    int idDoc = Convert.ToInt32(facturas.Split(';')[0]);
+                    int idIva = this.obtenerDatosIvasFactura(idDoc);
+                    if (idIva > 0)
+                        this.establecerIvaCliente(idIva, f.cliente.id);
+                }
+
+                this.nuevaFactura = Session["Factura"] as Factura;
+                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
+                this.cargarSucursal(f.empresa.id);
+                this.cargarPuntoVta(f.sucursal.id);
+                this.cargarCliente(f.cliente.id);
+                this.cargarClienteEnLista(f.cliente.id);
+                this.DropListClientes.SelectedValue = f.cliente.id.ToString();
+                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
+                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
+                this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
+                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                if (!String.IsNullOrEmpty(f.comentario))
+                {
+                    this.checkDatos.Checked = true;
+                    this.txtComentarios.Text = f.comentario;
+                }
+                if (f.formaPAgo.forma == "Tarjeta")
+                {
+                    this.cargarPagosTarjetasDesdeFactura(f);
+                }
+
+                this.cargarItems();
+                this.ActualizarTotales();
+                this.obtenerNroFactura();
+
+                this.lblSaldoTarjeta.Text = f.total.ToString();
+                this.lblMontoOriginal.Text = f.total.ToString();
+
+                this.DropListClientes.Attributes.Add("disabled", "disabled");
+
+                this.lbtnAccion.Visible = false;
+                this.panelBusquedaCliente.Visible = false;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
+
+            }
+        }
+        private void cargarPagosTarjetasDesdeFactura(Factura f)
+        {
+            try
+            {
+                string facturas = Request.QueryString["facturas"];
+                controladorCobranza contCob = new controladorCobranza();
+                Cobro c = contCob.obtenerCobroByFactura(Convert.ToInt32(facturas.Split(';')[0]), f.cliente.id);
+                Pago_Tarjeta pt = new Pago_Tarjeta();
+                Pago_Credito pagoCredito = new Pago_Credito();
+                DataTable dt = lstPago;
+
+                foreach (var pago in c.pagos)
+                {
+                    if (pt.sosPagoTarjeta(pago))
+                    {
+                        //Guardar la info de pago en el DT Temporal de pagos                        
+                        DataRow dr = dt.NewRow();
+                        dr["Tipo Pago"] = (pago as Pago_Tarjeta).tarjeta.nombre;
+                        dr["Importe"] = pago.monto;
+                        dr["Neto"] = pago.monto;
+                        dr["Recargo"] = Convert.ToDecimal(0.00);
+
+
+                        dt.Rows.Add(dr);
+                        lstPago = dt;
+                    }
+                    else if (pagoCredito.SosPagoCredito(pago))
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Tipo Pago"] = "Credito";
+                        dr["Importe"] = pago.monto;
+                        dr["Neto"] = pago.monto;
+                        dr["Recargo"] = Convert.ToDecimal(0.00);
+
+                        dt.Rows.Add(dr);
+                        lstPago = dt;
+                    }
+                    else
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Tipo Pago"] = "Efectivo";
+                        dr["Importe"] = pago.monto;
+                        dr["Neto"] = pago.monto;
+                        dr["Recargo"] = Convert.ToDecimal(0.00);
+                        dr["IdMoneda"] = (pago as Pago_Contado).moneda.id;
+
+                        dt.Rows.Add(dr);
+                        lstPago = dt;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        public void GenerarRefacturacion(string facturas, string idCLiente)
+        {
+            try
+            {
+                this.nuevaFactura = Session["Factura"] as Factura;
+                Factura f = this.controlador.obtenerFacturaId(Convert.ToInt32(facturas));
+                var clienteAux = this.contCliente.obtenerClienteID(f.cliente.id);
+                if (!string.IsNullOrEmpty(idCLiente))//si cambiaron el cliente al momento de facturar
+                {
+                    f.cliente.id = Convert.ToInt32(idCLiente);
+                }
+
+                this.cargarClienteEnLista(f.cliente.id);
+
+                Session.Add("Factura", f);
+
+                string tipoOriginal = f.tipo.tipo;
+                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
+                this.cargarSucursal(f.empresa.id);
+                this.cargarPuntoVta(f.sucursal.id);
+                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
+                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
+                this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
+                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                this.cargarCliente(f.cliente.id);
+                this.DropListClientes.SelectedValue = f.cliente.id.ToString();
+                this.cargarItems();
+                this.ActualizarTotales();
+
+                this.txtComentarios.Text += "\n Correspondiente a PRP Nº " + nuevaFactura.numero + " Cliente PRP " + clienteAux.razonSocial;
+
+                if (tipoOriginal.Contains("Debito"))
+                {
+                    this.obtenerNroNotaDebito();
+                }
+                else
+                {
+                    if (f.tipo.tipo.Contains("Credito"))
+                    {
+                        this.obtenerNroNotaDebito();
+                    }
+                    else
+                    {
+                        this.obtenerNroFactura();
+                    }
+                }
+
+
+                int ok = this.controlador.verificarRefacturarProveedor(f);
+                if (ok < 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puede refacturar porque uno o más articulos tienen proveedor con condicion IVA NO INFORMA."));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
+            }
+        }
+
+        #endregion
+
+        #region verificaciones iniciales
         private void VerificarLogin()
         {
             try
@@ -338,11 +716,11 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     if (this.verificarAcceso() != 1)
-                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
                     {
                         Response.Redirect("/Default.aspx?m=1", false);
                     }
                 }
+                bloquearPHDescuentoEnFactura();
             }
             catch
             {
@@ -357,6 +735,19 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                if (!listPermisos.Contains("173"))
+                    return 0;
+
+                if (!listPermisos.Contains("150"))
+                {
+                    DropListLista.Enabled = false;
+                    DropListLista.CssClass = "form-control";
+                }
+
+                if (!listPermisos.Contains("209") && accion == 9 || !listPermisos.Contains("211") && accion == 6)
+                    phAgregarItems.Visible = false;
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -393,276 +784,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 return -1;
             }
-        }        
-
-        #region Generacion de facuras desde otros documentos
-        /// <summary>
-        /// Genera el remito con los datos recibidos del pedido
-        /// </summary>
-        /// 
-        public void GenerarFacturaRemito(int id_rem)
-        {
-            try
-            {
-                this.factura = Session["Factura"] as Factura;
-                Remito r = new Remito();
-                r = cr.obtenerRemitoId(id_rem);
-
-                //Obtengo los comentarios ingresados en el remito.
-                DataTable dtComentariosRemito = cr.obtenerComentarioRemito(r.id);
-                r.comentario = dtComentariosRemito.Rows[0]["observaciones"].ToString();
-
-                Factura f = controlador.AsignarRemito(r);
-                Session.Add("Factura", f);
-                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
-                this.cargarSucursal(f.empresa.id);
-                this.cargarPuntoVta(f.sucursal.id);
-                this.cargarCliente(f.cliente.id);
-                //this.DropListClientes.SelectedValue = f.cliente.id.ToString();
-                //cargocliente
-                Session.Add("FacturasABM_ClienteModal", f.cliente.id);
-                this.cargarClienteDesdeModal();
-
-                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
-                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
-                this.DropListLista.SelectedValue = f.listaP.id.ToString();
-                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
-                this.cargarItems();
-                this.actualizarTotales();
-                this.obtenerNroFactura();
-                this.cargarComentariosDeRemito();
-            }
-            catch(Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos remito a factura " + ex.Message));
-            }
         }
-
-        public void GenerarFacturaPedido(string pedidos)
-        {
-            try
-            {
-                this.factura = Session["Factura"] as Factura;
-                string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
-                Configuracion config = new Configuracion();
-                Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));                
-                Session.Add("Factura", f);
-                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
-                this.ListSucursal.SelectedValue = "-1";
-                this.ListPuntoVenta.SelectedValue = "-1";
-                this.cargarSucursal(f.empresa.id);
-                this.cargarPuntoVta(f.sucursal.id);
-                
-                //antes de cargar cliente me guardo temporalmente el descuento y subtotal
-                decimal subtotal = f.subTotal;
-                decimal descuento = f.descuento;
-
-                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();                
-                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
-                //cargo los datos de entrega del pedido.
-                this.txtFechaEntrega.Text = f.pedidos[0].fechaEntrega.ToString("dd/MM/yyyy");
-                this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
-                this.txtBultosEntrega.Text = f.bultosEntrega;
-                //cargocliente
-                Session.Add("FacturasABM_ClienteModal", f.cliente.id);
-                this.cargarClienteDesdeModal();
-                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
-                this.DropListLista.SelectedValue = f.listaP.id.ToString();
-
-                if (config.infoImportacionFacturas == "1")
-                {
-                    foreach (ItemFactura item in f.items)
-                    {
-                        this.agregarInfoDespachoDesdePedido(item);
-                    }
-                }
-
-                this.cargarItems();
-                this.actualizarTotales();
-                this.obtenerNroFactura();
-
-                var itemCero = f.items.Where(x => x.total == 0).FirstOrDefault();
-                if (itemCero != null)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Existe/n item/s en la factura con precio final cero."));
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
-            }
-        }
-
-        public void GenerarNotaCredito(string facturas)
-        {
-            try
-            {
-                Configuracion config = new Configuracion();
-                Factura f = controlador.GenerarNotaCredito(facturas);
-                
-                Session.Add("Factura", f);
-
-                //pongo el iva del cliente que tenia al momento en que se le hizo esa fc
-                if (config.siemprePRP == "1")
-                {
-                    int idDoc = Convert.ToInt32(facturas.Split(';')[0]);
-                    int idIva = this.obtenerDatosIvasFactura(idDoc);
-                    if(idIva > 0)
-                        this.establecerIvaCliente(idIva, f.cliente.id);
-                }
-
-                this.factura = Session["Factura"] as Factura;
-                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
-                this.cargarSucursal(f.empresa.id);
-                this.cargarPuntoVta(f.sucursal.id);
-                this.cargarCliente(f.cliente.id);
-                this.cargarClienteEnLista(f.cliente.id);
-                this.DropListClientes.SelectedValue = f.cliente.id.ToString();
-                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
-                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
-                this.DropListLista.SelectedValue = f.listaP.id.ToString();
-                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
-                if (!String.IsNullOrEmpty(f.comentario))
-                {
-                    this.checkDatos.Checked = true;
-                    this.txtComentarios.Text = f.comentario;
-                }
-                if (f.formaPAgo.forma == "Tarjeta")
-                {
-                    this.cargarPagosTarjetasDesdeFactura(f);
-                }
-
-                this.cargarItems();
-                this.actualizarTotales();
-                this.obtenerNroFactura();
-
-                this.lblSaldoTarjeta.Text = f.total.ToString();
-                this.lblMontoOriginal.Text = f.total.ToString();
-
-                this.DropListClientes.Attributes.Add("disabled", "disabled");
-
-                this.lbtnAccion.Visible = false;
-                this.panelBusquedaCliente.Visible = false;
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
-
-            }
-        }
-        private void cargarPagosTarjetasDesdeFactura(Factura f)
-        {
-            try
-            {
-                string facturas = Request.QueryString["facturas"];
-                controladorCobranza contCob = new controladorCobranza();
-                Cobro c = contCob.obtenerCobroByFactura(Convert.ToInt32(facturas.Split(';')[0]), f.cliente.id);
-                Pago_Tarjeta pt = new Pago_Tarjeta();
-                DataTable dt = lstPago;
-
-                foreach (var pago in c.pagos)
-                {
-                    if (pt.sosPagoTarjeta(pago))
-                    {
-                        //Guardar la info de pago en el DT Temporal de pagos                        
-                        DataRow dr = dt.NewRow();
-                        dr["Tipo Pago"] = (pago as Pago_Tarjeta).tarjeta.nombre;
-                        dr["Importe"] = pago.monto;
-                        dr["Neto"] = pago.monto;
-                        dr["Recargo"] = Convert.ToDecimal(0.00);
-
-                        dt.Rows.Add(dr);
-                        lstPago = dt;
-                    }
-                    else
-                    {
-                        
-                        DataRow dr = dt.NewRow();
-                        dr["Tipo Pago"] = "Efectivo";
-                        dr["Importe"] = pago.monto;
-                        dr["Neto"] = pago.monto;
-                        dr["Recargo"] = Convert.ToDecimal(0.00);
-
-                        dt.Rows.Add(dr);
-                        lstPago = dt;
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-        public void GenerarRefacturacion(string facturas, string idCLiente)
-        {
-            try
-            {
-                this.factura = Session["Factura"] as Factura;
-                Factura f = this.controlador.obtenerFacturaId(Convert.ToInt32(facturas));
-                var clienteAux = this.contCliente.obtenerClienteID(f.cliente.id);
-                if (!string.IsNullOrEmpty(idCLiente))//si cambiaron el cliente al momento de facturar
-                {
-                    f.cliente.id = Convert.ToInt32(idCLiente);
-                }
-               
-                this.cargarClienteEnLista(f.cliente.id);
-                
-                Session.Add("Factura", f);
-
-                string tipoOriginal = f.tipo.tipo;
-                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
-                this.cargarSucursal(f.empresa.id);
-                this.cargarPuntoVta(f.sucursal.id);
-                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
-                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
-                this.DropListLista.SelectedValue = f.listaP.id.ToString();
-                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
-                this.cargarCliente(f.cliente.id);
-                this.DropListClientes.SelectedValue = f.cliente.id.ToString();
-                this.cargarItems();
-                this.actualizarTotales();
-
-                this.txtComentarios.Text += "\n Correspondiente a PRP Nº " + factura.numero + " Cliente PRP " + clienteAux.razonSocial;
-
-                if (tipoOriginal.Contains("Debito"))
-                {
-                    this.obtenerNroNotaDebito();
-                }
-                else
-                {
-                    if (f.tipo.tipo.Contains("Credito"))
-                    {
-                        this.obtenerNroNotaDebito();
-                    }
-                    else
-                    {
-                        this.obtenerNroFactura();
-                    }
-                }
-                
-
-                int ok = this.controlador.verificarRefacturarProveedor(f);
-                if (ok < 1)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se puede refacturar porque uno o más articulos tienen proveedor con condicion IVA NO INFORMA."));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
-
-            }
-        }
-        
-        #endregion
-
-        #region verificaciones iniciales
         public void verificarModoBlanco()
         {
             try
@@ -716,13 +838,17 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //string idCliente = WebConfigurationManager.AppSettings.Get("ClienteDefecto");
-                
+
                 idSucursal = (int)Session["Login_SucUser"];
                 if (IsPostBack)//Si cambio la sucursal en el list manualmente uso ese valor en lugar del de usuario.
                 {
                     idSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
                 }
                 Sucursal s = this.cs.obtenerSucursalID(idSucursal);
+
+                if (s == null)
+                    return;
+
                 string idCliente = s.clienteDefecto.ToString();
 
                 if (idCliente != "-1" && idCliente != null)
@@ -736,7 +862,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.obtenerNroFactura();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Error verificando cliente por defecto " + ex.Message + "\", {type: \"error\"});", true);
             }
@@ -756,7 +882,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (permisoDesc != null)
                     {
                         this.txtDescripcion.Attributes.Remove("disabled");
-                        
+
                     }
                     if (permisoPrecio != null)
                     {
@@ -764,7 +890,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Error verificando configuracion editar descripcion.  " + ex.Message + "\", {type: \"error\"});", true);
             }
@@ -776,7 +902,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Configuracion c = new Configuracion();
                 if (c.egresoStock == "1")
                 {
-                    
+
                     if (this.labelNroFactura.Text.Contains("Credito") || this.accion == 4)
                     {
                         this.btnAgregarRemitir.Attributes.Add("style", "display:none");
@@ -833,11 +959,11 @@ namespace Gestion_Web.Formularios.Facturas
                             this.ListEmpresa.Attributes.Remove("disabled");
                         }
                     }
-                }                
+                }
             }
             catch
             {
-                
+
             }
         }
         private void verificarPermisoNC()
@@ -856,9 +982,9 @@ namespace Gestion_Web.Formularios.Facturas
                             this.lbNC.Visible = true;
                         }
                     }
-                }                
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -910,7 +1036,7 @@ namespace Gestion_Web.Formularios.Facturas
                         foreach (DataRow row in dtImpagas.Rows)
                         {
                             DateTime fechaImpaga = Convert.ToDateTime(row["fecha"].ToString());
-                            if ( (DateTime.Today.DayOfYear - fechaImpaga.DayOfYear) > c.vencFC)
+                            if ((DateTime.Today.DayOfYear - fechaImpaga.DayOfYear) > c.vencFC)
                             {
                                 saldo += Convert.ToDecimal(row["saldo"]);
                             }
@@ -940,9 +1066,9 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 if (script != "" || okSMS > 0)
-                {                    
-                    if (this.flag_clienteModal > 0 || (!IsPostBack && this.flag_clienteModal  == 0))//si vienen desde modal uso un script sino uso el otro.
-                    {                        
+                {
+                    if (this.flag_clienteModal > 0 || (!IsPostBack && this.flag_clienteModal == 0))//si vienen desde modal uso un script sino uso el otro.
+                    {
                         this.abrirModalEnvioSMS(0);
                         if ((alerta1 + alerta2 + alerta3) != "")
                         {
@@ -950,17 +1076,17 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     else
-                    {                        
+                    {
                         this.abrirModalEnvioSMS(1);
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", script, true);                        
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", script, true);
                     }
-                    
+
                 }
 
             }
             catch (Exception ex)
             {
-                
+
             }
         }
         private void verificarAlertaArticulo(Articulo art)
@@ -988,6 +1114,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //si esta concateno la alerta
                     script += "$.msgbox(\"Este articulo ya fue cargado previamente a la factura: Cod.: " + art.codigo + " \");";
                     alerta += "Este articulo fue cargado previamente a la factura: Articulo: " + art.codigo;
+                    ActualizarStockAlAgregarItem(art.codigo);
                 }
 
                 //miro si esta en alguna promocion 
@@ -1038,7 +1165,7 @@ namespace Gestion_Web.Formularios.Facturas
                     catch { }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -1084,7 +1211,21 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        #endregion 
+        private void bloquearPHDescuentoEnFactura()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["bloquearRealizarDescuentoEnFacturacion"]) && WebConfigurationManager.AppSettings["bloquearRealizarDescuentoEnFacturacion"] == "1")
+                {
+                    phDescuentoSobreElTotal.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: habilitarPHDescuentoEnFactura. Ex: " + ex.Message));
+            }
+        }
+        #endregion
 
         #region cargar Datos iniciales
 
@@ -1147,7 +1288,7 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListVendedor.Items.Add(item);
                 }
 
-                
+
 
                 //this.DropListVendedor.DataSource = dt;
                 //this.DropListVendedor.DataValueField = "id";
@@ -1205,7 +1346,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.DataTextField = "NombreFantasia";
 
                 this.ListPuntoVenta.DataBind();
-                
+
             }
             catch (Exception ex)
             {
@@ -1276,7 +1417,7 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
-            }         
+            }
         }
         public void cargarListaPrecio()
         {
@@ -1284,7 +1425,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.DropListLista.ClearSelection();
                 ControladorFormasPago contForma = new ControladorFormasPago();
-                List<Gestion_Api.Entitys.listasPrecio> listas = contForma.obtenerListasByFormaPago(Convert.ToInt32(this.DropListFormaPago.SelectedValue));                
+                List<Gestion_Api.Entitys.listasPrecio> listas = contForma.obtenerListasByFormaPago(Convert.ToInt32(this.DropListFormaPago.SelectedValue));
 
                 if (listas != null && listas.Count > 0)
                 {
@@ -1309,7 +1450,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListLista.DataBind();
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1482,7 +1623,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ControladorArticulosEntity contArticuloEnt = new ControladorArticulosEntity();
 
-                List<Gestion_Api.Entitys.cliente> provedores = contArticuloEnt.obtenerProveedoresCombustibles();                                
+                List<Gestion_Api.Entitys.cliente> provedores = contArticuloEnt.obtenerProveedoresCombustibles();
 
                 this.ListProveedorCombustible.DataSource = provedores;
                 this.ListProveedorCombustible.DataValueField = "id";
@@ -1515,6 +1656,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ViewState["ListaPagos"] = value;
             }
         }
+
         private void cargarCliente(int idCliente)
         {
             try
@@ -1543,29 +1685,29 @@ namespace Gestion_Web.Formularios.Facturas
                         this.txtDniCredito.Text = this.cliente.cuit;
                     }
 
-                    try 
+                    try
                     {
                         this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
                     }
-                    catch { }                    
+                    catch { }
                     //this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
 
                     //SI ES CONSUMIDOR FINAL no permito venta en CTA CTE
                     this.cargarFormaPAgo();
-                    this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();                    
+                    this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
                     //CARGO LAS LISTAS DE PRECIO QUE TIENE LA FORMA DE PAGO QUE TIENE EL CLIENTE
                     this.cargarListaPrecio();
                     try
                     {
                         this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
-                    }                    
+                    }
                     catch { }
                     //this.verificarPermisoSeleccionarCtaCte();
                     //verifico si el PERFIL tiene permitido vender en Cta Cte
                     this.verificarPermisoVentaCtaCte();
                     if (this.cliente.iva == "Consumidor Final")
                     {
-                        
+
                         if (c.consumidorFinalCC != "1")
                         {
                             //this.DropListFormaPago.Items.RemoveAt(2);
@@ -1578,14 +1720,14 @@ namespace Gestion_Web.Formularios.Facturas
                         this.chkIvaNoInformado.Visible = true;
                         this.lblPercepcionCF.Visible = true;
                         this.txtPercepcionCF.Visible = true;
-                        
+
                     }
                     else
                     {
                         this.chkIvaNoInformado.Visible = false;
                         this.lblPercepcionCF.Visible = false;
                         this.txtPercepcionCF.Visible = false;
-                        
+
                     }
                     this.chkIvaNoInformado.Checked = false;
 
@@ -1655,8 +1797,8 @@ namespace Gestion_Web.Formularios.Facturas
                             this.phDatosEntrega.Visible = true;
                             this.txtHorarioEntrega.Text = entrega.HorarioEntrega;
                             this.txtFechaEntrega.Text = DateTime.Today.ToString("dd/MM/yyyy");
-                            this.checkDatos.Checked = true;                            
-                            
+                            this.checkDatos.Checked = true;
+
                         }
                         this.cargarDatosEnvioCliente(idCliente);
                     }
@@ -1673,7 +1815,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //verifico si tiene permitido facturar entre sucursales
                     if (this.verficarPermisoFactSucursal() == 1)
                     {
-                        //verifico si tiene sucursales 
+                        //verifico si tiene sucursales
                         var sucu = this.contClienteEntity.obtenerSucursalesCliente(idCliente);
                         if (sucu != null)
                         {
@@ -1698,6 +1840,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 this.lbtnStockDestinoProd.Visible = false;
                                 this.ListSucursalCliente.Visible = false;
+                                this.ListSucursalCliente.SelectedValue = "-1";
                             }
                         }
                         else
@@ -1710,10 +1853,21 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        this.ListSucursalCliente.Visible = false;
+                        if (contClienteEntity.obtenerSucursalesCliente(f.cliente.id).Count > 0)
+                        {
+                            ListSucursalCliente.Visible = false;
+                            f.items.Clear();
+                            f.cliente = null;
+                            labelCliente.Text = string.Empty;
+                            borrarCamposagregarItem();
+                            Session.Add("Factura", f);
+                            cargarItems();
+                            DropListClientes.SelectedValue = "-1";
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No tiene permiso para facturarle a un cliente interno!"));
+                        }
                     }
-                    
-                    
+
+
                 }
 
                 else
@@ -1732,11 +1886,12 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //obtengo codigo
-                int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                //int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                int idCliente = _idCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();
-                    if(this.DropListClientes.SelectedValue == "-1")
+                    if (this.DropListClientes.SelectedValue == "-1")
                     {
                         this.cargarClienteEnLista(idCliente);
                     }
@@ -1747,11 +1902,11 @@ namespace Gestion_Web.Formularios.Facturas
                     //lo agrego y selecciono
                     //lo busco y agrego
                     this.cargarClienteEnLista(idCliente);
-                }               
+                }
 
                 this.cargarCliente(idCliente);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando cliente desde modal. " + ex.Message));
             }
@@ -1782,14 +1937,14 @@ namespace Gestion_Web.Formularios.Facturas
                     this.obtenerNroPresupuesto();
                     this.lbtnAccion.Text = "PRP <span class='caret'></span>";
                     this.lbtnFC.Visible = false;
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
                 else
                 {
                     this.obtenerNroFactura();
                     this.lbtnAccion.Text = "FC <span class='caret'></span>";
                     this.lbtnFC.Visible = true;
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
 
             }
@@ -1838,7 +1993,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnFacturaE.Visible = false;
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
-                
+
                 if (accion != 6 && accion != 7)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
@@ -1883,7 +2038,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                                 PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                                 //como estoy en cotizacion pido el ultimo numero de este documento
-                                if(c.monotributo=="1")
+                                if (c.monotributo == "1")
                                 {
                                     int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Factura C");
                                     this.labelNroFactura.Text = "Factura C N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
@@ -1893,20 +2048,20 @@ namespace Gestion_Web.Formularios.Facturas
                                     int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Factura B");
                                     this.labelNroFactura.Text = "Factura B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                                 }
-                                
+
                             }
                         }
-                        
+
                     }
                 }
                 else
                 {
                     //si vengo de Factura-Accion-NotadeCredito me fijo en el tipo de doc del que vengo y no el tipo de IVA del cliente
-                    string tipoDoc = this.factura.tipo.tipo;
+                    string tipoDoc = this.nuevaFactura.tipo.tipo;
                     if (tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("PRP"))
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
-                        PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));                        
+                        PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                         int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito PRP");
                         this.labelNroFactura.Text = "Nota de Credito PRP N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                     }
@@ -1915,7 +2070,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (tipoDoc.Contains("Factura A") || tipoDoc.Contains("Credito A"))
                         {
                             int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
-                            PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));                            
+                            PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                             int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
                             this.labelNroFactura.Text = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                         }
@@ -2027,7 +2182,7 @@ namespace Gestion_Web.Formularios.Facturas
                             }
                         }
                     }
-                    
+
                 }
             }
             catch
@@ -2100,7 +2255,7 @@ namespace Gestion_Web.Formularios.Facturas
                             }
                         }
                     }
-                    
+
                 }
             }
             catch
@@ -2326,6 +2481,8 @@ namespace Gestion_Web.Formularios.Facturas
                 lstPagosTemp.Columns.Add("Importe");
                 lstPagosTemp.Columns.Add("Neto");
                 lstPagosTemp.Columns.Add("Recargo");
+                lstPagosTemp.Columns.Add("DetallePago");
+                lstPagosTemp.Columns.Add("IdMoneda");
                 lstPago = lstPagosTemp;
             }
             catch (Exception ex)
@@ -2355,23 +2512,257 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListPais.DataBind();
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando paises exportacion. " + ex.Message));
             }
         }
-        #endregion        
-        
+
+        private void cargarMonedasModalTarjetas()
+        {
+            try
+            {
+                DataTable dt = contCobranza.obtenerMonedasDT();
+
+                DataRow dr = dt.NewRow();
+
+                this.ListMonedas.DataSource = dt;
+                this.ListMonedas.DataValueField = "id";
+                this.ListMonedas.DataTextField = "moneda";
+
+                this.ListMonedas.DataBind();
+                this.ListMonedas.Items.Add(new ListItem
+                {
+                    Text = "Credito",
+                    Value = "0"
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #endregion
+
+        #region Funcion botones
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             //this.cargarCliente(this.txtBusquedaCliente.Text);
         }
-
         protected void btnBuscarProducto_Click(object sender, EventArgs e)
         {
-
-            this.cargarProducto(this.txtCodigo.Text);
+            _codigoArticuloParaAgregar = txtCodigo.Text;
+            this.cargarProducto(_codigoArticuloParaAgregar);
         }
+        /// <summary>
+        /// cuando hace clic en guardar y se genera la factura
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnAgregar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (IsValid)
+                {
+                    Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                    if (!respuesta.Item2)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                        return;
+                    }
+                    //Verifico si tiene la alerta de precios de articulos sin actualizar
+                    if (!VerificarArticulosSinActualizar())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
+                        return;
+                    }
+
+                    //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
+                    if (!ValidarSaldoMutual())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
+                        return;
+                    }
+
+                    //Verifico en caso de que sea Nota de Crédito de una Factura con Forma de Pago Mutual, que haya eliminado los cobros asociados
+                    if (!VerificarAnularFcMutual())
+                    {
+                        //Si existen cobros pendientes, retorno. El mensaje lo muestro en el método.
+                        return;
+                    }
+
+                    //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
+                    if (!VerificarNotaCreditoFactura())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarFacturaEnCero())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarDescripcionDeItems())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
+                        return;
+                    }
+
+                    //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
+                    string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
+                    if (!string.IsNullOrEmpty(combustible) && combustible == "1")
+                    {
+                        int itemsCombustible = this.validarItemsCombustible();
+                        if (itemsCombustible < 0)
+                        {
+                            if (itemsCombustible == -1)
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error validando items de la factura. \");", true);
+
+                            if (itemsCombustible == -2)
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Los items de la factura deben ser todos del grupo de combustibles. \");", true);
+
+                            if (itemsCombustible == -3)
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se calcularon los impuestos de combustibles. \");", true);
+
+                            return;
+                        }
+                    }
+
+                    if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
+                    {
+
+                        int i = validarSaldoTarjeta();
+                        if (i == 1)
+                        {
+                            int j = validarUltimaFactura();
+                            if (j == 1)
+                            {
+                                int t = this.validarTrazasCargadas();
+                                if (t == 1)
+                                {
+                                    int iec = this.validarItemsEnCero();
+                                    if (iec == 1)
+                                    {
+                                        this.generarFactura(0);
+                                    }
+                                    else
+                                    {
+                                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
+                                    }
+
+                                }
+                                else
+                                {
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.1 \", {type: \"error\"});", true);
+                                }
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                            }
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto ingresado en la forma de pago no es igual al monto total de la factura. \", {type: \"error\"});", true);
+                            //m.mensajeBoxError("El monto ingresado en la forma de pago no es igual al monto total de la factura.");
+                        }
+                    }
+                    else
+                    {
+                        int j = validarUltimaFactura();//solo para preimpresa
+                        if (j == 1)
+                        {
+                            int t = this.validarTrazasCargadas();
+                            if (t == 1)
+                            {
+                                int iec = this.validarItemsEnCero();
+                                if (iec == 1)
+                                {
+                                    this.generarFactura(0);
+                                }
+                                else
+                                {
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
+                                }
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.2 \", {type: \"error\"});", true);
+                            }
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                            this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
+                        }
+                    }
+                }
+                else
+                {
+                    this.btnAgregar.Attributes.Remove("Disabled");
+                    this.btnAgregarRemitir.Attributes.Remove("Disabled");
+                }
+
+            }
+            catch
+            {
+
+            }
+        }
+        protected void btnCambiarPorcentajeCantidadFacturar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal porcentaje = Convert.ToInt32(this.txtPorcentajeCantFacturar.Text);
+                if (porcentaje > 0)
+                {
+                    Factura fc = Session["Factura"] as Factura;
+                    foreach (var item in fc.items)
+                    {
+                        item.cantidad = item.cantidad * (porcentaje / 100);
+                        item.cantidad = Convert.ToInt32(item.cantidad);
+                        item.descuento = (item.precioUnitario * (item.porcentajeDescuento / 100)) * item.cantidad;
+                        item.total = ((item.precioUnitario * (1 - (item.porcentajeDescuento / 100))) * item.cantidad);
+                    }
+                    Session["Factura"] = fc;
+                    //vuelvo a cargar los items
+                    this.cargarItems();
+                    this.ActualizarTotales();
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        protected void lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtPorcDescuento.Text = "0";
+                ActualizarTotales();
+                if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
+                {
+                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
+                    ActualizarTotales();
+                }
+                //Para recalcular el label del modal de metodo de pago de tarjeta
+                this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "cerrarModalDescuentoMonto();", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "Error en fun: lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click. Ex: " + ex.Message, true);
+            }
+        }
+        #endregion
 
         private void cargarProducto(string codigo)
         {
@@ -2382,7 +2773,6 @@ namespace Gestion_Web.Formularios.Facturas
                 Configuracion config = new Configuracion();
                 Articulo art = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
 
-                //Limpio campo de Descuento Arriba
                 this.TxtDescuentoArri.Text = "0";
 
                 if (art != null)
@@ -2408,11 +2798,13 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
 
+                    AgregarInfoDespachoItem(art);
+
                     decimal cantPromo = 0;
                     if (this.txtCantidad.Text != "")
                         cantPromo = Convert.ToDecimal(this.txtCantidad.Text);
                     Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(art.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), cantPromo);
-                    if (p != null)
+                    if (p != null && p.FormaPago != 8)
                     {
                         if (p.PrecioFijo > 0)
                         {
@@ -2423,7 +2815,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             this.TxtDescuentoArri.Text = p.Descuento.ToString();
                             this.TxtDescuentoArri.Attributes.Add("disabled", "disabled");
-                        }                        
+                        }
                     }
                     else
                     {
@@ -2446,38 +2838,37 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     this.verificarMedidasVenta(art.id);
-                    //agrego los txt
                     this.txtDescripcion.Text = art.descripcion;
 
-                    this.verificarStockMinimo();                    
-
-                    //decimal PrecioSinIva = decimal.Round(art.precioVenta - (art.precioVenta * (art.porcentajeIva / 100)),2);
-                    this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                    this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
-                    this.verificarAlertaArticulo(art);
-
-                    if (config.infoImportacionFacturas == "1")
+                    this.verificarStockMinimo();
+                    if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
                     {
-                        //si tiene datos de despacho se los cargo
-                        this.agregarInfoDespachoItem(art);
+                        this.txtIva.Text = 0 + "%";
+                        art.precioVenta = (art.precioVenta / ((1 + (art.porcentajeIva / 100))));
+                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                    }
+                    else
+                    {
+                        this.txtIva.Text = art.porcentajeIva.ToString() + "%";
+                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
-                    //this.txtPUnitario.Text = decimal.Round(art.precioVenta,4).ToString();
+                    this.verificarAlertaArticulo(art);
+
                     Session["FacturasABM_ArticuloModal"] = null;
                     this.txtPorcDescuento.Focus();
-                    this.txtCantidad.Focus();                    
-                    //recalculo total
-                    this.totalItem();                   
+                    this.txtCantidad.Focus();
+                    this.totalItem();
 
-                    Factura f = Session["Factura"] as Factura;
-                    this.txtRenglon.Text = (f.items.Count + 1).ToString();
+                    Factura factura = Session["Factura"] as Factura;
+                    this.txtRenglon.Text = (factura.items.Count + 1).ToString();
 
                     //Si tiene configuracion CON COMMITANTE
                     //agrego automaticamente el articulo a la FC con la cant y dto que este escrito
-                    
+
                     if (config.commitante == "1")
                     {
-                        if (!String.IsNullOrEmpty(this.txtCodigo.Text))
+                        if (!String.IsNullOrEmpty(codigo))
                         {
                             if (String.IsNullOrEmpty(this.txtCantidad.Text))
                             {
@@ -2487,21 +2878,20 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 this.TxtDescuentoArri.Text = "0";
                             }
-                            this.cargarProductoAFactura();
-                            this.txtCodigo.Text = "";
+
+                            CargarProductoAFactura();
+                            ActualizarTotales();
+                            txtCodigo.Text = "";
                         }
                     }
-
                 }
                 else
                 {
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra Articulo " + this.txtCodigo.Text));
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encuentra Articulo. \");", true);
                 }
             }
             catch (Exception ex)
             {
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Articulo. " + ex.Message));
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error buscando articulo." + ex.Message + " \", {type: \"error\"});", true);
             }
         }
@@ -2530,7 +2920,6 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Factura f = Session["Factura"] as Factura;
-                //limpio el place holder y lo vuelvo a cargar
                 this.phArticulos.Controls.Clear();
                 int pos = 0;
 
@@ -2541,10 +2930,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.accion == 5 && !string.IsNullOrEmpty(ordenar) && ordenar == "1")
                     f.items = f.items.OrderBy(x => x.articulo.ubicacion).ToList();
 
-                foreach(ItemFactura item in f.items)
+                foreach (ItemFactura item in f.items)
                 {
+                    AgregarInfoDespachoItem(item.articulo);
+
                     pos = f.items.IndexOf(item);
-                    this.agregarItemFactura(item,pos);
+                    this.agregarItemFactura(item, pos);
                 }
             }
             catch (Exception ex)
@@ -2552,7 +2943,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error dibujando items en facrura. " + ex.Message));
             }
         }
-        
+
         /// <summary>
         /// Carga el item en la tabla items
         /// </summary>
@@ -2571,7 +2962,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (item.nroRenglon > 0)
                     celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
                 else
-                    celCodigo.Text = (pos + 1) + " - " + item.articulo.codigo;                
+                    celCodigo.Text = (pos + 1) + " - " + item.articulo.codigo;
 
                 celCodigo.Width = Unit.Percentage(15);
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
@@ -2580,7 +2971,7 @@ namespace Gestion_Web.Formularios.Facturas
                 TableCell celCantidad = new TableCell();
                 TextBox txtCant = new TextBox();
                 txtCant.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
-                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad;
+                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad + "_" + item.articulo.codigo;
                 txtCant.CssClass = "form-control";
                 txtCant.Style.Add("text-align", "Right");
                 //txtCant.TextMode = TextBoxMode.Number;
@@ -2589,6 +2980,10 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
+                if (ListSucursalCliente.SelectedIndex > 0)
+                    txtCant.Enabled = PuedeModificarCantidadDeItemSegunConfiguracion();
+                else
+                    txtCant.Enabled = true;
                 tr.Cells.Add(celCantidad);
 
                 TableCell celDescripcion = new TableCell();
@@ -2605,7 +3000,7 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celPrecio);
 
                 TableCell celDescuento = new TableCell();
-                celDescuento.Text = "$" +item.descuento.ToString();
+                celDescuento.Text = "$" + item.descuento.ToString();
                 celDescuento.Width = Unit.Percentage(10);
                 celDescuento.VerticalAlign = VerticalAlign.Middle;
                 celDescuento.HorizontalAlign = HorizontalAlign.Right;
@@ -2661,7 +3056,6 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                         btnTraza.Click += new EventHandler(this.TrazabilidadItem);
                     celAccion.Controls.Add(btnTraza);
-
                 }
                 else
                 {
@@ -2709,7 +3103,7 @@ namespace Gestion_Web.Formularios.Facturas
                         celAccion.Controls.Add(btnModificarDesc);
                     }
                 }
-                
+
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celAccion);
@@ -2723,40 +3117,54 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
             }
         }
-        private void actualizarTotales()
+
+        private bool PuedeModificarCantidadDeItemSegunConfiguracion()
+        {
+            if (!string.IsNullOrEmpty(configuracion.ModificarCantidadEnVentaEntreSucursales))
+            {
+                if (configuracion.ModificarCantidadEnVentaEntreSucursales == "1")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void ActualizarTotales()
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
-                this.factura.tipo = this.cargarTiposFactura(lbl[0]);
+                this.nuevaFactura.tipo = this.cargarTiposFactura(lbl[0]);
 
                 //impuestos vta de combustible
                 decimal impuestosCombustible = 0;
-                this.factura.provCombustibles = Convert.ToInt32(this.ListProveedorCombustible.SelectedValue);
+                this.nuevaFactura.provCombustibles = Convert.ToInt32(this.ListProveedorCombustible.SelectedValue);
                 if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
                 {
-                    impuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
+                    impuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.nuevaFactura);
                     this.actualizarTotalesVentaCombustible();
-                    
+
                 }
                 else
                 {
                     //obtengo total de suma de item
-                    decimal totalC = this.factura.obtenerTotalNeto();
+                    decimal totalC = this.nuevaFactura.obtenerTotalNeto();
                     decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
-                    this.factura.neto = total;
+                    this.nuevaFactura.neto = total;
 
                     if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                     {
-                        this.txtPorcDescuento.Text = decimal.Round(this.factura.neto10, 2).ToString();
+                        this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                     }
 
                     //Subtotal = neto menos el descuento
-                    this.factura.descuento = decimal.Round((this.factura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
-                    this.factura.subTotal = decimal.Round((this.factura.neto - this.factura.descuento), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.descuento = decimal.Round((this.nuevaFactura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.subTotal = decimal.Round((this.nuevaFactura.neto - this.nuevaFactura.descuento), 2, MidpointRounding.AwayFromZero);
 
                     //del subtotal obtengo iva
                     //this.factura.neto21 = (this.factura.subTotal * Convert.ToDecimal(0.21));
@@ -2768,16 +3176,16 @@ namespace Gestion_Web.Formularios.Facturas
 
                         if (c.ivaArticulosPresupuesto == "1")
                         {
-                            this.factura.neto21 = decimal.Round((this.factura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.neto21 = decimal.Round((this.nuevaFactura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
                         }
                         else
                         {
-                            decimal iva = decimal.Round(this.factura.obtenerTotalIva(), 2);
+                            decimal iva = decimal.Round(this.nuevaFactura.obtenerTotalIva(), 2);
                             decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
                             //AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
-                            this.factura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                             //*/
-                            this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                         }
 
                     }
@@ -2785,82 +3193,63 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (lbl[0].Contains("Factura E") || lbl[0].Contains("Credito E") || lbl[0].Contains("Debito E"))
                         {
-                            this.factura.neto21 = 0;
+                            this.nuevaFactura.neto21 = 0;
                         }
                         else
                         {
-                            decimal iva = decimal.Round(this.factura.obtenerTotalIva(), 2);
+                            decimal iva = decimal.Round(this.nuevaFactura.obtenerTotalIva(), 2);
                             decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
 
                             //SI ES 'B' AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
                             if (lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B"))
                             {
-                                this.factura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                                this.nuevaFactura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                             }
 
-                            this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                         }
                     }
-
-                    this.factura.totalSinDescuento = decimal.Round(this.factura.neto + this.factura.obtenerTotalIva(), 2);
+                    //TODO sumarle el neto21 y sacar el obtener total iva
+                    this.nuevaFactura.totalSinDescuento = decimal.Round(this.nuevaFactura.neto + this.nuevaFactura.obtenerTotalIva(), 2);
 
                     //retencion sobre el sub total
-                    this.factura.retencion = decimal.Round((this.factura.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                    this.nuevaFactura.retencion = decimal.Round((this.nuevaFactura.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
 
                     //percepcion iva == checked
                     if (this.chkIvaNoInformado.Checked == true)
                     {
-                        this.factura.iva10 = decimal.Round(this.factura.neto * Convert.ToDecimal(0.105), 2);//iva 10.5%
+                        this.nuevaFactura.iva10 = decimal.Round(this.nuevaFactura.neto * Convert.ToDecimal(0.105), 2);//iva 10.5%
                     }
                     else
                     {
-                        this.factura.iva10 = 0;
+                        this.nuevaFactura.iva10 = 0;
                     }
 
-                    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-
+                    this.nuevaFactura.total = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.neto21 + this.nuevaFactura.iva10 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
                 }
 
-                this.txtTotalITC.Text = this.factura.totalITC.ToString();
-                this.txtTotalTasaHidrica.Text = this.factura.totalHidrica.ToString();
-                this.txtTotalTasaVial.Text = this.factura.totalVial.ToString();
-                this.txtTotalTasaMunicipal.Text = this.factura.totalMunicipal.ToString();
+                this.txtTotalITC.Text = this.nuevaFactura.totalITC.ToString();
+                this.txtTotalTasaHidrica.Text = this.nuevaFactura.totalHidrica.ToString();
+                this.txtTotalTasaVial.Text = this.nuevaFactura.totalVial.ToString();
+                this.txtTotalTasaMunicipal.Text = this.nuevaFactura.totalMunicipal.ToString();
                 this.txtTotalImpuestos.Text = impuestosCombustible.ToString();
 
-                //total: subtotal + iva + retencion + ivaPercepcion 
-                //impuestosCombustible
-                //if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
-                //{
-                //    this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.iva21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                //}
-                //else
-                //{
-                //    //this.factura.total = decimal.Round((this.factura.subTotal + this.factura.neto21 + this.factura.iva10 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-                //}
-                //cargo en pantalla
-                
-                string neto = decimal.Round(this.factura.neto, 2).ToString();
-                //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
+                string neto = decimal.Round(this.nuevaFactura.neto, 2).ToString();
                 this.txtNeto.Text = neto;
 
-                this.txtDescuento.Text = decimal.Round(this.factura.descuento, 2).ToString();
+                this.txtDescuento.Text = decimal.Round(this.nuevaFactura.descuento, 2).ToString();
 
-                this.txtsubTotal.Text = decimal.Round(this.factura.subTotal, 2).ToString();
+                this.txtsubTotal.Text = decimal.Round(this.nuevaFactura.subTotal, 2).ToString();
 
-                this.txtIvaTotal.Text = decimal.Round(this.factura.neto21, 2).ToString();
+                this.txtIvaTotal.Text = decimal.Round(this.nuevaFactura.neto21, 2).ToString();
 
-                this.txtPercepcionCF.Text = decimal.Round(this.factura.iva10, 2).ToString();
+                this.txtPercepcionCF.Text = decimal.Round(this.nuevaFactura.iva10, 2).ToString();
 
-                this.txtRetencion.Text = decimal.Round(this.factura.retencion, 2).ToString();
+                this.txtRetencion.Text = decimal.Round(this.nuevaFactura.retencion, 2).ToString();//PERCERPCION
 
-                //string Stotal = .ToString();
-                this.txtTotal.Text = decimal.Round(this.factura.total, 2).ToString();
-                //this.txtImporteEfectivo.Text = decimal.Round(this.factura.total, 2).ToString();
-                //this.txtImporteT.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.txtTotal.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.txtImporteFinanciar.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
-                //this.lblSaldoTarjeta.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.txtImporteFinanciar.Text = decimal.Round(this.factura.total, 2).ToString();
-                
                 try
                 {
                     if (!String.IsNullOrEmpty(this.txtImporteFinanciar.Text) && !String.IsNullOrEmpty(this.txtAnticipo.Text))
@@ -2872,7 +3261,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
                 catch { }
-                Factura f = this.factura;
+                Factura f = this.nuevaFactura;
                 Session.Add("Factura", f);
             }
             catch (Exception ex)
@@ -2881,140 +3270,48 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        /// <summary>
-        /// cuando hace clic en guardar y se genera la factura
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void btnAgregar_Click(object sender, EventArgs e)
+
+        private bool VerificarDescripcionDeItems()
         {
             try
             {
-                if (IsValid)
+                Factura factura = Session["Factura"] as Factura;
+
+                foreach (var item in factura.items)
                 {
-                    //Verifico si tiene la alerta de precios de articulos sin actualizar
-                    if (!this.verificarArticulosSinActualizar())
+                    if (string.IsNullOrEmpty(item.articulo.descripcion))
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
-                        return;
-                    }
-
-                    //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
-                    if (!this.validarSaldoMutual())
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
-                        return;
-                    }
-
-                    //Verifico en caso de que sea Nota de Crédito de una Factura con Forma de Pago Mutual, que haya eliminado los cobros asociados
-                    if (!this.verificarAnularFcMutual())
-                    {
-                        //Si existen cobros pendientes, retorno. El mensaje lo muestro en el método.
-                        return;
-                    }
-
-                    //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
-                    string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
-                    if (!string.IsNullOrEmpty(combustible) && combustible == "1")
-                    {
-                        int itemsCombustible = this.validarItemsCombustible();
-                        if (itemsCombustible < 0)
-                        {
-                            if (itemsCombustible == -1)
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error validando items de la factura. \");", true);
-
-                            if (itemsCombustible == -2)
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Los items de la factura deben ser todos del grupo de combustibles. \");", true);
-
-                            if (itemsCombustible == -3)
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se calcularon los impuestos de combustibles. \");", true);
-
-                            return;
-                        }
-                    }
-
-                    if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
-                    {
-
-                        int i = validarSaldoTarjeta();
-                        if (i == 1)
-                        {
-                            int j = validarUltimaFactura();
-                            if (j == 1)
-                            {
-                                int t = this.validarTrazasCargadas();
-                                if (t == 1)
-                                {
-                                    int iec = this.validarItemsEnCero();
-                                    if (iec == 1)
-                                    {
-                                        this.generarFactura(0);
-                                    }
-                                    else
-                                    {
-                                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                                    }
-
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender. \", {type: \"error\"});", true);
-                                }
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                            }
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto ingresado en la forma de pago no es igual al monto total de la factura. \", {type: \"error\"});", true);
-                            //m.mensajeBoxError("El monto ingresado en la forma de pago no es igual al monto total de la factura.");
-                        }
-                    }
-                    else
-                    {
-                        int j = validarUltimaFactura();//solo para preimpresa
-                        if (j == 1)
-                        {
-                            int t = this.validarTrazasCargadas();
-                            if (t == 1)
-                            {
-                                int iec = this.validarItemsEnCero();
-                                if (iec == 1)
-                                {
-                                    this.generarFactura(0);
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                                }
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender. \", {type: \"error\"});", true);
-                            }
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                            this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
-                        }
+                        return false;
                     }
                 }
-                else
-                {
-                    this.btnAgregar.Attributes.Remove("Disabled");
-                    this.btnAgregarRemitir.Attributes.Remove("Disabled");
-                }
 
+                return true;
             }
             catch
             {
-                
+                return false;
             }
-            
         }
+
+        private bool VerificarFacturaEnCero()
+        {
+            try
+            {
+                Factura factura = Session["Factura"] as Factura;
+
+                if (factura.EsFactura() && factura.total <= 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         protected void btnAgregarFactE_Click(object sender, EventArgs e)
         {
             try
@@ -3060,7 +3357,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     int ok = this.controlador.verificarRefacturarProveedor(fact);
                     if (ok < 1)
-                    {                        
+                    {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede refacturar porque uno o más articulos tienen proveedor con condicion IVA NO INFORMA. \", {type: \"error\"});", true);
                         return;
                     }
@@ -3070,18 +3367,18 @@ namespace Gestion_Web.Formularios.Facturas
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada. \", {type: \"error\"});", true);
                         return;
                     }
-                        int verificaTotalCero = this.validarFacturarTotalCero(fact);
-                        if (verificaTotalCero < 1)
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede facturar en monto cero. \", {type: \"error\"});", true);
-                            return;
-                        }
-                    
+                    int verificaTotalCero = this.validarFacturarTotalCero(fact);
+                    if (verificaTotalCero < 1)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede facturar en monto cero. \", {type: \"error\"});", true);
+                        return;
+                    }
+
                     if (fact.items.Count == 0)
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe agregar articulos a la factura. \", {type: \"error\"});", true);
-                    }                    
-                    
+                    }
+
                     fact.empresa.id = Convert.ToInt32(this.ListEmpresa.SelectedValue);
                     fact.sucursal.id = Convert.ToInt32(this.ListSucursal.SelectedValue);
                     fact.ptoV = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
@@ -3116,7 +3413,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int user = (int)Session["Login_IdUser"];
                     string presupuestos = Request.QueryString["prps"];
 
-                    int i = this.controlador.ProcesoRefacturarPRPEditado(fact, user,presupuestos);
+                    int i = this.controlador.ProcesoRefacturarPRPEditado(fact, user, presupuestos);
                     if (i > 0)
                     {
                         //despues de refacturar establezco el iva de nuevo en NO informa
@@ -3144,23 +3441,48 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-        }        
+        }
         protected void btnAgregarRemitir_Click(object sender, EventArgs e)
         {
-            
+
             if (IsValid)
             {
+                Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                if (!respuesta.Item2)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                    return;
+                }
                 //Verifico si tiene la alerta de precios de articulos sin actualizar
-                if(!this.verificarArticulosSinActualizar())
+                if (!this.VerificarArticulosSinActualizar())
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
                     return;
                 }
 
                 //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
-                if (!this.validarSaldoMutual())
+                if (!this.ValidarSaldoMutual())
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
+                    return;
+                }
+
+                //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
+                if (!VerificarNotaCreditoFactura())
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                    return;
+                }
+
+                if (!VerificarFacturaEnCero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                    return;
+                }
+
+                if (!VerificarDescripcionDeItems())
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
                     return;
                 }
 
@@ -3194,7 +3516,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (j == 1)
                         {
                             int t = this.validarTrazasCargadas();
-                            if(t == 1)
+                            if (t == 1)
                             {
                                 int iec = this.validarItemsEnCero();
                                 if (iec == 1)
@@ -3210,7 +3532,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 if (t == -1)
                                 {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender. \", {type: \"error\"});", true);
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.3 \", {type: \"error\"});", true);
                                 }
                                 else
                                 {
@@ -3249,7 +3571,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         else
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender. \", {type: \"error\"});", true);
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.4 \", {type: \"error\"});", true);
                         }
                     }
                     else
@@ -3259,7 +3581,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
             }
-            
+
         }
         private void generarFactura(int generaRemito)
         {
@@ -3284,7 +3606,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (fact.items.Count > 0)
                 {
-
                     int datosExtras = this.validarDatosExtrasCargadosFactura(fact);
                     if (datosExtras < 1)
                     {
@@ -3301,7 +3622,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.txtPorcDescuento.Text = "0";
                         this.lstPago.Clear();
-                        this.actualizarTotales();
+                        this.ActualizarTotales();
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No puede ingresar un descuento mayor al permitido. \", {type: \"error\"});", true);
                         return;
                     }
@@ -3324,7 +3645,7 @@ namespace Gestion_Web.Formularios.Facturas
                     fact.comentario = this.txtComentarios.Text;
                     if (this.chkIvaNoInformado.Checked == true)
                     {
-                        fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.factura.iva10 + ").";
+                        fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
                     }
                     fact.fechaEntrega = this.txtFechaEntrega.Text;
                     fact.horaEntrega = this.txtHorarioEntrega.Text;
@@ -3350,22 +3671,25 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     if (fact.formaPAgo.forma == "Credito")
                     {
-                        if (String.IsNullOrEmpty(fact.NroSolicitud) && this.accion != 6)
+                        if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se cargo solicitud del credito!. \");", true);
-                            return;
+                            if (String.IsNullOrEmpty(fact.NroSolicitud) && this.accion != 6)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se cargo solicitud del credito!. \");", true);
+                                return;
+                            }
                         }
+
                         int okAnticipo = this.validarCobroAnticipo();
                         if (okAnticipo <= 0)
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se genero el cobro del anticipo!. \");", true);
                             return;
                         }
-
                     }
                     if (fact.formaPAgo.forma == "Mutuales")
                     {
-                        if (!fact.tipo.tipo.Contains("Credito PRP"))
+                        if (!fact.tipo.tipo.Contains("Credito PRP") || accion != 6)
                         {
                             if (fact.pagare == null)
                             {
@@ -3423,7 +3747,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
                     {
                         //total NetosNoGravados cuando es venta combustible los guardo en .iva21
-                        fact.iva21 = this.obtenerTotalImpuestosCombustibles(this.factura);
+                        fact.iva21 = this.obtenerTotalImpuestosCombustibles(this.nuevaFactura);
                     }
                     else
                     {
@@ -3442,11 +3766,26 @@ namespace Gestion_Web.Formularios.Facturas
                         return;
                     }
 
+                    //por si es venta entre sucursales y selecciono un cliente interno que no pueda ingresar cantidades en negativo
+                    if (this.verificarSiLaCantidadIngresadaPorItemEsPositiva(nuevaFactura) == 0)
+                    {
+                        return;
+                    }
+
+                    //para saber si se va a imprimir el ticket de cambio con la factura
+                    fact.imprimirTicketDeCambio = this.chkImprimirTicketDeCambio.Checked;
+
+                    //si es nota de credito guarda en facturas el/los id de las facturas q pertenecen a esta nota de credito
+                    if (this.accion == 6)
+                    {
+                        fact.idFacturasParaLaNotaDeCredito = Request.QueryString["facturas"];
+                    }
+
                     //facturo
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
                     if (i > 0)
                     {
-                        #region func post generar
+                        #region func post generarl
                         if (this.accion == 4)
                         {
                             controladorFactEntity contFcEnt = new controladorFactEntity();
@@ -3455,6 +3794,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         if (this.accion == 6)
                         {
+                            string facturas = Request.QueryString["facturas"];
                             Configuracion config = new Configuracion();
                             controladorFactEntity contFcEnt = new controladorFactEntity();
 
@@ -3466,7 +3806,6 @@ namespace Gestion_Web.Formularios.Facturas
                                 //si NC de prp cuando facturo anulo el remito par devolver las trazas
                                 if (fact.tipo.tipo.Contains("Credito PRP") && config.egresoStock == "1")
                                 {
-                                    string facturas = Request.QueryString["facturas"];
                                     Remito r = this.controlador.obtenerRemitoByFactura(Convert.ToInt32(facturas.Split(';')[0]));
                                     this.contArticulo.AnularTrazabilidadArticulosDesdeRemito(r);
                                 }
@@ -3474,18 +3813,16 @@ namespace Gestion_Web.Formularios.Facturas
                                 if (fact.formaPAgo.forma == "Mutuales")
                                 {
                                     //Pongo en estado 0 los pagarés generados
-                                    string facturas = Request.QueryString["facturas"];
-                                    int  anularPagares = contFcEnt.quitarPagoMutualByFactura(Convert.ToInt32(facturas.Split(';')[0]));
+                                    int anularPagares = contFcEnt.quitarPagoMutualByFactura(Convert.ToInt32(facturas.Split(';')[0]));
                                     if (anularPagares >= 0)
-                                        Log.EscribirSQL(1,"INFO","Se anularon los pagarés asociados a la factura con id " + facturas.Split(';')[0]);
+                                        Log.EscribirSQL(1, "INFO", "Se anularon los pagarés asociados a la factura con id " + facturas.Split(';')[0]);
                                     else
-                                        Log.EscribirSQL(1, "ERROR", "No se pudieron anular los pagarés asociados a la factura con id " + facturas.Split(';')[0]);                                    
+                                        Log.EscribirSQL(1, "ERROR", "No se pudieron anular los pagarés asociados a la factura con id " + facturas.Split(';')[0]);
                                 }
                             }
                             if (fact.tipo.tipo.Contains("Credito PRP"))//elimino el anticipo
                             {
                                 controladorCobranza contCobranza = new controladorCobranza();
-                                string facturas = Request.QueryString["facturas"];
                                 Gestion_Api.Entitys.Facturas_Anticipos datosAnticipo = contFcEnt.obtenerDatosFacturaAnticipo(Convert.ToInt32(facturas.Split(';')[0]));
                                 if (datosAnticipo != null)
                                 {
@@ -3493,6 +3830,13 @@ namespace Gestion_Web.Formularios.Facturas
                                     //contCobranza.ProcesoEliminarCobro(movAnticipo.id);
                                     contCobranza.ProcesoEliminarCobroCompensacion(movAnticipo.id);
                                 }
+                            }
+
+                            //Guardo la relación de la factura/s con la Nota de Crédito
+                            int f_nc = contFcEnt.agregarFacturas_NotasCredito(facturas, fact.id);
+                            if (f_nc <= 0)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error guardando la relación de la Nota de Crédito con la/s factura/s. \", {type: \"error\"});", true);
                             }
 
                         }
@@ -3604,6 +3948,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             this.EnviarFacturaMail(fact);
                         }
+
                         if (this.accion != 9)
                         {
                             this.agregarMovimientoMillas(fact);
@@ -3611,7 +3956,6 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         #endregion
 
-                        //factura exitosa
                         Session.Remove("Factura");
                         string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
                         if (imprimir == "1")
@@ -3629,11 +3973,10 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        this.actualizarTotales();
+                        this.ActualizarTotales();
                         if (i == 0)
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Se debe reprocesar factura electronica. Vuelva a facturar. \", {type: \"error\"});", true);
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se debe reprocesar factura electronica. Vuelva a facturar"));
                         }
                         string motivo = "";
                         try
@@ -3641,23 +3984,21 @@ namespace Gestion_Web.Formularios.Facturas
                             motivo = fact.respuestaFE.Split('_')[2];
                         }
                         catch { }
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura." + motivo + ". \", {type: \"error\"});", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar factura "));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura 2." + motivo + ". \", {type: \"error\"});", true);
                     }
 
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe agregar articulos a la factura. " + this.txtCodigo.Text + " \", {type: \"error\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura " + this.txtCodigo.Text));
                 }
             }
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error guardando facturas." + ex.Message + " \", {type: \"error\"});", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando facturas. " + ex.Message));
             }
         }
+
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
         {
             try
@@ -3695,7 +4036,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);                        
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
                     }
 
                     this.btnNueva.Visible = true;
@@ -3704,30 +4045,34 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                     if (i == 0)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Se debe reprocesar factura electronica. Vuelva a facturar. \", {type: \"error\"});", true);                        
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Se debe reprocesar factura electronica. Vuelva a facturar. \", {type: \"error\"});", true);
                     }
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura. \", {type: \"error\"});", true);                    
-                }                
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se pudo generar factura. \", {type: \"error\"});", true);
+                }
                 return;
             }
             catch
             {
                 return;
-            }           
+            }
         }
         private int restablecerIvaCliente()
         {
             try
             {
-                //despues de refacturar dejo el IVA en no informa
-                Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
-                int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
-                c.iva = idIva.ToString();
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
-                return cMod;
+                if (configuracion.siemprePRP == "1")
+                {
+                    //despues de refacturar dejo el IVA en no informa
+                    Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                    int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
+                    c.iva = idIva.ToString();
+                    int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                    return cMod;
+                }
+                return 1;
             }
             catch
             {
@@ -3736,7 +4081,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
         private int obtenerDatosIvasFactura(int idFc)
         {
-            try 
+            try
             {
                 controladorFactEntity contFactEntity = new controladorFactEntity();
                 var datos = contFactEntity.obtenerDatosIvasFactura(idFc);
@@ -3751,21 +4096,21 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private void establecerIvaCliente(int idIva,int idCliente)
+        private void establecerIvaCliente(int idIva, int idCliente)
         {
             try
             {
-                Cliente c = this.contCliente.obtenerClienteID(idCliente);                
+                Cliente c = this.contCliente.obtenerClienteID(idCliente);
                 c.iva = idIva.ToString();
                 int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
                 return;
             }
             catch
             {
-                
+
             }
         }
-        private bool verificarArticulosSinActualizar()
+        private bool VerificarArticulosSinActualizar()
         {
             try
             {
@@ -3791,11 +4136,13 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnAgregarArt_Click(object sender, EventArgs e)
         {
-            this.cargarProductoAFactura();
+            _codigoArticuloParaAgregar = txtCodigo.Text;
+            this.CargarProductoAFactura();
+            this.ActualizarTotales();
         }
 
 
-        private void cargarProductoAFactura()
+        private void CargarProductoAFactura()
         {
             try
             {
@@ -3814,21 +4161,18 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtTotalArri.Text = "0";
                 }
 
+                ActualizarStockAlAgregarItem(txtCodigo.Text);
 
-                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                if (this.verificarNoEnviarMercaderiaNegativa() == 0)
+                    return;
 
-                if (artVerPromo != null)
-                {
-                    //Verifico si ya existen o no articulos en promocion en la fc, para controlar que estos articulos sean todos del mismo tipo (con promocion / sin promocion)
-                    //if (!verificarArticulosEnPromocion(artVerPromo))
-                    //{
-                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Los articulos a facturar deben tener la misma condición (todos en Promoción o todos sin Promoción). \", {type: \"error\"});", true);
-                    //    return;
-                    //}
-                }
-                
+                if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
+                    return;
+
+                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+
                 Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-                if (p != null)
+                if (p != null && p.FormaPago != 8)
                 {
                     if (p.PrecioFijo > 0)
                         this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
@@ -3856,7 +4200,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //item
                 ItemFactura item = new ItemFactura();
-                item.articulo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                item.articulo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
                 item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
                 decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
                 item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
@@ -3886,10 +4230,10 @@ namespace Gestion_Web.Formularios.Facturas
                 item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
                 //en base al precio unitario calculo iva del item
                 item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
+
                 //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
                 item.precioSinRecargo = item.precioSinIva;
                 item.precioVentaSinRecargo = item.precioUnitario;
-
                 item.porcentajeIIBB = item.articulo.ingBrutos;
                 item.porcentajeOtrosImpuestos = item.articulo.impInternos;
 
@@ -3928,16 +4272,17 @@ namespace Gestion_Web.Formularios.Facturas
                     item.descuento = 0;
                 }
 
-                ////si es importado cargo los datos de despacho si tiene alguno cargado
+                //si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
 
-                this.factura.items.Add(item);
+                this.nuevaFactura.items.Add(item);
                 //lo agrego al session
                 if (Session["Factura"] == null)
                 {
                     Factura fac = new Factura();
                     Session.Add("Factura", fac);
                 }
+
                 Factura f = Session["Factura"] as Factura;
 
                 if (!String.IsNullOrEmpty(this.txtRenglon.Text))
@@ -3946,15 +4291,15 @@ namespace Gestion_Web.Formularios.Facturas
                     item.nroRenglon = f.items.Count() + 1;
 
                 f.items.Add(item);
+                f.items = f.items.Distinct().ToList();
                 Session.Add("Factura", f);
 
-                //lo dibujo en pantalla
                 this.cargarItems();
 
                 //agrego abajo
                 //this.factura.items.Add(item);
                 //actualizo totales
-                this.actualizarTotales();
+                //this.actualizarTotales();
 
                 //borro los campos
                 this.borrarCamposagregarItem();
@@ -3962,13 +4307,12 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtCodigo.Focus();
 
                 this.lblMontoOriginal.Text = f.total.ToString();
-                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
             }
             catch (Exception ex)
             {
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando articulos." + ex.Message + " \", {type: \"error\"});", true);
             }
         }
@@ -3998,7 +4342,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //Si el articulo tiene promocion y los articulos ya seleccionados tienen promocion, retorno true
                     if (p != null && flagArticulosPromocion)
-                            return true;
+                        return true;
                     //Si el articulo no tiene promocion y los articulos ya seleccionados tampoco tienen, retorno true
                     if (p == null && !flagArticulosPromocion)
                         return true;
@@ -4024,11 +4368,11 @@ namespace Gestion_Web.Formularios.Facturas
                 string idCodigo = (sender as LinkButton).ID.ToString();
 
                 string[] datos = idCodigo.Split('_');
-                
+
                 idCodigo = datos[1];
 
                 string pos = datos[2];
-                
+
                 //obtengo el pedido del session
                 Factura ct = Session["Factura"] as Factura;
                 foreach (ItemFactura item in ct.items)
@@ -4050,10 +4394,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //vuelvo a cargar los items
                 this.cargarItems();
-                this.actualizarTotales();
+                this.ActualizarTotales();
 
-                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
             }
             catch (Exception ex)
@@ -4064,7 +4408,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void TrazabilidadItem(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 string idBoton = (sender as LinkButton).ID;
                 int idArticulo = Convert.ToInt32(idBoton.Split('_')[1]);
                 int posItem = Convert.ToInt32(idBoton.Split('_')[2]);
@@ -4085,7 +4429,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar trazabilidad item factura. " + ex.Message));                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al cargar trazabilidad item factura. " + ex.Message));
             }
         }
         private void CargarTrazabilidadItem(object sender, EventArgs e)
@@ -4097,12 +4441,12 @@ namespace Gestion_Web.Formularios.Facturas
                 int posItem = Convert.ToInt32(idBoton.Split('_')[2]);
 
                 Factura f = Session["Factura"] as Factura;
-                ItemFactura item = f.items[posItem];                
+                ItemFactura item = f.items[posItem];
 
                 this.lbMovTrazaNueva.Text = idBoton;
 
                 this.cargarCamposGrupo(item.articulo);
-                
+
 
                 ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirCargaTraza('')", true);
 
@@ -4133,7 +4477,7 @@ namespace Gestion_Web.Formularios.Facturas
                         txtTotalArri.Text = item.total.ToString();
                         ct.items.Remove(item);
                         break;
-                        
+
                     }
                 }
 
@@ -4142,7 +4486,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //vuelvo a cargar los items
                 this.cargarItems();
-                this.actualizarTotales();
+                this.ActualizarTotales();
 
             }
             catch (Exception ex)
@@ -4159,13 +4503,13 @@ namespace Gestion_Web.Formularios.Facturas
                 //int posItem = Convert.ToInt32(idBoton.Split('_')[2]);
 
                 this.lblDatosExtraItem.Text = idBoton;
-                
+
                 ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog2('')", true);
 
             }
             catch (Exception ex)
             {
-                
+
             }
         }
         private void EditarDescItemRefacturar(object sender, EventArgs e)
@@ -4192,7 +4536,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             List<ItemFactura> items = new List<ItemFactura>();
 
-            foreach(Control cr in this.phArticulos.Controls)
+            foreach (Control cr in this.phArticulos.Controls)
             {
                 //item
                 ItemFactura item = new ItemFactura();
@@ -4204,7 +4548,7 @@ namespace Gestion_Web.Formularios.Facturas
                 item.total = Convert.ToDecimal(tr.Cells[4]);
 
                 items.Add(item);
-               
+
             }
 
             return items;
@@ -4216,7 +4560,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
-                if (esTrazable == 1 && item.cantidad>0)
+                if (esTrazable == 1 && item.cantidad > 0)
+
                 {
                     int cantTrazas = 0;
                     int trazaActual = -1;
@@ -4242,7 +4587,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         return -1;
                     }
-                    if ( Math.Abs(cantTrazas) < Math.Abs(item.cantidad))
+                    if (Math.Abs(cantTrazas) < Math.Abs(item.cantidad))
                     {
                         return -2;
                     }
@@ -4327,7 +4672,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.chkVentaMedidaVenta.Visible = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -4349,10 +4694,10 @@ namespace Gestion_Web.Formularios.Facturas
                 Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(this.txtCodigo.Text);
                 if (artEnt != null)
                 {
-                    
+
                     //List<Stock> stocks = this.contArticulo.obtenerStockArticulo(artEnt.id);
                     var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, Convert.ToInt32(this.ListSucursal.SelectedValue));
-                    
+
 
                     decimal stock = 0;
                     decimal stockDestino = 0;
@@ -4361,7 +4706,7 @@ namespace Gestion_Web.Formularios.Facturas
                         stock = stocks.stock1.Value;
 
                         //verifico stock, si es cliente interno
-                        
+
                         if (this.ListSucursalCliente.Visible == true)
                         {
                             var StockDestino = contArtEntity.obtenerStockArticuloLocal(artEnt.id, Convert.ToInt32(this.ListSucursalCliente.SelectedValue));
@@ -4370,9 +4715,8 @@ namespace Gestion_Web.Formularios.Facturas
                                 stockDestino = StockDestino.stock1.Value;
                             }
                         }
-                        
                     }
-                    catch { }  
+                    catch { }
 
                     if (artEnt.stockMinimo > 0)
                     {
@@ -4384,20 +4728,20 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             if (stock - cant <= artEnt.stockMinimo)
                             {
-                                this.lbtnStockProd.BackColor = System.Drawing.Color.Red;   
+                                this.lbtnStockProd.BackColor = System.Drawing.Color.Red;
                             }
                             else
                             {
                                 this.lbtnStockProd.BackColor = System.Drawing.Color.Gray;
-                            }                            
+                            }
                         }
                     }
                     else
                     {
                         this.lbtnStockProd.BackColor = System.Drawing.Color.Gray;
                     }
-                    this.lbtnStockProd.Text = decimal.Round(stock,0).ToString();
-                    this.lbtnStockDestinoProd.Text = decimal.Round(stockDestino,0).ToString();
+                    this.lbtnStockProd.Text = decimal.Round(stock, 0).ToString();
+                    this.lbtnStockDestinoProd.Text = decimal.Round(stockDestino, 0).ToString();
                 }
             }
             catch
@@ -4405,6 +4749,9 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+
+
         private void totalItem()
         {
             try
@@ -4467,7 +4814,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //decimal precio = Convert.ToDecimal(this.txtPUnitario.Text);
                 //decimal total = cantidad * precio;
                 //this.txtTotalArri.Text = decimal.Round(total,2).ToString();               
-                
+
                 ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "alert", "focoDesc();", true);
             }
             catch (Exception ex)
@@ -4482,7 +4829,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string posicion = (sender as TextBox).ID.ToString().Split('_')[1];
                 Factura ct = Session["Factura"] as Factura;
                 ItemFactura item = ct.items[Convert.ToInt32(posicion)];
-                string cantNueva = (sender as TextBox).Text.Replace(',', '.');                                    
+                string cantNueva = (sender as TextBox).Text.Replace(',', '.');
                 item.cantidad = Convert.ToDecimal(cantNueva, CultureInfo.InvariantCulture);
 
                 //item.porcentajeDescuento = 0;
@@ -4512,7 +4859,7 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 item.descuento = (item.precioUnitario * (item.porcentajeDescuento / 100)) * item.cantidad;
-                item.total = ((item.precioUnitario*(1-(item.porcentajeDescuento/100))) * item.cantidad);
+                item.total = ((item.precioUnitario * (1 - (item.porcentajeDescuento / 100))) * item.cantidad);
                 ct.items.Remove(item);
                 ct.items.Insert(Convert.ToInt32(posicion), item);
                 TableRow tr = this.phArticulos.Controls[Convert.ToInt32(posicion)] as TableRow;
@@ -4527,7 +4874,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //vuelvo a cargar los items
                 //this.cargarItems();
-                this.actualizarTotales();
+                this.ActualizarTotales();
 
             }
             catch (Exception ex)
@@ -4575,7 +4922,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
-                return 0;  
+                return 0;
             }
             catch
             {
@@ -4608,14 +4955,14 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.totalItem();
                     this.lbtnAgregarArticuloASP.Focus();
-                }                
-                
+                }
+
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total con descuento. Verifique que ingreso numeros en Descuento" + ex.Message));
             }
-        }        
+        }
         protected void txtDescuento_TextChanged(object sender, EventArgs e)
         {
             try
@@ -4628,7 +4975,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.txtPorcDescuento.Text = "0";
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No puede ingresar un descuento mayor al " + dtoMax + "%. \"); ", true);
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No puede ingresar un descuento mayor al " + dtoMax + "%."));
                 }
             }
@@ -4636,17 +4983,17 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-            
-        }        
+
+        }
         protected void txtRetencion_TextChanged(object sender, EventArgs e)
         {
-            this.actualizarTotales();
+            this.ActualizarTotales();
         }
         protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
             //this.txtPtoVenta.Text = this.ListSucursal.SelectedValue;
             cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
-            
+
             cargarVendedor();
             //Me fijo si hay que cargar un cliente por defecto
             this.verificarClienteDefecto();
@@ -4679,14 +5026,14 @@ namespace Gestion_Web.Formularios.Facturas
                 //verifico el cierre de caja del punto de venta
                 this.verificarCierreCaja();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
         }
         protected void txtPorcRetencion_TextChanged(object sender, EventArgs e)
         {
-            this.actualizarTotales();
+            this.ActualizarTotales();
         }
         protected void DropListClientes_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -4698,6 +5045,8 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     Factura f = Session["Factura"] as Factura;
                     f.items.Clear();
+                    f.cliente = null;
+                    labelCliente.Text = string.Empty;
                     this.borrarCamposagregarItem();
                     Session.Add("Factura", f);
                     //lo dibujo en pantalla
@@ -4706,11 +5055,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
                 this.obtenerNroFactura();
-                
+
             }
             catch
             {
- 
+
             }
         }
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
@@ -4799,7 +5148,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void btnBuscarCliente_Click(object sender, EventArgs e)
         {
-            if(!String.IsNullOrEmpty(txtBuscarCliente.Text))
+            if (!String.IsNullOrEmpty(txtBuscarCliente.Text))
             {
 
             }
@@ -4842,10 +5191,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //me guardo el id de la lista seleccionada para mantenerlo al recargar la lista
                 int listaAnt = Convert.ToInt32(this.DropListLista.SelectedValue);
-                this.cargarListaPrecio();                
+                this.cargarListaPrecio();
                 this.DropListLista.SelectedValue = listaAnt.ToString();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error seleccionando tipo de Pago. " + ex.Message));
             }
@@ -4870,7 +5219,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.actualizarTotales();
+                this.ActualizarTotales();
                 //if (this.chkIvaNoInformado.Checked == true)
                 //{
                 //    this.txtComentarios.Text += "Percepcion IVA a Consumidor Final ($" + this.factura.iva10 + ")";
@@ -4899,17 +5248,44 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void ListTarjetas_SelectedIndexChanged(object sender, EventArgs e)
         {
+            MostrarMontoA_PagarModalTarjetas();
+        }
+
+        protected void ListMonedas_SelectedIndexChanged(object sender, EventArgs e)
+        {
             try
             {
-                //this.txtImporteT.Text = totalRecargo.ToString();
-                //this.txtImporteEfectivo.Text = totalRecargo.ToString();
                 DataTable dt = lstPago;
                 decimal resta = 0;
                 foreach (DataRow row in dt.Rows)
                 {
                     resta += Convert.ToDecimal(row["Neto"]);
                 }
-                
+
+                this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text) - resta).ToString();
+                this.txtImporteEfectivo.Text = (Convert.ToDecimal(this.txtTotal.Text) - resta).ToString();
+
+                //solo cuando es pago total con una sola tarjeta dejo la promocion
+                if (resta == 0)
+                    this.verificarPromocionTarjeta();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void MostrarMontoA_PagarModalTarjetas()
+        {
+            try
+            {
+                DataTable dt = lstPago;
+                decimal resta = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    resta += Convert.ToDecimal(row["Neto"]);
+                }
+
                 this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text) - resta).ToString();
                 this.txtImporteEfectivo.Text = (Convert.ToDecimal(this.txtTotal.Text) - resta).ToString();
 
@@ -4957,7 +5333,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //abre en pestaña nueva pantalla de stock del articulo
                 Articulo art = this.contArticulo.obtenerArticuloCodigo(this.txtCodigo.Text);
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Articulos/StockF.aspx?a=2&fd="+DateTime.Today.AddDays(-30).ToString("dd/MM/yyyy")+"&fh="+DateTime.Today.AddDays(1).ToString("dd/MM/yyyy")+"&articulo="+art.id+"&s="+this.ListSucursal.SelectedValue+"');", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('../Articulos/StockF.aspx?a=2&fd=" + DateTime.Today.AddDays(-30).ToString("dd/MM/yyyy") + "&fh=" + DateTime.Today.AddDays(1).ToString("dd/MM/yyyy") + "&articulo=" + art.id + "&s=" + this.ListSucursal.SelectedValue + "');", true);
             }
             catch
             {
@@ -5035,10 +5411,10 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal totalFC = Convert.ToDecimal(this.lblMontoOriginal.Text.ToString());
                 DataTable dt = this.lstPago;
                 foreach (DataRow row in dt.Rows)
-                {                    
+                {
                     total += Convert.ToDecimal(row["Neto"].ToString());
                 }
-                
+
                 if (total == totalFC)
                 {
                     return 1;
@@ -5047,7 +5423,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     return -1;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -5055,7 +5431,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private bool validarSaldoMutual()
+        private bool ValidarSaldoMutual()
         {
             try
             {
@@ -5127,18 +5503,20 @@ namespace Gestion_Web.Formularios.Facturas
         private int validarTrazasCargadas()
         {
             try
-            {                
+            {
                 Factura f = Session["Factura"] as Factura;
                 Configuracion config = new Configuracion();
-                if (config.siemprePRP == "1" && this.accion == 6 && !f.tipo.tipo.Contains("PRP"))
+                if (config.siemprePRP == "1" && this.accion == 6)
                 {
-                    return 1;
+                    if (!f.tipo.tipo.Contains("PRP") && !f.tipo.tipo.Contains("Presupuesto"))
+                    {
+                        return 1;
+                    }
                 }
-
                 foreach (ItemFactura item in f.items)
                 {
                     int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
-                    if (esTrazable == 1 && item.cantidad>0)
+                    if (esTrazable == 1 && item.cantidad > 0)
                     {
                         int cantTrazas = 0;
                         int trazaActual = -1;
@@ -5183,11 +5561,11 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Factura f = Session["Factura"] as Factura;
                 Configuracion config = new Configuracion();
-                if(config.ItemsEnCero == "0")
+                if (config.ItemsEnCero == "0")
                 {
                     foreach (ItemFactura item in f.items)
                     {
-                        if(item.precioUnitario == 0)
+                        if (item.precioUnitario == 0)
                         {
                             return -1;
                         }
@@ -5202,7 +5580,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return 1;
             }
         }
-        
         private int validarFacturacionPorcentual()
         {
             try
@@ -5244,7 +5621,8 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal total = f.total;
                     String cuit = f.cliente.cuit;
 
-                    if ((cuit == "00000000000" || cuit == "00-00000000-0") && (total > 1000) && (f.formaPAgo.id == 1))
+                    //if ((cuit == "00000000000" || cuit == "00-00000000-0") && (total > 1000) && (f.formaPAgo.id == 1))                    
+                    if ((cuit == "00000000000" || cuit == "00-00000000-0") && (total > f.ptoV.tope) && (f.formaPAgo.id == 1))
                     {
                         i = -1;
                     }
@@ -5331,7 +5709,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Configuracion c = new Configuracion();
                 decimal dto = Convert.ToDecimal(txtPorcDescuento.Text);
                 decimal dtoMax = Convert.ToDecimal(c.maxDtoFactura);
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
 
                 //si tiene seteado limite
                 if (dtoMax > 0)
@@ -5357,9 +5735,9 @@ namespace Gestion_Web.Formularios.Facturas
                 //    return 1;
                 //    //this.actualizarTotales();
                 //}
-                this.actualizarTotales();
-                this.lblMontoOriginal.Text = this.factura.total.ToString();
-                Factura f = this.factura;
+                this.ActualizarTotales();
+                this.lblMontoOriginal.Text = this.nuevaFactura.total.ToString();
+                Factura f = this.nuevaFactura;
                 Session.Add("Factura", f);
 
                 return 1; //Puede poner ese dto en la fc,recalculo y sigo
@@ -5400,7 +5778,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //}
                 return 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return -1;
             }
@@ -5453,7 +5831,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
-        
         private int validarDatosExtrasCargadosFactura(Factura f)
         {
             try
@@ -5477,6 +5854,130 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+        private bool VerificarNotaCreditoFactura()
+        {
+            try
+            {
+                controladorFactEntity contFactEnt = new controladorFactEntity();
+                Factura factura = Session["Factura"] as Factura;
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                //Verifico si es Nota de Credito. Si lo es, realizo las validaciones
+                if (accion == 6)
+                {
+                    //Verifico si tiene el permiso para refacturar nota de crédito. Si lo tiene devuelvo true.
+                    string permisoReFacturarNotaCredito = listPermisos.Where(x => x == "149").FirstOrDefault();
+                    if (!string.IsNullOrEmpty(permisoReFacturarNotaCredito))
+                    {
+                        return true;
+                    }
+
+                    //Valido que no se hayan realizado Notas de Crédito para las facturas seleccionadas
+                    bool response = contFactEnt.verificarFacturas_NotasCreditoByFacturas(Request.QueryString["facturas"]);
+                    return response;
+                }
+
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error validando facturas para realizar Nota de Crédito. Excepción:" + Ex.Message + " \", {type: \"error\"});", true);
+                return false;
+            }
+        }
+
+        private int verificarSiLaCantidadIngresadaPorItemEsPositiva(Factura f)
+        {
+            try
+            {
+                if (this.ListSucursalCliente.SelectedIndex != -1)
+                {
+                    foreach (var item in f.items)
+                    {
+
+                        if (item.cantidad <= 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Debe ingresar cantidades en los articulos mayores a '0' \", {type: \"error\"});", true);
+                            return 0;
+                        }
+                    }
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarSiLaCantidadIngresadaPorItemEsPositiva. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
+
+        public void ActualizarStockAlAgregarItem(string codigo)
+        {
+
+            Factura fc = Session["Factura"] as Factura;
+
+            var cantidadARestar = fc.items.Where(x => x.articulo.codigo == codigo).ToList().Sum(x => x.cantidad);
+
+            lbtnStockProd.Text = (Convert.ToDecimal(lbtnStockProd.Text) - Convert.ToDecimal(cantidadARestar)).ToString();
+        }
+
+        private int verificarNoEnviarMercaderiaSiNoHayStock()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(_verificarEnvioMercaderiaSiNoHayStockOrNegativo) && _verificarEnvioMercaderiaSiNoHayStockOrNegativo == "1")
+                {
+                    if (this.ListSucursalCliente.SelectedIndex > 0)
+                    {
+                        int stock = Convert.ToInt32(lbtnStockProd.Text);
+                        int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                        int total = stock - cantidad;
+
+                        if (total < 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita es mayor al stock que posee la sucursal \", {type: \"alert\"});", true);
+                            return 0;
+                        }
+                    }
+                }
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarNoEnviarMercaderiaSiNoHayStock. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
+
+        private int verificarNoEnviarMercaderiaNegativa()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(_verificarEnvioMercaderiaSiNoHayStockOrNegativo) && _verificarEnvioMercaderiaSiNoHayStockOrNegativo == "1")
+                {
+                    if (this.ListSucursalCliente.SelectedIndex > 0)
+                    {
+                        int cantidad = Convert.ToInt32(txtCantidad.Text);
+
+                        if (cantidad <= 0)
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"La cantidad escrita debe ser mayor a 0 \", {type: \"alert\"});", true);
+                            return 0;
+                        }
+                    }
+                }
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: verificarNoEnviarMercaderiaNegativa. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
         #endregion
 
         #region pagos tarjeta
@@ -5484,8 +5985,13 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int idListTarjetas = 0;
+                if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue))
+                {
+                    idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
+                }
                 //genero la clase
-                Tarjeta t = ct.obtenerTarjetaID(Convert.ToInt32(this.ListTarjetas.SelectedValue));
+                Tarjeta t = ct.obtenerTarjetaID(idListTarjetas);
                 //obtengo parametro si usa recargos o no
                 string recargo = WebConfigurationManager.AppSettings.Get("Recargo");
                 if (recargo == "1")
@@ -5520,7 +6026,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(this.txtImporteT.Text != "")
+                if (this.txtImporteT.Text != "")
                     this.calcularPagosCuotas();
             }
             catch
@@ -5535,29 +6041,65 @@ namespace Gestion_Web.Formularios.Facturas
                 Factura f = Session["Factura"] as Factura;
                 if (f.items.Count > 0)
                 {
-                    //Guardar la info de pago en el DT Temporal de pagos
-                    DataTable dt = lstPago;
-                    DataRow dr = dt.NewRow();
-                    dr["Tipo Pago"] = "Efectivo";
-                    dr["Importe"] = Convert.ToDecimal(this.txtImporteEfectivo.Text);
-                    dr["Neto"] = Convert.ToDecimal(this.txtImporteEfectivo.Text);
-                    dr["Recargo"] = Convert.ToDecimal(0.00);
+                    decimal montoIngresadoTxtEnEfectivo = Convert.ToDecimal(this.txtImporteEfectivo.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                    decimal totalFactura = Convert.ToDecimal(this.lblMontoOriginal.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                    controladorMoneda contMoneda = new controladorMoneda();
+                    var moneda = contMoneda.obtenerMonedaID(Convert.ToInt32(ListMonedas.SelectedValue));
+                    if (!ListMonedas.SelectedItem.Text.Equals("Credito"))
+                    {
+                        montoIngresadoTxtEnEfectivo *= Convert.ToDecimal(moneda.cambio);
+                    }
+                    DataTable dt = this.lstPago;
 
-                    dt.Rows.Add(dr);
+                    decimal sumaDeMontosPagos = 0;
 
-                    lstPago = dt;
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        sumaDeMontosPagos += Convert.ToDecimal(dr["Neto"]);
+                    }
 
-                    //llamo al metodo que muestra los pagos en la tabla
-                    this.cargarTablaPAgos();
-                    this.txtImporteEfectivo.Text = "";
+                    sumaDeMontosPagos += montoIngresadoTxtEnEfectivo;
+
+                    if (totalFactura >= sumaDeMontosPagos && montoIngresadoTxtEnEfectivo > 0)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Tipo Pago"] = "Efectivo";
+                        string tipoDePago = "Efectivo en " + ListMonedas.SelectedItem.Text;
+                        if (ListMonedas.SelectedItem.Text.Equals("Credito"))
+                        {
+                            tipoDePago = "Credito";
+                            dr["Tipo Pago"] = "Credito";
+                        }
+                        dr["Importe"] = montoIngresadoTxtEnEfectivo;
+                        dr["Neto"] = montoIngresadoTxtEnEfectivo;
+                        dr["Recargo"] = Convert.ToDecimal(0.00);
+                        dr["DetallePago"] = tipoDePago;
+                        dr["IdMoneda"] = ListMonedas.SelectedValue;
+
+                        dt.Rows.Add(dr);
+
+                        lstPago = dt;
+
+                        this.cargarTablaPAgos();
+                        this.txtImporteEfectivo.Text = "";
+
+                        this.lblAvisoTarjeta.Visible = false;
+                    }
+                    else
+                    {
+                        this.lblAvisoTarjeta.Text = "El Monto Ingresado supera al total de la factura. ";
+                        this.lblAvisoTarjeta.Visible = true;
+                        this.txtImporteEfectivo.Focus();
+                        this.txtImporteEfectivo.Text = "0";
+                    }
                 }
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura "));
                 }
-
+                MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
             }
-            catch
+            catch (Exception ex)
             {
 
             }
@@ -5566,34 +6108,35 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //genero la clase
                 Tarjeta t = ct.obtenerTarjetaID(Convert.ToInt32(this.ListTarjetas.SelectedValue));
-                Pago_Tarjeta ptarjeta = new Pago_Tarjeta();                
+                Pago_Tarjeta ptarjeta = new Pago_Tarjeta();
 
                 Factura f = Session["Factura"] as Factura;
+
+                decimal totalImportesIngresadosPagosConTarjeta = obtenerImportesIngresadosPagosConTarjeta();
+                decimal totalFactura = Convert.ToDecimal(this.lblMontoOriginal.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                decimal montoTxtTarjeta = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
+
                 if (f.items.Count > 0)
                 {
                     //obtengo parametro si usa recargos o no
                     string recargo = WebConfigurationManager.AppSettings.Get("Recargo");
                     if (recargo == "1")
                     {
-                        decimal totalActual = Convert.ToDecimal(this.txtImporteEfectivo.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                         ptarjeta.tarjeta.id = Convert.ToInt32(this.ListTarjetas.SelectedValue);
                         ptarjeta.tarjeta.nombre = this.ListTarjetas.SelectedItem.Text;
-                        decimal monto = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
-                        ptarjeta.monto = monto;
+                        ptarjeta.monto = montoTxtTarjeta;
+
                         ptarjeta.tarjeta.recargo = t.recargo;
-                        //decimal TotalIngresado = decimal.Round(ptarjeta.monto + ptarjeta.monto * (ptarjeta.tarjeta.recargo / 100), 2);
                         decimal TotalIngresado = decimal.Round(ptarjeta.monto, 2);
 
-
-                        if (totalActual >= TotalIngresado)
+                        //pregunta si el pago q se agrego no supera al total de la factura
+                        if (totalImportesIngresadosPagosConTarjeta + montoTxtTarjeta <= totalFactura && montoTxtTarjeta > 0)
                         {
                             decimal montoRecargado = TotalIngresado;
                             if (t.recargo > 0)
                             {
                                 montoRecargado = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture) * (1 + (t.recargo / 100));
-                                //this.SumarRecargoTarjeta(t);
                                 montoRecargado = decimal.Round(montoRecargado, 2);
                             }
 
@@ -5604,6 +6147,7 @@ namespace Gestion_Web.Formularios.Facturas
                             dr["Importe"] = montoRecargado;//TotalIngresado;
                             dr["Neto"] = ptarjeta.monto;
                             dr["Recargo"] = ptarjeta.tarjeta.recargo;
+                            dr["DetallePago"] = ptarjeta.tarjeta.nombre;
 
                             dt.Rows.Add(dr);
                             lstPago = dt;
@@ -5616,25 +6160,21 @@ namespace Gestion_Web.Formularios.Facturas
                             this.lblAvisoTarjeta.Visible = true;
                             this.txtImporteT.Focus();
                         }
-
                         //llamo al metodo que muestra los pagos en la tabla
                         this.cargarTablaPAgos();
                         this.txtImporteT.Text = "";
                     }
                     else
                     {
-                        decimal totalActual = Convert.ToDecimal(this.txtImporteEfectivo.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                         ptarjeta.tarjeta.id = Convert.ToInt32(this.ListTarjetas.SelectedValue);
                         ptarjeta.tarjeta.nombre = this.ListTarjetas.SelectedItem.Text;
                         decimal monto = Convert.ToDecimal(txtImporteT.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
                         ptarjeta.monto = monto;
                         ptarjeta.tarjeta.recargo = t.recargo;
-                        //decimal TotalIngresado = decimal.Round(ptarjeta.monto + ptarjeta.monto * (ptarjeta.tarjeta.recargo / 100), 2);
                         decimal TotalIngresado = decimal.Round(ptarjeta.monto, 2);
 
-                        if (totalActual >= TotalIngresado)
-                        {                                                       
-
+                        if (totalImportesIngresadosPagosConTarjeta + montoTxtTarjeta <= totalFactura && montoTxtTarjeta > 0)
+                        {
                             //Guardar la info de pago en el DT Temporal de pagos
                             DataTable dt = lstPago;
                             DataRow dr = dt.NewRow();
@@ -5642,6 +6182,7 @@ namespace Gestion_Web.Formularios.Facturas
                             dr["Importe"] = TotalIngresado;//TotalIngresado;
                             dr["Neto"] = ptarjeta.monto;
                             dr["Recargo"] = ptarjeta.tarjeta.recargo;
+                            dr["DetallePago"] = ptarjeta.tarjeta.nombre;
 
                             dt.Rows.Add(dr);
                             lstPago = dt;
@@ -5654,11 +6195,11 @@ namespace Gestion_Web.Formularios.Facturas
                             this.lblAvisoTarjeta.Visible = true;
                             this.txtImporteT.Focus();
                         }
-
                         //llamo al metodo que muestra los pagos en la tabla
                         this.cargarTablaPAgos();
                         this.txtImporteT.Text = "";
                     }
+                    MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
                 }
                 else
                 {
@@ -5670,19 +6211,54 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        private void MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta()
+        {
+            try
+            {
+                DataTable dt = lstPago;
+                decimal resta = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    resta += Convert.ToDecimal(row["Neto"]);
+                }
+                this.txtImporteEfectivo.Text = (Convert.ToDecimal(lblMontoOriginal.Text) - resta).ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private decimal obtenerImportesIngresadosPagosConTarjeta()
+        {
+            try
+            {
+                decimal montoTotal = 0;
+                DataTable dt = lstPago;
+                foreach (DataRow row in dt.Rows)
+                {
+                    montoTotal += Convert.ToDecimal(row["Neto"]);
+                }
+                return montoTotal;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
         private void cargarTablaPAgos()
         {
             try
             {
                 decimal totalFactura = Convert.ToDecimal(this.txtTotal.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                 decimal totalRecargos = 0;
-                decimal totTarjeta = 0;
+                decimal sumaMontosPagosTarjeta = 0;
                 DataTable dt = this.lstPago;
 
                 //limpio el Place holder
                 this.phPagosTarjeta.Controls.Clear();
-                //decimal saldo = 0;
-                
+
                 //obtengo parametro si usa recargos o no
                 string recargo = WebConfigurationManager.AppSettings.Get("Recargo");
                 if (recargo == "1")
@@ -5691,26 +6267,26 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         int pos = dt.Rows.IndexOf(dr);
                         this.cargarPHPagos(dr, pos);
-                        //totTarjeta += Convert.ToDecimal(dr["Importe"]) / (1 + (Convert.ToDecimal(dr["Recargo"]) / 100));
-                        totTarjeta += Convert.ToDecimal(dr["Neto"]);
+                        sumaMontosPagosTarjeta += Convert.ToDecimal(dr["Neto"]);
                         totalRecargos += Convert.ToDecimal(dr["Importe"]);
                     }
-                    decimal totalI = Decimal.Round(totalFactura - totTarjeta, 2);
-                    this.txtImporteEfectivo.Text = totalI.ToString();
-                    //this.lblSaldoTarjeta.Text = totalFactura.ToString();
+                    decimal totalI = Decimal.Round(totalFactura - sumaMontosPagosTarjeta, 2);
+                    //this.txtImporteEfectivo.Text = totalI.ToString();
                     this.lblSaldoTarjeta.Text = totalRecargos.ToString();
                     if (totalI == 0 && dt.Rows.Count > 0)//si ya complete el monto final sin recargos de la factura , le aplico el recargo a los items
                     {
                         int i = this.SumarRecargoTarjeta(dt);
-                        this.txtImporteEfectivo.Text = "0.00";
+                        //this.txtImporteEfectivo.Text = "0.00";
                         if (this.accion != 6)
                         {
                             if (i > 0)
                             {
+                                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Recargos aplicados a factura \", {type: \"info\"});", true);
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
                             }
                             else
                             {
+                                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"No se pudo aplicar recargo/s a factura! \", {type: \"info\"});", true);
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
                             }
                         }
@@ -5722,9 +6298,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         int pos = dt.Rows.IndexOf(dr);
                         this.cargarPHPagos(dr, pos);
-                        totTarjeta += Convert.ToDecimal(dr["Importe"]);
+                        sumaMontosPagosTarjeta += Convert.ToDecimal(dr["Importe"]);
                     }
-                    decimal totalI = Decimal.Round(totalFactura - totTarjeta, 2);
+                    decimal totalI = Decimal.Round(totalFactura - sumaMontosPagosTarjeta, 2);
                     this.txtImporteEfectivo.Text = totalI.ToString();
                     this.lblSaldoTarjeta.Text = totalFactura.ToString();
                     if (totalI == 0 && dt.Rows.Count > 0)//si ya complete el monto final sin recargos de la factura , le aplico el recargo a los items
@@ -5732,13 +6308,11 @@ namespace Gestion_Web.Formularios.Facturas
                         this.txtImporteEfectivo.Text = "0.00";
                     }
                 }
-
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista Pagos " + ex.Message));
             }
-
         }
         protected void cargarPHPagos(DataRow dr, int pos)
         {
@@ -5750,7 +6324,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //Celdas
 
                 TableCell celCodigo = new TableCell();
-                celCodigo.Text = dr["Tipo Pago"].ToString();
+                celCodigo.Text = dr["DetallePago"].ToString();
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
 
@@ -5781,7 +6355,6 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celAccion);
 
                 phPagosTarjeta.Controls.Add(tr);
-
             }
             catch
             {
@@ -5795,7 +6368,6 @@ namespace Gestion_Web.Formularios.Facturas
                 string[] codigo = (sender as LinkButton).ID.Split(new Char[] { '_' });
                 //obtengo el pedido del session
                 DataTable dt = lstPago;
-                decimal montoOriginal = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     if (dt.Rows.IndexOf(dr).ToString() == codigo[1])
@@ -5812,49 +6384,14 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
                             }
-                            //if (dr["Tipo Pago"].ToString() != "Efectivo")
-                            //{
-                            //    int idTarjeta = Convert.ToInt32(this.ListTarjetas.Items.FindByText(dr["Tipo Pago"].ToString()).Value);
-                            //    Tarjeta tarjeta = this.ct.obtenerTarjetaID(idTarjeta);
-                            //    if (tarjeta.recargo > 0)
-                            //    {
-                            //        if ((this.lblMontoOriginal.Text != this.lblSaldoTarjeta.Text) && dt.Rows.Count > 0)//si es el primero que borro y ya aplique el recargo a la factura.
-                            //        {
-                            //            int i = this.QuitarRecargoTarjeta(dt);
-                            //            if (i > 0)
-                            //            {
-                            //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
-                            //            }
-                            //            else
-                            //            {
-                            //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
-                            //            }
-                            //        }
-
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    int i = this.QuitarRecargoTarjeta(dt);
-                            //    if (i > 0)
-                            //    {
-                            //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
-                            //    }
-                            //    else
-                            //    {
-                            //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
-                            //    }
-                            //}
                         }
 
                         //lo quito
                         dt.Rows.RemoveAt(Convert.ToInt32(codigo[1]));
                         this.lblAvisoTarjeta.Visible = false;
-                        break;                        
-
+                        break;
                     }
                 }
-
                 //cargo el nuevo pedido a la sesion
                 lstPago = dt;
 
@@ -5862,8 +6399,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarTablaPAgos();
 
                 this.lblMontoCuotas.Text = "";
-                //this.lblSaldoTarjeta.Text = this.lblMontoOriginal.Text;
 
+                this.MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
             }
             catch (Exception ex)
             {
@@ -5897,8 +6434,8 @@ namespace Gestion_Web.Formularios.Facturas
                 Factura f = Session["Factura"] as Factura;
 
                 foreach (ItemFactura item in f.items)
-                {                    
-                    item.precioSinIva =Decimal.Round( item.precioSinIva * recargo,2,MidpointRounding.AwayFromZero);//(1 + (t.recargo / 100));                    
+                {
+                    item.precioSinIva = Decimal.Round(item.precioSinIva * recargo, 2, MidpointRounding.AwayFromZero);//(1 + (t.recargo / 100));                    
                     item.precioUnitario = Decimal.Round(item.precioUnitario * recargo, 2, MidpointRounding.AwayFromZero);// (1 + (t.recargo / 100));
                     //item.precioSinIva = Decimal.Round(item.precioSinIva * porcentajeOriginal * recargo, 2, MidpointRounding.AwayFromZero) + Decimal.Round(item.precioSinIva * (1 - porcentajeOriginal), 2, MidpointRounding.AwayFromZero);                    
                     //item.precioUnitario = Decimal.Round(item.precioSinIva * (1 + (item.articulo.porcentajeIva / 100)), 2, MidpointRounding.AwayFromZero);
@@ -5911,11 +6448,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //lo dibujo en pantalla
                 this.cargarItems();
                 //actualizo totales
-                this.actualizarTotales();
-                //this.txtImporteEfectivo.Text = decimal.Round(f.total, 2).ToString();
+                this.ActualizarTotales();
                 return 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return -1;
             }
@@ -5924,33 +6460,14 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //decimal montoFinalRecargo = 0;
-                //decimal montoOriginal = 0;
-
-                //foreach (DataRow row in dt.Rows)
-                //{
-                //    if (row["Tipo Pago"].ToString() != "Efectivo")
-                //    {
-                //        montoFinalRecargo += Convert.ToDecimal(row["Importe"]);
-                //        montoOriginal += Convert.ToDecimal(row["Neto"]);
-                //    }
-                //    //montoFinalRecargo += Convert.ToDecimal(row["Importe"]);
-                //    //montoOriginal += Convert.ToDecimal(row["neto"]);
-                //}
-                //calculo cuanto del total de la factura pago con tarjeta, en caso de que sea parte en tarjeta y otra en efectivo
-                //decimal porcentajeOriginal = montoOriginal / Convert.ToDecimal(this.lblMontoOriginal.Text);
-                //decimal recargo = Decimal.Round((((montoFinalRecargo * 100) / montoOriginal) / 100),2,MidpointRounding.AwayFromZero);
-
                 Factura f = Session["Factura"] as Factura;
 
                 foreach (ItemFactura item in f.items)
                 {
-                    //item.precioSinIva = Decimal.Round((item.precioSinIva / recargo),2);
-                    //item.precioUnitario = Decimal.Round(( item.precioUnitario / recargo),2);
                     item.precioSinIva = item.precioSinRecargo;
                     item.precioUnitario = item.precioVentaSinRecargo;
-                    item.total = Decimal.Round(((item.precioUnitario * item.cantidad) / (1 - (item.porcentajeDescuento / 100))),2);
-                    item.descuento = Decimal.Round(((item.precioUnitario * item.cantidad) - item.total),2);
+                    item.total = Decimal.Round(((item.precioUnitario * item.cantidad) / (1 - (item.porcentajeDescuento / 100))), 2);
+                    item.descuento = Decimal.Round(((item.precioUnitario * item.cantidad) - item.total), 2);
                 }
 
                 Session.Add("Factura", f);
@@ -5958,9 +6475,8 @@ namespace Gestion_Web.Formularios.Facturas
                 //lo dibujo en pantalla
                 this.cargarItems();
                 //actualizo totales
-                this.actualizarTotales();
-                //this.txtImporteEfectivo.Text = decimal.Round(f.total, 2).ToString();
-                
+                this.ActualizarTotales();
+
                 return 1;
             }
             catch (Exception ex)
@@ -5975,21 +6491,19 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dt = this.lstPago;
                 Tarjeta t = ct.obtenerTarjetaID(Convert.ToInt32(this.ListTarjetas.SelectedValue));
                 this.txtImporteEfectivo.Text = "0.00";
-                
+
                 if (t.recargo > 0)
                 {
                     int i = this.SumarRecargoTarjeta(dt);
                     if (i > 0)
                     {
                         this.lbtnCancelarPago.Visible = true;
-                        
+
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Recargos aplicados a factura.. \", {type: \"info\"});cerrarModalTarjeta();", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
                     }
                     else
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"No se pudo aplicar recargo/s a factura!. \");", true);
-                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo aplicar recargo/s a factura!."));
                     }
                 }
                 else
@@ -6017,7 +6531,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             dt.Clear();
                             this.cargarTablaPAgos();
-                            lstPago = dt;                            
+                            lstPago = dt;
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Proceso concluido con exito. \", {type: \"info\"});", true);
                             //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Recargos aplicados a factura. ", ""));
                         }
@@ -6042,28 +6556,40 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 //miro si esta en alguna promocion 
                 ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
-                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToInt32(ListTarjetas.SelectedValue));
+                int idListEmpresa = 0;
+                int idListSucursal = 0;
+                int idDropListFormaPago = 0;
+                int idDropListLista = 0;
+                int idListTarjetas = 0;
+
+                if (!string.IsNullOrWhiteSpace(ListEmpresa.SelectedValue)) idListEmpresa = Convert.ToInt32(ListEmpresa.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(ListSucursal.SelectedValue)) idListSucursal = Convert.ToInt32(ListSucursal.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(DropListFormaPago.SelectedValue)) idDropListFormaPago = Convert.ToInt32(DropListFormaPago.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(DropListLista.SelectedValue)) idDropListLista = Convert.ToInt32(DropListLista.SelectedValue);
+                if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue)) idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
+
+                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(idListEmpresa, idListSucursal, idDropListFormaPago, idDropListLista, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), idListTarjetas);
                 if (p != null)
                 {
-                    this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");                    
-                    this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
-                    this.actualizarTotales();
+                    ValidarExisteArticuloEnPromoTarjeta(p);
+                    this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
+                    //this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
+                    this.ActualizarTotales();
                     this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.txtImporteEfectivo.Text = "0";
                     this.lbtnAgregarEfectivo.Visible = false;
-
                     this.lblAvisoPromocion.Text = "Tarjeta en Promocion " + p.Descuento.Value.ToString() + "% de dto.";
                     this.lblAvisoPromocion.Visible = true;
                 }
                 else
                 {
+                    //Al seleccionar metodo de pago con tarjeta se borraba el descuento que se le habia puesto, y se borraba cuando se le ponia un descuento a traves de un monto ingresado
+                    //this.txtPorcDescuento.Text = "0";
                     this.txtImporteEfectivo.Attributes.Remove("disabled");
-                    this.txtPorcDescuento.Text = "0";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                     this.txtImporteT.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.txtImporteEfectivo.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
@@ -6075,6 +6601,67 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+        public void ValidarExisteArticuloEnPromoTarjeta(Gestion_Api.Entitys.Promocione promo)
+        {
+            try
+            {
+                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
+
+                Factura f = Session["Factura"] as Factura;
+
+                foreach (var item in f.items)
+                {
+                    Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(item.articulo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(item.cantidad));
+
+                    //TODO si es true que calcule el descuento
+                    if (p != null && p.Id == promo.Id)
+                    {
+                        totalItemPromocionArticulo(p, item);
+                    }
+                }
+
+                Session["Factura"] = f;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al validar si existe un articulo en la promocion de tarjeta " + ex.Message);
+            }
+        }
+
+        private void totalItemPromocionArticulo(Gestion_Api.Entitys.Promocione p, ItemFactura fi)
+        {
+            try
+            {
+                decimal desc = 0;
+
+                if (p.PrecioFijo > 0)
+                    fi.precioUnitario = p.PrecioFijo.Value;
+                else
+                    desc = Convert.ToDecimal(p.Descuento);
+
+                //recalculo los totales del item
+                decimal cantidad = Convert.ToDecimal(fi.cantidad);
+                decimal precio = Convert.ToDecimal(fi.precioUnitario);
+
+                decimal total = decimal.Round((cantidad * precio), 2);
+
+                total = decimal.Round(total, 2);
+
+                decimal totalConDescuento = decimal.Round(total - (total * (desc / 100)), 2);
+
+                decimal descuentoEnPesos = decimal.Round(total - totalConDescuento, 2);
+
+                fi.total = totalConDescuento;
+                fi.porcentajeDescuento = desc;
+                fi.descuento = descuentoEnPesos;
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total " + ex.Message));
             }
         }
         #endregion
@@ -6089,7 +6676,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerNroFactura();
                     this.lbtnAccion.Text = "FC <span class='caret'></span>";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
                 else
                 {
@@ -6111,7 +6698,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerNroPresupuesto();
                     this.lbtnAccion.Text = "PRP <span class='caret'></span>";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
             }
             catch
@@ -6129,7 +6716,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerNroNotaCredito();
                     this.lbtnAccion.Text = "NC <span class='caret'></span>";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
                 else
                 {
@@ -6151,7 +6738,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerNroNotaCreditoPresupuesto();
                     this.lbtnAccion.Text = "NC PRP <span class='caret'></span>";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
                 else
                 {
@@ -6173,7 +6760,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerNroNotaDebitoPresupuesto();
                     this.lbtnAccion.Text = "ND PRP <span class='caret'></span>";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
                 else
                 {
@@ -6195,7 +6782,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.obtenerNroNotaDebito();
                     this.lbtnAccion.Text = "ND <span class='caret'></span>";
-                    this.actualizarTotales();
+                    this.ActualizarTotales();
                 }
                 else
                 {
@@ -6225,7 +6812,7 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo realizar cierre. "));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error HAciendo Cierre Z. " + ex.Message));
             }
@@ -6245,34 +6832,34 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 string script;
-                
+
                 //obtengo numero factura
                 controladorDocumentos contDocumentos = new controladorDocumentos();
-                
+
                 TipoDocumento tp = contDocumentos.obtenerTipoDoc("Presupuesto");
-                
+
                 if (tipo == tp.id || tipo == 11 || tipo == 12)//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
                 {
-                    script = "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "','_blank');";                    
+                    script = "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "','_blank');";
                 }
                 else
                 {
                     if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26)//Si es Factura A/E, Nota credito A/E o Nota debito A/E
                     {
                         //factura
-                        script = "window.open('ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "', '_blank');";                        
+                        script = "window.open('ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "', '_blank');";
                     }
                     else//Factura B o cualquier otro.
                     {
-                        script = "window.open('ImpresionPresupuesto.aspx?a=2&Presupuesto=" + idFactura + "','_blank');";                        
+                        script = "window.open('ImpresionPresupuesto.aspx?a=2&Presupuesto=" + idFactura + "','_blank');";
                     }
                 }
 
                 if (remito > 0)
-                {                    
-                    script += " window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + remito + "&o=1','_blank');";                    
-                }               
-                
+                {
+                    script += " window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + remito + "&o=1','_blank');";
+                }
+
                 script += " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';";
 
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
@@ -6287,7 +6874,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.GenerarImpresionPDF(f);               
+                this.GenerarImpresionPDF(f);
             }
             catch
             {
@@ -6305,7 +6892,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string destinatarios = this.txtMailEntrega.Text;
 
                 if (f.tipo.tipo.Contains("Factura A") || f.tipo.tipo.Contains("Debito A") || f.tipo.tipo.Contains("Credito A")
-                    ||f.tipo.tipo.Contains("Factura E") || f.tipo.tipo.Contains("Debito E") || f.tipo.tipo.Contains("Credito E"))
+                    || f.tipo.tipo.Contains("Factura E") || f.tipo.tipo.Contains("Debito E") || f.tipo.tipo.Contains("Credito E"))
                 {
                     #region Fact A/E
                     //obtengo detalle de items
@@ -7167,7 +7754,7 @@ namespace Gestion_Web.Formularios.Facturas
                     stream.Write(pdfContent, 0, pdfContent.Length);
                     stream.Close();
 
-                    Attachment adjunto = new Attachment(path);                    
+                    Attachment adjunto = new Attachment(path);
 
                     int i = contFunciones.enviarMailFactura(adjunto, f, destinatarios);
                     if (i > 0)
@@ -7179,7 +7766,7 @@ namespace Gestion_Web.Formularios.Facturas
                     #endregion
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "No se pudo generar pdf para enviar factura por correo." + ex.Message);
             }
@@ -7206,7 +7793,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (idRemito > 0)
                 {
                     scriptRemito = " window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + idRemito + "&o=1','_blank');";
-                }    
+                }
 
                 script2 = "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + prp.id + "','_blank');";
                 script3 = " $.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';";
@@ -7351,7 +7938,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idC = Convert.ToInt32(this.DropListClientes.SelectedValue);
                 int ok = this.verificarMostrarAccionSMS();
                 if (ok < 1)
-                {                    
+                {
                     return -1;
                 }
                 else
@@ -7419,7 +8006,7 @@ namespace Gestion_Web.Formularios.Facturas
                 List<Gestion_Api.Entitys.Trazabilidad_Campos> lstCampos = this.contArticulo.obtenerCamposTrazabilidadByGrupo(art.grupo.id);
 
                 foreach (Gestion_Api.Entitys.Trazabilidad_Campos campos in lstCampos)
-                {                   
+                {
 
                     TableHeaderCell th = new TableHeaderCell();
                     th.Text = campos.nombre;
@@ -7433,7 +8020,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private void CargarTrazasArticulo(int idArticulo,int cantCampos)
+        private void CargarTrazasArticulo(int idArticulo, int cantCampos)
         {
             try
             {
@@ -7478,7 +8065,7 @@ namespace Gestion_Web.Formularios.Facturas
                         dt = contCompra.obtenerTrazabilidadVendidasItemByArticuloDoc(idArticulo, suc, 0, 0);
                     }
                 }
-                
+
                 int pos = 0;
                 int columnas = 0;
                 TableRow tr = new TableRow();
@@ -7523,10 +8110,8 @@ namespace Gestion_Web.Formularios.Facturas
                         pos++;
                         idTrazas = "";
                         phStockTrazabilidad.Controls.Add(tr);
-
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -7583,10 +8168,10 @@ namespace Gestion_Web.Formularios.Facturas
                                 }
                             }
                         }
-                     }
+                    }
                     //cargo de nuevo la factura con las trazas en los items
                     f.items[posItem].lstTrazas = listaTrazas;
-                    
+
                     Session["Factura"] = f;
                 }
                 else
@@ -7610,7 +8195,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int NroTraza = -1;
                 foreach (ItemFactura item in f.items)
                 {
-                    if(item.lstTrazas.Count > 0 && item.lstTrazas != null)
+                    if (item.lstTrazas.Count > 0 && item.lstTrazas != null)
                     {
                         foreach (Gestion_Api.Entitys.Trazabilidad traza in item.lstTrazas)
                         {
@@ -7629,7 +8214,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 return f.items;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -7674,7 +8259,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ItemFactura item = f.items[Convert.ToInt32(posItem)];
 
-                
+
                 int cantCampos = phCamposTrazaNueva.Controls.Count;
                 TableRow tr = new TableRow();
                 int pos = 0;
@@ -7696,11 +8281,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.phTrazabilidadNueva.Controls.Add(tr);
                         pos = 0;
-                    }                                
+                    }
                 }
                 //this.phTrazabilidadNueva.Controls.Add(tr);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -7743,7 +8328,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Session["Factura"] = f;
                 this.cargarTrazasAgregadas();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -7799,35 +8384,37 @@ namespace Gestion_Web.Formularios.Facturas
 
         #region datos despacho
 
-        private void agregarInfoDespachoItem(Articulo articulo)
+        private void AgregarInfoDespachoItem(Articulo articulo)
         {
             try
             {
-                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
-                controladorPais contPais = new controladorPais();
-
-                Gestion_Api.Entitys.articulo art = contArtEntity.obtenerArticuloEntity(articulo.id);
-
-                Factura fact = Session["Factura"] as Factura;
-                //si es PRP omito la info de despachos
-                if (fact.tipo.tipo.Contains("Presupuesto") || fact.tipo.tipo.Contains("PRP"))
-                    return;
-
-                if (art.Articulos_Despachos.Count > 0)
+                if (configuracion.infoImportacionFacturas == "1")
                 {
-                    Pais pais = contPais.obtenerPaisID(art.procedencia.Value);
-                    var datos = art.Articulos_Despachos.FirstOrDefault();
+                    ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+                    controladorPais contPais = new controladorPais();
 
-                    if(datos.FechaDespacho != null)
-                        this.txtDescripcion.Text += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
-                    if(!String.IsNullOrEmpty(datos.NumeroDespacho))
-                        this.txtDescripcion.Text += " |" + "D.I.: " + datos.NumeroDespacho;
-                    if(!String.IsNullOrEmpty(datos.Lote))
-                        this.txtDescripcion.Text += " |" + "Lote: " + datos.Lote;
-                    if(!String.IsNullOrEmpty(datos.Vencimiento))
-                        this.txtDescripcion.Text += " |" + "Vencimiento: " + datos.Vencimiento;
-                    if (pais != null)
-                        this.txtDescripcion.Text += " |" + "Procedencia: " + pais.descripcion;
+                    Factura fact = Session["Factura"] as Factura;
+                    //si es PRP omito la info de despachos
+                    if (fact.tipo.tipo.ToLower().Contains("presupuesto") || fact.tipo.tipo.ToLower().Contains("prp"))
+                        return;
+
+                    Gestion_Api.Entitys.articulo art = contArtEntity.obtenerArticuloEntity(articulo.id);
+                    if (art.Articulos_Despachos.Count > 0)
+                    {
+                        Pais pais = contPais.obtenerPaisID(art.procedencia.Value);
+                        var datos = art.Articulos_Despachos.FirstOrDefault();
+
+                        if (datos.FechaDespacho != null && !articulo.descripcion.Contains("Fecha despacho:"))
+                            articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
+                        if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !articulo.descripcion.Contains("D.I.:"))
+                            articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
+                        if (!String.IsNullOrEmpty(datos.Lote) && !articulo.descripcion.Contains("Lote:"))
+                            articulo.descripcion += " |" + "Lote: " + datos.Lote;
+                        if (!String.IsNullOrEmpty(datos.Vencimiento) && !articulo.descripcion.Contains("Vencimiento:"))
+                            articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
+                        if (pais != null && !articulo.descripcion.Contains("Procedencia:"))
+                            articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
+                    }
                 }
 
                 return;
@@ -7837,43 +8424,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return;
             }
         }
-        private void agregarInfoDespachoDesdePedido(ItemFactura item)
-        {
-            try
-            {
-                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
-                controladorPais contPais = new controladorPais();
 
-                Factura fact = Session["Factura"] as Factura;
-                //si es PRP omito la info de despachos
-                if (fact.tipo.tipo.Contains("Presupuesto") || fact.tipo.tipo.Contains("PRP"))
-                    return;
-
-                Gestion_Api.Entitys.articulo art = contArtEntity.obtenerArticuloEntity(item.articulo.id);
-                if (art.Articulos_Despachos.Count > 0)
-                {
-                    Pais pais = contPais.obtenerPaisID(art.procedencia.Value);
-                    var datos = art.Articulos_Despachos.FirstOrDefault();
-
-                    if (datos.FechaDespacho != null && !item.articulo.descripcion.Contains("Fecha despacho:"))
-                        item.articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
-                    if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !item.articulo.descripcion.Contains("D.I.:"))
-                        item.articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
-                    if (!String.IsNullOrEmpty(datos.Lote) && !item.articulo.descripcion.Contains("Lote:"))
-                        item.articulo.descripcion += " |" + "Lote: " + datos.Lote;
-                    if (!String.IsNullOrEmpty(datos.Vencimiento) && !item.articulo.descripcion.Contains("Vencimiento:"))
-                        item.articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
-                    if (pais != null && !item.articulo.descripcion.Contains("Procedencia:"))
-                        item.articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
-                }
-
-                return;
-            }
-            catch
-            {
-                return;
-            }
-        }
         #endregion        
 
         #region CREDITOS
@@ -7882,8 +8433,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 ControladorPlenario contPlena = new ControladorPlenario();
-                List<SolicitudPlenario> solicitudes = contPlena.obtenerSolicitudesPlenarioFiltradas(this.txtDniCredito.Text);                
-                
+                List<SolicitudPlenario> solicitudes = contPlena.obtenerSolicitudesPlenarioFiltradas(this.txtDniCredito.Text);
+
                 int pos = 0;
                 this.phSolicitud.Controls.Clear();
                 foreach (SolicitudPlenario s in solicitudes)
@@ -7951,7 +8502,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -7967,10 +8518,14 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string omitioValidacion = this.lblOmitioCodigoCredito.Text;
                 string motivo = this.txtMotivoCredito.Text;
-                if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
-                    return;
+                    if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
+                        return;
+                    }
                 }
 
                 foreach (Control c in this.phSolicitud.Controls)
@@ -7984,199 +8539,235 @@ namespace Gestion_Web.Formularios.Facturas
                         solicitud.Dni = this.txtDniCredito.Text;
                         solicitud.FechaOperacion = Convert.ToDateTime(tr.Cells[1].Text, new CultureInfo("es-AR"));
                         solicitud.NroSolicitud = Convert.ToInt32(tr.Cells[2].Text);
-                        solicitud.Capital = Convert.ToDecimal(tr.Cells[3].Text.Replace("$",""));
+                        solicitud.Capital = Convert.ToDecimal(tr.Cells[3].Text.Replace("$", ""));
                         solicitud.Anticipo = Convert.ToDecimal(tr.Cells[4].Text.Replace("$", ""));
                         solicitud.Validada = 1;
                         solicitud.FechaValidacion = DateTime.Now;
                     }
                 }
-                if (!String.IsNullOrEmpty(nroSolicitud))
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                 {
-                    int okSucursal = contPlenario.validarSucursalSolicitudPlenario(solicitud.Dni,solicitud.NroSolicitud,Convert.ToInt32(this.ListSucursal.SelectedValue));
-                    if ( okSucursal < 0)
+                    if (String.IsNullOrEmpty(nroSolicitud))
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe seleccionar al menos una solicitud. \");", true);
+                        return;
+                    }
+
+                    int okSucursal = contPlenario.validarSucursalSolicitudPlenario(solicitud.Dni, solicitud.NroSolicitud, Convert.ToInt32(this.ListSucursal.SelectedValue));
+                    if (okSucursal < 0)
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"La solicitud seleccionada no corresponde a esta sucursal. \");", true);
                         return;
                     }
-                    
-                    Factura f = Session["Factura"] as Factura;
+                }
 
-                    decimal diferencia = f.total - (solicitud.Capital + solicitud.Anticipo.Value);
+                Factura f = Session["Factura"] as Factura;
+
+                decimal diferencia = f.total - (solicitud.Capital + solicitud.Anticipo.Value);
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
+                {
                     if (Math.Abs(diferencia) > Convert.ToDecimal(10))
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto de la factura. \");", true);
                         return;
-                    }                    
+                    }
+                }
 
-                    if(solicitud.Anticipo.ToString() != this.txtAnticipo.Text)
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
-                        return;
-                    }
-                    this.txtComentarios.Text += "\n " + datos;
-                    f.NroSolicitud = nroSolicitud;
-                    f.Solicitud = solicitud;                    
-                    Session["Factura"] = f;
+                if (solicitud.Anticipo.ToString() != this.txtAnticipo.Text)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
+                    return;
+                }
+
+                this.txtComentarios.Text += "\n " + datos;
+                f.NroSolicitud = nroSolicitud;
+                f.Solicitud = solicitud;
+                Session["Factura"] = f;
+                //lo marco como que se uso
+                contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
+
+                if (omitioValidacion == "0")
+                {
                     //lo marco como que se uso
-                    contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text),2);
-                    
-                    if (omitioValidacion == "0")
-                    {
-                        //lo marco como que se uso
-                        contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
-                        this.txtComentarios.Text += " - VALIDADO POR SMS";
-                    }
-                    else
-                    {
-                        if (this.lblIdRegistro.Text == "0")
-                        {
-                            CodigosTelefono registro = new CodigosTelefono();
-                            registro.DNI = this.txtDniCredito.Text;
-                            string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
-                            if(!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
-                            {
-                                registro.Telefono = telefono;
-                            }
-                            registro.FechaHora = DateTime.Now;
-                            registro.Estado = 0;
-                            registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
-                            registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
-                            registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            contPlenario.agregarCodigoTelefono(registro);
-                            this.lblIdRegistro.Text = registro.Id.ToString();
-                        }
-                        else
-                        {
-                            Planario_Api.Plenario p = new Planario_Api.Plenario();
-                            CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
-                            registro.Motivo = this.txtMotivoCredito.Text;                            
-                            p.modificarTelefonoDNI(registro);                            
-                        }
-                    }
-                    this.guardarDatosFechaNacimiento();
-                    this.verificarCobroAnticipo();
-                    this.obtenerPagosCuentaAnticipo();
-                    
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud seleccionada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
+                    contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
+                    this.txtComentarios.Text += " - VALIDADO POR SMS";
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe seleccionar al menos una solicitud. \");", true);
+                    if (this.lblIdRegistro.Text == "0")
+                    {
+                        CodigosTelefono registro = new CodigosTelefono();
+                        registro.DNI = this.txtDniCredito.Text;
+                        string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
+                        if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
+                        {
+                            registro.Telefono = telefono;
+                        }
+                        registro.FechaHora = DateTime.Now;
+                        registro.Estado = 0;
+                        registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
+                        registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                        registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        contPlenario.agregarCodigoTelefono(registro);
+                        this.lblIdRegistro.Text = registro.Id.ToString();
+                    }
+                    else
+                    {
+                        Planario_Api.Plenario p = new Planario_Api.Plenario();
+                        CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        p.modificarTelefonoDNI(registro);
+                    }
                 }
+                this.guardarDatosFechaNacimiento();
+                int temp = this.verificarCobroAnticipo();
+
+                if (temp <= 0)
+                    return;
+
+                this.obtenerPagosCuentaAnticipo();
+
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud seleccionada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Ocurrio un error guardando solicitud. " + ex.Message + " \", {type: \"error\"});", true);
             }
-        }                
+        }
         private void guardarSolicitudManual()
         {
             try
             {
                 ControladorPlenario contPlenario = new ControladorPlenario();
+                SolicitudPlenario solicitudPlenario = new SolicitudPlenario();
 
                 string omitioValidacion = this.lblOmitioCodigoCredito.Text;
                 string motivo = this.txtMotivoCredito.Text;
-                if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
+
+                if (!string.IsNullOrEmpty(configuracion.CreditosModoSimple) && configuracion.CreditosModoSimple != "1")
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
-                    return;
-                }
-
-                if (this.txtNroSolicitudManual.Text.Length != 6)
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Nro de solicitud debe ser de 6 digitos. \");", true);
-                    return;
-                }
-
-                if (!String.IsNullOrEmpty(this.txtNroSolicitudManual.Text) && !String.IsNullOrEmpty(this.txtFechaSolicitudManual.Text) && !String.IsNullOrEmpty(this.txtCapitalSolicitudManual.Text))
-                {
-                    SolicitudPlenario solicitud = new SolicitudPlenario();
-                    solicitud.Dni = this.txtDniCredito.Text;
-                    solicitud.FechaOperacion = Convert.ToDateTime(this.txtFechaSolicitudManual.Text, new CultureInfo("es-AR"));
-                    solicitud.NroSolicitud = Convert.ToInt32(this.txtNroSolicitudManual.Text);
-                    solicitud.Capital = Convert.ToDecimal(this.txtCapitalSolicitudManual.Text);
-                    solicitud.Anticipo = Convert.ToDecimal(this.txtAnticipoSolicitudManual.Text);
-                    solicitud.Validada = 0;
-
-                    string datos = "Solicitud nº " + this.txtNroSolicitudManual.Text + ", DNI: " + this.txtDniCredito.Text + ", Fecha: " + this.txtFechaSolicitudManual.Text + ", Capital:" + this.txtCapitalSolicitudManual.Text + ", Anticipo:" + this.txtAnticipoSolicitudManual.Text;
-
-                    Factura f = Session["Factura"] as Factura;
-                    
-                    decimal diferencia = f.total - (solicitud.Capital + solicitud.Anticipo.Value);                    
-                    if (Math.Abs(diferencia) > Convert.ToDecimal(10))
+                    if (omitioValidacion == "1" && (String.IsNullOrEmpty(motivo) || motivo.Length < 3))
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto de la factura. \");", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar un motivo de porque omitio validacion. \");", true);
                         return;
-                    } 
+                    }
 
-                    if (solicitud.Anticipo.ToString() != this.txtAnticipo.Text)
+                    if (this.txtNroSolicitudManual.Text.Length != 6)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Nro de solicitud debe ser de 6 digitos. \");", true);
                         return;
-                    } 
-
-                    f.NroSolicitud = this.txtNroSolicitudManual.Text;
-                    f.Solicitud = solicitud;
-                    Session["Factura"] = f;
-                    this.txtComentarios.Text += "\n " + datos;
-
-                    if (omitioValidacion == "0")
-                    {
-                        //lo marco como que se uso
-                        contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
-                        this.txtComentarios.Text += " - VALIDADO POR SMS";
                     }
-                    else
-                    {
-                        if (this.lblIdRegistro.Text == "0")
-                        {
-                            CodigosTelefono registro = new CodigosTelefono();
-                            registro.DNI = this.txtDniCredito.Text;
-                            string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
-                            if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
-                            {
-                                registro.Telefono = telefono;
-                            }
-                            registro.FechaHora = DateTime.Now;
-                            registro.Estado = 0;
-                            registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
-                            registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
-                            registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            contPlenario.agregarCodigoTelefono(registro);
-                            this.lblIdRegistro.Text = registro.Id.ToString();
-                        }
-                        else
-                        {
-                            Planario_Api.Plenario p = new Planario_Api.Plenario();
-                            CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
-                            registro.Motivo = this.txtMotivoCredito.Text;
-                            p.modificarTelefonoDNI(registro);                            
-                        }
-                    }
-                    this.guardarDatosFechaNacimiento();
-                    this.verificarCobroAnticipo();
-                    this.obtenerPagosCuentaAnticipo();
 
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud cargada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
+                    if (String.IsNullOrEmpty(this.txtNroSolicitudManual.Text) && String.IsNullOrEmpty(this.txtFechaSolicitudManual.Text) && String.IsNullOrEmpty(this.txtCapitalSolicitudManual.Text))
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar todos los datos!. \");", true);
+                        return;
+                    }
+
+                    solicitudPlenario.Dni = this.txtDniCredito.Text;
+                    solicitudPlenario.FechaOperacion = Convert.ToDateTime(this.txtFechaSolicitudManual.Text, new CultureInfo("es-AR"));
+                    solicitudPlenario.NroSolicitud = Convert.ToInt32(this.txtNroSolicitudManual.Text);
+                    solicitudPlenario.Capital = Convert.ToDecimal(this.txtCapitalSolicitudManual.Text);
+                    solicitudPlenario.Anticipo = Convert.ToDecimal(this.txtAnticipoSolicitudManual.Text);
+                    solicitudPlenario.Validada = 0;
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Debe cargar todos los datos!. \");", true);
+                    InicializarSolicitudPlenarioPorDefault(solicitudPlenario);
                 }
+
+                string datos = "Solicitud nº " + solicitudPlenario.NroSolicitud.ToString() + ", DNI: " + solicitudPlenario.Dni + ", Fecha: " + solicitudPlenario.FechaOperacion.ToString("dd/MM/yyyy") +
+                    ", Capital:" + solicitudPlenario.Capital + ", Anticipo:" + solicitudPlenario.Anticipo;
+
+                Factura f = Session["Factura"] as Factura;
+
+                decimal diferencia = f.total - (solicitudPlenario.Capital + solicitudPlenario.Anticipo.Value);
+
+                if (Math.Abs(diferencia) > Convert.ToDecimal(10))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto de la factura. \");", true);
+                    return;
+                }
+
+                if (solicitudPlenario.Anticipo.ToString() != this.txtAnticipo.Text)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Verifique el monto del anticipo cargado. \");", true);
+                    return;
+                }
+
+                f.NroSolicitud = solicitudPlenario.NroSolicitud.ToString();
+                f.Solicitud = solicitudPlenario;
+                Session["Factura"] = f;
+                this.txtComentarios.Text += "\n " + datos;
+
+                if (omitioValidacion == "0")
+                {
+                    //lo marco como que se uso
+                    contPlenario.editarEstadoRegistroTelefonoDniByID(Convert.ToInt32(this.lblIdRegistro.Text), 2);
+                    this.txtComentarios.Text += " - VALIDADO POR SMS";
+                }
+                else
+                {
+                    if (this.lblIdRegistro.Text == "0")
+                    {
+                        CodigosTelefono registro = new CodigosTelefono();
+                        registro.DNI = this.txtDniCredito.Text;
+                        string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
+                        if (!String.IsNullOrEmpty(this.txtCodAreaCredito.Text) && !String.IsNullOrEmpty(this.txtNroCelularCredito.Text) && (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length == 10))
+                        {
+                            registro.Telefono = telefono;
+                        }
+                        registro.FechaHora = DateTime.Now;
+                        registro.Estado = 0;
+                        registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
+                        registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
+                        registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        contPlenario.agregarCodigoTelefono(registro);
+                        this.lblIdRegistro.Text = registro.Id.ToString();
+                    }
+                    else
+                    {
+                        Planario_Api.Plenario p = new Planario_Api.Plenario();
+                        CodigosTelefono registro = p.obtenerRegistroTelefonoDNI(Convert.ToInt32(this.lblIdRegistro.Text));
+                        registro.Motivo = this.txtMotivoCredito.Text;
+                        p.modificarTelefonoDNI(registro);
+                    }
+                }
+                this.guardarDatosFechaNacimiento();
+                int temp = this.verificarCobroAnticipo();
+
+                if (temp <= 0)
+                    return;
+
+                this.obtenerPagosCuentaAnticipo();
+
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Solicitud cargada con exito!. \", {type: \"info\"}); cerrarModalCredito(); ", true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"Ocurrio un error guardando solicitud. " + ex.Message + " \", {type: \"error\"});", true);
             }
         }
+
+        private void InicializarSolicitudPlenarioPorDefault(SolicitudPlenario solicitudPlenario)
+        {
+            solicitudPlenario.Dni = "00000000";
+            solicitudPlenario.FechaOperacion = DateTime.Now;
+            solicitudPlenario.NroSolicitud = 000000;
+            solicitudPlenario.Capital = Convert.ToDecimal(txtFinanciado.Text);
+            solicitudPlenario.Anticipo = Convert.ToDecimal(txtAnticipo.Text);
+            solicitudPlenario.Validada = 0;
+        }
+
         private void guardarDatosFechaNacimiento()
         {
             try
             {
-                
+
                 var datos = this.contClienteEntity.obtenerClienteDatosByCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
                 if (datos != null)
                 {
@@ -8197,7 +8788,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     }
                     if (ok >= 0)
-                    {                        
+                    {
                         this.verificarAgregarTareaAvisoCumpleanios(datos.FirstOrDefault());
                     }
                 }
@@ -8230,7 +8821,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFinanciado.Text = (totalFC - anticipo).ToString();
                     this.txtAnticipoSolicitudManual.Text = this.txtAnticipo.Text;
                 }
-                
+
             }
             catch
             {
@@ -8240,7 +8831,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void lbtnAgregarSolicitud_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 if (this.chkCreditoManual.Checked == true)
                 {
                     this.guardarSolicitudManual();
@@ -8263,7 +8854,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.panelSolicitudes.Visible = false;
                     this.panelCreditoManual.Visible = true;
-                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos, UpdatePanelCreditos.GetType(), "alert", "tooltipCredito();", true);
                 }
                 else
                 {
@@ -8276,7 +8866,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private void verificarCobroAnticipo()
+        private int verificarCobroAnticipo()
         {
             try
             {
@@ -8285,6 +8875,13 @@ namespace Gestion_Web.Formularios.Facturas
                     if (Session["CobroAnticipo"] != null)
                     {
                         Cobro cobroAnticipo = Session["CobroAnticipo"] as Cobro;
+
+                        if (cobroAnticipo.total < Convert.ToDecimal(txtAnticipo.Text))
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"El capital de la solicitud debe ser igual al monto del cobro. \");", true);
+                            return -1;
+                        }
+
                         if (cobroAnticipo != null)
                         {
                             this.btnCredito.Attributes["class"] = "btn btn-success";
@@ -8297,16 +8894,20 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.btnCredito.Attributes["class"] = "btn btn-danger";
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCreditos2, UpdatePanelCreditos2.GetType(), "alert", "$.msgbox(\"No se genero un cobro. \");", true);
+                        return -1;
                     }
                 }
                 else
                 {
                     this.btnCredito.Attributes["class"] = "btn btn-success";
                 }
+
+                return 1;
             }
             catch
             {
-
+                return -1;
             }
         }
         protected void btnCerrarCreditos_Click(object sender, EventArgs e)
@@ -8329,7 +8930,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.btnEnviarCodigoCredito.Enabled = false;
                 ControladorPlenario contPlena = new ControladorPlenario();
 
-                if(this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length != 10)
+                if (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length != 10)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Codigo de area y/o numero invalido/s!. \");desbloquearEnvioCod();", true);
                     return;
@@ -8351,19 +8952,19 @@ namespace Gestion_Web.Formularios.Facturas
                     registro.Telefono = telefono;
                     registro.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
                     registro.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
-                    registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);                    
+                    registro.IdVendedor = Convert.ToInt32(this.DropListVendedor.SelectedValue);
 
                     //int envioCodigo = contPlena.enviarCodigoTelefono(dni, telefono);
                     int envioCodigo = contPlena.enviarCodigoTelefono(registro);
                     this.lblIdRegistro.Text = registro.Id.ToString();
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Codigo enviado. \", {type: \"info\"});desbloquearEnvioCod();", true);                   
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Codigo enviado. \", {type: \"info\"});desbloquearEnvioCod();", true);
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Este telefono ya fue utilizado con otro DNI!. \");desbloquearEnvioCod();", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Ha ocurrido un error. " + ex.Message + " \", {type: \"error\"});desbloquearEnvioCod();", true);
             }
@@ -8390,14 +8991,14 @@ namespace Gestion_Web.Formularios.Facturas
 
                 int ok = contPlena.validarCodigoVerificacion(dni, telefono, codigo);
                 if (ok > 0)
-                {                    
+                {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Codigo validado. \", {type: \"info\"});", true);
                     this.lblIdRegistro.Text = ok.ToString();
                     this.mostarPanelSolicitud();
                 }
                 else
                 {
-                    if(ok == -2)
+                    if (ok == -2)
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"Codigo incorrecto. \");", true);
                     else
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelSms, UpdatePanelSms.GetType(), "alert", "$.msgbox(\"No se pudo validar. \", {type: \"error\"});", true);
@@ -8512,7 +9113,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string telefono = "+549" + this.txtCodAreaCredito.Text + this.txtNroCelularCredito.Text;//+54 9 cod + tel
 
                 if (this.txtCodAreaCredito.Text.Length + this.txtNroCelularCredito.Text.Length != 10)
-                {                    
+                {
                     return;
                 }
 
@@ -8631,7 +9232,7 @@ namespace Gestion_Web.Formularios.Facturas
                         tr.Cells.Add(celSaldo);
 
                         TableCell celSeleccion = new TableCell();
-                        CheckBox cbSeleccion = new CheckBox();                        
+                        CheckBox cbSeleccion = new CheckBox();
                         cbSeleccion.ID = "cbSeleccion_" + movV.id;
                         cbSeleccion.ClientIDMode = System.Web.UI.ClientIDMode.Static;
                         cbSeleccion.CssClass = "btn btn-info";
@@ -8645,7 +9246,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -8656,7 +9257,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string numeroDoc = "";
                 if (this.rbtnPagoCuentaCredito.Checked)
-                {                    
+                {
                     string idPagos = "";
                     foreach (Control control in phPagosCuentaCredito.Controls)
                     {
@@ -8673,24 +9274,24 @@ namespace Gestion_Web.Formularios.Facturas
                         Session["PagoCuentaAnticipo"] = idPagos;
                         this.txtComentarios.Text += " - " + numeroDoc;
                     }
-                }                
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
         }
-        
+
         private void procesarPagosCuentaCredito(string pagos)
         {
             try
-            {                
+            {
                 controladorCuentaCorriente contCC = new controladorCuentaCorriente();
                 Factura fc = Session["factura"] as Factura;
                 int ok = contCC.imputarMovimientosAnticiposCreditos(pagos, fc);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -8727,7 +9328,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 //Luego de recorrer los items, verifico en caso de que sean items del tipo combustible, que se haya seleccionado el proveedor de combustible
-                if(flagItemCombustible)
+                if (flagItemCombustible)
                 {
                     if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) <= 0)
                         return -3;
@@ -8743,8 +9344,8 @@ namespace Gestion_Web.Formularios.Facturas
         }
         private void cargarDatosProveedorCombustible()
         {
-            try 
-            { 
+            try
+            {
                 //ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
                 //Gestion_Api.Entitys.Articulos_Combustible datos = contArtEntity.obtenerDatosCombustibleByProveedor(Convert.ToInt32(ListProveedorCombustible.SelectedValue));
 
@@ -8771,7 +9372,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //}
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -8780,12 +9381,13 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.actualizarTotales();
+                this.ActualizarTotales();
 
                 if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0)
                     this.actualizarPrecioItemsCombustible();
 
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "clickTab(); ", true);                
+
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "clickTab(); ", true);
             }
             catch
             {
@@ -8819,11 +9421,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 total = totalItc + totalHidrica + totalVial + totalMunicipal;
 
-                this.factura.totalITC = totalItc;
-                this.factura.totalHidrica = totalHidrica;
-                this.factura.totalMunicipal = totalMunicipal;
-                this.factura.totalVial = totalVial;
-                
+                this.nuevaFactura.totalITC = totalItc;
+                this.nuevaFactura.totalHidrica = totalHidrica;
+                this.nuevaFactura.totalMunicipal = totalMunicipal;
+                this.nuevaFactura.totalVial = totalVial;
+
                 return total;
             }
             catch
@@ -8831,24 +9433,24 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
-        private void agregarDatosCombustibleAComentarios(Factura f) 
+        private void agregarDatosCombustibleAComentarios(Factura f)
         {
             try
             {
                 string info = "";
 
                 if (f.totalITC > 0)
-                    info += " ITC: $" + f.totalITC.ToString();
+                    info += " ICL $" + f.totalITC.ToString();
                 if (f.totalHidrica > 0)
-                    info += "\nTasa Hidrica: $" + f.totalHidrica.ToString();
+                    info += "\nIDC: $" + f.totalHidrica.ToString();
                 if (f.totalVial > 0)
                     info += "\nTasa Vial: $" + f.totalVial.ToString();
                 if (f.totalMunicipal > 0)
                     info += "\nTasa Municipal: $" + f.totalMunicipal.ToString();
-    
+
                 this.txtComentarios.Text += "\n" + info;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -8861,46 +9463,64 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
-                this.factura.tipo = this.cargarTiposFactura(lbl[0]);
+                this.nuevaFactura.tipo = this.cargarTiposFactura(lbl[0]);
                 decimal iva = 0;
 
+                #region impuestos combustibles
                 //Calculo los impuestos correspondiente a la venta de combustibles (ITC,CO2)
-                this.factura.totalImpuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.factura);
+                this.nuevaFactura.totalImpuestosCombustible = this.obtenerTotalImpuestosCombustibles(this.nuevaFactura);
+                #endregion
 
+
+                #region obtener el neto de la factura
                 //obtengo total de suma de item
-                //decimal totalC = contArtEnt.obtenerTotalNetoCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
                 decimal totalC = 0;
-                foreach (var item in factura.items)
+                foreach (var item in nuevaFactura.items)
                 {
                     totalC += item.total;
-                }
+                }//el total va a ser el neto cuando es factura A, y va a ser el total final cuando es factura B
                 decimal total = decimal.Round(totalC, 2, MidpointRounding.AwayFromZero);
-                this.factura.neto = total;
+                //this.factura.neto = total;
+                if (lbl[0].Contains("Factura A") || lbl[0].Contains("Nota de Credito A") || lbl[0].Contains("Nota de Debito A"))
+                {
+                    this.nuevaFactura.neto = total;
+                }
+                else
+                {
+                    this.nuevaFactura.total = total;
+                    this.nuevaFactura.neto = contArtEnt.obtenerNetoFacturaBVentaCombustible(this.nuevaFactura);
+                }
+                #endregion
 
+
+                #region obtener subtotal
                 if (this.accion == 6 || this.accion == 9)// si viene de generar nota de credito mantengo el descuento que le habia hecho a la factura
                 {
-                    this.txtPorcDescuento.Text = decimal.Round(this.factura.neto10, 2).ToString();
+                    this.txtPorcDescuento.Text = decimal.Round(this.nuevaFactura.neto10, 2).ToString();
                 }
 
                 //Subtotal = neto menos el descuento
-                this.factura.descuento = decimal.Round((this.factura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
-                this.factura.subTotal = decimal.Round((this.factura.neto - this.factura.descuento), 2, MidpointRounding.AwayFromZero);
+                this.nuevaFactura.descuento = decimal.Round((this.nuevaFactura.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                this.nuevaFactura.subTotal = decimal.Round((this.nuevaFactura.neto - this.nuevaFactura.descuento), 2, MidpointRounding.AwayFromZero);
+                #endregion
 
+
+                #region obtener el iva
                 if (lbl[0].Contains("Presupuesto") || lbl[0].Contains("PRP"))
                 {
                     Configuracion c = new Configuracion();
 
                     if (c.ivaArticulosPresupuesto == "1")
                     {
-                        this.factura.neto21 = decimal.Round((this.factura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.neto21 = decimal.Round((this.nuevaFactura.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100), 2, MidpointRounding.AwayFromZero);
                     }
                     else
                     {
-                        iva = contArtEnt.obtenerTotalIvaCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
+                        iva = contArtEnt.obtenerTotalIvaCombustible(this.nuevaFactura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
                         decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
                         //AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
-                        this.factura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
-                        this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.descuento += descuento; decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                     }
 
                 }
@@ -8908,33 +9528,60 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (lbl[0].Contains("Factura E") || lbl[0].Contains("Credito E") || lbl[0].Contains("Debito E"))
                     {
-                        this.factura.neto21 = 0;
+                        this.nuevaFactura.neto21 = 0;
                     }
                     else
                     {
-                        iva = contArtEnt.obtenerTotalIvaCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
+                        iva = contArtEnt.obtenerTotalIvaCombustible(this.nuevaFactura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue));
                         decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
 
                         //SI ES 'B' AL DESCUENTO DE LA FACTURA LE AGREGO EL DESC DEL IVA
                         if (lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B"))
                         {
-                            this.factura.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
+                            this.nuevaFactura.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                         }
 
-                        this.factura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
+                        this.nuevaFactura.neto21 = decimal.Round((iva - decimal.Round(descuento, 2)), 2, MidpointRounding.AwayFromZero);
                     }
                 }
+                #endregion
 
-                //this.factura.totalSinDescuento = decimal.Round(this.factura.neto + contArtEnt.obtenerTotalIvaCombustible(this.factura, Convert.ToInt32(this.ListProveedorCombustible.SelectedValue)), 2);
-                this.factura.totalSinDescuento = decimal.Round(this.factura.neto + iva);
+                this.nuevaFactura.totalSinDescuento = decimal.Round(this.nuevaFactura.neto + iva);
 
+                #region calculo de persepciones
                 //Las percepciones se hacen sobre el neto de la factura + impuestos de combustible
-                this.factura.retencion = decimal.Round(((this.factura.subTotal + this.factura.totalImpuestosCombustible) * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
+                this.nuevaFactura.retencion = decimal.Round(((this.nuevaFactura.subTotal + this.nuevaFactura.totalImpuestosCombustible) * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100)), 2, MidpointRounding.AwayFromZero);
                 //total NetosNoGravados cuando es venta combustible los guardo en .iva21
+                #endregion
 
-                //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
-                this.factura.total = decimal.Round((this.factura.subTotal + this.factura.totalImpuestosCombustible + this.factura.neto21 + this.factura.retencion), 2, MidpointRounding.AwayFromZero);
-
+                #region calculo del total
+                if ((lbl[0].Contains("Factura B") || lbl[0].Contains("Credito B") || lbl[0].Contains("Debito B")))//para q no recalcule el total 
+                {
+                    //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
+                    decimal totalAux = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.totalImpuestosCombustible + this.nuevaFactura.neto21 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
+                    //this.factura.total += this.factura.retencion;
+                    this.nuevaFactura.total = totalAux;
+                    if (this.nuevaFactura.total != totalAux)
+                    {
+                        if (this.nuevaFactura.total > totalAux)//ajuste redondeo
+                        {
+                            decimal diferencia = this.nuevaFactura.total - totalAux;
+                            this.nuevaFactura.totalImpuestosCombustible += diferencia;
+                        }
+                        else
+                        {
+                            decimal diferencia = totalAux - this.nuevaFactura.total;
+                            this.nuevaFactura.totalImpuestosCombustible -= diferencia;
+                        }
+                    }
+                    //this.factura.total = this.factura.subTotal;
+                }
+                else
+                {
+                    //El total de la FC sería: Neto + Impuestos + IVA + Percepciones
+                    this.nuevaFactura.total = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.totalImpuestosCombustible + this.nuevaFactura.neto21 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
+                }
+                #endregion
             }
             catch
             {
@@ -8948,37 +9595,41 @@ namespace Gestion_Web.Formularios.Facturas
                 Factura factura = Session["Factura"] as Factura;
                 ControladorArticulosEntity contArticulosEnt = new ControladorArticulosEntity();
 
-                //Recorro items de la factura y actualizo el precio sin iva y el precio unitario
-                foreach (var item in factura.items)
+                if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
                 {
-                    //Verifico si el item pertenece al grupo de combustibles
-                    if (item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
+                    //Recorro items de la factura y actualizo el precio sin iva y el precio unitario
+                    foreach (var item in factura.items)
                     {
-                        decimal totalItc = 0;
-                        decimal totalHidrica = 0;
-                        decimal totalVial = 0;
-                        decimal totalMunicipal = 0;
-
-                        //Obtengo datos del proveedor de combustible
-                        var datos = contArticulosEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
-                        if (datos != null)
+                        //Verifico si el item pertenece al grupo de combustibles
+                        if (item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
                         {
-                            totalItc += decimal.Round((datos.ITC.Value), 2);
-                            totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
-                            totalVial += decimal.Round((datos.TasaVial.Value), 2);
-                            totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
+                            decimal totalItc = 0;
+                            decimal totalHidrica = 0;
+                            decimal totalVial = 0;
+                            decimal totalMunicipal = 0;
+
+                            //Obtengo datos del proveedor de combustible
+                            var datos = contArticulosEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
+                            if (datos != null)
+                            {
+                                totalItc += decimal.Round((datos.ITC.Value), 2);
+                                totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
+                                totalVial += decimal.Round((datos.TasaVial.Value), 2);
+                                totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
+                            }
+
+                            //Le agrego el iva al precio unitario del item
+                            decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
+
+
+                            item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
+                            item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal; //Sumo al precio del item el importe de impuestos
+
+                            //Genero un nuevo item, le seteo los valores del item que estoy modificando, remuevo el item y agrego este nuevo item
+                            ItemFactura nuevoItem = item;
+                            factura.items.Remove(item);
+                            factura.items.Add(nuevoItem);
                         }
-
-                        //Le agrego el iva al precio unitario del item
-                        decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                        item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
-                        item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal; //Sumo al precio del item el importe de impuestos
-
-                        //Genero un nuevo item, le seteo los valores del item que estoy modificando, remuevo el item y agrego este nuevo item
-                        ItemFactura nuevoItem = item;
-                        factura.items.Remove(item);
-                        factura.items.Add(nuevoItem);
                     }
                 }
             }
@@ -9045,8 +9696,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Factura fact = Session["Factura"] as Factura; 
-                 
+                Factura fact = Session["Factura"] as Factura;
+
                 //Verifico si ya existe hay un pago mutual cargado
                 if (fact.pagare != null)
                 {
@@ -9070,7 +9721,7 @@ namespace Gestion_Web.Formularios.Facturas
                     pago.Numero = this.txtNroPagareMutual.Text;
                     pago.Sucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
                     pago.PuntoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
-                        
+
                     pago.Fecha = Convert.ToDateTime(this.txtFechaPagareMutual.Text, new CultureInfo("es-AR"));
                     pago.Vencimiento = Convert.ToDateTime(this.txtFechaVtoCuotaMutual.Text, new CultureInfo("es-AR"));
                     pago.NroSocio = this.txtNroSocioMutual.Text;
@@ -9109,7 +9760,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "$.msgbox(\"No se pudo guardar pago. \");", true);
                     }
-                    
+
                 }
                 else
                 {
@@ -9117,7 +9768,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "$.msgbox(\"Ocurrio un error guardando pago mutual. " + ex.Message + " \", {type: \"error\"});", true);
             }
@@ -9207,7 +9858,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int ok = this.QuitarRecargoMutuales();
-                if(ok > 0)
+                if (ok > 0)
                 {
                     Factura fact = Session["Factura"] as Factura;
                     fact.pagare = null;
@@ -9235,7 +9886,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "$.msgbox(\"Ocurrio un error quitando pago mutual. " + ex.Message + " \", {type: \"error\"});", true);
             }
@@ -9269,7 +9920,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //lo dibujo en pantalla
                 this.cargarItems();
                 //actualizo totales
-                this.actualizarTotales();
+                this.ActualizarTotales();
 
                 return 1;
             }
@@ -9297,7 +9948,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //lo dibujo en pantalla
                 this.cargarItems();
                 //actualizo totales
-                this.actualizarTotales();
+                this.ActualizarTotales();
 
                 this.ListMutuales.SelectedValue = "-1";
                 this.ListMutualesPagos.SelectedValue = "-1";
@@ -9312,8 +9963,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.lblTotalRecargoMutuales.Text = "0.00";
 
                 this.calcularLabelAnticiposMutual();
-               
-                
+
+
 
                 return 1;
             }
@@ -9375,7 +10026,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.lblTotalAnticipoPagoCuentaMutual.Text = this.txtAnticipoMutual.Text;
                 }
                 else
-                  this.lblTotalAnticipoPagoCuentaMutual.Text = "0.00";
+                    this.lblTotalAnticipoPagoCuentaMutual.Text = "0.00";
 
             }
             catch (Exception Ex)
@@ -9391,7 +10042,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     //Limpio campo de anticipo, y muestro boton para generar un cobro pago a cuenta
                     this.txtAnticipoMutual.Text = "0";
-                    
+
                     //Limpio el lbl de total con el original de la factura
                     this.lblTotalMutuales.Text = this.lblTotalOriginalMutuales.Text;
 
@@ -9446,7 +10097,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "window.open('../Cobros/ABMCobros?documentos=0;&cliente=" + idCli + "&empresa=" + idEmp + "&sucursal=" + idSuc + "&puntoVenta=" + idPv + "&monto=" + this.txtAnticipoMutual.Text + "&valor=2&tipo=2&anticipo=1'); ", true);
                 }
-                    
+
             }
             catch
             {
@@ -9661,7 +10312,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Si no hay nada en la session y el radiobutton de anticipo no está tildado, lo dejo seguir
                 return true;
-                    
+
             }
             catch (Exception Ex)
             {
@@ -9708,7 +10359,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        private bool verificarAnularFcMutual()
+        private bool VerificarAnularFcMutual()
         {
             try
             {
@@ -9737,7 +10388,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             //Primero verifico si la factura tiene pagarés en estado liquidado
 
-                            var pagares = contFactEnt.obtenerPagaresByFacturaEstado(fc.id,2);
+                            var pagares = contFactEnt.obtenerPagaresByFacturaEstado(fc.id, 2);
                             if (pagares != null && pagares.Count > 0)
                             {
                                 //Si tiene pagarés liquidados, concateno los numeros en un string, y lo muestro
@@ -9751,7 +10402,7 @@ namespace Gestion_Web.Formularios.Facturas
                             }
 
                             //Luego verifico si la factura tiene recibos de cobro generados en consecuencia de la factura con forma de pago mutual
-                            
+
                             //Obtengo el cobro generado cuando facturé con forma de pago mutual
                             List<Gestion_Api.Entitys.Facturas_Anticipos> datosFcMutual = contFactEnt.obtenerDatosFacturaAnticipoByFactura(fc.id);
 
@@ -9766,7 +10417,7 @@ namespace Gestion_Web.Formularios.Facturas
                                         cobrosAnular += cobro.numero + " ; ";
                                 }
 
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "$.msgbox(\"Para realizar la NC de esta FC debe anular el/los siguiente/s Cobro/s: " + cobrosAnular.Substring(0,cobrosAnular.Length - 2) + " \");", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "$.msgbox(\"Para realizar la NC de esta FC debe anular el/los siguiente/s Cobro/s: " + cobrosAnular.Substring(0, cobrosAnular.Length - 2) + " \");", true);
                                 return false;
                             }
                             else
@@ -9886,7 +10537,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.rbtnAnticipoMutual.Visible = false;
                     this.rbtnPagoCuentaMutual.Visible = false;
                 }
-                
+
                 //Quitó el pago mutual, por lo tanto habilito los controles
                 if (flag == 2)
                 {
@@ -9911,7 +10562,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
-                
+
                 int esDatosExtra = contArtEnt.obtenerSiDatosExtra(item.articulo.id);
                 int esTrazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
                 //si es traza, ignoro los datos extras
@@ -9938,7 +10589,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int idArt = Convert.ToInt32(this.lblDatosExtraItem.Text.Split('_')[1]);
-                int posItem = Convert.ToInt32(this.lblDatosExtraItem.Text.Split('_')[2]);                
+                int posItem = Convert.ToInt32(this.lblDatosExtraItem.Text.Split('_')[2]);
 
                 if (!String.IsNullOrEmpty(this.txtDatoExtra.Text))
                 {
@@ -9973,7 +10624,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void agregarMovimientoMillas(Factura f)
         {
             try
-            {                
+            {
                 string sistema = WebConfigurationManager.AppSettings.Get("Millas");
                 if (!String.IsNullOrEmpty(sistema))
                 {
@@ -10025,9 +10676,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         var comentario = contFcEnt.obtenerComentarioFactura(f.id);
                         if (comentario != null)
-                        {                            
+                        {
                             int millaSumadas = contMilla.obtenerTotalMillas(f.total, flag_tipo);
-                            
+
                             comentario.Observaciones += "\n Sumo " + millaSumadas.ToString() + " puntos por esta compra.";
                             contFcEnt.modificarComentarioFactura(comentario);
                         }
@@ -10040,7 +10691,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No se pudo agregar movimiento millas desde fc: " + f.id + ". " + ex.Message);
             }
@@ -10053,7 +10704,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.factura = Session["Factura"] as Factura;
+                this.nuevaFactura = Session["Factura"] as Factura;
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
                 Configuracion config = new Configuracion();
                 Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));
@@ -10076,6 +10727,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
+                _idCliente = this.idClientePadre;
                 Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
                 this.DropListClientes.Attributes.Add("disabled", "disabled");
                 this.cargarClienteDesdeModal();
@@ -10086,12 +10738,12 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     foreach (ItemFactura item in f.items)
                     {
-                        this.agregarInfoDespachoDesdePedido(item);
+                        this.AgregarInfoDespachoItem(item.articulo);
                     }
                 }
 
                 this.cargarItems();
-                this.actualizarTotales();
+                this.ActualizarTotales();
                 this.obtenerNroFactura();
 
                 var itemCero = f.items.Where(x => x.total == 0).FirstOrDefault();
@@ -10108,36 +10760,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
-        protected void btnCambiarPorcentajeCantidadFacturar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                decimal porcentaje = Convert.ToInt32(this.txtPorcentajeCantFacturar.Text);
-                if (porcentaje > 0)
-                {
-                    Factura fc = Session["Factura"] as Factura;
-                    foreach (var item in fc.items)
-                    {
-                        item.cantidad = item.cantidad * (porcentaje / 100);
-                        item.cantidad = Convert.ToInt32(item.cantidad);
-                        item.descuento = (item.precioUnitario * (item.porcentajeDescuento / 100)) * item.cantidad;
-                        item.total = ((item.precioUnitario * (1 - (item.porcentajeDescuento / 100))) * item.cantidad);
-                    }
-                    Session["Factura"] = fc;                    
-                    //vuelvo a cargar los items
-                    this.cargarItems();
-                    this.actualizarTotales();
-                }
-                else
-                {
-
-                }
-            }
-            catch(Exception ex)
-            {
-
-            }
-        }
         private void cargarComentariosDeRemito()
         {
             try
@@ -10151,6 +10773,223 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        
+        public Tuple<string, bool> ComprobarCamposSeleccionados()
+        {
+            if (Convert.ToInt32(DropListVendedor.SelectedValue) <= 0)
+                return new Tuple<string, bool>("Debe seleccionar un vendedor!", false);
+            else if (Convert.ToInt32(DropListLista.SelectedValue) <= 0)
+                return new Tuple<string, bool>("Debe seleccionar una lista de precios!", false);
+            else if (Convert.ToInt32(DropListFormaPago.SelectedValue) <= 0)
+                return new Tuple<string, bool>("Debe seleccionar una forma de pago!", false);
+            else
+                return new Tuple<string, bool>("", true);
+        }
+
+        [WebMethod]
+        public static string BuscarArticulosPorDescripcion(string codigoArticulo, int idSucursal)
+        {
+            if (idSucursal <= 0)
+                return "";
+
+            Configuracion configuracion = new Configuracion();
+            List<Articulo> articulos = new List<Articulo>();
+            controladorArticulo contArticulo = new controladorArticulo();
+
+            if (String.IsNullOrEmpty(codigoArticulo))
+            {
+                articulos = contArticulo.obtenerArticulosReduc();
+                //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                if (configuracion.FiltroArticulosSucursal == "1")
+                {
+                    articulos = contArticulo.obtenerArticulosReduc_Sucursales(idSucursal);
+                }
+            }
+            else
+            {
+                //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+                if (configuracion.FiltroArticulosSucursal == "1")
+                {
+                    articulos = contArticulo.buscarArticuloListReduc_Sucursales(codigoArticulo, idSucursal);
+                }
+                else
+                {
+                    articulos = contArticulo.buscarArticuloList(codigoArticulo);
+                }
+            }
+
+            List<ArticulosTemporal> articulosTemporal = new List<ArticulosTemporal>();
+
+            foreach (var articulo in articulos)
+            {
+                ArticulosTemporal articuloTemporal = new ArticulosTemporal();
+                articuloTemporal.codigo = articulo.codigo;
+                articuloTemporal.descripcion = articulo.descripcion;
+                articuloTemporal.stock = obtenerStockArticuloBySucursal(articulo.codigo,idSucursal).ToString();
+                articuloTemporal.moneda = articulo.monedaVenta.moneda;
+                articuloTemporal.precioVenta = "$" + articulo.precioVenta.ToString();
+                articulosTemporal.Add(articuloTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(articulosTemporal);
+
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static void AgregarMultiplesArticulosPorDescripcion(string codigosArticulos)
+        {
+            var codigosArticulosTemp = codigosArticulos.Split(';');
+            _codigosArticulosMultiplesParaAgregar = codigosArticulosTemp.ToList();
+            _codigoArticuloParaAgregar = "";
+            _agregarArticuloPorDescripcion = false;
+            _buscarArticuloPorDescripcion = false;
+            _agregarMultiplesArticulosPorDescripcion = true;
+        }
+
+        private void AgregarArticulosMultiplesPorDescripcion()
+        {
+            _agregarMultiplesArticulosPorDescripcion = false;
+
+            foreach (var codigoArticulo in _codigosArticulosMultiplesParaAgregar)
+            {
+                if (string.IsNullOrEmpty(codigoArticulo))
+                    continue;
+
+                //txtCodigo.Text = codigoArticulo;
+                _codigoArticuloParaAgregar = codigoArticulo;
+                txtCantidad.Text = "1";
+                cargarProducto(_codigoArticuloParaAgregar);
+                CargarProductoAFactura();
+                _codigoArticuloParaAgregar = "";
+            }
+
+            ActualizarTotales();
+        }
+
+        static decimal obtenerStockArticuloBySucursal(string codigoArticulo, int idSucursal)
+        {
+
+            ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+            decimal stock = 0;
+            Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(codigoArticulo);
+            if (artEnt != null)
+            {
+                var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, idSucursal);
+                stock = 0;
+
+                stock = stocks.stock1.Value;
+                return stock;
+            }
+
+            return 0;
+        }
+
+        [WebMethod]
+        public static void AgregarArticulosPorDescripcion(string codigoArticulo)
+        {
+            _agregarArticuloPorDescripcion = true;
+            _buscarArticuloPorDescripcion = false;
+            _agregarMultiplesArticulosPorDescripcion = false;
+            _codigoArticuloParaAgregar = codigoArticulo;
+        }
+
+        private void AgregarArticuloPorDescripcion()
+        {
+            _agregarArticuloPorDescripcion = false;
+            cargarProducto(_codigoArticuloParaAgregar);
+            ActualizarTotales();
+            _codigoArticuloParaAgregar = "";
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+        }
+
+        [WebMethod]
+        public static void CerrarModalBuscarArticulosPorDescripcion()
+        {
+            //AgregarArticulosPorDescripcion();
+            _agregarArticuloPorDescripcion = false;
+            _buscarArticuloPorDescripcion = false;
+            _agregarMultiplesArticulosPorDescripcion = false;
+        }
+
+        private void CerrarModalBuscarArticuloPorDescripcion()
+        {
+            if(!_agregarArticuloPorDescripcion && !_buscarArticuloPorDescripcion && !_agregarMultiplesArticulosPorDescripcion)
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
+        }
+
+        [WebMethod]
+        public static string CargarClientes()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesReduc(1);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string BuscarCliente(string razonSocial)
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            controladorCliente controladorCliente = new controladorCliente();
+            clientes = controladorCliente.obtenerClientesAlias(razonSocial);
+
+            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+
+            foreach (var cliente in clientes)
+            {
+                ClientesTemporal clienteTemporal = new ClientesTemporal();
+                clienteTemporal.id = cliente.id.ToString();
+                clienteTemporal.codigo = cliente.codigo;
+                clienteTemporal.razonSocial = cliente.razonSocial;
+                clienteTemporal.alias = cliente.alias;
+                clientesTemporal.Add(clienteTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = serializer.Serialize(clientesTemporal);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static void AgregarCliente(int idCliente)
+        {
+            _idCliente = idCliente;
+            _agregarCliente = true;
+        }
+
+        class ArticulosTemporal
+        {
+            public string codigo;
+            public string descripcion;
+            public string stock;
+            public string moneda;
+            public string precioVenta;
+        }
+
+        class ClientesTemporal
+        {
+            public string id;
+            public string codigo;
+            public string razonSocial;
+            public string alias;
+        }
     }
 }

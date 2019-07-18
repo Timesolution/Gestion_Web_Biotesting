@@ -35,6 +35,9 @@ namespace Gestion_Web.Formularios.Facturas
         int accion;
         int idEmpresa;
         int idSucursal;
+        //orden de reparacion
+        int idCliente;
+        int idArticulo;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -42,6 +45,8 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
+                this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.idArticulo = Convert.ToInt32(Request.QueryString["articulo"]);
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
@@ -59,6 +64,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
+
+                    //orden de reparacion
+                    //idCliente = (int)Session["Login_idcliente"];
+                    //idArticulo = (int)Session["Login_idArticulo"];
 
                     Remito rem = new Remito();
                     Session.Add("Remito", rem);
@@ -98,6 +107,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         int idPedido = Convert.ToInt32(Request.QueryString["id_ped"]);
                         GenerarRemitoPedido(idPedido);
+                    }
+                    //cuando viene de una orden de reparacion
+                    if (this.accion == 5)
+                    {
+                        GenerarRemitoOrdenReparacion();
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
@@ -442,6 +456,58 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        public void GenerarRemitoOrdenReparacion()
+        {
+            try
+            {
+                Remito r = new Remito();
+
+                this.DropListClientes.SelectedValue = idCliente.ToString();
+                if (this.DropListClientes.SelectedValue == "-1")
+                {
+                    this.cargarClienteEnLista(idCliente);
+                }
+
+                this.cargarCliente(idCliente);
+
+                ItemRemito ir = new ItemRemito();
+
+                var art = contArticulo.obtenerArticuloByID(idArticulo);
+
+                ir.articulo = art;
+                ir.cantidad = 1;
+                ir.descuento = 0;
+                ir.descripcion = art.descripcion;
+                ir.precioUnitario = art.precioVenta;
+                ir.total = art.precioVenta;
+
+                this.agregarItemRemito(ir,0);
+
+                r.items.Add(ir);
+                r.cliente = contCliente.obtenerClienteID(idCliente);
+
+                Session.Add("Remito", r);
+
+                this.cargarItems();
+                this.actualizarTotales();
+                this.obtenerNroRemito();
+
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + r.id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
+                //string script = "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + r.id.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                //script += " $.msgbox(\"Orden de reparación agregada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Alerta Cliente: " + c.alerta.descripcion + ". \");", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Alerta Cliente: " + c.alerta.descripcion + "."));
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
+
+            }
+        }
+
         #endregion
         /// <summary>
         /// Busca el cliente
@@ -545,7 +611,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     this.obtenerRemito(this.cliente.iva);
-                    this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
+
+                    try { this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();}
+                    catch { }
+
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
                     this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
                     //this.DropListIva.SelectedIndex = 1;
@@ -1205,8 +1274,9 @@ namespace Gestion_Web.Formularios.Facturas
                     if (i > 0)
                     {
                         Session.Remove("Remito");
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta " + labelNroRemito.Text);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Remito agregado", "ABMRemitos.aspx"));
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta " + labelNroRemito.Text);                        
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + rem.id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMRemitos.aspx';", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Remito agregado", "ABMRemitos.aspx"));
                     }
                     else
                     {

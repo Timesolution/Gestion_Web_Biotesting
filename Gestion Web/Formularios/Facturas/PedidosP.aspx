@@ -177,6 +177,9 @@
                                         <th>Razon</th>
                                         <th>Total</th>
                                         <th>Estado</th>
+                                        <th>Lineas</th>
+                                        <th>Bultos</th>
+                                        <th>Tiempo</th>
                                         <th></th>
                                     </tr>
 
@@ -294,26 +297,6 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListClientes" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-                                    <%-- <div class="form-group">
-                                        <label class="col-md-3">Descripcion Articulo</label>
-                                        <div class="col-md-6">
-                                            <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <asp:LinkButton ID="lbtnBuscarArticulo" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="lbtnBuscarArticulo_Click" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3">Articulo</label>
-                                        <div class="col-md-6">
-                                            <asp:DropDownList ID="DropListArticulos" runat="server" class="form-control"></asp:DropDownList>
-                                            <!-- /input-group -->
-                                        </div>
-                                        <div class="col-md-2">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListArticulos" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>--%>
                                     <div class="form-group">
                                         <label class="col-md-3">Vendedor</label>
                                         <div class="col-md-6">
@@ -379,10 +362,14 @@
                                 <!-- /input-group -->
 
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-4">Buscar por observacion</label>
+                                <div class="col-md-4">
+                                    <asp:TextBox ID="txtObservacion" runat="server" class="form-control"></asp:TextBox>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
                     </div>
@@ -541,6 +528,13 @@
                                         <label class="col-md-4">Zona Entrega</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListZonaEntregaCantidad" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Estado</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListEstadoPendientes" runat="server" class="form-control"></asp:DropDownList>
                                             <!-- /input-group -->
                                         </div>
                                     </div>

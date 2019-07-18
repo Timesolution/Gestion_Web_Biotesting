@@ -202,7 +202,8 @@ namespace Gestion_Web.Formularios.Valores
                 cc.Sucursal = this.sucursal;
                 cc.PuntoVenta = this.puntoVenta;
                 cc.FechaApertura = Convert.ToDateTime(this.txtFechaApertura.Text, new CultureInfo("es-AR")).AddHours(7);
-                cc.FechaCierre = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
+                cc.FechaCierre = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")).AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute).AddSeconds(DateTime.Now.Second);
+
                 cc.Total = Convert.ToDecimal(this.txtTotal.Text);
                 cc.Numero = this.txtNumeroCierre.Text;
 
@@ -327,25 +328,32 @@ namespace Gestion_Web.Formularios.Valores
             {
                 controladorFacturacion contFact = new controladorFacturacion();
                 ControladorPlenario contPlenario = new ControladorPlenario();
+                controladorFactEntity contFactEntity = new controladorFactEntity();
                 string fechaD = this.txtFecha.Text;
                 string fechaH = DateTime.Now.ToString("dd/MM/yyyy");                
-                List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, this.sucursal);
-
-                // Si existen solicitudes de créditos, verifico que estén validadas
-                //var okSolicitudes = contPlenario.solicitudesNoValidadas(fechaD, fechaH, this.sucursal, this.puntoVenta);
-                //if (okSolicitudes <= 0)
-                //{
-                //    if (okSolicitudes == -1)
-                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "$.msgbox(\"Existen solicitudes de Créditos pendientes de validar. \");", true);
-                //    if (okSolicitudes == 0)
-                //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Ocurrió un error verificando solicitudes de Créditos. \", {type: \"error\"});", true);
-
-                //    return;
-                //}
+                List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, sucursal);
+                
+                var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));
 
                 if (Facturas != null)
                 {
-                    int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                    //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                    int ok;
+
+                    if (chequearMercaderia > 0)
+                    {
+                        var temp = contFactEntity.AceptarMercaderiaAntesDelMaximoEstablecido(sucursal);
+
+                        if (temp)
+                            ok = 1;
+                        else
+                            ok = -1;
+                    }
+                    else
+                    {
+                        ok = 1;
+                    }
+
                     if (ok > 0 && Facturas.Count > 0 || Facturas.Count == 0)
                     {
                         //agrego diferencia
@@ -720,6 +728,27 @@ namespace Gestion_Web.Formularios.Valores
         }
 
         #region mercaderia entre sucursales
+        //protected void lbtnAceptarMercaderia_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        Caja_Cierre_Mercaderia cierre = new Caja_Cierre_Mercaderia();
+        //        cierre.Estado = 1;
+        //        cierre.Fecha = DateTime.Now;
+        //        cierre.Sucursal = this.sucursal;
+        //        cierre.PtoVenta = this.puntoVenta;
+
+        //        int i = this.contCaja.agregarValidacionMercaderiaCaja(cierre);
+        //        if (i > 0)
+        //        {
+        //            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Aceptado con exito. \", {type: \"info\"});", true);
+        //        }
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
         protected void lbtnAceptarMercaderia_Click(object sender, EventArgs e)
         {
             try
@@ -741,6 +770,7 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
+
         private void cargarFacturasRango()
         {
             try

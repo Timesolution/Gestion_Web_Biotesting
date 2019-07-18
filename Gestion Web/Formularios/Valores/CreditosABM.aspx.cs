@@ -5,6 +5,7 @@ using Gestion_Api.Modelo;
 using Gestion_Api.Entitys;
 using Planario_Api;
 using Planario_Api.Entidades;
+using Gestion_Api.Controladores;
 
 namespace Gestion_Web.Formularios.Valores
 {
@@ -12,6 +13,7 @@ namespace Gestion_Web.Formularios.Valores
     {
         Mensajes m = new Mensajes();
         Plenario p = new Plenario();
+        ControladorPlenario contPlenario = new ControladorPlenario();
         private Int64 idSolicitud;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -21,6 +23,7 @@ namespace Gestion_Web.Formularios.Valores
                 this.idSolicitud = Convert.ToInt64(Request.QueryString["id"]);
 
                 lbtnGuardar.Attributes.Add("onclick", " this.disabled = true;  " + lbtnGuardar.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(lbtnGuardar, null) + ";");
+                btnValidarSeguro.Attributes.Add("onclick", " this.disabled = true;  " + btnValidarSeguro.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnValidarSeguro, null) + ";");
 
                 verificarLogin();
 
@@ -107,6 +110,24 @@ namespace Gestion_Web.Formularios.Valores
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando a editar Solicitud de Crédito. Excepción: " + Ex.Message));
             }
         }
+
+        protected void btnValidarSeguro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtComentarioValidarSeguro.Text))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe ingresar un comentario"));
+                    return;
+                }
+
+                validarSolicitud();
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error enviando a validar solicitud. Excepción: " + Ex.Message));
+            }
+        }
         #endregion
 
         #region Funciones ABM
@@ -128,6 +149,7 @@ namespace Gestion_Web.Formularios.Valores
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos de solicitud. Excepción: " + Ex.Message));
             }
         }
+
         public void editarSolicitud()
         {
             try
@@ -155,6 +177,41 @@ namespace Gestion_Web.Formularios.Valores
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error editando solicitud. Excepción: " + Ex.Message));
             }
         }
+
+        public void validarSolicitud()
+        {
+            try
+            {
+                SolicitudesValidada sv = new SolicitudesValidada();
+                sv.Solicitud = Convert.ToInt64(lblIdSolicitud.Text);
+                sv.Fecha = DateTime.Now;
+                sv.Usuario = (int)Session["Login_IdUser"];
+                sv.Comentario = txtComentarioValidarSeguro.Text;
+
+                int i = contPlenario.forzarValidarSolicitud(sv);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Solicitud validada con éxito!", "CreditosF.aspx"));
+
+                if (i == 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se encontró la solicitud para validar."));
+
+                if (i == -1)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error guardando los datos de la validación segura."));
+
+                if (i == -2)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando registro de solicitud."));
+
+                if (i == -3)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error validando solicitud."));
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error enviando a validar solicitud. Excepción: " + Ex.Message));
+            }
+        }
         #endregion
+
+        
     }
 }

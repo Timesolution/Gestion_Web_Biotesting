@@ -67,7 +67,7 @@
                                         <a href="#modalStockDias" data-toggle="modal" style="width: 90%">Stock a dias</a>
                                     </li>
                                     <li>
-                                        <a href="#modalStockNoVendido" data-toggle="modal" style="width: 90%">Stock no vendido</a>
+                                        <a href="#modalStockNoVendido" data-toggle="modal" style="width: 90%">Stock sin movimiento</a>
                                     </li>
                                     <li>
                                         <a href="#modalUnicoSucursal" data-toggle="modal" style="width: 90%">Stock unico sucursal</a>
@@ -77,6 +77,9 @@
                                     </li>
                                     <li>
                                         <a href="#modalIngresosEgresosArticulos" data-toggle="modal" style="width: 90%">Ingresos/Egresos</a>
+                                    </li>
+                                    <li>
+                                        <a href="#modalNominaDeArticulos" data-toggle="modal" style="width: 90%">Nomina de Articulos</a>
                                     </li>
                                 </ul>
                             </div>
@@ -149,6 +152,9 @@
                                         </li>
                                         <li>
                                             <a href="#modalActualizarProveedor" data-toggle="modal">Actualizar Precios Proveedor</a>
+                                        </li>
+                                        <li>
+                                            <a href="#modalArticulosDespacho" data-toggle="modal">Actualizar Articulos Despacho</a>
                                         </li>
                                         <li>
                                             <asp:LinkButton ID="btnActualizarTodo" runat="server" Visible="False" Text="recalcular desde precio venta" OnClick="btnActualizarTodo_Click"></asp:LinkButton>
@@ -248,7 +254,6 @@
     <!-- /container -->
 
 
-
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -287,7 +292,6 @@
             </div>
         </div>
     </div>
-    <%--Fin modalGrupo--%>
 
     <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -359,6 +363,12 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtDiasActualizacion" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Solo proveedor predeterminado</label>
+                                    <div class="col-md-6">
+                                        <asp:CheckBox ID="cbSoloProveedorPredeterminado" runat="server" />
+                                    </div>
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -379,54 +389,46 @@
     <div id="modalRecalcular" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
+                <asp:UpdatePanel runat="server" ID="UpdatePanel11">
+                    <ContentTemplate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Modificar Precio</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-4">Porcentaje Costo</label>
+                                    <div class="col-md-5">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Modificar Precio</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <%-- <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
-                            <ContentTemplate>--%>
-                        <div class="form-group">
-                            <label class="col-md-4">Porcentaje Costo</label>
-                            <div class="col-md-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnModificarPrecio" runat="server" text="Actualizar" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Nuevo Precio Venta</label>
+                                    <div class="col-md-5">
 
-                                <div class="input-group">
-                                    <span class="input-group-addon">%</span>
-                                    <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnSeteaPrecioventa" runat="server" text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <asp:LinkButton ID="btnModificarPrecio" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
+                            <div class="modal-footer">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-4">Nuevo Precio Venta</label>
-                            <div class="col-md-6">
-
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-
-                                <asp:LinkButton ID="btnSeteaPrecioventa" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
-                            </div>
-                        </div>
-
-                        <%--</ContentTemplate>
-                            <Triggers>
-                            </Triggers>
-                        </asp:UpdatePanel>--%>
-                    </div>
-
-
-                    <div class="modal-footer">
-                    </div>
-                </div>
-
+                    </ContentTemplate>
+                </asp:UpdatePanel>
             </div>
         </div>
     </div>
@@ -434,14 +436,15 @@
     <div id="modalActualizarProveedor" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Actualizar Precio de Otros Proveedores</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Always" runat="server">
-                            <ContentTemplate>
+                <asp:UpdatePanel ID="UpdatePanel9" runat="server">
+                    <ContentTemplate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Actualizar Precio de Otros Proveedores</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+
                                 <div class="form-group">
                                     <label class="col-md-4">Buscar Proveedor</label>
                                     <div class="col-md-6">
@@ -473,13 +476,47 @@
                                     <br />
                                     <asp:Label ID="lblFormato" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
                                 </div>
+                            </div>                            
+                        </div>
+                        
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalArticulosDespacho" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Actualizar Despacho de articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel10" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Archivo:</label>
+                                    <div class="col-md-8">
+                                        <asp:FileUpload ID="FileUploadArticulosDespacho" runat="server" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <asp:Label ID="Label1" runat="server" ForeColor="#999999"></asp:Label>
+                                    <br />
+                                    <asp:Label ID="Label2" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="lbtnActualizarOtrosProveedores" runat="server" class="btn btn-success" ValidationGroup="OtrosProveedores" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarOtrosProveedores_Click"></asp:LinkButton>
+                        <asp:LinkButton ID="lbtnActualizarArticulosDespacho" runat="server" class="btn btn-success" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="lbtnActualizarArticulosDespacho_Click"></asp:LinkButton>
                     </div>
                 </div>
             </div>
@@ -796,7 +833,6 @@
                                     <label class="col-md-4">Desde</label>
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtFechaRefDesde" runat="server" class="form-control"></asp:TextBox>
-                                        <!-- /input-group -->
                                     </div>
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaRefDesde" ValidationGroup="ReferenciaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -810,7 +846,6 @@
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaRefHasta" ValidationGroup="ReferenciaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
-                                    <!-- /input-group -->
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Cant. Dias</label>
@@ -856,6 +891,12 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProvRef" InitialValue="0" ValidationGroup="ReferenciaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Categoria</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListCategoria" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -999,6 +1040,31 @@
         </div>
     </div>
 
+    <div id="modalNominaDeArticulos" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Nomina de Articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-4">Incluir Art. Inactivos</label>
+                            <div class="col-md-1">
+                                <asp:CheckBox ID="chArtInactivos" runat="server" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnNominaArticulosImprimir" runat="server" Text="Generar PDF" class="btn btn-success" OnClick="lbtnNominaArticulosImprimir_Click" />
+                    <asp:LinkButton ID="lbtnNominaArticulosExportar" runat="server" Text="Generar Excel" class="btn btn-success" OnClick="lbtnNominaArticulosExportar_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modalMovStock" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1083,7 +1149,6 @@
         </div>
     </div>
 
-
     <div id="modalIngresosEgresosArticulos" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1130,7 +1195,6 @@
             </div>
         </div>
     </div>
-
 
     <script>
         function abrirdialog(valor) {
@@ -1210,9 +1274,9 @@
             $.msgbox("Are you sure that you want to permanently delete the selected element?", {
                 type: "confirm",
                 buttons: [
-                  { type: "submit", value: "Yes" },
-                  { type: "submit", value: "No" },
-                  { type: "cancel", value: "Cancel" }
+                    { type: "submit", value: "Yes" },
+                    { type: "submit", value: "No" },
+                    { type: "cancel", value: "Cancel" }
                 ]
             }, function (result) {
                 if (result == 'Yes') {
@@ -1282,8 +1346,7 @@
             if (key < 48 || key > 57) {
                 if (key == 45 || key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

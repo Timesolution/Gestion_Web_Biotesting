@@ -221,6 +221,10 @@ namespace Gestion_Web.Formularios.Valores
                 int validas = 0;
                 int validar = 0;
 
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                string permisoValidarSeguro = listPermisos.Where(x => x == "152").FirstOrDefault();
+
                 if (!String.IsNullOrEmpty(this.txtFechaDesde.Text))
                 {
                     List<Planario_Api.Entidades.SolicitudPlenario> solicitudes = contPlenario.obtenerSolicitudesCierreCaja(emp, suc, pv, this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.ListEstados.SelectedValue));
@@ -242,7 +246,7 @@ namespace Gestion_Web.Formularios.Valores
 
                         TableCell celDoc = new TableCell();                        
                         celDoc.Text = f.tipo.tipo + " Nº " + f.numero;
-                        celDoc.Width = Unit.Percentage(25);
+                        celDoc.Width = Unit.Percentage(20);
                         celDoc.VerticalAlign = VerticalAlign.Middle;
                         tr.Cells.Add(celDoc);
 
@@ -254,7 +258,7 @@ namespace Gestion_Web.Formularios.Valores
 
                         TableCell celDNI = new TableCell();
                         celDNI.Text = s.Dni.ToString();
-                        celDNI.Width = Unit.Percentage(15);
+                        celDNI.Width = Unit.Percentage(10);
                         celDNI.VerticalAlign = VerticalAlign.Middle;
                         tr.Cells.Add(celDNI);
 
@@ -290,7 +294,7 @@ namespace Gestion_Web.Formularios.Valores
                                 btnValidar.ID = "btnOK_" + s.Id;
                                 btnValidar.Text = "<span class='shortcut-icon icon-ok'></span>";
                                 celAccion.Controls.Add(btnValidar);
-                                celAccion.Width = Unit.Percentage(15);
+                                celAccion.Width = Unit.Percentage(25);
                                 celAccion.VerticalAlign = VerticalAlign.Middle;
                                 tr.Cells.Add(celAccion);
                             }
@@ -323,7 +327,23 @@ namespace Gestion_Web.Formularios.Valores
                                 btnEditar.Attributes.Add("onclick", "grisarClick('" + btnEditar.ID + "')");
                                 celAccion.Controls.Add(btnEditar);
 
-                                celAccion.Width = Unit.Percentage(15);
+                                Literal l2 = new Literal();
+                                l2.Text = "&nbsp";
+                                celAccion.Controls.Add(l2);
+
+                                LinkButton btnvalidarSeguro = new LinkButton();
+                                btnvalidarSeguro.CssClass = "btn btn-warning ui-tooltip";
+                                btnvalidarSeguro.Attributes.Add("data-toggle", "tooltip");
+                                btnvalidarSeguro.ID = "btnSeguro" + s.Id;
+                                btnvalidarSeguro.ClientIDMode = System.Web.UI.ClientIDMode.Static;
+                                btnvalidarSeguro.PostBackUrl = "CreditosABM?id=" + s.Id;
+                                btnvalidarSeguro.Text = "<span class='shortcut-icon icon-ok'></span>";
+                                btnvalidarSeguro.Attributes.Add("title data-original-title", "Validar Seguro");
+                                if (string.IsNullOrEmpty(permisoValidarSeguro))
+                                    btnvalidarSeguro.Visible = false;
+                                celAccion.Controls.Add(btnvalidarSeguro);
+
+                                celAccion.Width = Unit.Percentage(25);
                                 celAccion.VerticalAlign = VerticalAlign.Middle;
                                 tr.Cells.Add(celAccion);
                             }
@@ -356,6 +376,22 @@ namespace Gestion_Web.Formularios.Valores
                             btnEditar.ClientIDMode = System.Web.UI.ClientIDMode.Static;
                             btnEditar.Attributes.Add("onclick", "grisarClick('" + btnEditar.ID + "')");
                             celAccion.Controls.Add(btnEditar);
+
+                            Literal l2 = new Literal();
+                            l2.Text = "&nbsp";
+                            celAccion.Controls.Add(l2);
+
+                            LinkButton btnvalidarSeguro = new LinkButton();
+                            btnvalidarSeguro.CssClass = "btn btn-warning ui-tooltip";
+                            btnvalidarSeguro.Attributes.Add("data-toggle", "tooltip");
+                            btnvalidarSeguro.ID = "btnSeguro" + s.Id;
+                            btnvalidarSeguro.ClientIDMode = System.Web.UI.ClientIDMode.Static;
+                            btnvalidarSeguro.PostBackUrl = "CreditosABM?id=" + s.Id;
+                            btnvalidarSeguro.Text = "<span class='shortcut-icon icon-ok'></span>";
+                            btnvalidarSeguro.Attributes.Add("title data-original-title", "Validar Seguro");
+                            if (string.IsNullOrEmpty(permisoValidarSeguro))
+                                btnvalidarSeguro.Visible = false;
+                            celAccion.Controls.Add(btnvalidarSeguro);
 
                             celAccion.Width = Unit.Percentage(15);
                             celAccion.VerticalAlign = VerticalAlign.Middle;
@@ -472,6 +508,7 @@ namespace Gestion_Web.Formularios.Valores
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ha ocurrido un error." + ex.Message + " \");", true);
             }
         }
+
         protected void BtnValidarCreditosManuales_Click(object sender, EventArgs e)
         {
             try
@@ -483,6 +520,7 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
+
         private void validarCreditosManuales()
         {
             try
@@ -514,6 +552,7 @@ namespace Gestion_Web.Formularios.Valores
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Ocurrio un error validando solicitudes. " + ex.Message + ". \", {type: \"error\"});", true);
             }
         }
+
         protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -525,6 +564,7 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
+
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -536,5 +576,6 @@ namespace Gestion_Web.Formularios.Valores
 
             }
         }
+        
     }
 }

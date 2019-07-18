@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Total Costo</Value>
+                <Value>Total Costo Con Iva</Value>
                 <Style>
                   <Format>'$'#,0.00</Format>
                 </Style>
@@ -324,7 +324,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Costo Sin Iva</Value>
+                              <Value>Costo Con Iva</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -384,7 +384,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Precio Unitario Con Iva</Value>
+                              <Value>Precio Unitario Sin Iva</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -594,14 +594,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Costo_Imponible">
+                    <Textbox Name="Costo_Imponible_Con_Iva">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Costo_Imponible.Value</Value>
+                              <Value>=Fields!Costo_Imponible_Con_Iva.Value</Value>
                               <Style>
                                 <Format>'$'#,0.00;('$'#,0.00)</Format>
                               </Style>
@@ -612,7 +612,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Costo_Imponible</rd:DefaultName>
+                      <rd:DefaultName>Costo_Imponible_Con_Iva</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -661,14 +661,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Precio_Unitario">
+                    <Textbox Name="Precio_Unitario_Sin_Iva">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Precio_Unitario.Value</Value>
+                              <Value>=Fields!Precio_Unitario_Sin_Iva.Value</Value>
                               <Style>
                                 <Format>'$'#,0.00;('$'#,0.00)</Format>
                               </Style>
@@ -677,7 +677,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Precio_Unitario</rd:DefaultName>
+                      <rd:DefaultName>Precio_Unitario_Sin_Iva</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -803,7 +803,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Total Vendido</Value>
+                <Value>Total Vendido Sin Iva</Value>
                 <Style>
                   <Format>'$'#,0.00;'$'-#,0.00</Format>
                 </Style>
@@ -970,10 +970,18 @@
           <DataField>Porcentaje</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Costo_Imponible_Con_Iva">
+          <DataField>Costo_Imponible_Con_Iva</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Precio_Unitario_Sin_Iva">
+          <DataField>Precio_Unitario_Sin_Iva</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsRentabilidad</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\times\Google Drive\Proyectos\Git\Gestion_Web\Gestion Web\Formularios\Reportes\dsRentabilidad.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\black\Documents\Trabajo\Gestion\Gestion_Web\Gestion Web\Formularios\Reportes\dsRentabilidad.xsd</rd:SchemaPath>
         <rd:TableName>dtRentabilidadCosto</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

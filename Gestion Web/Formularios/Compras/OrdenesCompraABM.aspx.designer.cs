@@ -13,15 +13,6 @@ namespace Gestion_Web.Formularios.Compras {
     public partial class OrdenesCompraABM {
         
         /// <summary>
-        /// UpdatePanel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
-        /// <summary>
         /// ListSucursal control.
         /// </summary>
         /// <remarks>
@@ -130,60 +121,6 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
         
         /// <summary>
-        /// Panel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
-        
-        /// <summary>
-        /// txtCodigo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCodigo;
-        
-        /// <summary>
-        /// txtDescripcion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDescripcion;
-        
-        /// <summary>
-        /// txtPrecio control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPrecio;
-        
-        /// <summary>
-        /// txtCantidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCantidad;
-        
-        /// <summary>
-        /// lbtnAgregarArticuloASP control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarArticuloASP;
-        
-        /// <summary>
         /// lblMailOC control.
         /// </summary>
         /// <remarks>
@@ -191,6 +128,15 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMailOC;
+        
+        /// <summary>
+        /// hfLabelMailOC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfLabelMailOC;
         
         /// <summary>
         /// lblRequiereAutorizacionOC control.
@@ -220,49 +166,49 @@ namespace Gestion_Web.Formularios.Compras {
         protected global::System.Web.UI.WebControls.Label lblRequiereAnticipoOC;
         
         /// <summary>
-        /// btnVerStockMinimo control.
+        /// lblObservacion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerStockMinimo;
+        protected global::System.Web.UI.WebControls.Label lblObservacion;
         
         /// <summary>
-        /// btnVerStockMinimoSucursal control.
+        /// txtFormaDePago control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerStockMinimoSucursal;
+        protected global::System.Web.UI.WebControls.TextBox txtFormaDePago;
         
         /// <summary>
-        /// btnVerOC control.
+        /// lbtnVerStockMinimo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerOC;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVerStockMinimo;
         
         /// <summary>
-        /// lblVerCargados control.
+        /// lbtnVerOC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblVerCargados;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVerOC;
         
         /// <summary>
-        /// btnVerTodos control.
+        /// lbtnVerTodos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerTodos;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVerTodos;
         
         /// <summary>
         /// phProductos control.
@@ -272,6 +218,15 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phProductos;
+        
+        /// <summary>
+        /// panelProductos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel panelProductos;
         
         /// <summary>
         /// btnAgregar control.

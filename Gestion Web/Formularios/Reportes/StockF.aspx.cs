@@ -47,17 +47,6 @@ namespace Gestion_Web.Formularios.Reportes
         }
 
         #region Eventos Controles
-        protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                //this.cargarSucursales();
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Sucursales de la Empresa seleccionada. Excepción: " + Ex.Message));
-            }
-        }
         protected void lbtnSolicitarInforme_Click(object sender, EventArgs e)
         {
             try
@@ -134,7 +123,6 @@ namespace Gestion_Web.Formularios.Reportes
                             valor = 1;
                     }
                 }
-
                 return valor;
             }
             catch

@@ -25,12 +25,15 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFacturacion controladorF = new controladorFacturacion();
         controladorSucursal controlSucursal = new controladorSucursal();
         controladorCliente controlCliente = new controladorCliente();
+        ControladorRemitoEntity contRemitoEntity = new ControladorRemitoEntity();
         Mensajes m = new Mensajes();
         Configuracion c = new Configuracion();
         private int suc;
         private string fechaD;
         private string fechaH;
         private int original;
+        private int cliente;
+        private int sinFactura;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -38,29 +41,44 @@ namespace Gestion_Web.Formularios.Facturas
                 this.VerificarLogin();
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
-                suc= Convert.ToInt32(Request.QueryString["Sucursal"]);
+                suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
                 this.original = Convert.ToInt32(Request.QueryString["o"]);
+                this.cliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.sinFactura = Convert.ToInt32(Request.QueryString["sF"]);
 
                 if (!IsPostBack)
                 {
-                    if (fechaD == null && fechaH == null && suc == 0)
+                    this.cargarClientes();
+
+                    if (fechaD == null && fechaH == null && suc == 0 && cliente == 0)
                     {
                         suc = (int)Session["Login_SucUser"];
                         this.cargarSucursal();
-                        fechaD = DateTime.Now.ToString("dd/MM/yyyy");
-                        fechaH = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        DropListSucursal.SelectedValue = suc.ToString();
+
+                        this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.DropListSucursal.SelectedValue = suc.ToString();
+                        this.DropListClientes.SelectedValue = cliente.ToString();
                     }
                     this.cargarSucursal();
-                    txtFechaDesde.Text = fechaD;
-                    txtFechaHasta.Text = fechaH;
-                    DropListSucursal.SelectedValue = suc.ToString();
-
+                    this.txtFechaDesde.Text = fechaD;
+                    this.txtFechaHasta.Text = fechaH;
+                    this.DropListSucursal.SelectedValue = suc.ToString();
+                    this.DropListClientes.SelectedValue = cliente.ToString();
+                    if (sinFactura == 1)
+                    {
+                        chkRemSinFacturas.Checked = true;
+                    }
+                    else
+                    {
+                        chkRemSinFacturas.Checked = false;
+                    }
+                    
                 }
-                    this.cargarRemitosRango(fechaD, fechaH, suc);
 
+                this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura);
             }
             catch (Exception ex)
             {
@@ -133,6 +151,11 @@ namespace Gestion_Web.Formularios.Facturas
                 dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
+                DataRow dr1 = dt.NewRow();
+                dr1["nombre"] = "Todas";
+                dr1["id"] = 0;
+                dt.Rows.InsertAt(dr1, 1);
+
 
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
@@ -147,35 +170,21 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc)
+        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc, int cliente, int sinFactura)
         {
             try
             {
-                if (fechaD != null && fechaH != null && suc != 0)
+                if (fechaD != null && fechaH != null && suc != -1)
                 {
-                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc);
+                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc,cliente,sinFactura);
                     decimal saldo = 0;
                     foreach (Remito r in remitos)
                     {
                         saldo += r.total;
                         this.cargarEnPh(r);
                     }
-
                     lblSaldo.Text = saldo.ToString("C");
                 }
-                else
-                {
-                    List<Remito> remitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue));
-                    decimal saldo = 0;
-                    foreach (Remito r in remitos)
-                    {
-                        saldo += r.total;
-                        this.cargarEnPh(r);
-                    }
-
-                    lblSaldo.Text = "Total: $" + saldo.ToString();
-                }
-
             }
             catch (Exception ex)
             {
@@ -496,13 +505,21 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 if (!String.IsNullOrEmpty(txtFechaDesde.Text) && (!String.IsNullOrEmpty(txtFechaHasta.Text)))
                 {
                     if (DropListSucursal.SelectedValue != "-1")
                     {
+                        sinFactura = 0;
+
+                        if (chkRemSinFacturas.Checked)
+                        {
+                            sinFactura = 1;
+                        }
+                        
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("RemitosR.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue);
+                        Response.Redirect("RemitosR.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + 
+                            txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue +
+                            "&cliente=" + DropListClientes.SelectedValue + "&sF=" + sinFactura);
                     }
                     else
                     {
@@ -587,6 +604,11 @@ namespace Gestion_Web.Formularios.Facturas
                         idtildado = ch.ID.Split('_')[1];
                     }
                 }
+                if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(idtildado)))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Este remito ya fue facturado"));
+                    return;
+                }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
                     Response.Redirect("ABMFacturas.aspx?accion=4&id_rem=" + idtildado);
@@ -652,7 +674,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
                 else
                 {
-                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue));
+                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue),0,sinFactura);
 
                     foreach (var remito in listRemitos)
                     {
@@ -992,5 +1014,67 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = this.txtCodCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
+
+        public void cargarClientes()
+        {
+            try
+            {
+                var dt = controlCliente.obtenerClientesDT();
+
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 1)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["alias"] = "Seleccione...";
+                        dr["id"] = -1;
+                        dt.Rows.InsertAt(dr, 0);
+
+                        DataRow dr2 = dt.NewRow();
+                        dr2["alias"] = "Todos";
+                        dr2["id"] = 0;
+                        dt.Rows.InsertAt(dr2, 1);
+                    }
+
+                    this.DropListClientes.DataSource = dt;
+                    this.DropListClientes.DataValueField = "id";
+                    this.DropListClientes.DataTextField = "alias";
+
+                    this.DropListClientes.DataBind();
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrió un error obteniendo Clientes para cargar a la lista."));
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. Excepción: " + Ex.Message));
+            }
+        }
     }
+
+    
 }
+

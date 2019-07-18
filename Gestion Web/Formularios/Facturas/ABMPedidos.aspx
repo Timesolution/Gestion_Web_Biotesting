@@ -12,8 +12,8 @@
                         <div class="widget-content">
                             <asp:UpdatePanel ID="UpdatePanel2" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
-                                    <div class="col-md-12" style="padding:0px;">
-                                        <table class="table table-striped table-bordered" style="width:100%;">
+                                    <div class="col-md-12" style="padding: 0px;">
+                                        <table class="table table-striped table-bordered" style="width: 100%;">
                                             <thead>
                                                 <tr>
                                                     <th>Datos Cliente</th>
@@ -32,7 +32,7 @@
                                                                     <asp:Panel ID="PanelBuscar" runat="server">
                                                                         <a class="btn btn-info" onclick="createC();">
                                                                             <i class="shortcut-icon icon-search"></i>
-                                                                        </a>                                                                    
+                                                                        </a>
                                                                     </asp:Panel>
                                                                 </div>
                                                                 <div class="col-md-6">
@@ -63,7 +63,6 @@
                                                     <td style="width: 40%">
                                                         <div role="form" class="form-horizontal col-md-12">
                                                             <div class="form-group">
-                                                                <%--<label class="col-md-4">Cliente: </label>--%>
                                                                 <div class="col-md-12">
                                                                     <h5>
                                                                         <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label>
@@ -115,7 +114,7 @@
                                         </table>
                                     </div>
 
-                                    <div class="col-md-12" style="padding:0px;">
+                                    <div class="col-md-12" style="padding: 0px;">
                                         <table class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
@@ -138,9 +137,6 @@
                                                             <asp:DropDownList ID="DropListVendedor" runat="server" class="form-control"></asp:DropDownList>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <%--<a class="btn btn-info" data-toggle="modal" href="#modalVendedor">
-                                                                <i class="shortcut-icon icon-plus"></i>
-                                                            </a>--%>
                                                         </div>
 
                                                         <div class="col-md-2">
@@ -204,11 +200,11 @@
                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                 <ContentTemplate>
 
-                                     <div class="col-md-12">
-                                        <asp:Label ID="lblDatosReferenciaArt" runat="server" class="alert alert-info alert-dismissable" ForeColor="Black" Width="100%" style="text-align:center;" Height="75%" Visible="false"/>
-                                        <asp:Label ID="lblDescuentoCantidad" runat="server" class="alert alert-info alert-dismissable" ForeColor="Black" Width="100%" style="text-align:center;" Height="75%" Visible="false"/>
-                                         <asp:Label ID="LabelPendientes" runat="server" class="alert alert-danger alert-dismissable" ForeColor="Black" Width="100%" style="text-align:center;" Height="75%" Visible="false"/>
-                                    </div>                                    
+                                    <div class="col-md-12">
+                                        <asp:Label ID="lblDatosReferenciaArt" runat="server" class="alert alert-info alert-dismissable" ForeColor="Black" Width="100%" Style="text-align: center;" Height="75%" Visible="false" />
+                                        <asp:Label ID="lblDescuentoCantidad" runat="server" class="alert alert-info alert-dismissable" ForeColor="Black" Width="100%" Style="text-align: center;" Height="75%" Visible="false" />
+                                        <asp:Label ID="LabelPendientes" runat="server" class="alert alert-danger alert-dismissable" ForeColor="Black" Width="100%" Style="text-align: center;" Height="75%" Visible="false" />
+                                    </div>
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
@@ -232,7 +228,7 @@
                                                     <div class="form-group">
                                                         <div class="col-md-12">
                                                             <div class="input-group">
-                                                                <asp:TextBox ID="txtCodigo" runat="server" class="form-control" ></asp:TextBox>
+                                                                <asp:TextBox ID="txtCodigo" runat="server" class="form-control"></asp:TextBox>
 
                                                                 <span class="input-group-btn">
                                                                     <a class="btn btn-info" onclick="createA();">
@@ -252,7 +248,7 @@
                                                 <td style="width: 8%">
                                                     <asp:TextBox ID="txtCantidad" runat="server" class="form-control" AutoPostBack="True" onkeypress="javascript:return validarNro(event)" onfocus="foco();" OnTextChanged="txtCantidad_TextChanged" Style="text-align: right"></asp:TextBox>
                                                     <asp:CheckBox ID="checkMarcar" runat="server" />
-                                                    <asp:LinkButton ID="lbtnStockProd" runat="server" class="badge pull-right" Text="0" OnClick="lbtnStockProd_Click" ></asp:LinkButton>
+                                                    <asp:LinkButton ID="lbtnStockProd" runat="server" class="badge pull-right" Text="0" OnClick="lbtnStockProd_Click"></asp:LinkButton>
                                                 </td>
                                                 <td style="width: 25%">
 
@@ -280,7 +276,7 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                    </table>                                   
+                                    </table>
 
                                     <table class="table table-striped table-bordered">
                                         <thead>
@@ -332,36 +328,36 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="name" class="col-md-4">Horario Entrega</label>
-                                                                        <div class="col-md-8">                                                                            
+                                                                        <div class="col-md-8">
                                                                             <asp:TextBox ID="txtHorarioEntrega" runat="server" class="form-control"></asp:TextBox>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="name" class="col-md-4">Zona Entrega</label>
-                                                                        <div class="col-md-4">                                                                            
+                                                                        <div class="col-md-4">
                                                                             <asp:DropDownList ID="DropListZonaEntrega" runat="server" class="form-control"></asp:DropDownList>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group">                                                                        
+                                                                    <div class="form-group">
                                                                         <label for="name" class="col-md-4">Seña</label>
                                                                         <div class="col-md-4">
                                                                             <div class="input-group">
                                                                                 <span class="input-group-addon">$</span>
                                                                                 <asp:TextBox ID="txtSenia" runat="server" Text="0" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                                                             </div>
-                                                                        </div>   
+                                                                        </div>
                                                                         <div class="col-md-2">
                                                                             <asp:Button ID="btnAgregar_senia" runat="server" Text="$" class="btn btn-success" OnClick="btnAgregar_senia_Click" ValidationGroup="PedidosGroup" />
-                                                                        </div>                                                                     
+                                                                        </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <div class="col-md-12">
                                                                             <asp:TextBox placeholder="AGREGUE AQUI OBSERVACIONES" ID="txtComentarios" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
                                                                         </div>
                                                                     </div>
-                                                                                                                                        
+
                                                                 </asp:PlaceHolder>
-                                                                
+
                                                                 <div class="col-md-12">
                                                                     <asp:CheckBox ID="CheckBox1" TextAlign="Left" CssClass="pull-right" Text="Más Datos&nbsp&nbsp" runat="server" AutoPostBack="True" OnCheckedChanged="CheckBox1_CheckedChanged" />
                                                                 </div>
@@ -457,9 +453,6 @@
 
 
                                 </ContentTemplate>
-                                <Triggers>
-                                    <%-- <asp:AsyncPostBackTrigger ControlID="btnAgregar" EventName="Click" />--%>
-                                </Triggers>
                             </asp:UpdatePanel>
                             <div class="row">
                                 <div role="form" class="form-horizontal col-md-12">
@@ -490,23 +483,24 @@
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
                             <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Always">
-                                <ContentTemplate>                                
+                                <ContentTemplate>
                                     <div class="form-group">
                                         <label for="validateSelect" class="col-md-4">Archivo:</label>
                                         <div class="col-md-6">
                                             <asp:FileUpload ID="FileUpload1" runat="server" />
                                         </div>
-                                        <div class="col-md-2">
+                                        <%--<div class="col-md-2">
                                             <asp:RegularExpressionValidator ID="uplValidator" runat="server" ControlToValidate="FileUpload1" ValidationGroup="ImportarGroup" ForeColor="Red" ErrorMessage="* .csv" 
                                             ValidationExpression="(.+\.([Cc][Ss][Vv]))" ></asp:RegularExpressionValidator>
-                                        </div>
+                                        </div>--%>
                                     </div>
                                 </ContentTemplate>
-                        </asp:UpdatePanel>
+                            </asp:UpdatePanel>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button ID="btnImportarPedido" runat="server" Text="Importar" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
+                        <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
+                        <asp:Button ID="btnImportarPedidoExcel" runat="server" Text="Importar Excel" class="btn btn-success" OnClick="btnImportarPedidoExcel_Click" ValidationGroup="ImportarGroup" />
                     </div>
 
                 </div>
@@ -619,41 +613,7 @@
             </div>
         </div>
         <%--Fin modalGrupo--%>
-
-
-        <!-- /row -->
-
     </div>
-    <!-- /container -->
-
-    <%-- </div>--%>
-    <!-- /main -->
-
-
-
-    <%-- <!-- Core Scripts - Include with every page -->
-  
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
-
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-
-    <script src="../../Scripts/Application.js"></script>
-
-    <%--<script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>--%>
-
-
-
-    <%-- <script src="../../Scripts/demo/gallery.js"></script>
-
-      <script src="../../Scripts/jquery-1.10.2.js"></script>
-    <script src="../../Scripts/bootstrap.min.js"></script>--%>
-    <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
-
-    
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <!-- Core Scripts - Include with every page -->
@@ -690,18 +650,8 @@
             $(function () {
                 $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
-
-
         }
     </script>
-
-    <%--    <script>
-
-        $(function () {
-            $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
-        });
-
-    </script>--%>
 
     <script type="text/javascript">
 
@@ -716,8 +666,6 @@
             document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
             var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
             var screenPosition = note.getBoundingClientRect();
-
-            //window.scrollTo(0, screenPosition.bottom / 2);
         }
 
         function focoDesc() {
@@ -730,29 +678,24 @@
                 $('#modalImportar').modal('show');
             }
         }
-
     </script>
 
     <script src="../../js/daypilot-modal-2.0.js"></script>
 
     <script>
         function createC() {
-            //var d = document.getElementById("TheBody_txtDescripcion").value;
-            //              var resource = d.options[d.selectedIndex].value;
-
             var modal = new DayPilot.Modal();
             modal.closed = function () {
                 if (this.result == "OK") {
                     __doPostBack("UpdateButton", "");
                 }
             };
-            //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
             modal.showUrl("BuscarCliente.aspx?accion=4");
         }
 
         function createA() {
-            //var d = document.getElementById("TheBody_txtDescripcion").value;
-            //              var resource = d.options[d.selectedIndex].value;
+            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+            var idSucursal = ddlSucursal.selectedOptions[0].value;
 
             var modal = new DayPilot.Modal();
             modal.closed = function () {
@@ -760,8 +703,7 @@
                     __doPostBack("UpdateButton", "");
                 }
             };
-            //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
-            modal.showUrl("BuscarArticulos.aspx?accion=4");
+            modal.showUrl("BuscarArticulos.aspx?accion=4&suc=" + idSucursal);
         }
 
         function edit(id) {
@@ -773,24 +715,16 @@
             };
             modal.showUrl("ModalEdit.aspx?id=" + id);
         }
-
-
-
-
     </script>
 
     <script>
         function createImpresion(value) {
-            //var d = document.getElementById("TheBody_txtDescripcion").value;
-            //              var resource = d.options[d.selectedIndex].value;
-
             var modal = new DayPilot.Modal();
             modal.closed = function () {
                 if (this.result == "OK") {
                     __doPostBack("UpdateButton", "");
                 }
             };
-            //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
             modal.showUrl("PedidoImpresion.aspx?Pedido=" + value);
         }
     </script>
@@ -811,8 +745,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
