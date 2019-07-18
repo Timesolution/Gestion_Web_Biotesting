@@ -235,7 +235,8 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Cells.Add(celOrdenCompra);
 
                 TableCell celArticulo = new TableCell();
-                celArticulo.Text = contArt.obtenerArticuloByID((int)f.Articulo).descripcion;
+                var articulo = contArt.obtenerArticuloByID((int)f.Articulo);
+                celArticulo.Text = articulo.codigo + " - " + articulo.descripcion;
                 celArticulo.HorizontalAlign = HorizontalAlign.Left;
                 celArticulo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celArticulo);

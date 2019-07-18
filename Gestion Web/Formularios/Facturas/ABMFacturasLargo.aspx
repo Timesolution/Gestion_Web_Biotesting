@@ -279,7 +279,7 @@
                             <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
                                     <table class="table table-striped table-bordered" onload="AddRequestHandler()">
-                                        <asp:PlaceHolder ID="phRefacturacion" runat="server" Visible="true">
+                                        <asp:PlaceHolder ID="phAgregarItems" runat="server" Visible="true">
                                         <thead>
                                             <tr>
                                                 <th>#</th>

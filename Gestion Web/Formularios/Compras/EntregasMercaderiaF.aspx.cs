@@ -46,9 +46,9 @@ namespace Gestion_Web.Formularios.Compras
 
         private void ConfigurarBotonesAguarde()
         {
-            //btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirSoloLoSolicitado.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
-            //btnRecibirSoloLoSolicitado.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirSoloLoSolicitado, null) + ";");
-            //btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRecibirSoloLoSolicitado.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
+            btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnIngresoManual.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
+            btnIngresoManual.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnIngresoManual, null) + ";");
+            btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnIngresoManual.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
             //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
             btnGuardar.Attributes.Add("onclick", " this.disabled = true; " + btnCerrar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGuardar, null) + ";");
             btnCerrar.Attributes.Add("onclick", " this.disabled = true; " + btnGuardar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCerrar, null) + ";");
@@ -103,7 +103,6 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (s == "210")
                             _verCantidadPedida = true;
-
                     }
                 }
 
@@ -303,28 +302,45 @@ namespace Gestion_Web.Formularios.Compras
                 celCantidadYaRecibida.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCantidadYaRecibida);
 
-                TableCell celAccion = new TableCell();
-
+                TableCell celAccionCantidadRecibida = new TableCell();
                 TextBox celCantidadRecibida = new TextBox();
+                celCantidadRecibida.CssClass = "form-control";
                 celCantidadRecibida.TextMode = TextBoxMode.Number;
                 celCantidadRecibida.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
-                celCantidadRecibida.Text = "0";/* (cantidad - cantidadYaRecibidas).ToString();*/
+                celCantidadRecibida.TextChanged += new EventHandler(ValidarCampo);
+                celCantidadRecibida.Text = "0";
+                
+                celAccionCantidadRecibida.Controls.Add(celCantidadRecibida);
+                tr.Cells.Add(celAccionCantidadRecibida);
 
-                celAccion.Controls.Add(celCantidadRecibida);
-
+                TableCell celAccion = new TableCell();
                 DropDownList celDropDownList = new DropDownList();
+                celDropDownList.CssClass = "form-control";
                 DataTable dt = new DataTable();
+                dt.Columns.Add("NombreAccion");
+                dt.Columns.Add("Valor");
+
                 DataRow dr = dt.NewRow();
-                dr["alias"] = "Todos";
-                dr["id"] = -1;
+                dr["NombreAccion"] = "Agregar";
+                dr["Valor"] = "agregar";
                 dt.Rows.InsertAt(dr, 0);
 
+                DataRow dr2 = dt.NewRow();
+                dr2["NombreAccion"] = "Rechazar";
+                dr2["Valor"] = "rechazar";
+                dt.Rows.InsertAt(dr2, 1);
+
+                DataRow dr3 = dt.NewRow();
+                dr3["NombreAccion"] = "Recepcion parcial";
+                dr3["Valor"] = "parcial";
+                dt.Rows.InsertAt(dr3, 2);
+
                 celDropDownList.DataSource = dt;
-                celDropDownList.DataValueField = "id";
-                celDropDownList.DataTextField = "alias";
+                celDropDownList.DataValueField = "Valor";
+                celDropDownList.DataTextField = "NombreAccion";
+                celDropDownList.DataBind();
 
-                this.ListProveedor.DataBind();
-
+                celAccion.Controls.Add(celDropDownList);
 
                 tr.Cells.Add(celAccion);
 
@@ -334,6 +350,22 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun cargarEnPh EntregasMercaderiaF. Ex: " + ex.Message));
+            }
+        }
+
+        private void ValidarCampo(object sender, EventArgs e)
+        {
+            try
+            {
+                TextBox textBox = (sender as TextBox);
+
+                if(string.IsNullOrEmpty(textBox.Text) || Convert.ToInt32(textBox.Text) < 0)
+                    textBox.Text = "0";
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al validar el campo. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error validando campo. " + ex.Message);
             }
         }
 
@@ -600,12 +632,44 @@ namespace Gestion_Web.Formularios.Compras
 
                 script += " $.msgbox(\"Entrega generada. \", {type: \"info\"}); location.href = 'RemitoF.aspx';";
 
-                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", script, true);
+                ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir remito. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "Error al imprimir remito. " + ex.Message, true);
             }
+        }
+
+        private bool ValidarCampoNumero()
+        {
+            if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
+            {
+                btnRecibirTodo.Attributes.Remove("Disabled");
+                btnRechazarTodo.Attributes.Remove("Disabled");
+                btnIngresoManual.Attributes.Remove("Disabled");
+                btnIngresoManual.Text = "Ingreso manual";
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarEntregaConValoresMayoresACero()
+        {
+            bool valoresMayoresACero = false;
+
+            foreach (var c in phProductos.Controls)
+            {
+                TableRow tr = c as TableRow;
+                TextBox cantidadRecibidaTB = tr.Cells[4].Controls[0] as TextBox;
+                decimal cantidadRecibida = Convert.ToDecimal(cantidadRecibidaTB.Text);
+
+                if(cantidadRecibida > 0)
+                {
+                    valoresMayoresACero = true;
+                }
+
+            }
+            return valoresMayoresACero;
         }
 
         protected void btnRecibirTodo_Click(object sender, EventArgs e)
@@ -615,7 +679,25 @@ namespace Gestion_Web.Formularios.Compras
                 if (!Page.IsValid)
                     return;
 
-                var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
+                if (!ValidarCampoNumero())
+                    return;
+
+                if (!ValidarEntregaConValoresMayoresACero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
+                {
+                    btnRecibirTodo.Attributes.Remove("Disabled");
+                    btnRechazarTodo.Attributes.Remove("Disabled");
+                    btnIngresoManual.Attributes.Remove("Disabled");
+                    btnIngresoManual.Text = "Ingreso manual";
+                    return;
+                }
+
+                var ordenDeCompra = contComprasEnt.obtenerOrden(ordenCompra);
 
                 var nuevoRemitoCompra = GenerarEntrega(true,false,true);
 
@@ -771,32 +853,41 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        protected void btnRecibirLoSolicitado_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!Page.IsValid)
-                    return;
+        //protected void btnRecibirLoSolicitado_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (!Page.IsValid)
+        //            return;
 
-                var resp = GenerarEntregaAceptarLoSolicitado();
+        //        var resp = GenerarEntregaAceptarLoSolicitado();
 
-                if (resp.resultadoProcesarEntrega)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se acepto solo la mercaderia solicitada con exito!", "RemitoF.aspx"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "Error", "Error al recibir la mercaderia solicitada de la orden de compra cuando la mercaderia era mayor a la solicitada " + ex.Message);
-            }
-        }
+        //        if (resp.resultadoProcesarEntrega)
+        //        {
+        //            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se acepto solo la mercaderia solicitada con exito!", "RemitoF.aspx"));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "Error", "Error al recibir la mercaderia solicitada de la orden de compra cuando la mercaderia era mayor a la solicitada " + ex.Message);
+        //    }
+        //}
 
         protected void lbtnRechazarTodo_Click(object sender, EventArgs e)
         {
             try
             {
                 if (!Page.IsValid)
-                    return;                
+                    return;
+
+                if (!ValidarCampoNumero())
+                    return;
+
+                if (!ValidarEntregaConValoresMayoresACero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
 
                 var resp = GenerarEntregaRechazada();
 
@@ -811,34 +902,34 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private ProcesarEntregaResponse GenerarEntregaAceptarLoSolicitado()
-        {
-            var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
+        //private ProcesarEntregaResponse GenerarEntregaAceptarLoSolicitado()
+        //{
+        //    var ordenDeCompra = this.contComprasEnt.obtenerOrden(ordenCompra);
 
-            RemitosCompra remitoCompraDevolucion = new RemitosCompra();
-            RemitosCompra remitoCompra = new RemitosCompra();
-            List<RemitoCompraOrdenCompra_Diferencias> itemsConDiferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
+        //    RemitosCompra remitoCompraDevolucion = new RemitosCompra();
+        //    RemitosCompra remitoCompra = new RemitosCompra();
+        //    List<RemitoCompraOrdenCompra_Diferencias> itemsConDiferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
 
-            ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompra);
-            ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompraDevolucion);
+        //    ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompra);
+        //    ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompraDevolucion);
 
-            remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
-            remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
-            remitoCompraDevolucion.Devolucion = 1;
+        //    remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
+        //    remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
+        //    remitoCompraDevolucion.Devolucion = 1;
 
-            remitoCompra.RemitosCompras_Items = ObtenerItems(remitoCompra, false);
-            remitoCompraDevolucion.RemitosCompras_Items = ObtenerItems(remitoCompraDevolucion, false);
+        //    remitoCompra.RemitosCompras_Items = ObtenerItems(remitoCompra, false);
+        //    remitoCompraDevolucion.RemitosCompras_Items = ObtenerItems(remitoCompraDevolucion, false);
 
-            itemsConDiferencias = ObtenerDiferencias(remitoCompra,false);
+        //    itemsConDiferencias = ObtenerDiferencias(remitoCompra,false);
 
-            ActualizarCantidadesYaRecibidasOrdenDeCompra_Items();
+        //    ActualizarCantidadesYaRecibidasOrdenDeCompra_Items();
 
-            var entregaRechazadaResponse = contComprasEnt.ProcesarEntregaRecibirSoloLoSolicitado(itemsConDiferencias, remitoCompra, remitoCompraDevolucion, ordenCompra);
+        //    var entregaRechazadaResponse = contComprasEnt.ProcesarEntregaRecibirSoloLoSolicitado(itemsConDiferencias, remitoCompra, remitoCompraDevolucion, ordenCompra);
 
-            ImprimirRemito(entregaRechazadaResponse.idRemito, entregaRechazadaResponse.idRemitoDevolucion);
+        //    ImprimirRemito(entregaRechazadaResponse.idRemito, entregaRechazadaResponse.idRemitoDevolucion);
 
-            return entregaRechazadaResponse;
-        }
+        //    return entregaRechazadaResponse;
+        //}
 
         private ProcesarEntregaResponse GenerarEntregaRechazada()
         {
@@ -885,6 +976,9 @@ namespace Gestion_Web.Formularios.Compras
                 decimal cantidadRecibida = cantidades.Item4;
                 TableCell cantidadYaRecibidaTB = cantidades.Item5;
                 decimal cantidadYaRecibida = cantidades.Item6;
+
+                if (cantidadRecibida <= 0)
+                    continue;
 
                 if (!String.IsNullOrEmpty(idArticulo))
                 {
@@ -964,6 +1058,157 @@ namespace Gestion_Web.Formularios.Compras
             decimal cantidadYaRecibida = Convert.ToDecimal(cantidadYaRecibidaTB.Text);
 
             return new Tuple<string, decimal, TextBox, decimal, TableCell, decimal>(idArticulo, cantidadPedida, cantidadRecibidaTB, cantidadRecibida, cantidadYaRecibidaTB, cantidadYaRecibida);
+        }
+
+        protected void btnIngresoManual_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!Page.IsValid)
+                    return;
+
+                if (!ValidarCampoNumero())
+                    return;
+
+                if (!ValidarEntregaConValoresMayoresACero())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
+
+                var resp = GenerarEntregaIngresoManual();
+
+                if (resp.resultadoProcesarEntrega)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Ingreso manual realizado con exito!", "RemitoF.aspx"));
+                }                
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al realizar un ingreso manual en entregas. " + ex.Message);
+            }
+        }
+
+        private ProcesarEntregaResponse GenerarEntregaIngresoManual()
+        {
+            var ordenDeCompra = contComprasEnt.obtenerOrden(ordenCompra);
+            RemitosCompra remitoCompraDevolucion = null;
+            RemitosCompra remitoCompra = new RemitosCompra();
+            List<RemitosCompras_Items> items = new List<RemitosCompras_Items>();
+            List<RemitosCompras_Items> itemsDevolucion = new List<RemitosCompras_Items>();
+            List<RemitoCompraOrdenCompra_Diferencias> itemsConDiferencias = new List<RemitoCompraOrdenCompra_Diferencias>();
+
+            ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompra);            
+
+            foreach (var c in phProductos.Controls)
+            {
+                TableRow tr = c as TableRow;
+
+                DropDownList dropDownList = tr.Cells[5].Controls[0] as DropDownList;
+                var condicion = dropDownList.Text;
+                var cantidades = RecorrerPHyObtenerCantidades(tr);
+
+                string idArticulo = cantidades.Item1;
+                decimal cantidadPedida = cantidades.Item2;
+                decimal cantidadRecibida = cantidades.Item4;
+
+                if (cantidadRecibida <= 0)
+                    continue;
+
+                if (condicion == "agregar")
+                {
+                    var itemIngresoTemp = GenerarIngresoArticulo(idArticulo, cantidadRecibida);
+                    items.Add(itemIngresoTemp);
+                }
+                else if (condicion == "rechazar")
+                {
+                    var itemIngresoTemp = GenerarIngresoArticulo(idArticulo, cantidadRecibida);
+                    var itemRechazoTemp = GenerarRechazoArticulo(idArticulo, cantidadRecibida);
+                    items.Add(itemIngresoTemp);
+                    itemsDevolucion.Add(itemRechazoTemp);
+                }
+                else
+                {
+                    if (cantidadRecibida > cantidadPedida)
+                    {
+                        var itemIngresoTemp = GenerarIngresoArticulo(idArticulo, cantidadRecibida);
+                        var itemRechazoTemp = GenerarRechazoArticulo(idArticulo, cantidadRecibida - cantidadPedida);
+                        items.Add(itemIngresoTemp);
+                        itemsDevolucion.Add(itemRechazoTemp);
+                    }
+                    else
+                    {
+                        var itemIngresoTemp = GenerarIngresoArticulo(idArticulo, cantidadRecibida);
+                        items.Add(itemIngresoTemp);
+                    }
+                }
+            }
+
+            remitoCompra.RemitosCompras_Items = items;
+
+            if(itemsDevolucion.Count > 0)
+            {
+                remitoCompraDevolucion = new RemitosCompra();
+                ObtenerRemitoCompraAPartirDeLosDatosDeLaVista(remitoCompraDevolucion);
+                remitoCompraDevolucion.RemitosCompras_Items = itemsDevolucion;
+                remitoCompraDevolucion.RemitosCompras_Comentarios = new RemitosCompras_Comentarios();
+                remitoCompraDevolucion.RemitosCompras_Comentarios.Observacion = "Se genera remito de devolucion por exceso de mercaderia aceptada en la orden de compra numero" + ordenDeCompra.Numero;
+                remitoCompraDevolucion.Devolucion = 1;
+            }            
+
+            itemsConDiferencias = ObtenerDiferencias(remitoCompra, false);
+
+            ActualizarCantidadesYaRecibidasOrdenDeCompra_Items();
+
+            var entregaParcialResponse = contComprasEnt.ProcesarEntregaRecibirSoloLoSolicitado(itemsConDiferencias, remitoCompra, remitoCompraDevolucion, ordenCompra);
+
+            ImprimirRemito(entregaParcialResponse.idRemito, entregaParcialResponse.idRemitoDevolucion);
+
+            return entregaParcialResponse;
+        }
+
+        public RemitosCompras_Items GenerarIngresoArticulo(string idArticulo, decimal cantidadRecibida)
+        {
+            try
+            {
+                Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArticulo));
+                RemitosCompras_Items remitosCompras_Items = new RemitosCompras_Items();
+                remitosCompras_Items.Codigo = A.id;
+                remitosCompras_Items.Cantidad = cantidadRecibida;
+                int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
+                if (trazable > 0)
+                    remitosCompras_Items.Trazabilidad = 1;
+                else
+                    remitosCompras_Items.Trazabilidad = 0;
+
+                return remitosCompras_Items;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al generar ingreso de articulo. " + ex.Message);
+            }
+        }
+
+        public RemitosCompras_Items GenerarRechazoArticulo(string idArticulo, decimal cantidadRecibida)
+        {
+            try
+            {
+                Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArticulo));
+                RemitosCompras_Items remitosCompras_ItemsDevolucion = new RemitosCompras_Items();
+                remitosCompras_ItemsDevolucion.Codigo = A.id;
+                remitosCompras_ItemsDevolucion.Cantidad = cantidadRecibida * -1;
+                int trazable = contArticulos.verificarGrupoTrazableByID(A.grupo.id);
+                if (trazable > 0)
+                    remitosCompras_ItemsDevolucion.Trazabilidad = 1;
+                else
+                    remitosCompras_ItemsDevolucion.Trazabilidad = 0;
+
+                return remitosCompras_ItemsDevolucion;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al generar rechazo de articulo. " + ex.Message);
+            }
         }
     }
 }

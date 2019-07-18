@@ -499,6 +499,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.txtPorcDescuento.Text = decimal.Round(nuevaFactura.neto10, 2).ToString();
 
                 if (config.infoImportacionFacturas == "1")
                 {
@@ -744,8 +745,8 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListLista.CssClass = "form-control";
                 }
 
-                if (!listPermisos.Contains("209") && accion == 9)
-                    phRefacturacion.Visible = false;
+                if (!listPermisos.Contains("209") && accion == 9 || !listPermisos.Contains("211") && accion == 6)
+                    phAgregarItems.Visible = false;
 
                 foreach (string s in listPermisos)
                 {

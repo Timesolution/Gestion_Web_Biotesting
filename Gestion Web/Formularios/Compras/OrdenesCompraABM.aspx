@@ -177,7 +177,7 @@
                         <br />
                         <div class="btn-toolbar">
                             <div class="btn-group">
-                                <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="return AgregarOrdenCompra()" OnClick="lbtnAgregar_Click"/>
+                                <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" OnClientClick="return AgregarOrdenCompra()" OnClick="lbtnAgregar_Click"/>
                                 <%--<asp:LinkButton ID="lbtnAgregar" OnClientClick="AgregarOrdenCompra()" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregar_Click"/>--%>
                                 <%--<asp:Label ID="lblCodigosOrdenCompra" runat="server" visible="true"></asp:Label>--%>
                             </div>
@@ -364,6 +364,8 @@
                     return false;
                 }
 
+                var controlDropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>');
+
                 var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
 
                 var data = table.rows().data();
@@ -379,7 +381,7 @@
 
                     if (parseInt(txtCantidad[0].value) > 0)
                     {
-                        var articuloDatos = articulo[0] + ";" + articulo[1] + ";" + txtPrecio[0].value + ";" + articulo[3] + ";" + txtCantidad[0].value;
+                        var articuloDatos = articulo[0].replace('&amp;','&') + ";" + articulo[1].replace('&amp;','&') + ";" + txtPrecio[0].value + ";" + articulo[3] + ";" + txtCantidad[0].value;
                         articulos.push(articuloDatos);
                     }
                 }
@@ -407,14 +409,12 @@
                 var requiereAnticipo = document.getElementById('<%=this.lblRequiereAnticipoOC.ClientID%>');
                 var requiereAutorizacion = document.getElementById('<%=this.lblRequiereAutorizacionOC.ClientID%>');
                 var montoAutorizacion = document.getElementById('<%=this.lblMontoAutorizacionOC.ClientID%>');
-                var observacionProveedor = document.getElementById('<%=this.lblObservacion.ClientID%>');
                 var formaDePago = document.getElementById('<%=this.txtFormaDePago.ClientID%>');
 
                 if (mailProveedor.innerHTML == "" ||
                     requiereAnticipo.innerHTML == "" ||
                     requiereAutorizacion.innerHTML == "" ||
                     montoAutorizacion.innerHTML == "" ||
-                    observacionProveedor.innerHTML == "" ||
                     formaDePago.value == "")
                     return false;
 

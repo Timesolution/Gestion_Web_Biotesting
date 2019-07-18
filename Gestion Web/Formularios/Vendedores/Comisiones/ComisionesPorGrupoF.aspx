@@ -230,6 +230,7 @@
             //si hasta es mas chico que desde
             var desde = InvertirDiaPorMes(controlFechaDesde.value);
             var hasta = InvertirDiaPorMes(controlFechaHasta.value);
+            var hoy = InvertirDiaPorMes(fechaActual);
             if (desde > hasta)
             {
                 controlFechaHasta.value = fechaActual;
@@ -238,7 +239,7 @@
             }
 
             //si hasta es mas grande que hoy
-            if (controlFechaHasta.value > fechaActual)
+            if (hasta > hoy)
             {
                 controlFechaHasta.value = fechaActual;
                 return false;
