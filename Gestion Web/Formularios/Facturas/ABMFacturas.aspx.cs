@@ -70,6 +70,15 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!IsPostBack)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
+
+                    Session["CobroAnticipo"] = null;
+                    Session["PagoCuentaAnticipo"] = null;
+                    Session["PagoCuentaAnticipoMutual"] = null;
+                    Session["Factura"] = null;
+                    Session["FacturasABM_ArticuloModalMultiple"] = null;
+                    Session["FacturasABM_ArticuloModal"] = null;
+                    phArticulos.Controls.Clear();
+                    
                     //Si tiene configurada la pantalla vieja lo redirecciono
                     string pantalla = WebConfigurationManager.AppSettings.Get("FormularioFC");
                     if (pantalla == "1")
@@ -1862,7 +1871,7 @@ namespace Gestion_Web.Formularios.Facturas
                 PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                 //como estoy en cotizacion pido el ultimo numero de este documento
                 int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Factura B");
-                this.labelNroFactura.Text = "Factura B  N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                this.labelNroFactura.Text = "Factura B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                 this.lblAcordeonNumero.InnerText = this.labelNroFactura.Text;
                 this.ListDocumentos.SelectedValue = "FC";
 
