@@ -787,40 +787,13 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
         
         /// <summary>
-        /// RadioSinIva control.
+        /// PrecioSinIva control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RadioSinIva;
-        
-        /// <summary>
-        /// RadioConIva control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RadioConIva;
-        
-        /// <summary>
-        /// chkUbicacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkUbicacion;
-        
-        /// <summary>
-        /// chkDescuentoCantidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkDescuentoCantidad;
+        protected global::System.Web.UI.WebControls.CheckBox PrecioSinIva;
         
         /// <summary>
         /// btnImprimirListaPreciosPDF control.

@@ -751,6 +751,17 @@
     <Content Include="Formularios\Articulos\dsNominaArticulos.xsc">
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\dsListaPrecios.xsc">
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Articulos\dsListaPrecios.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsListaPrecios.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Articulos\dsListaPrecios.xss">
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Articulos\dsNominaArticulos.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1365,6 +1376,11 @@
     </Compile>
     <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
       <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Articulos\dsListaPrecios.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\dsNominaArticulos.Designer.cs">
       <AutoGen>True</AutoGen>
