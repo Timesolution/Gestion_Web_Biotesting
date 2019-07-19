@@ -16,11 +16,13 @@
                         <tr>
                             <td style="width: 10%">
                                 <div class="btn-group">
-                                    <%--<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>--%>
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <%--<li>
-                                            <asp:LinkButton ID="lbtnRemesa" Visible="false" runat="server" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
-                                        </li>--%>
+                                        <li>
+                                            <ul class="dropdown-menu">
+                                                <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -40,17 +42,6 @@
                     </table>
                 </div>
             </div>
-            <%--<div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Saldo</h4>
-                            <asp:Label ID="labelSaldo" runat="server" class="value" Visible="true"></asp:Label>
-                            <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
-                        </div>
-                    </div>
-                </div>
-            </div>--%>
         </div>
 
         <div class="col-md-12">
