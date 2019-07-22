@@ -671,11 +671,14 @@
                                    
                                     </label>
                                     <div class="col-md-1">
+                                        <asp:CheckBox ID="PrecioSinIva" runat="server" />
+                                    </div>
+                                    <%--<div class="col-md-1">
                                         <asp:RadioButton ID="RadioSinIva" Checked="true" runat="server" GroupName="iva" />
                                         <!-- /input-group -->
-                                    </div>
+                                    </div>--%>
                                 </div>
-                                <div class="form-group">
+                                <%--<div class="form-group">
                                     <label class="col-md-4">
                                         Precio Con Iva
                                    
@@ -702,7 +705,7 @@
                                     <div class="col-md-1">
                                         <asp:CheckBox ID="chkDescuentoCantidad" runat="server" />
                                     </div>
-                                </div>
+                                </div>--%>
 
                             </ContentTemplate>
                             <Triggers>

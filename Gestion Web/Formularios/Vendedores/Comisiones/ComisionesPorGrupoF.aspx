@@ -16,11 +16,24 @@
                         <tr>
                             <td style="width: 10%">
                                 <div class="btn-group">
-                                    <%--<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>--%>
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <%--<li>
-                                            <asp:LinkButton ID="lbtnRemesa" Visible="false" runat="server" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
-                                        </li>--%>
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Exportar</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="lbtnImprimir" runat="server" OnClick="lbtnImprimir_Click">
+                                                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                            &nbsp Imprimir
+                                                    </asp:LinkButton>
+                                                </li>
+                                                <li>
+                                                    <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">
+                                                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                            &nbsp Exportar
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -40,17 +53,6 @@
                     </table>
                 </div>
             </div>
-            <%--<div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Saldo</h4>
-                            <asp:Label ID="labelSaldo" runat="server" class="value" Visible="true"></asp:Label>
-                            <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
-                        </div>
-                    </div>
-                </div>
-            </div>--%>
         </div>
 
         <div class="col-md-12">
@@ -60,10 +62,12 @@
                         <div class="stat">
                             <h4>Neto</h4>
                             <asp:Label ID="labelNeto" runat="server" class="value"></asp:Label>
+                            <asp:HiddenField id="labelNetoHidden" runat="server" />
                         </div>
                         <div class="stat">
                             <h4>Total</h4>
                             <asp:Label ID="labelTotal" runat="server" class="value"></asp:Label>
+                            <asp:HiddenField id="labelTotalHidden" runat="server" />
                         </div>
                     </div>
                 </div>
@@ -428,6 +432,8 @@
             var controlLabelNeto = document.getElementById('<%= labelNeto.ClientID %>');
             var controlLabelTotal = document.getElementById('<%= labelTotal.ClientID %>');
             var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
+            var totalNetoHidden = document.getElementById('<%= labelNetoHidden.ClientID %>');
+            var totalHidden = document.getElementById('<%= labelTotalHidden.ClientID %>');
 
             var data = response.d;
             var obj = JSON.parse(data);
@@ -471,6 +477,9 @@
 
             controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
             controlLabelTotal.innerHTML = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+
+            totalNetoHidden.value = totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+            totalHidden.value = total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
 
             $('#tablaComisiones').dataTable(
                 {                    

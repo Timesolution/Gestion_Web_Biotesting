@@ -560,6 +560,7 @@
     <Content Include="Formularios\Reportes\TrazabilidadABM.aspx" />
     <Content Include="Formularios\Vendedores\Comisiones\Comisiones.js" />
     <Content Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx" />
+    <Content Include="Formularios\Vendedores\Comisiones\ImpresionComisiones.aspx" />
     <Content Include="Formularios\Vendedores\ImpresionVendedores.aspx" />
     <Content Include="Formularios\Vendedores\Vendedores.aspx" />
     <Content Include="Formularios\Vendedores\VendedoresABM.aspx" />
@@ -751,6 +752,17 @@
     <Content Include="Formularios\Articulos\dsNominaArticulos.xsc">
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\dsListaPrecios.xsc">
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Articulos\dsListaPrecios.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsListaPrecios.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Articulos\dsListaPrecios.xss">
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Articulos\dsNominaArticulos.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -824,6 +836,17 @@
     </None>
     <Content Include="Formularios\Valores\dsRemesa.xss">
       <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.xsc">
+      <DependentUpon>dsComisionesVendedores.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsComisionesVendedores.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.xss">
+      <DependentUpon>dsComisionesVendedores.xsd</DependentUpon>
     </Content>
     <None Include="Formularios\Vendedores\dsVendedores.xsd">
       <SubType>Designer</SubType>
@@ -1365,6 +1388,11 @@
     </Compile>
     <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
       <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Articulos\dsListaPrecios.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\dsNominaArticulos.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2973,6 +3001,18 @@
     <Compile Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx.designer.cs">
       <DependentUpon>ComisionesPorGrupoF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsComisionesVendedores.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\ImpresionComisiones.aspx.cs">
+      <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\ImpresionComisiones.aspx.designer.cs">
+      <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Vendedores\dsVendedores.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3207,6 +3247,7 @@
     <EmbeddedResource Include="Formularios\Valores\RemesaR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ResumenTurnoR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\TarjetasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupo.rdlc" />
     <EmbeddedResource Include="Formularios\Vendedores\VendedoresR.rdlc" />
   </ItemGroup>
   <ItemGroup>
@@ -3233,7 +3274,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>8986</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
