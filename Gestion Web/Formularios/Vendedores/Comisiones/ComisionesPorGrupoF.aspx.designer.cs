@@ -22,13 +22,22 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
         
         /// <summary>
-        /// lbtnAnular control.
+        /// lbtnImprimir control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnAnular;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
+        
+        /// <summary>
+        /// lbtnExportar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnExportar;
         
         /// <summary>
         /// lblParametros control.
@@ -49,6 +58,15 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         protected global::System.Web.UI.WebControls.Label labelNeto;
         
         /// <summary>
+        /// labelNetoHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField labelNetoHidden;
+        
+        /// <summary>
         /// labelTotal control.
         /// </summary>
         /// <remarks>
@@ -56,6 +74,15 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labelTotal;
+        
+        /// <summary>
+        /// labelTotalHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField labelTotalHidden;
         
         /// <summary>
         /// phComisiones control.
