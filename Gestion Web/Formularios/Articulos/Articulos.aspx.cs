@@ -1208,72 +1208,11 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                int descuentoPorCantidad = 0;
-                if (this.chkDescuentoCantidad.Checked == true)
-                    descuentoPorCantidad = 1;
-
-                int iva = 0;
-                if (this.RadioSinIva.Checked == true)
-                    iva = 1;
-                else
-                    iva = 2;
-
-                if (this.chkUbicacion.Checked == true)
-                {
-                    if (accion == 2)//si se filtro
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                    }
-                    else
-                    {
-                        if (accion == 1)// por busqueda
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=3&iva=" + iva + "&dc=" + descuentoPorCantidad + "&t=" + this.textoBuscar + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                        }
-
-                        else//default
-                        {
-                            if (accion == 3)// por fecha actualizacion
-                            {
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=4&d=" + this.dias + "&desact" + this.desactualizados + "&dc=" + descuentoPorCantidad + "&iva=" + iva + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                            }
-                            else
-                            {
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (accion == 2)//si se filtro
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=0&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                    }
-                    else
-                    {
-                        if (accion == 1)// por busqueda
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=0&a=3&iva=" + iva + "&t=" + this.textoBuscar + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                        }
-                        else//default
-                        {
-                            if (accion == 3)// por fecha actualizacion
-                            {
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=0&a=4&iva=" + iva + "&d=" + this.dias + "&dc=" + descuentoPorCantidad + "&desact=" + this.desactualizados + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                            }
-                            else
-                            {
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=0&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                            }
-                        }
-                    }
-                }
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de articulos. "));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de precios. "));
             }
 
         }
@@ -1284,70 +1223,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                int descuentoPorCantidad = 0;
-                if (this.chkDescuentoCantidad.Checked == true)
-                    descuentoPorCantidad = 1;
-
-                int iva = 0;
-                if (this.RadioSinIva.Checked == true)
-                {
-                    iva = 1;
-                }
-                else
-                {
-                    iva = 2;
-                }
-
-                if (this.chkUbicacion.Checked == true)
-                {
-                    if (accion == 2)//si se filtro
-                    {
-                        Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&dc=" + descuentoPorCantidad + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&l=" + this.DropListListaPrecios.SelectedValue);
-                    }
-                    else
-                    {
-                        if (accion == 1)// por busqueda
-                        {
-                            Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=3&iva=" + iva + "&t=" + this.textoBuscar + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue);
-                        }
-                        else//default
-                        {
-                            if (accion == 3)
-                            {
-                                Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=4&iva=" + iva + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad + "&desact=" + this.desactualizados + "&l=" + this.DropListListaPrecios.SelectedValue);
-                            }
-                            else
-                            {
-                                Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (accion == 2)//si se filtro
-                    {
-                        Response.Redirect("ImpresionListaPrecios.aspx?ex=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&dc=" + descuentoPorCantidad + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&l=" + this.DropListListaPrecios.SelectedValue);
-                    }
-                    else
-                    {
-                        if (accion == 1)// por busqueda
-                        {
-                            Response.Redirect("ImpresionListaPrecios.aspx?ex=1&a=3&iva=" + iva + "&t=" + this.textoBuscar + "&l=" + this.DropListListaPrecios.SelectedValue + "&dc=" + descuentoPorCantidad);
-                        }
-                        else//default
-                        {
-                            if (accion == 3)
-                            {
-                                Response.Redirect("ImpresionListaPrecios.aspx?ex=1&a=4&iva=" + iva + "&d=" + this.dias + "&desact=" + this.desactualizados + "&l=" + this.DropListListaPrecios.SelectedValue + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad);
-                            }
-                            else
-                            {
-                                Response.Redirect("ImpresionListaPrecios.aspx?ex=1&a=2&iva=" + iva + "&l=" + this.DropListListaPrecios.SelectedValue + "&dc=" + descuentoPorCantidad);
-                            }
-                        }
-                    }
-                }
+                Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked));
             }
             catch
             {
