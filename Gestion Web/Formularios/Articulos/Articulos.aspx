@@ -792,17 +792,21 @@
 
                                 <div class="form-group">
                                     <label class="col-md-4">
-                                        Sucursal
-                                   
+                                        Sucursal                                   
                                     </label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListSucursal_St2" runat="server" class="form-control" disabled></asp:DropDownList>
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal_St2" InitialValue="-1" ValidationGroup="StockValorizado" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>                                    
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Stock Detallado</label>
+                                    <div class="col-md-6">
+                                        <asp:CheckBox ID="cbStockDetallado" Checked="false" runat="server"/>
                                     </div>
                                 </div>
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>

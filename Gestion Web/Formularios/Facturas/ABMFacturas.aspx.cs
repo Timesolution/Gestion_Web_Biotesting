@@ -2257,8 +2257,11 @@ namespace Gestion_Web.Formularios.Facturas
                     Factura fac = new Factura();
                     Session.Add("Factura", fac);
                 }
+
                 Factura f = Session["Factura"] as Factura;
+
                 f.items.Add(item);
+                f.items = f.items.Distinct().ToList();
                 Session.Add("Factura", f);
 
                 //lo dibujo en pantalla
