@@ -771,6 +771,7 @@
     <Content Include="Formularios\Articulos\dsNominaArticulos.xss">
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\StockValorizadoDetalladoR.rdlc" />
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
