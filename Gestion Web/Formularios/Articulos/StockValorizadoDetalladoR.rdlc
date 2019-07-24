@@ -122,7 +122,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>grupo</Value>
+                              <Value>Grupo</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
@@ -157,7 +157,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>sub Grupo</Value>
+                              <Value>Sub Grupo</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
@@ -192,7 +192,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>marca</Value>
+                              <Value>Marca</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
@@ -227,7 +227,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>categoria</Value>
+                              <Value>Categoria</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
@@ -1324,7 +1324,7 @@
                 </Style>
               </TextRun>
               <TextRun>
-                <Value>Stock Valorizado</Value>
+                <Value>Stock Valorizado Detallado</Value>
                 <Style>
                   <FontSize>24pt</FontSize>
                   <Color>Orange</Color>
@@ -1364,12 +1364,14 @@
               <TextRun>
                 <Value>Sucursal: </Value>
                 <Style>
+                  <FontSize>12pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
               <TextRun>
                 <Value>=Fields!Sucursal.Value</Value>
                 <Style>
+                  <FontSize>12pt</FontSize>
                   <FontWeight>Normal</FontWeight>
                 </Style>
               </TextRun>
@@ -1379,10 +1381,40 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>0.44662cm</Top>
+        <Left>24.98391cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>4.03458cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox3">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=CDate(Today()).ToString("MM/dd/yyyy")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox3</rd:DefaultName>
+        <Top>0.44662cm</Top>
         <Left>0.89641cm</Left>
         <Height>0.6cm</Height>
-        <Width>3.55833cm</Width>
-        <ZIndex>2</ZIndex>
+        <Width>2.5cm</Width>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>

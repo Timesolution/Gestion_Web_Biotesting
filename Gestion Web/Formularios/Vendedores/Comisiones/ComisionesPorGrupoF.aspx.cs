@@ -311,9 +311,7 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
         {
             decimal comisionTemp = Convert.ToDecimal(comision);
             decimal netoTemp = Convert.ToDecimal(neto.Split('$')[1]);
-            //decimal comisionTemp = Convert.ToDecimal(comision.Split('$')[1]);
-            //decimal netoTemp = Convert.ToDecimal(neto);
-                                            //comision           //neto
+
             decimal total = decimal.Round((comisionTemp / 100) * netoTemp,2);
 
             return total.ToString();
