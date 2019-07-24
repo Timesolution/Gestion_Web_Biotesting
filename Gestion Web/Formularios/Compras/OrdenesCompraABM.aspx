@@ -366,6 +366,12 @@
 
                 var controlDropListSucursal = document.getElementById('<%= ListSucursal.ClientID %>');
 
+                if (controlDropListSucursal.value <= 0)
+                {
+                    $.msgbox("No hay una sucursal seleccionada.", { type: "error" });
+                    return false;
+                }                    
+
                 var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
 
                 var data = table.rows().data();
@@ -718,7 +724,7 @@
                         "<tr id='articulo_" + obj[i].codigo + "'> " +
                         "<td> " + obj[i].codigo + "</td>" +
                         "<td> " + obj[i].descripcion + "</td>" +
-                        "<td><input name='txtPrecio_" + obj[i].codigo + "'type=\"string\" value=" + obj[i].precioSinIva.toFixed(2) + " style=\"text-align: right;\"></td>" +
+                        "<td><input name='txtPrecio_" + obj[i].codigo + "'type=\"string\" value=" + obj[i].costo.toFixed(2) + " style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].precioventa.toFixed(2) + "</td>" +
                         "<td><input name='txtCantidad_" + obj[i].codigo + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
@@ -749,23 +755,6 @@
                 if (key == 8 || key == 46)
                     return false;
 
-                //if (window.event) // IE
-                //{
-                //    key = e.keyCode;
-                //}
-                //else if (e.which) // Netscape/Firefox/Opera
-                //{
-                //    key = e.which;
-                //}
-                //if (key < 48 || key > 57) {
-                //    if (key == 46 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
-                //    {
-                //        return true;
-                //    }
-                //    else {
-                //        return false;
-                //    }
-                //}
                 return false;
             }
         </script>

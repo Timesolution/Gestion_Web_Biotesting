@@ -322,6 +322,12 @@ namespace Gestion_Web.Formularios.Compras
                 var proveedor = Convert.ToInt32(Request.Form[ListProveedor.UniqueID]);
                 var sucursal = Convert.ToInt32(Request.Form[ListSucursal.UniqueID]);
 
+                if(sucursal <= 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se encuentra una sucursal seleccionada"));
+                    return;
+                }
+
                 OrdenesCompra oc = null;
                 if (this.accion == 2)
                 {
