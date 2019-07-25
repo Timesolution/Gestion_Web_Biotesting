@@ -320,7 +320,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 var puntoVenta = Convert.ToInt32(Request.Form[ListPtoVenta.UniqueID]);
                 var proveedor = Convert.ToInt32(Request.Form[ListProveedor.UniqueID]);
-                var sucursal = Convert.ToInt32(Request.Form[ListSucursal.UniqueID]);
+                var sucursal = Convert.ToInt32(ListSucursalHV.Value);
 
                 if(sucursal <= 0)
                 {

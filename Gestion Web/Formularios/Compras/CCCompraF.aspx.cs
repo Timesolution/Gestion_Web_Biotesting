@@ -243,7 +243,7 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     celNumero.Text = "<a href=\"ComprasABM.aspx?a=1&i=" + m.Documento + "\" target=\"_blank\">" + m.Compra.TipoDocumento + tipoDocumento + m.Numero + "</a>";
                 }
-                if (m.TipoDocumento == 21)
+                else if (m.TipoDocumento == 21)
                 {
                     celNumero.Text = "<a href=\"../Pagos/ReportesR.Aspx?a=0&id=" + m.Documento + "\" target=\"_blank\">" + m.tipoDocumento1.tipo + tipoDocumento + m.Numero + "</a>";
                 }
@@ -252,7 +252,7 @@ namespace Gestion_Web.Formularios.Compras
                     celNumero.Text = "<a href=\"ComprasABM.aspx?a=1&i=" + m.Documento + "\" target=\"_blank\">" + m.tipoDocumento1.tipo + tipoDocumento + m.Numero + "</a>";
                 }
 
-                
+
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumero);
 
