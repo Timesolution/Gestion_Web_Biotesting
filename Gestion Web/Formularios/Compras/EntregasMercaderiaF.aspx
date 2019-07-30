@@ -133,9 +133,9 @@
                                 <div class="btn-toolbar">
                                     <div role="form" class="form-horizontal col-md-12 text-right">
                                         <%--<asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />--%>
-                                        <asp:Button ID="btnRecibirTodo" type="button" runat="server" Text="Recibir todo" class="btn btn-success" OnClick="btnRecibirTodo_Click" />
+                                        <%--<asp:Button ID="btnRecibirTodo" type="button" Visible="false" runat="server" Text="Recibir todo" class="btn btn-success" OnClick="btnRecibirTodo_Click" />--%>
                                         <asp:Button ID="btnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
-                                        <asp:Button ID="btnIngresoManual" type="button" runat="server" Text="Ingreso manual" class="btn btn-warning" OnClick="btnIngresoManual_Click" />
+                                        <asp:Button ID="btnIngresoManual" type="button" runat="server" Text="Ingresar mercaderia" class="btn btn-success" OnClick="btnIngresoManual_Click" />
                                     </div>
                                 </div>
 

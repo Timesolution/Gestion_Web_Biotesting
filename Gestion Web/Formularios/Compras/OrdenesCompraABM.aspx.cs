@@ -1089,7 +1089,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             foreach (var articulo in articulos)
             {
-                var articuloTemp = articulo.Split(';');
+                var articuloTemp = articulo.Replace("&amp;", "&").Split(';');
 
                 ArticulosProveedorTemp articuloProveedorTemp = new ArticulosProveedorTemp();
                 articuloProveedorTemp.codigo = articuloTemp[0];
