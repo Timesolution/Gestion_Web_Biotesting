@@ -7,99 +7,72 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Herramientas {
+namespace Gestion_Web.Formularios.PlanCuentas {
     
     
-    public partial class ResetearStock {
+    public partial class Cuentas_Contables_Mayor {
         
         /// <summary>
-        /// Control DropListEmpresa.
+        /// Control dropList_Mayor_TipoDeMovimiento.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListEmpresa;
+        protected global::System.Web.UI.WebControls.DropDownList dropList_Mayor_TipoDeMovimiento;
         
         /// <summary>
-        /// Control lbDropListEmpresaError.
+        /// Control phCuentasContables_MayorTipoMovimiento.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbDropListEmpresaError;
+        protected global::System.Web.UI.WebControls.PlaceHolder phCuentasContables_MayorTipoMovimiento;
         
         /// <summary>
-        /// Control DropListSucursal.
+        /// Control DropListNivel1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
+        protected global::System.Web.UI.WebControls.DropDownList DropListNivel1;
         
         /// <summary>
-        /// Control lbDropListSucursalError.
+        /// Control DropListNivel2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbDropListSucursalError;
+        protected global::System.Web.UI.WebControls.DropDownList DropListNivel2;
         
         /// <summary>
-        /// Control DropListProveedor.
+        /// Control DropListNivel3.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListProveedor;
+        protected global::System.Web.UI.WebControls.DropDownList DropListNivel3;
         
         /// <summary>
-        /// Control DropListGrupo.
+        /// Control DropListNivel4.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListGrupo;
+        protected global::System.Web.UI.WebControls.DropDownList DropListNivel4;
         
         /// <summary>
-        /// Control DropListSubGrupo.
+        /// Control lbtnCrearRegistro.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListSubGrupo;
-        
-        /// <summary>
-        /// Control DropListMarca.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListMarca;
-        
-        /// <summary>
-        /// Control phAcciones.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phAcciones;
-        
-        /// <summary>
-        /// Control ProcesarReinicioDeStock.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ProcesarReinicioDeStock;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnCrearRegistro;
     }
 }

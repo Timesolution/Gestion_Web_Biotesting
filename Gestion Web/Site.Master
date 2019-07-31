@@ -253,6 +253,7 @@
                                                 <a tabindex="" href="#">Plan de cuentas</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/PlanCuentas/CuentasF.aspx">Cuentas</a></li>
+                                                    <li><a href="/../../Formularios/PlanCuentas/Cuentas_Contables_Mayor.aspx">Tipos Cuentas</a></li>
                                                 </ul>
                                             </li>
 
@@ -392,6 +393,7 @@
                                             <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
                                             <li><a href="">Cuenta Personal</a></li>
                                             <li><a href="/../../Formularios/Valores/ABMDivisas.aspx">Divisas</a></li>
+                                            <li><a href="/../../Formularios/Valores/MayorF.aspx">Mayor</a></li>
                                             <li><a href="/../../Formularios/Valores/PagaresF.aspx">Pagares</a></li>
                                             <li><a href="/../../Formularios/Valores/RetencionesF.aspx">Retenciones</a></li>
                                             <li><a href="/../../Formularios/Valores/SolicitudesF.aspx">Solicitudes </a></li>

@@ -355,6 +355,7 @@
     <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Asientos\AsientosF.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
@@ -459,6 +460,7 @@
     <Content Include="Formularios\Personal\PagosEmpleadosF.aspx" />
     <Content Include="Formularios\Personal\ReportesR.Aspx" />
     <Content Include="Formularios\PlanCuentas\CuentasF.aspx" />
+    <Content Include="Formularios\PlanCuentas\Cuentas_Contables_Mayor.aspx" />
     <Content Include="Formularios\Promociones\ABMPromociones.aspx" />
     <Content Include="Formularios\Promociones\ImpresionPromociones.aspx" />
     <Content Include="Formularios\Promociones\PromocionesF.aspx" />
@@ -521,6 +523,7 @@
     <Content Include="Formularios\Valores\CajaDiferenciasF.aspx" />
     <Content Include="Formularios\Valores\ChequesF_2.aspx" />
     <Content Include="Formularios\Valores\CreditosABM.aspx" />
+    <Content Include="Formularios\Valores\MayorF.aspx" />
     <Content Include="Formularios\Valores\MutualesPagosF.aspx" />
     <Content Include="Formularios\Valores\BancosF.aspx" />
     <Content Include="Formularios\Valores\RemesasF.aspx" />
@@ -1371,6 +1374,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Asientos\AsientosF.aspx.cs">
+      <DependentUpon>AsientosF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Asientos\AsientosF.aspx.designer.cs">
+      <DependentUpon>AsientosF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
       <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1871,6 +1881,13 @@
     </Compile>
     <Compile Include="Formularios\PlanCuentas\CuentasF.aspx.designer.cs">
       <DependentUpon>CuentasF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\PlanCuentas\Cuentas_Contables_Mayor.aspx.cs">
+      <DependentUpon>Cuentas_Contables_Mayor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\PlanCuentas\Cuentas_Contables_Mayor.aspx.designer.cs">
+      <DependentUpon>Cuentas_Contables_Mayor.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Promociones\ABMPromociones.aspx.cs">
       <DependentUpon>ABMPromociones.aspx</DependentUpon>
@@ -2701,6 +2718,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Valores\MayorF.aspx.cs">
+      <DependentUpon>MayorF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Valores\MayorF.aspx.designer.cs">
+      <DependentUpon>MayorF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Valores\MutualesPagosF.aspx.cs">
       <DependentUpon>MutualesPagosF.aspx</DependentUpon>

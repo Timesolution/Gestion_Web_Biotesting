@@ -16,11 +16,7 @@
                         <tr>
                             <td style="width: 10%">
                                 <div class="btn-group">
-                                    <%--<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>--%>
                                     <ul class="dropdown-menu">
-                                        <%--<li>
-                                            <asp:LinkButton ID="lbtnRemesa" Visible="false" runat="server" OnClick="lbtnRemesa_Click">Nota de Remesa</asp:LinkButton>
-                                        </li>--%>
                                     </ul>
                                 </div>
                             </td>
@@ -40,17 +36,6 @@
                     </table>
                 </div>
             </div>
-            <%--<div class="widget big-stats-container stacked">
-                <div class="widget-content">
-                    <div id="big_stats" class="cf">
-                        <div class="stat">
-                            <h4>Saldo</h4>
-                            <asp:Label ID="labelSaldo" runat="server" class="value" Visible="true"></asp:Label>
-                            <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
-                        </div>
-                    </div>
-                </div>
-            </div>--%>
         </div>
 
         <div class="col-md-12">
@@ -157,24 +142,6 @@
             </div>
         </div>
     </div>
-
-    <%--<link href="../../css/pages/reports.css" rel="stylesheet">--%>
-    <%--<script src="../../Scripts/plugins/dataTables/jquery-2.0.0.js"></script>
-    <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
-    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>--%>
-    <%--<script src="../../../Scripts/jquery-1.10.2.js"></script>--%>
-    <%--<script src="../../Scripts/bootstrap.min.js"></script>
-    <script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
-    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
-    <script src="../../Scripts/Application.js"></script>
-    <script src="../../Scripts/demo/gallery.js"></script>
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>    --%>
-    <%--<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>--%>
 
     <script src="../../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
