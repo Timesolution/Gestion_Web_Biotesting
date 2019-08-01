@@ -682,7 +682,7 @@ namespace Gestion_Web.Formularios.Compras
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar el estado de la Orden de Compra seleccionada. "));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue autorizada."));
                     }
                     //modificarEstadoOrdenCompra(3);
                 }

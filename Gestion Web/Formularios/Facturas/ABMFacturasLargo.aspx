@@ -32,10 +32,10 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <asp:Panel ID="panelBusquedaCliente" runat="server">
-                                                                    <asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>
-                                                                    <%--<a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
+                                                                    <%--<asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>--%>
+                                                                    <a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
-                                                                    </a>--%>
+                                                                    </a>
                                                                     <asp:LinkButton ID="lbtnVerCtaCte" runat="server" OnClick="lbtnVerCtaCte_Click" class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Ver cta cte">
                                                                         <i class="shortcut-icon icon-th-list"></i>
                                                                     </asp:LinkButton>

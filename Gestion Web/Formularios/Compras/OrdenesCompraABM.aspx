@@ -159,13 +159,12 @@
                         <table class="table table-striped table-bordered" id="articulosTablaProveedor">
                             <thead>
                                 <tr>
-                                    <th style="width: 10%">Codigo</th>
+                                    <th style="width: 20%">Codigo</th>
                                     <th style="width: 20%">Descripcion</th>
-                                    <th style="width: 5%">Precio</th>
-                                    <th style="width: 10%">Precio Mas IVA</th>
-                                    <th style="width: 5%">Cantidad</th>
-                                    <th style="width: 10%">Stock Sucursal</th>
-                                    <th style="width: 10%">Stock Total</th>
+                                    <th style="width: 10%;text-align:right">Costo sin IVA</th>
+                                    <th style="width: 10%;text-align:right">Cantidad</th>
+                                    <th style="width: 10%;text-align:right">Stock Sucursal</th>
+                                    <th style="width: 10%;text-align:right">Stock Total</th>
                                     <th style="width: 10%">Stock Minimo</th>
                                     <th></th>
                                 </tr>
@@ -657,7 +656,6 @@
                         "<td> " + obj[i].codigo + "</td>" +
                         "<td> " + obj[i].descripcion + "</td>" +
                         "<td><input name='txtPrecio_" + obj[i].codigo + "'type=\"string\" value=" + obj[i].costo.toFixed(2) + " style=\"text-align: right;\"></td>" +
-                        "<td style=\"text-align: right;\"> " + obj[i].precioventa.toFixed(2) + "</td>" +
                         "<td><input name='txtCantidad_" + obj[i].codigo + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockTotal.toFixed(2) + "</td>" +
