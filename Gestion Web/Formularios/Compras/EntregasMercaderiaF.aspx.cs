@@ -46,9 +46,9 @@ namespace Gestion_Web.Formularios.Compras
 
         private void ConfigurarBotonesAguarde()
         {
-            btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnIngresoManual.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
-            btnIngresoManual.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnIngresoManual, null) + ";");
-            btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnRecibirTodo.ClientID + ".disabled=true;" + btnIngresoManual.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
+            //btnRecibirTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnIngresoManual.ClientID + ".disabled=true;" + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRecibirTodo, null) + ";");
+            btnIngresoManual.Attributes.Add("onclick", " this.disabled = true;  " + btnRechazarTodo.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnIngresoManual, null) + ";");
+            btnRechazarTodo.Attributes.Add("onclick", " this.disabled = true;  " + btnIngresoManual.ClientID + ".disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnRechazarTodo, null) + ";");
             //btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
             btnGuardar.Attributes.Add("onclick", " this.disabled = true; " + btnCerrar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGuardar, null) + ";");
             btnCerrar.Attributes.Add("onclick", " this.disabled = true; " + btnGuardar.ClientID + ".disabled=true;" + " this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCerrar, null) + ";");
@@ -644,13 +644,33 @@ namespace Gestion_Web.Formularios.Compras
         {
             if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
             {
-                btnRecibirTodo.Attributes.Remove("Disabled");
+                //btnRecibirTodo.Attributes.Remove("Disabled");
                 btnRechazarTodo.Attributes.Remove("Disabled");
                 btnIngresoManual.Attributes.Remove("Disabled");
                 btnIngresoManual.Text = "Ingreso manual";
                 return false;
             }
             return true;
+        }
+
+        private bool ValidarEntregaConValoresIgualesOMenoresALosSolicitados()
+        {
+            foreach (var c in phProductos.Controls)
+            {
+                TableRow tr = c as TableRow;
+                var cantidades = RecorrerPHyObtenerCantidades(tr);
+
+                decimal cantidadPedida = cantidades.Item2;
+                decimal cantidadRecibida = cantidades.Item4;
+                decimal cantidadYaRecibida = cantidades.Item6;
+
+                if (cantidadRecibida + cantidadYaRecibida > cantidadPedida)
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
 
         private bool ValidarEntregaConValoresMayoresACero()
@@ -690,7 +710,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 if (string.IsNullOrEmpty(txtPVenta.Text) || string.IsNullOrEmpty(txtNumero.Text))
                 {
-                    btnRecibirTodo.Attributes.Remove("Disabled");
+                    //btnRecibirTodo.Attributes.Remove("Disabled");
                     btnRechazarTodo.Attributes.Remove("Disabled");
                     btnIngresoManual.Attributes.Remove("Disabled");
                     btnIngresoManual.Text = "Ingreso manual";
@@ -1073,6 +1093,12 @@ namespace Gestion_Web.Formularios.Compras
                 if (!ValidarEntregaConValoresMayoresACero())
                 {
                     ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Todos los valores de mercaderia recibida se encuentran en cero! \");", true);
+                    return;
+                }
+
+                if (ValidarEntregaConValoresIgualesOMenoresALosSolicitados())
+                {
+                    ScriptManager.RegisterClientScriptBlock(UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Algun articulo esta recibiendo cantidades mayores a las solicitadas! \");", true);
                     return;
                 }
 
