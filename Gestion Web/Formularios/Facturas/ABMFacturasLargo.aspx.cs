@@ -244,11 +244,11 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 }
 
-                //if (Session["FacturasABM_ClienteModal"] != null)
-                //{
-                //    this.flag_clienteModal = 1;
-                //    this.cargarClienteDesdeModal();
-                //}
+                if (Session["FacturasABM_ClienteModal"] != null)
+                {
+                    this.flag_clienteModal = 1;
+                    this.cargarClienteDesdeModal();
+                }
 
                 //si viene de la pantalla de articulos, modal
                 if (Session["FacturasABM_ArticuloModal"] != null)
@@ -1886,8 +1886,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //obtengo codigo
-                //int idCliente = (int)Session["FacturasABM_ClienteModal"];
-                int idCliente = _idCliente;
+                int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                //int idCliente = _idCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();

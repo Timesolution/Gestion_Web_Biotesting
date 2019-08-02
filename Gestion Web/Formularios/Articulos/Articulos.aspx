@@ -666,55 +666,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">
-                                        Precio Sin Iva
-                                   
-                                    </label>
+                                    <label class="col-md-4">Precio Sin Iva</label>
                                     <div class="col-md-1">
                                         <asp:CheckBox ID="PrecioSinIva" runat="server" />
                                     </div>
-                                    <%--<div class="col-md-1">
-                                        <asp:RadioButton ID="RadioSinIva" Checked="true" runat="server" GroupName="iva" />
-                                        <!-- /input-group -->
-                                    </div>--%>
-                                </div>
-                                <%--<div class="form-group">
-                                    <label class="col-md-4">
-                                        Precio Con Iva
-                                   
-                                    </label>
-                                    <div class="col-md-1">
-                                        <asp:RadioButton ID="RadioConIva" runat="server" GroupName="iva" />
-                                        <!-- /input-group -->
-                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">
-                                        Agrupar por ubicacion
-                                   
-                                    </label>
+                                    <label class="col-md-4">Descuento Por Cantidad</label>
                                     <div class="col-md-1">
-                                        <asp:CheckBox ID="chkUbicacion" runat="server" />
+                                        <asp:CheckBox ID="DescuentoPorCantidad" runat="server" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-4">
-                                        Incluir Descuento por Cantidad
-                                   
-                                    </label>
-                                    <div class="col-md-1">
-                                        <asp:CheckBox ID="chkDescuentoCantidad" runat="server" />
-                                    </div>
-                                </div>--%>
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
-
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="btnImprimirListaPreciosPDF" runat="server" ValidationGroup="BusquedaLista" Text="Generar PDF" class="btn btn-success" OnClick="btnImprimirListaPrecios_Click" />
                         <asp:LinkButton ID="btnImprimirListaPreciosXLS" runat="server" ValidationGroup="BusquedaLista" Text="Generar Excel" class="btn btn-success" OnClick="btnImprimirListaPrecios2_Click" />

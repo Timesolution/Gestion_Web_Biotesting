@@ -20,6 +20,7 @@
                                     <div class="col-md-4">
                                         <asp:DropDownList ID="ListSucursal" class="form-control" runat="server"></asp:DropDownList>
                                     </div>
+                                    <asp:HiddenField ID="ListSucursalHV" runat="server" />
                                 </div>
                                 <div class="form-group">
                                     <label for="name" class="col-md-2">Pto Venta</label>
@@ -158,13 +159,12 @@
                         <table class="table table-striped table-bordered" id="articulosTablaProveedor">
                             <thead>
                                 <tr>
-                                    <th style="width: 10%">Codigo</th>
+                                    <th style="width: 20%">Codigo</th>
                                     <th style="width: 20%">Descripcion</th>
-                                    <th style="width: 5%">Precio</th>
-                                    <th style="width: 10%">Precio Mas IVA</th>
-                                    <th style="width: 5%">Cantidad</th>
-                                    <th style="width: 10%">Stock Sucursal</th>
-                                    <th style="width: 10%">Stock Total</th>
+                                    <th style="width: 10%;text-align:right">Costo sin IVA</th>
+                                    <th style="width: 10%;text-align:right">Cantidad</th>
+                                    <th style="width: 10%;text-align:right">Stock Sucursal</th>
+                                    <th style="width: 10%;text-align:right">Stock Total</th>
                                     <th style="width: 10%">Stock Minimo</th>
                                     <th></th>
                                 </tr>
@@ -270,79 +270,6 @@
             }
         </script>
 
-        <%--<script>
-            $(document).ready(function () {
-                $('#dataTables-example').dataTable({
-                    "paging": false,
-                    "bInfo": false,
-                    "bAutoWidth": false,
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ registros",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
-                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix": "",
-                        "sSearch": "Buscar:",
-                        "sUrl": "",
-                        "sInfoThousands": ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
-                    }
-
-                });
-            });
-        </script>--%>
-
-        <%--<script type="text/javascript">
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-            function endReq(sender, args) {
-                $('#dataTables-example').dataTable({
-
-                    "paging": false,
-                    "bInfo": false,
-                    "bAutoWidth": false,
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ registros",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
-                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix": "",
-                        "sSearch": "Buscar:",
-                        "sUrl": "",
-                        "sInfoThousands": ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
-                    }
-
-
-                });
-            }
-        </script>--%>
-
         <script>
             $(function ()
             {
@@ -358,6 +285,8 @@
 
             function AgregarOrdenCompra()
             {
+                var controlSucursalHV = document.getElementById('<%= ListSucursalHV.ClientID %>');
+
                 if (!ComprobarDatosProveedor())
                 {
                     $.msgbox("Los datos del proveedor no se encuentran cargados, por favor acceda al proveedor y carguelos para continuar.", { type: "alert" });
@@ -387,12 +316,14 @@
 
                     if (parseInt(txtCantidad[0].value) > 0)
                     {
-                        var articuloDatos = articulo[0].replace('&amp;','&') + ";" + articulo[1].replace('&amp;','&') + ";" + txtPrecio[0].value + ";" + articulo[3] + ";" + txtCantidad[0].value;
+                        var articuloDatos = articulo[0].replace('&amp;','&') + ";" + articulo[1].replace('&amp;','&') + ";" + txtPrecio[0].value + ";" + txtCantidad[0].value;
                         articulos.push(articuloDatos);
                     }
                 }
                 var controlDropListPuntoVenta = document.getElementById('<%= ListPtoVenta.ClientID %>');
                 var articulosOrdenCompra = JSON.stringify(articulos);
+
+                controlSucursalHV.value = controlDropListSucursal.selectedOptions[0].value;
 
                 $.ajax({
                     type: "POST",
@@ -725,7 +656,6 @@
                         "<td> " + obj[i].codigo + "</td>" +
                         "<td> " + obj[i].descripcion + "</td>" +
                         "<td><input name='txtPrecio_" + obj[i].codigo + "'type=\"string\" value=" + obj[i].costo.toFixed(2) + " style=\"text-align: right;\"></td>" +
-                        "<td style=\"text-align: right;\"> " + obj[i].precioventa.toFixed(2) + "</td>" +
                         "<td><input name='txtCantidad_" + obj[i].codigo + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
                         "<td style=\"text-align: right;\"> " + obj[i].StockTotal.toFixed(2) + "</td>" +
