@@ -316,7 +316,7 @@
 
                     if (parseInt(txtCantidad[0].value) > 0)
                     {
-                        var articuloDatos = articulo[0].replace('&amp;','&') + ";" + articulo[1].replace('&amp;','&') + ";" + txtPrecio[0].value + ";" + articulo[3] + ";" + txtCantidad[0].value;
+                        var articuloDatos = articulo[0].replace('&amp;','&') + ";" + articulo[1].replace('&amp;','&') + ";" + txtPrecio[0].value + ";" + txtCantidad[0].value;
                         articulos.push(articuloDatos);
                     }
                 }

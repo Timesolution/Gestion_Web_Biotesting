@@ -694,9 +694,9 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     string codigo = obtenerCodigo(articulo.codigo);
                     Articulo a = contArticulos.obtenerArticuloCodigoAparece(codigo);
-                    OrdenesCompra_Items item = controlador.OrdenCompra_ItemGetOne(orden, a.id.ToString());
+                    //OrdenesCompra_Items item = controlador.OrdenCompra_ItemGetOne(orden, a.id.ToString());
 
-                    item = new OrdenesCompra_Items();
+                    OrdenesCompra_Items item = new OrdenesCompra_Items();
 
                     item.Codigo = codigo;
                     item.PrecioConIVA = 0.00m;
@@ -1095,8 +1095,7 @@ namespace Gestion_Web.Formularios.Compras
                 articuloProveedorTemp.codigo = articuloTemp[0];
                 articuloProveedorTemp.descripcion = articuloTemp[1];
                 articuloProveedorTemp.precio = articuloTemp[2];
-                articuloProveedorTemp.precioMasIVA = articuloTemp[3];
-                articuloProveedorTemp.cantidad = articuloTemp[4];
+                articuloProveedorTemp.cantidad = articuloTemp[3];
 
                 _articulosOrdenCompra.Add(articuloProveedorTemp);
             }
@@ -1118,7 +1117,6 @@ namespace Gestion_Web.Formularios.Compras
         public string codigo;
         public string descripcion;
         public string precio;
-        public string precioMasIVA;
         public string stockSucursal;
         public string stockTotal;
         public string stockMinimo;
