@@ -265,15 +265,18 @@ namespace Gestion_Web.Formularios.Facturas
                 if (Session["FacturasABM_ArticuloModalMultiple"] != null)
                 {
                     List<string> CodigosArticulos = Session["FacturasABM_ArticuloModalMultiple"] as List<string>;
+                    Configuracion config = new Configuracion();
                     foreach (var codigoArticulo in CodigosArticulos)
                     {
                         Session["FacturasABM_ArticuloModal"] = codigoArticulo;
                         txtCodigo.Text = codigoArticulo;
                         txtCantidad.Text = "1";
                         cargarProducto(txtCodigo.Text);
-                        CargarProductoAFactura();                        
+                        if(config.commitante != "1")
+                            CargarProductoAFactura();
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     }
+                    txtCodigo.Text = "";
                     ActualizarTotales();
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
