@@ -259,7 +259,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.SelectedValue = idPtoVentaUser.ToString();
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
-                this.txtComentarios.Text = "NUMEROS COTIZACIONES Nº: " + numerosCotizaciones;
+                this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones;
                 this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();

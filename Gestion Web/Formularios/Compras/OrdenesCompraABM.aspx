@@ -331,6 +331,7 @@
                     data: JSON.stringify({articulos: articulos}),
                     contentType: "application/json",
                     dataType: 'json',
+                    async: false,
                     error: function ()
                     {
                         $.msgbox("Error agregando orden de compra.", { type: "alert" });
