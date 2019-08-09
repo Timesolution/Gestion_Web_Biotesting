@@ -75,7 +75,7 @@ namespace Gestion_Web.Formularios.Facturas
         //private static bool _agregarMultiplesArticulosPorDescripcion = false;
         //private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
         //private static string _codigoArticuloParaAgregar = "";
-        //static int _idCliente = 0;
+        static int _idCliente = 0;
         //private static bool _agregarCliente = false;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -242,7 +242,12 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 }
 
-                if (Session["FacturasABM_ClienteModal"] != null)
+                //if (Session["FacturasABM_ClienteModal"] != null)
+                //{
+                //    this.flag_clienteModal = 1;
+                //    this.cargarClienteDesdeModal();
+                //}
+                if (_idCliente > 0)
                 {
                     this.flag_clienteModal = 1;
                     this.cargarClienteDesdeModal();
@@ -364,26 +369,30 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        //protected void btnBuscarCod_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        controladorCliente contrCliente = new controladorCliente();
-        //        String buscar = txtCodigoCliente.Text.Replace(' ', '%');
-        //        DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = txtCodigoCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
 
-        //        //cargo la lista
-        //        this.DropListClientes.DataSource = dtClientes;
-        //        this.DropListClientes.DataValueField = "id";
-        //        this.DropListClientes.DataTextField = "alias";
-        //        this.DropListClientes.DataBind();
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
-        //    }
-        //}
+                _idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+
+                if (_idCliente > 0)
+                    cargarClienteDesdeModal();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
 
         private void CargarInformacionSegunPuntoDeVentaSeleccionado()
         {
@@ -471,8 +480,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarCliente(f.cliente.id);
                 //this.DropListClientes.SelectedValue = f.cliente.id.ToString();
                 //cargocliente
-                //_idCliente = f.cliente.id;
-                Session.Add("FacturasABM_ClienteModal", f.cliente.id);
+                _idCliente = f.cliente.id;
+                //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
                 this.cargarClienteDesdeModal();
 
                 this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
@@ -518,8 +527,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
-                Session.Add("FacturasABM_ClienteModal", f.cliente.id);
-                //_idCliente = f.cliente.id;
+                //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
+                _idCliente = f.cliente.id;
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
@@ -1834,7 +1843,8 @@ namespace Gestion_Web.Formularios.Facturas
                     f.cliente = contCliente.obtenerClienteID(this.cliente.id);
                     Session.Add("Factura", f);
                     this.verificarAlerta();
-                    Session["FacturasABM_ClienteModal"] = null;
+                    //Session["FacturasABM_ClienteModal"] = null;
+                    _idCliente = 0;
                     Session["CobroAnticipo"] = null;
                     //verifico si tiene permitido facturar entre sucursales
                     if (this.verficarPermisoFactSucursal() == 1)
@@ -1910,7 +1920,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //obtengo codigo
-                int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                //int idCliente = (int)Session["FacturasABM_ClienteModal"];
+                int idCliente = _idCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();
@@ -5075,7 +5086,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //lo dibujo en pantalla
                     this.cargarItems();
                 }
-
+                _idCliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
                 this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
                 this.obtenerNroFactura();
 
@@ -10750,8 +10761,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
-                //_idCliente = this.idClientePadre;
-                Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
+                _idCliente = this.idClientePadre;
+                //Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
                 this.DropListClientes.Attributes.Add("disabled", "disabled");
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();

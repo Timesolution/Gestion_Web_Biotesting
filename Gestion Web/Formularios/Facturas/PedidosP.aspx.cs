@@ -1538,7 +1538,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    //Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + idtildado + "&vendedor=" + ListVendedor.SelectedValue + "&cliente=" + DropListClientes.SelectedValue);
                     foreach (String id in idtildado.Split(';'))
                     {
                         if (id != "" && id != null)

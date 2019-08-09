@@ -26,7 +26,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="width: 40%">
-                                                        <%--<div class="form-group">
+                                                        <div class="form-group">
                                                             <div class="col-md-8">
                                                                 <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
                                                                 <label class="col-md-4"></label>
@@ -34,7 +34,7 @@
                                                             <div class="col-md-2">
                                                                 <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click"/> 
                                                             </div>
-                                                        </div>--%>
+                                                        </div>
                                                         <div class="form-group">
                                                             <div class="col-md-8">
                                                                 <asp:DropDownList ID="DropListClientes" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListClientes_SelectedIndexChanged"></asp:DropDownList>
@@ -42,9 +42,9 @@
                                                             <div class="col-md-4">
                                                                 <asp:Panel ID="panelBusquedaCliente" runat="server">
                                                                     <%--<asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>--%>
-                                                                    <a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
+                                                                    <%--<a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
-                                                                    </a>
+                                                                    </a>--%>
                                                                     <asp:LinkButton ID="lbtnVerCtaCte" runat="server" OnClick="lbtnVerCtaCte_Click" class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Ver cta cte">
                                                                         <i class="shortcut-icon icon-th-list"></i>
                                                                     </asp:LinkButton>
