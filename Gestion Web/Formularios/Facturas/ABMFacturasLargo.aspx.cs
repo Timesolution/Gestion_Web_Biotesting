@@ -70,14 +70,13 @@ namespace Gestion_Web.Formularios.Facturas
 
         private string _verificarEnvioMercaderiaSiNoHayStockOrNegativo;
 
-        private static bool _agregarArticuloPorDescripcion = false;
-        private static bool _buscarArticuloPorDescripcion = false;
-        private static bool _agregarMultiplesArticulosPorDescripcion = false;
-        private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
-        private static string _codigoArticuloParaAgregar = "";
-
-        static int _idCliente = 0;
-        private static bool _agregarCliente = false;
+        //private static bool _agregarArticuloPorDescripcion = false;
+        //private static bool _buscarArticuloPorDescripcion = false;
+        //private static bool _agregarMultiplesArticulosPorDescripcion = false;
+        //private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
+        //private static string _codigoArticuloParaAgregar = "";
+        //static int _idCliente = 0;
+        //private static bool _agregarCliente = false;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -123,7 +122,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                     lstPagosTemp = new DataTable();
                     this.InicializarListaPagos();
-
 
                     dtTrazasTemp = new DataTable();
                     //this.InicializarListaTrazas();
@@ -226,13 +224,13 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFechaVtoCuotaMutual.Text = DateTime.Now.AddMonths(1).ToString("dd/MM/yyyy");
                     this.txtCodigo.Focus();
 
-                    _agregarArticuloPorDescripcion = false;
-                    _buscarArticuloPorDescripcion = false;
-                    _agregarMultiplesArticulosPorDescripcion = false;
-                    _codigosArticulosMultiplesParaAgregar = new List<string>();
-                    _idCliente = 0;
-                    _agregarCliente = false;
-                    _codigoArticuloParaAgregar = "";
+                    //_agregarArticuloPorDescripcion = false;
+                    //_buscarArticuloPorDescripcion = false;
+                    //_agregarMultiplesArticulosPorDescripcion = false;
+                    //_codigosArticulosMultiplesParaAgregar = new List<string>();
+                    //_idCliente = 0;
+                    //_agregarCliente = false;
+                    //_codigoArticuloParaAgregar = "";
                 }
 
                 this.cargarTablaPAgos();
@@ -282,24 +280,26 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["FacturasABM_ArticuloModal"] = null;
                 }
 
-                if (_agregarCliente)
-                {
-                    _agregarCliente = false;
-                    this.flag_clienteModal = 1;
-                    this.cargarClienteDesdeModal();
-                }
+                #region javascript calls
+                //if (_agregarCliente)
+                //{
+                //    _agregarCliente = false;
+                //    this.flag_clienteModal = 1;
+                //    this.cargarClienteDesdeModal();
+                //}
 
-                if (_agregarMultiplesArticulosPorDescripcion)
-                    AgregarArticulosMultiplesPorDescripcion();
+                //if (_agregarMultiplesArticulosPorDescripcion)
+                //    AgregarArticulosMultiplesPorDescripcion();
 
-                if (_buscarArticuloPorDescripcion)
-                {
-                    _buscarArticuloPorDescripcion = false;
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "abrirModalBuscarArticulo();", true);
-                }
+                //if (_buscarArticuloPorDescripcion)
+                //{
+                //    _buscarArticuloPorDescripcion = false;
+                //    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "abrirModalBuscarArticulo();", true);
+                //}
 
-                if (_agregarArticuloPorDescripcion)
-                    AgregarArticuloPorDescripcion();
+                //if (_agregarArticuloPorDescripcion)
+                //    AgregarArticuloPorDescripcion();
+                #endregion
 
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
@@ -361,6 +361,27 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+            }
+        }
+
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = txtCodigoCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
             }
         }
 
@@ -450,7 +471,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarCliente(f.cliente.id);
                 //this.DropListClientes.SelectedValue = f.cliente.id.ToString();
                 //cargocliente
-                _idCliente = f.cliente.id;
+                //_idCliente = f.cliente.id;
                 Session.Add("FacturasABM_ClienteModal", f.cliente.id);
                 this.cargarClienteDesdeModal();
 
@@ -498,7 +519,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
                 Session.Add("FacturasABM_ClienteModal", f.cliente.id);
-                _idCliente = f.cliente.id;
+                //_idCliente = f.cliente.id;
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
@@ -1890,7 +1911,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //obtengo codigo
                 int idCliente = (int)Session["FacturasABM_ClienteModal"];
-                //int idCliente = _idCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();
@@ -2554,8 +2574,8 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void btnBuscarProducto_Click(object sender, EventArgs e)
         {
-            _codigoArticuloParaAgregar = txtCodigo.Text;
-            this.cargarProducto(_codigoArticuloParaAgregar);
+            //_codigoArticuloParaAgregar = txtCodigo.Text;
+            this.cargarProducto(txtCodigo.Text);
         }
         /// <summary>
         /// cuando hace clic en guardar y se genera la factura
@@ -4139,7 +4159,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnAgregarArt_Click(object sender, EventArgs e)
         {
-            _codigoArticuloParaAgregar = txtCodigo.Text;
+            //_codigoArticuloParaAgregar = txtCodigo.Text;
             this.CargarProductoAFactura();
             this.ActualizarTotales();
         }
@@ -10730,7 +10750,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
-                _idCliente = this.idClientePadre;
+                //_idCliente = this.idClientePadre;
                 Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
                 this.DropListClientes.Attributes.Add("disabled", "disabled");
                 this.cargarClienteDesdeModal();
@@ -10788,211 +10808,213 @@ namespace Gestion_Web.Formularios.Facturas
                 return new Tuple<string, bool>("", true);
         }
 
-        [WebMethod]
-        public static string BuscarArticulosPorDescripcion(string codigoArticulo, int idSucursal)
-        {
-            if (idSucursal <= 0)
-                return "";
+        #region javascript Calls
+        //[WebMethod]
+        //public static string BuscarArticulosPorDescripcion(string codigoArticulo, int idSucursal)
+        //{
+        //    if (idSucursal <= 0)
+        //        return "";
 
-            Configuracion configuracion = new Configuracion();
-            List<Articulo> articulos = new List<Articulo>();
-            controladorArticulo contArticulo = new controladorArticulo();
+        //    Configuracion configuracion = new Configuracion();
+        //    List<Articulo> articulos = new List<Articulo>();
+        //    controladorArticulo contArticulo = new controladorArticulo();
 
-            if (String.IsNullOrEmpty(codigoArticulo))
-            {
-                articulos = contArticulo.obtenerArticulosReduc();
-                //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
-                if (configuracion.FiltroArticulosSucursal == "1")
-                {
-                    articulos = contArticulo.obtenerArticulosReduc_Sucursales(idSucursal);
-                }
-            }
-            else
-            {
-                //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
-                if (configuracion.FiltroArticulosSucursal == "1")
-                {
-                    articulos = contArticulo.buscarArticuloListReduc_Sucursales(codigoArticulo, idSucursal);
-                }
-                else
-                {
-                    articulos = contArticulo.buscarArticuloList(codigoArticulo);
-                }
-            }
+        //    if (String.IsNullOrEmpty(codigoArticulo))
+        //    {
+        //        articulos = contArticulo.obtenerArticulosReduc();
+        //        //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+        //        if (configuracion.FiltroArticulosSucursal == "1")
+        //        {
+        //            articulos = contArticulo.obtenerArticulosReduc_Sucursales(idSucursal);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
+        //        if (configuracion.FiltroArticulosSucursal == "1")
+        //        {
+        //            articulos = contArticulo.buscarArticuloListReduc_Sucursales(codigoArticulo, idSucursal);
+        //        }
+        //        else
+        //        {
+        //            articulos = contArticulo.buscarArticuloList(codigoArticulo);
+        //        }
+        //    }
 
-            List<ArticulosTemporal> articulosTemporal = new List<ArticulosTemporal>();
+        //    List<ArticulosTemporal> articulosTemporal = new List<ArticulosTemporal>();
 
-            foreach (var articulo in articulos)
-            {
-                ArticulosTemporal articuloTemporal = new ArticulosTemporal();
-                articuloTemporal.codigo = articulo.codigo;
-                articuloTemporal.descripcion = articulo.descripcion;
-                articuloTemporal.stock = obtenerStockArticuloBySucursal(articulo.codigo,idSucursal).ToString();
-                articuloTemporal.moneda = articulo.monedaVenta.moneda;
-                articuloTemporal.precioVenta = "$" + articulo.precioVenta.ToString();
-                articulosTemporal.Add(articuloTemporal);
-            }
+        //    foreach (var articulo in articulos)
+        //    {
+        //        ArticulosTemporal articuloTemporal = new ArticulosTemporal();
+        //        articuloTemporal.codigo = articulo.codigo;
+        //        articuloTemporal.descripcion = articulo.descripcion;
+        //        articuloTemporal.stock = obtenerStockArticuloBySucursal(articulo.codigo,idSucursal).ToString();
+        //        articuloTemporal.moneda = articulo.monedaVenta.moneda;
+        //        articuloTemporal.precioVenta = "$" + articulo.precioVenta.ToString();
+        //        articulosTemporal.Add(articuloTemporal);
+        //    }
 
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            string resultadoJSON = serializer.Serialize(articulosTemporal);
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    string resultadoJSON = serializer.Serialize(articulosTemporal);
 
-            return resultadoJSON;
-        }
+        //    return resultadoJSON;
+        //}
 
-        [WebMethod]
-        public static void AgregarMultiplesArticulosPorDescripcion(string codigosArticulos)
-        {
-            var codigosArticulosTemp = codigosArticulos.Split(';');
-            _codigosArticulosMultiplesParaAgregar = codigosArticulosTemp.ToList();
-            _codigoArticuloParaAgregar = "";
-            _agregarArticuloPorDescripcion = false;
-            _buscarArticuloPorDescripcion = false;
-            _agregarMultiplesArticulosPorDescripcion = true;
-        }
+        //[WebMethod]
+        //public static void AgregarMultiplesArticulosPorDescripcion(string codigosArticulos)
+        //{
+        //    var codigosArticulosTemp = codigosArticulos.Split(';');
+        //    _codigosArticulosMultiplesParaAgregar = codigosArticulosTemp.ToList();
+        //    _codigoArticuloParaAgregar = "";
+        //    _agregarArticuloPorDescripcion = false;
+        //    _buscarArticuloPorDescripcion = false;
+        //    _agregarMultiplesArticulosPorDescripcion = true;
+        //}
 
-        private void AgregarArticulosMultiplesPorDescripcion()
-        {
-            _agregarMultiplesArticulosPorDescripcion = false;
+        //private void AgregarArticulosMultiplesPorDescripcion()
+        //{
+        //    _agregarMultiplesArticulosPorDescripcion = false;
 
-            foreach (var codigoArticulo in _codigosArticulosMultiplesParaAgregar)
-            {
-                if (string.IsNullOrEmpty(codigoArticulo))
-                    continue;
+        //    foreach (var codigoArticulo in _codigosArticulosMultiplesParaAgregar)
+        //    {
+        //        if (string.IsNullOrEmpty(codigoArticulo))
+        //            continue;
 
-                //txtCodigo.Text = codigoArticulo;
-                _codigoArticuloParaAgregar = codigoArticulo;
-                txtCantidad.Text = "1";
-                cargarProducto(_codigoArticuloParaAgregar);
-                CargarProductoAFactura();
-                _codigoArticuloParaAgregar = "";
-            }
+        //        //txtCodigo.Text = codigoArticulo;
+        //        _codigoArticuloParaAgregar = codigoArticulo;
+        //        txtCantidad.Text = "1";
+        //        cargarProducto(_codigoArticuloParaAgregar);
+        //        CargarProductoAFactura();
+        //        _codigoArticuloParaAgregar = "";
+        //    }
 
-            ActualizarTotales();
-        }
+        //    ActualizarTotales();
+        //}
 
-        static decimal obtenerStockArticuloBySucursal(string codigoArticulo, int idSucursal)
-        {
+        //static decimal obtenerStockArticuloBySucursal(string codigoArticulo, int idSucursal)
+        //{
 
-            ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
-            decimal stock = 0;
-            Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(codigoArticulo);
-            if (artEnt != null)
-            {
-                var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, idSucursal);
-                stock = 0;
+        //    ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+        //    decimal stock = 0;
+        //    Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCodigoYcodigoBarra(codigoArticulo);
+        //    if (artEnt != null)
+        //    {
+        //        var stocks = contArtEntity.obtenerStockArticuloLocal(artEnt.id, idSucursal);
+        //        stock = 0;
 
-                stock = stocks.stock1.Value;
-                return stock;
-            }
+        //        stock = stocks.stock1.Value;
+        //        return stock;
+        //    }
 
-            return 0;
-        }
+        //    return 0;
+        //}
 
-        [WebMethod]
-        public static void AgregarArticulosPorDescripcion(string codigoArticulo)
-        {
-            _agregarArticuloPorDescripcion = true;
-            _buscarArticuloPorDescripcion = false;
-            _agregarMultiplesArticulosPorDescripcion = false;
-            _codigoArticuloParaAgregar = codigoArticulo;
-        }
+        //[WebMethod]
+        //public static void AgregarArticulosPorDescripcion(string codigoArticulo)
+        //{
+        //    _agregarArticuloPorDescripcion = true;
+        //    _buscarArticuloPorDescripcion = false;
+        //    _agregarMultiplesArticulosPorDescripcion = false;
+        //    _codigoArticuloParaAgregar = codigoArticulo;
+        //}
 
-        private void AgregarArticuloPorDescripcion()
-        {
-            _agregarArticuloPorDescripcion = false;
-            cargarProducto(_codigoArticuloParaAgregar);
-            ActualizarTotales();
-            _codigoArticuloParaAgregar = "";
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
-        }
+        //private void AgregarArticuloPorDescripcion()
+        //{
+        //    _agregarArticuloPorDescripcion = false;
+        //    cargarProducto(_codigoArticuloParaAgregar);
+        //    ActualizarTotales();
+        //    _codigoArticuloParaAgregar = "";
+        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+        //}
 
-        [WebMethod]
-        public static void CerrarModalBuscarArticulosPorDescripcion()
-        {
-            //AgregarArticulosPorDescripcion();
-            _agregarArticuloPorDescripcion = false;
-            _buscarArticuloPorDescripcion = false;
-            _agregarMultiplesArticulosPorDescripcion = false;
-        }
+        //[WebMethod]
+        //public static void CerrarModalBuscarArticulosPorDescripcion()
+        //{
+        //    //AgregarArticulosPorDescripcion();
+        //    _agregarArticuloPorDescripcion = false;
+        //    _buscarArticuloPorDescripcion = false;
+        //    _agregarMultiplesArticulosPorDescripcion = false;
+        //}
 
-        private void CerrarModalBuscarArticuloPorDescripcion()
-        {
-            if(!_agregarArticuloPorDescripcion && !_buscarArticuloPorDescripcion && !_agregarMultiplesArticulosPorDescripcion)
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
-        }
+        //private void CerrarModalBuscarArticuloPorDescripcion()
+        //{
+        //    if(!_agregarArticuloPorDescripcion && !_buscarArticuloPorDescripcion && !_agregarMultiplesArticulosPorDescripcion)
+        //        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "cerrarModalBuscarArticulo();", true);
+        //}
 
-        [WebMethod]
-        public static string CargarClientes()
-        {
-            List<Cliente> clientes = new List<Cliente>();
-            controladorCliente controladorCliente = new controladorCliente();
-            clientes = controladorCliente.obtenerClientesReduc(1);
+        //[WebMethod]
+        //public static string CargarClientes()
+        //{
+        //    List<Cliente> clientes = new List<Cliente>();
+        //    controladorCliente controladorCliente = new controladorCliente();
+        //    clientes = controladorCliente.obtenerClientesReduc(1);
 
-            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+        //    List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
 
-            foreach (var cliente in clientes)
-            {
-                ClientesTemporal clienteTemporal = new ClientesTemporal();
-                clienteTemporal.id = cliente.id.ToString();
-                clienteTemporal.codigo = cliente.codigo;
-                clienteTemporal.razonSocial = cliente.razonSocial;
-                clienteTemporal.alias = cliente.alias;
-                clientesTemporal.Add(clienteTemporal);
-            }
+        //    foreach (var cliente in clientes)
+        //    {
+        //        ClientesTemporal clienteTemporal = new ClientesTemporal();
+        //        clienteTemporal.id = cliente.id.ToString();
+        //        clienteTemporal.codigo = cliente.codigo;
+        //        clienteTemporal.razonSocial = cliente.razonSocial;
+        //        clienteTemporal.alias = cliente.alias;
+        //        clientesTemporal.Add(clienteTemporal);
+        //    }
 
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            serializer.MaxJsonLength = 5000000;
-            string resultadoJSON = serializer.Serialize(clientesTemporal);
-            return resultadoJSON;
-        }
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    serializer.MaxJsonLength = 5000000;
+        //    string resultadoJSON = serializer.Serialize(clientesTemporal);
+        //    return resultadoJSON;
+        //}
 
-        [WebMethod]
-        public static string BuscarCliente(string razonSocial)
-        {
-            List<Cliente> clientes = new List<Cliente>();
-            controladorCliente controladorCliente = new controladorCliente();
-            clientes = controladorCliente.obtenerClientesAlias(razonSocial);
+        //[WebMethod]
+        //public static string BuscarCliente(string razonSocial)
+        //{
+        //    List<Cliente> clientes = new List<Cliente>();
+        //    controladorCliente controladorCliente = new controladorCliente();
+        //    clientes = controladorCliente.obtenerClientesAlias(razonSocial);
 
-            List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
+        //    List<ClientesTemporal> clientesTemporal = new List<ClientesTemporal>();
 
-            foreach (var cliente in clientes)
-            {
-                ClientesTemporal clienteTemporal = new ClientesTemporal();
-                clienteTemporal.id = cliente.id.ToString();
-                clienteTemporal.codigo = cliente.codigo;
-                clienteTemporal.razonSocial = cliente.razonSocial;
-                clienteTemporal.alias = cliente.alias;
-                clientesTemporal.Add(clienteTemporal);
-            }
+        //    foreach (var cliente in clientes)
+        //    {
+        //        ClientesTemporal clienteTemporal = new ClientesTemporal();
+        //        clienteTemporal.id = cliente.id.ToString();
+        //        clienteTemporal.codigo = cliente.codigo;
+        //        clienteTemporal.razonSocial = cliente.razonSocial;
+        //        clienteTemporal.alias = cliente.alias;
+        //        clientesTemporal.Add(clienteTemporal);
+        //    }
 
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            serializer.MaxJsonLength = 5000000;
-            string resultadoJSON = serializer.Serialize(clientesTemporal);
-            return resultadoJSON;
-        }
+        //    JavaScriptSerializer serializer = new JavaScriptSerializer();
+        //    serializer.MaxJsonLength = 5000000;
+        //    string resultadoJSON = serializer.Serialize(clientesTemporal);
+        //    return resultadoJSON;
+        //}
 
-        [WebMethod]
-        public static void AgregarCliente(int idCliente)
-        {
-            _idCliente = idCliente;
-            _agregarCliente = true;
-        }
+        //[WebMethod]
+        //public static void AgregarCliente(int idCliente)
+        //{
+        //    _idCliente = idCliente;
+        //    _agregarCliente = true;
+        //}
 
-        class ArticulosTemporal
-        {
-            public string codigo;
-            public string descripcion;
-            public string stock;
-            public string moneda;
-            public string precioVenta;
-        }
+        //class ArticulosTemporal
+        //{
+        //    public string codigo;
+        //    public string descripcion;
+        //    public string stock;
+        //    public string moneda;
+        //    public string precioVenta;
+        //}
 
-        class ClientesTemporal
-        {
-            public string id;
-            public string codigo;
-            public string razonSocial;
-            public string alias;
-        }
+        //class ClientesTemporal
+        //{
+        //    public string id;
+        //    public string codigo;
+        //    public string razonSocial;
+        //    public string alias;
+        //}
+        #endregion
     }
 }
