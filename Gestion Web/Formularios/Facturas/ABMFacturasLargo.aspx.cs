@@ -364,26 +364,26 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        protected void btnBuscarCod_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                controladorCliente contrCliente = new controladorCliente();
-                String buscar = txtCodigoCliente.Text.Replace(' ', '%');
-                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+        //protected void btnBuscarCod_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        controladorCliente contrCliente = new controladorCliente();
+        //        String buscar = txtCodigoCliente.Text.Replace(' ', '%');
+        //        DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
 
-                //cargo la lista
-                this.DropListClientes.DataSource = dtClientes;
-                this.DropListClientes.DataValueField = "id";
-                this.DropListClientes.DataTextField = "alias";
-                this.DropListClientes.DataBind();
+        //        //cargo la lista
+        //        this.DropListClientes.DataSource = dtClientes;
+        //        this.DropListClientes.DataValueField = "id";
+        //        this.DropListClientes.DataTextField = "alias";
+        //        this.DropListClientes.DataBind();
 
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+        //    }
+        //}
 
         private void CargarInformacionSegunPuntoDeVentaSeleccionado()
         {

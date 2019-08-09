@@ -1517,6 +1517,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 string idtildado = "";
+                int contador = 0;
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
@@ -1524,39 +1525,46 @@ namespace Gestion_Web.Formularios.Facturas
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        contador++;
                         idtildado += ch.ID.Split('_')[1] + ";";
                     }
                 }
 
+                if(contador > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo puede remitir un pedido a la vez!"));
+                    return;
+                }
+
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + idtildado + "&vendedor=" + ListVendedor.SelectedValue + "&cliente=" + DropListClientes.SelectedValue);
-                    //foreach (String id in idtildado.Split(';'))
-                    //{
-                    //    if (id != "" && id != null)
-                    //    {
-                    //        Pedido p = new Pedido();
-                    //        p = this.controlador.obtenerPedidoId(Convert.ToInt32(id));
-                    //        if (p != null)
-                    //        {
-                    //            Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + idtildado);
-                    //            int i = this.contRemito.RemitirDesdePedido(p);
+                    //Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + idtildado + "&vendedor=" + ListVendedor.SelectedValue + "&cliente=" + DropListClientes.SelectedValue);
+                    foreach (String id in idtildado.Split(';'))
+                    {
+                        if (id != "" && id != null)
+                        {
+                            Pedido p = new Pedido();
+                            p = this.controlador.obtenerPedidoId(Convert.ToInt32(id));
+                            if (p != null)
+                            {
+                                Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + p.id);
+                                int i = this.contRemito.RemitirDesdePedido(p);
 
-                    //            if (i < 1)
-                    //            {
-                    //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error generando Remito desde pedido. "));
-                    //                return;
-                    //            }
-                    //        }
-                    //        else
-                    //        {
-                    //            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo pedido a remitir. "));
-                    //            return;
-                    //        }
-                    //    }
-                    //}
+                                if (i < 1)
+                                {
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error generando Remito desde pedido. "));
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo pedido a remitir. "));
+                                return;
+                            }
+                        }
+                    }
 
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito!. ", "PedidosP.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito!. ", "PedidosP.aspx"));
 
                 }
                 else

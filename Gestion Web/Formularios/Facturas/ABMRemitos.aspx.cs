@@ -37,10 +37,7 @@ namespace Gestion_Web.Formularios.Facturas
         int idSucursal;
         //orden de reparacion
         int idCliente;
-        int idVendedor;
         int idArticulo;
-        int idPtoVentaUser;
-        string idPedido;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -50,8 +47,6 @@ namespace Gestion_Web.Formularios.Facturas
                 accion = Convert.ToInt32(Request.QueryString["accion"]);
                 idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
                 idArticulo = Convert.ToInt32(Request.QueryString["articulo"]);
-                idPedido = Request.QueryString["id_ped"];
-                idVendedor = Convert.ToInt32(Request.QueryString["vendedor"]);
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
@@ -69,7 +64,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
-                    idPtoVentaUser = (int)Session["Login_PtoUser"];
 
                     //orden de reparacion
                     //idCliente = (int)Session["Login_idcliente"];
@@ -111,7 +105,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     if (this.accion == 4)
                     {
-                        
+                        int idPedido = Convert.ToInt32(Request.QueryString["id_ped"]);
                         GenerarRemitoPedido(idPedido);
                     }
                     //cuando viene de una orden de reparacion
@@ -418,36 +412,34 @@ namespace Gestion_Web.Formularios.Facturas
         /// <summary>
         /// Genera el remito con los datos recibidos del pedido
         /// </summary>
-        public void GenerarRemitoPedido(string id_ped)
+        public void GenerarRemitoPedido(int id_ped)
         {
             try
             {
-                //this.remito = Session["Remito"] as Remito;
-                //Pedido p = new Pedido();
-                //p = cp.obtenerPedidoId(id_ped);
-
-                Remito r = CargarRemitoDesdePedidos();
-                //if (id_ped > 0)
-                //{
-                //    r.pedido.id = id_ped;
-                //}
-                //else
-                //{
-                //    r.pedido.id = 0;
-                //}
+                this.remito = Session["Remito"] as Remito;
+                Pedido p = new Pedido();
+                p = cp.obtenerPedidoId(id_ped);
+                Remito r = controlador.AsignarPedido(p);
+                if (id_ped > 0)
+                {
+                    r.pedido.id = id_ped;
+                }
+                else
+                {
+                    r.pedido.id = 0;
+                }
                 Session.Add("Remito", r);
-                this.ListEmpresa.SelectedValue = idEmpresa.ToString();
-                this.cargarSucursal(idEmpresa);
-                this.cargarPuntoVta(idSucursal);
-                this.cargarCliente(idCliente);
-                this.DropListClientes.SelectedValue = idCliente.ToString();
-                this.DropListVendedor.SelectedValue = idVendedor.ToString();
+                this.ListEmpresa.SelectedValue = r.empresa.id.ToString();
+                this.cargarSucursal(r.empresa.id);
+                this.cargarPuntoVta(r.sucursal.id);
+                this.cargarCliente(r.cliente.id);
+                this.DropListClientes.SelectedValue = r.cliente.id.ToString();
+                this.DropListVendedor.SelectedValue = r.vendedor.id.ToString();
                 this.DropListFormaPago.SelectedValue = r.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = r.listaP.id.ToString();
-                this.ListSucursal.SelectedValue = idSucursal.ToString();
-                this.ListPuntoVenta.SelectedValue = idPtoVentaUser.ToString();
+                this.ListSucursal.SelectedValue = r.sucursal.id.ToString();
+                this.ListPuntoVenta.SelectedValue = r.ptoV.id.ToString();
                 this.txtComentarios.Text = r.comentario;
-                this.txtPorcDescuento.Text = r.neto10.ToString();
                 if (r.comentario.Length > 0)
                 {
                     this.checkDatos.Checked = true;
@@ -457,103 +449,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.actualizarTotales();
                 this.obtenerNroRemito();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
 
-            }
-        }
-
-        public Remito CargarRemitoDesdePedidos()
-        {
-            try
-            {
-                Pedido pedido = new Pedido();
-                bool descuentosDiferentes = false;
-                Cliente cliente = contCliente.obtenerClienteID(idCliente);
-                var idsPedidos = idPedido.Split(';').ToList();
-                idsPedidos.Remove(idsPedidos.Last());
-                decimal descuentoTemp = cp.obtenerPedidoId(Convert.ToInt32(idsPedidos[0])).neto10;
-
-                ControladorPedidoEntity contPedidoEnt = new ControladorPedidoEntity();
-
-                Remito r = new Remito();
-
-                r.empresa.id = idEmpresa;
-                r.sucursal.id = idSucursal;
-                r.listaP.id = cliente.lisPrecio.id;
-                r.fecha = DateTime.Now;
-                r.cliente = cliente;
-                r.tipo.id = 14;
-                r.vendedor.id = idVendedor;
-                r.formaPAgo.id = cliente.formaPago.id;
-
-                for (int i = 0; i < idsPedidos.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(idsPedidos[i]))
-                        continue;
-
-                    pedido = cp.obtenerPedidoId(Convert.ToInt32(idsPedidos[i]));
-
-                    foreach (ItemPedido item in pedido.items)
-                    {
-                        ItemRemito itemRemito = new ItemRemito();
-                        itemRemito.articulo = item.articulo;
-                        itemRemito.cantidad = item.cantidad;
-                        itemRemito.descuento = item.descuento;
-                        itemRemito.descripcion = item.descripcion;
-                        itemRemito.precioUnitario = item.precioUnitario;
-                        itemRemito.total = item.total;
-                        r.items.Add(itemRemito);
-                    }
-
-                    var ped_com = contPedidoEnt.obtenerComentariosPedido(pedido.id);
-                    if (ped_com != null)
-                        r.comentario += "Pedido N°: " + pedido.numero + " Observacion: " + ped_com.Observaciones + "\n";
-
-                    if (descuentoTemp != pedido.neto10)
-                        descuentosDiferentes = true;
-                }
-
-                if (!descuentosDiferentes)
-                    r.neto10 = descuentoTemp;
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los pedidos tienen descuentos distintos! El descuento para el remito sera 0"));
-                }
-
-                //foreach (ItemPedido item in pedido.items)
-                //{
-                //    ItemRemito itemRemito = new ItemRemito();
-                //    itemRemito.articulo = item.articulo;
-                //    itemRemito.cantidad = item.cantidad;
-                //    itemRemito.descuento = item.descuento;
-                //    itemRemito.descripcion = item.descripcion;
-                //    itemRemito.precioUnitario = item.precioUnitario;
-                //    itemRemito.total = item.total;
-                //    r.items.Add(itemRemito);
-                //}
-                //r.pedido.id = pedido.id;
-                //r.neto = pedido.neto;
-                //r.netoNGrabado = pedido.netoNGrabado;
-                //r.neto10 = pedido.neto10;
-                //r.neto21 = pedido.neto21;
-                //r.iva10 = pedido.iva10;
-                //r.iva21 = pedido.iva21;
-                //r.descuento = pedido.descuento;
-                //r.subTotal = pedido.subTotal;
-                //r.retencion = pedido.retencion;
-                //r.total = pedido.total;
-                //var ped_com = contPedidoEnt.obtenerComentariosPedido(pedido.id);
-                //if (ped_com != null)
-                //    r.comentario = ped_com.Observaciones;
-
-                return r;
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error asignando datos pedido a remito " + ex.Message);
-                return null;
             }
         }
 
