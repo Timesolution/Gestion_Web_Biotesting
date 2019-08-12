@@ -51,6 +51,7 @@ namespace Gestion_Web.Formularios.Facturas
         int idVendedor;
         int idPedido;
         int cotizacion;
+        int idCliente;
 
         string idCotizacion;
 
@@ -63,7 +64,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.idVendedor = (int)Session["Login_Vendedor"];
                 this.idPedido = Convert.ToInt32(Request.QueryString["id"]);
                 this.cotizacion = Convert.ToInt32(Request.QueryString["c"]);
-                this.idCotizacion = (Request.QueryString["cot"]);
+                this.idCotizacion = Request.QueryString["cot"];
+                this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
 
                 if (Session["Pedido"] != null)
                 {
@@ -189,23 +191,6 @@ namespace Gestion_Web.Formularios.Facturas
                     return 1;
                 }
 
-
-                //foreach (string s in listPermisos)
-                //{
-                //    if (!String.IsNullOrEmpty(s))
-                //    {
-
-                //        if (perIngresaPantalla == "37")
-                //        {
-                //            //Permiso para bloquear la lista de precios
-                //            if (s == "151")
-                //                this.DropListLista.Attributes.Add("disabled", "disabled");
-
-                //            return 1;
-                //        }
-                //    }
-                //}
-
                 return 0;
             }
             catch
@@ -260,33 +245,21 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.Pedido = Session["Pedido"] as Pedido;
-                Pedido cotizacion = new Pedido();
-                int id_cot = Convert.ToInt32(this.idCotizacion.Replace(";", ""));
-                cotizacion = controlador.obtenerPedidoId(id_cot);
-                Pedido p = controlador.AsignarCotizacion2(cotizacion);
-                if (id_cot > 0)
-                {
-                    p.cotizacion.id = id_cot;
-                }
-                else
-                {
-                    p.cotizacion.id = 0;
-                }
+                string numerosCotizaciones = "";
+                Pedido p = CargarPedidoDesdeCotizacion(ref numerosCotizaciones);
                 Session.Add("Pedido", p);
-                this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
-                this.cargarSucursal(p.empresa.id);
-                this.cargarPuntoVta(p.sucursal.id);
+                this.ListEmpresa.SelectedValue = idEmpresa.ToString();
+                this.cargarSucursal(idEmpresa);
+                this.cargarPuntoVta(idSucursal);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
-                this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 this.DropListFormaPago.SelectedValue = p.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
-                this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
-                this.ListPuntoVenta.SelectedValue = p.ptoV.id.ToString();
+                this.ListSucursal.SelectedValue = idSucursal.ToString();
+                this.ListPuntoVenta.SelectedValue = idPtoVentaUser.ToString();
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
-                this.txtComentarios.Text = "ORDEN DE COMPRA Nº: ";
+                this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones;
                 this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
@@ -295,6 +268,84 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos cotizacion a pedido " + ex.Message));
+            }
+        }
+
+        public Pedido CargarPedidoDesdeCotizacion(ref string numerosCotizaciones)
+        {
+            try
+            {                
+                Pedido cotizacion = new Pedido();
+                bool descuentosDiferentes = false;
+                Cliente cliente = contCliente.obtenerClienteID(idCliente);
+                var idsCotizaciones = idCotizacion.Split(';').ToList();
+                idsCotizaciones.Remove(idsCotizaciones.Last());
+                decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
+
+                Pedido p = new Pedido();
+
+                p.empresa.id = idEmpresa;
+                p.sucursal.id = idSucursal;
+                p.listaP = cliente.lisPrecio;
+                p.ptoV.id = idPtoVentaUser;
+                p.fecha = DateTime.Now;
+                p.cliente = cliente;
+                p.tipo.id = 13;//id tipo documento pedido
+                p.formaPAgo.id = cliente.formaPago.id;
+
+                for (int i = 0; i < idsCotizaciones.Count; i++)
+                {
+                    if (string.IsNullOrEmpty(idsCotizaciones[i]))
+                        continue;
+
+                    cotizacion = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[i]));
+
+                    if(i != idsCotizaciones.Count - 1)
+                        numerosCotizaciones += cotizacion.numero + ", ";
+                    else
+                        numerosCotizaciones += cotizacion.numero;
+
+                    foreach (ItemPedido item in cotizacion.items)
+                    {
+                        ItemPedido itemPedido = new ItemPedido();
+                        itemPedido.articulo = item.articulo;
+                        itemPedido.descripcion = item.descripcion;
+                        itemPedido.cantidad = item.cantidad;
+                        itemPedido.descuento = item.descuento;
+                        itemPedido.precioUnitario = item.precioUnitario;
+                        itemPedido.total = item.total;
+                        p.items.Add(itemPedido);
+                    }
+
+                    if (descuentoTemp != cotizacion.neto10)
+                        descuentosDiferentes = true;
+                }
+
+                if(!descuentosDiferentes)
+                    p.neto10 = descuentoTemp;
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Las cotizaciones tienen descuentos distintos! El descuento para el pedido sera 0"));
+                }
+
+                //p.cotizacion.id = cotizacion.id;
+                //p.neto = cotizacion.neto;
+                //p.netoNGrabado = cotizacion.netoNGrabado;
+                //p.neto10 = cotizacion.neto10;
+                //p.neto21 = cotizacion.neto21;
+                //p.iva10 = cotizacion.iva10;
+                //p.iva21 = cotizacion.iva21;
+                //p.descuento = cotizacion.descuento;
+                //p.subTotal = cotizacion.subTotal;
+                //p.retencion = cotizacion.retencion;
+                //p.total = cotizacion.total;
+
+                return p;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error asignando datos de cotizacion a pedido " + ex.Message);
+                return null;
             }
         }
 
@@ -1052,34 +1103,6 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        //private void cargarClienteDesdeModal()
-        //{
-        //    try
-        //    {
-        //        //obtengo codigo
-        //        int idCliente = (int)Session["PedidosABM_ClienteModal"];
-        //        try
-        //        {
-        //            this.DropListClientes.SelectedValue = idCliente.ToString();
-        //        }
-        //        catch
-        //        {
-        //            //el cliente no estaba en el drop list
-        //            //lo agrego y selecciono
-        //            //lo busco y agrego
-        //            var c = contCliente.obtenerClienteID(idCliente);
-
-        //            this.DropListClientes.Items.Add(new ListItem { Value = idCliente.ToString(), Text = c.alias });
-        //            this.DropListClientes.SelectedValue = idCliente.ToString();
-        //        }
-        //        this.cargarCliente(idCliente);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando cliente desde modal. " + ex.Message));
-        //    }
-        //}
-
         private void cargarClienteDesdeModal()
         {
             try
@@ -1744,9 +1767,9 @@ namespace Gestion_Web.Formularios.Facturas
                             ControladorPedidoEntity contPedEnt = new ControladorPedidoEntity();
                             if (accion == 4)//agrego el dato de la cotizacion y el pedido generado
                             {
-                                int t = contPedEnt.agregarPedidoCotizacion(i, Convert.ToInt32(this.idCotizacion.Replace(";", "")));
+                                int t = contPedEnt.agregarPedidoCotizacion(i, idCotizacion);
                                 //cambio estado a cotizacion
-                                t = contPedEnt.cambiarEstadoPedido(Convert.ToInt32(this.idCotizacion.Replace(";", "")), 6);
+                                t = contPedEnt.CambiarEstadoCotizaciones(idCotizacion, 6);
                             }
                             //Verifico si utiliza modo distribución (Cliente_Referidos, Pedidos_Referidos)
                             if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")

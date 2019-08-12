@@ -575,6 +575,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-4">Desc Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtDescCliente" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="btnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCliente_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-4">Cliente</label>
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>

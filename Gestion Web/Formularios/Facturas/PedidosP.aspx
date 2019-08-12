@@ -25,7 +25,7 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnRemitir" runat="server" OnClick="lbtnRemitir_Click" Visible="true">Remitir</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnRemitir" runat="server" OnClick="lbtnRemitir_Click" Visible="false">Remitir</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
