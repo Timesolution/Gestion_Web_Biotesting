@@ -1365,5 +1365,25 @@ namespace Gestion_Web.Formularios.Reportes
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&s=" + idSucursal + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
         #endregion
+
+        protected void btnBuscarCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                String buscar = txtDescCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contCliente.obtenerClientesAliasDT(buscar);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
     }
 }

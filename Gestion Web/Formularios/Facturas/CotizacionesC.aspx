@@ -25,7 +25,7 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnGenPedido" runat="server" OnClick="lbtnGenPedido_Click" Visible="true">Generar Pedido</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnGenPedido" runat="server" OnClick="lbtnGenPedido_Click" Visible="false">Generar Pedido</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -400,7 +400,7 @@
                             <ContentTemplate>
 
                                 <div class="form-group">
-                                    <label class="col-md-4">Desde</label>
+                                    <label class="col-md-3">Desde</label>
                                     <div class="col-md-4">
 
                                         <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
@@ -412,7 +412,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">Hasta</label>
+                                    <label class="col-md-3">Hasta</label>
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
                                     </div>
@@ -423,7 +423,7 @@
 
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">Sucursal</label>
+                                    <label class="col-md-3">Sucursal</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListSucursal" runat="server" class="form-control"></asp:DropDownList>
                                         <!-- /input-group -->
