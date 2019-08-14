@@ -75,7 +75,7 @@ namespace Gestion_Web.Formularios.Facturas
         //private static bool _agregarMultiplesArticulosPorDescripcion = false;
         //private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
         //private static string _codigoArticuloParaAgregar = "";
-        int _idCliente;
+        static int _idCliente;
         //private static bool _agregarCliente = false;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -377,11 +377,17 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente contrCliente = new controladorCliente();
                 String buscar = txtCodigoCliente.Text.Replace(' ', '%');
                 DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
-
+                
+                //this.DropListClientes.SelectedValue = "0";
                 //cargo la lista
+                if (dtClientes == null)
+                    return;
+
+                this.DropListClientes.Items.Clear();
                 this.DropListClientes.DataSource = dtClientes;
                 this.DropListClientes.DataValueField = "id";
                 this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
                 this.DropListClientes.DataBind();
 
                 _idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
