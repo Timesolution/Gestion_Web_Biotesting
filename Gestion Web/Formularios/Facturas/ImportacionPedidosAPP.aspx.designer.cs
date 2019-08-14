@@ -7,11 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Facturas
-{
-
-
-    public partial class ImportacionPedidosAPP
-    {
+namespace Gestion_Web.Formularios.Facturas {
+    
+    
+    public partial class ImportacionPedidosAPP {
     }
 }
