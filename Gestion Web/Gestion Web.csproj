@@ -355,6 +355,7 @@
     <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Facturas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
@@ -1399,6 +1400,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ImportacionPedidosAPP.aspx.cs">
+      <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ImportacionPedidosAPP.aspx.designer.cs">
+      <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
       <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
