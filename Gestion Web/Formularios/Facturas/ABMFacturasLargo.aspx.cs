@@ -75,7 +75,7 @@ namespace Gestion_Web.Formularios.Facturas
         //private static bool _agregarMultiplesArticulosPorDescripcion = false;
         //private static List<string> _codigosArticulosMultiplesParaAgregar = new List<string>();
         //private static string _codigoArticuloParaAgregar = "";
-        static int _idCliente = 0;
+        int _idCliente;
         //private static bool _agregarCliente = false;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -111,6 +111,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["Factura"] = null;
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
+                    _idCliente = 0;
                     phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
@@ -1844,7 +1845,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Session.Add("Factura", f);
                     this.verificarAlerta();
                     //Session["FacturasABM_ClienteModal"] = null;
-                    _idCliente = 0;
+                    //_idCliente = 0;
                     Session["CobroAnticipo"] = null;
                     //verifico si tiene permitido facturar entre sucursales
                     if (this.verficarPermisoFactSucursal() == 1)
@@ -1892,6 +1893,7 @@ namespace Gestion_Web.Formularios.Facturas
                             ListSucursalCliente.Visible = false;
                             f.items.Clear();
                             f.cliente = null;
+                            _idCliente = 0;
                             labelCliente.Text = string.Empty;
                             borrarCamposagregarItem();
                             Session.Add("Factura", f);
@@ -5080,6 +5082,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Factura f = Session["Factura"] as Factura;
                     f.items.Clear();
                     f.cliente = null;
+                    _idCliente = 0;
                     labelCliente.Text = string.Empty;
                     this.borrarCamposagregarItem();
                     Session.Add("Factura", f);
