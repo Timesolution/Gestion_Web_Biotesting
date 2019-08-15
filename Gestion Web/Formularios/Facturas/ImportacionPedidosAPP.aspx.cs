@@ -1,4 +1,5 @@
 ﻿using Gestion_Api.Controladores;
+using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,19 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            _idUsuario = (int)Session["Login_IdUser"];
+            try
+            {
+                _idUsuario = (int)Session["Login_IdUser"];
 
-            _controladorPedidoEntity.ImportarPedidoAPP(_idUsuario);
+                _controladorPedidoEntity.ImportarPedidoAPP(_idUsuario);
+
+                Response.Redirect("../Facturas/PedidosP.aspx");
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al importar los pedidos de la APP. " + ex.Message);
+            }
+            
         }
     }
 }
