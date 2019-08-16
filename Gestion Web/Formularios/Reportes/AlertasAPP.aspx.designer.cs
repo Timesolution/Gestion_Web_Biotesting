@@ -49,15 +49,6 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.Label lblSaldo;
         
         /// <summary>
-        /// phCompra control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phCompra;
-        
-        /// <summary>
         /// UpdatePanel4 control.
         /// </summary>
         /// <remarks>
@@ -94,13 +85,13 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.TextBox txtCodCliente;
         
         /// <summary>
-        /// btnBuscarCliente control.
+        /// lbtnBuscarCliente control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnBuscarCliente;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscarCliente;
         
         /// <summary>
         /// DropListCliente control.
@@ -148,6 +139,15 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.DropDownList DropListTipoAlerta;
         
         /// <summary>
+        /// DropListEstadoAlerta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListEstadoAlerta;
+        
+        /// <summary>
         /// lbtnBuscar control.
         /// </summary>
         /// <remarks>
@@ -175,12 +175,12 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.TextBox txtMovimiento;
         
         /// <summary>
-        /// btnSi control.
+        /// btnCambiarEstadoAlertas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSi;
+        protected global::System.Web.UI.WebControls.Button btnCambiarEstadoAlertas;
     }
 }
