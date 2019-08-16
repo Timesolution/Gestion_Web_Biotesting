@@ -90,7 +90,7 @@
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" ID="btnCerrarModalBusqueda" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Busqueda</h4>
                     </div>
                     <div class="modal-body">
@@ -163,7 +163,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button id="btnCerrarModalBusqueda" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" ID="btnCerrarModalCambiarEstado" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Confirmacion Cambiar estado</h4>
                     </div>
                     <div class="modal-body">
@@ -251,7 +251,8 @@
                         $.msgbox("Estado de alertas cambiadas con exito!", { type: "info" });
                         btnCambiarEstadoAlertas.disabled = false;
                         btnCambiarEstadoAlertas.value = "Aceptar";
-                        setTimeout(Filtrar(btnFiltrar),1000);
+                        document.getElementById('btnCambiarEstadoAlertas').click();
+                        setTimeout(Filtrar(btnFiltrar),500);
                     }
                 });
             }
@@ -292,7 +293,6 @@
                 var data = response.d;
                 var obj = JSON.parse(data);
 
-                document.getElementById('MainContent_btnCerrarModalBusqueda').click();
                 $("#tablaAlertas").dataTable().fnDestroy();
                 $('#tablaAlertas').find("tr:gt(0)").remove();
 
@@ -323,6 +323,9 @@
                     });
 
                 $(controlBotonFiltrar).removeAttr('disabled');
+
+                document.getElementById('btnCerrarModalBusqueda').click();
+                document.getElementById('btnCambiarEstadoAlertas').click();
             }
 
             function CrearBotonesAccion(idAlerta)

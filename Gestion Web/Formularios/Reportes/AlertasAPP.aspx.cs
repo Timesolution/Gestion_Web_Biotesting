@@ -246,7 +246,7 @@ namespace Gestion_Web.Formularios.Reportes
             {
                 AlertaTemporal alertaTemporal = new AlertaTemporal();
                 alertaTemporal.id = alerta.Id.ToString();
-                alertaTemporal.fecha = Convert.ToDateTime(alerta.Fecha, CultureInfo.InvariantCulture).ToString("dd/MM/yyyy");
+                alertaTemporal.fecha = Convert.ToDateTime(alerta.Fecha, CultureInfo.InvariantCulture).ToString("dd/MM/yyyy hh:mm");
                 alertaTemporal.cliente = controladorCliente.obtenerClienteID((int)alerta.IdCliente).alias;
                 alertaTemporal.vendedor = controladorVendedor.obtenerVendedorID((int)alerta.IdVendedor).emp.nombre;
                 alertaTemporal.tipoAlerta = controladorAlertaAPP.ObtenerTiposAlerta((int)alerta.IdTipoAlerta).FirstOrDefault().Tipo;
