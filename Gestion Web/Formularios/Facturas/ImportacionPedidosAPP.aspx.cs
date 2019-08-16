@@ -1,4 +1,5 @@
 ﻿using Gestion_Api.Controladores;
+using Gestion_Api.Controladores.APP;
 using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Gestion_Web.Formularios.Facturas
 {
     public partial class ImportacionPedidosAPP : System.Web.UI.Page
     {
-        ControladorPedidoEntity _controladorPedidoEntity = new ControladorPedidoEntity();
+        ControladorPedidosAPP _controladorPedidosAPP = new ControladorPedidosAPP();
         int _idUsuario;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -20,7 +21,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 _idUsuario = (int)Session["Login_IdUser"];
 
-                _controladorPedidoEntity.ImportarPedidoAPP(_idUsuario);
+                _controladorPedidosAPP.ImportarPedidoAPP(_idUsuario);
 
                 Response.Redirect("../Facturas/PedidosP.aspx");
             }

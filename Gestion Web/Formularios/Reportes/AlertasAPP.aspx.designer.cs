@@ -7,153 +7,180 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web {
+namespace Gestion_Web.Formularios.Reportes {
     
     
-    public partial class SiteMaster {
+    public partial class AlertasAPP {
         
         /// <summary>
-        /// LabelInicio control.
+        /// btnAccion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelInicio;
+        protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
         
         /// <summary>
-        /// Label3 control.
+        /// btnCambiarEstado control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
+        protected global::System.Web.UI.WebControls.LinkButton btnCambiarEstado;
         
         /// <summary>
-        /// Label2 control.
+        /// lblParametros control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::System.Web.UI.WebControls.Label lblParametros;
         
         /// <summary>
-        /// Label1 control.
+        /// lblSaldo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label lblSaldo;
         
         /// <summary>
-        /// btnCerrarSesion control.
+        /// phCompra control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesion;
+        protected global::System.Web.UI.WebControls.PlaceHolder phCompra;
         
         /// <summary>
-        /// phMenuCompleto control.
+        /// UpdatePanel4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phMenuCompleto;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel4;
         
         /// <summary>
-        /// phMenu control.
+        /// txtFechaDesde control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phMenu;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaDesde;
         
         /// <summary>
-        /// phImportarListaDePrecio control.
+        /// txtFechaHasta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phImportarListaDePrecio;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
         
         /// <summary>
-        /// litMillas control.
+        /// txtCodCliente control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litMillas;
+        protected global::System.Web.UI.WebControls.TextBox txtCodCliente;
         
         /// <summary>
-        /// phServicioTecnico control.
+        /// btnBuscarCliente control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phServicioTecnico;
+        protected global::System.Web.UI.WebControls.LinkButton btnBuscarCliente;
         
         /// <summary>
-        /// phAceptarMercaderia control.
+        /// DropListCliente control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phAceptarMercaderia;
+        protected global::System.Web.UI.WebControls.DropDownList DropListCliente;
         
         /// <summary>
-        /// phOrdenReparacion control.
+        /// txtVendedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phOrdenReparacion;
+        protected global::System.Web.UI.WebControls.TextBox txtVendedor;
         
         /// <summary>
-        /// phCombustible control.
+        /// lbtnBuscarVendedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phCombustible;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscarVendedor;
         
         /// <summary>
-        /// phImagenes control.
+        /// DropListVendedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phImagenes;
+        protected global::System.Web.UI.WebControls.DropDownList DropListVendedor;
         
         /// <summary>
-        /// phTapice control.
+        /// DropListTipoAlerta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phTapice;
+        protected global::System.Web.UI.WebControls.DropDownList DropListTipoAlerta;
         
         /// <summary>
-        /// MainContent control.
+        /// lbtnBuscar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
+        
+        /// <summary>
+        /// lblMensaje control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensaje;
+        
+        /// <summary>
+        /// txtMovimiento control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMovimiento;
+        
+        /// <summary>
+        /// btnSi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSi;
     }
 }
