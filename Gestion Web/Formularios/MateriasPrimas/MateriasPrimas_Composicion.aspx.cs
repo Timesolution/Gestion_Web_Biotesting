@@ -119,7 +119,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 int i = contMateriaPrima.agregarComposicion(materiaPrima_Composiciones);
                 if (i > 0)
                 {
-                    this.cargarComposicionAlPH();
+                    Response.Redirect("MateriasPrimas_Composicion.aspx?idArt=" + idArt);
                 }
             }
             catch (Exception ex)
@@ -217,7 +217,6 @@ namespace Gestion_Web.Formularios.MateriasPrimas
 
                     TableCell celImporte = new TableCell();
                     decimal importe = this.obtenerImporteEnPesos((decimal)item.MateriaPrima.Importe, (int)item.MateriaPrima.Moneda);
-                    importe = Math.Round(importe, 2);
                     celImporte.Text = "$ " + importe;
                     celImporte.Width = Unit.Percentage(3);
                     celImporte.VerticalAlign = VerticalAlign.Middle;
@@ -252,7 +251,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
 
                     totalCosto += (decimal)item.Cantidad * (decimal)importe;
                 }
-                this.lbCostoTotalComposicion.Text = Math.Round((decimal)totalCosto,2).ToString();
+                this.lbCostoTotalComposicion.Text = Math.Round((decimal)totalCosto, 2).ToString();
             }
             catch (Exception ex)
             {
