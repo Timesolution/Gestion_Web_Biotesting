@@ -15,7 +15,7 @@ using System.Web.Script.Serialization;
 using System.Globalization;
 using Gestion_Api.Entitys;
 
-namespace Gestion_Web.Formularios.Reportes
+namespace Gestion_Web.Formularios.Reportes.AlertasAPP
 {
     public partial class AlertasAPP : System.Web.UI.Page
     {
@@ -267,7 +267,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             var ids = idsAlertas.Split(';').ToList();
             ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
-            var alertas = controladorAlertaAPP.ObtenerAlertasPorID(ids);            
+            var alertas = controladorAlertaAPP.ObtenerAlertasPorID(ids);
 
             int i = controladorAlertaAPP.ModificarEstadoAlertas(alertas,2);
 

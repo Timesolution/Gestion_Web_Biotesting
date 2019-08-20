@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Reportes {
+namespace Gestion_Web.Formularios.Reportes.AlertasAPP {
     
     
     public partial class AlertasAPP {
@@ -29,6 +29,15 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnCambiarEstado;
+        
+        /// <summary>
+        /// btnAdministrarBotonesAlertas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnAdministrarBotonesAlertas;
         
         /// <summary>
         /// lblParametros control.

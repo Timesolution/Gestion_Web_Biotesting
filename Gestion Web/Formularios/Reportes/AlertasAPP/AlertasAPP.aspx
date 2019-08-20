@@ -1,4 +1,4 @@
-﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AlertasAPP.aspx.cs" Inherits="Gestion_Web.Formularios.Reportes.AlertasAPP" %>
+﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AlertasAPP.aspx.cs" Inherits="Gestion_Web.Formularios.Reportes.AlertasAPP.AlertasAPP" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
@@ -17,10 +17,11 @@
                             <tr>
                                 <td style="width: 20%">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="btnCambiarEstado" data-toggle="modal" runat="server" href="#modalConfirmacion">Cambiar estado</asp:LinkButton>
+                                                <asp:LinkButton ID="btnAdministrarBotonesAlertas" runat="server" href="ABMBotonesAlertas.aspx">Administrar Botones Alertas</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -193,17 +194,17 @@
             </div>
         </div>
 
-        <script src="../../../Scripts/libs/jquery-1.9.1.min.js"></script>
-        <script src="../../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-        <link href="../../../css/pages/reports.css" rel="stylesheet">
+        <script src="../../../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+        <link href="../../../../css/pages/reports.css" rel="stylesheet">
         <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
         <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
-        <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
+        <script src="../../../../Scripts/plugins/dataTables/custom.tables.js"></script>
         <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-        <script src="../../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-        <script src="../../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-        <script src="../../../scripts/demo/notifications.js"></script>
-        <script src="../Vendedores/Comisiones/Comisiones.js" type="text/javascript"></script>
+        <script src="../../../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        <script src="../../../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../../../scripts/demo/notifications.js"></script>
+        <script src="../../Vendedores/Comisiones/Comisiones.js" type="text/javascript"></script>
 
         <script>
             $(function ()
