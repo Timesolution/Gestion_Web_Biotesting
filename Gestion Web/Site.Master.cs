@@ -119,10 +119,6 @@ namespace Gestion_Web
                     this.phMenu.Visible = true;
                 }
 
-                if (perfil == "SuperAdministrador")
-                {
-                    this.phRentabilidad.Visible = true;
-                }
                 //combustible
                 string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
                 //string nombreUser = Session["Login_UserNafta"] as string;

@@ -29,7 +29,6 @@ namespace Gestion_Web.Formularios.Compras
         private int puntoVenta;
         private int proveedor;
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             try

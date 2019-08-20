@@ -378,17 +378,15 @@ namespace Gestion_Web.Formularios.Facturas
                 String buscar = txtCodigoCliente.Text.Replace(' ', '%');
                 DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
                 
-                //this.DropListClientes.SelectedValue = "0";
-                //cargo la lista
                 if (dtClientes == null)
                     return;
 
-                this.DropListClientes.Items.Clear();
-                this.DropListClientes.DataSource = dtClientes;
-                this.DropListClientes.DataValueField = "id";
-                this.DropListClientes.DataTextField = "alias";
-                this.DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
-                this.DropListClientes.DataBind();
+                DropListClientes.Items.Clear();
+                DropListClientes.DataSource = dtClientes;
+                DropListClientes.DataValueField = "id";
+                DropListClientes.DataTextField = "alias";
+                DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
+                DropListClientes.DataBind();
 
                 _idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
 
