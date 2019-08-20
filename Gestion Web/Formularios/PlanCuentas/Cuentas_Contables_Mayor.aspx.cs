@@ -17,9 +17,6 @@ namespace Gestion_Web.Formularios.PlanCuentas
     {
         Mensajes m = new Mensajes();
         ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
-        controladorSucursal contSucursal = new controladorSucursal();
-        ControladorEmpresa contEmpresa = new ControladorEmpresa();
-        ControladorAsientos contAsientos = new ControladorAsientos();
 
         class ListItemTemporal
         {
@@ -151,41 +148,57 @@ namespace Gestion_Web.Formularios.PlanCuentas
         #endregion
 
         [WebMethod]
-        //public static string EliminarRegistroDeTabla(int idCuenta)
-        //{
-        //    try
-        //    {
-        //        int resultado = 0;
-        //        ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
-        //        if (contPlanCuentas.(idCuentasContable_MayorTipoMovimiento))
-        //        {
-        //            resultado = 1;
-        //        }
-        //        JavaScriptSerializer serializer = new JavaScriptSerializer();
-        //        serializer.MaxJsonLength = 5000000;
-        //        string resultadoJSON = serializer.Serialize(resultado);
+        public static string EliminarRegistroDeTabla(int idCuentasContable_MayorTipoMovimiento)
+        {
+            try
+            {
+                int resultado = 0;
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
 
-        //        return resultadoJSON;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return string.Empty;
-        //    }
-        //}
+                var mayortipoMovimiento_cuentaContable = contPlanCuentas.GetOne_CuentasContables_MayorTipoMovimiento(idCuentasContable_MayorTipoMovimiento);
+                if (mayortipoMovimiento_cuentaContable.Id != 0)
+                {
+                    mayortipoMovimiento_cuentaContable.Estado = 0;
+
+                    bool correcto = contPlanCuentas.CreateOrUpdateInDB_CuentasContables_MayorTipoMovimiento(mayortipoMovimiento_cuentaContable);
+                    if (correcto) resultado = 1;
+                }
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON = serializer.Serialize(resultado);
+
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
 
         protected void lbtnCrearRegistro_Click(object sender, EventArgs e)
         {
             try
             {
-                CuentasContables_MayorTipoMovimiento cuentasContables_MayorTipoMovimiento = new CuentasContables_MayorTipoMovimiento();
-                cuentasContables_MayorTipoMovimiento.IdCuenta_Contable = Convert.ToInt32(DropListNivel4.SelectedValue);
-                cuentasContables_MayorTipoMovimiento.IdMayor_TipoMovimiento = Convert.ToInt32(dropList_Mayor_TipoDeMovimiento.SelectedValue);
-                cuentasContables_MayorTipoMovimiento.Estado = 1;
+                bool existeUnaRelacion = contPlanCuentas.VerificarSiEl_MayorTipoMovimentoYaEstaAsignadoAUna_CuentaContable(Convert.ToInt32(dropList_Mayor_TipoDeMovimiento.SelectedValue));
 
-                if (contPlanCuentas.AgregarRegistroToTable_CuentasContables_MayorTipoMovimiento(cuentasContables_MayorTipoMovimiento))
+                if (!existeUnaRelacion)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Registro creado correctamente", "Cuentas_Contables_Mayor.aspx"));
+                    CuentasContables_MayorTipoMovimiento cuentasContables_MayorTipoMovimiento = new CuentasContables_MayorTipoMovimiento();
+                    cuentasContables_MayorTipoMovimiento.IdCuenta_Contable = Convert.ToInt32(DropListNivel4.SelectedValue);
+                    cuentasContables_MayorTipoMovimiento.IdMayor_TipoMovimiento = Convert.ToInt32(dropList_Mayor_TipoDeMovimiento.SelectedValue);
+                    cuentasContables_MayorTipoMovimiento.Estado = 1;
+
+                    if (contPlanCuentas.AgregarRegistroToTable_CuentasContables_MayorTipoMovimiento(cuentasContables_MayorTipoMovimiento))
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Registro creado correctamente", "Cuentas_Contables_Mayor.aspx"));
+                    }
                 }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ya se hay una cuenta contable relacionada con ese tipo de movimiento, debe eliminarlo si quiere agregar otro distinto."));
+                }
+
             }
             catch (Exception ex)
             {
@@ -206,6 +219,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 {
                     cuentasContables_MayorTipoMovimiento_Temporal.Add(new CuentasContables_MayorTipoMovimiento_Temporal
                     {
+                        Id = item.Id.ToString(),
                         IdCuenta_Contable = item.Cuentas_Contables.Descripcion.ToString(),
                         IdMayor_TipoMovimiento = item.Mayor_TipoMovimiento.TipoMovimiento.ToString(),
                     });

@@ -102,12 +102,6 @@ namespace Gestion_Web.Formularios.Articulos
                 var suc = cont.obtenerSucursalID(this.sucursal);
                 ReportParameter rp2 = new ReportParameter("ParamSucursal", suc.nombre);
 
-                //ReportDataSource rds2 = new ReportDataSource("DSDocumentos", dtDocumentos);
-                //ReportDataSource rds3 = new ReportDataSource("DSChequesPropios", dtCheques);
-                //ReportDataSource rds4 = new ReportDataSource("DSChequesTerceros", dtChequesTer);
-                //ReportDataSource rds5 = new ReportDataSource("DSTransferencias", dtTrans);
-                //ReportDataSource rds6 = new ReportDataSource("DSDetalle", dtDetalle);
-                
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.SetParameters(rp);
@@ -129,15 +123,12 @@ namespace Gestion_Web.Formularios.Articulos
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/ms-excel";
                     this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
-                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                     this.Response.BinaryWrite(xlsContent);
 
                     this.Response.End();
                 }
                 else
                 {
-
-
                     //get pdf content
 
                     Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
@@ -151,12 +142,6 @@ namespace Gestion_Web.Formularios.Articulos
                     this.Response.End();
 
                 }
-                //this.ReportViewer1.LocalReport.DataSources.Add(rds2);
-                //this.ReportViewer1.LocalReport.DataSources.Add(rds3);
-                //this.ReportViewer1.LocalReport.DataSources.Add(rds4);
-                //this.ReportViewer1.LocalReport.DataSources.Add(rds5);
-                //this.ReportViewer1.LocalReport.DataSources.Add(rds6);
-                //this.ReportViewer1.LocalReport.Refresh();
             }
             catch (Exception ex)
             {

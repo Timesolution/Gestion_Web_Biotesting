@@ -16,15 +16,22 @@
             <div class="widget-content">
                 <table style="width: 100%">
                     <tr>
-                        <td style="width: 30%">
-                            <label class="col-md-2">Tipo Movimiento</label>
+                        <td style="width: 100%">
                             <div class="col-md-3">
-                                <div class="row">
-                                    <asp:DropDownList ID="dropList_Mayor_TipoDeMovimiento" runat="server" class="form-control"></asp:DropDownList>
-                                </div>
+                                <label>Tipo Movimiento</label>
+                                <asp:DropDownList ID="dropList_Mayor_TipoDeMovimiento" runat="server" class="form-control"></asp:DropDownList>
                             </div>
-                            &nbsp
-                            <a href="#modal_DropList_Cuentas" data-toggle="modal" class="btn btn-success">Plan de ctas.</a>
+                            <div class="col-md-3">
+                                <label>Debe / Haber</label>
+                                <asp:DropDownList ID="DropDownList1" runat="server" class="form-control">
+                                    <asp:ListItem Text="Debe" Value="1"></asp:ListItem>
+                                    <asp:ListItem Text="Haber" Value="2"></asp:ListItem>
+                                </asp:DropDownList>
+                            </div>
+                             <div class="col-md-3">
+                                 <br />
+                                <a href="#modal_DropList_Cuentas" data-toggle="modal" class="btn btn-success">Plan de ctas.</a>
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -329,7 +336,7 @@
                     "<tr>" +
                     "<td> " + obj[i].IdMayor_TipoMovimiento + "</td>" +
                     "<td> " + obj[i].IdCuenta_Contable + "</td>" +
-                    //'<td> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="EliminarRegistroDeTabla(' + obj[i].Id + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
+                    '<td> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="EliminarRegistroDeTabla(' + obj[i].Id + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
                     "</tr> ");
             };
         }
@@ -338,11 +345,11 @@
             $.ajax({
                 type: "POST",
                 url: "Cuentas_Contables_Mayor.aspx/EliminarRegistroDeTabla",
-                data: '{idAsiento: "' + parseInt(idAsiento) + '"}',
+                data: '{idCuentasContable_MayorTipoMovimiento: "' + parseInt(idAsiento) + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function () {
-                    alert("No se pudo borrar el asiento");
+                    alert("No se pudo eliminar el registro");
                 },
                 success: OnSuccessEliminarRegistroDeTabla
             });

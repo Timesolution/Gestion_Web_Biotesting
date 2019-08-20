@@ -60,7 +60,7 @@
                                                     <div class="form-group">
                                                         <label for="name" class="col-md-4">Stock Minimo</label>
                                                         <div class="col-md-4">
-                                                            <asp:TextBox ID="txtStockMinimo" Text="0" runat="server" class="form-control" Style="text-align: right;" TextMode="Number" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            <asp:TextBox ID="txtStockMinimo" Text="0" runat="server" class="form-control" Style="text-align: right;" onkeypress="javascript:return ValidarSoloNumeros(event)"></asp:TextBox>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtStockMinimo" ValidationGroup="MateriasPrimasGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -87,7 +87,7 @@
                                                     <div class="form-group">
                                                         <label for="name" class="col-md-4">Importe</label>
                                                         <div class="col-md-4">
-                                                            <asp:TextBox ID="txtImporte" Text="0" runat="server" class="form-control" Style="text-align: right;" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            <asp:TextBox ID="txtImporte" Text="0" runat="server" class="form-control" Style="text-align: right;" onkeypress="javascript:return ValidarSoloNumeros(event)"></asp:TextBox>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtImporte" ValidationGroup="MateriasPrimasGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -127,6 +127,28 @@
     </div>
 
     <script>
+        function ValidarSoloNumeros(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+            if (key < 48 || key > 57) {
+                if (key == 8 || key == 46)//46 = '.'
+                {
+                    if (key == 46 && controlTxtImporte_ModalAgregarRegistro.value.includes(".", 0)) {
+                        return false;
+                    }
+                    return true;
+                }
+                else { return false; }
+            }
+            return true;
+        }
         //valida los campos solo numeros
         function validarNro(e) {
             var key;

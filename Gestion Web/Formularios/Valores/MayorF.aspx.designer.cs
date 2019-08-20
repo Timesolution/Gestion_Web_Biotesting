@@ -175,24 +175,6 @@ namespace Gestion_Web.Formularios.Valores {
         protected global::System.Web.UI.WebControls.DropDownList dropListPuntoVenta_ModalAgregarRegistro;
         
         /// <summary>
-        /// Control dropList_Asientos_Item_ModalAgregarRegistro.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList dropList_Asientos_Item_ModalAgregarRegistro;
-        
-        /// <summary>
-        /// Control dropList_Mayor_TipoMovimiento.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList dropList_Mayor_TipoMovimiento;
-        
-        /// <summary>
         /// Control DropListNivel1_ModalAgregarRegistro.
         /// </summary>
         /// <remarks>

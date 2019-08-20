@@ -22,7 +22,6 @@ namespace Gestion_Web.Formularios.Valores
         public ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
         public controladorSucursal contSucursal = new controladorSucursal();
         public ControladorEmpresa contEmpresa = new ControladorEmpresa();
-        public ControladorAsientos contAsientos = new ControladorAsientos();
 
         class MayorTemporal
         {
@@ -36,8 +35,6 @@ namespace Gestion_Web.Formularios.Valores
             public string Nivel2;
             public string Nivel3;
             public string Nivel4;
-            public string Asiento_Item;
-            public string Asiento_Cuenta;
             public string Credito;
             public string Debito;
             public string NumeroDocumento;
@@ -81,6 +78,7 @@ namespace Gestion_Web.Formularios.Valores
             CargarTiposMovimientosEnLista();
             CargarNivel1EnLista();
             CargarNiveles1_2_3ConElItemTODOS();
+            CargarNivelesDeLosDropDown();
         }
 
         private void CargarEmpresasEnLista()
@@ -194,11 +192,6 @@ namespace Gestion_Web.Formularios.Valores
 
             if (dtMayor_TipoMovimiento != null)
             {
-                dropList_Mayor_TipoMovimiento.DataSource = dtMayor_TipoMovimiento;
-                dropList_Mayor_TipoMovimiento.DataTextField = "TipoMovimiento";
-                dropList_Mayor_TipoMovimiento.DataValueField = "Id";
-                dropList_Mayor_TipoMovimiento.DataBind();
-
                 if (dtMayor_TipoMovimiento.Count > 1)
                 {
                     dtMayor_TipoMovimiento.Insert(0, new Mayor_TipoMovimiento
@@ -219,7 +212,7 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 var lista = contPlanCuentas.obtenerCuentasContablesByNivel(1, 0);
-
+                var lista_ModalAgregarRegistro = contPlanCuentas.obtenerCuentasContablesByNivel(1, 0);
                 if (lista != null)
                 {
                     if (lista.Count > 0)
@@ -260,6 +253,35 @@ namespace Gestion_Web.Formularios.Valores
             catch (Exception ex)
             {
 
+            }
+        }
+
+        public void CargarNivelesDeLosDropDown()
+        {
+            try
+            {
+                DropDownList[] ddls = { DropListNivel1_ModalAgregarRegistro, DropListNivel2_ModalAgregarRegistro, DropListNivel3_ModalAgregarRegistro, DropListNivel4_ModalAgregarRegistro };
+                List<Cuentas_Contables> lista = new List<Cuentas_Contables>();
+
+                for (int i = 0; i < ddls.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        lista = contPlanCuentas.obtenerCuentasContablesByNivel(1, 0);
+                    }
+                    if (lista != null)
+                    {
+                        ddls[i].DataSource = lista;
+                        ddls[i].DataTextField = "Descripcion";
+                        ddls[i].DataValueField = "Id";
+                        ddls[i].DataBind();
+                    }
+                    lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
             }
         }
 
@@ -327,7 +349,7 @@ namespace Gestion_Web.Formularios.Valores
                 controladorSucursal contSucursal = new controladorSucursal();
                 ControladorEmpresa contEmpresa = new ControladorEmpresa();
 
-                List<Mayor> listaMayor = contPlanCuentas.ObtenerTodosMayor(fechaDesde, fechaHasta, idTipoMovimiento, idEmpresa, idSucursal, idPuntoVenta);
+                List<Mayor> listaMayor = contPlanCuentas.ObtenerTodosMayor(fechaDesde, fechaHasta.AddHours(23).AddMinutes(59), idTipoMovimiento, idEmpresa, idSucursal, idPuntoVenta);
                 List<MayorTemporal> listaMayorTemporal = new List<MayorTemporal>();
                 foreach (var item in listaMayor)
                 {
@@ -343,8 +365,6 @@ namespace Gestion_Web.Formularios.Valores
                         Nivel2 = item.Cuentas_Contables1.Descripcion,
                         Nivel3 = item.Cuentas_Contables2.Descripcion,
                         Nivel4 = item.Cuentas_Contables3.Descripcion,
-                        Asiento_Item = item.Asiento1.Item,
-                        Asiento_Cuenta = item.Asiento1.Cuenta,
                         Debito = item.Debito.ToString(),
                         Credito = item.Credito.ToString(),
                         NumeroDocumento = item.NumeroDocumento
@@ -392,6 +412,63 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
 
+        [WebMethod(EnableSession = true)]
+        public static void InsertarRegistroEnLaTablaMayor_JSON(string[] objetos)
+        {
+            try
+            {
+                int idUser = (int)HttpContext.Current.Session["Login_IdUser"];
+
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
+                controladorSucursal contSucursal = new controladorSucursal();
+
+                for (int i = 0; i < objetos.Length; i++)
+                {
+                    var linea = objetos[i].Split('_');
+
+                    string fecha = linea[0].ToString();
+                    string[] fechaArray = fecha.Split('/');
+                    string nuevaFecha = fechaArray[1] + "/" + fechaArray[0] + "/" + fechaArray[2] + " 00:00";
+                    DateTime fechaDateTime = Convert.ToDateTime(nuevaFecha);
+
+                    decimal debe = Convert.ToDecimal(linea[1]);
+                    decimal haber = Convert.ToDecimal(linea[2]);
+                    int idEmpresa = Convert.ToInt32(linea[3]);
+                    int idSucursal = Convert.ToInt32(linea[4]);
+                    int idPuntoDeVenta = Convert.ToInt32(linea[5]);
+                    int idNivel1 = Convert.ToInt32(linea[6]);
+                    int idNivel2 = Convert.ToInt32(linea[7]);
+                    int idNivel3 = Convert.ToInt32(linea[8]);
+                    int idNivel4 = Convert.ToInt32(linea[9]);
+
+                    string puntoDeVenta = contSucursal.obtenerPtoVentaEntityID(idPuntoDeVenta).NombreFantasia;
+                    string numeroDocumento = "0000-" + contPlanCuentas.ObtenerCantidadDeRegistrosCreadosDeLaTabla_MayorFiltradoPorTipoDeMayor(1).ToString().PadLeft(8,'0');
+
+                    contPlanCuentas.AgregarRegistroToTableMayor(new Mayor
+                    {
+                        Fecha = fechaDateTime,
+                        Debito = debe,
+                        Credito = haber,
+                        Empresa = idEmpresa,
+                        Sucursal = idSucursal,
+                        PuntoDeVenta = idPuntoDeVenta,
+                        Usuario = idUser,
+                        TipoMovimiento = 1,//Manual
+                        Estado = 1,
+                        NumeroDocumento = numeroDocumento,
+                        Nivel1 = idNivel1,
+                        Nivel2 = idNivel2,
+                        Nivel3 = idNivel3,
+                        Nivel4 = idNivel4
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         protected void lbtnCrearRegistroManual_Click(object sender, EventArgs e)
         {
             try
@@ -403,16 +480,11 @@ namespace Gestion_Web.Formularios.Valores
                 var puntoVenta = contSucursal.obtenerPtoVentaId(idSucursal);
                 int idPuntoVenta = Convert.ToInt32(dropListPuntoVenta_ModalAgregarRegistro.SelectedValue);
 
-                var idAsiento = Convert.ToInt32(DropListNivel4_ModalAgregarRegistro.SelectedValue);
-
-                int idCuentaContable = (int)contAsientos.AsientoGetOneAndActive(Convert.ToInt32(idAsiento)).IdCuentaContable;
-                var cuenta_contable = contPlanCuentas.obtenerCuentaById(idCuentaContable);
-
-                int idMayor_TipoMovimiento = Convert.ToInt32(dropList_Mayor_TipoMovimiento.SelectedValue);
+                var cuenta_contable = contPlanCuentas.obtenerCuentaById(Convert.ToInt32(DropListNivel4_ModalAgregarRegistro.SelectedValue));
 
                 decimal importe = Convert.ToDecimal(txtImporte_ModalAgregarRegistro.Text);
 
-                int cantidadRegistrosCreadosFiltradoPorTipo = contPlanCuentas.ObtenerCantidadDeRegistrosCreadosDeLaTabla_MayorFiltradoPorTipoDeMayor(idMayor_TipoMovimiento) + 1;
+                int cantidadRegistrosCreadosFiltradoPorTipo = contPlanCuentas.ObtenerCantidadDeRegistrosCreadosDeLaTabla_MayorFiltradoPorTipoDeMayor(1) + 1;
 
                 string numeroDocumento = puntoVenta.puntoVenta + "-" + cantidadRegistrosCreadosFiltradoPorTipo.ToString().PadLeft(8, '0');
 
@@ -433,8 +505,7 @@ namespace Gestion_Web.Formularios.Valores
                     Nivel3 = cuenta_contable.Nivel3,
                     Nivel4 = cuenta_contable.Id,
                     Usuario = (int)Session["Login_IdUser"],
-                    TipoMovimiento = idMayor_TipoMovimiento,
-                    Asiento = idAsiento,
+                    TipoMovimiento = 1,//Manual
                     NumeroDocumento = numeroDocumento,
                     Estado = 1
                 };
