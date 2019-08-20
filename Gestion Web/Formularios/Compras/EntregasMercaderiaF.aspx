@@ -8,13 +8,10 @@
                 <ContentTemplate>
                     <div class="col-md-12 col-xs-12">
                         <div class="widget stacked">
-
                             <div class="widget-header">
                                 <i class="icon-wrench"></i>
                                 <h3>Herramientas</h3>
                             </div>
-                            <!-- /widget-header -->
-
                             <div class="widget-content">
                                 <div id="validation-form" role="form" class="form-horizontal col-md-8">
                                     <fieldset>
@@ -118,14 +115,14 @@
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Descripcion</th>
+                                            <th style="width:10%">Codigo</th>
+                                            <th style="width:20%">Descripcion</th>
                                             <asp:PlaceHolder ID="phCantidadPedida" runat="server">
-                                            <th>Cantidad Pedida</th>
+                                            <th style="width:5%">Cantidad Pedida</th>
                                             </asp:PlaceHolder>
-                                            <th>Cantidad ya Recibida</th>
-                                            <th>Cantidad Recibida</th>
-                                            <th></th>
+                                            <th style="width:5%">Cantidad ya Recibida</th>
+                                            <th style="width:5%">Cantidad Recibida</th>
+                                            <th style="width:10%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,8 +133,9 @@
                                 <div class="btn-toolbar">
                                     <div role="form" class="form-horizontal col-md-12 text-right">
                                         <%--<asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" />--%>
-                                        <asp:Button ID="btnRecibirTodo" type="button" runat="server" Text="Recibir todo" class="btn btn-success" OnClick="btnRecibirTodo_Click" />
+                                        <%--<asp:Button ID="btnRecibirTodo" type="button" Visible="false" runat="server" Text="Recibir todo" class="btn btn-success" OnClick="btnRecibirTodo_Click" />--%>
                                         <asp:Button ID="btnRechazarTodo" runat="server" Text="Rechazar todo" class="btn btn-danger" OnClick="lbtnRechazarTodo_Click" />
+                                        <asp:Button ID="btnIngresoManual" type="button" runat="server" Text="Ingresar mercaderia" class="btn btn-success" OnClick="btnIngresoManual_Click" />
                                     </div>
                                 </div>
 

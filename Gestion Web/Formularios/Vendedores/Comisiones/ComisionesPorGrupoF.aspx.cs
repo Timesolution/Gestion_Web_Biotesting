@@ -307,14 +307,44 @@ namespace Gestion_Web.Formularios.Vendedores.Comisiones
             return resultadoJSON;
         }
 
-        static string CalcularTotal(string comision, string neto)
+        static string CalcularTotal(string neto, string comision)
         {
-            decimal comisionTemp = Convert.ToDecimal(comision.Split('$')[1]);
-            decimal netoTemp = Convert.ToDecimal(neto);
+            decimal comisionTemp = Convert.ToDecimal(comision);
+            decimal netoTemp = Convert.ToDecimal(neto.Split('$')[1]);
 
             decimal total = decimal.Round((comisionTemp / 100) * netoTemp,2);
 
             return total.ToString();
+        }
+
+        protected void lbtnImprimir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime fechaDesde = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                DateTime fechaHasta = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Vendedores/Comisiones/ImpresionComisiones.aspx?a=1&fd=" + fechaDesde + "&fh=" + fechaHasta + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + DropListPuntoVenta.SelectedValue + "&v=" + DropListVendedor.SelectedValue + "&tn=" + labelNetoHidden.Value + "&tc=" + labelTotalHidden.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al imprimir las comisiones por grupo " + ex.Message);
+            }
+        }
+
+        protected void lbtnExportar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime fechaDesde = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                DateTime fechaHasta = Convert.ToDateTime(txtFechaHasta.Text, new CultureInfo("es-AR"));
+
+                Response.Redirect("/Formularios/Vendedores/Comisiones/ImpresionComisiones.aspx?a=1&ex=1&fd=" + fechaDesde + "&fh=" + fechaHasta + "&e=" + DropListEmpresa.SelectedValue + "&s=" + DropListSucursal.SelectedValue + "&pv=" + DropListPuntoVenta.SelectedValue + "&v=" + DropListVendedor.SelectedValue + "&tn=" + labelNetoHidden.Value + "&tc=" + labelTotalHidden.Value);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al exportar las comisiones por grupo " + ex.Message);
+            }
         }
     }
 

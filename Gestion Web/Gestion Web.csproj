@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -355,6 +355,7 @@
     <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Facturas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
@@ -463,6 +464,7 @@
     <Content Include="Formularios\Promociones\ABMPromociones.aspx" />
     <Content Include="Formularios\Promociones\ImpresionPromociones.aspx" />
     <Content Include="Formularios\Promociones\PromocionesF.aspx" />
+    <Content Include="Formularios\Reportes\AlertasAPP.aspx" />
     <Content Include="Formularios\Reportes\BalanceF.aspx" />
     <Content Include="Formularios\Reportes\ImpresionRentabilidadD.aspx" />
     <Content Include="Formularios\Reportes\ImpresionReporte.aspx" />
@@ -562,6 +564,7 @@
     <Content Include="Formularios\Reportes\TrazabilidadABM.aspx" />
     <Content Include="Formularios\Vendedores\Comisiones\Comisiones.js" />
     <Content Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx" />
+    <Content Include="Formularios\Vendedores\Comisiones\ImpresionComisiones.aspx" />
     <Content Include="Formularios\Vendedores\ImpresionVendedores.aspx" />
     <Content Include="Formularios\Vendedores\Vendedores.aspx" />
     <Content Include="Formularios\Vendedores\VendedoresABM.aspx" />
@@ -753,6 +756,17 @@
     <Content Include="Formularios\Articulos\dsNominaArticulos.xsc">
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\dsListaPrecios.xsc">
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Articulos\dsListaPrecios.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsListaPrecios.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Articulos\dsListaPrecios.xss">
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Articulos\dsNominaArticulos.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -761,6 +775,7 @@
     <Content Include="Formularios\Articulos\dsNominaArticulos.xss">
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Content>
+    <Content Include="Formularios\Articulos\StockValorizadoDetalladoR.rdlc" />
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -826,6 +841,17 @@
     </None>
     <Content Include="Formularios\Valores\dsRemesa.xss">
       <DependentUpon>dsRemesa.xsd</DependentUpon>
+    </Content>
+    <Content Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.xsc">
+      <DependentUpon>dsComisionesVendedores.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsComisionesVendedores.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.xss">
+      <DependentUpon>dsComisionesVendedores.xsd</DependentUpon>
     </Content>
     <None Include="Formularios\Vendedores\dsVendedores.xsd">
       <SubType>Designer</SubType>
@@ -1368,10 +1394,22 @@
     <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
       <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Articulos\dsListaPrecios.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsListaPrecios.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Articulos\dsNominaArticulos.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ImportacionPedidosAPP.aspx.cs">
+      <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ImportacionPedidosAPP.aspx.designer.cs">
+      <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
       <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
@@ -1906,6 +1944,13 @@
     </Compile>
     <Compile Include="Formularios\Promociones\PromocionesF.aspx.designer.cs">
       <DependentUpon>PromocionesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\AlertasAPP.aspx.cs">
+      <DependentUpon>AlertasAPP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\AlertasAPP.aspx.designer.cs">
+      <DependentUpon>AlertasAPP.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\dsRentabilidad.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2989,6 +3034,18 @@
     <Compile Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupoF.aspx.designer.cs">
       <DependentUpon>ComisionesPorGrupoF.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\dsComisionesVendedores.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsComisionesVendedores.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\ImpresionComisiones.aspx.cs">
+      <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Vendedores\Comisiones\ImpresionComisiones.aspx.designer.cs">
+      <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Vendedores\dsVendedores.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3223,6 +3280,7 @@
     <EmbeddedResource Include="Formularios\Valores\RemesaR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ResumenTurnoR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\TarjetasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Vendedores\Comisiones\ComisionesPorGrupo.rdlc" />
     <EmbeddedResource Include="Formularios\Vendedores\VendedoresR.rdlc" />
   </ItemGroup>
   <ItemGroup>
@@ -3249,7 +3307,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>8986</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

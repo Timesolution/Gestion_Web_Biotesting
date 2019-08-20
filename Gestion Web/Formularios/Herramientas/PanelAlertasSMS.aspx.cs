@@ -244,17 +244,17 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
-                if (!txtEnvioCobro.Text.Contains("@@COBRO"))
+                if (chkAlertaCobro.Checked && !txtEnvioCobro.Text.Contains("@@COBRO"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@COBRO'. \", {type: \"error\"});", true);
                     txtEnvioCobro.Text = "'Ingrese su texto' @@COBRO";
                 }
-                else if (!txtEnvioFact.Text.Contains("@@MONTO"))
+                else if (chkAlertaFC.Checked && !txtEnvioFact.Text.Contains("@@MONTO"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@MONTO'. \", {type: \"error\"});", true);
                     txtEnvioFact.Text = "'Ingrese su texto' @@FACTURA @@MONTO";
                 }
-                else if (!txtEnvioMailFC.Text.Contains("@@FACTURA") || !txtEnvioFact.Text.Contains("@@FACTURA"))
+                else if (chkAlertaEnvioFC.Checked && !txtEnvioMailFC.Text.Contains("@@FACTURA") || chkAlertaFC.Checked && !txtEnvioFact.Text.Contains("@@FACTURA"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No eliminar esto '@@FACTURA'. \", {type: \"error\"});", true);
                     txtEnvioMailFC.Text = "'Ingrese su texto' @@FACTURA ";

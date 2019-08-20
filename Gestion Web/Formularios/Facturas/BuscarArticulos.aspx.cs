@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Script.Serialization;
 using System.Web.Services;
 using System.Web.UI;
@@ -70,6 +71,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string pantalla = WebConfigurationManager.AppSettings.Get("FormularioFC");
+
+                if (pantalla == "0")
+                    lbtnAgregarArticulosMultiples.Visible = false;
+
                 foreach (Articulo art in articulos)
                 {
                     if (art.apareceLista == 0)
@@ -119,7 +125,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //celAction.Width = Unit.Percentage(10);
                     celAction.VerticalAlign = VerticalAlign.Middle;
 
-                    if(accion == 1)
+                    if(accion == 1 && pantalla != "0")
                     {
                         Literal l1 = new Literal();
                         l1.Text = "&nbsp";

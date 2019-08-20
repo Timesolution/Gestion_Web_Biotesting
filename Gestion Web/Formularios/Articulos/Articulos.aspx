@@ -666,52 +666,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">
-                                        Precio Sin Iva
-                                   
-                                    </label>
+                                    <label class="col-md-4">Precio Sin Iva</label>
                                     <div class="col-md-1">
-                                        <asp:RadioButton ID="RadioSinIva" Checked="true" runat="server" GroupName="iva" />
-                                        <!-- /input-group -->
+                                        <asp:CheckBox ID="PrecioSinIva" runat="server" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">
-                                        Precio Con Iva
-                                   
-                                    </label>
+                                    <label class="col-md-4">Descuento Por Cantidad</label>
                                     <div class="col-md-1">
-                                        <asp:RadioButton ID="RadioConIva" runat="server" GroupName="iva" />
-                                        <!-- /input-group -->
+                                        <asp:CheckBox ID="DescuentoPorCantidad" runat="server" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-4">
-                                        Agrupar por ubicacion
-                                   
-                                    </label>
-                                    <div class="col-md-1">
-                                        <asp:CheckBox ID="chkUbicacion" runat="server" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4">
-                                        Incluir Descuento por Cantidad
-                                   
-                                    </label>
-                                    <div class="col-md-1">
-                                        <asp:CheckBox ID="chkDescuentoCantidad" runat="server" />
-                                    </div>
-                                </div>
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
-
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="btnImprimirListaPreciosPDF" runat="server" ValidationGroup="BusquedaLista" Text="Generar PDF" class="btn btn-success" OnClick="btnImprimirListaPrecios_Click" />
                         <asp:LinkButton ID="btnImprimirListaPreciosXLS" runat="server" ValidationGroup="BusquedaLista" Text="Generar Excel" class="btn btn-success" OnClick="btnImprimirListaPrecios2_Click" />
@@ -789,17 +759,21 @@
 
                                 <div class="form-group">
                                     <label class="col-md-4">
-                                        Sucursal
-                                   
+                                        Sucursal                                   
                                     </label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListSucursal_St2" runat="server" class="form-control" disabled></asp:DropDownList>
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal_St2" InitialValue="-1" ValidationGroup="StockValorizado" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>                                    
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Stock Detallado</label>
+                                    <div class="col-md-6">
+                                        <asp:CheckBox ID="cbStockDetallado" Checked="false" runat="server"/>
                                     </div>
                                 </div>
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>

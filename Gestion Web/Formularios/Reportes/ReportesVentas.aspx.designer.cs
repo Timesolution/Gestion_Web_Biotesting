@@ -157,15 +157,6 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorCategoriaAndProveedorPDF;
         
         /// <summary>
-        /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF;
-        
-        /// <summary>
         /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel control.
         /// </summary>
         /// <remarks>
@@ -173,6 +164,15 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel;
+        
+        /// <summary>
+        /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF;
         
         /// <summary>
         /// lbtnReporteVentasPorPuntoDeVentaPDF control.
@@ -470,6 +470,24 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
+        
+        /// <summary>
+        /// txtDescCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDescCliente;
+        
+        /// <summary>
+        /// btnBuscarCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnBuscarCliente;
         
         /// <summary>
         /// DropListClientes control.

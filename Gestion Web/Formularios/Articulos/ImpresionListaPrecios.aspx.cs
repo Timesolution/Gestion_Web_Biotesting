@@ -22,6 +22,7 @@ namespace Gestion_Web.Formularios.Articulos
         Mensajes m = new Mensajes();
         private int accion;
         private int lista;
+        private int precioSinIva;
         private int grupo;
         private int subgrupo;
         private int dias;
@@ -31,8 +32,8 @@ namespace Gestion_Web.Formularios.Articulos
         private string textoBuscar;
         private int excel;
         private int marca;
+        private int descuentoPorCantidad;
         string descSubGrupo;
-        int descuentoPorCantidad;
         private int valor;
 
         private DataTable dtArticulos = new DataTable();
@@ -45,6 +46,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //ListaPrecio y Categoria
                     this.lista = Convert.ToInt32(Request.QueryString["l"]);
+                    this.precioSinIva = Convert.ToInt32(Request.QueryString["psi"]);
                     this.grupo = Convert.ToInt32(Request.QueryString["g"]);
                     this.subgrupo = Convert.ToInt32(Request.QueryString["sg"]);                    
                     this.dias = Convert.ToInt32(Request.QueryString["d"]);
@@ -57,24 +59,28 @@ namespace Gestion_Web.Formularios.Articulos
                     this.textoBuscar = Request.QueryString["t"];
                     this.marca = Convert.ToInt32(Request.QueryString["m"]);
                     this.descSubGrupo = Request.QueryString["dsg"];
-                    this.descuentoPorCantidad = Convert.ToInt32(Request.QueryString["dc"]);
+                    this.descuentoPorCantidad = Convert.ToInt32(Request.QueryString["dpc"]);
 
-                    if (this.valor == 0 && descuentoPorCantidad == 0)
-                    {
-                        generarReporte();
-                    }
-                    if (this.valor == 1 && descuentoPorCantidad == 0)
-                    {
-                        generarReporte2();
-                    }
-                    if (this.valor == 0 && descuentoPorCantidad == 1)
-                    {
-                        generarReporte3();
-                    }
-                    if (this.valor == 1 && descuentoPorCantidad == 1)
-                    {
-                        generarReporte4();
-                    }
+                    //if (this.valor == 0 && descuentoPorCantidad == 0)
+                    //{
+                    //    generarReporte();
+                    //}
+                    //if (this.valor == 1 && descuentoPorCantidad == 0)
+                    //{
+                    //    generarReporte2();
+                    //}
+                    //if (this.valor == 0 && descuentoPorCantidad == 1)
+                    //{
+                    //    generarReporte3();
+                    //}
+                    //if (this.valor == 1 && descuentoPorCantidad == 1)
+                    //{
+                    //    generarReporte4();
+                    //}
+                    if(descuentoPorCantidad == 1)
+                        GenerarListaPreciosDescuentoPorCantidad();
+                    else
+                        GenerarListaPrecios();
                 }
             }
             catch (Exception ex)
@@ -480,6 +486,144 @@ namespace Gestion_Web.Formularios.Articulos
             dtArticulos.Columns.Add("Descuento2");
             dtArticulos.Columns.Add("Descuento3");
             dtArticulos.Columns.Add("Observaciones");
+        }
+
+        private void GenerarListaPreciosDescuentoPorCantidad()
+        {
+            try
+            {
+                controladorListaPrecio contList = new controladorListaPrecio();
+                listaPrecio lista = contList.obtenerlistaPrecioID(this.lista);
+                String nombreLista = lista.nombre;
+
+                //CargarTablaArticulos(this.grupo, this.subgrupo, this.proveedor, this.dias);
+
+                var listaDePrecios = contList.ObtenerListaDePreciosDescuentoPorCantidad(this.lista, precioSinIva);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaPreciosDescuentoCantidadR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("ListaPreciosDescuentoCantidad", listaDePrecios);
+
+                ReportParameter param = new ReportParameter("ParamLista", nombreLista);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "ListaPrecios_" + DateTime.Today.ToString("ddMMyyyy"), "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando lista de precios con descuento por cantidad. " + ex.Message);
+            }
+        }
+
+        private void GenerarListaPrecios()
+        {
+            try
+            {
+                controladorListaPrecio contList = new controladorListaPrecio();
+                listaPrecio lista = contList.obtenerlistaPrecioID(this.lista);
+                String nombreLista = lista.nombre;
+
+                //CargarTablaArticulos(this.grupo, this.subgrupo, this.proveedor, this.dias);
+
+                var listaDePrecios = contList.ObtenerListaDePrecios(this.lista,precioSinIva);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaPreciosR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("ListaPrecios", listaDePrecios);
+
+                ReportParameter param = new ReportParameter("ParamLista", nombreLista);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "ListaPrecios_" + DateTime.Today.ToString("ddMMyyyy"), "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando lista de precios. " + ex.Message);
+            }
         }
 
         private void generarReporte()

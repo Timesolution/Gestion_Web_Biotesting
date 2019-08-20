@@ -913,6 +913,12 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //si logre dar de alta el articulo intento guardar los datos de despacho y los datos de presentaciones 
                     // i = idArticulo nuevo
+
+                    Articulos_Catalogo artCat = new Articulos_Catalogo();
+                    artCat.Articulo = i;
+                    artCat.ApareceLista = 1;
+
+                    this.contArtEnt.agregarApareceLista(artCat);
                     this.guardarDatosDespacho(i);
                     this.guardarDatosPresentaciones(i);                    
                 }

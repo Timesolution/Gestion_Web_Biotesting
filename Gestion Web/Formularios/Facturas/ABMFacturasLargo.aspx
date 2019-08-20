@@ -28,11 +28,20 @@
                                                     <td style="width: 40%">
                                                         <div class="form-group">
                                                             <div class="col-md-8">
+                                                                <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
+                                                                <label class="col-md-4"></label>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click"/> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-8">
                                                                 <asp:DropDownList ID="DropListClientes" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListClientes_SelectedIndexChanged"></asp:DropDownList>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <asp:Panel ID="panelBusquedaCliente" runat="server">
-                                                                    <asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>
+                                                                    <%--<asp:LinkButton ID="lbtnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" title data-original-title="Buscar cliente" data-toggle="modal" class="btn btn-info ui-tooltip" href="#modalBuscarClienteDescripcion" OnClientClick="CargarClientes()"/>--%>
                                                                     <%--<a class="btn btn-info ui-tooltip" data-toggle="tooltip" title data-original-title="Buscar cliente" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>--%>
@@ -279,7 +288,7 @@
                             <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
                                     <table class="table table-striped table-bordered" onload="AddRequestHandler()">
-                                        <asp:PlaceHolder ID="phRefacturacion" runat="server" Visible="true">
+                                        <asp:PlaceHolder ID="phAgregarItems" runat="server" Visible="true">
                                         <thead>
                                             <tr>
                                                 <th>#</th>

@@ -161,8 +161,8 @@ namespace Gestion_Web.Formularios.Compras
                         if (s == "177")
                             this.DropListSucursal.Attributes.Remove("disabled");
 
-                        //if (s == "178")
-                        //    ltbnCambiarEstado.Visible = true;
+                        if (s == "178")
+                            lbtnEliminar.Visible = true;
                     }
                 }
 
@@ -512,10 +512,10 @@ namespace Gestion_Web.Formularios.Compras
                 foreach (Control C in phOrdenes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[7].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
-                        idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        idtildado += ch.ID.Split('_')[1] + ";";
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
@@ -682,7 +682,7 @@ namespace Gestion_Web.Formularios.Compras
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar el estado de la Orden de Compra seleccionada. "));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue autorizada."));
                     }
                     //modificarEstadoOrdenCompra(3);
                 }

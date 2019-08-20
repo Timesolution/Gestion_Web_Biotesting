@@ -81,6 +81,9 @@ namespace Gestion_Web.Formularios.Facturas
                     buscarPorObservacion();
                 }
 
+                if(idCliente <= 0)
+                    lbtnGenPedido.Visible = false;
+
             }
             catch (Exception ex)
             {
@@ -131,6 +134,9 @@ namespace Gestion_Web.Formularios.Facturas
                             this.lblSaldo.Visible = true;
                     }
                 }
+
+                if (listPermisos.Contains("213"))
+                    lbtnGenPedido.Visible = true;
 
                 return valor;
             }
@@ -678,7 +684,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     if (!String.IsNullOrEmpty(idtildado))
                     {
-                        Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado);
+                        Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado + "&cliente=" + idCliente);
                     }
                     else
                     {

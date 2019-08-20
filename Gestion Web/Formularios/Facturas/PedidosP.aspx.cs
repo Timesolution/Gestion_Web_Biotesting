@@ -183,6 +183,9 @@ namespace Gestion_Web.Formularios.Facturas
                     this.buscarPorObservacion();
                     this.lbtnFacturar.Visible = true;
                 }
+
+                if (idCliente > 0)
+                    lbtnRemitir.Visible = true;
             }
             catch (Exception ex)
             {
@@ -1514,6 +1517,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 string idtildado = "";
+                int contador = 0;
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
@@ -1521,8 +1525,15 @@ namespace Gestion_Web.Formularios.Facturas
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        contador++;
                         idtildado += ch.ID.Split('_')[1] + ";";
                     }
+                }
+
+                if(contador > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo puede remitir un pedido a la vez!"));
+                    return;
                 }
 
                 if (!String.IsNullOrEmpty(idtildado))

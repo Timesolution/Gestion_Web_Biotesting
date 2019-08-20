@@ -43,17 +43,17 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.VerificarLogin();
-                this.accion = Convert.ToInt32(Request.QueryString["accion"]);
-                this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
-                this.idArticulo = Convert.ToInt32(Request.QueryString["articulo"]);
+                VerificarLogin();
+                accion = Convert.ToInt32(Request.QueryString["accion"]);
+                idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                idArticulo = Convert.ToInt32(Request.QueryString["articulo"]);
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
 
                 //dibujo los items en la tabla
                 if (Session["Remito"] != null)
                 {
-                    this.cargarItems();
+                    cargarItems();
                 }
                 if (!IsPostBack)
                 {
@@ -449,7 +449,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.actualizarTotales();
                 this.obtenerNroRemito();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a remito " + ex.Message));
 
