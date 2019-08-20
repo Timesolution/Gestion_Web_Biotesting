@@ -463,6 +463,7 @@
     <Content Include="Formularios\Promociones\ABMPromociones.aspx" />
     <Content Include="Formularios\Promociones\ImpresionPromociones.aspx" />
     <Content Include="Formularios\Promociones\PromocionesF.aspx" />
+    <Content Include="Formularios\Reportes\AlertasAPP.aspx" />
     <Content Include="Formularios\Reportes\BalanceF.aspx" />
     <Content Include="Formularios\Reportes\ImpresionRentabilidadD.aspx" />
     <Content Include="Formularios\Reportes\ImpresionReporte.aspx" />
@@ -1934,6 +1935,13 @@
     </Compile>
     <Compile Include="Formularios\Promociones\PromocionesF.aspx.designer.cs">
       <DependentUpon>PromocionesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\AlertasAPP.aspx.cs">
+      <DependentUpon>AlertasAPP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\AlertasAPP.aspx.designer.cs">
+      <DependentUpon>AlertasAPP.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\dsRentabilidad.Designer.cs">
       <AutoGen>True</AutoGen>
