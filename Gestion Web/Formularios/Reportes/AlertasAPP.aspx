@@ -226,11 +226,21 @@
             function CambiarEstadoAlertas()
             {
                 var btnCambiarEstadoAlertas = document.getElementById("MainContent_btnCambiarEstadoAlertas");
-                var btnFiltrar = document.getElementById("MainContent_lbtnBuscar");
+                
                 btnCambiarEstadoAlertas.disabled = true;
                 btnCambiarEstadoAlertas.value = "Aguarde...";
 
                 var checkedNodes = $('#tablaAlertas').find('input[type="checkbox"]:checked');
+
+                if (checkedNodes.length <= 0)
+                {
+                    event.preventDefault();
+                    $.msgbox("No hay alertas seleccionadas!", { type: "alert" });
+                    btnCambiarEstadoAlertas.disabled = false;
+                    btnCambiarEstadoAlertas.value = "Aceptar";
+                    document.getElementById('btnCerrarModalCambiarEstado').click();
+                    return false;
+                }
 
                 var idsAlertas = "";
 
@@ -247,14 +257,27 @@
                     error: function () {
                         $.msgbox("No se pudo cambiar el estado de las alertas!", { type: "error" });
                     },
-                    success:function () {
-                        $.msgbox("Estado de alertas cambiadas con exito!", { type: "info" });
-                        btnCambiarEstadoAlertas.disabled = false;
-                        btnCambiarEstadoAlertas.value = "Aceptar";
-                        document.getElementById('btnCambiarEstadoAlertas').click();
-                        setTimeout(Filtrar(btnFiltrar),500);
-                    }
+                    success:OnSuccessCambiarEstado
                 });
+            }
+
+            function OnSuccessCambiarEstado(response)
+            {
+                var btnFiltrar = document.getElementById("MainContent_lbtnBuscar");
+                var btnCambiarEstadoAlertas = document.getElementById("MainContent_btnCambiarEstadoAlertas");
+
+                var data = response.d;
+                var obj = JSON.parse(data);
+
+                if (obj >= 1)
+                    $.msgbox("Estado de alertas cambiadas con exito!", { type: "info" });                
+                else
+                    $.msgbox("Error cambiando estado de alertas!", { type: "error" });
+
+                    btnCambiarEstadoAlertas.disabled = false;
+                    btnCambiarEstadoAlertas.value = "Aceptar";
+                    document.getElementById('btnCerrarModalCambiarEstado').click();
+                    setTimeout(Filtrar(btnFiltrar));
             }
 
             function Filtrar(obj)
@@ -325,7 +348,7 @@
                 $(controlBotonFiltrar).removeAttr('disabled');
 
                 document.getElementById('btnCerrarModalBusqueda').click();
-                document.getElementById('btnCambiarEstadoAlertas').click();
+                document.getElementById('btnCerrarModalCambiarEstado').click();
             }
 
             function CrearBotonesAccion(idAlerta)

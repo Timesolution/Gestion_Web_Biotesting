@@ -196,7 +196,7 @@ namespace Gestion_Web.Formularios.Personal
         {
             try
             {
-                List<Empleado> empleados = this.controlador.obtenerEmpleadosReduc();
+                List<Gestion_Api.Modelo.Empleado> empleados = this.controlador.obtenerEmpleadosReduc();
                 //Table table = new Table();
                 //table.CssClass = "table table-striped table-bordered";
                 //table.Width = Unit.Percentage(100);
@@ -206,7 +206,7 @@ namespace Gestion_Web.Formularios.Personal
 
                 phEmpleados.Controls.Clear();
 
-                foreach (Empleado emp in empleados)
+                foreach (Gestion_Api.Modelo.Empleado emp in empleados)
                 {
                     //fila
                     TableRow tr = new TableRow();
@@ -297,7 +297,7 @@ namespace Gestion_Web.Formularios.Personal
             }
         }
 
-            private void cargarEmpleadosTabla(List<Empleado> empleados)
+            private void cargarEmpleadosTabla(List<Gestion_Api.Modelo.Empleado> empleados)
         {
             try
             {
@@ -311,7 +311,7 @@ namespace Gestion_Web.Formularios.Personal
                 //para cargar el cliente
                 int i = 0;
 
-                foreach (Empleado emp in empleados)
+                foreach (Gestion_Api.Modelo.Empleado emp in empleados)
                 {
                     //fila
                     TableRow tr = new TableRow();
@@ -485,7 +485,7 @@ namespace Gestion_Web.Formularios.Personal
             try
             {
                 //this.phEmpEncabezado.Controls.Clear();
-                Empleado emp = this.controlador.obtenerEmpleadoID(idEmpleado);
+                Gestion_Api.Modelo.Empleado emp = this.controlador.obtenerEmpleadoID(idEmpleado);
                 //cargo los campos
                 Table table = new Table();
                 table.CssClass = "btn btn-primary";
@@ -531,7 +531,7 @@ namespace Gestion_Web.Formularios.Personal
         {
             try
             {
-                List<Empleado> Empleados = this.controlador.obtenerEmpleadosNombre(nombre);
+                List<Gestion_Api.Modelo.Empleado> Empleados = this.controlador.obtenerEmpleadosNombre(nombre);
                 this.cargarEmpleadosTabla(Empleados);
             }
             catch (Exception ex)
@@ -605,7 +605,7 @@ namespace Gestion_Web.Formularios.Personal
                     {
                         if (!String.IsNullOrEmpty(empleado))
                         {
-                            Empleado emp = this.controlador.obtenerEmpleadoID(Convert.ToInt32(empleado));
+                            Gestion_Api.Modelo.Empleado emp = this.controlador.obtenerEmpleadoID(Convert.ToInt32(empleado));
 
                             Remuneracione r = new Remuneracione();
                             r.Fecha = DateTime.Now;

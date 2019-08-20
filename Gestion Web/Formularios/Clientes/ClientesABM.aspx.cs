@@ -402,9 +402,9 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 controladorEmpleado contEmpleado = new controladorEmpleado();
-                List<Empleado> empleados = contEmpleado.obtenerEmpleadosReduc();
+                List<Gestion_Api.Modelo.Empleado> empleados = contEmpleado.obtenerEmpleadosReduc();
 
-                foreach (Empleado emp in empleados.OrderBy(x=> x.nombre).OrderBy(y=> y.apellido))
+                foreach (Gestion_Api.Modelo.Empleado emp in empleados.OrderBy(x=> x.nombre).OrderBy(y=> y.apellido))
                 {
                     this.listEmpleados.Items.Add(new ListItem
                     {
@@ -2346,7 +2346,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                Empleado emp = new Empleado();
+                Gestion_Api.Modelo.Empleado emp = new Gestion_Api.Modelo.Empleado();
                 emp.legajo = Convert.ToDecimal(this.txtLegajo.Text);
                 emp.nombre = this.txtNombre.Text;
                 emp.apellido = this.txtApellido.Text;
