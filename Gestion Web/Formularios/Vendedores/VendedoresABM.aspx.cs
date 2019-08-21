@@ -205,7 +205,7 @@ namespace Gestion_Web.Formularios.Vendedores
         {
             try
             {
-                List<Empleado> empleados = this.controladorEmpleado.obtenerEmpleadosNoVendedoresReduc();
+                List<Gestion_Api.Modelo.Empleado> empleados = this.controladorEmpleado.obtenerEmpleadosNoVendedoresReduc();
                 //Table table = new Table();
 
                 //table.CssClass = "table table-striped table-bordered";
@@ -214,7 +214,7 @@ namespace Gestion_Web.Formularios.Vendedores
                 //para cargar el cliente
                 int i = 0;
 
-                foreach (Empleado emp in empleados)
+                foreach (Gestion_Api.Modelo.Empleado emp in empleados)
                 {
                     //fila
                     TableRow tr = new TableRow();
@@ -387,7 +387,7 @@ namespace Gestion_Web.Formularios.Vendedores
             try
             {
                 Vendedor ven = new Vendedor();
-                Empleado emp = this.controladorEmpleado.obtenerEmpleadoLegajo(Convert.ToDecimal(this.tLegajo.Value));
+                Gestion_Api.Modelo.Empleado emp = this.controladorEmpleado.obtenerEmpleadoLegajo(Convert.ToDecimal(this.tLegajo.Value));
                 ven.emp = emp;
                 ven.comision = Convert.ToDecimal(this.txtComision.Text);
                 ven.sucursal = Convert.ToInt32(this.DropListSucursal.SelectedValue);
