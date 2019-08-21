@@ -655,7 +655,6 @@
                     <div role="form" class="form-horizontal col-md-12">
                         <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
                             <ContentTemplate>
-
                                 <div class="form-group">
                                     <label class="col-md-4">Lista de Precios</label>
                                     <div class="col-md-6">
@@ -663,6 +662,24 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListListaPrecios" InitialValue="-1" ValidationGroup="BusquedaLista" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                        <label class="col-md-4">Buscar Proveedor</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                        </div>
+                                    </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Proveedor</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListProveedor" ValidationGroup="BusquedaLista" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaLista" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -1212,6 +1229,45 @@
 
     </script>
     <script>
+
+        function ObtenerProveedor()
+        {
+            event.preventDefault();
+            var descripcionCliente = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>').value;
+
+            $.ajax({
+                type: "POST",
+                url: "AlertasAPP.aspx/ObtenerCliente",
+                data: '{cliente: "' + descripcionCliente + '"  }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo obtener el cliente.");
+                },
+                success: OnSuccessObtenerCliente
+            });
+        };
+
+        function OnSuccessObtenerCliente(response)
+        {
+            var controlDropListCliente = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>');
+
+            while (controlDropListCliente.options.length > 0) {
+                controlDropListCliente.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].alias;
+
+                controlDropListCliente.add(option);
+            }
+        }
+
         function excelMovStock() {
             var desde = $("#<%= txtFechaDesdeMovStock.ClientID %>");
             var hasta = $("#<%= txtFechaHastaMovStock.ClientID %>");
