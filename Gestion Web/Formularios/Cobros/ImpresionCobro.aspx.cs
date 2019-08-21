@@ -898,14 +898,14 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                var listaCobros = Session["listaReporteDetalleCobros"] as string;
-
-                Session.Remove("listaReporteDetalleCobros");
+                var listaCobros = Request.Cookies["listaReporteDetalleCobros"].Value as string;
 
                 if (string.IsNullOrEmpty(listaCobros))
                 {
                     return;
                 }
+
+                Response.Cookies["listaReporteDetalleCobros"].Expires = DateTime.Now.AddDays(-1);
 
                 listaCobros = listaCobros.Remove(listaCobros.Length - 1).Replace(',',';');
 
