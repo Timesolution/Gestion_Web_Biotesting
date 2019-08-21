@@ -27,6 +27,8 @@ namespace Gestion_Web.Formularios.Valores
         controladorCajaEntity contCajaCierre = new controladorCajaEntity();
         controladorSucursal contSucursal = new controladorSucursal();
         ControladorBanco contBanco = new ControladorBanco();
+        ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
+        ControladorEmpresa contEmpresa = new ControladorEmpresa();
 
         Mensajes m = new Mensajes();
         private int suc;
@@ -1076,6 +1078,27 @@ namespace Gestion_Web.Formularios.Valores
                     this.tipoPago = 0;
                     this.tipoMovimiento = 0;
                     this.suc = (int)Session["Login_SucUser"];
+
+                    bool existe = contPlanCuentas.ExisteUnaCuentaRelacionadaConElMovimientoDeCaja(caja.mov.id);
+                    if (existe)
+                    {
+                        int idCuentaContable = contPlanCuentas.obtenerCuentaContableTipoMovCaja(caja.mov.id).IdCuentaContable.Value;
+                        var registroCuenta_contable = contPlanCuentas.obtenerCuentaById(idCuentaContable);
+                        Mayor mayor = new Mayor
+                        {
+                            Fecha = caja.fecha,
+                            Empresa = contEmpresa.obtenerEmpresaByIdSucursal(caja.suc.id).id,
+                            PuntoDeVenta = caja.pv.id,
+                            Sucursal = caja.suc.id,
+                            TipoMovimiento = 2,
+                            Nivel1 = registroCuenta_contable.Nivel1,
+                            Nivel2 = registroCuenta_contable.Nivel2,
+                            Nivel3 = registroCuenta_contable.Nivel3,
+                            Nivel4 = idCuentaContable,
+                            Usuario = (int)Session["Login_IdUser"]
+                        };
+                        contPlanCuentas.AgregarRegistroToTableMayor(mayor);
+                    }
                     Response.Redirect("CajaF.aspx?FD=" + this.fechaD + "&FH=" + this.fechaH + "&S=" + this.suc + "&TP=" + this.tipoPago + "&TM=" + this.tipoMovimiento);
                 }
                 else

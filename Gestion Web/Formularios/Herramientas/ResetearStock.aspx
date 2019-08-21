@@ -67,11 +67,11 @@
         </div>
     </div>
 
-        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-        <script src="../../Scripts/libs/bootstrap.min.js"></script>
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
 
-        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-        <script src="../../Scripts/demo/notifications.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
 
     <script>
         var controlDropListEmpresa;

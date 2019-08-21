@@ -253,6 +253,7 @@
                                                 <a tabindex="" href="#">Plan de cuentas</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/PlanCuentas/CuentasF.aspx">Cuentas</a></li>
+                                                    <li><a href="/../../Formularios/PlanCuentas/Cuentas_Contables_Mayor.aspx">Tipos Cuentas</a></li>
                                                 </ul>
                                             </li>
 
@@ -392,6 +393,7 @@
                                             <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
                                             <li><a href="">Cuenta Personal</a></li>
                                             <li><a href="/../../Formularios/Valores/ABMDivisas.aspx">Divisas</a></li>
+                                            <li><a href="/../../Formularios/Valores/MayorF.aspx">Mayor</a></li>
                                             <li><a href="/../../Formularios/Valores/PagaresF.aspx">Pagares</a></li>
                                             <li><a href="/../../Formularios/Valores/RetencionesF.aspx">Retenciones</a></li>
                                             <li><a href="/../../Formularios/Valores/SolicitudesF.aspx">Solicitudes </a></li>
@@ -460,7 +462,7 @@
                                                     <li><a href="/../../Formularios/Reportes/ImpresionReporteBeneficios.aspx?a=1">Lista De Socios</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/../../Formularios/Reportes/AlertasAPP.aspx">Alertas</a></li>
+                                            <li><a href="/../../Formularios/Reportes/AlertasAPP/AlertasAPP.aspx">Alertas</a></li>
                                             <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
                                             <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>                                            
                                             <li><a href="/../../Formularios/Reportes/ReportesTrazabilidad.aspx">Trazabilidad</a></li>
@@ -487,7 +489,7 @@
                                             <li><a href="/../../Formularios/Herramientas/FormasVenta.aspx">Formas de venta</a></li>
                                             <li><a href="/../../Formularios/Herramientas/InformeBTBF.aspx">Informe BTB</a></li>
                                             <li><a href="/../../Formularios/Herramientas/ActPadronF.aspx">Ingresos Brutos</a></li>
-                                            <li><a href="/../../Formularios/Facturas/ImportacionPedidosAPP.aspx">Procesar Pedidos</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/ImportacionPedidosAPP.aspx">Procesar Pedidos</a></li>
                                             <li><a href="/../../Formularios/Herramientas/NumeracionDocumentos.aspx">Numeracion Documentos</a></li>
                                             <li><a href="/../../Formularios/Herramientas/PanelControl.aspx">Panel de Control</a></li>
                                             <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Regimen Informativo</a></li>

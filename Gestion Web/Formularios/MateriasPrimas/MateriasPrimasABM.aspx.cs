@@ -31,7 +31,6 @@ namespace Gestion_Web.Formularios.MateriasPrimas
 
             if (!IsPostBack)
             {
-                //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                 this.cargarDDLs();
                 if (accion == 2)
                 {
@@ -178,8 +177,6 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando materia prima."));
                     }
                 }
-
-                
             }
             catch (Exception ex)
             {

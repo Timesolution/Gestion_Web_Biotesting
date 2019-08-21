@@ -15,7 +15,7 @@ using System.Web.Script.Serialization;
 using System.Globalization;
 using Gestion_Api.Entitys;
 
-namespace Gestion_Web.Formularios.Reportes
+namespace Gestion_Web.Formularios.Reportes.AlertasAPP
 {
     public partial class AlertasAPP : System.Web.UI.Page
     {
@@ -245,14 +245,14 @@ namespace Gestion_Web.Formularios.Reportes
             foreach (var alerta in alertas)
             {
                 AlertaTemporal alertaTemporal = new AlertaTemporal();
-                alertaTemporal.id = alerta.Id.ToString();
-                alertaTemporal.fecha = Convert.ToDateTime(alerta.Fecha, CultureInfo.InvariantCulture).ToString("dd/MM/yyyy hh:mm");
-                alertaTemporal.cliente = controladorCliente.obtenerClienteID((int)alerta.IdCliente).alias;
-                alertaTemporal.vendedor = controladorVendedor.obtenerVendedorID((int)alerta.IdVendedor).emp.nombre;
-                alertaTemporal.tipoAlerta = controladorAlertaAPP.ObtenerTiposAlerta((int)alerta.IdTipoAlerta).FirstOrDefault().Tipo;
-                alertaTemporal.mensaje = alerta.Mensaje;
-                alertaTemporal.estado = controladorAlertaAPP.ObtenerEstadosAlerta((int)alerta.Estado).FirstOrDefault().Estado;
-                alertaTemporal.vencimiento = CalcularProgressBar(Convert.ToDateTime(alerta.Fecha, CultureInfo.InvariantCulture), 30).ToString();
+                alertaTemporal.id = alerta.id.ToString();
+                alertaTemporal.fecha = Convert.ToDateTime(alerta.fecha, CultureInfo.InvariantCulture).ToString("dd/MM/yyyy hh:mm");
+                alertaTemporal.cliente = alerta.cliente;
+                alertaTemporal.vendedor = alerta.vendedor;
+                alertaTemporal.tipoAlerta = alerta.tipoAlerta;
+                alertaTemporal.mensaje = alerta.mensaje;
+                alertaTemporal.estado = alerta.estado;
+                alertaTemporal.vencimiento = CalcularProgressBar(Convert.ToDateTime(alerta.fecha, CultureInfo.InvariantCulture), 30).ToString();
                 alertasTemporales.Add(alertaTemporal);
             }
 
@@ -263,18 +263,15 @@ namespace Gestion_Web.Formularios.Reportes
         }
 
         [WebMethod]
-        public static void CambiarEstadoAlertas(string idsAlertas)
+        public static string CambiarEstadoAlertas(string idsAlertas)
         {
             var ids = idsAlertas.Split(';').ToList();
             ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
             var alertas = controladorAlertaAPP.ObtenerAlertasPorID(ids);
 
-            foreach (var alerta in alertas)
-            {
-                alerta.Estado = 2;
-            }
+            int i = controladorAlertaAPP.ModificarEstadoAlertas(alertas,2);
 
-            controladorAlertaAPP.ModificarAlertas(alertas);
+            return i.ToString();
         }
 
         static int CalcularProgressBar(DateTime fechaAlerta, int plazoMaximo)

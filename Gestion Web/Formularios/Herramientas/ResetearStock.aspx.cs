@@ -324,7 +324,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 int IdSubGrupo = Convert.ToInt32(DropListSubGrupo.SelectedValue);
                 int IdMarca = Convert.ToInt32(DropListMarca.SelectedValue);
 
-                int respuesta =  contArticulo.ReiniciarStock(IdUsuario, IdSucursal, IdProveedor, IdGrupo, IdSubGrupo, IdMarca);
+                int respuesta = contArticulo.ReiniciarStock(IdUsuario, IdSucursal, IdProveedor, IdGrupo, IdSubGrupo, IdMarca);
 
                 if (respuesta > 0)
                 {

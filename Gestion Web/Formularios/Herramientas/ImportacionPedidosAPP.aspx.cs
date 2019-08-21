@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Gestion_Web.Formularios.Facturas
+namespace Gestion_Web.Formularios.Herramientas
 {
     public partial class ImportacionPedidosAPP : System.Web.UI.Page
     {
