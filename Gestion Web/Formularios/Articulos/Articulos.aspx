@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Gestion_Web.Formularios.Articulos.Articulos" %>
+﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Gestion_Web.Formularios.Articulos.Articulos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -1233,27 +1233,27 @@
         function ObtenerProveedor()
         {
             event.preventDefault();
-            var descripcionCliente = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>').value;
+            var descripcionProveedor = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>').value;
 
             $.ajax({
                 type: "POST",
-                url: "AlertasAPP.aspx/ObtenerCliente",
-                data: '{cliente: "' + descripcionCliente + '"  }',
+                url: "Articulos.aspx/ObtenerProveedor",
+                data: '{proveedor: "' + descripcionProveedor + '"  }',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function () {
-                    alert("No se pudo obtener el cliente.");
+                    alert("No se pudo obtener el proveedor.");
                 },
-                success: OnSuccessObtenerCliente
+                success: OnSuccessObtenerProveedor
             });
         };
 
-        function OnSuccessObtenerCliente(response)
+        function OnSuccessObtenerProveedor(response)
         {
-            var controlDropListCliente = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>');
+            var controlDropListProveedor = document.getElementById('<%= DropListProveedor.ClientID %>');
 
-            while (controlDropListCliente.options.length > 0) {
-                controlDropListCliente.remove(0);
+            while (controlDropListProveedor.options.length > 0) {
+                controlDropListProveedor.remove(0);
             }
 
             var data = response.d;
@@ -1264,7 +1264,7 @@
                 option.value = obj[i].id;
                 option.text = obj[i].alias;
 
-                controlDropListCliente.add(option);
+                controlDropListProveedor.add(option);
             }
         }
 
