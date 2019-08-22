@@ -1849,7 +1849,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Session.Add("Factura", f);
                     this.verificarAlerta();
                     //Session["FacturasABM_ClienteModal"] = null;
-                    //_idCliente = 0;
+                    _idCliente = 0;
                     Session["CobroAnticipo"] = null;
                     //verifico si tiene permitido facturar entre sucursales
                     if (this.verficarPermisoFactSucursal() == 1)

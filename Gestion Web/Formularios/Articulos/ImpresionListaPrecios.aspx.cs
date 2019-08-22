@@ -567,7 +567,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 //CargarTablaArticulos(this.grupo, this.subgrupo, this.proveedor, this.dias);
 
-                var listaDePrecios = contList.ObtenerListaDePrecios(this.lista,precioSinIva);
+                var listaDePrecios = contList.ObtenerListaDePrecios(this.lista,precioSinIva,proveedor);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaPreciosR.rdlc");
