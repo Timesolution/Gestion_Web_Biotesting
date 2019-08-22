@@ -12,6 +12,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -27,6 +29,8 @@ namespace Gestion_Web.Formularios.Articulos
         private ControladorCobranzaEntity contCobranzaEntity = new ControladorCobranzaEntity();
         private controladorPais contPais = new controladorPais();
         private controladorListaPrecio contListaPrecio = new controladorListaPrecio();
+        controladorCliente _controladorCliente = new controladorCliente();
+
         Mensajes m = new Mensajes();
         Configuracion config = new Configuracion();
         int accion;
@@ -91,7 +95,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.txtFechaHastaNoVendido.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtDesdeIEArticulos.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtHastaIEArticulos.Text = DateTime.Now.ToString("dd/MM/yyyy");
-
+                    CargarProveedor();
                     //Obtengo todas las promociones
                     this.listPromociones = this.contArtEnt.obtenerPromociones();
                 }
@@ -1208,7 +1212,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) +"&p=" + DropListProveedor.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {
@@ -1223,7 +1227,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked));
+                Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + DropListProveedor.SelectedValue);
             }
             catch
             {
@@ -2011,45 +2015,64 @@ namespace Gestion_Web.Formularios.Articulos
 
         #endregion
 
-        //protected void btnModificarPrecio2_Click(object sender, EventArgs e)
-        //{
+        void CargarProveedor()
+        {
+            try
+            {
+                DataTable dt = _controladorCliente.obtenerClientesDT();
 
-        //    decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
-        //    string noActu = "";
-        //    foreach (var c in this.phArticulos.Controls)
-        //    {
-        //        TableRow tr = c as TableRow;
-        //        string id = tr.ID.Split('_')[1];
-        //        int i = this.controlador.aumentarPrecioPorcentaje(Convert.ToInt32(id), porcentaje);
-        //        if (i <= 0)
-        //        {
-        //            //no se atualizo
-        //            if (!String.IsNullOrEmpty(id))
-        //            {
-        //                Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
-        //                noActu += art.codigo + "; ";
-        //            }
-        //        }
-        //    }
-        //    if (string.IsNullOrEmpty(noActu))
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
-        //    }
-        //    else
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
-        //    }
-        //    //filtro
-        //    if (this.accion == 2)
-        //    {
-        //        this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
-        //    }
-        //    //busco
-        //    if (this.accion == 1)
-        //    {
-        //        this.buscar(this.textoBuscar);
-        //    }
-        //}
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Todos";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DropListProveedor.DataSource = dt;
+                DropListProveedor.DataValueField = "id";
+                DropListProveedor.DataTextField = "alias";
+
+                DropListProveedor.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes. " + ex.Message));
+            }
+        }
+
+        [WebMethod]
+        public static string ObtenerProveedor(string proveedor)
+        {
+            controladorCliente controladorCliente = new controladorCliente();
+            string buscar = proveedor.Replace(' ', '%');
+            var dtProveedores = controladorCliente.obtenerProveedoresAliasDT(buscar);
+
+            if (string.IsNullOrEmpty(buscar))
+            {
+                DataRow dr = dtProveedores.NewRow();
+                dr["alias"] = "Todos";
+                dr["id"] = -1;
+                dtProveedores.Rows.InsertAt(dr, 0);
+            }
+
+            List<ProveedorTemporal> proveedoresTemp = new List<ProveedorTemporal>();
+
+            foreach (DataRow row in dtProveedores.Rows)
+            {
+                ProveedorTemporal proveedorTemporal = new ProveedorTemporal();
+                proveedorTemporal.id = row["id"].ToString();
+                proveedorTemporal.alias = row["alias"].ToString();
+                proveedoresTemp.Add(proveedorTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(proveedoresTemp);
+            return resultadoJSON;
+        }
+
+        class ProveedorTemporal
+        {
+            public string id;
+            public string alias;
+        }
 
     }
 }

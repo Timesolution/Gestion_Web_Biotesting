@@ -21,7 +21,7 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
     {
         Mensajes _m = new Mensajes();
 
-        controladorCliente _controladorCliente = new controladorCliente();        
+        controladorCliente _controladorCliente = new controladorCliente();
 
         protected void Page_Load(object sender, EventArgs e)
         {
