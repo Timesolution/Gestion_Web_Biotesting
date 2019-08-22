@@ -678,9 +678,6 @@
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListProveedor" ValidationGroup="BusquedaLista" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
-                                    <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaLista" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Precio Sin Iva</label>

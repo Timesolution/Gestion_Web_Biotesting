@@ -105,7 +105,7 @@
     </Reference>
     <Reference Include="Millas_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Millas API\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+      <HintPath>..\..\Repositorio millas api\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
