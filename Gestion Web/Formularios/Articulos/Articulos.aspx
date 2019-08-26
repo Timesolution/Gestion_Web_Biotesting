@@ -432,18 +432,6 @@
                                 <asp:Button ID="btnSeteaPrecioventaPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventaPorcentual_Click" />
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-4">Porcentaje Margen</label>
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <span class="input-group-addon">%</span>
-                                    <asp:TextBox ID="txtMargenPorcentual" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <asp:Button ID="btnSeterMargenPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeterMargenPorcentual_Click" />
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                     </div>
