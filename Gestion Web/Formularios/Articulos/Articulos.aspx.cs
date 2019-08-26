@@ -1227,7 +1227,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + DropListProveedor.SelectedValue);
+                Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + idProveedorHF.Value);
             }
             catch
             {
@@ -2125,7 +2125,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                decimal precio = Convert.ToDecimal(this.txtPrecioVentaPorcentual.Text, CultureInfo.InvariantCulture);
+                decimal precio = Convert.ToDecimal(this.txtMargenPorcentual.Text, CultureInfo.InvariantCulture);
                 string noActu = "";
                 foreach (var c in this.phArticulos.Controls)
                 {
