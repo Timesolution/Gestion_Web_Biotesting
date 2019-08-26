@@ -699,6 +699,12 @@
                                         <asp:CheckBox ID="DescuentoPorCantidad" runat="server" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Agrupar por ubicacion</label>
+                                    <div class="col-md-1">
+                                        <asp:CheckBox ID="chkUbicacion" runat="server" />
+                                    </div>
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
