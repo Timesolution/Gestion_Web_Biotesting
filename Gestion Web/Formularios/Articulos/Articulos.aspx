@@ -389,46 +389,65 @@
     <div id="modalRecalcular" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <asp:UpdatePanel runat="server" ID="UpdatePanel11">
-                    <ContentTemplate>
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Modificar Precio</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div role="form" class="form-horizontal col-md-12">
-                                <div class="form-group">
-                                    <label class="col-md-4">Porcentaje Costo</label>
-                                    <div class="col-md-5">
-
-                                        <div class="input-group">
-                                            <span class="input-group-addon">%</span>
-                                            <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:Button ID="btnModificarPrecio" runat="server" text="Actualizar" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-4">Nuevo Precio Venta</label>
-                                    <div class="col-md-5">
-
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:Button ID="btnSeteaPrecioventa" runat="server" text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
-                                    </div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Modificar Precio</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-4">Porcentaje Costo</label>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                    <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
                                 </div>
                             </div>
-                            <div class="modal-footer">
+                            <div class="col-md-2">
+                                <asp:Button ID="btnModificarPrecio" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
                             </div>
                         </div>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
+                        <div class="form-group">
+                            <label class="col-md-4">Nuevo Precio Venta</label>
+                            <div class="col-md-5">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <asp:Button ID="btnSeteaPrecioventa" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4">Porcentaje Precio Venta</label>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                    <asp:TextBox ID="txtPrecioVentaPorcentual" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <asp:Button ID="btnSeteaPrecioventaPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventaPorcentual_Click" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4">Porcentaje Margen</label>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">%</span>
+                                    <asp:TextBox ID="txtMargenPorcentual" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <asp:Button ID="btnSeterMargenPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeterMargenPorcentual_Click" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
