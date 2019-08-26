@@ -670,6 +670,7 @@
                                             <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
                                         </div>
                                         <div class="col-md-2">
+                                            <asp:HiddenField runat="server" ID="idProveedorHF" />
                                             <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
                                         </div>
                                     </div>
@@ -677,9 +678,6 @@
                                     <label class="col-md-4">Proveedor</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListProveedor" ValidationGroup="BusquedaLista" runat="server" class="form-control"></asp:DropDownList>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaLista" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -700,8 +698,8 @@
                         </asp:UpdatePanel>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="btnImprimirListaPreciosPDF" runat="server" ValidationGroup="BusquedaLista" Text="Generar PDF" class="btn btn-success" OnClick="btnImprimirListaPrecios_Click" />
-                        <asp:LinkButton ID="btnImprimirListaPreciosXLS" runat="server" ValidationGroup="BusquedaLista" Text="Generar Excel" class="btn btn-success" OnClick="btnImprimirListaPrecios2_Click" />
+                        <asp:LinkButton ID="btnImprimirListaPreciosPDF" runat="server" ValidationGroup="BusquedaLista" Text="Generar PDF" class="btn btn-success" OnClientClick="AsignarProveedor()" OnClick="btnImprimirListaPrecios_Click" />
+                        <asp:LinkButton ID="btnImprimirListaPreciosXLS" runat="server" ValidationGroup="BusquedaLista" Text="Generar Excel" class="btn btn-success" OnClientClick="AsignarProveedor()" OnClick="btnImprimirListaPrecios2_Click" />
                     </div>
                 </div>
 
@@ -1229,6 +1227,14 @@
 
     </script>
     <script>
+
+        function AsignarProveedor()
+        {
+            var idProveedor = document.getElementById('<%= DropListProveedor.ClientID %>').value;
+            var idProveedorHF = document.getElementById('<%= idProveedorHF.ClientID %>');
+
+            idProveedorHF.value = idProveedor;
+        };
 
         function ObtenerProveedor()
         {

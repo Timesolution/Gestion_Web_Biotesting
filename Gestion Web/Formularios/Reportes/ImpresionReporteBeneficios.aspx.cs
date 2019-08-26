@@ -33,7 +33,7 @@ namespace Gestion_Web.Formularios.Reportes
             {
                 ControladorMillas controladorMillas = new ControladorMillas();
 
-                var datosSocios = controladorMillas.ObtenerDatosSociosYMillasAHoy();
+                var datosSocios = controladorMillas.ObtenerDatosSociosYMillasAHoyDT();
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("SocioBeneficiosR.rdlc");
