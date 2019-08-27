@@ -181,14 +181,10 @@
           <DataField>Procedencia</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="PorcentajeDescuentoItem">
-          <DataField>PorcentajeDescuentoItem</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsPresupuesto</rd:DataSetName>
-        <rd:SchemaPath>D:\Proyects\Git\Gestion_Web2\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\Lucas\Documents\SVN\Gestion Web\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
         <rd:TableName>DatosFactura</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -217,10 +213,6 @@
           <DataField>HoraEntrega</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Bultos">
-          <DataField>Bultos</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsPresupuesto</rd:DataSetName>
@@ -243,7 +235,7 @@
                   <Width>3.16779cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>6.30837cm</Width>
+                  <Width>6.62587cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.73935cm</Width>
@@ -252,7 +244,7 @@
                   <Width>2.16274cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.16961cm</Width>
+                  <Width>1.8874cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.42537cm</Width>
@@ -597,18 +589,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="PorcentajeDescuentoItem">
+                        <Textbox Name="Descuento">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PorcentajeDescuentoItem.Value</Value>
-                                  <Style />
-                                </TextRun>
-                                <TextRun>
-                                  <Value> %</Value>
+                                  <Value>=Fields!Descuento.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -617,7 +605,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>PorcentajeDescuentoItem</rd:DefaultName>
+                          <rd:DefaultName>Descuento</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -886,7 +874,7 @@
             <Top>0.31295cm</Top>
             <Left>0.20727cm</Left>
             <Height>1.8cm</Height>
-            <Width>17.97323cm</Width>
+            <Width>18.00852cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -902,7 +890,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.62646cm</Height>
+                  <Height>0.68996cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -937,89 +925,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.6cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="FechaEntrega">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Fecha Entrega: </Value>
-                                  <Style>
-                                    <Format>dd/MM/yyyy</Format>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!FechaEntrega.Value</Value>
-                                  <Style>
-                                    <Format>dd/MM/yyyy</Format>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>FechaEntrega</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.6cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="HoraEntrega">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Hora Entrega: </Value>
-                                  <Style />
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!HoraEntrega.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>HoraEntrega</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.6cm</Height>
+                  <Height>0.6635cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1042,6 +948,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Visibility>
+                            <Hidden>true</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1071,8 +980,6 @@
                   <TablixMembers>
                     <TablixMember />
                     <TablixMember />
-                    <TablixMember />
-                    <TablixMember />
                   </TablixMembers>
                 </TablixMember>
               </TablixMembers>
@@ -1080,7 +987,7 @@
             <DataSetName>DetalleComentario</DataSetName>
             <Top>2.26604cm</Top>
             <Left>0.20727cm</Left>
-            <Height>2.42646cm</Height>
+            <Height>1.35346cm</Height>
             <Width>18.00852cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
@@ -1090,13 +997,13 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.89952in</Height>
+        <Height>1.50369in</Height>
         <Style />
       </Body>
       <Width>7.43092in</Width>
       <Page>
         <PageHeader>
-          <Height>5.83848cm</Height>
+          <Height>8.00806cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1379,8 +1286,8 @@
               </Style>
             </Textbox>
             <Line Name="Line2">
-              <Top>5.36497cm</Top>
-              <Left>0.17198cm</Left>
+              <Top>7.79914cm</Top>
+              <Left>0.20727cm</Left>
               <Height>0cm</Height>
               <Width>18.00852cm</Width>
               <ZIndex>8</ZIndex>
@@ -1390,6 +1297,110 @@
                 </Border>
               </Style>
             </Line>
+            <Textbox Name="TelefonoEntrega">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Telefono: </Value>
+                      <Style />
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Parameters!TelefonoEntrega.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>TelefonoEntrega</rd:DefaultName>
+              <Top>5.36497cm</Top>
+              <Left>0.17198cm</Left>
+              <Height>0.6cm</Height>
+              <Width>18.04381cm</Width>
+              <ZIndex>9</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="FechaEntrega1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Fecha Entrega: </Value>
+                      <Style>
+                        <Format>dd/MM/yyyy</Format>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!FechaEntrega.Value, "DetalleComentario")</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>FechaEntrega1</rd:DefaultName>
+              <Top>6.11964cm</Top>
+              <Left>0.20727cm</Left>
+              <Height>0.6cm</Height>
+              <Width>18.00852cm</Width>
+              <ZIndex>10</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="HoraEntrega1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Hora Entrega: </Value>
+                      <Style />
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!HoraEntrega.Value, "DetalleComentario")</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>HoraEntrega1</rd:DefaultName>
+              <Top>6.90633cm</Top>
+              <Left>0.17198cm</Left>
+              <Height>0.6cm</Height>
+              <Width>18.00852cm</Width>
+              <ZIndex>11</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1743,6 +1754,63 @@
               <Height>0.54708cm</Height>
               <Width>5.28883cm</Width>
               <ZIndex>8</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox6">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>PASADAS LAS 72 HS. DE RECIBIDA LA MERCADERÍA NO SE ACEPTAN RECLAMOS.</Value>
+                      <Style>
+                        <FontStyle>Italic</FontStyle>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value />
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontSize>9pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <LeftIndent>0cm</LeftIndent>
+                  <RightIndent>0cm</RightIndent>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox6</rd:DefaultName>
+              <Top>0.17639cm</Top>
+              <Left>0.20727cm</Left>
+              <Height>1.26174cm</Height>
+              <Width>9.39068cm</Width>
+              <ZIndex>9</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

@@ -1212,7 +1212,45 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) +"&p=" + idProveedorHF.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                int descuentoPorCantidad = 0;
+
+                if (DescuentoPorCantidad.Checked == true)
+                    descuentoPorCantidad = 1;
+
+                int iva = 0;
+                if (PrecioSinIva.Checked == true)                
+                    iva = 1;                
+                else                
+                    iva = 2;                
+
+                if (this.chkUbicacion.Checked == true)
+                {
+                    if (accion == 2)//si se filtro
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + idProveedorHF.Value + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+                    else
+                    {
+                        if (accion == 1)// por busqueda
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=3&iva=" + iva + "&dc=" + descuentoPorCantidad + "&t=" + this.textoBuscar + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        }
+
+                        else//default
+                        {
+                            if (accion == 3)// por fecha actualizacion
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=4&d=" + this.dias + "&desact" + this.desactualizados + "&dc=" + descuentoPorCantidad + "&iva=" + iva + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                            }
+                            else
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                            }
+                        }
+                    }
+                }
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) +"&p=" + idProveedorHF.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {
@@ -1227,7 +1265,44 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
-                Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + DropListProveedor.SelectedValue);
+                int descuentoPorCantidad = 0;
+
+                if (DescuentoPorCantidad.Checked == true)
+                    descuentoPorCantidad = 1;
+
+                int iva = 0;
+                if (PrecioSinIva.Checked == true)                
+                    iva = 1;
+                else                
+                    iva = 2;                
+
+                if (this.chkUbicacion.Checked == true)
+                {
+                    if (accion == 2)//si se filtro
+                    {
+                        Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=1&iva=" + iva + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + idProveedorHF.Value + "&dc=" + descuentoPorCantidad + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&l=" + this.DropListListaPrecios.SelectedValue);
+                    }
+                    else
+                    {
+                        if (accion == 1)// por busqueda
+                        {
+                            Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=3&iva=" + iva + "&t=" + this.textoBuscar + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue);
+                        }
+                        else//default
+                        {
+                            if (accion == 3)
+                            {
+                                Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=4&iva=" + iva + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad + "&desact=" + this.desactualizados + "&l=" + this.DropListListaPrecios.SelectedValue);
+                            }
+                            else
+                            {
+                                Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue);
+                            }
+                        }
+                    }
+                }
+                else
+                    Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + idProveedorHF.Value);
             }
             catch
             {
@@ -1941,13 +2016,13 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 if (string.IsNullOrEmpty(noActu))
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Precios modificados con exito!\", {type: \"info\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Precios modificados con exito!\", {type: \"info\"});", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Los siguientes articulos no se actualizaron: " + noActu + "\" , {type: \"alert\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Los siguientes articulos no se actualizaron: " + noActu + "\" , {type: \"alert\"});", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
                 }
                 //filtro
                 if (this.accion == 2)
@@ -2074,5 +2149,51 @@ namespace Gestion_Web.Formularios.Articulos
             public string alias;
         }
 
+        protected void btnSeteaPrecioventaPorcentual_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal precio = Convert.ToDecimal(this.txtPrecioVentaPorcentual.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+                foreach (var c in this.phArticulos.Controls)
+                {
+                    TableRow tr = c as TableRow;
+                    string id = tr.ID.Split('_')[1];
+                    int i = this.controlador.SetearPrecioVentaPorcentual(Convert.ToInt32(id), precio);
+                    if (i <= 0)
+                    {
+                        //no se atualizo
+                        if (!String.IsNullOrEmpty(id))
+                        {
+                            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+                            noActu += art.codigo + "; ";
+                        }
+                    }
+                }
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+                //filtro
+                if (this.accion == 2)
+                {
+                    this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
+                }
+                //busco
+                if (this.accion == 1)
+                {
+                    this.buscar(this.textoBuscar);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error actualizando precios de venta por porcentaje. " + ex.Message));
+            }
+        }
     }
 }
