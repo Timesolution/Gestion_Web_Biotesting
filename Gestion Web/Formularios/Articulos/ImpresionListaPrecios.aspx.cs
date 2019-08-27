@@ -65,19 +65,20 @@ namespace Gestion_Web.Formularios.Articulos
                     //{
                     //    generarReporte();
                     //}
-                    //if (this.valor == 1 && descuentoPorCantidad == 0)
-                    //{
-                    //    generarReporte2();
-                    //}
                     //if (this.valor == 0 && descuentoPorCantidad == 1)
                     //{
                     //    generarReporte3();
                     //}
-                    //if (this.valor == 1 && descuentoPorCantidad == 1)
-                    //{
-                    //    generarReporte4();
-                    //}
-                    if(descuentoPorCantidad == 1)
+                    if (valor == 1 && descuentoPorCantidad == 0)
+                    {
+                        generarReporte2();
+                    }
+                    else if (valor == 1 && descuentoPorCantidad == 1)
+                    {
+                        generarReporte4();
+                    }
+
+                    if (descuentoPorCantidad == 1)
                         GenerarListaPreciosDescuentoPorCantidad();
                     else
                         GenerarListaPrecios();

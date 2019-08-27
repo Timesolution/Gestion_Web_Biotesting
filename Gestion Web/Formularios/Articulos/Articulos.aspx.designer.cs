@@ -445,15 +445,6 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.LinkButton btnFiltrar;
         
         /// <summary>
-        /// UpdatePanel11 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel11;
-        
-        /// <summary>
         /// txtPorcentajeAumento control.
         /// </summary>
         /// <remarks>
@@ -488,6 +479,24 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSeteaPrecioventa;
+        
+        /// <summary>
+        /// txtPrecioVentaPorcentual control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPrecioVentaPorcentual;
+        
+        /// <summary>
+        /// btnSeteaPrecioventaPorcentual control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSeteaPrecioventaPorcentual;
         
         /// <summary>
         /// UpdatePanel9 control.
@@ -839,6 +848,15 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox DescuentoPorCantidad;
+        
+        /// <summary>
+        /// chkUbicacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkUbicacion;
         
         /// <summary>
         /// btnImprimirListaPreciosPDF control.

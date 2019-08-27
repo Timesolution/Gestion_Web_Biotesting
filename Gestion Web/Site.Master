@@ -450,12 +450,12 @@
                                                     <li><a href="/../../Formularios/Reportes/ReporteSaldosProveedores.aspx">Proveedores</a></li>
                                                 </ul>
                                             </li>
-                                            <li class="dropdown-submenu">
+<%--                                            <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Articulos</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Reportes/ReporteListaDePreciosF.aspx">Lista De Precios</a></li>
                                                 </ul>
-                                            </li>
+                                            </li>--%>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Sistema Beneficios</a>
                                                 <ul class="dropdown-menu">
