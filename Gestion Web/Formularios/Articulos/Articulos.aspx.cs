@@ -1218,10 +1218,10 @@ namespace Gestion_Web.Formularios.Articulos
                     descuentoPorCantidad = 1;
 
                 int iva = 0;
-                if (PrecioSinIva.Checked == true)                
-                    iva = 1;                
-                else                
-                    iva = 2;                
+                if (PrecioSinIva.Checked == true)
+                    iva = 1;
+                else
+                    iva = 2;
 
                 if (this.chkUbicacion.Checked == true)
                 {
@@ -1271,10 +1271,10 @@ namespace Gestion_Web.Formularios.Articulos
                     descuentoPorCantidad = 1;
 
                 int iva = 0;
-                if (PrecioSinIva.Checked == true)                
+                if (PrecioSinIva.Checked == true)
                     iva = 1;
-                else                
-                    iva = 2;                
+                else
+                    iva = 2;
 
                 if (this.chkUbicacion.Checked == true)
                 {
