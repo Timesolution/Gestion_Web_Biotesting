@@ -283,6 +283,87 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.Button btnNext;
         
         /// <summary>
+        /// hiddenGrupoValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenGrupoValue;
+        
+        /// <summary>
+        /// hiddenSubGrupoValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenSubGrupoValue;
+        
+        /// <summary>
+        /// hiddenMarca control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenMarca;
+        
+        /// <summary>
+        /// hiddenDiasUltimaActualizacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenDiasUltimaActualizacion;
+        
+        /// <summary>
+        /// hiddenProveedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenProveedor;
+        
+        /// <summary>
+        /// hiddenSoloProveedorPredeterminado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenSoloProveedorPredeterminado;
+        
+        /// <summary>
+        /// hiddenDescSubGrupo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenDescSubGrupo;
+        
+        /// <summary>
+        /// hiddenAccion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenAccion;
+        
+        /// <summary>
+        /// hiddenBuscar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenBuscar;
+        
+        /// <summary>
         /// lblMensaje control.
         /// </summary>
         /// <remarks>
@@ -787,6 +868,24 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.TextBox txtBuscarProveedorListaPrecios;
         
         /// <summary>
+        /// idProveedorHF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField idProveedorHF;
+        
+        /// <summary>
+        /// LinkButton1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        
+        /// <summary>
         /// lbtnBuscarProveedor control.
         /// </summary>
         /// <remarks>
@@ -830,6 +929,15 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox DescuentoPorCantidad;
+        
+        /// <summary>
+        /// chkUbicacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkUbicacion;
         
         /// <summary>
         /// btnImprimirListaPreciosPDF control.

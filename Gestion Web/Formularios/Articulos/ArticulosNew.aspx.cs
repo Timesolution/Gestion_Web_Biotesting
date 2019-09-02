@@ -28,11 +28,18 @@ namespace Gestion_Web.Formularios.Articulos
         private controladorListaPrecio contListaPrecio = new controladorListaPrecio();
         private controladorCliente contCliente = new controladorCliente();
 
+        //int grupo;
+        //int subgrupo;
+        //int marca;
+        //int dias;
+        //int proveedor;
+        //int soloProveedorPredeterminado;
+        //string descSubGrupo;
+
         Configuracion config = new Configuracion();
         
         Mensajes m = new Mensajes();
         List<Gestion_Api.Entitys.Promocione> listPromociones;
-        int soloProveedorPredeterminado;
         int permisoEliminar = 0;
         int permisoStockValorizado = 0;//1 muestra costo, 0 muestra costo imponible
         int permisoMostrarBotonAgregarMateriasPrimas = 0;
@@ -495,7 +502,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                DataTable dt = contCliente.obtenerClientesDT();
+                DataTable dt = contCliente.obtenerProveedoresDT();
 
                 DataRow dr = dt.NewRow();
                 dr["alias"] = "Todos";
@@ -512,6 +519,42 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes. " + ex.Message));
             }
+        }
+
+        [WebMethod]
+        public static string ObtenerProveedor(string proveedor)
+        {
+            controladorCliente controladorCliente = new controladorCliente();
+            string buscar = proveedor.Replace(' ', '%');
+            var dtProveedores = controladorCliente.obtenerProveedoresAliasDT(buscar);
+
+            if (string.IsNullOrEmpty(buscar))
+            {
+                DataRow dr = dtProveedores.NewRow();
+                dr["alias"] = "Todos";
+                dr["id"] = -1;
+                dtProveedores.Rows.InsertAt(dr, 0);
+            }
+
+            List<ProveedorTemporal> proveedoresTemp = new List<ProveedorTemporal>();
+
+            foreach (DataRow row in dtProveedores.Rows)
+            {
+                ProveedorTemporal proveedorTemporal = new ProveedorTemporal();
+                proveedorTemporal.id = row["id"].ToString();
+                proveedorTemporal.alias = row["alias"].ToString();
+                proveedoresTemp.Add(proveedorTemporal);
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string resultadoJSON = serializer.Serialize(proveedoresTemp);
+            return resultadoJSON;
+        }
+
+        class ProveedorTemporal
+        {
+            public string id;
+            public string alias;
         }
 
         [WebMethod]
@@ -671,23 +714,243 @@ namespace Gestion_Web.Formularios.Articulos
         }
         protected void btnInformeStock_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string inactivos = "0";
+                if (this.CheckIncluirInactivos.Checked)
+                    inactivos = "1";
 
+                if (this.listSucursal.SelectedValue != "-1")
+                {
+                    string ceros = "1";
+                    if (this.CheckIncluirCeros.Checked)
+                    {
+                        ceros = "0";
+                    }
+                    if (this.CheckBoxStockFaltante.Checked)
+                    {
+                        ceros = "-1";
+                    }
+                    if (this.CheckBoxUnicoSucursal.Checked)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=6&s=" + this.listSucursal.SelectedValue + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&m=" + this.hiddenMarca.Value + "&c=" + ceros + "&i=" + inactivos + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=1&s=" + this.listSucursal.SelectedValue + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&m=" + this.hiddenMarca.Value + "&c=" + ceros + "&i=" + inactivos + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+
+                }
+                else
+                {
+                    string ceros = "1";
+                    if (this.CheckIncluirCeros.Checked)
+                    {
+                        ceros = "0";
+                    }
+                    if (this.CheckBoxStockFaltante.Checked)
+                    {
+                        ceros = "-1";
+                    }
+                    if (this.CheckBoxUnicoSucursal.Checked)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una sucursal para el informe de stock unico. "));
+                    }
+                    else
+                    {
+                        //Response.Redirect("ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.ListGrupo.SelectedValue + "&sg=" + this.ListSubGrupo.SelectedValue + "&p=" + this.ListProveedor.SelectedValue + "&d=" + this.txtDiasActualizacion.Text + "&c=" + ceros);
+                        //Response.Redirect("ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&m=" + this.hiddenMarca.Value + "&c=" + ceros + "&i=" + inactivos + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando informe de stock. " + ex.Message));
+            }
         }
         protected void btnInformeStock2_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (this.listSucursal.SelectedValue != "-1")
+                {
+                    string ceros = "1";
+                    if (this.CheckIncluirCeros.Checked)
+                    {
+                        ceros = "0";
+                    }
+                    if (this.CheckBoxStockFaltante.Checked)
+                    {
+                        ceros = "-1";
+                    }
+                    if (this.CheckBoxUnicoSucursal.Checked)
+                    {
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=6&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=6&s=" + this.listSucursal.SelectedValue + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&c=" + ceros + "&m=" + this.hiddenMarca.Value);
+                    }
+                    else
+                    {
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=1&s=" + this.listSucursal.SelectedValue + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&c=" + ceros + "&m=" + this.hiddenMarca.Value);
+                    }
+                    //Response.Redirect("ReporteAF.aspx?e=1&accion=1&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros);
+                }
+                else
+                {
+                    string ceros = "1";
+                    if (this.CheckIncluirCeros.Checked)
+                    {
+                        ceros = "0";
+                    }
+                    if (this.CheckBoxStockFaltante.Checked)
+                    {
+                        ceros = "-1";
+                    }
+                    if (this.CheckBoxUnicoSucursal.Checked)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una sucursal para el informe de stock unico. "));
+                    }
+                    else
+                    {
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&c=" + ceros + "&m=" + this.hiddenMarca.Value);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+                    //Response.Redirect("ReporteAF.aspx?e=1&accion=2&s=" + this.listSucursal.SelectedValue + "&g=" + this.grupo + "&sg=" + this.subgrupo + "&p=" + this.proveedor + "&d=" + this.dias + "&c=" + ceros);
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando informe de stock. " + ex.Message));
+            }
         }
         protected void btnImprimirEtiqueta_Click(object sender, EventArgs e)
         {
+            try
+            {
 
+                //filtro
+                if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
+                {
+                    Response.Redirect("ReporteAF.aspx?accion=3&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + this.hiddenProveedor.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&l=" + this.ListListaPrecio.SelectedValue + "&t=" + this.ListEtiqueta.SelectedValue + "&s=" + this.ListSucursalEtiquetas.SelectedValue + "&cero=" + Convert.ToInt32(this.StockCero.Checked) + "&m=" + this.hiddenMarca.Value);
+                }
+                //busco
+                if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
+                {
+                    Response.Redirect("ReporteAF.aspx?accion=4&txt=" + this.hiddenBuscar.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&l=" + this.ListListaPrecio.SelectedValue + "&t=" + this.ListEtiqueta.SelectedValue + "&s=" + this.ListSucursalEtiquetas.SelectedValue + "&cero=" + Convert.ToInt32(this.StockCero.Checked) + "&m=" + this.hiddenMarca.Value);
+
+                }
+                //    //actualizaciones de precios
+                //    if (this.accion == 3)
+                //    {
+                //        Response.Redirect("ReporteAF.aspx?accion=5&d=" + this.dias + "&l=" + this.ListListaPrecio.SelectedValue + "&t=" + this.ListEtiqueta.SelectedValue + "&s=" + this.ListSucursalEtiquetas.SelectedValue + "&cero=" + Convert.ToInt32(this.StockCero.Checked) + "&m=" + this.marca);
+                //    }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando informe de etiquetas. " + ex.Message));
+            }
         }
         protected void btnImprimirListaPrecios_Click(object sender, EventArgs e)
         {
+            try
+            {
+                int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
+                int descuentoPorCantidad = 0;
+
+                if (DescuentoPorCantidad.Checked == true)
+                    descuentoPorCantidad = 1;
+
+                int iva = 0;
+                if (PrecioSinIva.Checked == true)
+                    iva = 1;
+                else
+                    iva = 2;
+
+                if (this.chkUbicacion.Checked == true)
+                {
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)//si se filtro
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=1&iva=" + iva + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + idProveedorHF.Value + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&m=" + this.hiddenMarca.Value + "&dsg=" + this.hiddenDescSubGrupo.Value + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(this.hiddenAccion.Value) == 1)// por busqueda
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=3&iva=" + iva + "&dc=" + descuentoPorCantidad + "&t=" + this.hiddenBuscar.Value + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        }
+
+                        //else//default
+                        //{
+                        //    if (Convert.ToInt32(this.hiddenAccion.Value) == 3)// por fecha actualizacion
+                        //    {
+                        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=4&d=" + this.dias + "&desact" + this.desactualizados + "&dc=" + descuentoPorCantidad + "&iva=" + iva + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        //    }
+                        //    else
+                        //    {
+                        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        //    }
+                        //}
+                    }
+                }
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + idProveedorHF.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de precios. "));
+            }
         }
         protected void btnImprimirListaPrecios2_Click(object sender, EventArgs e)
         {
+            try
+            {
+                int idListap = Convert.ToInt32(this.DropListListaPrecios.SelectedValue);
 
+                int descuentoPorCantidad = 0;
+
+                if (DescuentoPorCantidad.Checked == true)
+                    descuentoPorCantidad = 1;
+
+                int iva = 0;
+                if (PrecioSinIva.Checked == true)
+                    iva = 1;
+                else
+                    iva = 2;
+
+                if (this.chkUbicacion.Checked == true)
+                {
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)//si se filtro
+                    {
+                        Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=1&iva=" + iva + "&g=" + this.hiddenGrupoValue.Value + "&sg=" + this.hiddenSubGrupoValue.Value + "&p=" + idProveedorHF.Value + "&dc=" + descuentoPorCantidad + "&d=" + this.hiddenDiasUltimaActualizacion.Value + "&m=" + this.hiddenMarca.Value + "&dsg=" + this.hiddenDescSubGrupo.Value + "&l=" + this.DropListListaPrecios.SelectedValue);
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(this.hiddenAccion.Value) == 1)// por busqueda
+                        {
+                            Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=3&iva=" + iva + "&t=" + this.hiddenBuscar.Value + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue);
+                        }
+                        //else//default
+                        //{
+                        //    if (accion == 3)
+                        //    {
+                        //        Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=4&iva=" + iva + "&d=" + this.dias + "&m=" + this.marca + "&dsg=" + this.descSubGrupo + "&dc=" + descuentoPorCantidad + "&desact=" + this.desactualizados + "&l=" + this.DropListListaPrecios.SelectedValue);
+                        //    }
+                        //    else
+                        //    {
+                        //        Response.Redirect("ImpresionListaPrecios.aspx?v=1&ex=1&a=2&iva=" + iva + "&dc=" + descuentoPorCantidad + "&l=" + this.DropListListaPrecios.SelectedValue);
+                        //    }
+                        //}
+                    }
+                }
+                else
+                    Response.Redirect("/Formularios/Articulos/ImpresionListaPrecios.aspx?ex=1&l=" + this.DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + idProveedorHF.Value);
+            }
+            catch
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de articulos. "));
+            }
         }
         protected void lbtnStockAFecha_Click(object sender, EventArgs e)
         {
@@ -784,7 +1047,6 @@ namespace Gestion_Web.Formularios.Articulos
         {
 
         }
-        
     }
 
     public class ArticulosClase

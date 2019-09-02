@@ -255,6 +255,15 @@
                 <div style="text-align: right; margin-bottom: 1%">
                     <asp:Button Text="Anterior" runat="server" ID="btnPrevious" OnClientClick="llenarTablaPrevious()" Style="margin-right: 1%; visibility: hidden" />
                     <asp:Button Text="Siguiente" runat="server" ID="btnNext" OnClientClick="llenarTablaNext()" Style="margin-right: 1%; visibility: hidden" />
+                    <input runat="server" ID="hiddenGrupoValue" type="hidden"/>
+                    <input runat="server" ID="hiddenSubGrupoValue" type="hidden"/>
+                    <input runat="server" ID="hiddenMarca" type="hidden"/>
+                    <input runat="server" ID="hiddenDiasUltimaActualizacion" type="hidden"/>
+                    <input runat="server" ID="hiddenProveedor" type="hidden"/>
+                    <input runat="server" ID="hiddenSoloProveedorPredeterminado" type="hidden"/>
+                    <input runat="server" ID="hiddenDescSubGrupo" type="hidden"/>
+                    <input runat="server" ID="hiddenAccion" type="hidden"/>
+                    <input runat="server" ID="hiddenBuscar" type="hidden"/>
                 </div>
             </div>
 
@@ -679,6 +688,10 @@
                                         <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
                                     </div>
                                     <div class="col-md-2">
+                                        <asp:HiddenField runat="server" ID="idProveedorHF" />
+                                        <asp:LinkButton ID="LinkButton1" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                    </div>
+                                    <div class="col-md-2">
                                         <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
                                     </div>
                                 </div>
@@ -703,14 +716,20 @@
                                         <asp:CheckBox ID="DescuentoPorCantidad" runat="server" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Agrupar por ubicacion</label>
+                                    <div class="col-md-1">
+                                        <asp:CheckBox ID="chkUbicacion" runat="server" />
+                                    </div>
+                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="btnImprimirListaPreciosPDF" runat="server" ValidationGroup="BusquedaLista" Text="Generar PDF" class="btn btn-success" OnClick="btnImprimirListaPrecios_Click" />
-                        <asp:LinkButton ID="btnImprimirListaPreciosXLS" runat="server" ValidationGroup="BusquedaLista" Text="Generar Excel" class="btn btn-success" OnClick="btnImprimirListaPrecios2_Click" />
+                        <asp:LinkButton ID="btnImprimirListaPreciosPDF" runat="server" ValidationGroup="BusquedaLista" Text="Generar PDF" class="btn btn-success" OnClientClick="AsignarProveedor()" OnClick="btnImprimirListaPrecios_Click" />
+                        <asp:LinkButton ID="btnImprimirListaPreciosXLS" runat="server" ValidationGroup="BusquedaLista" Text="Generar Excel" class="btn btn-success" OnClientClick="AsignarProveedor()" OnClick="btnImprimirListaPrecios2_Click" />
                     </div>
                 </div>
 
@@ -1239,13 +1258,21 @@
     </script>
     <script>
 
+        function AsignarProveedor()
+        {
+            var idProveedor = document.getElementById('<%= DropListProveedor.ClientID %>').value;
+            var idProveedorHF = document.getElementById('<%= idProveedorHF.ClientID %>');
+
+            idProveedorHF.value = idProveedor;
+        };
+
         function ObtenerProveedor() {
             event.preventDefault();
             var descripcionProveedor = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>').value;
 
             $.ajax({
                 type: "POST",
-                url: "Articulos.aspx/ObtenerProveedor",
+                url: "ArticulosNew.aspx/ObtenerProveedor",
                 data: '{proveedor: "' + descripcionProveedor + '"  }',
                 contentType: "application/json",
                 dataType: 'json',
@@ -1338,12 +1365,33 @@
             var selectedDescSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').textContent;
             var selectedProveedorDeterminado = document.getElementById('<%= cbSoloProveedorPredeterminado.ClientID%>').checked;
             var valueProvDet = 0;
+
             if (selectedProveedorDeterminado == true) {
                 valueProvDet = 1;
             }
             else {
                 valueProvDet = 0;
             }
+
+            var inputGrupo = document.getElementById('<%= hiddenGrupoValue.ClientID%>');
+            var inputSubGrupo = document.getElementById('<%= hiddenSubGrupoValue.ClientID%>');
+            var inputMarca = document.getElementById('<%= hiddenMarca.ClientID%>');
+            var inputDias = document.getElementById('<%= hiddenDiasUltimaActualizacion.ClientID%>');
+            var inputProveedor = document.getElementById('<%= hiddenProveedor.ClientID%>');
+            var inputSoloProvDet = document.getElementById('<%= hiddenSoloProveedorPredeterminado.ClientID%>');
+            var inputDescSubGrupo = document.getElementById('<%= hiddenDescSubGrupo.ClientID%>');
+            var inputAccion = document.getElementById('<%= hiddenAccion.ClientID%>');
+
+            inputAccion.value = 2;
+            inputGrupo.value = selectedGrupo;
+            inputSubGrupo.value = selectedSubGrupo;
+            inputMarca.value = selectedMarca;
+            inputDias.value = selectedFecha;
+            inputProveedor.value = selectedProveedor;
+            inputSoloProvDet.value = valueProvDet;
+            inputDescSubGrupo.value = selectedDescSubGrupo;
+
+            
             $.ajax({
                 method: "POST",
                 url: "ArticulosNew.aspx/getArticulosFiltrados",
@@ -1361,24 +1409,19 @@
 
         function llenarTablaNext() {
             event.preventDefault();
-            var selectedGrupo = document.getElementById('<%= ListGrupo.ClientID%>').value;
-            var selectedSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').value;
-            var selectedProveedor = document.getElementById('<%= ListProveedor.ClientID%>').value;
-            var selectedFecha = document.getElementById('<%= txtDiasActualizacion.ClientID%>').value;
-            var selectedMarca = document.getElementById('<%= ListMarca.ClientID%>').value;
-            var selectedDescSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').textContent;
-            var selectedProveedorDeterminado = document.getElementById('<%= cbSoloProveedorPredeterminado.ClientID%>').checked;
-            var valueProvDet = 0;
-            if (selectedProveedorDeterminado == true) {
-                valueProvDet = 1;
-            }
-            else {
-                valueProvDet = 0;
-            }
+
+            var inputGrupo = document.getElementById('<%= hiddenGrupoValue.ClientID%>').value;
+            var inputSubGrupo = document.getElementById('<%= hiddenSubGrupoValue.ClientID%>').value;
+            var inputMarca = document.getElementById('<%= hiddenMarca.ClientID%>').value;
+            var inputDias = document.getElementById('<%= hiddenDiasUltimaActualizacion.ClientID%>').value;
+            var inputProveedor = document.getElementById('<%= hiddenProveedor.ClientID%>').value;
+            var inputSoloProvDet = document.getElementById('<%= hiddenSoloProveedorPredeterminado.ClientID%>').value;
+            var inputDescSubGrupo = document.getElementById('<%= hiddenDescSubGrupo.ClientID%>').value;
+
             $.ajax({
                 method: "POST",
                 url: "ArticulosNew.aspx/getArticulosFiltrados",
-                data: '{grupo: "' + selectedGrupo + '", subgrupo: "' + selectedSubGrupo + '", proveedor: "' + selectedProveedor + '", dias: "' + selectedFecha + '", marca: "' + selectedMarca + '", descSubGrupo: "' + selectedDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + valueProvDet + '", lastPageId: "' + nextPageId + '" }',
+                data: '{grupo: "' + inputGrupo + '", subgrupo: "' + inputSubGrupo + '", proveedor: "' + inputProveedor + '", dias: "' + inputDias + '", marca: "' + inputMarca + '", descSubGrupo: "' + inputDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + inputSoloProvDet + '", lastPageId: "' + nextPageId + '" }',
                 contentType: "application/json",
                 dataType: 'json',
                 error: (error) => {
@@ -1392,24 +1435,19 @@
 
         function llenarTablaPrevious() {
             event.preventDefault();
-            var selectedGrupo = document.getElementById('<%= ListGrupo.ClientID%>').value;
-            var selectedSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').value;
-            var selectedProveedor = document.getElementById('<%= ListProveedor.ClientID%>').value;
-            var selectedFecha = document.getElementById('<%= txtDiasActualizacion.ClientID%>').value;
-            var selectedMarca = document.getElementById('<%= ListMarca.ClientID%>').value;
-            var selectedDescSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').textContent;
-            var selectedProveedorDeterminado = document.getElementById('<%= cbSoloProveedorPredeterminado.ClientID%>').checked;
-            var valueProvDet = 0;
-            if (selectedProveedorDeterminado == true) {
-                valueProvDet = 1;
-            }
-            else {
-                valueProvDet = 0;
-            }
+
+            var inputGrupo = document.getElementById('<%= hiddenGrupoValue.ClientID%>').value;
+            var inputSubGrupo = document.getElementById('<%= hiddenSubGrupoValue.ClientID%>').value;
+            var inputMarca = document.getElementById('<%= hiddenMarca.ClientID%>').value;
+            var inputDias = document.getElementById('<%= hiddenDiasUltimaActualizacion.ClientID%>').value;
+            var inputProveedor = document.getElementById('<%= hiddenProveedor.ClientID%>').value;
+            var inputSoloProvDet = document.getElementById('<%= hiddenSoloProveedorPredeterminado.ClientID%>').value;
+            var inputDescSubGrupo = document.getElementById('<%= hiddenDescSubGrupo.ClientID%>').value;
+
             $.ajax({
                 method: "POST",
                 url: "ArticulosNew.aspx/getArticulosFiltradosPrevious",
-                data: '{grupo: "' + selectedGrupo + '", subgrupo: "' + selectedSubGrupo + '", proveedor: "' + selectedProveedor + '", dias: "' + selectedFecha + '", marca: "' + selectedMarca + '", descSubGrupo: "' + selectedDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + valueProvDet + '", lastPageId: "' + previousPageId + '" }',
+                data: '{grupo: "' + inputGrupo + '", subgrupo: "' + inputSubGrupo + '", proveedor: "' + inputProveedor + '", dias: "' + inputDias + '", marca: "' + inputMarca + '", descSubGrupo: "' + inputDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + inputSoloProvDet + '", lastPageId: "' + previousPageId + '" }',
                 contentType: "application/json",
                 dataType: 'json',
                 error: (error) => {
@@ -1423,14 +1461,15 @@
 
         function successLlenarTabla(response) {
             event.preventDefault();
-            document.getElementById('<%= btnNext.ClientID%>').style.visibility = "visible";
-            document.getElementById('<%= btnPrevious.ClientID%>').style.visibility = "visible";
+            
             var obj = JSON.parse(response.d);
+            var rows = document.getElementById('dataTables-example').rows;
             if (obj.length == 0) {
-                //console.log(JSON.stringify(error));
-                //$.msgbox("Este listado no contiene mas paginas", { type: "error" });
+                //alert("Este listado no contiene mas paginas");
                 return;
             }
+            document.getElementById('<%= btnNext.ClientID%>').style.visibility = "visible";
+            document.getElementById('<%= btnPrevious.ClientID%>').style.visibility = "visible";
             $("#dataTables-example").dataTable().fnDestroy();
             $('#dataTables-example').find("tr:gt(0)").remove();
 
