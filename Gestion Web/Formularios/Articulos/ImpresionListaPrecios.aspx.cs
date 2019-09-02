@@ -61,27 +61,20 @@ namespace Gestion_Web.Formularios.Articulos
                     this.descSubGrupo = Request.QueryString["dsg"];
                     this.descuentoPorCantidad = Convert.ToInt32(Request.QueryString["dpc"]);
 
-                    //if (this.valor == 0 && descuentoPorCantidad == 0)
-                    //{
-                    //    generarReporte();
-                    //}
-                    //if (this.valor == 0 && descuentoPorCantidad == 1)
-                    //{
-                    //    generarReporte3();
-                    //}
-                    if (valor == 1 && descuentoPorCantidad == 0)
+                    if (valor == 1)
                     {
-                        generarReporte2();
+                        if (descuentoPorCantidad == 1)
+                            GenerarCatalogoDescuentoPorCantidad();
+                        else
+                            GenerarCatalogo();
                     }
-                    else if (valor == 1 && descuentoPorCantidad == 1)
-                    {
-                        generarReporte4();
-                    }
-
-                    if (descuentoPorCantidad == 1)
-                        GenerarListaPreciosDescuentoPorCantidad();
                     else
-                        GenerarListaPrecios();
+                    {
+                        if (descuentoPorCantidad == 1)
+                            GenerarListaPreciosDescuentoPorCantidad();
+                        else
+                            GenerarListaPrecios();
+                    }
                 }
             }
             catch (Exception ex)
@@ -649,7 +642,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
 
                 this.ReportViewer1.LocalReport.SetParameters(param);
-                                
+
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -662,7 +655,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //get xls content
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
-                    String filename = string.Format("{0}.{1}", "ListaPrecios_"+DateTime.Today.ToString("ddMMyyyy"), "xls");
+                    String filename = string.Format("{0}.{1}", "ListaPrecios_" + DateTime.Today.ToString("ddMMyyyy"), "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;
@@ -691,6 +684,140 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando reporte de Presupuesto. " + ex.Message);
+            }
+        }
+
+        private void GenerarCatalogoDescuentoPorCantidad()
+        {
+            try
+            {
+                controladorListaPrecio contList = new controladorListaPrecio();
+                listaPrecio lista = contList.obtenerlistaPrecioID(this.lista);
+                String nombreLista = lista.nombre;
+
+                var catalogo = contList.ObtenerListaDePreciosDescuentoPorCantidad(this.lista, precioSinIva);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaCatalogoR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("Catalogo", catalogo);
+
+                ReportParameter param = new ReportParameter("ParamLista", nombreLista);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "Catalogo_" + DateTime.Today.ToString("ddMMyyyy"), "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando catalogo. " + ex.Message);
+            }
+        }
+
+        private void GenerarCatalogo()
+        {
+            try
+            {
+                controladorListaPrecio contList = new controladorListaPrecio();
+                listaPrecio lista = contList.obtenerlistaPrecioID(this.lista);
+                String nombreLista = lista.nombre;
+
+                var catalogo = contList.ObtenerListaDePrecios(this.lista, precioSinIva, proveedor);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaCatalogoR.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("Catalogo", catalogo);
+
+                ReportParameter param = new ReportParameter("ParamLista", nombreLista);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "Catalogo_" + DateTime.Today.ToString("ddMMyyyy"), "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando catalogo. " + ex.Message);
             }
         }
 

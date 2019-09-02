@@ -2669,7 +2669,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                             return;
                         }
-                    }
+                    }                    
 
                     if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
                     {
@@ -2752,6 +2752,41 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        void AgregarComentariosIvaYNetoDiscriminados(Factura factura = null)
+        {
+            try
+            {
+                if(factura == null)
+                    factura = Session["Factura"] as Factura;
+
+                if (!factura.tipo.tipo.ToLower().Trim().Contains("factura a") && !factura.tipo.tipo.ToLower().Trim().Contains("nota de credito a") && !factura.tipo.tipo.ToLower().Trim().Contains("nota de debito a"))
+                    return;
+
+                //factura.ObtenerSumatoriasNetoFEComentarioFactura(Convert.ToDecimal(txtPorcDescuento.Text));
+                //factura.ObtenerSumatoriasIvaFEComentarioFactura(Convert.ToDecimal(txtPorcDescuento.Text));
+                factura.obtenerSumatoriasNetoFE();
+                factura.obtenerSumatoriasIvaFE();
+                factura.obtenerNetoNoGravado();
+
+                string netoNoGravadoComentario = "NETO NO GRAVADO: $" + decimal.Round(factura.sumaNeto0, 2).ToString() + "\n";
+                string neto10Comentario = "NETO 10.5%: $" + decimal.Round(factura.sumaNeto105, 2).ToString() + "\n";
+                string neto21Comentario = "NETO 21%: $" + decimal.Round(factura.sumaNeto21, 2).ToString() + "\n";
+                string neto27Comentario = "NETO 27%: $" + decimal.Round(factura.sumaNeto27, 2).ToString() + "\n";
+                string iva10Comentario = "IVA 10.5%: $" + decimal.Round(factura.sumaIva105, 2).ToString() + "\n";
+                string iva21Comentario = "IVA 21%: $" + decimal.Round(factura.sumaIva21, 2).ToString() + "\n";
+                string iva27Comentario = "IVA 27%: $" + decimal.Round(factura.sumaIva27, 2).ToString();                
+
+                string ivaYNetoDiscriminados = "\n" + netoNoGravadoComentario + neto10Comentario + neto21Comentario + neto27Comentario + iva10Comentario + iva21Comentario + iva27Comentario +  "\n";
+
+                txtComentarios.Text += ivaYNetoDiscriminados;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"Error","Error al agregar los comentarios de iva y neto " + ex.Message);
+            }
+        }
+
         protected void btnCambiarPorcentajeCantidadFacturar_Click(object sender, EventArgs e)
         {
             try
@@ -3288,7 +3323,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtRetencion.Text = decimal.Round(this.nuevaFactura.retencion, 2).ToString();//PERCERPCION
 
                 this.txtTotal.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
-                this.txtImporteFinanciar.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.txtImporteFinanciar.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();                
 
                 try
                 {
@@ -3453,6 +3488,8 @@ namespace Gestion_Web.Formularios.Facturas
                     int user = (int)Session["Login_IdUser"];
                     string presupuestos = Request.QueryString["prps"];
 
+                    AgregarComentariosIvaYNetoDiscriminados(fact);
+
                     int i = this.controlador.ProcesoRefacturarPRPEditado(fact, user, presupuestos);
                     if (i > 0)
                     {
@@ -3544,7 +3581,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         return;
                     }
-                }
+                }                
 
                 if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
                 {
@@ -3820,6 +3857,8 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         fact.idFacturasParaLaNotaDeCredito = Request.QueryString["facturas"];
                     }
+
+                    AgregarComentariosIvaYNetoDiscriminados(fact);
 
                     //facturo
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
