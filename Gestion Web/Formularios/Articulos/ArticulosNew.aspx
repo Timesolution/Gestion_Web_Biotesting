@@ -1332,6 +1332,11 @@
 
     <script>
 
+        $(document).ready(function () {
+            var inputAccion = document.getElementById('<%= hiddenAccion.ClientID%>');
+            inputAccion.value = 0;
+        });
+
         var previousPageId = 0;
         var nextPageId = 0;
 
@@ -1362,7 +1367,7 @@
             var selectedProveedor = document.getElementById('<%= ListProveedor.ClientID%>').value;
             var selectedFecha = document.getElementById('<%= txtDiasActualizacion.ClientID%>').value;
             var selectedMarca = document.getElementById('<%= ListMarca.ClientID%>').value;
-            var selectedDescSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').textContent;
+            var selectedDescSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').options[document.getElementById('<%= ListSubGrupo.ClientID%>').selectedIndex].text;
             var selectedProveedorDeterminado = document.getElementById('<%= cbSoloProveedorPredeterminado.ClientID%>').checked;
             var valueProvDet = 0;
 
