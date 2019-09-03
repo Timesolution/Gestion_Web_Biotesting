@@ -195,7 +195,7 @@
                                   </Style>
                                 </TextRun>
                                 <TextRun>
-                                  <Value>=Fields!precioVenta.Value</Value>
+                                  <Value>=Fields!total.Value</Value>
                                   <Style>
                                     <FontSize>8.5pt</FontSize>
                                     <Format>'$'#,0.00</Format>
