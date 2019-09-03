@@ -20,7 +20,7 @@
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscar_Click">
+                                        <asp:LinkButton ID="lbBuscar" OnClientClick="llenarTablaBySearch()" runat="server" Text="Buscar" class="btn btn-primary">
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
                                     </span>
                                     <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Articulo"></asp:TextBox>
@@ -1356,6 +1356,25 @@
             });
         }
 
+        function llenarTablaBySearch() {
+            event.preventDefault();
+
+            var selectedDescSubGrupo = document.getElementById('<%= txtBusqueda.ClientID%>').value;
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/buscarArticulo",
+                data: '{busqueda: "' + selectedDescSubGrupo.toString() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTablaBySearch,
+                complete: LimpiarTabla
+            });
+        }
 
         function llenarTabla() {
             event.preventDefault();
@@ -1518,6 +1537,73 @@
                 {
                     "bLengthChange": true,
                     "LengthChange": true,
+                    "bFilter": false,
+                    "bInfo": false,
+                    "bPaginate": false,
+                    "bAutoWidth": false,
+                    "bStateSave": true,
+                    "bSort": false,
+                    "pageLength": 50,
+                    "sPaginationType": "simple"
+                });
+        }
+
+        function successLlenarTablaBySearch(response) {
+            event.preventDefault();
+            
+            var obj = JSON.parse(response.d);
+            var rows = document.getElementById('dataTables-example').rows;
+            if (obj.length == 0) {
+                //alert("Este listado no contiene mas paginas");
+                return;
+            }
+
+            document.getElementById('<%= btnNext.ClientID%>').style.visibility = "hidden";
+            document.getElementById('<%= btnPrevious.ClientID%>').style.visibility = "hidden";
+
+            $("#dataTables-example").dataTable().fnDestroy();
+            $('#dataTables-example').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                $('#dataTables-example').append
+                    (
+                    "<tr>" +
+                    "<td> " + obj[i].Id + "</td>" +
+                    "<td> " + obj[i].Codigo + "</td>" +
+                    "<td> " + obj[i].Descripcion + "</td>" +
+                    "<td> " + obj[i].Grupo + "</td>" +
+                    "<td> " + obj[i].SubGrupo + "</td>" +
+                    "<td> " + obj[i].Marca + "</td>" +
+                    "<td> " + obj[i].UltimaActualizacion + "</td>" +
+                    "<td> " + obj[i].Proveedor + "</td>" +
+                    "<td style='text-align:right'> " + "$ " + obj[i].PVenta + "</td>" +
+                    "<td> " + obj[i].ApareceLista + "</td>" +
+                    "<td> <a href=\"ArticulosABM.aspx?accion=2&id=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >" +
+                    "<i class=\"shortcut-icon icon-search\"></i> </a> " +
+
+                    "<a href=\"StockF.aspx?articulo=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Stock\" >" +
+                    "<i class=\"shortcut-icon icon-list-alt\"></i> </a> " +
+
+                    "<a href=\"../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Composicion\" >" +
+                    "<i class=\"shortcut-icon icon-dropbox\"></i> </a> " +
+
+                    "<a href=\"#modalConfirmacion\" class=\"btn btn-info \" data-toggle=\"modal\" OnClientClick=\"abrirdialog(" + obj[i].Id + ")\" >" +
+                    "<i class=\"shortcut-icon icon-trash\"></i> </a> " +
+                    "</td > " +
+                    "</tr>"
+                    );
+                if (i == 0) {
+                    previousPageId = obj[i].Id;
+                }
+                if (i == 49) {
+                    nextPageId = obj[i].Id;
+                }
+            }
+
+            $('#dataTables-example').dataTable(
+                {
+                    "bLengthChange": false,
+                    "LengthChange": false,
                     "bFilter": false,
                     "bInfo": false,
                     "bPaginate": false,
