@@ -340,7 +340,6 @@
     <Content Include="css\ui-lightness\jquery-ui-1.10.0.custom.min.css" />
     <Content Include="DefaultClientes.aspx" />
     <Content Include="Error404.aspx" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="font\fontawesome-webfont.svg" />
     <Content Include="font\glyphicons-halflings-regular.svg" />
     <Content Include="Formularios\Articulos\ABMGruposArticulos.aspx" />
@@ -734,9 +733,6 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
     <Content Include="font\fontawesome-webfont.eot" />
     <Content Include="font\fontawesome-webfont.ttf" />
