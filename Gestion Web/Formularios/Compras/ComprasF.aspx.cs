@@ -28,6 +28,7 @@ namespace Gestion_Web.Formularios.Compras
         private string tipoDoc;
         private int puntoVenta;
         private int proveedor;
+        private int empresa;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -42,6 +43,7 @@ namespace Gestion_Web.Formularios.Compras
                 proveedor = Convert.ToInt32(Request.QueryString["prov"]);
                 tipoDoc = Request.QueryString["t"];
                 puntoVenta = Convert.ToInt32(Request.QueryString["pv"]);
+                empresa = Convert.ToInt32(Request.QueryString["e"]);
 
                 if (!IsPostBack)
                 {
@@ -81,7 +83,7 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 if (!String.IsNullOrEmpty(fechaD) && !String.IsNullOrEmpty(fechaH) && !String.IsNullOrEmpty(tipoDoc))
                 {
-                    this.buscar(fechaD, fechaH, tipoDoc, suc, puntoVenta, proveedor, tipoFecha);
+                    this.buscar(fechaD, fechaH, tipoDoc, suc, puntoVenta, proveedor, tipoFecha, empresa);
                 }
 
             }
@@ -497,7 +499,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor, int tipoFecha)
+        private void buscar(string fDesde, string fHasta, string tipoDoc, int sucursal, int puntoVenta, int proveedor, int tipoFecha, int empresa)
         {
             try
             {
@@ -507,7 +509,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (tipoDoc == "0")
                     tipoDoc = null;
 
-                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, sucursal, puntoVenta, proveedor, tipoFecha);
+                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, sucursal, puntoVenta, proveedor, tipoFecha, empresa);
                 if (compras != null)
                 {
                     this.cargarComras(compras);
@@ -535,11 +537,11 @@ namespace Gestion_Web.Formularios.Compras
                         if (this.RadioFechaCompra.Checked == true)
                         {
                             //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                            Response.Redirect("ComprasF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&s=" + DropListSucursal.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&pv=" + ListPuntoVenta.SelectedValue + "&prov=" + this.DropListProveedor.SelectedValue);
+                            Response.Redirect("ComprasF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&s=" + DropListSucursal.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&pv=" + ListPuntoVenta.SelectedValue + "&prov=" + this.DropListProveedor.SelectedValue + "&e=" + this.DropListEmpresa.SelectedValue) ;
                         }
                         else
                         {
-                            Response.Redirect("ComprasF.aspx?tf=1&fd=" + txtFechaDesdeImp.Text + "&fh=" + txtFechaHastaImp.Text + "&s=" + DropListSucursal.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&pv=" + ListPuntoVenta.SelectedValue + "&prov=" + this.DropListProveedor.SelectedValue);
+                            Response.Redirect("ComprasF.aspx?tf=1&fd=" + txtFechaDesdeImp.Text + "&fh=" + txtFechaHastaImp.Text + "&s=" + DropListSucursal.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&pv=" + ListPuntoVenta.SelectedValue + "&prov=" + this.DropListProveedor.SelectedValue + "&e=" + this.DropListEmpresa.SelectedValue);
                         }
                     }
                     else
