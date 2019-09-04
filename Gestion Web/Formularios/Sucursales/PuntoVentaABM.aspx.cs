@@ -38,7 +38,6 @@ namespace Gestion_Web.Formularios.Sucursales
 
                 if (valor != 2)
                 {
-
                     PuntoVenta pv = new PuntoVenta();
 
                     pv = controlador.obtenerLastPuntoVta(codigo);
@@ -51,8 +50,13 @@ namespace Gestion_Web.Formularios.Sucursales
                 emp = contr.obtenerEmpresa(empresa);
                 this.txtEmpresa.Text = emp.RazonSocial;
                 this.txtEmpresa.Enabled = false;
+                txtEmpresa.CssClass = "form-control";
+                txtPuntoVta.CssClass = "form-control";                
+
                 if (!IsPostBack)
                 {
+                    CargarMonedaFacturacion();
+
                     if (valor == 2)
                     {
                         PuntoVenta pv2 = controlador.obtenerPtoVentaId(idPuntoVenta);
@@ -66,6 +70,7 @@ namespace Gestion_Web.Formularios.Sucursales
 
                         this.txtPuntoVta.Text = pv2.puntoVenta;
                         this.ddlFormaFactura.SelectedValue = pv2.formaFacturar;
+                        DropDownListMonedaFacturacion.SelectedValue = pv2.monedaFacturacion.ToString();
                         this.txtNombreFantasia.Text = pv2.nombre_fantasia;
                         this.txtDireccion.Text = pv2.direccion;
                         if (pv2.retiene_ib)
@@ -92,7 +97,6 @@ namespace Gestion_Web.Formularios.Sucursales
                         }
                         this.panelContacto.Visible = true;
 
-
                         try
                         {
                             var pvC = controlador.obtenerPuntoVentaPV(pv2.puntoVenta, pv2.id_suc, pv2.empresa.id);
@@ -107,6 +111,25 @@ namespace Gestion_Web.Formularios.Sucursales
             catch
             {
 
+            }
+        }
+
+        void CargarMonedaFacturacion()
+        {
+            try
+            {
+                controladorMoneda controladorMoneda = new controladorMoneda();
+
+                var monedas = controladorMoneda.obtenerMonedasDT();
+
+                DropDownListMonedaFacturacion.DataSource = monedas;
+                DropDownListMonedaFacturacion.DataValueField = "id";
+                DropDownListMonedaFacturacion.DataTextField = "moneda";
+                DropDownListMonedaFacturacion.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "error", "Error cargando moneda facturacion: " + ex.Message);
             }
         }
 
@@ -176,7 +199,7 @@ namespace Gestion_Web.Formularios.Sucursales
                         ptoVenta.retiene_ib = true;
                     }
                     else
-                    {
+                    { 
                         ptoVenta.retiene_ib = false;
                     }
 
@@ -213,6 +236,7 @@ namespace Gestion_Web.Formularios.Sucursales
                     {
                         ptoVenta.caiRemito = this.txtCAIRemito.Text;
                         ptoVenta.caiVencimiento = Convert.ToDateTime(this.txtCAIVencimiento.Text, new CultureInfo("es-AR"));
+                        ptoVenta.monedaFacturacion = Convert.ToInt32(DropDownListMonedaFacturacion.SelectedValue);
                     }
                     catch
                     { }
@@ -256,6 +280,7 @@ namespace Gestion_Web.Formularios.Sucursales
                     ptoVenta.direccion = this.txtDireccion.Text;
                     ptoVenta.empresa.id = empresa;
                     ptoVenta.tope = Convert.ToDecimal(this.txtTope.Text);
+                    ptoVenta.monedaFacturacion = Convert.ToInt32(DropDownListMonedaFacturacion.SelectedValue);
                     int i = this.controlador.agregarPtoVenta(ptoVenta);
                     if (i > 0)
                     {
