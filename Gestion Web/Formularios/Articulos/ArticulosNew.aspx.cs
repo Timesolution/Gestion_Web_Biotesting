@@ -1,5 +1,7 @@
 ﻿using Disipar.Models;
+using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
@@ -7,6 +9,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -687,34 +691,43 @@ namespace Gestion_Web.Formularios.Articulos
             return resultadoJSON;
         }
 
-        protected void btnUltimoDia_Click(object sender, EventArgs e)
+        [WebMethod]
+        public static string cargarArticulosActualizacionPrecios(string dias)
         {
-
+            try
+            {
+                controladorArticulosNew contArticulo = new controladorArticulosNew();
+                List<ArticulosClase> ArticulosFiltrados = new List<ArticulosClase>();
+                DateTime fecha = DateTime.Today.AddDays(Convert.ToInt32(dias) * -1);
+                //List<Articulo> articulos = this.controlador.obtenerArticuloByFechaActualizacion(fecha);
+                //this.cargarArticulosTabla(articulos);
+                DataTable dt = contArticulo.obtenerArticuloByFechaActualizacionDT(fecha);
+                foreach (DataRow Row in dt.Rows)
+                {
+                    ArticulosClase articulo = new ArticulosClase();
+                    articulo.Id = Convert.ToInt32(Row["id"]).ToString();
+                    articulo.Codigo = Row["codigo"].ToString();
+                    articulo.Descripcion = Row["descripcion"].ToString();
+                    articulo.Grupo = Row["grupo"].ToString();
+                    articulo.SubGrupo = Row["subGrupo"].ToString();
+                    articulo.Marca = Row["razonSocial"].ToString();
+                    articulo.UltimaActualizacion = Row["ultimaActualizacion"].ToString();
+                    articulo.Proveedor = Row["razonSocial"].ToString();
+                    articulo.PVenta = Convert.ToInt32(Row["precioVenta"]).ToString();
+                    articulo.ApareceLista = Convert.ToInt32(Row["apareceLista"]).ToString();
+                    ArticulosFiltrados.Add(articulo);
+                }
+                JavaScriptSerializer javaScript = new JavaScriptSerializer();
+                javaScript.MaxJsonLength = 5000000;
+                string resultadoJSON = javaScript.Serialize(ArticulosFiltrados);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
         }
-        protected void btnUltimos2_Click(object sender, EventArgs e)
-        {
 
-        }
-        protected void btnUltimos3_Click(object sender, EventArgs e)
-        {
-
-        }
-        protected void btnUltimos4_Click(object sender, EventArgs e)
-        {
-
-        }
-        protected void btnUltimos5_Click(object sender, EventArgs e)
-        {
-
-        }
-        protected void btnUltimos6_Click(object sender, EventArgs e)
-        {
-
-        }
-        protected void btnUltimos7_Click(object sender, EventArgs e)
-        {
-
-        }
         protected void btnActualizarTodo_Click(object sender, EventArgs e)
         {
 
@@ -730,100 +743,240 @@ namespace Gestion_Web.Formularios.Articulos
 
         protected void btnModificarPrecio_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
-            //    string noActu = "";
-            //    foreach (var c in this.phArticulos.Controls)
-            //    {
-            //        TableRow tr = c as TableRow;
-            //        string id = tr.ID.Split('_')[1];
-            //        int i = this.contArticulo.aumentarPrecioPorcentaje(Convert.ToInt32(id), porcentaje);
-            //        if (i <= 0)
-            //        {
-            //            //no se atualizo
-            //            if (!String.IsNullOrEmpty(id))
-            //            {
-            //                Articulo art = this.contArticulo.obtenerArticuloByID(Convert.ToInt32(id));
-            //                noActu += art.codigo + "; ";
-            //            }
-            //        }
-            //    }
-            //    if (string.IsNullOrEmpty(noActu))
-            //    {
-            //        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Precios modificados con exito!\", {type: \"info\"});", true);
-            //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
-            //    }
-            //    else
-            //    {
-            //        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Los siguientes articulos no se actualizaron: " + noActu + "\" , {type: \"alert\"});", true);
-            //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
-            //}
+            try
+            {
+                decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+
+                if(Convert.ToInt32(this.hiddenAccion.Value) == 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe Buscar o Filtrar los articulos"));
+                    return;
+                }
+                else
+                {
+                    //accion 1 = busqueda
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
+                        noActu += this.contArticulo.aumentarPrecioPorcentaje(this.hiddenBuscar.Value.ToString(),porcentaje,noActu);
+
+                    //accion 2 = filtro
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
+                        noActu += this.contArticulo.aumentarPrecioPorcentaje(Convert.ToInt32(this.hiddenGrupoValue.Value), Convert.ToInt32(this.hiddenSubGrupoValue.Value), Convert.ToInt32(this.hiddenProveedor.Value), Convert.ToInt32(this.hiddenDiasUltimaActualizacion.Value), Convert.ToInt32(this.hiddenMarca.Value), this.hiddenDescSubGrupo.Value.ToString(), Convert.ToInt32(this.hiddenSoloProveedorPredeterminado.Value), porcentaje, noActu);
+                }                
+
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+            }
+            catch (Exception)
+            {
+
+                
+            }
         }
         protected void btnSeteaPrecioventa_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    decimal precio = Convert.ToDecimal(this.txtPrecioVenta.Text, CultureInfo.InvariantCulture);
-            //    string noActu = "";
-            //    foreach (var c in this.phArticulos.Controls)
-            //    {
-            //        TableRow tr = c as TableRow;
-            //        string id = tr.ID.Split('_')[1];
-            //        int i = this.controlador.setearPrecioVenta(Convert.ToInt32(id), precio);
-            //        if (i <= 0)
-            //        {
-            //            //no se atualizo
-            //            if (!String.IsNullOrEmpty(id))
-            //            {
-            //                Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
-            //                noActu += art.codigo + "; ";
-            //                //noActu += id + "; ";
-            //            }
-            //        }
-            //    }
-            //    if (string.IsNullOrEmpty(noActu))
-            //    {
-            //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
-            //    }
-            //    else
-            //    {
-            //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
-            //    }
-            //    //filtro
-            //    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
-            //    {
-            //        this.filtrar(grupo, subgrupo, proveedor, dias, marca, descSubGrupo);
-            //    }
-            //    //busco
-            //    if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
-            //    {
-            //        this.buscar(this.textoBuscar);
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
-            //}
+            
         }
         protected void lbtnBuscarProveedorDesdeActualizarProveedor_Click(object sender, EventArgs e)
         {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                DataTable dtProveedores = contrCliente.obtenerProveedorNombreDT(this.txtBuscarProveedor.Text);
 
+                //cargo la lista
+                this.DropListOtroProveedor.DataSource = dtProveedores;
+                this.DropListOtroProveedor.DataValueField = "id";
+                this.DropListOtroProveedor.DataTextField = "alias";
+
+                this.DropListOtroProveedor.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pueden cargar los proveedores. Excepción: " + ex.Message), true);
+            }
         }
         protected void lbtnActualizarOtrosProveedores_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Boolean fileOK = false;
 
+                String path = Server.MapPath("../../OtrosProveedores/");//Liquidacion_" + DateTime.Today.Month + "-" + DateTime.Today.Day + "/");
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension =
+                        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    //guardo nombre archivo
+                    string archivo = FileUpload1.FileName;
+                    //lo subo
+                    FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
+
+                    DataTable dtProveedoresArticulos = this.contArticulo.obtenerProveedorArticulosByProveedorDT(Convert.ToInt32(DropListOtroProveedor.SelectedValue));
+                    int cantRegistros = 0;
+
+                    if (dtProveedoresArticulos != null)
+                    {
+                        cantRegistros = dtProveedoresArticulos.Rows.Count;
+                    }
+                    int i = this.contArticulo.actualizarPrecioProveedoresXLS(path + archivo, Convert.ToInt32(DropListOtroProveedor.SelectedValue), dtProveedoresArticulos);
+
+                    if (i > 0)
+                    {
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se actualizaron: " + i + " articulos ", null));
+                    }
+                    else
+                    {
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"No se pudieron procesar una o mas articulos\", {type: \"info\"});", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudieron procesar una o mas articulos. "));
+                    }
+
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar un archivo '.csv'!. "));
+                }
+            }
+            catch (Exception )
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando precios Proveedores desde archivo. "));
+            }
         }
+
+
+
         protected void lbtnActualizarArticulosDespacho_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Inicio procesar actualizacion articulos despacho excel");
+                Boolean fileOK = false;
 
+                String path = Server.MapPath("../../content/excelFiles/artDespacho/");
+                String fileExtension = "";
+                if (FileUploadArticulosDespacho.HasFile)
+                {
+                    fileExtension = Path.GetExtension(FileUploadArticulosDespacho.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".xlsx" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "No existe directorio. " + path + ". lo creo");
+
+                        Directory.CreateDirectory(path);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "directorio creado");
+                    }
+                    //guardo nombre archivo
+                    string nombreArchivoExcel = FileUploadArticulosDespacho.FileName;
+
+                    //lo subo
+                    FileUploadArticulosDespacho.PostedFile.SaveAs(path + FileUploadArticulosDespacho.FileName);
+
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Voy a traer datos desde el excel " + path + FileUploadArticulosDespacho.FileName);
+                    var artDespachoExcel = new ArtDespachoExcel();
+                    var tablaDatos = artDespachoExcel.traerDatos(path + FileUploadArticulosDespacho.FileName);
+
+                    if (tablaDatos != null)
+                    {
+                        int contador = 0;
+                        //recorro los articulos del excel
+                        foreach (var item in tablaDatos)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.Codigo))
+                            {
+                                int i = this.actualizarDatosDelArticuloDespacho(item);
+                                if (i >= 1)
+                                {
+                                    contador++;
+                                }
+                            }
+                        }
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se actualizaron " + contador + " articulos.", null));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Verificar codigos y datos del excel."));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .xlsx"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Error procesando excel " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error procesando excel " + ex.Message));
+            }
         }
+
+        private int actualizarDatosDelArticuloDespacho(ArtDespachoExcel artDespachoExcel)
+        {
+            try
+            {
+                Gestion_Api.Entitys.articulo artEntity = this.contArticulosEntity.obtenerArticuloEntityByCod(artDespachoExcel.Codigo);
+                Articulos_Despachos datosDespacho = new Articulos_Despachos();
+                //datosDespacho.FechaDespacho = Convert.ToDateTime(this.txtFechaDespacho.Text, new CultureInfo("es-AR"));
+                //datosDespacho.Lote = this.txtLote.Text;
+                //datosDespacho.Vencimiento = this.txtVencimiento.Text;
+                datosDespacho.NumeroDespacho = artDespachoExcel.NumeroDespacho;
+                datosDespacho.IdArticulo = artEntity.id;
+                datosDespacho.FechaDespacho = DateTime.Now;
+
+                var listaPaises = this.contPais.obtenerPaisList();
+                var paisEncontrado = listaPaises.Where(x => x.descripcion.ToLower() == artDespachoExcel.Procedencia.ToLower()).FirstOrDefault();
+                if (paisEncontrado != null)
+                {
+                    artEntity.procedencia = paisEncontrado.id;
+                }
+                int i = this.contArticulosEntity.actualizarCostoYPrecioVentaYRecalcularlo(artEntity.id, Convert.ToDecimal(artDespachoExcel.Costo.Replace(",", ".")), Convert.ToDecimal(artDespachoExcel.PrecioVenta.Replace(",", ".")), artDespachoExcel.Moneda);
+                i += this.contArticulosEntity.crearOActualizarDatosDespachoArticulo(datosDespacho);
+                if (i == 2)
+                {
+                    return i;
+                }
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Error en fun: actualizarDatosDelArticuloDespacho. " + ex.Message));
+                return 0;
+            }
+        }
+
         protected void btnInformeStock_Click(object sender, EventArgs e)
         {
             try
@@ -1313,24 +1466,44 @@ namespace Gestion_Web.Formularios.Articulos
             {
             }
         }
-        protected void lbtnDesactualizados_Click(object sender, EventArgs e)
+
+        [WebMethod]
+        public static string cargarArticulosDesactualizadosPrecios(int dias)
         {
+            try
+            {
+                controladorArticulosNew contArticulo = new controladorArticulosNew();
+                List<ArticulosClase> ArticulosFiltrados = new List<ArticulosClase>();
 
-            //// HAY QUE VER
+                DateTime fecha = DateTime.Today.AddDays(dias * -1);
 
+                DataTable dt = contArticulo.obtenerArticuloDesactualizadosByFechaDT(fecha);
 
-            //try
-            //{
-            //    DateTime fecha = DateTime.Today.AddDays(Convert.ToInt32(this.txtDiasDesactualizado.Text) * -1);
-            //    //List<Articulo> articulos = this.controlador.obtenerArticuloDesactualizadosByFecha(fecha);
-            //    //this.cargarArticulosTabla(articulos);
-            //    DataTable dt = this.contArticulo.obtenerArticuloDesactualizadosByFechaDT(fecha);
-            //    this.cargarArticulosTablaDT(dt);
-            //}
-            //catch (Exception ex)
-            //{
-            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos precios desactualizados. "));
-            //}
+                foreach (DataRow Row in dt.Rows)
+                {
+                    ArticulosClase articulo = new ArticulosClase();
+                    articulo.Id = Convert.ToInt32(Row["id"]).ToString();
+                    articulo.Codigo = Row["codigo"].ToString();
+                    articulo.Descripcion = Row["descripcion"].ToString();
+                    articulo.Grupo = Row["grupo"].ToString();
+                    articulo.SubGrupo = Row["subGrupo"].ToString();
+                    articulo.Marca = Row["razonSocial"].ToString();
+                    articulo.UltimaActualizacion = Row["ultimaActualizacion"].ToString();
+                    articulo.Proveedor = Row["razonSocial"].ToString();
+                    articulo.PVenta = Convert.ToInt32(Row["precioVenta"]).ToString();
+                    articulo.ApareceLista = Convert.ToInt32(Row["apareceLista"]).ToString();
+                    ArticulosFiltrados.Add(articulo);
+                }
+
+                JavaScriptSerializer javaScript = new JavaScriptSerializer();
+                javaScript.MaxJsonLength = 50000000;
+                string resultadoJSON = javaScript.Serialize(ArticulosFiltrados);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
         }
         protected void btnIEArticulosPdf_Click(object sender, EventArgs e)
         {

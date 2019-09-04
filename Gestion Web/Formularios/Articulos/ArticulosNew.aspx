@@ -110,20 +110,20 @@
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <asp:LinkButton ID="btnUltimoDia" runat="server" OnClick="btnUltimoDia_Click">Ultimo Día</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_1" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimo Día</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos2" runat="server" OnClick="btnUltimos2_Click">Ultimos 2 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_2" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 2 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos3" runat="server" OnClick="btnUltimos3_Click">Ultimos 3 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_3" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 3 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos4" runat="server" OnClick="btnUltimos4_Click">Ultimos 4 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_4" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 4 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos_5" runat="server" OnClick="btnUltimos5_Click">Ultimos 5 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_5" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 5 Días</asp:LinkButton></li>
 
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos_6" runat="server" OnClick="btnUltimos6_Click">Ultimos 6 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_6" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 6 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos_7" runat="server" OnClick="btnUltimos7_Click">Ultimos 7 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_7" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 7 Días</asp:LinkButton></li>
 
                                 </ul>
                             </div>
@@ -264,6 +264,7 @@
                     <input runat="server" ID="hiddenDescSubGrupo" type="hidden"/>
                     <input runat="server" ID="hiddenAccion" type="hidden"/>
                     <input runat="server" ID="hiddenBuscar" type="hidden"/>
+                    <input runat="server" ID="hiddenDescripcion" type="hidden" />
                 </div>
             </div>
 
@@ -1144,7 +1145,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <button type="button" class="close" id="btnCerrarDesactualizados" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Seleccione dias</h4>
                 </div>
                 <div class="modal-body">
@@ -1160,7 +1161,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="lbtnDesactualizados" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="DesactGroup" OnClick="lbtnDesactualizados_Click" />
+                        <asp:LinkButton ID="lbtnDesactualizados" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="DesactGroup" OnClientClick="llenarTablaDesactualizados()" />
                     </div>
                 </div>
 
@@ -1359,12 +1360,59 @@
         function llenarTablaBySearch() {
             event.preventDefault();
 
-            var selectedDescSubGrupo = document.getElementById('<%= txtBusqueda.ClientID%>').value;
+            var selectedDescripcion = document.getElementById('<%= txtBusqueda.ClientID%>').value;
+
+            var inputDescripcion = document.getElementById('<%= hiddenDescripcion.ClientID%>');
+            var inputAccion = document.getElementById('<%= hiddenAccion.ClientID%>');
+
+            inputAccion.value = 1;
+
+            inputDescripcion.value = selectedDescripcion;
 
             $.ajax({
                 method: "POST",
                 url: "ArticulosNew.aspx/buscarArticulo",
-                data: '{busqueda: "' + selectedDescSubGrupo.toString() + '"}',
+                data: '{busqueda: "' + selectedDescripcion.toString() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTablaBySearch,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTablaByUltimosDias(boton) {
+            event.preventDefault();
+            var dias;
+            dias = boton.id.split('_')[2];
+
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/cargarArticulosActualizacionPrecios",
+                data: '{dias: "' + dias + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTablaBySearch,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTablaDesactualizados() {
+            event.preventDefault();
+            var dias = document.getElementById('<%= txtDiasDesactualizado.ClientID%>').value;
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/cargarArticulosDesactualizadosPrecios",
+                data: '{dias: "' + dias + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: (error) => {
@@ -1487,7 +1535,6 @@
             event.preventDefault();
             
             var obj = JSON.parse(response.d);
-            var rows = document.getElementById('dataTables-example').rows;
             if (obj.length == 0) {
                 //alert("Este listado no contiene mas paginas");
                 return;
@@ -1552,7 +1599,6 @@
             event.preventDefault();
             
             var obj = JSON.parse(response.d);
-            var rows = document.getElementById('dataTables-example').rows;
             if (obj.length == 0) {
                 //alert("Este listado no contiene mas paginas");
                 return;
@@ -1618,6 +1664,7 @@
         function LimpiarTabla() {
             event.preventDefault();
             document.getElementById('btnCerrarFlitro').click();
+            document.getElementById('btnCerrarDesactualizados').click();
             $.ajax({
                 method: "POST",
                 url: "ArticulosNew.aspx/getVistaTablaArticulos",

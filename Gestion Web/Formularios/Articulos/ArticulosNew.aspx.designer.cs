@@ -67,40 +67,40 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.Literal litNumero;
         
         /// <summary>
-        /// btnUltimoDia control.
+        /// btnUltimos_1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimoDia;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_1;
         
         /// <summary>
-        /// btnUltimos2 control.
+        /// btnUltimos_2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimos2;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_2;
         
         /// <summary>
-        /// btnUltimos3 control.
+        /// btnUltimos_3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimos3;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_3;
         
         /// <summary>
-        /// btnUltimos4 control.
+        /// btnUltimos_4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimos4;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_4;
         
         /// <summary>
         /// btnUltimos_5 control.
@@ -362,6 +362,15 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenBuscar;
+        
+        /// <summary>
+        /// hiddenDescripcion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenDescripcion;
         
         /// <summary>
         /// lblMensaje control.
