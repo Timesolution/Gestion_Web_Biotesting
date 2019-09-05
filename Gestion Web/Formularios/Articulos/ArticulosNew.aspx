@@ -255,16 +255,16 @@
                 <div style="text-align: right; margin-bottom: 1%">
                     <asp:Button Text="Anterior" runat="server" ID="btnPrevious" OnClientClick="llenarTablaPrevious()" Style="margin-right: 1%; visibility: hidden" />
                     <asp:Button Text="Siguiente" runat="server" ID="btnNext" OnClientClick="llenarTablaNext()" Style="margin-right: 1%; visibility: hidden" />
-                    <input runat="server" ID="hiddenGrupoValue" type="hidden"/>
-                    <input runat="server" ID="hiddenSubGrupoValue" type="hidden"/>
-                    <input runat="server" ID="hiddenMarca" type="hidden"/>
-                    <input runat="server" ID="hiddenDiasUltimaActualizacion" type="hidden"/>
-                    <input runat="server" ID="hiddenProveedor" type="hidden"/>
-                    <input runat="server" ID="hiddenSoloProveedorPredeterminado" type="hidden"/>
-                    <input runat="server" ID="hiddenDescSubGrupo" type="hidden"/>
-                    <input runat="server" ID="hiddenAccion" type="hidden"/>
-                    <input runat="server" ID="hiddenBuscar" type="hidden"/>
-                    <input runat="server" ID="hiddenDescripcion" type="hidden" />
+                    <input runat="server" id="hiddenGrupoValue" type="hidden" />
+                    <input runat="server" id="hiddenSubGrupoValue" type="hidden" />
+                    <input runat="server" id="hiddenMarca" type="hidden" />
+                    <input runat="server" id="hiddenDiasUltimaActualizacion" type="hidden" />
+                    <input runat="server" id="hiddenProveedor" type="hidden" />
+                    <input runat="server" id="hiddenSoloProveedorPredeterminado" type="hidden" />
+                    <input runat="server" id="hiddenDescSubGrupo" type="hidden" />
+                    <input runat="server" id="hiddenAccion" type="hidden" />
+                    <input runat="server" id="hiddenBuscar" type="hidden" />
+                    <input runat="server" id="hiddenDescripcion" type="hidden" />
                 </div>
             </div>
 
@@ -440,6 +440,18 @@
                                     </div>
                                     <div class="col-md-2">
                                         <asp:Button ID="btnSeteaPrecioventa" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Porcentaje Precio Venta</label>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPrecioVentaPorcentual" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnSeteaPrecioventaPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventaPorcentual_Click" />
                                     </div>
                                 </div>
                             </div>
@@ -1259,8 +1271,7 @@
     </script>
     <script>
 
-        function AsignarProveedor()
-        {
+        function AsignarProveedor() {
             var idProveedor = document.getElementById('<%= DropListProveedor.ClientID %>').value;
             var idProveedorHF = document.getElementById('<%= idProveedorHF.ClientID %>');
 
@@ -1463,7 +1474,7 @@
             inputSoloProvDet.value = valueProvDet;
             inputDescSubGrupo.value = selectedDescSubGrupo;
 
-            
+
             $.ajax({
                 method: "POST",
                 url: "ArticulosNew.aspx/getArticulosFiltrados",
@@ -1533,7 +1544,7 @@
 
         function successLlenarTabla(response) {
             event.preventDefault();
-            
+
             var obj = JSON.parse(response.d);
             if (obj.length == 0) {
                 //alert("Este listado no contiene mas paginas");
@@ -1597,7 +1608,7 @@
 
         function successLlenarTablaBySearch(response) {
             event.preventDefault();
-            
+
             var obj = JSON.parse(response.d);
             if (obj.length == 0) {
                 //alert("Este listado no contiene mas paginas");

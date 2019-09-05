@@ -748,7 +748,7 @@ namespace Gestion_Web.Formularios.Articulos
                 decimal porcentaje = Convert.ToDecimal(this.txtPorcentajeAumento.Text, CultureInfo.InvariantCulture);
                 string noActu = "";
 
-                if(Convert.ToInt32(this.hiddenAccion.Value) == 0)
+                if (Convert.ToInt32(this.hiddenAccion.Value) == 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe Buscar o Filtrar los articulos"));
                     return;
@@ -757,12 +757,12 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //accion 1 = busqueda
                     if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
-                        noActu += this.contArticulo.aumentarPrecioPorcentaje(this.hiddenBuscar.Value.ToString(),porcentaje,noActu);
+                        noActu += this.contArticulo.aumentarPrecioPorcentaje(this.hiddenBuscar.Value.ToString(), porcentaje, noActu);
 
                     //accion 2 = filtro
                     if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
                         noActu += this.contArticulo.aumentarPrecioPorcentaje(Convert.ToInt32(this.hiddenGrupoValue.Value), Convert.ToInt32(this.hiddenSubGrupoValue.Value), Convert.ToInt32(this.hiddenProveedor.Value), Convert.ToInt32(this.hiddenDiasUltimaActualizacion.Value), Convert.ToInt32(this.hiddenMarca.Value), this.hiddenDescSubGrupo.Value.ToString(), Convert.ToInt32(this.hiddenSoloProveedorPredeterminado.Value), porcentaje, noActu);
-                }                
+                }
 
                 if (string.IsNullOrEmpty(noActu))
                 {
@@ -776,13 +776,113 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception)
             {
 
-                
+
             }
         }
+
         protected void btnSeteaPrecioventa_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                decimal precio = Convert.ToDecimal(this.txtPrecioVenta.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+                if (Convert.ToInt32(this.hiddenAccion.Value) == 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe Buscar o Filtrar los articulos"));
+                    return;
+                }
+                else
+                {
+                    //accion 1 = busqueda
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
+                        noActu += this.contArticulo.setearPrecioVenta(this.hiddenBuscar.Value.ToString(), precio, noActu);
+
+                    //accion 2 = filtro
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
+                        noActu += this.contArticulo.setearPrecioVenta(Convert.ToInt32(this.hiddenGrupoValue.Value), Convert.ToInt32(this.hiddenSubGrupoValue.Value), Convert.ToInt32(this.hiddenProveedor.Value), Convert.ToInt32(this.hiddenDiasUltimaActualizacion.Value), Convert.ToInt32(this.hiddenMarca.Value), this.hiddenDescSubGrupo.Value.ToString(), Convert.ToInt32(this.hiddenSoloProveedorPredeterminado.Value), precio, noActu);
+                }
+                //foreach (var c in this.phArticulos.Controls)
+                //{
+                //    TableRow tr = c as TableRow;
+                //    string id = tr.ID.Split('_')[1];
+                //    int i = this.controlador.setearPrecioVenta(Convert.ToInt32(id), precio);
+                //    if (i <= 0)
+                //    {
+                //        //no se atualizo
+                //        if (!String.IsNullOrEmpty(id))
+                //        {
+                //            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+                //            noActu += art.codigo + "; ";
+                //            //noActu += id + "; ";
+                //        }
+                //    }
+                //}
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando precios. " + ex.Message));
+            }
         }
+
+        protected void btnSeteaPrecioventaPorcentual_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal precio = Convert.ToDecimal(this.txtPrecioVentaPorcentual.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+                if (Convert.ToInt32(this.hiddenAccion.Value) == 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe Buscar o Filtrar los articulos"));
+                    return;
+                }
+                else
+                {
+                    //accion 1 = busqueda
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
+                        noActu += this.contArticulo.SetearPrecioVentaPorcentual(this.hiddenBuscar.Value.ToString(), precio, noActu);
+
+                    //accion 2 = filtro
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
+                        noActu += this.contArticulo.SetearPrecioVentaPorcentual(Convert.ToInt32(this.hiddenGrupoValue.Value), Convert.ToInt32(this.hiddenSubGrupoValue.Value), Convert.ToInt32(this.hiddenProveedor.Value), Convert.ToInt32(this.hiddenDiasUltimaActualizacion.Value), Convert.ToInt32(this.hiddenMarca.Value), this.hiddenDescSubGrupo.Value.ToString(), Convert.ToInt32(this.hiddenSoloProveedorPredeterminado.Value), precio, noActu);
+                }
+                //foreach (var c in this.phArticulos.Controls)
+                //{
+                //    TableRow tr = c as TableRow;
+                //    string id = tr.ID.Split('_')[1];
+                //    int i = this.controlador.SetearPrecioVentaPorcentual(Convert.ToInt32(id), precio);
+                //    if (i <= 0)
+                //    {
+                //        //no se atualizo
+                //        if (!String.IsNullOrEmpty(id))
+                //        {
+                //            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+                //            noActu += art.codigo + "; ";
+                //        }
+                //    }
+                //}
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error actualizando precios de venta por porcentaje. " + ex.Message));
+            }
+        }
+
         protected void lbtnBuscarProveedorDesdeActualizarProveedor_Click(object sender, EventArgs e)
         {
             try
@@ -859,7 +959,7 @@ namespace Gestion_Web.Formularios.Articulos
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar un archivo '.csv'!. "));
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando precios Proveedores desde archivo. "));
             }
