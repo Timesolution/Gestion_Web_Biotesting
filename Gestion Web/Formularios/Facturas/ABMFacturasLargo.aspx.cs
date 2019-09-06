@@ -232,6 +232,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //_idCliente = 0;
                     //_agregarCliente = false;
                     //_codigoArticuloParaAgregar = "";
+                    this.cargarPaisesExportacion();
                 }
 
                 this.cargarTablaPAgos();
@@ -429,10 +430,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnCierreZ.Visible = false;
             }
 
-            if (puntoDeVenta.formaFacturar == "Electronica")
-            {
-                this.cargarPaisesExportacion();
-            }
+            //if (puntoDeVenta.formaFacturar == "Electronica")
+            //{
+                //this.cargarPaisesExportacion();
+            //}
 
             if (puntoDeVenta.formaFacturar == "Preimpresa")
             {
