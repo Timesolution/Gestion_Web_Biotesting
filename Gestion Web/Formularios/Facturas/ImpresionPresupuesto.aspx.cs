@@ -663,8 +663,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (pv.monedaFacturacion > 1)
                 {
-                    Moneda monedaOriginal = contMoneda.obtenerMonedaID(pv.monedaFacturacion);
-                    ReportParameter param46 = new ReportParameter("MonedaOriginal", monedaOriginal.cambio.ToString());
+                    string cambioMoneda = controladorFactEntity.obtenerDatosIvasFactura(idFactura).TipoCambio.Value.ToString();
+                    ReportParameter param46 = new ReportParameter("MonedaOriginal", cambioMoneda);
                     ReportViewer1.LocalReport.SetParameters(param46);
                 }
 
