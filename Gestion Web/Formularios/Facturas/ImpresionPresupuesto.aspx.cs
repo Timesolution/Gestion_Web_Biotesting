@@ -328,6 +328,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
 
                 DataTable dtDatos = new DataTable();
@@ -443,7 +444,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         esPreimpresa = 1;
                     }
-                }
+                }                
 
                 DataRow srCliente = dtDetalle.Rows[0];
                 string codigoCliente = srCliente[5].ToString();
@@ -505,7 +506,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
-                }         
+                }                
 
                 //direccion cliente
                 string direLegal = "-";
@@ -577,7 +578,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 if (letraDoc == "A")
                 {
-                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
+                    if (pv.monedaFacturacion > 1)
+                        this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaREnMonedaOriginal.rdlc");
+                    else
+                        this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
                 }
                 if (letraDoc == "E")
                 {
@@ -616,7 +620,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL(1, "INFO", @"Asigno Ruta file:///" + logo);
 
                 //string imagePath = Server.MapPath("~/images/Facturas/GS_LOGO.png");
-                //ReportParameter paramImg = new ReportParameter("ParamImagen", imagePath);
+                //ReportParameter paramImg = new ReportParameter("ParamImagen", imagePath);                                    
 
                 ReportParameter param3b = new ReportParameter("Subtotal2", subtotal2.ToString("C"));
                 ReportParameter param4b = new ReportParameter("Iva", iva.ToString("C"));
@@ -656,6 +660,13 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param43 = new ReportParameter("ParamTotalIva105", totalIva105.ToString("C"));
                 ReportParameter param44 = new ReportParameter("ParamTotalIva21", totalIva21.ToString("C"));
                 ReportParameter param45 = new ReportParameter("ParamTotalIva27", totalIva27.ToString("C"));
+
+                if (pv.monedaFacturacion > 1)
+                {
+                    string cambioMoneda = controladorFactEntity.obtenerDatosIvasFactura(idFactura).TipoCambio.Value.ToString();
+                    ReportParameter param46 = new ReportParameter("MonedaOriginal", cambioMoneda);
+                    ReportViewer1.LocalReport.SetParameters(param46);
+                }
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);

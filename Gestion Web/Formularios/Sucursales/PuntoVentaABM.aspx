@@ -27,7 +27,7 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-4">Empresa</label>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
 
                                                 <asp:TextBox ID="txtEmpresa" runat="server" class="form-control"></asp:TextBox>
 
@@ -40,7 +40,7 @@
                                         <div class="form-group">
                                             <label for="name" class="col-md-4">Punto de Venta</label>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
 
                                                 <asp:TextBox ID="txtPuntoVta" runat="server" class="form-control"></asp:TextBox>
 
@@ -71,9 +71,16 @@
 
                                                     <asp:RequiredFieldValidator ControlToValidate="txtTope" ID="RequiredFieldValidator5" runat="server" ErrorMessage="*" SetFocusOnError="true" ForeColor="Red" ValidationGroup="PVGroup"></asp:RequiredFieldValidator>
                                                 </div>
-                                            </asp:Panel>                                            
+                                            </asp:Panel>
                                         </div>
                                         
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-4">Moneda Facturacion</label>
+                                            <div class="col-md-3">
+                                                <asp:DropDownList ID="DropDownListMonedaFacturacion" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="name" class="col-md-4">Retiene Ganancias</label>
 
