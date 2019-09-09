@@ -23,7 +23,6 @@ namespace Gestion_Web.Formularios.Articulos
     public partial class ArticulosNew : System.Web.UI.Page
     {
 
-        private controladorListaPrecio contPrecio = new controladorListaPrecio();
         private controladorArticulosNew contArticulo = new controladorArticulosNew();
         private controladorUsuario contUser = new controladorUsuario();
         private ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
