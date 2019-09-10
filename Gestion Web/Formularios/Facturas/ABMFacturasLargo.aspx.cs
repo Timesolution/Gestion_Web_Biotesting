@@ -3682,6 +3682,9 @@ namespace Gestion_Web.Formularios.Facturas
                     return;
                 }
 
+                if (checkFacturaCredito.Checked)
+                    controlador.facturaCredito = true;
+
                 if (fact.items.Count > 0)
                 {
                     int datosExtras = this.validarDatosExtrasCargadosFactura(fact);
