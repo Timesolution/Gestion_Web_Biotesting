@@ -93,10 +93,10 @@ namespace Gestion_Web.Formularios.Reportes
                     DropListVendedores.SelectedValue = idVendedor.ToString();
                     DropListProveedores.SelectedValue = idProveedor.ToString();
                     ListTipo.SelectedValue = this.idTipo.ToString();
-
                     this.lblParametrosUrl.Text = this.fechaD + "&" + this.fechaH + "&" + this.suc + "&" + this.idArticulo + "&" + this.idSubGrupo + "&" + this.idGrupo + "&" + this.idCliente + "&" + this.idVendedor + "&" + this.idProveedor + "&" + this.idTipo + "&" + this.listas;
+                    this.cargarDatosRango(fechaD, fechaH, suc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, idTipo);
                 }
-                this.cargarDatosRango(fechaD, fechaH, suc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, idTipo);
+                
 
             }
             catch (Exception ex)
