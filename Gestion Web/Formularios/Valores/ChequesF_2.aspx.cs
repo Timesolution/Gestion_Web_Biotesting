@@ -446,8 +446,8 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control C in phCheques.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    String estadoCh = tr.Cells[10].Text;
-                    CheckBox ch = tr.Cells[12].Controls[2] as CheckBox;
+                    String estadoCh = tr.Cells[tr.Cells.Count-3].Text;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     //Si esta seleccionado, tiene estado disponible y es de terceros guardo el id.
                     if (ch.Checked == true && estadoCh == "Disponible")
                     {
