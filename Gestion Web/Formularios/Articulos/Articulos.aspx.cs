@@ -803,6 +803,14 @@ namespace Gestion_Web.Formularios.Articulos
                 this.DropListSucNoVendido.DataBind();
                 this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
 
+
+                this.DropListSucursal_St2.DataSource = dt;
+                this.DropListSucursal_St2.DataValueField = "Id";
+                this.DropListSucursal_St2.DataTextField = "nombre";
+
+                this.DropListSucursal_St2.DataBind();
+                this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
+
                 dt.Rows[0].ItemArray[2] = "Seleccione...";
                 dr["nombre"] = "Seleccione...";
 
@@ -812,12 +820,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 this.DropListSucursal_St.DataBind();
 
-                this.DropListSucursal_St2.DataSource = dt;
-                this.DropListSucursal_St2.DataValueField = "Id";
-                this.DropListSucursal_St2.DataTextField = "nombre";
-
-                this.DropListSucursal_St2.DataBind();
-                this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
+                
 
                 //informe stock unico en sucursal y en la otra no
                 this.ListSucursalCentral.DataSource = dt;
