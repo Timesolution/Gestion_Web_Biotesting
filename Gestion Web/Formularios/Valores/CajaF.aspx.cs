@@ -334,13 +334,10 @@ namespace Gestion_Web.Formularios.Valores
 
                 if (dt != null)
                 {
-                    if (dt.Rows.Count > 1)
-                    {
-                        DataRow dr = dt.NewRow();
-                        dr["Razon Social"] = "Seleccione...";
-                        dr["Cuit"] = "-1";
-                        dt.Rows.InsertAt(dr, 0);
-                    }
+                    DataRow dr = dt.NewRow();
+                    dr["Razon Social"] = "Seleccione...";
+                    dr["Cuit"] = "-1";
+                    dt.Rows.InsertAt(dr, 0);
 
                     this.ListEmpresaDestinoMovimientoBanco.DataSource = dt;
                     this.ListEmpresaDestinoMovimientoBanco.DataValueField = "Cuit";

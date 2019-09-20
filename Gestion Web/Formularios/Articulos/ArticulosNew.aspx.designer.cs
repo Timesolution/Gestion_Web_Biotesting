@@ -10,7 +10,7 @@
 namespace Gestion_Web.Formularios.Articulos {
     
     
-    public partial class Articulos {
+    public partial class ArticulosNew {
         
         /// <summary>
         /// lbBuscar control.
@@ -67,40 +67,40 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.Literal litNumero;
         
         /// <summary>
-        /// btnUltimoDia control.
+        /// btnUltimos_1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimoDia;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_1;
         
         /// <summary>
-        /// btnUltimos2 control.
+        /// btnUltimos_2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimos2;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_2;
         
         /// <summary>
-        /// btnUltimos3 control.
+        /// btnUltimos_3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimos3;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_3;
         
         /// <summary>
-        /// btnUltimos4 control.
+        /// btnUltimos_4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnUltimos4;
+        protected global::System.Web.UI.WebControls.LinkButton btnUltimos_4;
         
         /// <summary>
         /// btnUltimos_5 control.
@@ -157,130 +157,103 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.LinkButton btnActualizarTodo;
         
         /// <summary>
-        /// phColumna1 control.
+        /// ColumnaId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna1;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaId;
         
         /// <summary>
-        /// phColumna2 control.
+        /// ColumnaCodigo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna2;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaCodigo;
         
         /// <summary>
-        /// phColumna3 control.
+        /// ColumnaDescripcion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna3;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaDescripcion;
         
         /// <summary>
-        /// phColumna7 control.
+        /// ColumnaGrupo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna7;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaGrupo;
         
         /// <summary>
-        /// phColumna8 control.
+        /// ColumnaSubgrupo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna8;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaSubgrupo;
         
         /// <summary>
-        /// phColumna9 control.
+        /// ColumnaMarca control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna9;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaMarca;
         
         /// <summary>
-        /// thMarca control.
+        /// ColumnaUltimaAct control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell thMarca;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaUltimaAct;
         
         /// <summary>
-        /// phColumna4 control.
+        /// ColumnaProveedor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna4;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaProveedor;
         
         /// <summary>
-        /// phColumna5 control.
+        /// ColumnaPVenta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna5;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaPVenta;
         
         /// <summary>
-        /// thFechaAct control.
+        /// ColumnaApareceLista control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell thFechaAct;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaApareceLista;
         
         /// <summary>
-        /// phColumna10 control.
+        /// ColumnaBotones control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna10;
-        
-        /// <summary>
-        /// thPrecioVentaMonedaOriginal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell thPrecioVentaMonedaOriginal;
-        
-        /// <summary>
-        /// phColumna6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna6;
-        
-        /// <summary>
-        /// headerPrecio control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell headerPrecio;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell ColumnaBotones;
         
         /// <summary>
         /// phArticulos control.
@@ -290,6 +263,114 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phArticulos;
+        
+        /// <summary>
+        /// btnPrevious control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnPrevious;
+        
+        /// <summary>
+        /// btnNext control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnNext;
+        
+        /// <summary>
+        /// hiddenGrupoValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenGrupoValue;
+        
+        /// <summary>
+        /// hiddenSubGrupoValue control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenSubGrupoValue;
+        
+        /// <summary>
+        /// hiddenMarca control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenMarca;
+        
+        /// <summary>
+        /// hiddenDiasUltimaActualizacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenDiasUltimaActualizacion;
+        
+        /// <summary>
+        /// hiddenProveedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenProveedor;
+        
+        /// <summary>
+        /// hiddenSoloProveedorPredeterminado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenSoloProveedorPredeterminado;
+        
+        /// <summary>
+        /// hiddenDescSubGrupo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenDescSubGrupo;
+        
+        /// <summary>
+        /// hiddenAccion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenAccion;
+        
+        /// <summary>
+        /// hiddenBuscar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenBuscar;
+        
+        /// <summary>
+        /// hiddenDescripcion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hiddenDescripcion;
         
         /// <summary>
         /// lblMensaje control.
@@ -443,6 +524,15 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnFiltrar;
+        
+        /// <summary>
+        /// UpdatePanel11 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel11;
         
         /// <summary>
         /// txtPorcentajeAumento control.
@@ -814,6 +904,15 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.HiddenField idProveedorHF;
         
         /// <summary>
+        /// LinkButton1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        
+        /// <summary>
         /// lbtnBuscarProveedor control.
         /// </summary>
         /// <remarks>
@@ -830,6 +929,15 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListProveedor;
+        
+        /// <summary>
+        /// RequiredFieldValidator25 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator25;
         
         /// <summary>
         /// PrecioSinIva control.
