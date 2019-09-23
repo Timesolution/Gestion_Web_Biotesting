@@ -677,5 +677,50 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF;
+        
+        /// <summary>
+        /// txt_FechaDesde_ReporteVentasArticulosSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_FechaDesde_ReporteVentasArticulosSucursales;
+        
+        /// <summary>
+        /// txt_FechaHasta_ReporteVentasArticulosSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txt_FechaHasta_ReporteVentasArticulosSucursales;
+        
+        /// <summary>
+        /// dropList_Sucursal_ReporteVentasArticulosSucursales control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList dropList_Sucursal_ReporteVentasArticulosSucursales;
+        
+        /// <summary>
+        /// lbtn_GenerarReporte_VentasArticulosSucursales_XLS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtn_GenerarReporte_VentasArticulosSucursales_XLS;
+        
+        /// <summary>
+        /// lbtn_GenerarReporte_VentasArticulosSucursales_PDF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtn_GenerarReporte_VentasArticulosSucursales_PDF;
     }
 }
