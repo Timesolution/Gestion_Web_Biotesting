@@ -819,7 +819,9 @@
     <Content Include="Formularios\Reportes\VentasDeFacturasBySucursalesByRangoHorario.rdlc">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc" />
+    <Content Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>

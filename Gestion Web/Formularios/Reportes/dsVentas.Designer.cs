@@ -5167,9 +5167,9 @@ namespace Gestion_Web.Formularios.Reportes {
             
             private global::System.Data.DataColumn columndescripcion;
             
-            private global::System.Data.DataColumn columncantidad;
+            private global::System.Data.DataColumn columncantidadArticulos;
             
-            private global::System.Data.DataColumn columnimporte;
+            private global::System.Data.DataColumn columnTotal;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -5254,17 +5254,17 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn cantidadColumn {
+            public global::System.Data.DataColumn cantidadArticulosColumn {
                 get {
-                    return this.columncantidad;
+                    return this.columncantidadArticulos;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn importeColumn {
+            public global::System.Data.DataColumn TotalColumn {
                 get {
-                    return this.columnimporte;
+                    return this.columnTotal;
                 }
             }
             
@@ -5305,7 +5305,7 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public VentasArticulosSucursalesConImporteRow AddVentasArticulosSucursalesConImporteRow(string sucursal, string grupo, string subgrupo, string codigo, string marca, string descripcion, string cantidad, string importe) {
+            public VentasArticulosSucursalesConImporteRow AddVentasArticulosSucursalesConImporteRow(string sucursal, string grupo, string subgrupo, string codigo, string marca, string descripcion, string cantidadArticulos, string Total) {
                 VentasArticulosSucursalesConImporteRow rowVentasArticulosSucursalesConImporteRow = ((VentasArticulosSucursalesConImporteRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         sucursal,
@@ -5314,8 +5314,8 @@ namespace Gestion_Web.Formularios.Reportes {
                         codigo,
                         marca,
                         descripcion,
-                        cantidad,
-                        importe};
+                        cantidadArticulos,
+                        Total};
                 rowVentasArticulosSucursalesConImporteRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowVentasArticulosSucursalesConImporteRow);
                 return rowVentasArticulosSucursalesConImporteRow;
@@ -5344,8 +5344,8 @@ namespace Gestion_Web.Formularios.Reportes {
                 this.columncodigo = base.Columns["codigo"];
                 this.columnmarca = base.Columns["marca"];
                 this.columndescripcion = base.Columns["descripcion"];
-                this.columncantidad = base.Columns["cantidad"];
-                this.columnimporte = base.Columns["importe"];
+                this.columncantidadArticulos = base.Columns["cantidadArticulos"];
+                this.columnTotal = base.Columns["Total"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5363,10 +5363,10 @@ namespace Gestion_Web.Formularios.Reportes {
                 base.Columns.Add(this.columnmarca);
                 this.columndescripcion = new global::System.Data.DataColumn("descripcion", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columndescripcion);
-                this.columncantidad = new global::System.Data.DataColumn("cantidad", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columncantidad);
-                this.columnimporte = new global::System.Data.DataColumn("importe", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnimporte);
+                this.columncantidadArticulos = new global::System.Data.DataColumn("cantidadArticulos", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncantidadArticulos);
+                this.columnTotal = new global::System.Data.DataColumn("Total", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotal);
                 this.columnsucursal.Caption = "fechaDateTime";
                 this.columngrupo.Caption = "rangoHorario";
                 this.columnsubgrupo.Caption = "facturasRealizadas";
@@ -7564,35 +7564,35 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string cantidad {
+            public string cantidadArticulos {
                 get {
                     try {
-                        return ((string)(this[this.tableVentasArticulosSucursalesConImporte.cantidadColumn]));
+                        return ((string)(this[this.tableVentasArticulosSucursalesConImporte.cantidadArticulosColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'cantidad\' in table \'VentasArticulosSucursalesConImporte\' is" +
-                                " DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'cantidadArticulos\' in table \'VentasArticulosSucursalesConIm" +
+                                "porte\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableVentasArticulosSucursalesConImporte.cantidadColumn] = value;
+                    this[this.tableVentasArticulosSucursalesConImporte.cantidadArticulosColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string importe {
+            public string Total {
                 get {
                     try {
-                        return ((string)(this[this.tableVentasArticulosSucursalesConImporte.importeColumn]));
+                        return ((string)(this[this.tableVentasArticulosSucursalesConImporte.TotalColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'importe\' in table \'VentasArticulosSucursalesConImporte\' is " +
-                                "DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'Total\' in table \'VentasArticulosSucursalesConImporte\' is DB" +
+                                "Null.", e);
                     }
                 }
                 set {
-                    this[this.tableVentasArticulosSucursalesConImporte.importeColumn] = value;
+                    this[this.tableVentasArticulosSucursalesConImporte.TotalColumn] = value;
                 }
             }
             
@@ -7670,26 +7670,26 @@ namespace Gestion_Web.Formularios.Reportes {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IscantidadNull() {
-                return this.IsNull(this.tableVentasArticulosSucursalesConImporte.cantidadColumn);
+            public bool IscantidadArticulosNull() {
+                return this.IsNull(this.tableVentasArticulosSucursalesConImporte.cantidadArticulosColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetcantidadNull() {
-                this[this.tableVentasArticulosSucursalesConImporte.cantidadColumn] = global::System.Convert.DBNull;
+            public void SetcantidadArticulosNull() {
+                this[this.tableVentasArticulosSucursalesConImporte.cantidadArticulosColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsimporteNull() {
-                return this.IsNull(this.tableVentasArticulosSucursalesConImporte.importeColumn);
+            public bool IsTotalNull() {
+                return this.IsNull(this.tableVentasArticulosSucursalesConImporte.TotalColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetimporteNull() {
-                this[this.tableVentasArticulosSucursalesConImporte.importeColumn] = global::System.Convert.DBNull;
+            public void SetTotalNull() {
+                this[this.tableVentasArticulosSucursalesConImporte.TotalColumn] = global::System.Convert.DBNull;
             }
         }
         
