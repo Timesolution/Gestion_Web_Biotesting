@@ -3287,6 +3287,7 @@
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosGrupoR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosLista.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasVendedores.rdlc" />
