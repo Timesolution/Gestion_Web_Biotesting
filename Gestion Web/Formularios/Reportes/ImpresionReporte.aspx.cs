@@ -1414,9 +1414,9 @@ namespace Gestion_Web.Formularios.Reportes
                 DataTable dtReporte_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal = contFacturacion.obtenerVentasRealizadasAgrupadoPor_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal(fechaD, fechaH);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc");
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosSucursalesConImporte.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("VentasAgrupadoSucursalGrupoSubGrupoMarca", dtReporte_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal);
+                ReportDataSource rds = new ReportDataSource("VentasArticulosSucursalesConImporte", dtReporte_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal);
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
 
@@ -1433,7 +1433,7 @@ namespace Gestion_Web.Formularios.Reportes
                     //get xls content
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
-                    String filename = string.Format("{0}.{1}", "Ventas_Por_Sucursales_Grupo_SubGrupo_Marca", "xls");
+                    String filename = string.Format("{0}.{1}", "Ventas_Por_Sucursales_Articulos_Cantidad_Importe", "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;
