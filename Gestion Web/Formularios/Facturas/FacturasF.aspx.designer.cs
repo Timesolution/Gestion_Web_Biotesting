@@ -319,6 +319,24 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.LinkButton btnImprimirVentasVendedor;
         
         /// <summary>
+        /// btnExportarReporteVentasVendedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportarReporteVentasVendedor;
+        
+        /// <summary>
+        /// btnImprimirReporteVentasVendedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnImprimirReporteVentasVendedor;
+        
+        /// <summary>
         /// btnExportarVentasSucursal control.
         /// </summary>
         /// <remarks>

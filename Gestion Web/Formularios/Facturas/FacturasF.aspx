@@ -200,6 +200,23 @@
                                             </ul>
                                         </li>
 
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Reporte Ventas x Vendedor</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="btnExportarReporteVentasVendedor" runat="server" OnClick="btnExportarReporteVentasVendedor_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                    </asp:LinkButton>
+                                                </li>
+                                                <li>
+                                                    <asp:LinkButton ID="btnImprimirReporteVentasVendedor" runat="server" OnClick="btnImprimirReporteVentasVendedor_Click">
+                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                        &nbsp Imprimir
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
+
                                         <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Total Ventas x Sucursal</a>
                                             <ul class="dropdown-menu">
                                                 <li>

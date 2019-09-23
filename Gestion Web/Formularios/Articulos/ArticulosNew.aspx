@@ -1,4 +1,4 @@
-﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Gestion_Web.Formularios.Articulos.Articulos" %>
+﻿<%@ Page EnableEventValidation="false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ArticulosNew.aspx.cs" Inherits="Gestion_Web.Formularios.Articulos.ArticulosNew" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -20,7 +20,7 @@
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscar_Click">
+                                        <asp:LinkButton ID="lbBuscar" OnClientClick="llenarTablaBySearch()" runat="server" Text="Buscar" class="btn btn-primary">
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
                                     </span>
                                     <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Articulo"></asp:TextBox>
@@ -110,20 +110,20 @@
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <asp:LinkButton ID="btnUltimoDia" runat="server" OnClick="btnUltimoDia_Click">Ultimo Día</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_1" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimo Día</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos2" runat="server" OnClick="btnUltimos2_Click">Ultimos 2 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_2" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 2 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos3" runat="server" OnClick="btnUltimos3_Click">Ultimos 3 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_3" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 3 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos4" runat="server" OnClick="btnUltimos4_Click">Ultimos 4 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_4" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 4 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos_5" runat="server" OnClick="btnUltimos5_Click">Ultimos 5 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_5" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 5 Días</asp:LinkButton></li>
 
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos_6" runat="server" OnClick="btnUltimos5_Click">Ultimos 6 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_6" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 6 Días</asp:LinkButton></li>
                                     <li>
-                                        <asp:LinkButton ID="btnUltimos_7" runat="server" OnClick="btnUltimos5_Click">Ultimos 7 Días</asp:LinkButton></li>
+                                        <asp:LinkButton ID="btnUltimos_7" runat="server" OnClientClick="llenarTablaByUltimosDias(this)">Ultimos 7 Días</asp:LinkButton></li>
 
                                 </ul>
                             </div>
@@ -131,7 +131,7 @@
 
                         </td>
                         <td style="width: 2%">
-                            <asp:PlaceHolder ID="phActualizacionPrecios" Visible="false" runat="server">
+                            <asp:PlaceHolder ID="phActualizacionPrecios" Visible="true" runat="server">
                                 <%--<div class="btn-group" style="height: 100%">                                    
                                         <a class="btn btn-primary ui-tooltip" href="#modalRecalcular" data-toggle="modal" title data-original-title="Actualizar Precios" >
                                             <i class="shortcut-icon icon-usd"></i>
@@ -199,40 +199,46 @@
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                                 <tr>
-                                    <th runat="server" style="width: 5%">Codigo</th>
-                                    <th runat="server" style="width: 35%">Descripcion</th>
-                                    <asp:PlaceHolder ID="phColumna1" Visible="false" runat="server">
-                                        <th runat="server" style="width: 10%">Proveedor</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna2" Visible="false" runat="server">
-                                        <th runat="server" style="width: 10%">Grupo</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna3" Visible="false" runat="server">
-                                        <th runat="server" style="width: 10%">Sub Grupo</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna7" Visible="false" runat="server">
+                                    <%--<asp:PlaceHolder ID="phColumna0" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaId" style="width: 0%">Id</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <th runat="server" id="ColumnaCodigo" style="width: 5%">Codigo</th>
+                                    <th runat="server" id="ColumnaDescripcion" style="width: 35%">Descripcion</th>
+                                    <%--<asp:PlaceHolder ID="phColumna2" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaGrupo" style="width: 10%">Grupo</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna3" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaSubgrupo" style="width: 10%">SubGrupo</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna7" Visible="false" runat="server">
                                         <th runat="server" style="width: 10%">Presentacion</th>
                                     </asp:PlaceHolder>
                                     <asp:PlaceHolder ID="phColumna8" Visible="false" runat="server">
                                         <th runat="server" style="width: 10%">Stock</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna9" Visible="false" runat="server">
-                                        <th runat="server" id="thMarca" style="width: 5%">Marca</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna4" Visible="false" runat="server">
+                                    </asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna9" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaMarca" style="width: 5%">Marca</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna4" Visible="false" runat="server">
                                         <th runat="server" style="width: 5%">Moneda</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna5" Visible="false" runat="server">
-                                        <th runat="server" id="thFechaAct" style="width: 5%">Ultima Actualizacion.</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna10" Visible="false" runat="server">
-                                        <th runat="server" id="thPrecioVentaMonedaOriginal" style="width: 5%">P. Venta</th>
-                                    </asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phColumna6" runat="server">
+                                    </asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna5" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaUltimaAct" style="width: 5%">UltimaActualizacion.</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna1" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaProveedor" style="width: 10%">Proveedor</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna10" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaPVenta" style="width: 5%">PVenta</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna11" Visible="false" runat="server">--%>
+                                    <th runat="server" id="ColumnaApareceLista" style="width: 0%">ApareceLista</th>
+                                    <%--</asp:PlaceHolder>--%>
+                                    <%--<asp:PlaceHolder ID="phColumna6" runat="server">
                                         <th runat="server" id="headerPrecio" style="width: 5%">P.Venta en ($)</th>
-                                    </asp:PlaceHolder>
-                                    <th runat="server" class="td-actions" style="width: 20%"></th>
-
+                                    </asp:PlaceHolder>--%>
+                                    <%--<th runat="server" class="td-actions" style="width: 20%"></th>--%>
+                                    <th runat="server" id="ColumnaBotones" style="width: 20%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -246,7 +252,20 @@
 
 
                 <!-- /.content -->
-
+                <div style="text-align: right; margin-bottom: 1%">
+                    <asp:Button Text="Anterior" runat="server" ID="btnPrevious" OnClientClick="llenarTablaPrevious()" Style="margin-right: 1%; visibility: hidden" />
+                    <asp:Button Text="Siguiente" runat="server" ID="btnNext" OnClientClick="llenarTablaNext()" Style="margin-right: 1%; visibility: hidden" />
+                    <input runat="server" id="hiddenGrupoValue" type="hidden" />
+                    <input runat="server" id="hiddenSubGrupoValue" type="hidden" />
+                    <input runat="server" id="hiddenMarca" type="hidden" />
+                    <input runat="server" id="hiddenDiasUltimaActualizacion" type="hidden" />
+                    <input runat="server" id="hiddenProveedor" type="hidden" />
+                    <input runat="server" id="hiddenSoloProveedorPredeterminado" type="hidden" />
+                    <input runat="server" id="hiddenDescSubGrupo" type="hidden" />
+                    <input runat="server" id="hiddenAccion" type="hidden" />
+                    <input runat="server" id="hiddenBuscar" type="hidden" />
+                    <input runat="server" id="hiddenDescripcion" type="hidden" />
+                </div>
             </div>
 
         </div>
@@ -298,7 +317,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <button type="button" class="close" id="btnCerrarFlitro" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Filtrar Articulos</h4>
                 </div>
                 <div class="modal-body">
@@ -378,7 +397,7 @@
 
 
                     <div class="modal-footer">
-                        <asp:LinkButton ID="btnFiltrar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnFiltrar_Click" />
+                        <asp:LinkButton ID="btnFiltrar" OnClientClick="llenarTabla()" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" />
                     </div>
                 </div>
 
@@ -389,53 +408,58 @@
     <div id="modalRecalcular" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Modificar Precio</h4>
-                </div>
-                <div class="modal-body">
-                    <div role="form" class="form-horizontal col-md-12">
-                        <div class="form-group">
-                            <label class="col-md-4">Porcentaje Costo</label>
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <span class="input-group-addon">%</span>
-                                    <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <asp:Button ID="btnModificarPrecio" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
-                            </div>
+                <asp:UpdatePanel runat="server" ID="UpdatePanel11">
+                    <ContentTemplate>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Modificar Precio</h4>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-4">Nuevo Precio Venta</label>
-                            <div class="col-md-5">
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-4">Porcentaje Costo</label>
+                                    <div class="col-md-5">
 
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPorcentajeAumento" Style="text-align: right;" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnModificarPrecio" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnModificarPrecio_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Nuevo Precio Venta</label>
+                                    <div class="col-md-5">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <asp:TextBox ID="txtPrecioVenta" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnSeteaPrecioventa" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Porcentaje Precio Venta</label>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPrecioVentaPorcentual" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnSeteaPrecioventaPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventaPorcentual_Click" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <asp:Button ID="btnSeteaPrecioventa" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventa_Click" />
+                            <div class="modal-footer">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-4">Porcentaje Precio Venta</label>
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <span class="input-group-addon">%</span>
-                                    <asp:TextBox ID="txtPrecioVentaPorcentual" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <asp:Button ID="btnSeteaPrecioventaPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventaPorcentual_Click" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
             </div>
         </div>
     </div>
@@ -483,9 +507,9 @@
                                     <br />
                                     <asp:Label ID="lblFormato" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
-                        
+
                     </ContentTemplate>
                 </asp:UpdatePanel>
                 <div class="modal-footer">
@@ -672,19 +696,25 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                        <label class="col-md-4">Buscar Proveedor</label>
-                                        <div class="col-md-6">
-                                            <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <asp:HiddenField runat="server" ID="idProveedorHF" />
-                                            <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
-                                        </div>
+                                    <label class="col-md-4">Buscar Proveedor</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
                                     </div>
+                                    <div class="col-md-2">
+                                        <asp:HiddenField runat="server" ID="idProveedorHF" />
+                                        <asp:LinkButton ID="LinkButton1" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Proveedor</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListProveedor" ValidationGroup="BusquedaLista" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedor" InitialValue="-1" ValidationGroup="BusquedaLista" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -794,12 +824,12 @@
                                     </div>
                                     <div class="col-md-2">
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal_St2" InitialValue="-1" ValidationGroup="StockValorizado" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Stock Detallado</label>
                                     <div class="col-md-6">
-                                        <asp:CheckBox ID="cbStockDetallado" Checked="false" runat="server"/>
+                                        <asp:CheckBox ID="cbStockDetallado" Checked="false" runat="server" />
                                     </div>
                                 </div>
                             </ContentTemplate>
@@ -1127,7 +1157,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <button type="button" class="close" id="btnCerrarDesactualizados" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Seleccione dias</h4>
                 </div>
                 <div class="modal-body">
@@ -1143,7 +1173,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="lbtnDesactualizados" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="DesactGroup" OnClick="lbtnDesactualizados_Click" />
+                        <asp:LinkButton ID="lbtnDesactualizados" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" ValidationGroup="DesactGroup" OnClientClick="llenarTablaDesactualizados()" />
                     </div>
                 </div>
 
@@ -1241,22 +1271,20 @@
     </script>
     <script>
 
-        function AsignarProveedor()
-        {
+        function AsignarProveedor() {
             var idProveedor = document.getElementById('<%= DropListProveedor.ClientID %>').value;
             var idProveedorHF = document.getElementById('<%= idProveedorHF.ClientID %>');
 
             idProveedorHF.value = idProveedor;
         };
 
-        function ObtenerProveedor()
-        {
+        function ObtenerProveedor() {
             event.preventDefault();
             var descripcionProveedor = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>').value;
 
             $.ajax({
                 type: "POST",
-                url: "Articulos.aspx/ObtenerProveedor",
+                url: "ArticulosNew.aspx/ObtenerProveedor",
                 data: '{proveedor: "' + descripcionProveedor + '"  }',
                 contentType: "application/json",
                 dataType: 'json',
@@ -1267,8 +1295,7 @@
             });
         };
 
-        function OnSuccessObtenerProveedor(response)
-        {
+        function OnSuccessObtenerProveedor(response) {
             var controlDropListProveedor = document.getElementById('<%= DropListProveedor.ClientID %>');
 
             while (controlDropListProveedor.options.length > 0) {
@@ -1297,15 +1324,12 @@
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
-
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
     <script src="../../Scripts/libs/bootstrap.min.js"></script>
-
     <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
     <script src="../../Scripts/Application.js"></script>
     <script src="../../Scripts/demo/gallery.js"></script>
-
     <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
     <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
@@ -1319,6 +1343,15 @@
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
     <script>
+
+        $(document).ready(function () {
+            var inputAccion = document.getElementById('<%= hiddenAccion.ClientID%>');
+            inputAccion.value = 0;
+        });
+
+        var previousPageId = 0;
+        var nextPageId = 0;
+
         function mostrarMensaje(Boton) {
             $.msgbox("Are you sure that you want to permanently delete the selected element?", {
                 type: "confirm",
@@ -1335,51 +1368,399 @@
             });
         }
 
-    </script>
+        function llenarTablaBySearch() {
+            event.preventDefault();
 
-    <script>
-        $(document).ready(function () {
-            var columnaFecha = $("#<%= thFechaAct.ClientID %>");
-            if (columnaFecha[0] != null) {
-                $('#dataTables-example').dataTable({
-                    "bLengthChange": false,
-                    "bFilter": false,
-                    "bInfo": false,
-                    "bAutoWidth": false,
-                    "bStateSave": true,
-                    "columnDefs": [
-                        { type: 'date-eu', targets: 5 }
-                    ]
-                });
+            var selectedDescripcion = document.getElementById('<%= txtBusqueda.ClientID%>').value;
+
+            var inputDescripcion = document.getElementById('<%= hiddenDescripcion.ClientID%>');
+            var inputAccion = document.getElementById('<%= hiddenAccion.ClientID%>');
+
+            inputAccion.value = 1;
+
+            inputDescripcion.value = selectedDescripcion;
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/buscarArticulo",
+                data: '{busqueda: "' + selectedDescripcion.toString() + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTablaBySearch,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTablaByUltimosDias(boton) {
+            event.preventDefault();
+            var dias;
+            dias = boton.id.split('_')[2];
+
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/cargarArticulosActualizacionPrecios",
+                data: '{dias: "' + dias + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTablaBySearch,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTablaDesactualizados() {
+            event.preventDefault();
+            var dias = document.getElementById('<%= txtDiasDesactualizado.ClientID%>').value;
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/cargarArticulosDesactualizadosPrecios",
+                data: '{dias: "' + dias + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTablaBySearch,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTabla() {
+            event.preventDefault();
+            previousPageId = 0;
+            nextPageId = 0;
+
+            var selectedGrupo = document.getElementById('<%= ListGrupo.ClientID%>').value;
+            var selectedSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').value;
+            var selectedProveedor = document.getElementById('<%= ListProveedor.ClientID%>').value;
+            var selectedFecha = document.getElementById('<%= txtDiasActualizacion.ClientID%>').value;
+            var selectedMarca = document.getElementById('<%= ListMarca.ClientID%>').value;
+            var selectedDescSubGrupo = document.getElementById('<%= ListSubGrupo.ClientID%>').options[document.getElementById('<%= ListSubGrupo.ClientID%>').selectedIndex].text;
+            var selectedProveedorDeterminado = document.getElementById('<%= cbSoloProveedorPredeterminado.ClientID%>').checked;
+            var valueProvDet = 0;
+
+            if (selectedProveedorDeterminado == true) {
+                valueProvDet = 1;
             }
             else {
-                $('#dataTables-example').dataTable({
-                    "bLengthChange": false,
+                valueProvDet = 0;
+            }
+
+            var inputGrupo = document.getElementById('<%= hiddenGrupoValue.ClientID%>');
+            var inputSubGrupo = document.getElementById('<%= hiddenSubGrupoValue.ClientID%>');
+            var inputMarca = document.getElementById('<%= hiddenMarca.ClientID%>');
+            var inputDias = document.getElementById('<%= hiddenDiasUltimaActualizacion.ClientID%>');
+            var inputProveedor = document.getElementById('<%= hiddenProveedor.ClientID%>');
+            var inputSoloProvDet = document.getElementById('<%= hiddenSoloProveedorPredeterminado.ClientID%>');
+            var inputDescSubGrupo = document.getElementById('<%= hiddenDescSubGrupo.ClientID%>');
+            var inputAccion = document.getElementById('<%= hiddenAccion.ClientID%>');
+
+            inputAccion.value = 2;
+            inputGrupo.value = selectedGrupo;
+            inputSubGrupo.value = selectedSubGrupo;
+            inputMarca.value = selectedMarca;
+            inputDias.value = selectedFecha;
+            inputProveedor.value = selectedProveedor;
+            inputSoloProvDet.value = valueProvDet;
+            inputDescSubGrupo.value = selectedDescSubGrupo;
+
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/getArticulosFiltrados",
+                data: '{grupo: "' + selectedGrupo + '", subgrupo: "' + selectedSubGrupo + '", proveedor: "' + selectedProveedor + '", dias: "' + selectedFecha + '", marca: "' + selectedMarca + '", descSubGrupo: "' + selectedDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + valueProvDet + '", lastPageId: "' + nextPageId + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTabla,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTablaNext() {
+            event.preventDefault();
+
+            var inputGrupo = document.getElementById('<%= hiddenGrupoValue.ClientID%>').value;
+            var inputSubGrupo = document.getElementById('<%= hiddenSubGrupoValue.ClientID%>').value;
+            var inputMarca = document.getElementById('<%= hiddenMarca.ClientID%>').value;
+            var inputDias = document.getElementById('<%= hiddenDiasUltimaActualizacion.ClientID%>').value;
+            var inputProveedor = document.getElementById('<%= hiddenProveedor.ClientID%>').value;
+            var inputSoloProvDet = document.getElementById('<%= hiddenSoloProveedorPredeterminado.ClientID%>').value;
+            var inputDescSubGrupo = document.getElementById('<%= hiddenDescSubGrupo.ClientID%>').value;
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/getArticulosFiltrados",
+                data: '{grupo: "' + inputGrupo + '", subgrupo: "' + inputSubGrupo + '", proveedor: "' + inputProveedor + '", dias: "' + inputDias + '", marca: "' + inputMarca + '", descSubGrupo: "' + inputDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + inputSoloProvDet + '", lastPageId: "' + nextPageId + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTabla,
+                complete: LimpiarTabla
+            });
+        }
+
+        function llenarTablaPrevious() {
+            event.preventDefault();
+
+            var inputGrupo = document.getElementById('<%= hiddenGrupoValue.ClientID%>').value;
+            var inputSubGrupo = document.getElementById('<%= hiddenSubGrupoValue.ClientID%>').value;
+            var inputMarca = document.getElementById('<%= hiddenMarca.ClientID%>').value;
+            var inputDias = document.getElementById('<%= hiddenDiasUltimaActualizacion.ClientID%>').value;
+            var inputProveedor = document.getElementById('<%= hiddenProveedor.ClientID%>').value;
+            var inputSoloProvDet = document.getElementById('<%= hiddenSoloProveedorPredeterminado.ClientID%>').value;
+            var inputDescSubGrupo = document.getElementById('<%= hiddenDescSubGrupo.ClientID%>').value;
+
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/getArticulosFiltradosPrevious",
+                data: '{grupo: "' + inputGrupo + '", subgrupo: "' + inputSubGrupo + '", proveedor: "' + inputProveedor + '", dias: "' + inputDias + '", marca: "' + inputMarca + '", descSubGrupo: "' + inputDescSubGrupo.toString() + '", soloProveedorPredeterminado: "' + inputSoloProvDet + '", lastPageId: "' + previousPageId + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: successLlenarTabla,
+                complete: LimpiarTabla
+            });
+        }
+
+        function successLlenarTabla(response) {
+            event.preventDefault();
+
+            var obj = JSON.parse(response.d);
+            if (obj.length == 0) {
+                //alert("Este listado no contiene mas paginas");
+                return;
+            }
+            document.getElementById('<%= btnNext.ClientID%>').style.visibility = "visible";
+            document.getElementById('<%= btnPrevious.ClientID%>').style.visibility = "visible";
+            $("#dataTables-example").dataTable().fnDestroy();
+            $('#dataTables-example').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                $('#dataTables-example').append
+                    (
+                    "<tr>" +
+                    "<td> " + obj[i].Id + "</td>" +
+                    "<td> " + obj[i].Codigo + "</td>" +
+                    "<td> " + obj[i].Descripcion + "</td>" +
+                    "<td> " + obj[i].Grupo + "</td>" +
+                    "<td> " + obj[i].SubGrupo + "</td>" +
+                    "<td> " + obj[i].Marca + "</td>" +
+                    "<td> " + obj[i].UltimaActualizacion + "</td>" +
+                    "<td> " + obj[i].Proveedor + "</td>" +
+                    "<td style='text-align:right'> " + "$ " + obj[i].PVenta + "</td>" +
+                    "<td> " + obj[i].ApareceLista + "</td>" +
+                    "<td> <a href=\"ArticulosABM.aspx?accion=2&id=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >" +
+                    "<i class=\"shortcut-icon icon-search\"></i> </a> " +
+
+                    "<a href=\"StockF.aspx?articulo=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Stock\" >" +
+                    "<i class=\"shortcut-icon icon-list-alt\"></i> </a> " +
+
+                    "<a href=\"../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Composicion\" >" +
+                    "<i class=\"shortcut-icon icon-dropbox\"></i> </a> " +
+
+                    "<a href=\"#modalConfirmacion\" class=\"btn btn-info \" data-toggle=\"modal\" OnClientClick=\"abrirdialog(" + obj[i].Id + ")\" >" +
+                    "<i class=\"shortcut-icon icon-trash\"></i> </a> " +
+                    "</td > " +
+                    "</tr>"
+                    );
+                if (i == 0) {
+                    previousPageId = obj[i].Id;
+                }
+                if (i == 49) {
+                    nextPageId = obj[i].Id;
+                }
+            }
+
+            $('#dataTables-example').dataTable(
+                {
+                    "bLengthChange": true,
+                    "LengthChange": true,
                     "bFilter": false,
                     "bInfo": false,
+                    "bPaginate": false,
                     "bAutoWidth": false,
-                    "bStateSave": true
+                    "bStateSave": true,
+                    "bSort": false,
+                    "pageLength": 50,
+                    "sPaginationType": "simple"
                 });
-            }
-        });
-    </script>
-
-    <script type="text/javascript">
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-        function endReq(sender, args) {
-            $('#dataTables-example').dataTable();
         }
-        //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-        //function endReq(sender, args) {
-        //    $('#dataTables-example').dataTable({
-        //        "bLengthChange": false,
-        //        "bFilter": false,
-        //        "bInfo": false,
-        //        "bAutoWidth": false
-        //    });
-        //}
-    </script>
-    <script>
+
+        function successLlenarTablaBySearch(response) {
+            event.preventDefault();
+
+            var obj = JSON.parse(response.d);
+            if (obj.length == 0) {
+                //alert("Este listado no contiene mas paginas");
+                return;
+            }
+
+            document.getElementById('<%= btnNext.ClientID%>').style.visibility = "hidden";
+            document.getElementById('<%= btnPrevious.ClientID%>').style.visibility = "hidden";
+
+            $("#dataTables-example").dataTable().fnDestroy();
+            $('#dataTables-example').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                $('#dataTables-example').append
+                    (
+                    "<tr>" +
+                    "<td> " + obj[i].Id + "</td>" +
+                    "<td> " + obj[i].Codigo + "</td>" +
+                    "<td> " + obj[i].Descripcion + "</td>" +
+                    "<td> " + obj[i].Grupo + "</td>" +
+                    "<td> " + obj[i].SubGrupo + "</td>" +
+                    "<td> " + obj[i].Marca + "</td>" +
+                    "<td> " + obj[i].UltimaActualizacion + "</td>" +
+                    "<td> " + obj[i].Proveedor + "</td>" +
+                    "<td style='text-align:right'> " + "$ " + obj[i].PVenta + "</td>" +
+                    "<td> " + obj[i].ApareceLista + "</td>" +
+                    "<td> <a href=\"ArticulosABM.aspx?accion=2&id=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Ver y/o Editar\" >" +
+                    "<i class=\"shortcut-icon icon-search\"></i> </a> " +
+
+                    "<a href=\"StockF.aspx?articulo=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Stock\" >" +
+                    "<i class=\"shortcut-icon icon-list-alt\"></i> </a> " +
+
+                    "<a href=\"../MateriasPrimas/MateriasPrimas_Composicion.aspx?idArt=" + obj[i].Id + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Composicion\" >" +
+                    "<i class=\"shortcut-icon icon-dropbox\"></i> </a> " +
+
+                    "<a href=\"#modalConfirmacion\" class=\"btn btn-info \" data-toggle=\"modal\" OnClientClick=\"abrirdialog(" + obj[i].Id + ")\" >" +
+                    "<i class=\"shortcut-icon icon-trash\"></i> </a> " +
+                    "</td > " +
+                    "</tr>"
+                    );
+                if (i == 0) {
+                    previousPageId = obj[i].Id;
+                }
+                if (i == 49) {
+                    nextPageId = obj[i].Id;
+                }
+            }
+
+            $('#dataTables-example').dataTable(
+                {
+                    "bLengthChange": false,
+                    "LengthChange": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    "bPaginate": false,
+                    "bAutoWidth": false,
+                    "bStateSave": true,
+                    "bSort": false,
+                    "pageLength": 50,
+                    "sPaginationType": "simple"
+                });
+        }
+
+        function LimpiarTabla() {
+            event.preventDefault();
+            document.getElementById('btnCerrarFlitro').click();
+            document.getElementById('btnCerrarDesactualizados').click();
+            $.ajax({
+                method: "POST",
+                url: "ArticulosNew.aspx/getVistaTablaArticulos",
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("Error al cargar la visualizacion", { type: "error" });
+                },
+                success: function (vista) {
+                    var obj = JSON.parse(vista.d);
+                    var columnaID = document.getElementById('<%= ColumnaId.ClientID%>');
+                    columnaID.style.display = "none";
+                    var rows = document.getElementById('dataTables-example').rows;
+                    var cols = null;
+                    for (var row = 0; row < rows.length; row++) {
+                        cols = rows[row].cells;
+                        cols[0].style.display = 'none';
+                    }
+
+                    if (obj.columnaGrupo == 0) {
+                        var columnaGrupo = document.getElementById('<%= ColumnaGrupo.ClientID%>');
+                        columnaGrupo.style.display = "none";
+                        for (row = 0; row < rows.length; row++) {
+                            cols = rows[row].cells;
+                            cols[3].style.display = 'none';
+                        }
+                    }
+
+                    if (obj.columnaSubGrupo == 0) {
+                        var columnaSubGrupo = document.getElementById('<%= ColumnaSubgrupo.ClientID%>');
+                        columnaSubGrupo.style.display = "none";
+                        for (row = 0; row < rows.length; row++) {
+                            cols = rows[row].cells;
+                            cols[4].style.display = 'none';
+                        }
+                    }
+
+                    if (obj.columnaMarca == 0) {
+                        var columnaMarca = document.getElementById('<%= ColumnaMarca.ClientID%>');
+                        columnaMarca.style.display = "none";
+                        for (row = 0; row < rows.length; row++) {
+                            cols = rows[row].cells;
+                            cols[5].style.display = 'none';
+                        }
+                    }
+
+                    if (obj.columnaActualizacion == 0) {
+                        var columnaActualizacion = document.getElementById('<%= ColumnaUltimaAct.ClientID%>');
+                        columnaActualizacion.style.display = "none";
+                        for (row = 0; row < rows.length; row++) {
+                            cols = rows[row].cells;
+                            cols[6].style.display = 'none';
+                        }
+                    }
+
+                    if (obj.columnaProveedores == 0) {
+                        var columnaProveedores = document.getElementById('<%= ColumnaProveedor.ClientID%>');
+                        columnaProveedores.style.display = "none";
+                        for (row = 0; row < rows.length; row++) {
+                            cols = rows[row].cells;
+                            cols[7].style.display = 'none';
+                        }
+                    }
+
+                    if (obj.columnaPrecioVentaMonedaOriginal == 0) {
+                        var columnaPrecioVentaMonedaOriginal = document.getElementById('<%= ColumnaPVenta.ClientID%>');
+                        columnaPrecioVentaMonedaOriginal.style.display = "none";
+                        for (row = 0; row < rows.length; row++) {
+                            cols = rows[row].cells;
+                            cols[8].style.display = 'none';
+                        }
+                    }
+
+                    var columnaAparece = document.getElementById('<%= ColumnaApareceLista.ClientID%>');
+                    columnaAparece.style.display = "none";
+                    for (row = 0; row < rows.length; row++) {
+                        cols = rows[row].cells;
+                        cols[9].style.display = 'none';
+                    }
+                }
+            });
+        }
+
+
         //valida los campos solo numeros
         function validarNro(e) {
             var key;

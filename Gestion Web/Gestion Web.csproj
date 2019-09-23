@@ -105,7 +105,7 @@
     </Reference>
     <Reference Include="Millas_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio millas api\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+      <HintPath>..\..\..\Millas\Millas_Api\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -352,6 +352,7 @@
     <Content Include="Formularios\Articulos\Articulos.aspx" />
     <Content Include="Formularios\Articulos\ArticulosABM.aspx" />
     <Content Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx" />
+    <Content Include="Formularios\Articulos\ArticulosNew.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
@@ -1391,6 +1392,13 @@
     </Compile>
     <Compile Include="Formularios\Articulos\ArticulosDiferenciasStock.aspx.designer.cs">
       <DependentUpon>ArticulosDiferenciasStock.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosNew.aspx.cs">
+      <DependentUpon>ArticulosNew.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosNew.aspx.designer.cs">
+      <DependentUpon>ArticulosNew.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\dsListaPrecios.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -3202,6 +3210,7 @@
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedoresSucursalCategoria.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
