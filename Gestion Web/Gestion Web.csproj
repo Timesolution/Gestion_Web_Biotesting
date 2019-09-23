@@ -1274,6 +1274,17 @@
     <Content Include="TS_GestionDataSet1.xss">
       <DependentUpon>TS_GestionDataSet1.xsd</DependentUpon>
     </Content>
+    <Content Include="TS_Gestion_DesarrolloDataSet.xsc">
+      <DependentUpon>TS_Gestion_DesarrolloDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="TS_Gestion_DesarrolloDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TS_Gestion_DesarrolloDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="TS_Gestion_DesarrolloDataSet.xss">
+      <DependentUpon>TS_Gestion_DesarrolloDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3145,6 +3156,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TS_GestionDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="TS_Gestion_DesarrolloDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TS_Gestion_DesarrolloDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
