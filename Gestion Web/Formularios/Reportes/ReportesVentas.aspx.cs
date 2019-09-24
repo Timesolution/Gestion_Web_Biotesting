@@ -96,7 +96,7 @@ namespace Gestion_Web.Formularios.Reportes
                     this.lblParametrosUrl.Text = this.fechaD + "&" + this.fechaH + "&" + this.suc + "&" + this.idArticulo + "&" + this.idSubGrupo + "&" + this.idGrupo + "&" + this.idCliente + "&" + this.idVendedor + "&" + this.idProveedor + "&" + this.idTipo + "&" + this.listas;
                     this.cargarDatosRango(fechaD, fechaH, suc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, idTipo);
                 }
-                
+
 
             }
             catch (Exception ex)
@@ -219,6 +219,8 @@ namespace Gestion_Web.Formularios.Reportes
                 txtFechaHastaReporteVentasMarcaGrupoCantidad.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
                 txtFechaDesdeReporteVentasPorRangoHorario.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                txt_FechaHasta_ReporteVentasArticulosSucursales.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                txt_FechaDesde_ReporteVentasArticulosSucursales.Text = DateTime.Now.ToString("dd/MM/yyyy");
             }
             catch (Exception ex)
             {
@@ -250,6 +252,18 @@ namespace Gestion_Web.Formularios.Reportes
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();
+
+                dt = contSucu.obtenerSucursales();
+                DataRow dr3 = dt.NewRow();
+                dr3["nombre"] = "Todas";
+                dr3["id"] = 0;
+                dt.Rows.InsertAt(dr3, 1);
+
+                this.dropList_Sucursal_ReporteVentasArticulosSucursales.DataSource = dt;
+                this.dropList_Sucursal_ReporteVentasArticulosSucursales.DataValueField = "Id";
+                this.dropList_Sucursal_ReporteVentasArticulosSucursales.DataTextField = "nombre";
+
+                this.dropList_Sucursal_ReporteVentasArticulosSucursales.DataBind();
             }
             catch (Exception ex)
             {
@@ -1363,6 +1377,36 @@ namespace Gestion_Web.Formularios.Reportes
             string fd = this.txtFechaDesdeReporteVentasPorRangoHorario.Text.ToString();
             int idSucursal = Convert.ToInt32(this.DropListSucursalReporteVentasPorRangoHorario.SelectedValue);
             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=18&fd=" + fd + "&s=" + idSucursal + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+        }
+
+        protected void lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_XLS_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string fd = this.txt_FechaDesde_ReporteVentasArticulosSucursales.Text.ToString();
+                string fh = this.txt_FechaHasta_ReporteVentasArticulosSucursales.Text.ToString();
+                int idSucursal = Convert.ToInt32(this.dropList_Sucursal_ReporteVentasArticulosSucursales.SelectedValue);
+                Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&s=" + idSucursal + "&ex=1");
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_PDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string fd = this.txt_FechaDesde_ReporteVentasArticulosSucursales.Text.ToString();
+                string fh = this.txt_FechaHasta_ReporteVentasArticulosSucursales.Text.ToString();
+                int idSucursal = Convert.ToInt32(this.dropList_Sucursal_ReporteVentasArticulosSucursales.SelectedValue);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&fh=" + fh + "&s=" + idSucursal + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
         #endregion
 

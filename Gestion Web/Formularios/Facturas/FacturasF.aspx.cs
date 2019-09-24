@@ -1366,6 +1366,11 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
+                    if (this.controlador.obtenerNotasCreditoFactura(Convert.ToInt32(idtildado)))
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Este presupuesto posee una Nota de Credito!. "));
+                        return;
+                    }
                     Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "Inicio REFACTURAR presupuesto id: " + idtildado);
                     this.lblIdFact.Text = idtildado;
                     Gestion_Api.Modelo.Log.EscribirSQL(1, "INFO", "Obtengo prp desde la base");

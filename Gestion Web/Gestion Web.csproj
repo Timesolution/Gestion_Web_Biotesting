@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -819,6 +819,9 @@
     <Content Include="Formularios\Reportes\VentasDeFacturasBySucursalesByRangoHorario.rdlc">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Formularios\Surtidores\dsSurtidores.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1273,6 +1276,17 @@
     </None>
     <Content Include="TS_GestionDataSet1.xss">
       <DependentUpon>TS_GestionDataSet1.xsd</DependentUpon>
+    </Content>
+    <Content Include="TS_Gestion_DesarrolloDataSet.xsc">
+      <DependentUpon>TS_Gestion_DesarrolloDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="TS_Gestion_DesarrolloDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TS_Gestion_DesarrolloDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="TS_Gestion_DesarrolloDataSet.xss">
+      <DependentUpon>TS_Gestion_DesarrolloDataSet.xsd</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -3146,6 +3160,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TS_GestionDataSet1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="TS_Gestion_DesarrolloDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TS_Gestion_DesarrolloDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3271,6 +3290,7 @@
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosGrupoR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosLista.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasVendedores.rdlc" />

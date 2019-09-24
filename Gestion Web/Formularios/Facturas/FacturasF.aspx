@@ -200,7 +200,7 @@
                                             </ul>
                                         </li>
 
-                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Reporte Ventas x Vendedor</a>
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Reporte Ventas x Vendedor x Categoria</a>
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <asp:LinkButton ID="btnExportarReporteVentasVendedor" runat="server" OnClick="btnExportarReporteVentasVendedor_Click">
