@@ -71,7 +71,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Ventas por sucursal-grupo-subgrupo-marca</Value>
+                    <Value>Ventas Articulos x Sucursal con Importe</Value>
                     <Style>
                       <FontSize>24pt</FontSize>
                     </Style>
