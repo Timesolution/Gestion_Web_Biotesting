@@ -91,7 +91,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
         {
             try
             {
-                DropDownList[] ddls = { DropListNivel1, DropListNivel2, DropListNivel3, DropListNivel4 };
+                DropDownList[] ddls = { DropListNivel1, DropListNivel2, DropListNivel3, DropListNivel4, DropListNivel5};
                 List<Cuentas_Contables> lista = new List<Cuentas_Contables>();
 
                 for (int i = 0; i < ddls.Length; i++)
@@ -185,7 +185,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 if (!existeUnaRelacion)
                 {
                     CuentasContables_MayorTipoMovimiento cuentasContables_MayorTipoMovimiento = new CuentasContables_MayorTipoMovimiento();
-                    cuentasContables_MayorTipoMovimiento.IdCuenta_Contable = Convert.ToInt32(DropListNivel4.SelectedValue);
+                    cuentasContables_MayorTipoMovimiento.IdCuenta_Contable = Convert.ToInt32(DropListNivel5.SelectedValue);
                     cuentasContables_MayorTipoMovimiento.IdMayor_TipoMovimiento = Convert.ToInt32(dropList_Mayor_TipoDeMovimiento.SelectedValue);
                     cuentasContables_MayorTipoMovimiento.Estado = 1;
 
@@ -236,7 +236,5 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 return string.Empty;
             }
         }
-
-
     }
 }

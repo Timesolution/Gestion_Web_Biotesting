@@ -98,6 +98,12 @@
                                 <asp:DropDownList ID="DropListNivel4" runat="server" class="form-control"></asp:DropDownList>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-4">Nivel 5</label>
+                            <div class="col-md-6">
+                                <asp:DropDownList ID="DropListNivel5" runat="server" class="form-control"></asp:DropDownList>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -137,10 +143,12 @@
             controlDropListNivel2 = document.getElementById('<%= DropListNivel2.ClientID %>');
             controlDropListNivel3 = document.getElementById('<%= DropListNivel3.ClientID %>');
             controlDropListNivel4 = document.getElementById('<%= DropListNivel4.ClientID %>');
+            controlDropListNivel5 = document.getElementById('<%= DropListNivel5.ClientID %>');
 
-            controlDropListNivel1.addEventListener("change", ChangeNivel1);
+            controlDropListNivel1.addEventListener("change", CargarNivel2);
             controlDropListNivel2.addEventListener("change", CargarNivel3);
             controlDropListNivel3.addEventListener("change", CargarNivel4);
+            controlDropListNivel4.addEventListener("change", CargarNivel5);
 
             CargarTablaConLosRegistros();
         }
@@ -290,6 +298,38 @@
                 option.text = obj[i].nombre;
 
                 controlDropListNivel4.add(option);
+            }
+            CargarNivel5();
+        }
+
+        function CargarNivel5() {
+            $.ajax({
+                type: "POST",
+                url: "Cuentas_Contables_Mayor.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 5 + '", nivel: "' + parseInt(controlDropListNivel4.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 4.");
+                },
+                success: OnSuccessCargarNivel5
+            });
+        }
+
+        function OnSuccessCargarNivel5(response) {
+            while (controlDropListNivel5.options.length > 0) {
+                controlDropListNivel5.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel5.add(option);
             }
         }
 

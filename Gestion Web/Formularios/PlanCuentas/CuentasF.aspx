@@ -26,6 +26,7 @@
                                                 <asp:ListItem Text="2" Value="2" />
                                                 <asp:ListItem Text="3" Value="3" />
                                                 <asp:ListItem Text="4" Value="4" />
+                                                <asp:ListItem Text="5" Value="5" />
                                             </asp:DropDownList>
                                         </div>
                                         <div class="col-md-1">
@@ -36,7 +37,7 @@
                                         <div class="col-md-12">
                                             <asp:Panel ID="panelNivel1" runat="server" Visible="false">
                                                 <label class="col-md-1">Nivel 1:</label>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <asp:DropDownList ID="ListNivel1" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel1_SelectedIndexChanged" >
                                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                                     </asp:DropDownList>
@@ -44,7 +45,7 @@
                                             </asp:Panel>
                                             <asp:Panel ID="panelNivel2" runat="server" Visible="false">
                                                 <label class="col-md-1">Nivel 2:</label>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <asp:DropDownList ID="ListNivel2" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel2_SelectedIndexChanged">
                                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                                     </asp:DropDownList>
@@ -52,8 +53,16 @@
                                             </asp:Panel>
                                             <asp:Panel ID="panelNivel3" runat="server" Visible="false">
                                                 <label class="col-md-1">Nivel 3:</label>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <asp:DropDownList ID="ListNivel3" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel3_SelectedIndexChanged">
+                                                        <asp:ListItem Text="Seleccione..." Value="-1" />
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </asp:Panel>
+                                            <asp:Panel ID="panelNivel4" runat="server" Visible="false">
+                                                <label class="col-md-1">Nivel 4:</label>
+                                                <div class="col-md-2">
+                                                    <asp:DropDownList ID="ListNivel4" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel4_SelectedIndexChanged">
                                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                                     </asp:DropDownList>
                                                 </div>

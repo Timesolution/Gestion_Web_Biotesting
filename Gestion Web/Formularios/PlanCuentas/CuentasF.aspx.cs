@@ -32,7 +32,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
 
                 if (!IsPostBack)
                 {
-                    if(this.accion == 2)
+                    if (this.accion == 2)
                     {
                         this.cargarDatosCta();
                     }
@@ -97,7 +97,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 {
                     txtCodigo.Enabled = false;
                     txtCodigo.CssClass = "form-control";
-                }                    
+                }
 
                 return tienePermiso;
             }
@@ -110,7 +110,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
         {
             try
             {
-                this.phCuentas.Controls.Clear();                
+                this.phCuentas.Controls.Clear();
 
                 List<Cuentas_Contables> cuentas = this.contPlanCta.obtenerCuentasContables();
 
@@ -120,7 +120,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -186,12 +186,13 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
                 Cuentas_Contables cta = new Cuentas_Contables();
                 cta.Codigo = this.txtCodigo.Text;
-                cta.Descripcion = this.txtDescripcion.Text;                
+                cta.Descripcion = this.txtDescripcion.Text;
                 cta.Jerarquia = Convert.ToInt32(this.ListJerarquia.SelectedValue);
                 cta.Nivel1 = 0;
                 cta.Nivel2 = 0;
                 cta.Nivel3 = 0;
-                
+                cta.Nivel4 = 0;
+
                 if (cta.Jerarquia == 2)
                 {
                     cta.Nivel1 = Convert.ToInt32(this.ListNivel1.SelectedValue);
@@ -207,7 +208,14 @@ namespace Gestion_Web.Formularios.PlanCuentas
                     cta.Nivel2 = Convert.ToInt32(this.ListNivel2.SelectedValue);
                     cta.Nivel3 = Convert.ToInt32(this.ListNivel3.SelectedValue);
                 }
-                
+                if (cta.Jerarquia == 5)
+                {
+                    cta.Nivel1 = Convert.ToInt32(this.ListNivel1.SelectedValue);
+                    cta.Nivel2 = Convert.ToInt32(this.ListNivel2.SelectedValue);
+                    cta.Nivel3 = Convert.ToInt32(this.ListNivel3.SelectedValue);
+                    cta.Nivel4 = Convert.ToInt32(this.ListNivel4.SelectedValue);
+                }
+
                 cta.Estado = 1;
 
                 int i = this.contPlanCta.agregarCuenta(cta);
@@ -220,7 +228,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"No se pudo agregar cuenta contable. \";", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -250,7 +258,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                     cta.Nivel3 = Convert.ToInt32(this.ListNivel3.SelectedValue);
                 }
 
-                
+
                 int i = this.contPlanCta.modificarCuenta(cta);
                 if (i > 0)
                 {
@@ -272,7 +280,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
                 Cuentas_Contables cta = this.contPlanCta.obtenerCuentaById(this.id);
                 this.txtCodigo.Text = cta.Codigo;
-                this.txtDescripcion.Text = cta.Descripcion;                
+                this.txtDescripcion.Text = cta.Descripcion;
             }
             catch
             {
@@ -287,19 +295,21 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 int nivel1 = Convert.ToInt32(this.ListNivel1.SelectedValue);
                 int nivel2 = Convert.ToInt32(this.ListNivel2.SelectedValue);
                 int nivel3 = Convert.ToInt32(this.ListNivel3.SelectedValue);
+                int nivel4 = Convert.ToInt32(this.ListNivel4.SelectedValue);
                 string codigo = "";
 
                 if (jerarquia == 1)
-                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, 0, 0, 0);
+                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, 0, 0, 0, 0);
                 if (jerarquia == 2)
-                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, 0, 0);
+                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, 0, 0, 0);
                 if (jerarquia == 3)
-                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, nivel2, 0);
+                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, nivel2, 0, 0);
                 if (jerarquia == 4)
-                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, nivel2, nivel3);
+                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, nivel2, nivel3, 0);
+                if (jerarquia == 5)
+                    codigo = this.contPlanCta.obtenerProximoCodigoCuenta(jerarquia, nivel1, nivel2, nivel3, nivel4);
 
                 this.txtCodigo.Text = codigo;
-
             }
             catch
             {
@@ -335,7 +345,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 this.ListNivel2.DataTextField = "Descripcion";
                 this.ListNivel2.DataBind();
 
-                this.ListNivel2.Items.Insert(0,new ListItem("Seleccione...","-1"));
+                this.ListNivel2.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
             }
             catch
@@ -361,7 +371,25 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
 
             }
-        }        
+        }
+        private void cargarCuentasNivel4()
+        {
+            try
+            {
+                var ctas = this.contPlanCta.obtenerCuentasContablesByNivel(4, Convert.ToInt32(this.ListNivel3.SelectedValue));
+
+                this.ListNivel4.DataSource = ctas.ToList();
+                this.ListNivel4.DataValueField = "Id";
+                this.ListNivel4.DataTextField = "Descripcion";
+                this.ListNivel4.DataBind();
+
+                this.ListNivel4.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+            }
+            catch
+            {
+
+            }
+        }
         protected void btnSi_Click(object sender, EventArgs e)
         {
             try
@@ -405,6 +433,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                     this.panelNivel1.Visible = false;
                     this.panelNivel2.Visible = false;
                     this.panelNivel3.Visible = false;
+                    this.panelNivel4.Visible = false;
                     this.obtenerProximoCodigo();
                 }
                 if (this.ListJerarquia.SelectedValue == "2")
@@ -412,21 +441,31 @@ namespace Gestion_Web.Formularios.PlanCuentas
                     this.panelNivel1.Visible = true;
                     this.panelNivel2.Visible = false;
                     this.panelNivel3.Visible = false;
+                    this.panelNivel4.Visible = false;
                 }
                 if (this.ListJerarquia.SelectedValue == "3")
                 {
                     this.panelNivel1.Visible = true;
                     this.panelNivel2.Visible = true;
                     this.panelNivel3.Visible = false;
+                    this.panelNivel4.Visible = false;
                 }
                 if (this.ListJerarquia.SelectedValue == "4")
                 {
                     this.panelNivel1.Visible = true;
                     this.panelNivel2.Visible = true;
                     this.panelNivel3.Visible = true;
+                    this.panelNivel4.Visible = false;
+                }
+                if (this.ListJerarquia.SelectedValue == "5")
+                {
+                    this.panelNivel1.Visible = true;
+                    this.panelNivel2.Visible = true;
+                    this.panelNivel3.Visible = true;
+                    this.panelNivel4.Visible = true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -483,7 +522,21 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
                 if (Convert.ToInt32(this.ListJerarquia.SelectedValue) == 4 && Convert.ToInt32(this.ListNivel1.SelectedValue) > 0 && Convert.ToInt32(this.ListNivel2.SelectedValue) > 0 && Convert.ToInt32(this.ListNivel3.SelectedValue) > 0)
                     this.obtenerProximoCodigo();
-                
+
+                this.cargarCuentasNivel4();
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void ListNivel4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt32(this.ListJerarquia.SelectedValue) == 5 && Convert.ToInt32(this.ListNivel1.SelectedValue) > 0 && Convert.ToInt32(this.ListNivel2.SelectedValue) > 0 && Convert.ToInt32(this.ListNivel3.SelectedValue) > 0 && Convert.ToInt32(this.ListNivel4.SelectedValue) > 0)
+                    this.obtenerProximoCodigo();
             }
             catch
             {
