@@ -133,6 +133,12 @@
                                     <asp:DropDownList ID="dropListNivel4_ModalBusqueda" runat="server" class="form-control"></asp:DropDownList>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-4">Nivel 5</label>
+                                <div class="col-md-6">
+                                    <asp:DropDownList ID="dropListNivel5_ModalBusqueda" runat="server" class="form-control"></asp:DropDownList>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -175,24 +181,48 @@
 
                                 <hr />
 
-                                <div class="row col-lg-12">
-                                    <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-5ths col-xs-6">
                                         <label>Nivel 1</label>
                                         <asp:DropDownList ID="DropListNivel1_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-5ths col-xs-6">
                                         <label class="col-md-4">Nivel 2</label>
                                         <asp:DropDownList ID="DropListNivel2_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="col-md-4">Nivel 3</label>
+
+                                     <div class="col-md-5ths col-xs-6">
+                                         <label>Nivel 3</label>
                                         <asp:DropDownList ID="DropListNivel3_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="col-md-4">Nivel 4</label>
+
+                                     <div class="col-md-5ths col-xs-6">
+                                         <label>Nivel 4</label>
                                         <asp:DropDownList ID="DropListNivel4_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
+
+                                     <div class="col-md-5ths col-xs-6">
+                                          <label>Nivel 5</label>
+                                        <asp:DropDownList ID="DropListNivel5_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
                                 </div>
+
+
+<%--                                <div class="row col-lg-12">
+                                    <div class="col-md-3">
+                                        
+                                    </div>
+                                    <div class="col-md-3">
+                                        
+                                    </div>
+                                    <div class="col-md-3">
+                                        
+                                    </div>
+                                    <div class="col-md-3">
+                                        
+                                    </div>
+                                </div>--%>
 
                                 <hr />
 
@@ -251,6 +281,44 @@
         </div>
     </div>
 
+    <style>
+        .col-xs-5ths,
+        .col-sm-5ths,
+        .col-md-5ths,
+        .col-lg-5ths {
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .col-xs-5ths {
+            width: 20%;
+            float: left;
+        }
+
+        @media (min-width: 768px) {
+            .col-sm-5ths {
+                width: 20%;
+                float: left;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .col-md-5ths {
+                width: 20%;
+                float: left;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-lg-5ths {
+                width: 20%;
+                float: left;
+            }
+        }
+    </style>
+
     <script src="../../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
     <link href="../../../css/pages/reports.css" rel="stylesheet">
@@ -275,6 +343,7 @@
         var controlDropListNivel2_ModalBusqueda;
         var controlDropListNivel3_ModalBusqueda;
         var controlDropListNivel4_ModalBusqueda;
+        var controlDropListNivel5_ModalBusqueda;
 
         var controlDropListEmpresa_ModalAgregarRegistro;
         var controlDropListSucursal_ModalAgregarRegistro;
@@ -320,14 +389,17 @@
             controlDropListNivel2_ModalBusqueda = document.getElementById('<%= dropListNivel2_ModalBusqueda.ClientID %>');
             controlDropListNivel3_ModalBusqueda = document.getElementById('<%= dropListNivel3_ModalBusqueda.ClientID %>');
             controlDropListNivel4_ModalBusqueda = document.getElementById('<%= dropListNivel4_ModalBusqueda.ClientID %>');
+            controlDropListNivel5_ModalBusqueda = document.getElementById('<%= dropListNivel5_ModalBusqueda.ClientID %>');
 
-            controlDropListNivel1_ModalBusqueda.addEventListener("change", ChangeNivel1);
+            controlDropListNivel1_ModalBusqueda.addEventListener("change", CargarNivel2);
             controlDropListNivel2_ModalBusqueda.addEventListener("change", CargarNivel3);
             controlDropListNivel3_ModalBusqueda.addEventListener("change", CargarNivel4);
+            controlDropListNivel4_ModalBusqueda.addEventListener("change", CargarNivel5);
 
             dropLists.push(controlDropListNivel2_ModalBusqueda);
             dropLists.push(controlDropListNivel3_ModalBusqueda);
             dropLists.push(controlDropListNivel4_ModalBusqueda);
+            dropLists.push(controlDropListNivel5_ModalBusqueda);
         }
 
         function AsignarControles_ModalAgregarRegistro() {
@@ -662,6 +734,42 @@
             }
         }
 
+        function CargarNivel5() {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 5 + '", nivel: "' + parseInt(controlDropListNivel4_ModalBusqueda.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 5.");
+                },
+                success: OnSuccessCargarNivel5
+            });
+        }
+
+        function OnSuccessCargarNivel5(response) {
+            while (controlDropListNivel5_ModalBusqueda.options.length > 0) {
+                controlDropListNivel5_ModalBusqueda.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            option = document.createElement('option');
+            option.value = 0;
+            option.text = "Todos";
+            controlDropListNivel5_ModalBusqueda.add(option);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel5_ModalBusqueda.add(option);
+            }
+        }
+
         //modal agregar registro
         function CargarSucursales_ModalAgregarRegistro() {
             $.ajax({
@@ -799,8 +907,9 @@
             var idNivel2 = $('#<%= DropListNivel2_ModalAgregarRegistro.ClientID %>').val();
             var idNivel3 = $('#<%= DropListNivel3_ModalAgregarRegistro.ClientID %>').val();
             var idNivel4 = $('#<%= DropListNivel4_ModalAgregarRegistro.ClientID %>').val();
+            var idNivel5 = $('#<%= DropListNivel5_ModalAgregarRegistro.ClientID %>').val();
 
-            var datos_DeLaFila = [fecha, debe, haber, idEmpresa, idSucursal, idPuntoDeVenta, idNivel1, idNivel2, idNivel3, idNivel4].join('_');
+            var datos_DeLaFila = [fecha, debe, haber, idEmpresa, idSucursal, idPuntoDeVenta, idNivel1, idNivel2, idNivel3, idNivel4, idNivel5].join('_');
 
             var table = document.getElementById("tablaMayor_Temporal");
 
@@ -850,6 +959,11 @@
                 }
             });
 
+            if (!VerificarSiLaSumaDeLosRegistrosDelDebeYElHaberDaCero(objeto)) {
+                alert('La diferencia entre el debe y el haber debe dar "0"');
+                return false;
+            }
+
             $.ajax({
                 type: "POST",
                 url: "MayorF.aspx/InsertarRegistroEnLaTablaMayor_JSON",
@@ -863,10 +977,24 @@
             });
         });
 
+        function VerificarSiLaSumaDeLosRegistrosDelDebeYElHaberDaCero(objeto) {
+            var debe = 0;
+            var haber = 0;
+            for (var i in objeto) {
+                debe += parseFloat(objeto[i].split('_')[1]);
+                haber += parseFloat(objeto[i].split('_')[2]);
+            }
+            var resultado = debe - haber;
+
+            if (resultado == 0) {
+                return true;
+            }
+            return false;
+        } 
+
         function OnSuccess_CrearRegistros() {
-            
             alert("Registros creados correctamente.");
-            window.location.replace("/MayorF.aspx");
+            window.location.replace("/Formularios/Valores/MayorF.aspx");
 
             return false;
         }

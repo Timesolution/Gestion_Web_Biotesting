@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Valores
             public string Nivel2;
             public string Nivel3;
             public string Nivel4;
+            public string Nivel5;
             public string Credito;
             public string Debito;
             public string NumeroDocumento;
@@ -77,7 +78,7 @@ namespace Gestion_Web.Formularios.Valores
             CargarPuntosDeVentaEnLista();
             CargarTiposMovimientosEnLista();
             CargarNivel1EnLista();
-            CargarNiveles1_2_3ConElItemTODOS();
+            CargarNivelesDropList_Busqueda_ConElItemTODOS();
             CargarNivelesDeLosDropDown();
         }
 
@@ -235,13 +236,13 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
 
-        private void CargarNiveles1_2_3ConElItemTODOS()
+        private void CargarNivelesDropList_Busqueda_ConElItemTODOS()
         {
             try
             {
-                DropDownList[] dropListNivel2_3_4 = { dropListNivel2_ModalBusqueda, dropListNivel3_ModalBusqueda, dropListNivel4_ModalBusqueda };
+                DropDownList[] DropList_Niveles_Busqueda = { dropListNivel2_ModalBusqueda, dropListNivel3_ModalBusqueda, dropListNivel4_ModalBusqueda, dropListNivel5_ModalBusqueda};
 
-                foreach (var item in dropListNivel2_3_4)
+                foreach (var item in DropList_Niveles_Busqueda)
                 {
                     item.Items.Add(new ListItem
                     {
@@ -260,7 +261,7 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                DropDownList[] ddls = { DropListNivel1_ModalAgregarRegistro, DropListNivel2_ModalAgregarRegistro, DropListNivel3_ModalAgregarRegistro, DropListNivel4_ModalAgregarRegistro };
+                DropDownList[] ddls = { DropListNivel1_ModalAgregarRegistro, DropListNivel2_ModalAgregarRegistro, DropListNivel3_ModalAgregarRegistro, DropListNivel4_ModalAgregarRegistro, DropListNivel5_ModalAgregarRegistro };
                 List<Cuentas_Contables> lista = new List<Cuentas_Contables>();
 
                 for (int i = 0; i < ddls.Length; i++)
@@ -440,6 +441,7 @@ namespace Gestion_Web.Formularios.Valores
                     int idNivel2 = Convert.ToInt32(linea[7]);
                     int idNivel3 = Convert.ToInt32(linea[8]);
                     int idNivel4 = Convert.ToInt32(linea[9]);
+                    int idNivel5 = Convert.ToInt32(linea[10]);
 
                     string puntoDeVenta = contSucursal.obtenerPtoVentaEntityID(idPuntoDeVenta).NombreFantasia;
                     string numeroDocumento = "0000-" + contPlanCuentas.ObtenerCantidadDeRegistrosCreadosDeLaTabla_MayorFiltradoPorTipoDeMayor(1).ToString().PadLeft(8,'0');
@@ -459,7 +461,8 @@ namespace Gestion_Web.Formularios.Valores
                         Nivel1 = idNivel1,
                         Nivel2 = idNivel2,
                         Nivel3 = idNivel3,
-                        Nivel4 = idNivel4
+                        Nivel4 = idNivel4,
+                        Nivel5 = idNivel5
                     });
                 }
             }
@@ -503,7 +506,8 @@ namespace Gestion_Web.Formularios.Valores
                     Nivel1 = cuenta_contable.Nivel1,
                     Nivel2 = cuenta_contable.Nivel2,
                     Nivel3 = cuenta_contable.Nivel3,
-                    Nivel4 = cuenta_contable.Id,
+                    Nivel4 = cuenta_contable.Nivel4,
+                    Nivel5 = cuenta_contable.Id,
                     Usuario = (int)Session["Login_IdUser"],
                     TipoMovimiento = 1,//Manual
                     NumeroDocumento = numeroDocumento,

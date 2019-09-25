@@ -72,7 +72,7 @@
                                     <div class="form-group">
                                         <label class="col-md-1">Codigo:</label>
                                         <div class="col-md-3">
-                                            <asp:TextBox ID="txtCodigo" runat="server" class="form-control"/>
+                                            <asp:TextBox ID="txtCodigo" runat="server" class="form-control" disabled="true"></asp:TextBox>
                                         </div>
                                         <label class="col-md-1">Descripcion:</label>
                                         <div class="col-md-3">

@@ -186,7 +186,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
             {
                 Cuentas_Contables cta = new Cuentas_Contables();
                 cta.Codigo = this.txtCodigo.Text;
-                cta.Descripcion = this.txtDescripcion.Text;
+                cta.Descripcion = this.txtDescripcion.Text.ToUpper();
                 cta.Jerarquia = Convert.ToInt32(this.ListJerarquia.SelectedValue);
                 cta.Nivel1 = 0;
                 cta.Nivel2 = 0;
