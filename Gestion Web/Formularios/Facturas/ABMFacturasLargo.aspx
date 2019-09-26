@@ -459,12 +459,27 @@
 
                                                                         <div class="col-md-12">
                                                                             <asp:CheckBox ID="checkDatos" TextAlign="Left" CssClass="pull-right" Text="Comentarios&nbsp&nbsp" runat="server" AutoPostBack="True" OnCheckedChanged="checkDatos_CheckedChanged" />
+                                                                        </div>                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="tab-pane fade active in">
+                                                        <table class="table table-striped table-bordered">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="col-md-12">
+                                                                            <asp:CheckBox ID="checkFacturaCredito" TextAlign="Left" CssClass="pull-right" Text="Factura Credito&nbsp&nbsp" runat="server" AutoPostBack="false"/>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
+
                                                     <div class="tab-pane fade" id="Combustible">
                                                         <table class="table table-striped table-bordered">
                                                             <tbody>

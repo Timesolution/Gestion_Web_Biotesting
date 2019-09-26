@@ -63,9 +63,9 @@ namespace Gestion_Web.Formularios.Articulos
 
                     if (valor == 1)
                     {
-                        if (descuentoPorCantidad == 1)
-                            GenerarCatalogoDescuentoPorCantidad();
-                        else
+                        //if (descuentoPorCantidad == 1)
+                        //    GenerarCatalogoDescuentoPorCantidad();
+                        //else
                             GenerarCatalogo();
                     }
                     else
@@ -762,7 +762,7 @@ namespace Gestion_Web.Formularios.Articulos
                 listaPrecio lista = contList.obtenerlistaPrecioID(this.lista);
                 String nombreLista = lista.nombre;
 
-                var catalogo = contList.ObtenerListaDePrecios(this.lista, precioSinIva, proveedor);
+                var catalogo = contList.ObtenerListaDePrecios(this.lista, precioSinIva, proveedor,1);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListaCatalogoR.rdlc");
