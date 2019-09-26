@@ -1453,6 +1453,15 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.LinkButton lbtnNominaArticulosExportar;
         
         /// <summary>
+        /// lbtnArticulosOtrosProveedoresExportar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnArticulosOtrosProveedoresExportar;
+        
+        /// <summary>
         /// txtFechaDesdeMovStock control.
         /// </summary>
         /// <remarks>

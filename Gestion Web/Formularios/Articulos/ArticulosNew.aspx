@@ -81,6 +81,9 @@
                                     <li>
                                         <a href="#modalNominaDeArticulos" data-toggle="modal" style="width: 90%">Nomina de Articulos</a>
                                     </li>
+                                     <li>
+                                        <a href="#modalArticulosOtrosProveedores" data-toggle="modal" style="width: 90%">Articulos de Otros Proveedores</a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -1092,6 +1095,27 @@
                 <div class="modal-footer">
                     <asp:LinkButton ID="lbtnNominaArticulosImprimir" runat="server" Text="Generar PDF" class="btn btn-success" OnClick="lbtnNominaArticulosImprimir_Click" />
                     <asp:LinkButton ID="lbtnNominaArticulosExportar" runat="server" Text="Generar Excel" class="btn btn-success" OnClick="lbtnNominaArticulosExportar_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalArticulosOtrosProveedores" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Articulos de Otros Proveedores</h4>
+                </div>
+                <div class="modal-body">
+                    <%--<div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+
+                        </div>
+                    </div>--%>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnArticulosOtrosProveedoresExportar" runat="server" Text="Generar Excel" class="btn btn-success" OnClick="lbtnArticulosOtrosProveedoresExportar_Click"></asp:LinkButton>
                 </div>
             </div>
         </div>

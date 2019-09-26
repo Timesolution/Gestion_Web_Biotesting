@@ -125,7 +125,11 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                     if (accion == 10)
                     {
-                        generarReporte10();//Nomina de Articulos
+                        generarReporte10();//Stock Valorizado Detallado
+                    }
+                    if (accion == 11)
+                    {
+                        generarReporte11(); // Articulos Otros Proveedores
                     }
                 }
             }
@@ -915,6 +919,65 @@ namespace Gestion_Web.Formularios.Articulos
 
                     this.Response.End();
                 }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void generarReporte11()
+        {
+            try
+            {
+                DataTable dtArticulosOtrosProv = this.controlador.obtenerArticulosOtrosProveedores();
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ArticulosOtrosProveedores.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("ProvArticulos", dtArticulosOtrosProv);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "ArticulosOtrosProveedores_" + DateTime.Today.ToString("dd/MM/yyyy"), "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                //else
+                //{
+                //    //get pdf content
+
+                //    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                //    this.Response.Clear();
+                //    this.Response.Buffer = true;
+                //    this.Response.ContentType = "application/pdf";
+                //    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                //    this.Response.BinaryWrite(pdfContent);
+
+                //    this.Response.End();
+                //}
             }
             catch (Exception ex)
             {

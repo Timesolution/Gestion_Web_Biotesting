@@ -757,6 +757,17 @@
     <Content Include="Formularios\Articulos\dsListaPrecios.xsc">
       <DependentUpon>dsListaPrecios.xsd</DependentUpon>
     </Content>
+    <Content Include="dsArticulosOtrosProveedores.xsc">
+      <DependentUpon>dsArticulosOtrosProveedores.xsd</DependentUpon>
+    </Content>
+    <None Include="dsArticulosOtrosProveedores.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsArticulosOtrosProveedores.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="dsArticulosOtrosProveedores.xss">
+      <DependentUpon>dsArticulosOtrosProveedores.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\Articulos\dsListaPrecios.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1361,6 +1372,11 @@
     </Compile>
     <Compile Include="DefaultClientes.aspx.designer.cs">
       <DependentUpon>DefaultClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="dsArticulosOtrosProveedores.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsArticulosOtrosProveedores.xsd</DependentUpon>
     </Compile>
     <Compile Include="dsDespacho.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -3180,6 +3196,7 @@
     <Folder Include="Scripts\libs\bootstrap\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Formularios\Articulos\ArticulosOtrosProveedores.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosDescuentoCantidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosUbicacionR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosR.rdlc" />
