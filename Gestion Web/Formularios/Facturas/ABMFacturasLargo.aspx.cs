@@ -2764,8 +2764,9 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!factura.tipo.tipo.ToLower().Trim().Contains("factura a") && !factura.tipo.tipo.ToLower().Trim().Contains("nota de credito a") && !factura.tipo.tipo.ToLower().Trim().Contains("nota de debito a"))
                     return;
 
-                //factura.ObtenerSumatoriasNetoFEComentarioFactura(Convert.ToDecimal(txtPorcDescuento.Text));
-                //factura.ObtenerSumatoriasIvaFEComentarioFactura(Convert.ToDecimal(txtPorcDescuento.Text));
+                if (!string.IsNullOrEmpty(factura.comentarioFacturaImpuestosDetallados))
+                    txtComentarios.Text = txtComentarios.Text.Replace(factura.comentarioFacturaImpuestosDetallados, "");
+
                 factura.obtenerSumatoriasNetoFE();
                 factura.obtenerSumatoriasIvaFE();
                 factura.obtenerNetoNoGravado();
@@ -2781,6 +2782,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string ivaYNetoDiscriminados = "\n" + netoNoGravadoComentario + neto10Comentario + neto21Comentario + neto27Comentario + iva10Comentario + iva21Comentario + iva27Comentario +  "\n";
 
                 txtComentarios.Text += ivaYNetoDiscriminados;
+                factura.comentarioFacturaImpuestosDetallados = ivaYNetoDiscriminados;
             }
             catch (Exception ex)
             {
@@ -3482,14 +3484,13 @@ namespace Gestion_Web.Formularios.Facturas
                     //agrego el porcentaje de descuento
                     fact.neto10 = Convert.ToDecimal(this.txtPorcDescuento.Text);
                     //obtengo el Neto no gravado || de los items con alicuota 0%
-                    fact.iva21 = fact.obtenerNetoNoGravado();
-
-                    fact.comentario = this.txtComentarios.Text;
+                    fact.iva21 = fact.obtenerNetoNoGravado();                    
 
                     int user = (int)Session["Login_IdUser"];
                     string presupuestos = Request.QueryString["prps"];
 
                     AgregarComentariosIvaYNetoDiscriminados(fact);
+                    fact.comentario = this.txtComentarios.Text;
 
                     int i = this.controlador.ProcesoRefacturarPRPEditado(fact, user, presupuestos);
                     if (i > 0)
@@ -3723,11 +3724,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.agregarDatosCombustibleAComentarios(fact);
                     }
                     fact.vendedor.id = Convert.ToInt32(this.DropListVendedor.SelectedValue);
-                    fact.comentario = this.txtComentarios.Text;
-                    if (this.chkIvaNoInformado.Checked == true)
-                    {
-                        fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
-                    }
+                    
                     fact.fechaEntrega = this.txtFechaEntrega.Text;
                     fact.horaEntrega = this.txtHorarioEntrega.Text;
                     fact.bultosEntrega = this.txtBultosEntrega.Text;
@@ -3863,7 +3860,11 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     AgregarComentariosIvaYNetoDiscriminados(fact);
-
+                    fact.comentario = this.txtComentarios.Text;
+                    if (this.chkIvaNoInformado.Checked == true)
+                    {
+                        fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
+                    }
                     //facturo
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
                     if (i > 0)
