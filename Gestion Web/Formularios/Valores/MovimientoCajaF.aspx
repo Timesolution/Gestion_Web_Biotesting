@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MovimientoCajaF.aspx.cs" Inherits="Gestion_Web.Formularios.Valores.MovimientoCajaF" %>
+﻿<%@ Page Title="" Language="C#" EnableEventValidation="false" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MovimientoCajaF.aspx.cs" Inherits="Gestion_Web.Formularios.Valores.MovimientoCajaF" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
@@ -173,7 +173,7 @@
                                         <div class="col-md-12">
                                             <label class="col-md-3">Nivel 1:</label>
                                             <div class="col-md-6">
-                                                <asp:DropDownList ID="ListCtaContables1" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListCtaContables1_SelectedIndexChanged" />
+                                                <asp:DropDownList ID="ListCtaContables1" runat="server" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +181,7 @@
                                         <div class="col-md-12">
                                             <label class="col-md-3">Nivel 2:</label>
                                             <div class="col-md-6">
-                                                <asp:DropDownList ID="ListCtaContables2" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListCtaContables2_SelectedIndexChanged" />
+                                                <asp:DropDownList ID="ListCtaContables2" runat="server" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -189,7 +189,7 @@
                                         <div class="col-md-12">
                                             <label class="col-md-3">Nivel 3:</label>
                                             <div class="col-md-6">
-                                                <asp:DropDownList ID="ListCtaContables3" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListCtaContables3_SelectedIndexChanged" />
+                                                <asp:DropDownList ID="ListCtaContables3" runat="server" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -197,10 +197,21 @@
                                         <div class="col-md-12">
                                             <label class="col-md-3">Nivel 4:</label>
                                             <div class="col-md-6">
-                                                <asp:DropDownList ID="ListCtaContables" runat="server" class="form-control" />
+                                                <asp:DropDownList ID="ListCtaContables4" runat="server" class="form-control" />
                                             </div>
                                             <div class="col-md-1">
-                                                <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="ListCtaContables" InitialValue="-1" ForeColor="Red" Font-Bold="true" runat="server" ValidationGroup="CtaContableGroup" />
+                                                <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="ListCtaContables4" InitialValue="-1" ForeColor="Red" Font-Bold="true" runat="server" ValidationGroup="CtaContableGroup" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label class="col-md-3">Nivel 5:</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="ListCtaContables5" runat="server" class="form-control" />
+                                            </div>
+                                            <div class="col-md-1">
+                                                <asp:RequiredFieldValidator ErrorMessage="*" ControlToValidate="ListCtaContables5" InitialValue="-1" ForeColor="Red" Font-Bold="true" runat="server" ValidationGroup="CtaContableGroup" />
                                             </div>
                                         </div>
                                     </div>
@@ -243,6 +254,178 @@
 
 
         <script>
+            var controlDropListNivel1;
+            var controlDropListNivel2;
+            var controlDropListNivel3;
+            var controlDropListNivel4;
+            var controlDropListNivel5;
+
+            var dropLists = [];
+
+            function pageLoad() {
+                AsignarControles_DropListNiveles();
+            }
+
+            function BorrarLosDropListDeNiveles() {
+
+                for (var i in dropLists) {
+                    while (dropLists[i].options.length > 0) {
+                        dropLists[i].remove(0);
+                    }
+                }
+            }
+
+            function AsignarControles_DropListNiveles() {
+                controlDropListNivel1 = document.getElementById('<%= ListCtaContables1.ClientID %>');
+                controlDropListNivel2 = document.getElementById('<%= ListCtaContables2.ClientID %>');
+                controlDropListNivel3 = document.getElementById('<%= ListCtaContables3.ClientID %>');
+                controlDropListNivel4 = document.getElementById('<%= ListCtaContables4.ClientID %>');
+                controlDropListNivel5 = document.getElementById('<%= ListCtaContables5.ClientID %>');
+
+                controlDropListNivel1.addEventListener("change", CargarNivel2);
+                controlDropListNivel2.addEventListener("change", CargarNivel3);
+                controlDropListNivel3.addEventListener("change", CargarNivel4);
+                controlDropListNivel4.addEventListener("change", CargarNivel5);
+
+                dropLists.push(controlDropListNivel2);
+                dropLists.push(controlDropListNivel3);
+                dropLists.push(controlDropListNivel4);
+                dropLists.push(controlDropListNivel5);
+            }
+
+            function CargarNivel2() {
+                $.ajax({
+                    type: "POST",
+                    url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                    data: '{jerarquia: "' + 2 + '", nivel: "' + parseInt(controlDropListNivel1.value) + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudo cargar el nivel 2.");
+                    },
+                    success: OnSuccessCargarNivel2
+                });
+            };
+
+            function OnSuccessCargarNivel2(response) {
+                while (controlDropListNivel2.options.length > 0) {
+                    controlDropListNivel2.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombre;
+
+                    controlDropListNivel2.add(option);
+                }
+                if (controlDropListNivel1.value == 0) {
+                    return;
+                }
+                CargarNivel3();
+            }
+
+            function CargarNivel3() {
+                $.ajax({
+                    type: "POST",
+                    url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                    data: '{jerarquia: "' + 3 + '", nivel: "' + parseInt(controlDropListNivel2.value) + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudo cargar el nivel 3.");
+                    },
+                    success: OnSuccessCargarNivel3
+                });
+            };
+
+            function OnSuccessCargarNivel3(response) {
+                while (controlDropListNivel3.options.length > 0) {
+                    controlDropListNivel3.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombre;
+
+                    controlDropListNivel3.add(option);
+                }
+                if (controlDropListNivel1.value == 0) {
+                    return;
+                }
+                CargarNivel4();
+            }
+
+            function CargarNivel4() {
+                $.ajax({
+                    type: "POST",
+                    url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                    data: '{jerarquia: "' + 4 + '", nivel: "' + parseInt(controlDropListNivel3.value) + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudo cargar el nivel 4.");
+                    },
+                    success: OnSuccessCargarNivel4
+                });
+            }
+
+            function OnSuccessCargarNivel4(response) {
+                while (controlDropListNivel4.options.length > 0) {
+                    controlDropListNivel4.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombre;
+
+                    controlDropListNivel4.add(option);
+                }
+                CargarNivel5();
+            }
+
+            function CargarNivel5() {
+                $.ajax({
+                    type: "POST",
+                    url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                    data: '{jerarquia: "' + 5 + '", nivel: "' + parseInt(controlDropListNivel4.value) + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudo cargar el nivel 5.");
+                    },
+                    success: OnSuccessCargarNivel5
+                });
+            }
+
+            function OnSuccessCargarNivel5(response) {
+                while (controlDropListNivel5.options.length > 0) {
+                    controlDropListNivel5.remove(0);
+                }
+
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                for (i = 0; i < obj.length; i++) {
+                    option = document.createElement('option');
+                    option.value = obj[i].id;
+                    option.text = obj[i].nombre;
+
+                    controlDropListNivel5.add(option);
+                }
+            }
+
             //valida los campos solo numeros
             function validarNro(e) {
                 var key;
@@ -258,8 +441,7 @@
                 if (key < 48 || key > 57) {
                     if (key == 46 || key == 8) // Detectar . (punto) y backspace (retroceso)
                     { return true; }
-                    else
-                    { return false; }
+                    else { return false; }
                 }
                 return true;
             }

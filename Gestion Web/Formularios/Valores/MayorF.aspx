@@ -55,6 +55,7 @@
                                     <th>Nivel 2</th>
                                     <th>Nivel 3</th>
                                     <th>Nivel 4</th>
+                                    <th>Nivel 5</th>
                                 </tr>
                             </thead>
                         </table>
@@ -188,7 +189,7 @@
                                     </div>
 
                                     <div class="col-md-5ths col-xs-6">
-                                        <label class="col-md-4">Nivel 2</label>
+                                        <label>Nivel 2</label>
                                         <asp:DropDownList ID="DropListNivel2_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
 
@@ -207,22 +208,6 @@
                                         <asp:DropDownList ID="DropListNivel5_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
-
-
-<%--                                <div class="row col-lg-12">
-                                    <div class="col-md-3">
-                                        
-                                    </div>
-                                    <div class="col-md-3">
-                                        
-                                    </div>
-                                    <div class="col-md-3">
-                                        
-                                    </div>
-                                    <div class="col-md-3">
-                                        
-                                    </div>
-                                </div>--%>
 
                                 <hr />
 
@@ -345,6 +330,12 @@
         var controlDropListNivel4_ModalBusqueda;
         var controlDropListNivel5_ModalBusqueda;
 
+        var controlDropListNivel1_ModalAgregarRegistro;
+        var controlDropListNivel2_ModalAgregarRegistro;
+        var controlDropListNivel3_ModalAgregarRegistro;
+        var controlDropListNivel4_ModalAgregarRegistro;
+        var controlDropListNivel5_ModalAgregarRegistro;
+
         var controlDropListEmpresa_ModalAgregarRegistro;
         var controlDropListSucursal_ModalAgregarRegistro;
         var controlDropListPuntoVenta_ModalAgregarRegistro;
@@ -426,6 +417,17 @@
             controlTxtImporte_ModalAgregarRegistro = document.getElementById('<%= txtImporte_ModalAgregarRegistro.ClientID %>');
 
             controlDropList_TipoOperacion_ModalAgregarRegistro = document.getElementById('<%= dropList_TipoOperacion_ModalAgregarRegistro.ClientID %>');
+
+            controlDropListNivel1_ModalAgregarRegistro = document.getElementById('<%= DropListNivel1_ModalAgregarRegistro.ClientID %>');
+            controlDropListNivel2_ModalAgregarRegistro = document.getElementById('<%= DropListNivel2_ModalAgregarRegistro.ClientID %>');
+            controlDropListNivel3_ModalAgregarRegistro = document.getElementById('<%= DropListNivel3_ModalAgregarRegistro.ClientID %>');
+            controlDropListNivel4_ModalAgregarRegistro = document.getElementById('<%= DropListNivel4_ModalAgregarRegistro.ClientID %>');
+            controlDropListNivel5_ModalAgregarRegistro = document.getElementById('<%= DropListNivel5_ModalAgregarRegistro.ClientID %>');
+
+            controlDropListNivel1_ModalAgregarRegistro.addEventListener("change", CargarNivel2);
+            controlDropListNivel2_ModalAgregarRegistro.addEventListener("change", CargarNivel3);
+            controlDropListNivel3_ModalAgregarRegistro.addEventListener("change", CargarNivel4);
+            controlDropListNivel4_ModalAgregarRegistro.addEventListener("change", CargarNivel5);
         }
 
         function CargarSucursales() {
@@ -570,6 +572,7 @@
                     "<td> " + obj[i].Nivel2 + "</td>" +
                     "<td> " + obj[i].Nivel3 + "</td>" +
                     "<td> " + obj[i].Nivel4 + "</td>" +
+                    "<td> " + obj[i].Nivel5 + "</td>" +
                     "</tr> ");
             };
             $(controlBotonFiltrar).removeAttr('disabled');

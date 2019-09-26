@@ -77,9 +77,10 @@
                                         <label class="col-md-1">Descripcion:</label>
                                         <div class="col-md-3">
                                             <asp:TextBox ID="txtDescripcion" runat="server" class="form-control"/>
+                                            <asp: label id="lb_txtDescripcionError" style="display:none; color:red" runat="server"/>
                                         </div>
                                         <div class="col-md-2">
-                                            <asp:LinkButton ID="lbtnAgregar" Text="<span class='shortcut-icon icon-ok'></span>" runat="server" class="btn btn-success" ValidationGroup="CuentasGroup" OnClick="lbtnAgregar_Click" />
+                                            <asp:LinkButton ID="lbtnAgregar" Text="<span class='shortcut-icon icon-ok'></span>" runat="server" class="btn btn-success" ValidationGroup="CuentasGroup" OnClientClick="Javascript: return VerificarSiPuedeCrearElRegistro();" OnClick="lbtnAgregar_Click" />
                                         </div>
                                     </div>
                                 </ContentTemplate>
@@ -229,9 +230,17 @@
                     "bAutoWidth": false
                 });
             });
-        </script>
 
-        <script>
+            function VerificarSiPuedeCrearElRegistro() {
+                var controlTxtDescripcion = document.getElementById('<%= txtDescripcion.ClientID %>');
+                var controlLabelDescripcionError = document.getElementById('<%= lb_txtDescripcionError.ClientID %>');
+                if (controlTxtDescripcion.value == "") {
+                    
+                    return false;
+                }
+                return true;
+            }
+
             //valida los campos solo numeros
             function validarNro(e) {
                 var key;
@@ -252,9 +261,7 @@
                 }
                 return true;
             }
-        </script>
 
-        <script>
             //valida los campos solo numeros
             function validarSoloNro(e) {
                 var key;

@@ -130,6 +130,15 @@ namespace Gestion_Web.Formularios.PlanCuentas {
         protected global::System.Web.UI.WebControls.TextBox txtDescripcion;
         
         /// <summary>
+        /// lb_txtDescripcionError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.DataVisualization.Charting. lb_txtDescripcionError;
+        
+        /// <summary>
         /// lbtnAgregar control.
         /// </summary>
         /// <remarks>

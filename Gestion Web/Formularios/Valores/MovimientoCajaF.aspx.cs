@@ -5,7 +5,10 @@ using Gestion_Api.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -13,15 +16,21 @@ namespace Gestion_Web.Formularios.Valores
 {
     public partial class MovimientoCajaF : System.Web.UI.Page
     {
-        Mensajes mje = new Mensajes();
+        Mensajes m = new Mensajes();
         //controlador
         ControladorCaja controlador = new ControladorCaja();
         controladorUsuario contUser = new controladorUsuario();
-        ControladorPlanCuentas contPlanCta = new ControladorPlanCuentas();
+        ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
         //valores
         private int valor;
         private int idMovimiento;
-        private int idUsuario;
+
+        class ListItemTemporal
+        {
+            public string id;
+            public string nombre;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             this.valor = Convert.ToInt32(Request.QueryString["valor"]);
@@ -32,21 +41,20 @@ namespace Gestion_Web.Formularios.Valores
                 this.cargarMovimientos();
                 if (!IsPostBack)
                 {
-                    this.idUsuario = (int)Session["Login_IdUser"];
                     this.cargarCuentas();
-                    this.cargarCuentasNivel1();
+                    //this.cargarCuentasNivel1();
+
+                    CargarDropLists();
                     if (valor == 2)
                     {
                         this.cargarMovimientoEditar();
                     }                    
                 }
-
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
-
         }
 
         private void VerificarLogin()
@@ -110,7 +118,7 @@ namespace Gestion_Web.Formularios.Valores
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error cargando Movimientos de Caja. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando Movimientos de Caja. " + ex.Message));
 
             }
         }
@@ -118,7 +126,7 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                List<Cuentas_Contables> cuentas = this.contPlanCta.obtenerCuentasContables();
+                List<Cuentas_Contables> cuentas = this.contPlanCuentas.obtenerCuentasContables();
                 if (cuentas.Count > 0)
                 {                    
                     this.PanelCtaContable.Visible = true;
@@ -153,11 +161,11 @@ namespace Gestion_Web.Formularios.Valores
                     celTipo.Text = "Egreso";
                 }
 
-                List<Cuentas_Contables> cuentas = this.contPlanCta.obtenerCuentasContables();
+                List<Cuentas_Contables> cuentas = this.contPlanCuentas.obtenerCuentasContables();
                 if (cuentas.Count > 0)
                 {
                     TableCell celCuenta = new TableCell();
-                    var cta = this.contPlanCta.obtenerCuentaContableTipoMovCaja(mov.id);
+                    var cta = this.contPlanCuentas.obtenerCuentaContableTipoMovCaja(mov.id);
                     if (cta != null)
                     {
                         celCuenta.Text = cta.Cuentas_Contables.Codigo + " - " + cta.Cuentas_Contables.Descripcion;
@@ -205,7 +213,7 @@ namespace Gestion_Web.Formularios.Valores
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Movimiento en la lista. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento en la lista. " + ex.Message));
             }
         }
         private void cargarMovimientoEditar()
@@ -215,7 +223,7 @@ namespace Gestion_Web.Formularios.Valores
                 MovimientoCaja mov = this.controlador.obtenerMovimientoCajaID(this.idMovimiento);
                 this.txtMov.Text = mov.descripcion;
                 this.ListTipos.SelectedValue = mov.tipo.ToString();
-                var cta = this.contPlanCta.obtenerCuentaContableTipoMovCaja(mov.id);
+                var cta = this.contPlanCuentas.obtenerCuentaContableTipoMovCaja(mov.id);
                 if (cta != null)
                 {
                     this.cargarCuentasNivel1();
@@ -225,7 +233,9 @@ namespace Gestion_Web.Formularios.Valores
                     this.cargarCuentasNivel3();
                     this.ListCtaContables3.SelectedValue = cta.Cuentas_Contables.Nivel3.ToString();
                     this.cargarCuentasNivel4();
-                    this.ListCtaContables.SelectedValue = cta.IdCuentaContable.ToString();
+                    this.ListCtaContables4.SelectedValue = cta.Cuentas_Contables.Nivel4.ToString();
+                    this.cargarCuentasNivel5();
+                    this.ListCtaContables5.SelectedValue = cta.IdCuentaContable.ToString();
                 }
             }
             catch
@@ -239,9 +249,6 @@ namespace Gestion_Web.Formularios.Valores
             {
                 if (valor == 2)
                 {
-                    //MovimientoCaja mov = new MovimientoCaja();
-                    //mov.id = this.idMovimiento;
-
                     MovimientoCaja mov = this.controlador.obtenerMovimientoCajaID(this.idMovimiento);
                     mov.descripcion = this.txtMov.Text;
                     mov.tipo = Convert.ToInt32(this.ListTipos.SelectedValue);
@@ -252,13 +259,13 @@ namespace Gestion_Web.Formularios.Valores
                         //agrego bien  
                         this.modificarCtaContableTipoMov(mov);
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico  Movimiento de Caja: " + mov.descripcion);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Movimiento de Caja modificado con exito", "MovimientoCajaF.aspx"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento de Caja modificado con exito", "MovimientoCajaF.aspx"));
                         this.borrarCampos();
 
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error modificando Movimiento de Caja"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando Movimiento de Caja"));
 
                     }
                 }
@@ -274,19 +281,19 @@ namespace Gestion_Web.Formularios.Valores
                         //agrego bien
                         this.agregarCtaContableTipoMov(mov);
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Movimiento de Caja: " + this.txtMovimiento.Text);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Movimiento de Caja cargado con exito", "MovimientoCajaF.aspx"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento de Caja cargado con exito", "MovimientoCajaF.aspx"));
 
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Movimiento de Caja"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento de Caja"));
 
                     }
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Movimiento de Caja. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento de Caja. " + ex.Message));
             }
         }
         protected void btnAgregar_Click(object sender, EventArgs e)
@@ -310,7 +317,7 @@ namespace Gestion_Web.Formularios.Valores
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error borrando campos. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error borrando campos. " + ex.Message));
             }
         }
 
@@ -322,7 +329,7 @@ namespace Gestion_Web.Formularios.Valores
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error al editar Movimiento de Caja. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al editar Movimiento de Caja. " + ex.Message));
             }
         }
 
@@ -330,12 +337,12 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                if (this.ListCtaContables.Items.Count > 0)
+                if (this.ListCtaContables4.Items.Count > 0)
                 {
-                    int idCta = Convert.ToInt32(this.ListCtaContables.SelectedValue);
+                    int idCta = Convert.ToInt32(this.ListCtaContables4.SelectedValue);
                     if (idCta > 0)
                     {
-                        this.contPlanCta.agregarCuentaContableTipoMovCaja(mov.id, idCta);
+                        this.contPlanCuentas.agregarCuentaContableTipoMovCaja(mov.id, idCta);
                     }
                 }
             }
@@ -348,14 +355,14 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                int idCta = Convert.ToInt32(this.ListCtaContables.SelectedValue);
+                int idCta = Convert.ToInt32(this.ListCtaContables5.SelectedValue);
                 if (idCta > 0)
                 {
-                    var cta = this.contPlanCta.obtenerCuentaContableTipoMovCaja(mov.id);
+                    var cta = this.contPlanCuentas.obtenerCuentaContableTipoMovCaja(mov.id);
                     if (cta != null)
                     {
                         cta.IdCuentaContable = idCta;
-                        this.contPlanCta.modificarCuentaContableTipoMovCaja(cta);
+                        this.contPlanCuentas.modificarCuentaContableTipoMovCaja(cta);
                     }
                     else
                     {
@@ -381,18 +388,18 @@ namespace Gestion_Web.Formularios.Valores
                 {
                     //agrego bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Movimiento de Caja: " + m.descripcion);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Movimiento de Caja eliminado con exito", "MovimientoCajaF.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", this.m.mensajeBoxInfo("Movimiento de Caja eliminado con exito", "MovimientoCajaF.aspx"));
 
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error eliminando Movimiento de Caja"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", this.m.mensajeBoxError("Error eliminando Movimiento de Caja"));
 
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error al eliminar Movimiento de Caja. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar Movimiento de Caja. " + ex.Message));
             }
         }
 
@@ -444,11 +451,23 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
 
+        protected void ListCtaContables4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                this.cargarCuentasNivel5();
+            }
+            catch
+            {
+
+            }
+        }
+
         private void cargarCuentasNivel1()
         {
             try
             {
-                var ctas = this.contPlanCta.obtenerCuentasContablesByNivel(1, 0);
+                var ctas = this.contPlanCuentas.obtenerCuentasContablesByNivel(1, 0);
 
                 this.ListCtaContables1.DataSource = ctas.ToList();
                 this.ListCtaContables1.DataValueField = "Id";
@@ -466,7 +485,7 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                var ctas = this.contPlanCta.obtenerCuentasContablesByNivel(2, Convert.ToInt32(this.ListCtaContables1.SelectedValue));
+                var ctas = this.contPlanCuentas.obtenerCuentasContablesByNivel(2, Convert.ToInt32(this.ListCtaContables1.SelectedValue));
 
                 this.ListCtaContables2.DataSource = ctas.ToList();
                 this.ListCtaContables2.DataValueField = "Id";
@@ -485,7 +504,7 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                var ctas = this.contPlanCta.obtenerCuentasContablesByNivel(3, Convert.ToInt32(this.ListCtaContables2.SelectedValue));
+                var ctas = this.contPlanCuentas.obtenerCuentasContablesByNivel(3, Convert.ToInt32(this.ListCtaContables2.SelectedValue));
 
                 this.ListCtaContables3.DataSource = ctas.ToList();
                 this.ListCtaContables3.DataValueField = "Id";
@@ -503,19 +522,105 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                var ctas = this.contPlanCta.obtenerCuentasContablesByNivel(4, Convert.ToInt32(this.ListCtaContables3.SelectedValue));
+                var ctas = this.contPlanCuentas.obtenerCuentasContablesByNivel(4, Convert.ToInt32(this.ListCtaContables3.SelectedValue));
 
-                this.ListCtaContables.DataSource = ctas.ToList();
-                this.ListCtaContables.DataValueField = "Id";
-                this.ListCtaContables.DataTextField = "Descripcion";
-                this.ListCtaContables.DataBind();
-                this.ListCtaContables.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                this.ListCtaContables4.DataSource = ctas.ToList();
+                this.ListCtaContables4.DataValueField = "Id";
+                this.ListCtaContables4.DataTextField = "Descripcion";
+                this.ListCtaContables4.DataBind();
+                this.ListCtaContables4.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
             }
             catch
             {
 
             }
-        }    
+        }
+        private void cargarCuentasNivel5()
+        {
+            try
+            {
+                var ctas = this.contPlanCuentas.obtenerCuentasContablesByNivel(5, Convert.ToInt32(this.ListCtaContables4.SelectedValue));
+
+                this.ListCtaContables5.DataSource = ctas.ToList();
+                this.ListCtaContables5.DataValueField = "Id";
+                this.ListCtaContables5.DataTextField = "Descripcion";
+                this.ListCtaContables5.DataBind();
+                this.ListCtaContables5.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+            }
+            catch
+            {
+
+            }
+        }
+
+
+
+
+        private void CargarDropLists()
+        {
+            CargarNivelesDeLosDropDown();
+        }
+
+        public void CargarNivelesDeLosDropDown()
+        {
+            try
+            {
+                DropDownList[] ddls = { ListCtaContables1, ListCtaContables2, ListCtaContables3, ListCtaContables4, ListCtaContables5 };
+                List<Cuentas_Contables> lista = new List<Cuentas_Contables>();
+
+                for (int i = 0; i < ddls.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        lista = contPlanCuentas.obtenerCuentasContablesByNivel(1, 0);
+                    }
+                    if (lista != null)
+                    {
+                        ddls[i].DataSource = lista;
+                        ddls[i].DataTextField = "Descripcion";
+                        ddls[i].DataValueField = "Id";
+                        ddls[i].DataBind();
+                    }
+                    lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
+
+        [WebMethod]
+        public static string ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel(int jerarquia, int nivel)
+        {
+            try
+            {
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
+                var listaCuentas = contPlanCuentas.obtenerCuentasContablesByNivel(jerarquia, nivel);
+
+                List<ListItemTemporal> listaCuentasTemporal = new List<ListItemTemporal>();
+
+                foreach (var item in listaCuentas)
+                {
+                    listaCuentasTemporal.Add(new ListItemTemporal
+                    {
+                        id = item.Id.ToString(),
+                        nombre = item.Descripcion
+                    });
+                }
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON = serializer.Serialize(listaCuentasTemporal);
+
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return string.Empty;
+            }
+        }
     }
 }

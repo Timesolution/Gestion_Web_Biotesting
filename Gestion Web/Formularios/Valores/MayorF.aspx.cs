@@ -366,6 +366,7 @@ namespace Gestion_Web.Formularios.Valores
                         Nivel2 = item.Cuentas_Contables1.Descripcion,
                         Nivel3 = item.Cuentas_Contables2.Descripcion,
                         Nivel4 = item.Cuentas_Contables3.Descripcion,
+                        Nivel5 = item.Cuentas_Contables4.Descripcion,
                         Debito = item.Debito.ToString(),
                         Credito = item.Credito.ToString(),
                         NumeroDocumento = item.NumeroDocumento
