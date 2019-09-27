@@ -31,13 +31,13 @@ namespace Gestion_Web.Formularios.Valores {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator15;
         
         /// <summary>
-        /// ListTipos control.
+        /// dropListTipo_Debe_Haber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ListTipos;
+        protected global::System.Web.UI.WebControls.DropDownList dropListTipo_Debe_Haber;
         
         /// <summary>
         /// RequiredFieldValidator1 control.
@@ -56,15 +56,6 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel PanelCtaContable;
-        
-        /// <summary>
-        /// lbtnAgregar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregar;
         
         /// <summary>
         /// UpdatePanel1 control.

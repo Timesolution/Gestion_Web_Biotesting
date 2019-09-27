@@ -30,14 +30,14 @@
                                 <td style="width: 30%">
                                     <label class="col-md-2">Tipo</label>
                                     <div class="col-md-9">
-                                        <asp:DropDownList ID="ListTipos" runat="server" class="form-control">
+                                        <asp:DropDownList ID="dropListTipo_Debe_Haber" runat="server" class="form-control">
                                             <asp:ListItem Value="-1">Seleccione...</asp:ListItem>
                                             <asp:ListItem Value="1">Ingreso</asp:ListItem>
                                             <asp:ListItem Value="2">Egreso</asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                     <div class="col-md-1">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ControlToValidate="ListTipos" InitialValue="-1" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="SubGrupoGroup"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ControlToValidate="dropListTipo_Debe_Haber" InitialValue="-1" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="SubGrupoGroup"></asp:RequiredFieldValidator>
                                     </div>
                                 </td>
                                 <td style="width: 30%">
@@ -48,7 +48,7 @@
                                 <td style="width: 10%">
                                     <div class="col-md-1">
                                         <div class="shortcuts">
-                                            <asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="SubGrupoGroup" />
+                                            <%--<asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarOModificarMovimiento_Click" ValidationGroup="SubGrupoGroup" />--%>
                                         </div>
                                     </div>
                                 </td>
@@ -139,9 +139,6 @@
                                     <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
-                            <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                         </div>
 
 
@@ -216,11 +213,10 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </ContentTemplate>
                         </asp:UpdatePanel>
                         <div class="modal-footer">
-                            <asp:LinkButton ID="lbtnAgregarMovCtaCbe" runat="server" class="btn btn-success" Text="Guardar" OnClick="lbtnAgregarMovCtaCbe_Click" ValidationGroup="CtaContableGroup" />
+                            <asp:LinkButton ID="lbtnAgregarMovCtaCbe" runat="server" class="btn btn-success" Text="Guardar" OnClientClick="Javascript: return AgregarOModificarCuentaContableCaja();" ValidationGroup="CtaContableGroup" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -260,10 +256,16 @@
             var controlDropListNivel4;
             var controlDropListNivel5;
 
+            var controlTxtDescripcion;
+            var controlDropListTipo_Debe_Haber;
+
             var dropLists = [];
 
             function pageLoad() {
                 AsignarControles_DropListNiveles();
+
+                controlTxtDescripcion = document.getElementById('<%= txtMov.ClientID %>');
+                controlDropListTipo_Debe_Haber = document.getElementById('<%= dropListTipo_Debe_Haber.ClientID %>');
             }
 
             function BorrarLosDropListDeNiveles() {
@@ -424,6 +426,42 @@
 
                     controlDropListNivel5.add(option);
                 }
+            }
+
+            function AgregarOModificarCuentaContableCaja() {
+                var GET = {};
+                var query = window.location.search.substring(1).split("&");
+                for (var i = 0, max = query.length; i < max; i++) {
+                    if (query[i] === "") // check for trailing & with no param
+                        continue;
+
+                    var param = query[i].split("=");
+                    GET[decodeURIComponent(param[0])] = decodeURIComponent(param[1] || "");
+                }
+                var queryString_valor = GET.valor;
+                var queryString_idCuentaContable_Caja = GET.id;
+
+                var idMov = parseInt(controlDropListNivel5.value);
+                $.ajax({
+                    type: "POST",
+                    url: "MovimientoCajaF.aspx/AgregarOModificarMovimiento",
+                    data: '{queryString_idMovimiento_Caja: "' + parseInt(queryString_idCuentaContable_Caja) + '", queryString_valor: "' + parseInt(queryString_valor) +
+                        '", textDescripcionDelMovimiento: "' + controlTxtDescripcion.value + '", valorDropListTipo_Debe_Haber: "' + parseInt(controlDropListTipo_Debe_Haber.value) +
+                        '", idCuentaContable_Nivel5: "' + parseInt(controlDropListNivel5.value) + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        alert("No se pudo eliminar el registro");
+                    },
+                    success: OnSuccess_AgregarOModificarCuentaContableCaja
+                });
+            }
+
+            function OnSuccess_AgregarOModificarCuentaContableCaja(response) {
+                var data = response.d;
+                obj = JSON.parse(data);
+
+                alert(obj);
             }
 
             //valida los campos solo numeros

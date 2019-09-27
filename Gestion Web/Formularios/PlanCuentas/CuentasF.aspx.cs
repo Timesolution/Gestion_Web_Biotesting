@@ -146,14 +146,13 @@ namespace Gestion_Web.Formularios.PlanCuentas
 
                 TableCell celAction = new TableCell();
                 LinkButton btnEditar = new LinkButton();
-                btnEditar.ID = "btnEditar_" + cta.Id.ToString();
-                btnEditar.CssClass = "btn btn-info ui-tooltip";
-                btnEditar.Attributes.Add("data-toggle", "tooltip");
-                btnEditar.Attributes.Add("title data-original-title", "Editar");
-                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
-                //btnEditar.Font.Size = 9;
-                btnEditar.Click += new EventHandler(this.editarCuenta);
-                celAction.Controls.Add(btnEditar);
+                //btnEditar.ID = "btnEditar_" + cta.Id.ToString();
+                //btnEditar.CssClass = "btn btn-info ui-tooltip";
+                //btnEditar.Attributes.Add("data-toggle", "tooltip");
+                //btnEditar.Attributes.Add("title data-original-title", "Editar");
+                //btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                //btnEditar.Click += new EventHandler(this.editarCuenta);
+                //celAction.Controls.Add(btnEditar);
 
                 Literal l = new Literal();
                 l.Text = "&nbsp";

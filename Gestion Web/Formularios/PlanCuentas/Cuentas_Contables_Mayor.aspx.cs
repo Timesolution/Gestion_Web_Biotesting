@@ -196,7 +196,7 @@ namespace Gestion_Web.Formularios.PlanCuentas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ya se hay una cuenta contable relacionada con ese tipo de movimiento, debe eliminarlo si quiere agregar otro distinto."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ya hay una cuenta contable relacionada con ese tipo de movimiento, debe eliminarlo si quiere agregar otro distinto."));
                 }
 
             }

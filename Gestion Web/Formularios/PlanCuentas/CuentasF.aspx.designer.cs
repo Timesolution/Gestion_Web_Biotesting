@@ -136,7 +136,7 @@ namespace Gestion_Web.Formularios.PlanCuentas {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.DataVisualization.Charting. lb_txtDescripcionError;
+        protected global::System.Web.UI.WebControls.Label lb_txtDescripcionError;
         
         /// <summary>
         /// lbtnAgregar control.
