@@ -441,6 +441,12 @@
                 var queryString_valor = GET.valor;
                 var queryString_idCuentaContable_Caja = GET.id;
 
+                if (queryString_idCuentaContable_Caja == undefined)
+                    queryString_idCuentaContable_Caja = 0;
+
+                if (queryString_valor == undefined)
+                    queryString_valor = 0;
+
                 var idMov = parseInt(controlDropListNivel5.value);
                 $.ajax({
                     type: "POST",

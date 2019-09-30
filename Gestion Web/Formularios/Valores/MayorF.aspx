@@ -185,26 +185,26 @@
                                 <div class="row">
                                     <div class="col-md-5ths col-xs-6">
                                         <label>Nivel 1</label>
-                                        <asp:DropDownList ID="DropListNivel1_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="DropListNivel1_ModalAgregarRegistro" onchange="CargarNivel2_ModalAgregarRegistro()" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
 
                                     <div class="col-md-5ths col-xs-6">
                                         <label>Nivel 2</label>
-                                        <asp:DropDownList ID="DropListNivel2_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="DropListNivel2_ModalAgregarRegistro" onchange="CargarNivel3_ModalAgregarRegistro()" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
 
-                                     <div class="col-md-5ths col-xs-6">
-                                         <label>Nivel 3</label>
-                                        <asp:DropDownList ID="DropListNivel3_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
+                                    <div class="col-md-5ths col-xs-6">
+                                        <label>Nivel 3</label>
+                                        <asp:DropDownList ID="DropListNivel3_ModalAgregarRegistro" onchange="CargarNivel4_ModalAgregarRegistro()" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
 
-                                     <div class="col-md-5ths col-xs-6">
-                                         <label>Nivel 4</label>
-                                        <asp:DropDownList ID="DropListNivel4_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
+                                    <div class="col-md-5ths col-xs-6">
+                                        <label>Nivel 4</label>
+                                        <asp:DropDownList ID="DropListNivel4_ModalAgregarRegistro" onchange="CargarNivel5_ModalAgregarRegistro()" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
 
-                                     <div class="col-md-5ths col-xs-6">
-                                          <label>Nivel 5</label>
+                                    <div class="col-md-5ths col-xs-6">
+                                        <label>Nivel 5</label>
                                         <asp:DropDownList ID="DropListNivel5_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
@@ -346,7 +346,8 @@
         var controlTxtImporte_ModalAgregarRegistro;
         var controlDropList_TipoOperacion_ModalAgregarRegistro;
 
-        var dropLists = [];
+        var dropLists_ModalBusqueda = [];
+        var dropLists_Niveles_ModalAgregarRegistro = [];
 
         function pageLoad() {
             AsignarControles_ModalBuscar();
@@ -387,10 +388,10 @@
             controlDropListNivel3_ModalBusqueda.addEventListener("change", CargarNivel4);
             controlDropListNivel4_ModalBusqueda.addEventListener("change", CargarNivel5);
 
-            dropLists.push(controlDropListNivel2_ModalBusqueda);
-            dropLists.push(controlDropListNivel3_ModalBusqueda);
-            dropLists.push(controlDropListNivel4_ModalBusqueda);
-            dropLists.push(controlDropListNivel5_ModalBusqueda);
+            dropLists_ModalBusqueda.push(controlDropListNivel2_ModalBusqueda);
+            dropLists_ModalBusqueda.push(controlDropListNivel3_ModalBusqueda);
+            dropLists_ModalBusqueda.push(controlDropListNivel4_ModalBusqueda);
+            dropLists_ModalBusqueda.push(controlDropListNivel5_ModalBusqueda);
         }
 
         function AsignarControles_ModalAgregarRegistro() {
@@ -424,10 +425,11 @@
             controlDropListNivel4_ModalAgregarRegistro = document.getElementById('<%= DropListNivel4_ModalAgregarRegistro.ClientID %>');
             controlDropListNivel5_ModalAgregarRegistro = document.getElementById('<%= DropListNivel5_ModalAgregarRegistro.ClientID %>');
 
-            controlDropListNivel1_ModalAgregarRegistro.addEventListener("change", CargarNivel2);
-            controlDropListNivel2_ModalAgregarRegistro.addEventListener("change", CargarNivel3);
-            controlDropListNivel3_ModalAgregarRegistro.addEventListener("change", CargarNivel4);
-            controlDropListNivel4_ModalAgregarRegistro.addEventListener("change", CargarNivel5);
+            dropLists_Niveles_ModalAgregarRegistro.push(controlDropListNivel1_ModalAgregarRegistro);
+            dropLists_Niveles_ModalAgregarRegistro.push(controlDropListNivel2_ModalAgregarRegistro);
+            dropLists_Niveles_ModalAgregarRegistro.push(controlDropListNivel3_ModalAgregarRegistro);
+            dropLists_Niveles_ModalAgregarRegistro.push(controlDropListNivel4_ModalAgregarRegistro);
+            dropLists_Niveles_ModalAgregarRegistro.push(controlDropListNivel5_ModalAgregarRegistro);
         }
 
         function CargarSucursales() {
@@ -604,20 +606,20 @@
 
         function BorrarLosDropListDeNiveles() {
 
-            for (var i in dropLists) {
-                while (dropLists[i].options.length > 0) {
-                    dropLists[i].remove(0);
+            for (var i in dropLists_ModalBusqueda) {
+                while (dropLists_ModalBusqueda[i].options.length > 0) {
+                    dropLists_ModalBusqueda[i].remove(0);
                 }
             }
         }
 
         function CargarLosDropListDeNivelesConElItem_TODOS() {
-            for (var i in dropLists) {
+            for (var i in dropLists_ModalBusqueda) {
                 var option = document.createElement('option');
                 option.value = 0;
                 option.text = "Todos";
 
-                dropLists[i].add(option);
+                dropLists_ModalBusqueda[i].add(option);
             }
         }
 
@@ -773,7 +775,6 @@
             }
         }
 
-        //modal agregar registro
         function CargarSucursales_ModalAgregarRegistro() {
             $.ajax({
                 type: "POST",
@@ -855,6 +856,10 @@
             }
             else {
                 controlLabel_ImporteError_ModalAgregarRegistro.style.display = "none";
+            }
+            if (!VerificarSiSeleccionoTodosLosNiveles()) {
+                alert('Debe seleccionar todos los niveles');
+                estadoDelFormulario = false;
             }
             if (estadoDelFormulario) {
                 AgregarRegistroTo_TablaTemporal();
@@ -993,13 +998,170 @@
                 return true;
             }
             return false;
-        } 
+        }
 
         function OnSuccess_CrearRegistros() {
             alert("Registros creados correctamente.");
             window.location.replace("/Formularios/Valores/MayorF.aspx");
 
             return false;
+        }
+
+        function CargarNivel2_ModalAgregarRegistro() {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 2 + '", nivel: "' + parseInt(controlDropListNivel1_ModalAgregarRegistro.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 2.");
+                },
+                success: OnSuccessCargarNivel2_ModalAgregarRegistro
+            });
+        };
+
+        function OnSuccessCargarNivel2_ModalAgregarRegistro(response) {
+            while (controlDropListNivel2_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel2_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 2);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel2_ModalAgregarRegistro.add(option);
+            }
+            if (controlDropListNivel1_ModalAgregarRegistro.value == 0) {
+                return;
+            }
+            CargarNivel3_ModalAgregarRegistro();
+        }
+
+        function CargarNivel3_ModalAgregarRegistro() {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 3 + '", nivel: "' + parseInt(controlDropListNivel2_ModalAgregarRegistro.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 3.");
+                },
+                success: OnSuccessCargarNivel3_ModalAgregarRegistro
+            });
+        };
+
+        function OnSuccessCargarNivel3_ModalAgregarRegistro(response) {
+            while (controlDropListNivel3_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel3_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 3);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel3_ModalAgregarRegistro.add(option);
+            }
+            if (controlDropListNivel1_ModalAgregarRegistro.value == 0) {
+                return;
+            }
+            CargarNivel4_ModalAgregarRegistro();
+        }
+
+        function CargarNivel4_ModalAgregarRegistro() {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 4 + '", nivel: "' + parseInt(controlDropListNivel3_ModalAgregarRegistro.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 4.");
+                },
+                success: OnSuccessCargarNivel4_ModalAgregarRegistro
+            });
+        }
+
+        function OnSuccessCargarNivel4_ModalAgregarRegistro(response) {
+            while (controlDropListNivel4_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel4_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 4);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel4_ModalAgregarRegistro.add(option);
+            }
+        }
+
+        function CargarNivel5_ModalAgregarRegistro() {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 5 + '", nivel: "' + parseInt(controlDropListNivel4_ModalAgregarRegistro.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 5.");
+                },
+                success: OnSuccessCargarNivel5_ModalAgregarRegistro
+            });
+        }
+
+        function OnSuccessCargarNivel5_ModalAgregarRegistro(response) {
+            while (controlDropListNivel5_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel5_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 5);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel5_ModalAgregarRegistro.add(option);
+            }
+        }
+
+        function MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(datos, nivel) {
+            if (datos == "[]") {
+                alert('No se encontraron datos del nivel ' + nivel);
+            }
+        }
+
+        function VerificarSiSeleccionoTodosLosNiveles() {
+            var seleccionoTodo = true;
+
+            for (var i in dropLists_Niveles_ModalAgregarRegistro) {
+                if (dropLists_Niveles_ModalAgregarRegistro[i].value == 0) {
+                    seleccionoTodo = false;
+                }
+            }
+            return seleccionoTodo;
         }
     </script>
 </asp:Content>

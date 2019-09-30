@@ -176,33 +176,42 @@ namespace Gestion_Web.Formularios.PlanCuentas
             }
         }
 
-        protected void lbtnCrearRegistro_Click(object sender, EventArgs e)
+        [WebMethod]
+        public static string CrearRegistro_CuentaContable_MayorTipoDeMovimiento(int idTipoMovimiento, int nivel5)
         {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON;
             try
             {
-                bool existeUnaRelacion = contPlanCuentas.VerificarSiEl_MayorTipoMovimentoYaEstaAsignadoAUna_CuentaContable(Convert.ToInt32(dropList_Mayor_TipoDeMovimiento.SelectedValue));
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
+                bool existeUnaRelacion = contPlanCuentas.VerificarSiEl_MayorTipoMovimentoYaEstaAsignadoAUna_CuentaContable(idTipoMovimiento);
 
                 if (!existeUnaRelacion)
                 {
                     CuentasContables_MayorTipoMovimiento cuentasContables_MayorTipoMovimiento = new CuentasContables_MayorTipoMovimiento();
-                    cuentasContables_MayorTipoMovimiento.IdCuenta_Contable = Convert.ToInt32(DropListNivel5.SelectedValue);
-                    cuentasContables_MayorTipoMovimiento.IdMayor_TipoMovimiento = Convert.ToInt32(dropList_Mayor_TipoDeMovimiento.SelectedValue);
+                    cuentasContables_MayorTipoMovimiento.IdCuenta_Contable = nivel5;
+                    cuentasContables_MayorTipoMovimiento.IdMayor_TipoMovimiento = idTipoMovimiento;
                     cuentasContables_MayorTipoMovimiento.Estado = 1;
 
                     if (contPlanCuentas.AgregarRegistroToTable_CuentasContables_MayorTipoMovimiento(cuentasContables_MayorTipoMovimiento))
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Registro creado correctamente", "Cuentas_Contables_Mayor.aspx"));
+                        resultadoJSON = serializer.Serialize("Registro creado correctamente");
+                        return resultadoJSON;
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ya hay una cuenta contable relacionada con ese tipo de movimiento, debe eliminarlo si quiere agregar otro distinto."));
+                    resultadoJSON = serializer.Serialize("Ya hay una cuenta contable relacionada con ese tipo de movimiento, debe eliminarlo si quiere agregar otro distinto.");
+                    return resultadoJSON;
                 }
-
+                resultadoJSON = serializer.Serialize("No se creo el registro");
+                return resultadoJSON;
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+                resultadoJSON = serializer.Serialize("Error de catch en CrearRegistro_CuentaContable_MayorTipoDeMovimiento");
+                return resultadoJSON;
             }
         }
 

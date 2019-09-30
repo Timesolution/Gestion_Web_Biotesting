@@ -290,7 +290,6 @@ namespace Gestion_Web.Formularios.Valores
                         return ConvertirStringToJSON("No se pudo crear la cuenta");
                     }
                 }
-                return ConvertirStringToJSON("No se aplicaron cambios");
             }
             catch
             {
