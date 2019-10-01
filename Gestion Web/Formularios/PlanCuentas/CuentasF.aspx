@@ -26,25 +26,26 @@
                                                 <asp:ListItem Text="2" Value="2" />
                                                 <asp:ListItem Text="3" Value="3" />
                                                 <asp:ListItem Text="4" Value="4" />
+                                                <asp:ListItem Text="5" Value="5" />
                                             </asp:DropDownList>
                                         </div>
                                         <div class="col-md-1">
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListJerarquia" InitialValue="-1" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="CuentasGroup"></asp:RequiredFieldValidator>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <asp:Panel ID="panelNivel1" runat="server" Visible="false">
                                                 <label class="col-md-1">Nivel 1:</label>
-                                                <div class="col-md-3">
-                                                    <asp:DropDownList ID="ListNivel1" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel1_SelectedIndexChanged" >
+                                                <div class="col-md-2">
+                                                    <asp:DropDownList ID="ListNivel1" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel1_SelectedIndexChanged">
                                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                                     </asp:DropDownList>
                                                 </div>
                                             </asp:Panel>
                                             <asp:Panel ID="panelNivel2" runat="server" Visible="false">
                                                 <label class="col-md-1">Nivel 2:</label>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <asp:DropDownList ID="ListNivel2" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel2_SelectedIndexChanged">
                                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                                     </asp:DropDownList>
@@ -52,34 +53,41 @@
                                             </asp:Panel>
                                             <asp:Panel ID="panelNivel3" runat="server" Visible="false">
                                                 <label class="col-md-1">Nivel 3:</label>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <asp:DropDownList ID="ListNivel3" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel3_SelectedIndexChanged">
                                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                                     </asp:DropDownList>
                                                 </div>
                                             </asp:Panel>
+                                            <asp:Panel ID="panelNivel4" runat="server" Visible="false">
+                                                <label class="col-md-1">Nivel 4:</label>
+                                                <div class="col-md-2">
+                                                    <asp:DropDownList ID="ListNivel4" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListNivel4_SelectedIndexChanged">
+                                                        <asp:ListItem Text="Seleccione..." Value="-1" />
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </asp:Panel>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-md-1">Codigo:</label>
                                         <div class="col-md-3">
-                                            <asp:TextBox ID="txtCodigo" runat="server" class="form-control"/>
+                                            <asp:TextBox ID="txtCodigo" runat="server" class="form-control" disabled="true"></asp:TextBox>
                                         </div>
                                         <label class="col-md-1">Descripcion:</label>
                                         <div class="col-md-3">
-                                            <asp:TextBox ID="txtDescripcion" runat="server" class="form-control"/>
+                                            <asp:TextBox ID="txtDescripcion" runat="server" class="form-control" />
+                                            <asp:Label ID="lb_txtDescripcionError" Style="display: none; color: red" Text="Complete este campo" runat="server"></asp:Label>
                                         </div>
                                         <div class="col-md-2">
-                                            <asp:LinkButton ID="lbtnAgregar" Text="<span class='shortcut-icon icon-ok'></span>" runat="server" class="btn btn-success" ValidationGroup="CuentasGroup" OnClick="lbtnAgregar_Click" />
+                                            <asp:LinkButton ID="lbtnAgregar" Text="<span class='shortcut-icon icon-ok'></span>" runat="server" class="btn btn-success" ValidationGroup="CuentasGroup" OnClientClick="Javascript: return VerificarSiPuedeCrearElRegistro();" OnClick="lbtnAgregar_Click" />
                                         </div>
                                     </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                         </div>
                     </div>
-                    <!-- /widget-content -->
                 </div>
-                <!-- /widget -->
             </div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked widget-table action-table">
@@ -94,7 +102,7 @@
                             <%--<div class="col-md-12 col-xs-12">--%>
                             <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
                                 <ContentTemplate>
-                                    <div class="table-responsive">                                        
+                                    <div class="table-responsive">
                                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                             <thead>
                                                 <tr>
@@ -128,7 +136,7 @@
 
         </div>
 
-        
+
         <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -154,24 +162,18 @@
                                     <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                                 </div>
                             </div>
-                            <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                         </div>
-
 
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
-                            <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
                         </div>
                     </div>
 
                 </div>
             </div>
         </div>
-        <%--Fin modalGrupo--%>
 
         <script>
             function abrirdialog(valor) {
@@ -220,9 +222,18 @@
                     "bAutoWidth": false
                 });
             });
-        </script>
 
-        <script>
+            function VerificarSiPuedeCrearElRegistro() {
+                var controlTxtDescripcion = document.getElementById('<%= txtDescripcion.ClientID %>');
+                var controlLabelDescripcionError = document.getElementById('<%= lb_txtDescripcionError.ClientID %>');
+                var controlDropListJerarquia = document.getElementById('<%= ListJerarquia.ClientID %>');
+                if (controlTxtDescripcion.value == "") {
+                    controlLabelDescripcionError.style.display = "block";
+                    return false;
+                }
+                return true;
+            }
+
             //valida los campos solo numeros
             function validarNro(e) {
                 var key;
@@ -238,14 +249,11 @@
                 if (key < 48 || key > 57) {
                     if (key == 46 || key == 8) // Detectar . (punto) y backspace (retroceso)
                     { return true; }
-                    else
-                    { return false; }
+                    else { return false; }
                 }
                 return true;
             }
-        </script>
 
-        <script>
             //valida los campos solo numeros
             function validarSoloNro(e) {
                 var key;
