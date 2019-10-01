@@ -148,14 +148,14 @@ namespace Gestion_Web.Formularios.PlanCuentas
         #endregion
 
         [WebMethod]
-        public static string EliminarRegistroDeTabla(int idCuentasContable_MayorTipoMovimiento)
+        public static string EliminarRegistroDeTabla(int id)
         {
             try
             {
                 int resultado = 0;
                 ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
 
-                var mayortipoMovimiento_cuentaContable = contPlanCuentas.GetOne_CuentasContables_MayorTipoMovimiento(idCuentasContable_MayorTipoMovimiento);
+                var mayortipoMovimiento_cuentaContable = contPlanCuentas.GetOne_CuentasContables_MayorTipoMovimiento_ById(id);
                 if (mayortipoMovimiento_cuentaContable.Id != 0)
                 {
                     mayortipoMovimiento_cuentaContable.Estado = 0;

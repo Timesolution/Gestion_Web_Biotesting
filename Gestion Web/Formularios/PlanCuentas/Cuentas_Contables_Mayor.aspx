@@ -166,7 +166,9 @@
         }
 
         function CrearRegistroCuentaContable() {
-
+            if (!ValidateForm()) {
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: "Cuentas_Contables_Mayor.aspx/CrearRegistro_CuentaContable_MayorTipoDeMovimiento",
@@ -418,7 +420,7 @@
             $.ajax({
                 type: "POST",
                 url: "Cuentas_Contables_Mayor.aspx/EliminarRegistroDeTabla",
-                data: '{idCuentasContable_MayorTipoMovimiento: "' + parseInt(idAsiento) + '"}',
+                data: '{id: "' + parseInt(idAsiento) + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function () {
