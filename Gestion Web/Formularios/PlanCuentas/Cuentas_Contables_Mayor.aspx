@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Cuentas_Contables_Mayor.aspx.cs" Inherits="Gestion_Web.Formularios.PlanCuentas.Cuentas_Contables_Mayor" %>
+﻿<%@ Page Title="" Language="C#" enableEventValidation="false" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Cuentas_Contables_Mayor.aspx.cs" Inherits="Gestion_Web.Formularios.PlanCuentas.Cuentas_Contables_Mayor" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -21,15 +21,15 @@
                                 <label>Tipo Movimiento</label>
                                 <asp:DropDownList ID="dropList_Mayor_TipoDeMovimiento" runat="server" class="form-control"></asp:DropDownList>
                             </div>
-                            <div class="col-md-3">
+                         <%--   <div class="col-md-3">
                                 <label>Debe / Haber</label>
                                 <asp:DropDownList ID="DropDownList1" runat="server" class="form-control">
                                     <asp:ListItem Text="Debe" Value="1"></asp:ListItem>
                                     <asp:ListItem Text="Haber" Value="2"></asp:ListItem>
                                 </asp:DropDownList>
-                            </div>
-                             <div class="col-md-3">
-                                 <br />
+                            </div>--%>
+                            <div class="col-md-3">
+                                <br />
                                 <a href="#modal_DropList_Cuentas" data-toggle="modal" class="btn btn-success">Plan de ctas.</a>
                             </div>
                         </td>
@@ -98,10 +98,16 @@
                                 <asp:DropDownList ID="DropListNivel4" runat="server" class="form-control"></asp:DropDownList>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-4">Nivel 5</label>
+                            <div class="col-md-6">
+                                <asp:DropDownList ID="DropListNivel5" runat="server" class="form-control"></asp:DropDownList>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnCrearRegistro" OnClick="lbtnCrearRegistro_Click" OnClientClick="javascript:return ValidarFormulario_ModalCrearRegistro()" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack="false" />
+                    <asp:LinkButton ID="lbtnCrearRegistro" OnClientClick="javascript:return CrearRegistroCuentaContable();" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack="false" />
                 </div>
             </div>
         </div>
@@ -125,24 +131,62 @@
         var controlDropListNivel2;
         var controlDropListNivel3;
         var controlDropListNivel4;
+        var controlDropListNivel5;
+        var controlDropList_Mayor_TipoDeMovimiento;
         var dropLists = [];
 
         var controlTxtItem;
         var controlTxtCuenta;
         var controlLabelErrorTxtItem;
         var controlLabelErrorTxtCuenta;
+        var dropListsNiveles;
 
         function pageLoad() {
             controlDropListNivel1 = document.getElementById('<%= DropListNivel1.ClientID %>');
             controlDropListNivel2 = document.getElementById('<%= DropListNivel2.ClientID %>');
             controlDropListNivel3 = document.getElementById('<%= DropListNivel3.ClientID %>');
             controlDropListNivel4 = document.getElementById('<%= DropListNivel4.ClientID %>');
+            controlDropListNivel5 = document.getElementById('<%= DropListNivel5.ClientID %>');
 
-            controlDropListNivel1.addEventListener("change", ChangeNivel1);
+            controlDropList_Mayor_TipoDeMovimiento = document.getElementById('<%= dropList_Mayor_TipoDeMovimiento.ClientID %>');
+
+            controlDropListNivel1.addEventListener("change", CargarNivel2);
             controlDropListNivel2.addEventListener("change", CargarNivel3);
             controlDropListNivel3.addEventListener("change", CargarNivel4);
+            controlDropListNivel4.addEventListener("change", CargarNivel5);
 
             CargarTablaConLosRegistros();
+
+            dropListsNiveles = [];
+            dropListsNiveles.push(controlDropListNivel1);
+            dropListsNiveles.push(controlDropListNivel2);
+            dropListsNiveles.push(controlDropListNivel3);
+            dropListsNiveles.push(controlDropListNivel4);
+            dropListsNiveles.push(controlDropListNivel5);
+        }
+
+        function CrearRegistroCuentaContable() {
+            if (!ValidateForm()) {
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "Cuentas_Contables_Mayor.aspx/CrearRegistro_CuentaContable_MayorTipoDeMovimiento",
+                data: '{nivel5: "' + parseInt(controlDropListNivel5.value) + '", idTipoMovimiento: "' + parseInt(controlDropList_Mayor_TipoDeMovimiento.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo crear el registro.");
+                },
+                success: OnSuccess_CrearRegistroCuentaContable
+            });
+        }
+
+        function OnSuccess_CrearRegistroCuentaContable(response) {
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            alert(data);
         }
 
         function CargarDropListNivel1PageLoad() {
@@ -291,17 +335,48 @@
 
                 controlDropListNivel4.add(option);
             }
+            CargarNivel5();
+        }
+
+        function CargarNivel5() {
+            $.ajax({
+                type: "POST",
+                url: "Cuentas_Contables_Mayor.aspx/ObtenerJSON_ListaDeCuentasContablesByJerarquiaAndNivel",
+                data: '{jerarquia: "' + 5 + '", nivel: "' + parseInt(controlDropListNivel4.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("No se pudo cargar el nivel 4.");
+                },
+                success: OnSuccessCargarNivel5
+            });
+        }
+
+        function OnSuccessCargarNivel5(response) {
+            while (controlDropListNivel5.options.length > 0) {
+                controlDropListNivel5.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel5.add(option);
+            }
         }
 
         function ValidateForm() {
             var correcto = true;
-            if (controlTxtItem.value.length == 0) {
-                controlLabelErrorTxtItem.style.display = "block";
-                correcto = false;
-            }
-            if (controlTxtCuenta.value.length == 0) {
-                controlLabelErrorTxtCuenta.style.display = "block";
-                correcto = false;
+            
+            for (var i in dropListsNiveles) {
+                if (dropListsNiveles[i].value == 0) {
+                    correcto = false;
+                    alert('Debe seleccionar todos los niveles');
+                }
             }
             if (correcto) {
                 return true;
@@ -345,7 +420,7 @@
             $.ajax({
                 type: "POST",
                 url: "Cuentas_Contables_Mayor.aspx/EliminarRegistroDeTabla",
-                data: '{idCuentasContable_MayorTipoMovimiento: "' + parseInt(idAsiento) + '"}',
+                data: '{id: "' + parseInt(idAsiento) + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: function () {
