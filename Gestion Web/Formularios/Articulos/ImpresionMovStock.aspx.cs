@@ -894,12 +894,12 @@ namespace Gestion_Web.Formularios.Articulos
                 if (this.excel == 1)
                 {
                     //get xls content
-                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
-                    String filename = string.Format("{0}.{1}", "StockValorizadoDetallado_" + DateTime.Today.ToString("dd/MM/yyyy"), "xls");
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("EXCELOPENXML", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "StockValorizadoDetallado_" + DateTime.Today.ToString("dd/MM/yyyy"), "xlsx");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;
-                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.ContentType = "application/openxmlformats-officedocument";
                     this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
                     this.Response.BinaryWrite(xlsContent);
 
