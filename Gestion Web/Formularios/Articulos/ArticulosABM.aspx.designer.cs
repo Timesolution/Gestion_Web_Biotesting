@@ -1822,6 +1822,15 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.UpdatePanel UpdatePanel9;
         
         /// <summary>
+        /// lbIDMedidaOculto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbIDMedidaOculto;
+        
+        /// <summary>
         /// txtMedidaNombre control.
         /// </summary>
         /// <remarks>
@@ -1876,13 +1885,13 @@ namespace Gestion_Web.Formularios.Articulos {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator46;
         
         /// <summary>
-        /// lbtnAgregarMedida control.
+        /// lbtnAgregarOEditarMedida control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarMedida;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarOEditarMedida;
         
         /// <summary>
         /// phMedidas control.

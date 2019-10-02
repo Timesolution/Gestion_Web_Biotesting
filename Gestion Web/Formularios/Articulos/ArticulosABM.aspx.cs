@@ -34,7 +34,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         //articulo
         Articulo articulo = new Articulo();
-        
+
         //para saber si es alta(1) o modificacion(2)
         private int accion;
         private int id;
@@ -49,7 +49,7 @@ namespace Gestion_Web.Formularios.Articulos
         protected void Page_Load(object sender, EventArgs e)
         {
             try
-            {                  
+            {
 
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.id = Convert.ToInt32(Request.QueryString["id"]);
@@ -168,7 +168,7 @@ namespace Gestion_Web.Formularios.Articulos
                     Configuracion c = new Configuracion();
                     if (c.numeracionArticulos == "1")
                     {
-                        this.generarCodigoNuevo();                        
+                        this.generarCodigoNuevo();
                         //this.txtCodArticulo.Attributes.Add("disabled", "disabled");
                     }
                 }
@@ -191,7 +191,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 this.Form.DefaultButton = lbBuscar.UniqueID;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
 
@@ -210,7 +210,7 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                 {
                     //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Maestro.Articulos.Articulos") != 1)
-                    if(this.verificarAcceso() != 1)
+                    if (this.verificarAcceso() != 1)
                     {
                         Response.Redirect("/Default.aspx?m=1", false);
                     }
@@ -580,7 +580,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 List<Store> storesAux = new List<Store>();
                 storesAux = this.contArtEnt.obtenerStores();
-                if(storesAux != null)
+                if (storesAux != null)
                 {
                     this.ListStores.DataSource = storesAux;
                     this.ListStores.DataValueField = "Id";
@@ -604,7 +604,7 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 var storesArticulos = this.contArtEnt.obtenerStores_ArticulosPorIdArticulo(this.id);
-                if(storesArticulos != null)
+                if (storesArticulos != null)
                 {
                     ListBoxStores.Items.Clear();
                     foreach (Stores_Articulos sa in storesArticulos)
@@ -615,7 +615,7 @@ namespace Gestion_Web.Formularios.Articulos
                         if (sa.Store1 == null)
                         {
                             sa.Store1 = this.contArtEnt.obtenerStorePorId((long)sa.Store);
-                            
+
                         }
                         item.Text = sa.Store1.Descripcion;
                         this.ListBoxStores.Items.Add(item);
@@ -776,7 +776,7 @@ namespace Gestion_Web.Formularios.Articulos
                         this.ListApareceStore.SelectedValue = "SI";
                         this.UpdatePanelStoresArticulos.Visible = true;
                     }
-                        
+
 
                     if (store.Oferta != null)
                         this.ListOferta.SelectedValue = store.Oferta.ToString();
@@ -853,9 +853,9 @@ namespace Gestion_Web.Formularios.Articulos
                 //redirijo
                 this.DuplicarArticulo();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
- 
+
             }
 
         }
@@ -876,10 +876,10 @@ namespace Gestion_Web.Formularios.Articulos
                     return -1;
                 }
 
-                Articulo art = new Articulo();                
+                Articulo art = new Articulo();
                 art.codigo = this.txtCodArticulo.Text;
                 art.descripcion = this.txtDescripcion.Text;
-                art.proveedor.id = Convert.ToInt32(this.DropListProveedor.SelectedValue,CultureInfo.InvariantCulture);
+                art.proveedor.id = Convert.ToInt32(this.DropListProveedor.SelectedValue, CultureInfo.InvariantCulture);
                 art.grupo.id = Convert.ToInt32(this.DropListGrupo.SelectedValue, CultureInfo.InvariantCulture);
                 art.subGrupo.id = Convert.ToInt32(this.DropDownSubGrupo.SelectedValue, CultureInfo.InvariantCulture);
                 art.costo = Convert.ToDecimal(this.txtCosto.Text, CultureInfo.InvariantCulture);
@@ -920,7 +920,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                     this.contArtEnt.agregarApareceLista(artCat);
                     this.guardarDatosDespacho(i);
-                    this.guardarDatosPresentaciones(i);                    
+                    this.guardarDatosPresentaciones(i);
                 }
                 //traspaso temporal para el siguiente
                 //int idart=0;
@@ -941,7 +941,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 else
                 {
-                   //estoy duplicando
+                    //estoy duplicando
                     return i;
                 }
                 return 0;
@@ -990,8 +990,8 @@ namespace Gestion_Web.Formularios.Articulos
                 //art.ultActualizacion = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy"));
                 art.fechaAlta = fechaA;
                 art.observacion = this.txtObservacion.Text;
-                
-                decimal precioTemp = (decimal)ViewState["PrecioVenta"] ;
+
+                decimal precioTemp = (decimal)ViewState["PrecioVenta"];
                 if (precioTemp != art.precioVenta)
                 {
                     art.ultActualizacion = DateTime.Now;
@@ -1019,8 +1019,8 @@ namespace Gestion_Web.Formularios.Articulos
                 this.guardarDatosPresentaciones(art.id);
                 this.guardarHistorialCosto(art);
 
-                int i = this.controlador.modificarArticulo(art,cod,1);//funcion modificar articulo
-                
+                int i = this.controlador.modificarArticulo(art, cod, 1);//funcion modificar articulo
+
                 if (i == 1)
                 {
                     //cargo bien
@@ -1031,7 +1031,7 @@ namespace Gestion_Web.Formularios.Articulos
                     am.idMarca = Convert.ToInt32(this.DropListMarca.SelectedValue);
                     am.TipoDistribucion = Convert.ToInt32(this.ListTipoDistribucion.SelectedValue);
                     i = this.contArtEnt.modificarMarca(am);
-                    
+
                     if (a == 1)
                     {
                         int existeSiguiente = this.irProximoArticulo(art.id);
@@ -1048,7 +1048,7 @@ namespace Gestion_Web.Formularios.Articulos
                         //Response.Write("<html><body><script>history.go(-2);</script></body></html>");          
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.volverAtras());
                     }
-                }                
+                }
                 if (i == -2)
                 {
 
@@ -1060,22 +1060,22 @@ namespace Gestion_Web.Formularios.Articulos
 
                     //Agrego mal
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El Codigo de Barras del Articulo ya fue ingresado"));
-                }                
+                }
                 else
                 {
                     //Agrego mal
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("No se pudo modificar articulo. Verifique los datos ingresados", null));
                 }
-                        
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando articulo" + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error modificando articulo" + ex.Message);
             }
- 
+
         }
-        
+
         private void DuplicarArticulo()
         {
             try
@@ -1087,7 +1087,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
 
                 int i = this.controlador.duplicarArticulo(this.id, this.txtCodArticulo.Text, this.txtCodigoBarra.Text,
-                    Convert.ToInt64(this.DropListMarca.SelectedValue), 
+                    Convert.ToInt64(this.DropListMarca.SelectedValue),
                     Convert.ToInt32(this.ListTipoDistribucion.SelectedValue));
 
                 if (i > 0)
@@ -1133,7 +1133,7 @@ namespace Gestion_Web.Formularios.Articulos
                 //artStore.Oferta = 0;
                 //if(this.ListOferta.SelectedValue == "SI")
                 //    artStore.Oferta = 1;
-                
+
                 artStore.Destacado = 0;
                 if (this.ListDestacado.SelectedValue == "SI")
                     artStore.Destacado = 1;
@@ -1153,7 +1153,7 @@ namespace Gestion_Web.Formularios.Articulos
                 artStore.Especificaciones = this.txtEspecificacionStore.Text;
 
                 int aparece = 0;
-                if (this.ListApareceStore.SelectedValue == "SI") 
+                if (this.ListApareceStore.SelectedValue == "SI")
                     aparece = 1;
                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Voy a agregar el articulo");
                 int i = this.controlador.agregarStore(artStore, aparece);
@@ -1179,11 +1179,11 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                switch(i)
+                switch (i)
                 {
                     case 1:
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Articulo: " + this.txtDescripcion.Text);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo agregado con exito", "ArticulosABM.aspx?accion=1"));                                      
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo agregado con exito", "ArticulosABM.aspx?accion=1"));
 
                         //if (a == 1)
                         //{
@@ -1213,14 +1213,14 @@ namespace Gestion_Web.Formularios.Articulos
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. "+ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
         }
 
         #endregion
-        
+
         #region funciones auxiliares, alta grupo, calculos precios, imagenes
         private void cargarProducto(string busqueda)
         {
@@ -1269,17 +1269,17 @@ namespace Gestion_Web.Formularios.Articulos
 
                 return -8;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.EscribirSQL(1,"ERROR","Error al ir al proximo articulo " + ex.Message);
+                Log.EscribirSQL(1, "ERROR", "Error al ir al proximo articulo " + ex.Message);
                 return -1;
             }
         }
         protected void btnAgregarGrupo_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
-                
+
                 int i = this.controlador.agregarGrupo(this.txtGrupo.Text);
                 if (i > 0)
                 {
@@ -1299,7 +1299,7 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando grupo. " + ex.Message));
             }
@@ -1364,7 +1364,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.DropListPorcentajeIVA.SelectedValue = "0";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando porcentaje de IVA " + ex.Message));
 
@@ -1627,7 +1627,7 @@ namespace Gestion_Web.Formularios.Articulos
         public void subirImagen1()
         {
             //if(!String.IsNullOrEmpty(this.txtCodArticulo.Text))
-            if(this.id > 0)
+            if (this.id > 0)
             {
                 if (IsPostBack)
                 {
@@ -1640,7 +1640,7 @@ namespace Gestion_Web.Formularios.Articulos
                         String fileExtension =
                             System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
 
-                        String[] allowedExtensions = { ".jpg",".png","jpeg" };
+                        String[] allowedExtensions = { ".jpg", ".png", "jpeg" };
 
                         for (int i = 0; i < allowedExtensions.Length; i++)
                         {
@@ -1666,15 +1666,15 @@ namespace Gestion_Web.Formularios.Articulos
                             }
 
                             int cant = this.verificarCantidad(path);
-                            if(cant < 3 )
+                            if (cant < 3)
                             {
                                 //guardo nombre archivo
                                 string imagen = FileUpload1.FileName;
-                                
+
                                 //lo subo
                                 FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
 
-                                
+
 
                                 //cambio imagen y le asigno el nuevo nombre
                                 imagen = this.modificarNombre(path + imagen, this.id.ToString(), cant);
@@ -1691,14 +1691,14 @@ namespace Gestion_Web.Formularios.Articulos
 
                                 theFTP.ftpServer = WebConfigurationManager.AppSettings.Get("ImagenesStore");
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "URL FTP:" + theFTP.ftpServer);
-                                
+
                                 theFTP.ftpUser = WebConfigurationManager.AppSettings.Get("Usuario");
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "usuario FTP:" + theFTP.ftpUser);
-                                
+
                                 theFTP.ftpPass = WebConfigurationManager.AppSettings.Get("pass");
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Contraseña FTP:" + theFTP.ftpPass);
                                 controladorFunciones fun = new controladorFunciones();
-                                
+
 
                                 //verifico si existe el directorio en destino
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "verifico si Existe directorio");
@@ -1723,7 +1723,7 @@ namespace Gestion_Web.Formularios.Articulos
                             }
 
 
-                            
+
                             //Label1.Text = "File uploaded!";
 
                             //verifico si borra
@@ -1798,8 +1798,8 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                
-                string[] imagenes =  Directory.GetFiles(Server.MapPath("../../images/Productos/" + idArticulo + "/"));
+
+                string[] imagenes = Directory.GetFiles(Server.MapPath("../../images/Productos/" + idArticulo + "/"));
                 TableRow tr = new TableRow();
                 //limpio el placeholder
                 this.phImagenesArticulos.Controls.Clear();
@@ -2009,7 +2009,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         }
         #endregion
-        
+
         //cotizacion del dolar en detalle
 
         #region store
@@ -2131,7 +2131,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando Grupos. " + ex.Message));
             }
         }
-        
+
         private void cargarArticulosCompuestosPH(ArticulosCompuestos ac)
         {
             try
@@ -2376,10 +2376,10 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 TableRow tr = new TableRow();
-                                
+
                 tr.ID = "tr_" + pa.id.ToString();
 
-                if(lblNombreArticulo!= null)
+                if (lblNombreArticulo != null)
                     lblNombreArticulo.Text = "Otros Proveedores - " + pa.articulo.descripcion;
 
                 TableCell celDescripcion = new TableCell();
@@ -2857,8 +2857,8 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Ocurrio un error agregando dto.\");", true);
-                }                
-                
+                }
+
             }
             catch (Exception ex)
             {
@@ -2877,15 +2877,15 @@ namespace Gestion_Web.Formularios.Articulos
 
                 foreach (Gestion_Api.Entitys.Articulos_Descuentos dto in artDto.Articulos_Descuentos)
                 {
-                    this.cargarDescuentosPH(dto,artDto.codigo);    
+                    this.cargarDescuentosPH(dto, artDto.codigo);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
         }
-        public void cargarDescuentosPH(Gestion_Api.Entitys.Articulos_Descuentos dto,string codigo)
+        public void cargarDescuentosPH(Gestion_Api.Entitys.Articulos_Descuentos dto, string codigo)
         {
             try
             {
@@ -2949,8 +2949,8 @@ namespace Gestion_Web.Formularios.Articulos
                 if (i > 0)
                 {
                     //agrego bien
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja de descuento por cantidad Articulo: " +this.id);
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Descuento de articulo eliminado con exito\", {type: \"info\"});", true);                    
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja de descuento por cantidad Articulo: " + this.id);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Descuento de articulo eliminado con exito\", {type: \"info\"});", true);
                     this.cargarDescuentos();
                 }
                 else
@@ -2964,7 +2964,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Ocurrio un error eliminando dto.\");", true);
             }
         }
-        
+
         #endregion
 
         #region datos despachos
@@ -3009,7 +3009,7 @@ namespace Gestion_Web.Formularios.Articulos
                             datosDespacho.NumeroDespacho = this.txtNumeroDespacho.Text;
                             datosDespacho.Lote = this.txtLote.Text;
                             datosDespacho.Vencimiento = this.txtVencimiento.Text;
-                            artEntity.Articulos_Despachos.Add(datosDespacho);                            
+                            artEntity.Articulos_Despachos.Add(datosDespacho);
                         }
                         this.contArtEnt.guardarDatosDespacho(artEntity);
                     }
@@ -3113,7 +3113,7 @@ namespace Gestion_Web.Formularios.Articulos
                         {
                             artEntity.Articulos_Presentaciones.FirstOrDefault().Minima = this.txtPresentacionMin.Text;
                             artEntity.Articulos_Presentaciones.FirstOrDefault().Media = this.txtPresentacionMed.Text;
-                            artEntity.Articulos_Presentaciones.FirstOrDefault().Maxima = this.txtPresentacionMax.Text;                            
+                            artEntity.Articulos_Presentaciones.FirstOrDefault().Maxima = this.txtPresentacionMax.Text;
                         }
                         else
                         {
@@ -3121,7 +3121,7 @@ namespace Gestion_Web.Formularios.Articulos
                             datosPresentacion.Minima = this.txtPresentacionMin.Text;
                             datosPresentacion.Media = this.txtPresentacionMed.Text;
                             datosPresentacion.Maxima = this.txtPresentacionMax.Text;
-                            artEntity.Articulos_Presentaciones.Add(datosPresentacion);                            
+                            artEntity.Articulos_Presentaciones.Add(datosPresentacion);
                         }
                         contArtEnt.agregarPresentacionArticulo(artEntity);
                     }
@@ -3172,7 +3172,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarCombustiblesPH(d);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -3267,7 +3267,7 @@ namespace Gestion_Web.Formularios.Articulos
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "$.msgbox(\"No se pudieron guardar los datos.\");", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "$.msgbox(\"Ocurrio un error intentando guardar datos. " + ex.Message + " .\", {type: \"error\"});", true);
             }
@@ -3293,7 +3293,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
 
-                string[] datos = (sender as LinkButton).ID.Split('_');                
+                string[] datos = (sender as LinkButton).ID.Split('_');
                 string idDatos = datos[1];
 
                 int i = contArtEntity.quitarDatosCombustible(Convert.ToInt32(idDatos));
@@ -3309,7 +3309,7 @@ namespace Gestion_Web.Formularios.Articulos
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "$.msgbox(\"No se pudo eliminar datos combustible.\");", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel6, UpdatePanel6.GetType(), "alert", "$.msgbox(\"Ocurrio un error intentando eliminar datos. " + ex.Message + " .\", {type: \"error\"});", true);
             }
@@ -3340,17 +3340,17 @@ namespace Gestion_Web.Formularios.Articulos
                 List<Articulos_Costos> costos = contArtEntity.obtenerCostosArticulo(this.id);
                 foreach (var c in costos)
                 {
-                    this.cargarHistorialCostosPH(c, anterior,0);
+                    this.cargarHistorialCostosPH(c, anterior, 0);
                     anterior = c.Costo.Value;
                 }
 
                 //cargo el costo actual para tener referencia
                 Articulos_Costos ac = new Articulos_Costos();
                 ac.articulo = contArtEntity.obtenerArticuloEntity(this.id);
-                ac.Costo = Convert.ToDecimal(this.txtCosto.Text);                
+                ac.Costo = Convert.ToDecimal(this.txtCosto.Text);
                 ac.Proveedor = ac.articulo.proveedor;
                 ac.Fecha = DateTime.Now;
-                this.cargarHistorialCostosPH(ac, anterior,1);
+                this.cargarHistorialCostosPH(ac, anterior, 1);
 
             }
             catch
@@ -3358,7 +3358,7 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
-        public void cargarHistorialCostosPH(Articulos_Costos c,decimal anterior,int costoActual)
+        public void cargarHistorialCostosPH(Articulos_Costos c, decimal anterior, int costoActual)
         {
             try
             {
@@ -3427,7 +3427,7 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
-        
+
         public void guardarHistorialCosto(Articulo art)
         {
             try
@@ -3435,8 +3435,8 @@ namespace Gestion_Web.Formularios.Articulos
                 ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
 
                 var a = contArtEntity.obtenerArticuloEntity(art.id);
-                
-                if(a.costo != art.costo)
+
+                if (a.costo != art.costo)
                 {
                     Articulos_Costos reg = new Articulos_Costos();
                     reg.IdArticulo = art.id;
@@ -3484,7 +3484,7 @@ namespace Gestion_Web.Formularios.Articulos
                     int i = contArtEnt.modificarSiDatosExtra(this.id, Convert.ToInt32(this.ListSiDatosExtra.SelectedValue));
                     if (i > 0)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelExtras, UpdatePanelExtras.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito!. \", {type: \"info\"});", true);                        
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelExtras, UpdatePanelExtras.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito!. \", {type: \"info\"});", true);
                     }
                     else
                     {
@@ -3533,8 +3533,8 @@ namespace Gestion_Web.Formularios.Articulos
                 controladorFacturacion contFact = new controladorFacturacion();
                 //ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
 
-                DateTime desde = Convert.ToDateTime(this.txtFechaDesdeExtra.Text,new CultureInfo("es-AR"));
-                DateTime hasta = Convert.ToDateTime(this.txtFechaHastaExtra.Text,new CultureInfo("es-AR"));
+                DateTime desde = Convert.ToDateTime(this.txtFechaDesdeExtra.Text, new CultureInfo("es-AR"));
+                DateTime hasta = Convert.ToDateTime(this.txtFechaHastaExtra.Text, new CultureInfo("es-AR"));
                 int sucursal = Convert.ToInt32(this.ListSucursalesExtra.SelectedValue);
 
                 this.phDatosExtras.Controls.Clear();
@@ -3589,7 +3589,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                
+
                 List<Articulos_MedidasVenta> lstMedidas = contArtEnt.obtenerMedidasVentaArticulo(idArt);
                 if (lstMedidas != null)
                 {
@@ -3615,9 +3615,22 @@ namespace Gestion_Web.Formularios.Articulos
                         tr.Cells.Add(celCantidad);
 
                         TableCell celAccion = new TableCell();
+
+                        LinkButton btnEditarMedida = new LinkButton();
+                        btnEditarMedida.ID = "btnEditarMedida_" + m.Id;
+                        btnEditarMedida.CssClass = "btn btn-info ui-tooltip";
+                        btnEditarMedida.Text = "<i class='shortcut-icon icon-pencil'></i>";
+                        btnEditarMedida.Click += new EventHandler(this.CargarDatosDeLaUnidadMedidaAEditar);
+                        celAccion.Controls.Add(btnEditarMedida);
+                        tr.Cells.Add(celAccion);
+
+                        Literal l = new Literal();
+                        l.Text = "&nbsp";
+                        celAccion.Controls.Add(l);
+
                         LinkButton btnEliminarMedida = new LinkButton();
                         btnEliminarMedida.ID = "btnEliminarMedida_" + m.Id;
-                        btnEliminarMedida.CssClass = "btn btn-info ui-tooltip";
+                        btnEliminarMedida.CssClass = "btn btn-danger ui-tooltip";
                         btnEliminarMedida.Text = "<i class='shortcut-icon icon-trash'></i>";
                         btnEliminarMedida.Click += new EventHandler(this.QuitarUnidadMedida);
                         celAccion.Controls.Add(btnEliminarMedida);
@@ -3632,6 +3645,27 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
+        private void CargarDatosDeLaUnidadMedidaAEditar(object sender, EventArgs e)
+        {
+            try
+            {
+                string id = (sender as LinkButton).ID;
+                int idMedida = Convert.ToInt32(id.Split('_')[1]);
+
+                Articulos_MedidasVenta medida = contArtEnt.obtenerMedidasVentaID(idMedida);
+                medida.IdArticulo = this.id;
+                this.txtMedidaNombre.Text = medida.Medida;
+                this.txtMedidaCantidad.Text = medida.Cantidad.ToString();
+                this.txtCodigoBarraMedida.Text = medida.CodigoBarra;
+                this.lbIDMedidaOculto.Text = idMedida.ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private void QuitarUnidadMedida(object sender, EventArgs e)
         {
             try
@@ -3649,39 +3683,63 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"No se pudo eliminar.\");", true);
-                }  
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
         }
-        protected void lbtnAgregarMedida_Click(object sender, EventArgs e)
+        protected void lbtnAgregarOEditarMedida_Click(object sender, EventArgs e)
         {
             try
             {
-                Articulos_MedidasVenta medida = new Articulos_MedidasVenta();
-                medida.IdArticulo = this.id;
-                medida.Medida = this.txtMedidaNombre.Text;
-                medida.Cantidad = Convert.ToDecimal(this.txtMedidaCantidad.Text);
-                medida.CodigoBarra = this.txtCodigoBarraMedida.Text;
-
-                int ok = this.contArtEnt.agregarMedidaVenta(medida);
-                if (ok > 0)
+                if (!string.IsNullOrWhiteSpace(lbIDMedidaOculto.Text))//MODIFICA
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito\", {type: \"info\"});", true);
-                    this.txtMedidaNombre.Text = "";
-                    this.txtMedidaCantidad.Text = "";
-                    this.txtCodigoBarraMedida.Text = "";
-                    this.cargarMedidasVentaArticulo(this.id);
+                    int idMedida = Convert.ToInt32(lbIDMedidaOculto.Text);
+                    Articulos_MedidasVenta medidaBD = contArtEnt.obtenerMedidasVentaID(idMedida);
+                    medidaBD.Medida = txtMedidaNombre.Text;
+                    medidaBD.Cantidad = Convert.ToDecimal(this.txtMedidaCantidad.Text);
+                    medidaBD.CodigoBarra = this.txtCodigoBarraMedida.Text;
+
+                    if (this.contArtEnt.modificarMedidaVenta(medidaBD) >= 0)
+                    {
+                        this.txtMedidaNombre.Text = "";
+                        this.txtMedidaCantidad.Text = "";
+                        this.txtCodigoBarraMedida.Text = "";
+                        this.lbIDMedidaOculto.Text = "";
+                        this.cargarMedidasVentaArticulo(this.id);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Medida modificada con exito\", {type: \"info\"});", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"No se pudo modificar medida venta.\");", true);
+                    }
                 }
-                else
+                else//CREA
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"No se pudo agregar.\");", true);
-                }           
+                    Articulos_MedidasVenta medida = new Articulos_MedidasVenta();
+                    medida.IdArticulo = this.id;
+                    medida.Medida = this.txtMedidaNombre.Text;
+                    medida.Cantidad = Convert.ToDecimal(this.txtMedidaCantidad.Text);
+                    medida.CodigoBarra = this.txtCodigoBarraMedida.Text;
 
+                    int ok = this.contArtEnt.agregarMedidaVenta(medida);
+                    if (ok > 0)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito\", {type: \"info\"});", true);
+                        this.txtMedidaNombre.Text = "";
+                        this.txtMedidaCantidad.Text = "";
+                        this.txtCodigoBarraMedida.Text = "";
+                        this.cargarMedidasVentaArticulo(this.id);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"No se pudo agregar.\");", true);
+                    }
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Ocurrio un error\", {type: \"error\"});", true);
             }
@@ -3696,13 +3754,13 @@ namespace Gestion_Web.Formularios.Articulos
                 var existe = this.contArtEnt.obtenerArticuloBeneficioByArticulo(this.id);
                 int ok = 0;
                 if (existe != null)//modifico
-                {                    
+                {
                     existe.Beneficios = Convert.ToInt32(this.ListSiBeneficios.SelectedValue);
                     existe.Estado = Convert.ToInt32(this.ListSiBeneficios.SelectedValue);
                     existe.EsDestacado = Convert.ToInt32(this.ListSiDestacadoBeneficios.SelectedValue);
                     existe.EsOferta = Convert.ToInt32(this.ListSiOfertaBeneficios.SelectedValue);
                     existe.DesdeOferta = Convert.ToDateTime(this.txtBeneficiosDesde.Text, new CultureInfo("es-AR"));
-                    existe.HastaOferta = Convert.ToDateTime(this.txtBeneficiosHasta.Text, new CultureInfo("es-AR"));                    
+                    existe.HastaOferta = Convert.ToDateTime(this.txtBeneficiosHasta.Text, new CultureInfo("es-AR"));
                     existe.PuntoOferta = Convert.ToDecimal(this.txtBeneficiosPuntos.Text);
                     existe.Especificaciones = this.txtBeneficiosEspecificaciones.Text;
                     ok = this.contArtEnt.modificaArticuloBeneficios(existe);
@@ -3724,14 +3782,14 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (ok > 0)
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelBeneficios, UpdatePanelBeneficios.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito\", {type: \"info\"});", true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelBeneficios, UpdatePanelBeneficios.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito\", {type: \"info\"});", true);
                 }
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelBeneficios, UpdatePanelBeneficios.GetType(), "alert", "$.msgbox(\"No se pudo agregar.\");", true);
-                } 
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelBeneficios, UpdatePanelBeneficios.GetType(), "alert", "$.msgbox(\"Ocurrio un error." + ex.Message + "\");", true);
             }
@@ -3751,7 +3809,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.txtBeneficiosEspecificaciones.Text = beneficio.Especificaciones;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -3770,7 +3828,7 @@ namespace Gestion_Web.Formularios.Articulos
                 articulos_StockMinimo.sucursal = Convert.ToInt32(this.ListSucursalesStockMinimo.SelectedValue);
                 articulos_StockMinimo.stockMinimo = Convert.ToDecimal(this.txtStockMinimoSucursal.Text);
                 int i = contArtEnt.agregarStockMinimoArticuloASucursalOModificarloSiExiste(articulos_StockMinimo);
-                if(i > 0)
+                if (i > 0)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMedidas, UpdatePanelMedidas.GetType(), "alert", "$.msgbox(\"Articulo actualizado con exito.\", {type: \"info\"});", true);
                 }
@@ -3795,7 +3853,7 @@ namespace Gestion_Web.Formularios.Articulos
                 Articulos_StockMinimo articulos_StockMinimo = new Articulos_StockMinimo();
                 foreach (var item in lista_articulos_stockMinimo)
                 {
-                    if(item.sucursal == sucursal)
+                    if (item.sucursal == sucursal)
                     {
                         this.txtStockMinimoSucursal.Text = item.stockMinimo.ToString();
                         this.ListSucursalesStockMinimo.SelectedValue = item.sucursal.ToString();
@@ -3857,7 +3915,7 @@ namespace Gestion_Web.Formularios.Articulos
                 tr.ID = "tr_" + art_StockMinimo.id.ToString();
 
                 Articulo articulo = controlador.obtenerArticuloByID(this.id);
-                Sucursal sucursal = contSucu.obtenerSucursalID(art_StockMinimo.sucursal); 
+                Sucursal sucursal = contSucu.obtenerSucursalID(art_StockMinimo.sucursal);
 
                 TableCell celArticulo = new TableCell();
                 celArticulo.Text = articulo.codigo;
@@ -3890,7 +3948,6 @@ namespace Gestion_Web.Formularios.Articulos
                 Literal l = new Literal();
                 l.Text = "&nbsp";
                 celAction.Controls.Add(l);
-
 
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.ID = "btnEliminarST_" + art_StockMinimo.sucursal.ToString();
@@ -3948,7 +4005,7 @@ namespace Gestion_Web.Formularios.Articulos
                 artCat.Catalogo = this.txtCatalogo.Text;
 
                 int i = this.contArtEnt.agregarArticulos_Catalogo(artCat);
-                
+
                 if (i >= 0)
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", "$.msgbox(\"Los datos del Catálogo del Artículo se cargaron con éxito.\", {type: \"info\"});", true);
                 else
@@ -4153,6 +4210,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        
+
     }
 }

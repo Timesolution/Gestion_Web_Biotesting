@@ -1386,7 +1386,7 @@ namespace Gestion_Web.Formularios.Reportes
                 string fd = this.txt_FechaDesde_ReporteVentasArticulosSucursales.Text.ToString();
                 string fh = this.txt_FechaHasta_ReporteVentasArticulosSucursales.Text.ToString();
                 int idSucursal = Convert.ToInt32(this.dropList_Sucursal_ReporteVentasArticulosSucursales.SelectedValue);
-                Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&s=" + idSucursal + "&ex=1");
+                Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&fh=" + fh + "&s=" + idSucursal + "&ex=1");
             }
             catch (Exception ex)
             {
