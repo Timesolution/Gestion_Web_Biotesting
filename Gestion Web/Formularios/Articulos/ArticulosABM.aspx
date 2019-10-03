@@ -1521,7 +1521,7 @@
                                     </asp:UpdatePanel>
                                 </div>
                                 <%--Medidas--%>
-                                <div class="tab-pane fade" id="Medidas">
+                                <div class="tab-pane fade" id="Medidas">lbtnAgregarOEditarMedida_Click
                                     <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Always" runat="server">
                                         <ContentTemplate>
 
@@ -1534,6 +1534,7 @@
                                                     <br />
                                                     <fieldset>
                                                         <div class="form-group">
+                                                            <asp:Label Text="" ID="lbIDMedidaOculto" style="display:none" runat="server" />
                                                             <label for="name" class="col-md-2">Nombre:</label>
                                                             <div class="col-md-2">
                                                                 <asp:TextBox ID="txtMedidaNombre" runat="server" class="form-control"></asp:TextBox>
@@ -1563,7 +1564,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="col-md-2">
-                                                                <asp:LinkButton ID="lbtnAgregarMedida" runat="server" class="btn btn-success" ValidationGroup="MedidaGroup" OnClick="lbtnAgregarMedida_Click">
+                                                                <asp:LinkButton ID="lbtnAgregarOEditarMedida" runat="server" class="btn btn-success" ValidationGroup="MedidaGroup" OnClick="lbtnAgregarOEditarMedida_Click">
                                                                     <i class="shortcut-icon icon-ok"></i>
                                                                 </asp:LinkButton>
                                                             </div>
