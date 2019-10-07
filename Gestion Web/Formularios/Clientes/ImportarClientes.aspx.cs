@@ -1,0 +1,315 @@
+﻿using Disipar.Models;
+using Gestion_Api.Controladores;
+using Gestion_Api.Modelo;
+using Gestor_Solution.Controladores;
+using Gestor_Solution.Modelo;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Gestion_Web.Formularios.Clientes
+{
+    public partial class ImportarClientes : System.Web.UI.Page
+    {
+        Mensajes m = new Mensajes();
+        Configuracion config = new Configuracion();
+        controladorCliente contCliente = new controladorCliente();
+        ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+        ControladorProvincias contProvincias = new ControladorProvincias();
+        controladorVendedor contVendedor = new controladorVendedor();
+        controladorGrupoCliente contGrupoCliente = new controladorGrupoCliente();
+        controladorDireccion contDireccion = new controladorDireccion();
+        controladorUsuario contUsuario = new controladorUsuario();
+        ControladorEmpresa contEmpresa = new ControladorEmpresa();
+        controladorSucursal contSucursal = new controladorSucursal();
+        class ClienteTemporal
+        {
+            public string Direccion { get; set; }
+            public string Altura { get; set; }
+            public string Localidad { get; set; }
+            public string Canal { get; set; }
+            public string AgrupCanal { get; set; }
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                CargarProvinciasEnLista();
+                CargarVendedoresEnLista();
+            }
+        }
+
+        private void CargarVendedoresEnLista()
+        {
+            try
+            {
+                var dtVendedores = contVendedor.obtenerVendedores();
+
+                if (dtVendedores != null && dtVendedores.Rows.Count > 0)
+                {
+                    dropList_Vendedores.DataSource = dtVendedores;
+                    dropList_Vendedores.DataValueField = "id";
+                    dropList_Vendedores.DataTextField = "apellido";
+                    dropList_Vendedores.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void CargarProvinciasEnLista()
+        {
+            try
+            {
+                var listProvincias = contProvincias.ObtenerProvincias();
+
+                if (listProvincias != null)
+                {
+                    if (listProvincias.Count > 1)
+                    {
+                        dropList_Provincias.DataSource = listProvincias;
+                        dropList_Provincias.DataValueField = "Id";
+                        dropList_Provincias.DataTextField = "Provincia1";
+                        dropList_Provincias.DataBind();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void lbtnImportarClientes_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Boolean fileOK = false;
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension = Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    StreamReader sr = new StreamReader(FileUpload1.FileContent);
+                    Configuracion config = new Configuracion();
+                    string linea;
+                    int contador = 0;
+                    sr.ReadLine();//para saltar la primer linea
+
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        string[] datos = linea.Split(';');//obtengo datos del registro
+                        ClienteTemporal clienteTemporal = new ClienteTemporal();
+                        if (datos.Count() >= 4)
+                        {
+                            List<string> datosExcel = datos.ToList();
+                            clienteTemporal.Direccion = datos[0];
+                            clienteTemporal.Altura = datos[1];
+                            clienteTemporal.Localidad = datos[2];
+                            clienteTemporal.Canal = datos[3];
+                            clienteTemporal.AgrupCanal = datos[4];
+
+                            int respuesta = ImportarCliente(clienteTemporal);
+                            if (respuesta <= 0)
+                            {
+                                contador++;
+                            }
+                        }
+                    }
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Lista importada correctamente", null));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private int ImportarCliente(ClienteTemporal clienteTemporal)
+        {
+            try
+            {
+                if (Session["ClientesABM_Cliente"] == null)
+                {
+                    Cliente cli = new Cliente();
+                    Session.Add("ClientesABM_Cliente", cli);
+                }
+                Cliente cliente = Session["ClientesABM_Cliente"] as Cliente;
+                string perfil = Session["Login_NombrePerfil"] as string;
+
+                cliente.codigo = (contClienteEntity.ObtenerUltimoIdCliente() + 1).ToString();
+                cliente.tipoCliente.id = 4; //CONSUMIDOR FINAL
+                cliente.tipoCliente.descripcion = "CONSUMIDOR FINAL";
+                cliente.razonSocial = cliente.codigo;
+
+                CrearElGrupoSiNoExiste(clienteTemporal.AgrupCanal);
+
+                cliente.grupo.id = contGrupoCliente.obtenerGrupoDesc(clienteTemporal.AgrupCanal).id;
+                cliente.categoria.id = 1;
+                cliente.estado.id = 1;
+                cliente.cuit = "00000000000";
+                cliente.iva = "13";
+                cliente.pais.id = 1;//ARGENTINA
+                cliente.expreso.id = 1;
+                string saldMax = "0";
+                cliente.saldoMax = Convert.ToDecimal(saldMax);
+                cliente.vencFC = 0;
+                cliente.descFC = 0;
+                cliente.observaciones = "";
+
+                //alerta cliente                
+                cliente.alerta.descripcion = "";
+                cliente.alerta.idCliente = cliente.id;
+
+                cliente.hijoDe = 0;
+                cliente.alias = cliente.codigo;
+
+                Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
+                cliente.sucursal.id = vendedor.sucursal;//preguntar
+
+                cliente.vendedor.id = Convert.ToInt32(vendedor.id);
+                cliente.lisPrecio.id = 1;
+                cliente.formaPago.id = 1;//CONTADO
+
+                string codigoPostal = ObtenerCodigoPostalByLocalidad(dropList_Provincias.SelectedItem.Text, clienteTemporal.Localidad);
+
+                cliente.direcciones = obtenerListDirecciones(clienteTemporal, codigoPostal);
+
+                cliente.origen = 1;
+
+                if(CrearElClienteSiNoExiste(cliente) > 0)
+                {
+                    CrearUsuarioAlCliente(clienteTemporal, cliente);
+                }
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando cliente. " + ex.Message));
+                return 0;
+            }
+        }
+
+        void CrearElGrupoSiNoExiste(string nombreDelGrupo)
+        {
+            try
+            {
+                string grupoDB = contGrupoCliente.obtenerGrupoDesc(nombreDelGrupo).descripcion;
+                if (grupoDB != nombreDelGrupo)
+                {
+                    int i = contGrupoCliente.agregarGrupo(nombreDelGrupo);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        string ObtenerCodigoPostalByLocalidad(string provincia, string localidad)
+        {
+            try
+            {
+                controladorPais controladorPais = new controladorPais();
+                DataTable dt = controladorPais.obtenerCodPostalByLocalidadProvincia(provincia, localidad);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    return dr[0].ToString();
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        private List<direccion> obtenerListDirecciones(ClienteTemporal clienteTemporal, string codigoPostal)
+        {
+            try
+            {
+                List<direccion> direcciones = new List<direccion>();
+                direcciones.Add(new direccion
+                {
+                    nombre = "Legal",
+                    localidad = clienteTemporal.Localidad,
+                    pais = "Argentina",
+                    direc = clienteTemporal.Direccion + " " + clienteTemporal.Altura,
+                    provincia = dropList_Provincias.SelectedItem.Text,
+                    codPostal = codigoPostal
+                });
+                return direcciones;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        int CrearElClienteSiNoExiste(Cliente cliente)
+        {
+            try
+            {
+                int respuesta = 0;
+                var direccion = cliente.direcciones.FirstOrDefault();
+                var direccionDB = contDireccion.obtenerDireccionCompleta(direccion.codPostal, direccion.direc, direccion.localidad, direccion.provincia, direccion.pais);
+                if (direccionDB == null)
+                {
+                    respuesta = contCliente.agregarCliente(cliente);
+                }
+                return respuesta;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        void CrearUsuarioAlCliente(ClienteTemporal clienteTemporal, Cliente cliente)
+        {
+            try
+            {
+                var perfil = contUsuario.obtenerPerfilDesc("Cliente");
+                var empresa = contEmpresa.obtenerEmpresaByIdSucursal(cliente.sucursal.id);
+
+                var puntoDeVenta = contSucursal.obtenerPtoVentaSucursal(cliente.sucursal.id);
+
+                Usuario usuario = new Usuario();
+                usuario.usuario = clienteTemporal.Direccion;
+                usuario.contraseña = cliente.direcciones.FirstOrDefault().codPostal + clienteTemporal.Altura;
+                usuario.sucursal = cliente.sucursal;
+                usuario.perfil = perfil;//CLIENTE
+                usuario.empresa = empresa;
+                usuario.estado = 1;
+                usuario.vendedor = cliente.vendedor;
+                usuario.ptoVenta = puntoDeVenta.FirstOrDefault();
+                contUsuario.agregarUsuarios(usuario);  
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+    }
+}
