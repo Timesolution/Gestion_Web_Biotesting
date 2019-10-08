@@ -187,7 +187,7 @@ namespace Gestion_Web.Formularios.Clientes
                 Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
                 cliente.sucursal.id = vendedor.sucursal;//preguntar
 
-                cliente.vendedor.id = Convert.ToInt32(vendedor.id);
+                cliente.vendedor.id = cliente.id;
                 cliente.lisPrecio.id = 1;
                 cliente.formaPago.id = 1;//CONTADO
 
@@ -296,7 +296,7 @@ namespace Gestion_Web.Formularios.Clientes
                 var puntoDeVenta = contSucursal.obtenerPtoVentaSucursal(cliente.sucursal.id);
 
                 Usuario usuario = new Usuario();
-                usuario.usuario = clienteTemporal.Direccion;
+                usuario.usuario = clienteTemporal.Direccion.Trim();//chequear q no haya espacios.
                 usuario.contraseña = cliente.direcciones.FirstOrDefault().codPostal + clienteTemporal.Altura;
                 usuario.sucursal = cliente.sucursal;
                 usuario.perfil = perfil;//CLIENTE
