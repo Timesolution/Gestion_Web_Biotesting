@@ -3433,6 +3433,13 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     Factura fact = Session["Factura"] as Factura;
 
+                    Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                    if (!respuesta.Item2)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                        return;
+                    }
+
                     int ok = this.controlador.verificarRefacturarProveedor(fact);
                     if (ok < 1)
                     {
@@ -3676,10 +3683,17 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //valido que si esta facturando con lista de precio al 100% dto
 
+                Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                if (!respuesta.Item2)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                    return;
+                }
+
                 int verificaTotalCero = this.validarFacturarTotalCero(fact);
                 if (verificaTotalCero < 1)
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede facturar en monto cero. \", {type: \"error\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede facturar en monto cero. \", {type: \"alert\"});", true);
                     return;
                 }
 
@@ -10866,6 +10880,8 @@ namespace Gestion_Web.Formularios.Facturas
                 return new Tuple<string, bool>("Debe seleccionar una lista de precios!", false);
             else if (Convert.ToInt32(DropListFormaPago.SelectedValue) <= 0)
                 return new Tuple<string, bool>("Debe seleccionar una forma de pago!", false);
+            else if (ListSucursalCliente.Visible && Convert.ToInt32(ListSucursalCliente.SelectedValue) < 1)
+                return new Tuple<string, bool>("Debe seleccionar un cliente interno!", false);
             else
                 return new Tuple<string, bool>("", true);
         }
