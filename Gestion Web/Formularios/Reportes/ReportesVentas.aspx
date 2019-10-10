@@ -750,46 +750,64 @@
         <div id="modalReporteVentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Busqueda</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <label class="col-md-4">Desde</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txt_FechaDesde_ReporteVentasArticulosSucursales" runat="server" class="form-control"></asp:TextBox>
+
+                    <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
+
+                        <ContentTemplate>
+
+                            <div class="modal-header">
+                                <h4 class="modal-title">Busqueda</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-md-4">Desde</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txt_FechaDesde_ReporteVentasArticulosSucursales" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Hasta</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txt_FechaHasta_ReporteVentasArticulosSucursales" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="col-md-8">
+                                            <asp:DropDownList ID="dropList_Sucursal_ReporteVentasArticulosSucursales" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Listas de precio</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <asp:CheckBoxList ID="chkBoxList_Importe" runat="server" RepeatLayout="table" RepeatColumns="2" RepeatDirection="horizontal">
+                                            </asp:CheckBoxList>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="btn-group">
+                                            <asp:LinkButton ID="lbtn_GenerarReporte_VentasArticulosSucursales_XLS" Class="btn btn-success" title="EXCEL" runat="server" OnClick="lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_XLS_Click">Exportar a Excel</asp:LinkButton>
+                                        </div>
+                                        <div class="btn-group">
+                                            <asp:LinkButton ID="lbtn_GenerarReporte_VentasArticulosSucursales_PDF" Class="btn btn-success" title="PDF" runat="server" OnClick="lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_PDF_Click">Imprimir en PDF</asp:LinkButton>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-md-4">Hasta</label>
-                                <div class="col-md-4">
-                                    <asp:TextBox ID="txt_FechaHasta_ReporteVentasArticulosSucursales" runat="server" class="form-control"></asp:TextBox>
-                                </div>
-                            </div>
+                        </ContentTemplate>
 
-                            <div class="form-group">
-                                <label class="col-md-4">Sucursal</label>
-                                <div class="col-md-8">
-                                    <asp:DropDownList ID="dropList_Sucursal_ReporteVentasArticulosSucursales" runat="server" class="form-control"></asp:DropDownList>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="btn-group">
-                                    <asp:LinkButton ID="lbtn_GenerarReporte_VentasArticulosSucursales_XLS" Class="btn btn-success" title="EXCEL" runat="server" OnClick="lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_XLS_Click">Exportar a Excel</asp:LinkButton>
-                                </div>
-                                <div class="btn-group">
-                                    <asp:LinkButton ID="lbtn_GenerarReporte_VentasArticulosSucursales_PDF" Class="btn btn-success" title="PDF" runat="server" OnClick="lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_PDF_Click">Imprimir en PDF</asp:LinkButton>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </asp:UpdatePanel>
                 </div>
             </div>
         </div>
@@ -828,7 +846,7 @@
 
                 $("#<%= txt_FechaHasta_ReporteVentasArticulosSucursales.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txt_FechaDesde_ReporteVentasArticulosSucursales.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-                
+
                 var controlDropListEmpresa = document.getElementById('<%= DropListEmpresaReporteVentasPorRangoHorario.ClientID %>');
                 controlDropListEmpresa.addEventListener("change", CargarSucursales);
             }

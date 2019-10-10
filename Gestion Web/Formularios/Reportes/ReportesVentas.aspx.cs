@@ -85,6 +85,7 @@ namespace Gestion_Web.Formularios.Reportes
                     this.cargarProveedores();
                     this.cargarVendedores();
                     this.cargarListaPrecio();
+                    this.cargarCheckBoxListaPrecios_ModalVentasImporteTotal();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                     DropListSucursal.SelectedValue = suc.ToString();
@@ -408,9 +409,34 @@ namespace Gestion_Web.Formularios.Reportes
                     if (lista["nombre"].ToString() != "Seleccione...")
                     {
                         ListItem item = new ListItem(lista["nombre"].ToString(), lista["id"].ToString());
+
                         this.chkListListas.Items.Add(item);
                         int i = this.chkListListas.Items.IndexOf(item);
                         this.chkListListas.Items[i].Selected = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Lista de precios. " + ex.Message));
+            }
+        }
+
+        public void cargarCheckBoxListaPrecios_ModalVentasImporteTotal()
+        {
+            try
+            {
+                DataTable dt = this.contCliente.obtenerListaPrecios();
+
+                foreach (DataRow lista in dt.Rows)
+                {
+                    if (lista["nombre"].ToString() != "Seleccione...")
+                    {
+                        ListItem item = new ListItem(lista["nombre"].ToString(), lista["id"].ToString());
+
+                        this.chkBoxList_Importe.Items.Add(item);
+                        int i = this.chkBoxList_Importe.Items.IndexOf(item);
+                        this.chkBoxList_Importe.Items[i].Selected = true;
                     }
                 }
             }
@@ -1383,10 +1409,20 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
+                string listas = "";
+                foreach (ListItem lista in this.chkBoxList_Importe.Items)
+                {
+                    if (lista.Selected == true)
+                    {
+                        listas += lista.Value + ",";
+                    }
+                }
+                listas = listas.Remove(listas.Length - 1, 1);
+
                 string fd = this.txt_FechaDesde_ReporteVentasArticulosSucursales.Text.ToString();
                 string fh = this.txt_FechaHasta_ReporteVentasArticulosSucursales.Text.ToString();
                 int idSucursal = Convert.ToInt32(this.dropList_Sucursal_ReporteVentasArticulosSucursales.SelectedValue);
-                Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&fh=" + fh + "&s=" + idSucursal + "&ex=1");
+                Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&fh=" + fh + "&s=" + idSucursal + "&ex=1" + "&l=" + listas);
             }
             catch (Exception ex)
             {
@@ -1396,17 +1432,20 @@ namespace Gestion_Web.Formularios.Reportes
 
         protected void lbtnGenerarReporte_VentasArticulosSucursalesBy_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal_PDF_Click(object sender, EventArgs e)
         {
-            try
+            string listas = "";
+            foreach (ListItem lista in this.chkBoxList_Importe.Items)
             {
-                string fd = this.txt_FechaDesde_ReporteVentasArticulosSucursales.Text.ToString();
-                string fh = this.txt_FechaHasta_ReporteVentasArticulosSucursales.Text.ToString();
-                int idSucursal = Convert.ToInt32(this.dropList_Sucursal_ReporteVentasArticulosSucursales.SelectedValue);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&fh=" + fh + "&s=" + idSucursal + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                if (lista.Selected == true)
+                {
+                    listas += lista.Value + ",";
+                }
             }
-            catch (Exception ex)
-            {
+            listas = listas.Remove(listas.Length - 1, 1);
 
-            }
+            string fd = this.txt_FechaDesde_ReporteVentasArticulosSucursales.Text.ToString();
+            string fh = this.txt_FechaHasta_ReporteVentasArticulosSucursales.Text.ToString();
+            int idSucursal = Convert.ToInt32(this.dropList_Sucursal_ReporteVentasArticulosSucursales.SelectedValue);
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=19&fd=" + fd + "&fh=" + fh + "&s=" + idSucursal + "&l=" + listas + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
         #endregion
 

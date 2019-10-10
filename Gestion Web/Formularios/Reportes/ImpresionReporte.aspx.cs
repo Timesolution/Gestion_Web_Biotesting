@@ -1411,7 +1411,7 @@ namespace Gestion_Web.Formularios.Reportes
         {
             try
             {
-                DataTable dtReporte_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal = contFacturacion.obtenerVentasRealizadasAgrupadoPor_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal(fechaD, fechaH);
+                DataTable dtReporte_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal = contFacturacion.obtenerVentasRealizadasAgrupadoPor_Sucursal_Grupo_SubGrupo_Marca_Codigo_Descripcion_Cantidad_ImporteTotal(fechaD, fechaH, listas);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("VentasArticulosSucursalesConImporte.rdlc");
