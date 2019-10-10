@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Reportes {
-    
-    
-    public partial class ReportesVentas {
-        
+namespace Gestion_Web.Formularios.Reportes
+{
+
+
+    public partial class ReportesVentas
+    {
+
         /// <summary>
         /// phAcciones control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phAcciones;
-        
+
         /// <summary>
         /// btnAccion control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
-        
+
         /// <summary>
         /// lbtnImprimir control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
-        
+
         /// <summary>
         /// lbtnImprimir2 control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir2;
-        
+
         /// <summary>
         /// lbtnImprimir3 control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir3;
-        
+
         /// <summary>
         /// lbtnImprimir4 control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir4;
-        
+
         /// <summary>
         /// lbtnExportar control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar;
-        
+
         /// <summary>
         /// lbtnExportar2 control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar2;
-        
+
         /// <summary>
         /// lbtnExportar3 control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar3;
-        
+
         /// <summary>
         /// lbtnExportar4 control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar4;
-        
+
         /// <summary>
         /// lbtnExportar5 control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar5;
-        
+
         /// <summary>
         /// lbtnExportar6 control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar6;
-        
+
         /// <summary>
         /// lbtnReporteArticulosPorGrupo control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorGrupo;
-        
+
         /// <summary>
         /// lbtnReporteArticulosPorGrupoPDF control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorGrupoPDF;
-        
+
         /// <summary>
         /// lbtnReporteArticulosPorCategoriaAndProveedorXLS control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorCategoriaAndProveedorXLS;
-        
+
         /// <summary>
         /// lbtnReporteArticulosPorCategoriaAndProveedorPDF control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteArticulosPorCategoriaAndProveedorPDF;
-        
+
         /// <summary>
         /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaExcel;
-        
+
         /// <summary>
         /// lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorSucursalGrupoSubGrupoMarcaPDF;
-        
+
         /// <summary>
         /// lbtnReporteVentasPorPuntoDeVentaPDF control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorPuntoDeVentaPDF;
-        
+
         /// <summary>
         /// lbtnReporteVentasPorPuntoDeVentaExcel control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnReporteVentasPorPuntoDeVentaExcel;
-        
+
         /// <summary>
         /// lblParametros control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblParametros;
-        
+
         /// <summary>
         /// lblPedidosPendientes control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblPedidosPendientes;
-        
+
         /// <summary>
         /// lblVentasRealizadas control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblVentasRealizadas;
-        
+
         /// <summary>
         /// lblProductosVendidos control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblProductosVendidos;
-        
+
         /// <summary>
         /// lbDevoluciones control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbDevoluciones;
-        
+
         /// <summary>
         /// lbVentaPromedio control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbVentaPromedio;
-        
+
         /// <summary>
         /// lbArticulosXVenta control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbArticulosXVenta;
-        
+
         /// <summary>
         /// lblParametrosUrl control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblParametrosUrl;
-        
+
         /// <summary>
         /// phTopArticulosCantidad control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopArticulosCantidad;
-        
+
         /// <summary>
         /// phTopClientesCantidad control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopClientesCantidad;
-        
+
         /// <summary>
         /// phTopVendedoresCantidad control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopVendedoresCantidad;
-        
+
         /// <summary>
         /// phTopArticulosImporte control.
         /// </summary>
@@ -299,7 +301,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopArticulosImporte;
-        
+
         /// <summary>
         /// phTopClientesImporte control.
         /// </summary>
@@ -308,7 +310,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopClientesImporte;
-        
+
         /// <summary>
         /// phTopVendedorImporte control.
         /// </summary>
@@ -317,7 +319,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTopVendedorImporte;
-        
+
         /// <summary>
         /// UpdatePanel4 control.
         /// </summary>
@@ -326,7 +328,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel4;
-        
+
         /// <summary>
         /// txtFechaDesde control.
         /// </summary>
@@ -335,7 +337,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaDesde;
-        
+
         /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
@@ -344,7 +346,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-        
+
         /// <summary>
         /// txtFechaHasta control.
         /// </summary>
@@ -353,7 +355,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
-        
+
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -362,7 +364,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// DropListSucursal control.
         /// </summary>
@@ -371,7 +373,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
-        
+
         /// <summary>
         /// RequiredFieldValidator2 control.
         /// </summary>
@@ -380,7 +382,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
+
         /// <summary>
         /// DropListProveedores control.
         /// </summary>
@@ -389,7 +391,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListProveedores;
-        
+
         /// <summary>
         /// RequiredFieldValidator9 control.
         /// </summary>
@@ -398,7 +400,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator9;
-        
+
         /// <summary>
         /// DropListGrupo control.
         /// </summary>
@@ -407,7 +409,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListGrupo;
-        
+
         /// <summary>
         /// RequiredFieldValidator4 control.
         /// </summary>
@@ -416,7 +418,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
-        
+
         /// <summary>
         /// DropListSubGrupo control.
         /// </summary>
@@ -425,7 +427,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSubGrupo;
-        
+
         /// <summary>
         /// RequiredFieldValidator5 control.
         /// </summary>
@@ -434,7 +436,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
-        
+
         /// <summary>
         /// txtDescArticulo control.
         /// </summary>
@@ -443,7 +445,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescArticulo;
-        
+
         /// <summary>
         /// btnBuscarCod control.
         /// </summary>
@@ -452,7 +454,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnBuscarCod;
-        
+
         /// <summary>
         /// DropListArticulos control.
         /// </summary>
@@ -461,7 +463,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListArticulos;
-        
+
         /// <summary>
         /// RequiredFieldValidator6 control.
         /// </summary>
@@ -470,7 +472,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
-        
+
         /// <summary>
         /// txtDescCliente control.
         /// </summary>
@@ -479,7 +481,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescCliente;
-        
+
         /// <summary>
         /// btnBuscarCliente control.
         /// </summary>
@@ -488,7 +490,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnBuscarCliente;
-        
+
         /// <summary>
         /// DropListClientes control.
         /// </summary>
@@ -497,7 +499,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListClientes;
-        
+
         /// <summary>
         /// RequiredFieldValidator7 control.
         /// </summary>
@@ -506,7 +508,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator7;
-        
+
         /// <summary>
         /// DropListVendedores control.
         /// </summary>
@@ -515,7 +517,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListVendedores;
-        
+
         /// <summary>
         /// RequiredFieldValidator8 control.
         /// </summary>
@@ -524,7 +526,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator8;
-        
+
         /// <summary>
         /// ListTipo control.
         /// </summary>
@@ -533,7 +535,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListTipo;
-        
+
         /// <summary>
         /// chkListListas control.
         /// </summary>
@@ -542,7 +544,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList chkListListas;
-        
+
         /// <summary>
         /// lbtnBuscar control.
         /// </summary>
@@ -551,7 +553,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
-        
+
         /// <summary>
         /// UpdatePanel1 control.
         /// </summary>
@@ -560,7 +562,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
+
         /// <summary>
         /// txtFechaDesdeReporteVentasMarcaGrupoCantidad control.
         /// </summary>
@@ -569,7 +571,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaDesdeReporteVentasMarcaGrupoCantidad;
-        
+
         /// <summary>
         /// RequiredFieldValidator10 control.
         /// </summary>
@@ -578,7 +580,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator10;
-        
+
         /// <summary>
         /// txtFechaHastaReporteVentasMarcaGrupoCantidad control.
         /// </summary>
@@ -587,7 +589,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaHastaReporteVentasMarcaGrupoCantidad;
-        
+
         /// <summary>
         /// RequiredFieldValidator11 control.
         /// </summary>
@@ -596,7 +598,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
-        
+
         /// <summary>
         /// lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS control.
         /// </summary>
@@ -605,7 +607,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_XLS;
-        
+
         /// <summary>
         /// lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF control.
         /// </summary>
@@ -614,7 +616,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteComprasAndVentasAgrupadoBy_Marca_Grupo_Cantidad_PDF;
-        
+
         /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
@@ -623,7 +625,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
-        
+
         /// <summary>
         /// txtFechaDesdeReporteVentasPorRangoHorario control.
         /// </summary>
@@ -632,7 +634,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaDesdeReporteVentasPorRangoHorario;
-        
+
         /// <summary>
         /// RequiredFieldValidator12 control.
         /// </summary>
@@ -641,7 +643,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator12;
-        
+
         /// <summary>
         /// DropListEmpresaReporteVentasPorRangoHorario control.
         /// </summary>
@@ -650,7 +652,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListEmpresaReporteVentasPorRangoHorario;
-        
+
         /// <summary>
         /// DropListSucursalReporteVentasPorRangoHorario control.
         /// </summary>
@@ -659,7 +661,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSucursalReporteVentasPorRangoHorario;
-        
+
         /// <summary>
         /// lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS control.
         /// </summary>
@@ -668,7 +670,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_XLS;
-        
+
         /// <summary>
         /// lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF control.
         /// </summary>
@@ -677,7 +679,16 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarReporteVentasByRangoHorarioAgrupadoBy_Fecha_Sucursal_Cantidad_PDF;
-        
+
+        /// <summary>
+        /// UpdatePanel5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel5;
+
         /// <summary>
         /// txt_FechaDesde_ReporteVentasArticulosSucursales control.
         /// </summary>
@@ -686,7 +697,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_FechaDesde_ReporteVentasArticulosSucursales;
-        
+
         /// <summary>
         /// txt_FechaHasta_ReporteVentasArticulosSucursales control.
         /// </summary>
@@ -695,7 +706,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txt_FechaHasta_ReporteVentasArticulosSucursales;
-        
+
         /// <summary>
         /// dropList_Sucursal_ReporteVentasArticulosSucursales control.
         /// </summary>
@@ -704,7 +715,16 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList dropList_Sucursal_ReporteVentasArticulosSucursales;
-        
+
+        /// <summary>
+        /// chkBoxList_Importe control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList chkBoxList_Importe;
+
         /// <summary>
         /// lbtn_GenerarReporte_VentasArticulosSucursales_XLS control.
         /// </summary>
@@ -713,7 +733,7 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtn_GenerarReporte_VentasArticulosSucursales_XLS;
-        
+
         /// <summary>
         /// lbtn_GenerarReporte_VentasArticulosSucursales_PDF control.
         /// </summary>
