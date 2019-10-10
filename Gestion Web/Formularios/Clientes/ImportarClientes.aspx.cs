@@ -123,11 +123,11 @@ namespace Gestion_Web.Formularios.Clientes
                         if (datos.Count() >= 4)
                         {
                             List<string> datosExcel = datos.ToList();
-                            clienteTemporal.Direccion = datos[0];
-                            clienteTemporal.Altura = datos[1];
-                            clienteTemporal.Localidad = datos[2];
-                            clienteTemporal.Canal = datos[3];
-                            clienteTemporal.AgrupCanal = datos[4];
+                            clienteTemporal.Direccion = datos[0].Trim();
+                            clienteTemporal.Altura = datos[1].Trim();
+                            clienteTemporal.Localidad = datos[2].Trim();
+                            clienteTemporal.Canal = datos[3].Trim();
+                            clienteTemporal.AgrupCanal = datos[4].Trim();
 
                             int respuesta = ImportarCliente(clienteTemporal);
                             if (respuesta <= 0)
@@ -162,9 +162,9 @@ namespace Gestion_Web.Formularios.Clientes
                 cliente.tipoCliente.descripcion = "CONSUMIDOR FINAL";
                 cliente.razonSocial = cliente.codigo;
 
-                CrearElGrupoSiNoExiste(clienteTemporal.AgrupCanal);
+                CrearElGrupoSiNoExiste(clienteTemporal.Canal);
 
-                cliente.grupo.id = contGrupoCliente.obtenerGrupoDesc(clienteTemporal.AgrupCanal).id;
+                cliente.grupo.id = contGrupoCliente.obtenerGrupoDesc(clienteTemporal.Canal).id;
                 cliente.categoria.id = 1;
                 cliente.estado.id = 1;
                 cliente.cuit = "00000000000";
@@ -187,7 +187,7 @@ namespace Gestion_Web.Formularios.Clientes
                 Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
                 cliente.sucursal.id = vendedor.sucursal;//preguntar
 
-                cliente.vendedor.id = cliente.id;
+                cliente.vendedor.id = vendedor.id;
                 cliente.lisPrecio.id = 1;
                 cliente.formaPago.id = 1;//CONTADO
 
@@ -295,6 +295,9 @@ namespace Gestion_Web.Formularios.Clientes
 
                 var puntoDeVenta = contSucursal.obtenerPtoVentaSucursal(cliente.sucursal.id);
 
+                Vendedor vendedorCliente = new Vendedor();
+                vendedorCliente.id = cliente.id;
+
                 Usuario usuario = new Usuario();
                 usuario.usuario = clienteTemporal.Direccion.Trim();//chequear q no haya espacios.
                 usuario.contraseña = cliente.direcciones.FirstOrDefault().codPostal + clienteTemporal.Altura;
@@ -302,7 +305,7 @@ namespace Gestion_Web.Formularios.Clientes
                 usuario.perfil = perfil;//CLIENTE
                 usuario.empresa = empresa;
                 usuario.estado = 1;
-                usuario.vendedor = cliente.vendedor;
+                usuario.vendedor = vendedorCliente;
                 usuario.ptoVenta = puntoDeVenta.FirstOrDefault();
                 contUsuario.agregarUsuarios(usuario);  
             }
