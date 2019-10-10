@@ -44,6 +44,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorTarjeta ct = new controladorTarjeta();
         controladorCobranza contCobranza = new controladorCobranza();
         Configuracion configuracion = new Configuracion();
+        controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
 
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
 
@@ -111,7 +112,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["Factura"] = null;
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
-                    _idCliente = 0;
+                    controladorFacturasEntity.LimpiarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]));
+                    //_idCliente = 0;
                     phArticulos.Controls.Clear();
 
                     this.verificarModoBlanco();
@@ -378,7 +380,8 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente contrCliente = new controladorCliente();
                 String buscar = txtCodigoCliente.Text.Replace(' ', '%');
                 DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
-                
+                //controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
+
                 if (dtClientes == null)
                     return;
 
@@ -389,9 +392,11 @@ namespace Gestion_Web.Formularios.Facturas
                 DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
                 DropListClientes.DataBind();
 
-                _idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                //_idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
 
-                if (_idCliente > 0)
+                var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
+
+                if (usuario_cliente.IdCliente > 0)
                     cargarClienteDesdeModal();
             }
             catch (Exception ex)
@@ -486,7 +491,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarCliente(f.cliente.id);
                 //this.DropListClientes.SelectedValue = f.cliente.id.ToString();
                 //cargocliente
-                _idCliente = f.cliente.id;
+                //_idCliente = f.cliente.id;
                 //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
                 this.cargarClienteDesdeModal();
 
@@ -534,7 +539,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
                 //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
-                _idCliente = f.cliente.id;
+                //_idCliente = f.cliente.id;
                 this.cargarClienteDesdeModal();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
@@ -1850,7 +1855,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Session.Add("Factura", f);
                     this.verificarAlerta();
                     //Session["FacturasABM_ClienteModal"] = null;
-                    _idCliente = 0;
+                    //_idCliente = 0;
                     Session["CobroAnticipo"] = null;
                     //verifico si tiene permitido facturar entre sucursales
                     if (this.verficarPermisoFactSucursal() == 1)
@@ -1898,7 +1903,8 @@ namespace Gestion_Web.Formularios.Facturas
                             ListSucursalCliente.Visible = false;
                             f.items.Clear();
                             f.cliente = null;
-                            _idCliente = 0;
+                            controladorFacturasEntity.LimpiarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]));
+                            //_idCliente = 0;
                             labelCliente.Text = string.Empty;
                             borrarCamposagregarItem();
                             Session.Add("Factura", f);
@@ -1928,7 +1934,10 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //obtengo codigo
                 //int idCliente = (int)Session["FacturasABM_ClienteModal"];
-                int idCliente = _idCliente;
+                //controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
+                var usuario_cliente = controladorFacturasEntity.ObtenerClientePorUsuarioFacturacion(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
+
+                int idCliente = (int)usuario_cliente.IdCliente;
                 try
                 {
                     this.DropListClientes.SelectedValue = idCliente.ToString();
@@ -3433,6 +3442,13 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     Factura fact = Session["Factura"] as Factura;
 
+                    Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                    if (!respuesta.Item2)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                        return;
+                    }
+
                     int ok = this.controlador.verificarRefacturarProveedor(fact);
                     if (ok < 1)
                     {
@@ -3676,10 +3692,17 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //valido que si esta facturando con lista de precio al 100% dto
 
+                Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                if (!respuesta.Item2)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
+                    return;
+                }
+
                 int verificaTotalCero = this.validarFacturarTotalCero(fact);
                 if (verificaTotalCero < 1)
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede facturar en monto cero. \", {type: \"error\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se puede facturar en monto cero. \", {type: \"alert\"});", true);
                     return;
                 }
 
@@ -5125,20 +5148,25 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //vacio la factura actual
 
+                //controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
+
                 if (Session["Factura"] != null)
                 {
                     Factura f = Session["Factura"] as Factura;
                     f.items.Clear();
                     f.cliente = null;
-                    _idCliente = 0;
+                    //_idCliente = 0;
+                    controladorFacturasEntity.LimpiarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]));
                     labelCliente.Text = string.Empty;
                     this.borrarCamposagregarItem();
                     Session.Add("Factura", f);
                     //lo dibujo en pantalla
                     this.cargarItems();
                 }
-                _idCliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
-                this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                //_idCliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
+                var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
+                //this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                this.cargarCliente((int)usuario_cliente.IdCliente);
                 this.obtenerNroFactura();
 
             }
@@ -10812,7 +10840,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
                 //cargocliente
-                _idCliente = this.idClientePadre;
+                //_idCliente = this.idClientePadre;
                 //Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
                 this.DropListClientes.Attributes.Add("disabled", "disabled");
                 this.cargarClienteDesdeModal();
@@ -10860,14 +10888,24 @@ namespace Gestion_Web.Formularios.Facturas
 
         public Tuple<string, bool> ComprobarCamposSeleccionados()
         {
-            if (Convert.ToInt32(DropListVendedor.SelectedValue) <= 0)
-                return new Tuple<string, bool>("Debe seleccionar un vendedor!", false);
-            else if (Convert.ToInt32(DropListLista.SelectedValue) <= 0)
-                return new Tuple<string, bool>("Debe seleccionar una lista de precios!", false);
-            else if (Convert.ToInt32(DropListFormaPago.SelectedValue) <= 0)
-                return new Tuple<string, bool>("Debe seleccionar una forma de pago!", false);
-            else
-                return new Tuple<string, bool>("", true);
+            try
+            {
+                if (Convert.ToInt32(DropListVendedor.SelectedValue) <= 0)
+                    return new Tuple<string, bool>("Debe seleccionar un vendedor!", false);
+                else if (Convert.ToInt32(DropListLista.SelectedValue) <= 0)
+                    return new Tuple<string, bool>("Debe seleccionar una lista de precios!", false);
+                else if (Convert.ToInt32(DropListFormaPago.SelectedValue) <= 0)
+                    return new Tuple<string, bool>("Debe seleccionar una forma de pago!", false);
+                else if (ListSucursalCliente.Visible && Convert.ToInt32(ListSucursalCliente.SelectedValue) < 1)
+                    return new Tuple<string, bool>("Debe seleccionar un cliente interno!", false);
+                else
+                    return new Tuple<string, bool>("", true);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(Convert.ToInt32(Session["Login_IdUser"]),"Error","Error al comprobar campos seleccionados! " + ex.Message);
+                return new Tuple<string, bool>("Error al comprobar campos seleccionados!", false);
+            }            
         }
 
         #region javascript Calls
