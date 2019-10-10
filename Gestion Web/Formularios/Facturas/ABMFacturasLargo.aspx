@@ -80,9 +80,9 @@
                                                                 <div class="col-md-11">
                                                                     <asp:DropDownList ID="ListSucursalCliente" Visible="false" runat="server" class="form-control"></asp:DropDownList>
                                                                 </div>
-                                                                <div class="col-md-1">
+                                                                <%--<div class="col-md-1">
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListSucursalCliente" InitialValue="-1" ValidationGroup="FacturaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                                </div>
+                                                                </div>--%>
                                                             </div>
                                                     </td>
                                                     <td style="width: 60%">

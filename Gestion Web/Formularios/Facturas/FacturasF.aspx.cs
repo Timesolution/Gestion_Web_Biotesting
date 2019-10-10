@@ -745,6 +745,25 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                //string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");                
+
+                //string fechaDesdeFinal = txtFechaDesde.Text;
+                //string fechaHastaFinal = txtFechaHasta.Text;
+
+                //if (Convert.ToInt32(modificoHora) == 1)
+                //{
+                //    string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+
+                //    DateTime fechaDesdeTemp = Convert.ToDateTime(fechaDesdeFinal, new CultureInfo("es-AR"));
+                //    fechaDesdeTemp = fechaDesdeTemp.AddHours(Convert.ToInt32(restaHoras) * -1);
+
+                //    DateTime fechaHastaTemp =Convert.ToDateTime(fechaHastaFinal, new CultureInfo("es-AR"));
+                //    fechaHastaTemp = fechaHastaTemp.AddHours(Convert.ToInt32(restaHoras) * -1 + 23).AddMinutes(59).AddSeconds(59);
+
+                //    fechaDesdeFinal = fechaDesdeTemp.ToString("yyyy/MM/dd hh:mm:ss");
+                //    fechaHastaFinal = fechaHastaTemp.ToString("yyyy/MM/dd hh:mm:ss");
+                //}
+                
                 DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue));
                 decimal saldo = 0;
 
