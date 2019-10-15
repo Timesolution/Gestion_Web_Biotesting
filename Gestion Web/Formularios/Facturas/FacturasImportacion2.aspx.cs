@@ -375,41 +375,19 @@ namespace Gestion_Web.Formularios.Facturas
 
                     int i = this.contImp.obtenerFacturasDesdeArchivo(path + archivo,empresa,sucursal,puntoVenta);
 
-                    int cantRegistros = 0;
-
                     if (i > 0)
                     {
                         string script = "";
                         script += "window.onload=function(){";
                         script += "window.open('/Formularios/Facturas/FacturasF.aspx','_blank');";
-                        //script += "window.open('/Formularios/Facturas/RemitosR.aspx','_blank');";
 
                         script += " $.msgbox(\"Archivo Importado. \", {type: \"info\"}); location.href = '/Formularios/Facturas/FacturasImportacion2.aspx';";
-                        //sb.Append(message);
                         script += "};";
 
-                        //script += m.mensajeBoxInfo("Importacion Finalizada con exito", "/FacturasImportacion.aspx");
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", script, true);
-
                     }
                     else
                     {
-                        //if (i == -2)
-                        //{
-                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El lote ya fue importado."));
-                        //    return;
-                        //}
-                        //if (i == -3)
-                        //{
-                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo importar la totalidad del lote. Verificque estado del mismo."));
-                        //    return;
-                        //}
-                        //if (i == -10)
-                        //{
-                        //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El punto de venta tiene CAI vencido"));
-                        //    return;
-                        //}
-
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron procesar una o mas lotes."));
                     }
                 }
