@@ -811,6 +811,13 @@ namespace Gestion_Web.Formularios.Articulos
                 this.DropListSucursal_St2.DataBind();
                 this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
 
+                this.droplist_Sucursal_ModalStockPorTalles.DataSource = dt;
+                this.droplist_Sucursal_ModalStockPorTalles.DataValueField = "Id";
+                this.droplist_Sucursal_ModalStockPorTalles.DataTextField = "nombre";
+
+                this.droplist_Sucursal_ModalStockPorTalles.DataBind();
+                this.droplist_Sucursal_ModalStockPorTalles.SelectedValue = Session["Login_SucUser"].ToString();
+
                 dt.Rows[0].ItemArray[2] = "Seleccione...";
                 dr["nombre"] = "Seleccione...";
 
@@ -820,7 +827,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 this.DropListSucursal_St.DataBind();
 
-                
+
 
                 //informe stock unico en sucursal y en la otra no
                 this.ListSucursalCentral.DataSource = dt;
@@ -1226,8 +1233,8 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                     iva = 2;
 
-                if (this.chkUbicacion.Checked == true)                
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&l=" + DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + descuentoPorCantidad + "&p=" + idProveedorHF.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);                
+                if (this.chkUbicacion.Checked == true)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?v=1&l=" + DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + descuentoPorCantidad + "&p=" + idProveedorHF.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 else
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionListaPrecios.aspx?l=" + DropListListaPrecios.SelectedValue + "&psi=" + Convert.ToInt32(PrecioSinIva.Checked) + "&dpc=" + Convert.ToInt32(DescuentoPorCantidad.Checked) + "&p=" + idProveedorHF.Value + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
 
@@ -1366,7 +1373,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         protected void lbtnStockValorizado_Click(object sender, EventArgs e)
         {
-            if(!cbStockDetallado.Checked)
+            if (!cbStockDetallado.Checked)
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=3&ex=0&costo=" + this.permisoStockValorizado + "&s=" + this.DropListSucursal_St2.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             else
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=10&ex=0&costo=" + this.permisoStockValorizado + "&s=" + this.DropListSucursal_St2.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
@@ -1497,7 +1504,7 @@ namespace Gestion_Web.Formularios.Articulos
                     if (i > 0)
                     {
                         //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"Proceso finalizado con exito. Actualizados: " + i + " de " + cantRegistros + "\", {type: \"info\"});", true);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se actualizaron: " + i + " articulos ",null));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se actualizaron: " + i + " articulos ", null));
                     }
                     else
                     {
@@ -1727,6 +1734,16 @@ namespace Gestion_Web.Formularios.Articulos
             catch
             {
             }
+        }
+
+        protected void lbtnStockPorTallesPDF_Click(object sender, EventArgs e)
+        {
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Articulos/ImpresionMovStock.aspx?a=12&ex=0&s=" + this.droplist_Sucursal_ModalStockPorTalles.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+        }
+
+        protected void lbtnStockPorTallesXLS_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ImpresionMovStock.aspx?a=12&ex=1&s=" + this.droplist_Sucursal_ModalStockPorTalles.SelectedValue);
         }
 
         #endregion
@@ -2061,11 +2078,11 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                 }
                 if (string.IsNullOrEmpty(noActu))
-                {                    
+                {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
                 }
                 else
-                {                    
+                {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
                 }
                 //filtro

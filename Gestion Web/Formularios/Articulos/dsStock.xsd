@@ -132,6 +132,20 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="StockPorTallesR" msprop:Generator_TableClassName="StockPorTallesRDataTable" msprop:Generator_TableVarName="tableStockPorTallesR" msprop:Generator_RowChangedName="StockPorTallesRRowChanged" msprop:Generator_TablePropName="StockPorTallesR" msprop:Generator_RowDeletingName="StockPorTallesRRowDeleting" msprop:Generator_RowChangingName="StockPorTallesRRowChanging" msprop:Generator_RowEvHandlerName="StockPorTallesRRowChangeEventHandler" msprop:Generator_RowDeletedName="StockPorTallesRRowDeleted" msprop:Generator_RowClassName="StockPorTallesRRow" msprop:Generator_UserTableName="StockPorTallesR" msprop:Generator_RowEvArgName="StockPorTallesRRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Sucursal" msprop:Generator_ColumnVarNameInTable="columnSucursal" msprop:Generator_ColumnPropNameInRow="Sucursal" msprop:Generator_ColumnPropNameInTable="SucursalColumn" msprop:Generator_UserColumnName="Sucursal" type="xs:string" minOccurs="0" />
+              <xs:element name="Codigo" msprop:Generator_ColumnVarNameInTable="columnCodigo" msprop:Generator_ColumnPropNameInRow="Codigo" msprop:Generator_ColumnPropNameInTable="CodigoColumn" msprop:Generator_UserColumnName="Codigo" type="xs:string" minOccurs="0" />
+              <xs:element name="Descripcion" msprop:Generator_ColumnVarNameInTable="columnDescripcion" msprop:Generator_ColumnPropNameInRow="Descripcion" msprop:Generator_ColumnPropNameInTable="DescripcionColumn" msprop:Generator_UserColumnName="Descripcion" type="xs:string" minOccurs="0" />
+              <xs:element name="Grupo" msprop:Generator_ColumnVarNameInTable="columnGrupo" msprop:Generator_ColumnPropNameInRow="Grupo" msprop:Generator_ColumnPropNameInTable="GrupoColumn" msprop:Generator_UserColumnName="Grupo" type="xs:string" minOccurs="0" />
+              <xs:element name="SubGrupo" msprop:Generator_ColumnVarNameInTable="columnSubGrupo" msprop:Generator_ColumnPropNameInRow="SubGrupo" msprop:Generator_ColumnPropNameInTable="SubGrupoColumn" msprop:Generator_UserColumnName="SubGrupo" type="xs:string" minOccurs="0" />
+              <xs:element name="Marca" msprop:Generator_ColumnVarNameInTable="columnMarca" msprop:Generator_ColumnPropNameInRow="Marca" msprop:Generator_ColumnPropNameInTable="MarcaColumn" msprop:Generator_UserColumnName="Marca" type="xs:string" minOccurs="0" />
+              <xs:element name="Talle" msprop:Generator_ColumnVarNameInTable="columnTalle" msprop:Generator_ColumnPropNameInRow="Talle" msprop:Generator_ColumnPropNameInTable="TalleColumn" msprop:Generator_UserColumnName="Talle" type="xs:string" minOccurs="0" />
+              <xs:element name="Stock" msprop:Generator_ColumnVarNameInTable="columnStock" msprop:Generator_ColumnPropNameInRow="Stock" msprop:Generator_ColumnPropNameInTable="StockColumn" msprop:Generator_UserColumnName="Stock" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

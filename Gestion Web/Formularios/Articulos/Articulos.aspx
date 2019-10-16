@@ -70,6 +70,9 @@
                                         <a href="#modalStockNoVendido" data-toggle="modal" style="width: 90%">Stock sin movimiento</a>
                                     </li>
                                     <li>
+                                        <a href="#modalStockPorTalles" data-toggle="modal" style="width: 90%">Stock por talles</a>
+                                    </li>
+                                    <li>
                                         <a href="#modalUnicoSucursal" data-toggle="modal" style="width: 90%">Stock unico sucursal</a>
                                     </li>
                                     <li>
@@ -815,6 +818,43 @@
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbtnStockValorizado" runat="server" ValidationGroup="StockValorizado" Text="Generar PDF" class="btn btn-success" OnClick="lbtnStockValorizado_Click" />
                         <asp:LinkButton ID="lbtnStockValorizadoXLS" runat="server" ValidationGroup="StockValorizado" Text="Generar Excel" class="btn btn-success" OnClick="lbtnStockValorizadoXLS_Click" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="modalStockPorTalles" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Stock por talles</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel11" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+
+                                <div class="form-group">
+                                    <label class="col-md-4">
+                                        Sucursal                                   
+                                    </label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="droplist_Sucursal_ModalStockPorTalles" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="LinkButton1" runat="server" ValidationGroup="StockPorTalles" Text="Generar PDF" class="btn btn-success" OnClick="lbtnStockPorTallesPDF_Click" />
+                        <asp:LinkButton ID="LinkButton2" runat="server" ValidationGroup="StockPorTalles" Text="Generar Excel" class="btn btn-success" OnClick="lbtnStockPorTallesXLS_Click" />
                     </div>
                 </div>
 

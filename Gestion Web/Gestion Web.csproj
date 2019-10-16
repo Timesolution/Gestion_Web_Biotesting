@@ -3221,6 +3221,7 @@
     <EmbeddedResource Include="Formularios\Articulos\StockAPedir.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\StockUnicoR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\StockValorizadoImponibleR.rdlc" />
+    <EmbeddedResource Include="Formularios\Articulos\StockPorTalles.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\StockValorizadoR.rdlc" />
     <EmbeddedResource Include="Formularios\Clientes\InformeClientesZonaR.rdlc" />
     <EmbeddedResource Include="Formularios\Clientes\InformeClientesZonaR2.rdlc" />

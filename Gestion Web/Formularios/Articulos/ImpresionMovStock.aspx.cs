@@ -131,6 +131,10 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         generarReporte11(); // Articulos Otros Proveedores
                     }
+                    if (accion == 12)
+                    {
+                        generarReporte12(); // Stock por talles
+                    }
                 }
             }
             catch (Exception ex)
@@ -980,6 +984,65 @@ namespace Gestion_Web.Formularios.Articulos
                 //}
             }
             catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void generarReporte12()
+        {
+            try
+            {
+                DataTable dtStockPorTalles = this.controlador.obtenerStockPorTalles(this.suc);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockPorTalles.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("StockPorTallesR", dtStockPorTalles);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+                    String filename = string.Format("{0}.{1}", "StockPorTalles" + DateTime.Today.ToString("dd/MM/yyyy"), "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch(Exception ex)
             {
 
             }
