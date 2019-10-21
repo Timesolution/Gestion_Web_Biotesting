@@ -493,7 +493,13 @@ namespace Gestion_Web.Formularios.Facturas
                 //cargocliente
                 //_idCliente = f.cliente.id;
                 //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
-                this.cargarClienteDesdeModal();
+
+                var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), f.cliente.id);
+
+                if (usuario_cliente.IdCliente > 0)
+                    cargarClienteDesdeModal();
+
+                //this.cargarClienteDesdeModal();
 
                 this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
@@ -540,7 +546,14 @@ namespace Gestion_Web.Formularios.Facturas
                 //cargocliente
                 //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
                 //_idCliente = f.cliente.id;
-                this.cargarClienteDesdeModal();
+                //DropListClientes.SelectedValue = f.cliente.id.ToString();
+                //this.cargarClienteDesdeModal();
+
+                var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), f.cliente.id);
+
+                if (usuario_cliente.IdCliente > 0)
+                    cargarClienteDesdeModal();
+
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
                 this.txtPorcDescuento.Text = decimal.Round(nuevaFactura.neto10, 2).ToString();
@@ -10843,7 +10856,13 @@ namespace Gestion_Web.Formularios.Facturas
                 //_idCliente = this.idClientePadre;
                 //Session.Add("FacturasABM_ClienteModal", this.idClientePadre);
                 this.DropListClientes.Attributes.Add("disabled", "disabled");
-                this.cargarClienteDesdeModal();
+                //this.cargarClienteDesdeModal();
+
+                var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), f.cliente.id);
+
+                if (usuario_cliente.IdCliente > 0)
+                    cargarClienteDesdeModal();
+
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
 
