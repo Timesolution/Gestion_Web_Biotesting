@@ -35,6 +35,22 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="ImpresionAlertas" msprop:Generator_TableClassName="ImpresionAlertasDataTable" msprop:Generator_TableVarName="tableImpresionAlertas" msprop:Generator_RowChangedName="ImpresionAlertasRowChanged" msprop:Generator_TablePropName="ImpresionAlertas" msprop:Generator_RowDeletingName="ImpresionAlertasRowDeleting" msprop:Generator_RowChangingName="ImpresionAlertasRowChanging" msprop:Generator_RowEvHandlerName="ImpresionAlertasRowChangeEventHandler" msprop:Generator_RowDeletedName="ImpresionAlertasRowDeleted" msprop:Generator_RowClassName="ImpresionAlertasRow" msprop:Generator_UserTableName="ImpresionAlertas" msprop:Generator_RowEvArgName="ImpresionAlertasRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="cliente" msprop:Generator_ColumnVarNameInTable="columncliente" msprop:Generator_ColumnPropNameInRow="cliente" msprop:Generator_ColumnPropNameInTable="clienteColumn" msprop:Generator_UserColumnName="cliente" type="xs:string" minOccurs="0" />
+              <xs:element name="estado" msprop:Generator_ColumnVarNameInTable="columnestado" msprop:Generator_ColumnPropNameInRow="estado" msprop:Generator_ColumnPropNameInTable="estadoColumn" msprop:Generator_UserColumnName="estado" type="xs:string" minOccurs="0" />
+              <xs:element name="fecha" msprop:Generator_ColumnVarNameInTable="columnfecha" msprop:Generator_ColumnPropNameInRow="fecha" msprop:Generator_ColumnPropNameInTable="fechaColumn" msprop:Generator_UserColumnName="fecha" type="xs:string" minOccurs="0" />
+              <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:string" minOccurs="0" />
+              <xs:element name="mensaje" msprop:Generator_ColumnVarNameInTable="columnmensaje" msprop:Generator_ColumnPropNameInRow="mensaje" msprop:Generator_ColumnPropNameInTable="mensajeColumn" msprop:Generator_UserColumnName="mensaje" type="xs:string" minOccurs="0" />
+              <xs:element name="tipoAlerta" msprop:Generator_ColumnVarNameInTable="columntipoAlerta" msprop:Generator_ColumnPropNameInRow="tipoAlerta" msprop:Generator_ColumnPropNameInTable="tipoAlertaColumn" msprop:Generator_UserColumnName="tipoAlerta" type="xs:string" minOccurs="0" />
+              <xs:element name="vendedor" msprop:Generator_ColumnVarNameInTable="columnvendedor" msprop:Generator_ColumnPropNameInRow="vendedor" msprop:Generator_ColumnPropNameInTable="vendedorColumn" msprop:Generator_UserColumnName="vendedor" type="xs:string" minOccurs="0" />
+              <xs:element name="direccion" msprop:Generator_ColumnVarNameInTable="columndireccion" msprop:Generator_ColumnPropNameInRow="direccion" msprop:Generator_ColumnPropNameInTable="direccionColumn" msprop:Generator_UserColumnName="direccion" type="xs:string" minOccurs="0" />
+              <xs:element name="localidad" msprop:Generator_ColumnVarNameInTable="columnlocalidad" msprop:Generator_ColumnPropNameInRow="localidad" msprop:Generator_ColumnPropNameInTable="localidadColumn" msprop:Generator_UserColumnName="localidad" type="xs:string" minOccurs="0" />
+              <xs:element name="codigoPostal" msprop:Generator_ColumnVarNameInTable="columncodigoPostal" msprop:Generator_ColumnPropNameInRow="codigoPostal" msprop:Generator_ColumnPropNameInTable="codigoPostalColumn" msprop:Generator_UserColumnName="codigoPostal" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

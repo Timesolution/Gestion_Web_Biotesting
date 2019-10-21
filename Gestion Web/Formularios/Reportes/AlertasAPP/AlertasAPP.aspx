@@ -1,12 +1,12 @@
-﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AlertasAPP.aspx.cs" Inherits="Gestion_Web.Formularios.Reportes.AlertasAPP.AlertasAPP" %>
+﻿<%@ Page EnableEventValidation="false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AlertasAPP.aspx.cs" Inherits="Gestion_Web.Formularios.Reportes.AlertasAPP.AlertasAPP" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
-        <div >
+        <div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i> Compras > Compras</h5>
+                        <h5><i class="icon-map-marker"></i>Compras > Compras</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-wrench"></i>
@@ -31,7 +31,30 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                                <td style="width: 5%"></td>
+                                <td style="width: 5%">
+                                    <div class="btn-group pull-right" style="width: 100%">
+                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
+                                            <i class="shortcut-icon icon-print"></i>&nbsp
+                                       
+                                        <asp:Literal ID="Literal1" runat="server"></asp:Literal>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
+                                            <li>
+                                                <asp:LinkButton ID="btnExportarExcel" runat="server" OnClick="btnExportarExcel_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                </asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnImprimirPDF" runat="server" OnClick="btnImprimirPDF_Click">
+                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                        &nbsp Imprimir
+                                                </asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
 
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
@@ -91,7 +114,7 @@
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <button type="button" ID="btnCerrarModalBusqueda" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" id="btnCerrarModalBusqueda" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Busqueda</h4>
                     </div>
                     <div class="modal-body">
@@ -164,7 +187,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" ID="btnCerrarModalCambiarEstado" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" id="btnCerrarModalCambiarEstado" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Confirmacion Cambiar estado</h4>
                     </div>
                     <div class="modal-body">
@@ -186,7 +209,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnCambiarEstadoAlertas" Text="Aceptar" class="btn btn-success" OnClientClick="CambiarEstadoAlertas()"/>
+                            <asp:Button runat="server" ID="btnCambiarEstadoAlertas" Text="Aceptar" class="btn btn-success" OnClientClick="CambiarEstadoAlertas()" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -207,8 +230,7 @@
         <script src="../../Vendedores/Comisiones/Comisiones.js" type="text/javascript"></script>
 
         <script>
-            $(function ()
-            {
+            $(function () {
                 var fechaActual = ObtenerFechaActual();
 
                 var controlFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>');
@@ -224,17 +246,15 @@
 
         <script type="text/javascript">
 
-            function CambiarEstadoAlertas()
-            {
+            function CambiarEstadoAlertas() {
                 var btnCambiarEstadoAlertas = document.getElementById("MainContent_btnCambiarEstadoAlertas");
-                
+
                 btnCambiarEstadoAlertas.disabled = true;
                 btnCambiarEstadoAlertas.value = "Aguarde...";
 
                 var checkedNodes = $('#tablaAlertas').find('input[type="checkbox"]:checked');
 
-                if (checkedNodes.length <= 0)
-                {
+                if (checkedNodes.length <= 0) {
                     event.preventDefault();
                     $.msgbox("No hay alertas seleccionadas!", { type: "alert" });
                     btnCambiarEstadoAlertas.disabled = false;
@@ -258,12 +278,11 @@
                     error: function () {
                         $.msgbox("No se pudo cambiar el estado de las alertas!", { type: "error" });
                     },
-                    success:OnSuccessCambiarEstado
+                    success: OnSuccessCambiarEstado
                 });
             }
 
-            function OnSuccessCambiarEstado(response)
-            {
+            function OnSuccessCambiarEstado(response) {
                 var btnFiltrar = document.getElementById("MainContent_lbtnBuscar");
                 var btnCambiarEstadoAlertas = document.getElementById("MainContent_btnCambiarEstadoAlertas");
 
@@ -271,18 +290,17 @@
                 var obj = JSON.parse(data);
 
                 if (obj >= 1)
-                    $.msgbox("Estado de alertas cambiadas con exito!", { type: "info" });                
+                    $.msgbox("Estado de alertas cambiadas con exito!", { type: "info" });
                 else
                     $.msgbox("Error cambiando estado de alertas!", { type: "error" });
 
-                    btnCambiarEstadoAlertas.disabled = false;
-                    btnCambiarEstadoAlertas.value = "Aceptar";
-                    document.getElementById('btnCerrarModalCambiarEstado').click();
-                    setTimeout(Filtrar(btnFiltrar));
+                btnCambiarEstadoAlertas.disabled = false;
+                btnCambiarEstadoAlertas.value = "Aceptar";
+                document.getElementById('btnCerrarModalCambiarEstado').click();
+                setTimeout(Filtrar(btnFiltrar));
             }
 
-            function Filtrar(obj)
-            {
+            function Filtrar(obj) {
                 event.preventDefault();
                 var valorTxtFechaDesde = document.getElementById('<%= txtFechaDesde.ClientID %>').value;
                 var valorTxtFechaHasta = document.getElementById('<%= txtFechaHasta.ClientID %>').value;
@@ -310,8 +328,7 @@
                 });
             }
 
-            function OnSuccessFiltro(response)
-            {
+            function OnSuccessFiltro(response) {
                 var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
 
                 var data = response.d;
@@ -352,8 +369,7 @@
                 document.getElementById('btnCerrarModalCambiarEstado').click();
             }
 
-            function CrearBotonesAccion(idAlerta)
-            {
+            function CrearBotonesAccion(idAlerta) {
                 var accion = "";
 
                 accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='alerta_" + idAlerta + "' type=\"checkbox\"></span> "
@@ -361,31 +377,26 @@
                 return accion;
             }
 
-            function BarraDeProgreso(progreso)
-            {
+            function BarraDeProgreso(progreso) {
                 var barraDeProgreso = "";
 
-                if(progreso <= 70)
-                {
+                if (progreso <= 70) {
                     barraDeProgreso = "<div class=\"progress\"> <div class=\"progress-bar progress-bar-success\" style=\"width: " + progreso + "% \"></div></div>";
                 }
-                else if(progreso > 70 && progreso < 90)
-                {
+                else if (progreso > 70 && progreso < 90) {
                     barraDeProgreso = "<div class=\"progress\">";
                     barraDeProgreso += "<div class=\"progress-bar progress-bar-success\" style=\"width: 70% \"></div>";
-                    barraDeProgreso += "<div class=\"progress-bar progress-bar-warning\" style=\"width: " + (progreso*20)/100 + "% \"></div>";
+                    barraDeProgreso += "<div class=\"progress-bar progress-bar-warning\" style=\"width: " + (progreso * 20) / 100 + "% \"></div>";
                     barraDeProgreso += "</div>";
                 }
-                else if(progreso >= 90 && progreso <= 100)
-                {
+                else if (progreso >= 90 && progreso <= 100) {
                     barraDeProgreso = "<div class=\"progress\">";
                     barraDeProgreso += "<div class=\"progress-bar progress-bar-success\" style=\"width: 70% \"></div>";
                     barraDeProgreso += "<div class=\"progress-bar progress-bar-warning\" style=\"width: 20% \"></div>";
-                    barraDeProgreso += "<div class=\"progress-bar progress-bar-danger\" style=\"width: " + (progreso*10)/100 + "% \"></div>";
+                    barraDeProgreso += "<div class=\"progress-bar progress-bar-danger\" style=\"width: " + (progreso * 10) / 100 + "% \"></div>";
                     barraDeProgreso += "</div>";
                 }
-                else
-                {
+                else {
                     barraDeProgreso = "<div class=\"progress\">";
                     barraDeProgreso += "<div class=\"progress-bar progress-bar-success\" style=\"width: 70% \"></div>";
                     barraDeProgreso += "<div class=\"progress-bar progress-bar-warning\" style=\"width: 20% \"></div>";
