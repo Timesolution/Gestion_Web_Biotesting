@@ -31,30 +31,7 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                                <td style="width: 5%">
-                                    <div class="btn-group pull-right" style="width: 100%">
-                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
-                                            <i class="shortcut-icon icon-print"></i>&nbsp
-                                       
-                                        <asp:Literal ID="Literal1" runat="server"></asp:Literal>
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
-                                            <li>
-                                                <asp:LinkButton ID="btnExportarExcel" runat="server" OnClick="btnExportarExcel_Click">
-                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                                                        &nbsp Exportar
-                                                </asp:LinkButton>
-                                            </li>
-                                            <li>
-                                                <asp:LinkButton ID="btnImprimirPDF" runat="server" OnClick="btnImprimirPDF_Click">
-                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                                        &nbsp Imprimir
-                                                </asp:LinkButton>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
+                                <td style="width: 5%"></td>
 
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
@@ -347,7 +324,7 @@
                         "<td> " + obj[i].mensaje + "</td>" +
                         "<td> " + obj[i].estado + "</td>" +
                         "<td> " + BarraDeProgreso(parseInt(obj[i].vencimiento)) + "</td>" +
-                        "<td> " + CrearBotonesAccion(obj[i].id) + "</td>" +
+                        "<td> " + CrearBotonesAccion(obj[i].id, obj[i].idCliente) + "</td>" +
                         "</tr> ");
                 };
 
@@ -369,12 +346,17 @@
                 document.getElementById('btnCerrarModalCambiarEstado').click();
             }
 
-            function CrearBotonesAccion(idAlerta) {
+            function CrearBotonesAccion(idAlerta, idCliente) {
                 var accion = "";
 
-                accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='alerta_" + idAlerta + "' type=\"checkbox\"></span> "
+                accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='alerta_" + idAlerta + "' type=\"checkbox\"></span> ";
+                accion += "<a onclick=\"javascript: return IrAlCliente(" + idCliente + ");\" id=\"btnCliente" + idAlerta + "_" + idCliente + "\" class=\"btn btn-info\" style=\"text-align: right\" autopostback=\"false\"><span class=\"shortcut-icon icon-group\"></span></a>";
 
                 return accion;
+            }
+
+            function IrAlCliente(idCliente) {
+                window.location.replace("../../../Formularios/Clientes/ClientesABM.aspx?accion=2&id=" + idCliente);
             }
 
             function BarraDeProgreso(progreso) {
