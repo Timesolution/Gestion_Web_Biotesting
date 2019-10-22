@@ -31,7 +31,30 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                                <td style="width: 5%"></td>
+                                <td style="width: 5%">
+                                    <div class="btn-group pull-right" style="width: 100%">
+                                        <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
+                                            <i class="shortcut-icon icon-print"></i>&nbsp
+                                       
+                                        <asp:Literal ID="Literal1" runat="server"></asp:Literal>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
+                                            <li>
+                                                <asp:LinkButton ID="btnExportarExcel" runat="server" OnClick="btnExportarExcel_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                </asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnImprimirPDF" runat="server" OnClick="btnImprimirPDF_Click">
+                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                        &nbsp Imprimir
+                                                </asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
 
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
