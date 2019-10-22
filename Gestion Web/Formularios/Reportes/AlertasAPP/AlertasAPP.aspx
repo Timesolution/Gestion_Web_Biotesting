@@ -91,14 +91,14 @@
                                 <table class="table table-striped table-bordered table-hover" id="tablaAlertas">
                                     <thead>
                                         <tr>
-                                            <th>Fecha</th>
-                                            <th>Cliente</th>
-                                            <th>Vendedor</th>
-                                            <th>Tipo Alerta</th>
-                                            <th>Mensaje</th>
-                                            <th>Estado</th>
-                                            <th>Vencimiento</th>
-                                            <th></th>
+                                            <th style="width:10%">Fecha</th>
+                                            <th style="width:10%">Cliente</th>
+                                            <th style="width:10%">Vendedor</th>
+                                            <th style="width:10%">Tipo Alerta</th>
+                                            <th style="width:30%">Mensaje</th>
+                                            <th style="width:10%">Estado</th>
+                                            <th style="width:10%">Vencimiento</th>
+                                            <th style="width:10%"></th>
                                         </tr>
                                     </thead>
                                 </table>

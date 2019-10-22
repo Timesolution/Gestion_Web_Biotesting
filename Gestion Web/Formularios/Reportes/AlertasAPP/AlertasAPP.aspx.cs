@@ -20,7 +20,9 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
     public partial class AlertasAPP : System.Web.UI.Page
     {
         Mensajes _m = new Mensajes();
-
+        int idVendedor;
+        //para el de la lista
+        int Vendedor;
         controladorCliente _controladorCliente = new controladorCliente();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -29,12 +31,22 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
             {
                 VerificarLogin();
 
+                this.idVendedor = (int)Session["Login_Vendedor"];
+
                 if (!IsPostBack)
                 {
                     CargarClientes();
                     CargarVendedores();
                     CargarTiposAlertas();
                     CargarEstadosAlertas();
+                }
+                string perfil = Session["Login_NombrePerfil"] as string;
+                if (perfil == "Vendedor")
+                {
+                    //deshabilito el list de vendedor
+                    this.DropListVendedor.Attributes.Add("disabled", "true");
+                    this.DropListVendedor.SelectedValue = this.idVendedor.ToString();
+                    this.Vendedor = idVendedor;
                 }
             }
             catch (Exception ex)
@@ -78,7 +90,6 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
 
                     }
                 }
-
                 return 1;
             }
             catch
