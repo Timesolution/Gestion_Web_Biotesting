@@ -235,8 +235,6 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
         public static string Filtrar(DateTime fechaDesde, DateTime fechaHasta, int idCliente, int idVendedor, int tipoAlerta, int estado)
         {
             ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
-            controladorCliente controladorCliente = new controladorCliente();
-            controladorVendedor controladorVendedor = new controladorVendedor();
 
             var alertas = controladorAlertaAPP.ObtenerAlertas(fechaDesde, fechaHasta, idCliente, idVendedor, tipoAlerta, estado);
 
@@ -252,6 +250,7 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
                 alertaTemporal.tipoAlerta = alerta.tipoAlerta;
                 alertaTemporal.mensaje = alerta.mensaje;
                 alertaTemporal.estado = alerta.estado;
+                alertaTemporal.idCliente = alerta.idCliente.ToString();
                 alertaTemporal.vencimiento = CalcularProgressBar(Convert.ToDateTime(alerta.fecha, CultureInfo.InvariantCulture), 30).ToString();
                 alertasTemporales.Add(alertaTemporal);
             }
@@ -292,6 +291,7 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
             public string id;
             public string fecha;
             public string cliente;
+            public string idCliente;
             public string vendedor;
             public string tipoAlerta;
             public string mensaje;
