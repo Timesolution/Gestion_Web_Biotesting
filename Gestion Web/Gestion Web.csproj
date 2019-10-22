@@ -467,6 +467,7 @@
     <Content Include="Formularios\Promociones\PromocionesF.aspx" />
     <Content Include="Formularios\Reportes\AlertasAPP\ABMBotonesAlertas.aspx" />
     <Content Include="Formularios\Reportes\AlertasAPP\AlertasAPP.aspx" />
+    <Content Include="Formularios\Reportes\AlertasAPP\ImpresionAlertas.aspx" />
     <Content Include="Formularios\Reportes\BalanceF.aspx" />
     <Content Include="Formularios\Reportes\ImpresionRentabilidadD.aspx" />
     <Content Include="Formularios\Reportes\ImpresionReporte.aspx" />
@@ -2003,6 +2004,13 @@
     <Compile Include="Formularios\Reportes\AlertasAPP\AlertasAPP.aspx.designer.cs">
       <DependentUpon>AlertasAPP.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Reportes\AlertasAPP\ImpresionAlertas.aspx.cs">
+      <DependentUpon>ImpresionAlertas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\AlertasAPP\ImpresionAlertas.aspx.designer.cs">
+      <DependentUpon>ImpresionAlertas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Reportes\dsRentabilidad.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3306,6 +3314,7 @@
     <EmbeddedResource Include="Formularios\Cobros\DetalleImpagas.rdlc" />
     <EmbeddedResource Include="Formularios\Personal\ReciboPagoRemuneracionR.rdlc" />
     <EmbeddedResource Include="Formularios\Promociones\PromocionesR.rdlc" />
+    <EmbeddedResource Include="Formularios\Reportes\AlertasAPP\ImpresionAlertas.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\ComprasArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadRCosto.rdlc" />

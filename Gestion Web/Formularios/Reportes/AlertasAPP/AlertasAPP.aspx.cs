@@ -20,7 +20,9 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
     public partial class AlertasAPP : System.Web.UI.Page
     {
         Mensajes _m = new Mensajes();
-
+        int idVendedor;
+        //para el de la lista
+        int Vendedor;
         controladorCliente _controladorCliente = new controladorCliente();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -29,18 +31,28 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
             {
                 VerificarLogin();
 
+                this.idVendedor = (int)Session["Login_Vendedor"];
+
                 if (!IsPostBack)
                 {
                     CargarClientes();
                     CargarVendedores();
                     CargarTiposAlertas();
                     CargarEstadosAlertas();
-                }                    
+                }
+                string perfil = Session["Login_NombrePerfil"] as string;
+                if (perfil == "Vendedor")
+                {
+                    //deshabilito el list de vendedor
+                    this.DropListVendedor.Attributes.Add("disabled", "true");
+                    this.DropListVendedor.SelectedValue = this.idVendedor.ToString();
+                    this.Vendedor = idVendedor;
+                }
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al cargar alertasAPP. " + ex.Message);
-            }            
+                Log.EscribirSQL(1, "Error", "Error al cargar alertasAPP. " + ex.Message);
+            }
         }
 
         private void VerificarLogin()
@@ -78,7 +90,6 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
 
                     }
                 }
-
                 return 1;
             }
             catch
@@ -244,7 +255,11 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
             {
                 AlertaTemporal alertaTemporal = new AlertaTemporal();
                 alertaTemporal.id = alerta.id.ToString();
-                alertaTemporal.fecha = Convert.ToDateTime(alerta.fecha, CultureInfo.InvariantCulture).ToString("dd/MM/yyyy hh:mm");
+                DateTime dt;
+                alerta.fecha = alerta.fecha.AddHours(-3);
+                bool res = DateTime.TryParse(alerta.fecha.ToString(), out dt);
+                string hora = dt.ToString("HH:mm");
+                alertaTemporal.fecha = alerta.fecha.ToString("dd/MM/yyyy") + " " + hora;
                 alertaTemporal.cliente = alerta.cliente;
                 alertaTemporal.vendedor = alerta.vendedor;
                 alertaTemporal.tipoAlerta = alerta.tipoAlerta;
@@ -268,7 +283,7 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
             ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
             var alertas = controladorAlertaAPP.ObtenerAlertasPorID(ids);
 
-            int i = controladorAlertaAPP.ModificarEstadoAlertas(alertas,2);
+            int i = controladorAlertaAPP.ModificarEstadoAlertas(alertas, 2);
 
             return i.ToString();
         }
@@ -309,6 +324,46 @@ namespace Gestion_Web.Formularios.Reportes.AlertasAPP
         {
             public string id;
             public string nombre;
+        }
+
+        protected void btnExportarExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var valorTxtFechaDesde = txtFechaDesde.Text;
+                var valorTxtFechaHasta = txtFechaHasta.Text;
+                var valorDropListCliente = DropListCliente.SelectedValue;
+                var valorDropListVendedor = DropListVendedor.SelectedValue;
+                var valorDropListTipoAlerta = DropListTipoAlerta.SelectedValue;
+                var valorDropListEstadoAlerta = DropListEstadoAlerta.SelectedValue;
+                Response.Redirect("ImpresionAlertas.aspx?excel=1&fd=" + valorTxtFechaDesde + "&fh=" + valorTxtFechaHasta + "&c=" + valorDropListCliente
+                    + "&v=" + valorDropListVendedor + "&ta=" + valorDropListTipoAlerta + "&ea=" + valorDropListEstadoAlerta);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnImprimirPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var valorTxtFechaDesde = txtFechaDesde.Text;
+                var valorTxtFechaHasta = txtFechaHasta.Text;
+                var valorDropListCliente = DropListCliente.SelectedValue;
+                var valorDropListVendedor = DropListVendedor.SelectedValue;
+                var valorDropListTipoAlerta = DropListTipoAlerta.SelectedValue;
+                var valorDropListEstadoAlerta = DropListEstadoAlerta.SelectedValue;
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/AlertasAPP/ImpresionAlertas.aspx?&ex=0&fd=" +
+                    valorTxtFechaDesde + "&fh=" + valorTxtFechaHasta + "&c=" + valorDropListCliente
+                    + "&v=" + valorDropListVendedor + "&ta=" + valorDropListTipoAlerta + "&ea=" + valorDropListEstadoAlerta +
+                    "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
