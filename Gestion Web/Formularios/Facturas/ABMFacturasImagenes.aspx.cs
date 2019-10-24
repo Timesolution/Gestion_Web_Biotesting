@@ -82,7 +82,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnAgregarRemitir.Attributes.Add("onclick", " this.disabled = true; " + btnAgregar.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarRemitir, null) + ";");
                 btnRefacturar.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnRefacturar, null) + ";");
                 btnCargarTraza.Attributes.Add("onclick", " this.disabled = true;  " + btnCargarTraza.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCargarTraza, null) + ";");
-   
+
 
                 //dibujo los items en la tabla
                 if (Session["Factura"] != null)
@@ -90,6 +90,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarItems();
                     this.cargarTablaArticulosModoImagenes();
                 }
+                cargarArticulosFavoritosPh();
                 if (!IsPostBack)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Ingreso a facturacion.");
@@ -425,7 +426,7 @@ namespace Gestion_Web.Formularios.Facturas
         private void cargasInicialesModoImagen()
         {
             //dibujo los items en la tabla
-            this.cargarGruposPh();        
+            this.cargarGruposPh();
         }
 
         private void cargarGruposPh()
@@ -471,12 +472,12 @@ namespace Gestion_Web.Formularios.Facturas
                 phSubGruposArticulos.ID = "phSubGrupo_" + idGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
                 phSubGruposArticulos.Visible = false;
 
-                CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                cuadroImagenVolver.Linkbutton1.ID = idGrupo.ToString();
-                cuadroImagenVolver.Label1.Text = "volver";
-                cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
-                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(OcultarSubGrupos);
-                phSubGruposArticulos.Controls.Add(cuadroImagenVolver);
+                //CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                //cuadroImagenVolver.Linkbutton1.ID = idGrupo.ToString();
+                //cuadroImagenVolver.Label1.Text = "volver";
+                //cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
+                //cuadroImagenVolver.Linkbutton1.Click += new EventHandler(OcultarSubGrupos);
+                //phSubGruposArticulos.Controls.Add(cuadroImagenVolver);
 
                 var subGruposArticulos = contArticulo.obtenerSubGrupoByGrupo(idGrupo);
                 foreach (var item in subGruposArticulos)
@@ -519,23 +520,15 @@ namespace Gestion_Web.Formularios.Facturas
                 placeHolder.ID = "phArticulo_" + idSubGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
                 placeHolder.Visible = false;
 
-                //cargo el primer boton de volver
-                CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                cuadroImagenVolver.Linkbutton1.ID = idSubGrupo.ToString();
-                cuadroImagenVolver.Label1.Text = "volver";
-                cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
-                cuadroImagenVolver.Linkbutton1.Click += new EventHandler(this.ocultarArticulosSubGrupo);
-                placeHolder.Controls.Add(cuadroImagenVolver);
-
                 var articulos = contArticuloEntity.obtenerArticulosEntityByIdSubGrupo(Convert.ToInt32(idSubGrupo)).ToList();
                 foreach (var item in articulos)
                 {
                     CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
                     cuadroImagen.Linkbutton1.ID = "_" + item.id.ToString();
-                    cuadroImagen.Label1.Text = item.descripcion;
+                    cuadroImagen.Label1.Text = item.descripcion.ToLower();
                     if (item.descripcion.Length >= 40)
                     {
-                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40);
+                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
                     }
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
                     cuadroImagen.Linkbutton1.Click += new EventHandler(this.agregarArticuloAventa);
@@ -552,6 +545,42 @@ namespace Gestion_Web.Formularios.Facturas
                     placeHolder.Controls.Add(cuadroImagen);
                 }
                 phImagenCuadroArt.Controls.Add(placeHolder);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void cargarArticulosFavoritosPh()
+        {
+            try
+            {
+                var artStore = contArticuloEntity.obtenerArticulosStore();
+                this.phImagenCuadroArticulosFavoritos.Controls.Clear();
+                foreach (var item in artStore)
+                {
+                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    cuadroImagen.Linkbutton1.ID = "_" + item.id.ToString();
+                    cuadroImagen.Label1.Text = item.descripcion.ToLower();
+                    if (item.descripcion.Length >= 40)
+                    {
+                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
+                    }
+                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.agregarArticuloAventa);
+                    String path = Server.MapPath("../../images/Productos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            cuadroImagen.Image1.ImageUrl = "../../images/Productos/" + item.id + "/" + f.Name;
+                        }
+                    }
+                    this.phImagenCuadroArticulosFavoritos.Controls.Add(cuadroImagen);
+                }
             }
             catch (Exception ex)
             {
@@ -578,14 +607,14 @@ namespace Gestion_Web.Formularios.Facturas
                 }
             }
 
-            phImagenCuadroGrupos.Visible = false;
+            //phImagenCuadroGrupos.Visible = false;
         }
 
         private void OcultarSubGrupos(object sender, EventArgs e)
         {
-            phImagenCuadroSubGruposGrupos.Visible = false;
+            //phImagenCuadroSubGruposGrupos.Visible = false;
             phImagenCuadroArt.Visible = false;
-            phImagenCuadroGrupos.Visible = true;
+            //phImagenCuadroGrupos.Visible = true;
         }
 
         private void mostrarArticulosSubGrupo(object sender, EventArgs e)
@@ -609,8 +638,8 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
-                phImagenCuadroGrupos.Visible = false;
-                phImagenCuadroSubGruposGrupos.Visible = false;
+                //phImagenCuadroGrupos.Visible = false;
+                //phImagenCuadroSubGruposGrupos.Visible = false;
             }
             catch (Exception ex)
             {
@@ -665,7 +694,7 @@ namespace Gestion_Web.Formularios.Facturas
             int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
             Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
             decimal cantidad = 0;
-            
+
             TableRow tr;
             foreach (Control cr in this.phItemsModoImagenes.Controls)
             {
@@ -711,16 +740,16 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 cantidad += 1;
             }
-            guardarArticuloEnFactura(articulo,cantidad);
+            guardarArticuloEnFactura(articulo, cantidad);
         }
-        
+
         private void guardarArticuloEnFactura(Articulo articulo, decimal cantidad)
         {
             try
             {
                 reproducirSonido();
 
-                string cant = cantidad.ToString();                
+                string cant = cantidad.ToString();
 
                 this.txtCodigo.Text = articulo.codigo;
                 this.txtCantidad.Text = cant.ToString();
@@ -751,7 +780,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //}
                     //else
                     //{
-                        this.cargarProductoAFactura(-1);
+                    this.cargarProductoAFactura(-1);
                     //}
                 }
                 this.cargarTablaArticulosModoImagenes();
@@ -776,7 +805,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         private void cargarTablaArticulosModoImagenes()//agrega el articulo seleccionado a la tabla de articulos a facturar
         {
-            Factura f = Session["Factura"] as Factura;         
+            Factura f = Session["Factura"] as Factura;
 
             this.phItemsModoImagenes.Controls.Clear();
             foreach (var item in f.items)
@@ -804,7 +833,7 @@ namespace Gestion_Web.Formularios.Facturas
             this.phTotalModoImagen.Controls.Add(tr);
         }
 
-        protected void btnFacturarImagen_Click(object sender, EventArgs e) 
+        protected void btnFacturarImagen_Click(object sender, EventArgs e)
         {
             this.generarFactura(0);
         }
@@ -819,10 +848,10 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.updatePanelModoImagen, updatePanelModoImagen.GetType(), "alert", "$.msgbox(\"No se pudo agregar cliente. Ex: "+ex.Message+" \");", true);
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelModoImagen, updatePanelModoImagen.GetType(), "alert", "$.msgbox(\"No se pudo agregar cliente. Ex: " + ex.Message + " \");", true);
             }
         }
-        
+
         #endregion
 
         #region original
@@ -1473,7 +1502,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        
+
         private void verificarVtaCombustible()
         {
             try
@@ -4362,7 +4391,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ////si es importado cargo los datos de despacho si tiene alguno cargado
                 //this.agregarInfoDespachoItem(item);
                 this.factura.items.Add(item);
-                
+
                 //lo agrego al session
                 if (Session["Factura"] == null)
                 {
@@ -4384,7 +4413,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     f.items.Add(item);
                 }
-                
+
                 Session.Add("Factura", f);
 
                 //lo dibujo en pantalla
@@ -4462,7 +4491,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
                 btnRestar.Click += new EventHandler(this.sumarArticuloImagenes);
                 celAccion.Controls.Add(btnRestar);
-            
+
                 Literal l = new Literal();
                 l.Text = "&nbsp";
                 celAccion.Controls.Add(l);
@@ -10666,7 +10695,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btntest_Click(object sender, EventArgs e)
         {
-           string t = "hello world";
+            string t = "hello world";
         }
 
         protected void reproducirSonido()

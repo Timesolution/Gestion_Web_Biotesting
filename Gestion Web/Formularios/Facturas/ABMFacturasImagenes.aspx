@@ -67,7 +67,6 @@
                                                                 <div class="form-inline">
                                                                     <label class="col-md-12">
                                                                         <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label></label>
-
                                                                 </div>
 
                                                                 <div class="form-inline">
@@ -198,8 +197,7 @@
                                                         </th>
 
                                                         <th style="width: 5%">
-                                                            <div class="btn-group">
-                                                                <%--                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">FC<span class="caret"></span></button>--%>
+                                                            <%--<div class="btn-group">
                                                                 <asp:LinkButton ID="lbtnAccion" runat="server" class="btn btn-info dropdown-toggle" data-toggle="dropdown" Text="FC <span class='caret'></span>" />
                                                                 <ul class="dropdown-menu">
 
@@ -234,7 +232,7 @@
                                                                     </li>
 
                                                                 </ul>
-                                                            </div>
+                                                            </div>--%>
                                                         </th>
                                                         <th style="width: 25%">
                                                             <div class="col-md-12" style="padding-left: 0%; padding-right: 0%;">
@@ -1744,18 +1742,14 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="widget stacked">
-                                <div class="widget-header">
+                                <%--<div class="widget-header">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-th-large"></i>
                                     <h3>Facturacion</h3>
-                                </div>
-                                <!-- /widget-header -->
-
-                                <!-- columna izquierda-->
+                                </div>--%>
 
                                 <div class="widget-content">
 
-
-                                    <div class="col-md-6 col-xs-12">
+                                    <div class="col-md-4 col-xs-12">
 
                                         <div class="widget stacked widget-table action-table">
 
@@ -1777,11 +1771,8 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <!-- /widget-content -->
 
                                         </div>
-                                        <!-- /table -->
-
 
                                         <div class="widget stacked widget-table action-table">
                                             <div class="widget-header">
@@ -1793,9 +1784,7 @@
                                                     </thead>
                                                 </table>
                                             </div>
-                                            <!-- /widget-header -->
                                         </div>
-                                        <!-- /table -->
                                         <br />
 
                                         <div class="widget stacked widget-table action-table">
@@ -1803,16 +1792,13 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <td>
-                                                                &nbsp<asp:Label ID="lbNombreClienteImagenes" runat="server" Text="" Font-Bold="true" ForeColor="Black"></asp:Label>
+                                                            <td>&nbsp<asp:Label ID="lbNombreClienteImagenes" runat="server" Text="" Font-Bold="true" ForeColor="Black"></asp:Label>
                                                             </td>
                                                         </tr>
                                                     </thead>
                                                 </table>
                                             </div>
-                                            <!-- /widget-header -->
                                         </div>
-
 
                                         <div class="widget stacked widget-table action-table">
 
@@ -1821,43 +1807,67 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 25%">
-                                                                <div class="col-md-6 col-xs-12">
-                                                                    <a class="btn btn-info" onclick="createC();" style="width: 100%;">
+                                                            <th style="width: 20%;">
+                                                                <div style="text-align: center">
+                                                                    <a class="btn btn-info" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>
-
                                                                 </div>
-                                                                <div>Buscar</div>
                                                             </th>
-                                                            <th style="width: 25%">
-                                                                <div class="col-md-6 col-xs-12">
+                                                            <th style="width: 20%">
+                                                                <div style="text-align: center">
                                                                     <a class="btn btn-info" data-toggle="modal" href="#modalAltaRapida" runat="server" id="btnModalAltaRapida" visible="true">
                                                                         <i class="shortcut-icon icon-bolt"></i>
                                                                     </a>
                                                                 </div>
-                                                                <div>Alta Rapida</div>
                                                             </th>
-                                                            <th style="width: 25%">
-                                                                <div class="col-md-6 col-xs-12">
+                                                            <th style="width: 20%">
+                                                                <div style="text-align: center">
                                                                     <asp:LinkButton ID="lbtnAbrirModalTarjeta" runat="server" class="btn btn-info" Text="Cancelar" OnClick="btnAbrirModalTarjeta_Click">
                                                                          <i class="shortcut-icon icon-credit-card"></i>
                                                                     </asp:LinkButton>
                                                                 </div>
-                                                                <div>Tarjeta</div>
                                                             </th>
-                                                            <th style="width: 25%">
-                                                                <div class="col-md-6 col-xs-12">
+                                                            <th style="width: 20%">
+                                                                <div style="text-align: center">
                                                                     <asp:LinkButton ID="lbtnFormaDePagoContado" runat="server" class="btn btn-info" Text="Cancelar" OnClick="btnSetearFormaDePagoPorContado">
                                                                          <i class="shortcut-icon icon-money"></i>
                                                                     </asp:LinkButton>
                                                                 </div>
-                                                                <div>Contado</div>
                                                             </th>
+
+                                                            <th style="width: 20%">
+                                                                <div style="text-align: center">
+                                                                    <div class="btn-group">
+                                                                        <asp:LinkButton ID="lbtnAccion" runat="server" class="btn btn-info dropdown-toggle" data-toggle="dropdown" Text="FC <span class='caret'></span>" />
+                                                                        <ul class="dropdown-menu">
+                                                                            <li>
+                                                                                <asp:LinkButton ID="lbtnFC" runat="server" OnClick="lbtnFC_Click">FC</asp:LinkButton>
+                                                                            </li>
+                                                                            <li>
+                                                                                <asp:LinkButton ID="lbtnNC" runat="server" Visible="false" OnClick="lbtnNC_Click">NC</asp:LinkButton>
+                                                                            </li>
+                                                                            <li>
+                                                                                <asp:LinkButton ID="lbtnND" runat="server" OnClick="lbtnND_Click">ND</asp:LinkButton>
+                                                                            </li>
+                                                                            <li class="divider"></li>
+                                                                            <li>
+                                                                                <asp:LinkButton ID="lbtnPRP" runat="server" OnClick="lbtnPRP_Click">PRP</asp:LinkButton>
+                                                                            </li>
+                                                                            <li>
+                                                                                <asp:LinkButton ID="lbNC" runat="server" Visible="false" OnClick="lbNC_Click">NC PRP</asp:LinkButton>
+                                                                            </li>
+                                                                            <li>
+                                                                                <asp:LinkButton ID="lbND" runat="server" OnClick="lbND_Click">ND PRP</asp:LinkButton>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                         
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -1870,8 +1880,7 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <td>
-                                                                &nbsp<asp:Label ID="lbFormaDePago" Text="Forma de pago: Contado" runat="server" Font-Bold="true" ForeColor="Black"/>
+                                                            <td>&nbsp<asp:Label ID="lbFormaDePago" Text="Forma de pago: Contado" runat="server" Font-Bold="true" ForeColor="Black" />
                                                             </td>
                                                         </tr>
                                                     </thead>
@@ -1891,29 +1900,41 @@
 
                                     </div>
 
-                                    <div class="col-md-6 col-xs-12">
+                                    <div class="col-md-8 col-xs-12">
 
                                         <div class="widget stacked">
                                             <div class="widget-content">
 
-                                                <div class="shortcuts">
-
-                                                    <div class="shortcuts" style="height: 400px; overflow-y: scroll;">
-                                                        <%--aca van a ir los ascx con los botones grupo--%>
-                                                        <asp:PlaceHolder ID="phImagenCuadroGrupos" runat="server" Visible="true"></asp:PlaceHolder>
-                                                        <asp:PlaceHolder ID="phImagenCuadroSubGruposGrupos" runat="server" Visible="false"></asp:PlaceHolder>
-                                                        <asp:PlaceHolder ID="phImagenCuadroArt" runat="server" Visible="false"></asp:PlaceHolder>
+                                                <div>
+                                                    <div class="shortcuts Scroll" style="height: 180px">
+                                                        <%--aca van a ir los ascx con los botones Articulos Favoritos--%>
+                                                        <div>
+                                                            <asp:PlaceHolder ID="phImagenCuadroArticulosFavoritos" runat="server" Visible="true"></asp:PlaceHolder>
+                                                        </div>
                                                     </div>
-                                                    <!-- /shortcuts -->
-
+                                                    <div class="shortcuts Scroll" style="height: 180px">
+                                                        <%--aca van a ir los ascx con los botones grupo--%>
+                                                        <div>
+                                                            <asp:PlaceHolder ID="phImagenCuadroGrupos" runat="server" Visible="true"></asp:PlaceHolder>
+                                                        </div>
+                                                    </div>
+                                                    <div class="shortcuts Scroll" style="height: 180px">
+                                                        <%--aca van a ir los ascx con los botones subgrupo--%>
+                                                        <div>
+                                                            <asp:PlaceHolder ID="phImagenCuadroSubGruposGrupos" runat="server" Visible="true"></asp:PlaceHolder>
+                                                        </div>
+                                                    </div>
+                                                    <div class="shortcuts Scroll" style="height: 180px">
+                                                        <%--aca van a ir los ascx con los botones articulos--%>
+                                                        <div>
+                                                            <asp:PlaceHolder ID="phImagenCuadroArt" runat="server" Visible="true"></asp:PlaceHolder>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             </div>
-                                            <!-- /widget-content -->
-
                                         </div>
                                         <!-- botones con imagenes -->
-
                                     </div>
                                 </div>
                             </div>
@@ -2157,7 +2178,15 @@
     </div>
 
     <!-- /main principal-->
+    <style>
+        .Scroll {
+        }
 
+            .Scroll div {
+                overflow-x: scroll;
+                display: flex;
+            }
+    </style>
 
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
@@ -2327,7 +2356,6 @@
             else {
                 document.getElementById('<%= txtNroSolicitud.ClientID %>').value = "";
                 document.getElementById('<%=txtAnticipo.ClientID%>').value = "";
-                <%--document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = ""--%>;
             }
 
         }
