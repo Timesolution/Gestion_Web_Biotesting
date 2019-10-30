@@ -179,6 +179,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Articulo art = contArt.obtenerArticuloByID(12);
                 ItemFactura item = new ItemFactura();
                 item.articulo = art;
+                item.articulo.descripcion = item.articulo.descripcion + " Numero " + txtNroLiqui.Text;
                 item.cantidad = 1;
                 item.precioUnitario = Convert.ToInt32(txtImporte.Text);
                 item.total = Convert.ToInt32(txtImporte.Text);
@@ -193,6 +194,7 @@ namespace Gestion_Web.Formularios.Facturas
                 f.sucursal.id = (int)Session["Login_SucUser"];
                 f.ptoV = contSuc.obtenerPtoVentaId((int)Session["Login_PtoUser"]);
                 f.tipo = contFact.obtenerTipoDocId(17);
+                f.comentario = txtNroLiqui.Text;
                 //CHEQUEO QUE EXISTA UN CLIENTE POR DEFECTO
                 if (suc.clienteDefecto < 0)
                 {
@@ -221,6 +223,7 @@ namespace Gestion_Web.Formularios.Facturas
                 f2.empresa.id = suc2.empresa.id;
                 f2.ptoV = contSuc.obtenerPtoVentaSucursal(suc2.id).First();
                 f2.tipo = contFact.obtenerTipoDocId(17);
+                f2.comentario = txtNroLiqui.Text;
                 //CHEQUEO QUE EXISTA UN CLIENTE POR DEFECTO
                 if (suc2.clienteDefecto < 0)
                 {
@@ -240,8 +243,8 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     //item
                     ItemFactura item2 = new ItemFactura();
-                    string[] producto = pr.Split(',');
-                    Articulo art2 = contArt.obtenerArticuloCodigo(producto[0].ToString());
+                    string[] producto = pr.Split(',');                    
+                    Articulo art2 = contArt.obtenerArticuloByID(Convert.ToInt32(producto[0]));
                     item2.articulo = art2;
                     item2.cantidad = Convert.ToDecimal(producto[1]);
                     item2.descuento = 0;
@@ -265,6 +268,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (i > 0 && j > 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Liquidaciones Cargadas Correctamente. ", ""));
+                    Response.Redirect("/Formularios/Facturas/FacturasF.aspx");
                 }
                 else
                 {
