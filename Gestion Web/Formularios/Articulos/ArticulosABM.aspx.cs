@@ -1130,10 +1130,7 @@ namespace Gestion_Web.Formularios.Articulos
                 artStore.IdArticulo = this.id;
 
                 artStore.Oferta = Convert.ToInt32(this.ListOferta.SelectedValue);
-                //artStore.Oferta = 0;
-                //if(this.ListOferta.SelectedValue == "SI")
-                //    artStore.Oferta = 1;
-
+         
                 artStore.Destacado = 0;
                 if (this.ListDestacado.SelectedValue == "SI")
                     artStore.Destacado = 1;
