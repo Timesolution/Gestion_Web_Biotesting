@@ -20,8 +20,6 @@
                                     <label class="col-md-4">Nombre</label>
                                     <div class="col-md-6">
                                         <asp:TextBox ID="txtNombre" runat="server" class="form-control"></asp:TextBox>
-                                        <%--<asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>--%>
-                                        <!-- /input-group -->
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtNombre" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="DivisaGroup"></asp:RequiredFieldValidator>
@@ -31,76 +29,33 @@
                                     <label class="col-md-4">Direccion</label>
                                     <div class="col-md-6">
                                         <asp:TextBox ID="txtDireccion" runat="server" class="form-control"></asp:TextBox>
-                                        <%--<asp:DropDownList ID="DropListEmpresa" runat="server" class="form-control" AutoPostBack="True"></asp:DropDownList>--%>
-
-                                        <!-- /input-group -->
                                     </div>
                                     <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtDireccion" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="DivisaGroup"></asp:RequiredFieldValidator>
                                     </div>
                                 </td>
                                 <td style="width: 10%">
-                                            <div class="col-md-1">
-                                                <div class="shortcuts">
-                                                    <%--                                                <a onclick="btnAgregar_Click" class="btn btn-default ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
-                                                    <i class="shortcut-icon icon-plus"></i>
-                                                    <span class="shortcut-label">Users</span>
-                                                </a>--%>
-                                                    <asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="DivisaGroup" />
+                                    <div class="col-md-1">
+                                        <div class="shortcuts">
+                                            <asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="DivisaGroup" />
 
-                                                </div>
-                                            </div>
-                                        </td>
-                                
-                                <%-- <td style="width: 5%">
-                                            <div class="shortcuts" style="height: 100%">
-                                               <a onclick="" class="btn btn-default ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
-                                                    <i class="shortcut-icon icon-pencil"></i>
-                                                    <%--<span class="shortcut-label">Users</span>
-                                                </a>
-                                                <asp:LinkButton ID="lbtn" runat="server" Text="<span class='shortcut-icon icon-pencil'></span>" class="btn btn-default" style="width: 100%"/>
-
-                                            </div>
-                                            <%--</div>
-                                        </td>--%>
-                                <%--<td style="width: 5%">
-                                            <div class="shortcuts" style="height: 100%">
-
-
-
-                                                <a onclick="" class="btn btn-default ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
-                                                    <i class="shortcut-icon icon-trash"></i>
-                                                    <%--<span class="shortcut-label">Users</span>
-                                                </a>
-                                            </div>
-                                            <%--</div>
-                                        </td>--%>
-                                <%--<td style="width: 5%">
-                                            <div class="shortcuts" style="height: 100%">
-
-
-
-                                                <a onclick="" class="btn btn-default ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
-                                                    <i class="shortcut-icon icon-print"></i>
-                                                    <%--<span class="shortcut-label">Users</span>--%>
-                                <%--     </a>
-                                            </div>--%>
-                                <%--</div>
-                                        </td>--%>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>&nbsp
                                 </td>
                             </tr>
                             <tr>
-
                                 <td style="width: 45%">
-                                    <label class="col-md-4">Cliente por Defecto</label>
+                                    <label class="col-md-4">Buscar cliente</label>
                                     <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
-                                        <%--<asp:TextBox ID="txtClienteDefecto" runat="server" class="form-control"></asp:TextBox>--%>
-                                        <%--<asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>--%>
-                                        <!-- /input-group -->
+                                        <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
+                                        <label class="col-md-4"></label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click"/>
                                     </div>
                                 </td>
                                 <td style="width: 10%">
@@ -109,6 +64,18 @@
                                         <asp:CheckBox ID="checkPrivada" runat="server" />
                                     </div>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 45%">
+                                    <label class="col-md-4">Cliente por Defecto</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                </td>                                
                             </tr>
 
                         </table>

@@ -129,6 +129,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         this.ListVendedor.SelectedValue = this.idVendedor.ToString();
                         this.Vendedor = idVendedor;
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
                     }
                     else if (perfil == "Cliente")
                     {
@@ -145,7 +146,7 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
-                    }
+                    }                    
 
                     if (idCliente > 0)
                     {
