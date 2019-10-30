@@ -24,24 +24,17 @@ namespace Gestion_Web.Formularios.Sucursales
         {
             try
             {
-                this.valor = Convert.ToInt32(Request.QueryString["valor"]);
-                this.idSucursal = Convert.ToInt32(Request.QueryString["id"]);
+                valor = Convert.ToInt32(Request.QueryString["valor"]);
+                idSucursal = Convert.ToInt32(Request.QueryString["id"]);
 
-                this.VerificarLogin();
-                this.cargarSucursal();
+                VerificarLogin();
+                cargarSucursal();
                 if (!IsPostBack)
                 {
-                    this.cargarClientes();
+                    cargarClientes();
                     if (valor == 2)
                     {
-                        Sucursal s = this.controlador.obtenerSucursalID(this.idSucursal);
-                        txtNombre.Text = s.nombre;
-                        txtDireccion.Text = s.direccion;
-                        this.DropListClientes.SelectedValue = s.clienteDefecto.ToString(); 
-                        if(s.clienteDefecto==-2)
-                        {
-                            this.checkPrivada.Checked = true;
-                        }
+                        CargarDatosSucursal();
                     }
                 }
             }
@@ -96,6 +89,28 @@ namespace Gestion_Web.Formularios.Sucursales
             catch
             {
                 return -1;
+            }
+        }
+
+        void CargarDatosSucursal()
+        {
+            controladorCliente controladorCliente = new controladorCliente();
+            Sucursal s = controlador.obtenerSucursalID(idSucursal);
+            txtNombre.Text = s.nombre;
+            txtDireccion.Text = s.direccion;
+            DropListClientes.SelectedValue = s.clienteDefecto.ToString();
+            if (DropListClientes.SelectedValue == "-1")
+            {
+                var c = controladorCliente.obtenerClienteID(s.clienteDefecto);
+                if (c != null)
+                {
+                    DropListClientes.Items.Add(new ListItem { Value = c.id.ToString(), Text = c.alias });
+                    DropListClientes.SelectedValue = c.id.ToString();
+                }
+            }
+            if (s.clienteDefecto == -2)
+            {
+                checkPrivada.Checked = true;
             }
         }
 
@@ -368,5 +383,29 @@ namespace Gestion_Web.Formularios.Sucursales
             }
         }
 
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = txtCodigoCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+                controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
+
+                if (dtClientes == null)
+                    return;
+
+                DropListClientes.Items.Clear();
+                DropListClientes.DataSource = dtClientes;
+                DropListClientes.DataValueField = "id";
+                DropListClientes.DataTextField = "alias";
+                DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
+                DropListClientes.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
     }
 }
