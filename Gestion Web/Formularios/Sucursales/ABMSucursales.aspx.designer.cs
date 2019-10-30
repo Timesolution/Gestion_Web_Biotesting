@@ -58,13 +58,13 @@ namespace Gestion_Web.Formularios.Sucursales {
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregar;
         
         /// <summary>
-        /// DropListClientes control.
+        /// txtCodigoCliente control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListClientes;
+        protected global::System.Web.UI.WebControls.TextBox txtCodigoCliente;
         
         /// <summary>
         /// checkPrivada control.
@@ -74,6 +74,15 @@ namespace Gestion_Web.Formularios.Sucursales {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox checkPrivada;
+        
+        /// <summary>
+        /// DropListClientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListClientes;
         
         /// <summary>
         /// UpdatePanel1 control.

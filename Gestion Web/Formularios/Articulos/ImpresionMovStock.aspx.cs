@@ -999,7 +999,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("StockPorTalles.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("StockPorTallesR", dtStockPorTalles);
+                ReportDataSource rds = new ReportDataSource("StockPorTalles", dtStockPorTalles);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
 

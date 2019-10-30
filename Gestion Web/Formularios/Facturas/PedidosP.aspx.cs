@@ -129,6 +129,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         this.ListVendedor.SelectedValue = this.idVendedor.ToString();
                         this.Vendedor = idVendedor;
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
                     }
                     else if (perfil == "Cliente")
                     {
@@ -145,14 +146,11 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
-                    }
+                    }                    
 
                     if (idCliente > 0)
                     {
-                        //this.lbtnFacturar.Enabled = true;
-                        //this.btnAccion.Disabled = false;
                         this.lbtnFacturar.Visible = true;
-                        //this.lbtnRemitir.Visible = true;
                     }
                 }
                 //busca por pedido
@@ -442,12 +440,6 @@ namespace Gestion_Web.Formularios.Facturas
                     item.Text = dr["nombre"].ToString() + " " + dr["apellido"].ToString();
                     ListVendedor.Items.Add(item);
                 }
-
-                //this.DropListVendedor.DataSource = dt;
-                //this.DropListVendedor.DataValueField = "id";
-                //this.DropListVendedor.DataTextField = "nombre" + "apellido";
-
-                //this.DropListVendedor.DataBind();
             }
             catch (Exception ex)
             {
@@ -717,26 +709,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                #region old
-                //selecciono un cliente y una sucursal
-                //if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
-                //{
-                //    List<Pedido> p = this.controlador.obtenerPedidosRango(fechaD, fechaH,fechaD, fechaH, idSuc, idCliente, idEstado, vendedor,this.tipoEntrega, this.tipoFecha, this.tipoFecha2);
-                //    this.cargarLista(p);
-                //    this.cargarLabel(fechaD, fechaH, idSuc, idCliente, idEstado);
-                //}
-                //else
-                //{
-                //    //List<Pedido> p = this.controlador.obtenerPedidosRango(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListEstado.SelectedValue), Convert.ToInt32(this.ListVendedor.SelectedValue));
-                //    List<Pedido> p = this.controlador.obtenerPedidosRango(this.txtFechaDesde.Text, this.txtFechaHasta.Text, this.txtFechaEntregaDesde.Text, this.txtFechaEntregaHasta.Text,
-                //        Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue),
-                //        Convert.ToInt32(this.DropListEstado.SelectedValue), Convert.ToInt32(this.ListVendedor.SelectedValue), Convert.ToInt32(this.ListTipoEntrega.SelectedValue),
-                //        Convert.ToInt32(this.RadioFechaPedido.Checked),Convert.ToInt32(this.RadioFechaEntrega.Checked));
-                //    this.cargarLista(p);
-                //    this.cargarLabel(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListEstado.SelectedValue));
-                //}
-                #endregion
-
                 if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
                 {
                     DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2);
