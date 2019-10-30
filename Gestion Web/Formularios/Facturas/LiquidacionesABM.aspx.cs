@@ -13,6 +13,7 @@ using Gestion_Api.Controladores;
 using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Disipar.Models;
+using Gestor_Solution.Controladores;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -170,11 +171,12 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorArticulo contArt = new controladorArticulo();
                 controladorSucursal contSuc = new controladorSucursal();
                 controladorFacturacion contFact = new controladorFacturacion();
+                controladorCliente contCliente = new controladorCliente();
 
                 // PREPARO PRIMER PRP///
-                Sucursal suc = contSuc.obtenerSucursalID((int)Session["Login_SucUser"]);
+                Sucursal suc = contSuc.obtenerSucursalID(Convert.ToInt32(ListSucursales.SelectedValue));
 
-                Articulo art = contArt.obtenerArticuloByID(5827);
+                Articulo art = contArt.obtenerArticuloByID(12);
                 ItemFactura item = new ItemFactura();
                 item.articulo = art;
                 item.cantidad = 1;
@@ -190,7 +192,6 @@ namespace Gestion_Web.Formularios.Facturas
                 f.empresa.id = (int)Session["Login_EmpUser"];
                 f.sucursal.id = (int)Session["Login_SucUser"];
                 f.ptoV = contSuc.obtenerPtoVentaId((int)Session["Login_PtoUser"]);
-                f.vendedor.id = (int)Session["Login_Vendedor"];
                 f.tipo = contFact.obtenerTipoDocId(17);
                 //CHEQUEO QUE EXISTA UN CLIENTE POR DEFECTO
                 if (suc.clienteDefecto < 0)
@@ -201,8 +202,9 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    f.cliente.id = suc.clienteDefecto;
+                    f.cliente = contCliente.obtenerClienteID(suc.clienteDefecto);
                 }
+                f.vendedor.id = f.cliente.vendedor.id;
                 f.formaPAgo = contFact.obtenerFormaPagoFP("Cuenta Corriente");
                 f.items.Add(item);
                 f.listaP.id = 1;
@@ -218,7 +220,6 @@ namespace Gestion_Web.Formularios.Facturas
                 f2.sucursal.id = suc2.id;
                 f2.empresa.id = suc2.empresa.id;
                 f2.ptoV = contSuc.obtenerPtoVentaSucursal(suc2.id).First();
-                f2.vendedor.id = (int)Session["Login_Vendedor"];
                 f2.tipo = contFact.obtenerTipoDocId(17);
                 //CHEQUEO QUE EXISTA UN CLIENTE POR DEFECTO
                 if (suc2.clienteDefecto < 0)
@@ -229,8 +230,9 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    f2.cliente.id = suc2.clienteDefecto;
+                    f2.cliente = contCliente.obtenerClienteID(suc2.clienteDefecto);
                 }
+                f2.vendedor.id = f2.cliente.vendedor.id;
                 f2.formaPAgo = contFact.obtenerFormaPagoFP("Cuenta Corriente");
 
                 string[] items2 = hiddenProd.Value.Split(';');
@@ -243,15 +245,15 @@ namespace Gestion_Web.Formularios.Facturas
                     item2.articulo = art2;
                     item2.cantidad = Convert.ToDecimal(producto[1]);
                     item2.descuento = 0;
-                    item2.precioUnitario = art2.precioVenta;
+                    item2.precioUnitario = 0;
                     item2.total = item2.precioUnitario * item2.cantidad;
-                    item2.precioSinIva = art2.precioSinIva;
+                    item2.precioSinIva = 0;
                     item2.datosExtras = null;
 
                     f2.items.Add(item2);
                 }
                 f2.listaP.id = 1;
-                f2.total = Convert.ToInt32(txtImporte.Text);
+                f2.total = 0;
 
                 //TERMINO SEGUNDO PRP///
 

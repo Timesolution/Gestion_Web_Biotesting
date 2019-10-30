@@ -357,7 +357,6 @@
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
-    <Content Include="Formularios\Facturas\LiquidacionesF.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
@@ -1457,13 +1456,6 @@
     </Compile>
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.designer.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Formularios\Facturas\LiquidacionesF.aspx.cs">
-      <DependentUpon>LiquidacionesF.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Formularios\Facturas\LiquidacionesF.aspx.designer.cs">
-      <DependentUpon>LiquidacionesF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx.cs">
       <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
