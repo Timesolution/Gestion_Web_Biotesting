@@ -21,6 +21,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Task_Api;
@@ -63,6 +64,7 @@ namespace Gestion_Web.Formularios.Facturas
         int flag_cambioFecha = 0;
 
         int flag_clienteModal = 0;
+        int idArticuloModalCalculadora;
 
         DataTable lstPagosTemp;
         DataTable dtTrazasTemp;
@@ -531,7 +533,7 @@ namespace Gestion_Web.Formularios.Facturas
                         cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
                     }
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.agregarArticuloAventa);
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
                     String path = Server.MapPath("../../images/Productos/" + item.id + "/");
                     if (Directory.Exists(path))
                     {
@@ -568,7 +570,8 @@ namespace Gestion_Web.Formularios.Facturas
                         cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
                     }
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.agregarArticuloAventa);
+                    //cuadroImagen.Linkbutton1.OnClientClick = "Javascript: MostrarCalculadora();";
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
                     String path = Server.MapPath("../../images/Productos/" + item.id + "/");
                     if (Directory.Exists(path))
                     {
@@ -678,13 +681,29 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void agregarArticuloAventa(object sender, EventArgs e)
+        private void MostrarPopUpCalculadora(object sender, EventArgs e)
         {
             var idLinkButton = (sender as LinkButton).ID;
             int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
-            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "MostrarCalculadora("+ idArt + ");", true);
+            Session.Add("idArticuloCalculadora", idArt.ToString());
+        }
 
-            this.guardarArticuloEnFactura(articulo, 1);
+        [WebMethod]
+        public static string SetearEnLaSessionIdArticuloYCantidad(string idArticulo, string cantidad)
+        {
+            Page objp = new Page();
+            objp.Session["idArticuloCalculadora"] = idArticulo;
+            objp.Session["cantidadArticuloCalculadora"] = cantidad;
+            return idArticulo;
+        }
+
+        public void agregarArticuloAventa_Click(object sender, EventArgs e)
+        {
+            int idArticulo = Convert.ToInt32(Session["idArticuloCalculadora"]);
+            decimal cantidadArticulo = Convert.ToDecimal(Session["cantidadArticuloCalculadora"]);
+            Articulo articulo = contArticulo.obtenerArticuloByID(idArticulo);
+            guardarArticuloEnFactura(articulo, cantidadArticulo);
         }
 
         #region FACTURAR IMAGENES PANADERIA
@@ -788,18 +807,6 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en agregarArticuloAventa. Excepcion: " + ex.Message));
-            }
-        }
-
-        protected void txtCantidadImagenes_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.agregarArticuloAventa(sender, e);
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando total. Verifique que ingreso numeros en cantidad imagenes" + ex.Message));
             }
         }
 
@@ -4246,9 +4253,6 @@ namespace Gestion_Web.Formularios.Facturas
                 return true;
             }
         }
-
-        #endregion
-        #region original
 
         #region items factura
 
@@ -10639,7 +10643,6 @@ namespace Gestion_Web.Formularios.Facturas
             Session.Remove("Factura");
             Response.Redirect("ABMFacturas.aspx");
         }
-
         #endregion
 
         protected void btnIrAHome_Click(object sender, EventArgs e)
