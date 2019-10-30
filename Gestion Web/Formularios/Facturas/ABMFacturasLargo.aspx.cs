@@ -3513,7 +3513,10 @@ namespace Gestion_Web.Formularios.Facturas
                     //agrego el porcentaje de descuento
                     fact.neto10 = Convert.ToDecimal(this.txtPorcDescuento.Text);
                     //obtengo el Neto no gravado || de los items con alicuota 0%
-                    fact.iva21 = fact.obtenerNetoNoGravado();                    
+                    fact.iva21 = fact.obtenerNetoNoGravado();
+
+                    if (checkFacturaCredito.Checked)
+                        controlador.facturaCredito = true;
 
                     int user = (int)Session["Login_IdUser"];
                     string presupuestos = Request.QueryString["prps"];
