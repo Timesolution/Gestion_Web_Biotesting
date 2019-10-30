@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -356,6 +356,7 @@
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
+    <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
@@ -1448,6 +1449,13 @@
     </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.designer.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.cs">
+      <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.designer.cs">
+      <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx.cs">
       <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
