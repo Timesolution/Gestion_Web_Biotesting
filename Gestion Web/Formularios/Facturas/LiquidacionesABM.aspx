@@ -143,7 +143,7 @@
 
             function succesAgregarPr(response) {
                 var obj = JSON.parse(response.d);
-                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(obj.id)) {
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(obj.codigo)) {
                     return;
                 }
                 $('#tableProductos').append(
@@ -154,10 +154,10 @@
                     "</tr>"
                 );
                 if (document.getElementById('<%= hiddenProd.ClientID%>').value == "") {
-                    document.getElementById('<%= hiddenProd.ClientID%>').value += obj.id + "," + obj.cantidad;
+                    document.getElementById('<%= hiddenProd.ClientID%>').value += obj.id + "," + obj.codigo + "," + obj.cantidad;
                 }
                 else {
-                    document.getElementById('<%= hiddenProd.ClientID%>').value += ";" + obj.id + "," + obj.cantidad;
+                    document.getElementById('<%= hiddenProd.ClientID%>').value += ";" + obj.id + "," + obj.codigo + "," + obj.cantidad;
                 }
             }
         </script>

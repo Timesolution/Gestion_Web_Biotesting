@@ -246,7 +246,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string[] producto = pr.Split(',');                    
                     Articulo art2 = contArt.obtenerArticuloByID(Convert.ToInt32(producto[0]));
                     item2.articulo = art2;
-                    item2.cantidad = Convert.ToDecimal(producto[1]);
+                    item2.cantidad = Convert.ToDecimal(producto[2]);
                     item2.descuento = 0;
                     item2.precioUnitario = 0;
                     item2.total = item2.precioUnitario * item2.cantidad;
