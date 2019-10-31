@@ -87,7 +87,7 @@
                                         <th style="width: 25%">Cod. Producto</th>
                                         <th style="width: 40%">Descripcion</th>
                                         <th style="width: 25%">Cant. Consumida</th>
-                                        <%--<th style="width:10%"></th>--%>
+                                        <th style="width:10%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -115,6 +115,17 @@
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
 
         <script>
+            function borrarProd(idprod) {
+                event.preventDefault();
+                var pepe = document.getElementById('<%= hiddenProd.ClientID%>').value;
+                var reg = "\\d+,+(" + idprod + ")+,+\\d*;*";
+                var re = new RegExp(reg);
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(idprod)) {
+                    document.getElementById('<%= hiddenProd.ClientID%>').value = document.getElementById('<%= hiddenProd.ClientID%>').value.replace(re, "");
+                    var pepe = document.getElementById('<%= hiddenProd.ClientID%>').value;
+                    document.getElementById("prod_"+idprod).outerHTML="";
+                }
+            }
             function pageLoad() {
                 $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 var date = new Date();
@@ -141,16 +152,20 @@
                 });
             }
 
+
             function succesAgregarPr(response) {
                 var obj = JSON.parse(response.d);
                 if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(obj.codigo)) {
                     return;
                 }
                 $('#tableProductos').append(
-                    "<tr>" +
+                    "<tr id=\"prod_"+obj.codigo+"\">" +
                     "<td> " + obj.codigo + "</td>" +
                     "<td> " + obj.descripcion + "</td>" +
                     "<td> " + obj.cantidad + "</td>" +
+                    "<td> <a class=\"btn btn-info \" onclick=\"javascript: return borrarProd('"+ obj.codigo.toString() +"');\" >" +
+                    "<i class=\"shortcut-icon icon-trash\"></i> </a> " +
+                    "</td > " +
                     "</tr>"
                 );
                 if (document.getElementById('<%= hiddenProd.ClientID%>').value == "") {
