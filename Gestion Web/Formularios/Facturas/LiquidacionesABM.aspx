@@ -12,7 +12,10 @@
                     <div class="col-md-9" style="margin-bottom: 10px">
                         <label class="col-md-2">Fecha Liquidacion</label>
                         <div class="col-md-3">
-                            <asp:TextBox runat="server" ID="txtFecha" AutoComplete="off" CssClass="form-control"></asp:TextBox>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
+                                <asp:TextBox runat="server" ID="txtFecha" style="text-align:right" AutoComplete="off" CssClass="form-control"></asp:TextBox>
+                            </div>
                         </div>
                         <div class="col-md-1">
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="  *  " ControlToValidate="txtFecha" ValidationGroup="LiquidacionesGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -39,11 +42,14 @@
                     <div class="col-md-9" style="margin-bottom: 10px">
                         <label class="col-md-2">Importe</label>
                         <div class="col-md-3">
-                            <asp:TextBox runat="server" ID="txtImporte" CssClass="form-control"></asp:TextBox>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <asp:TextBox runat="server" ID="txtImporte" style="text-align:right" CssClass="form-control"></asp:TextBox>
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="  *  " ControlToValidate="txtImporte" ValidationGroup="LiquidacionesGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="Solo acepta numeros" ControlToValidate="txtImporte" ValidationGroup="LiquidacionesGroup" Font-Bold="true" ForeColor="Red" ValidationExpression="^\d+$" />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="Solo acepta numeros" ControlToValidate="txtImporte" ValidationGroup="LiquidacionesGroup" Font-Bold="true" ForeColor="Red" ValidationExpression="^[1-9]\d*(\.\d+)?$" />
                         </div>
                     </div>
                 </div>
@@ -61,7 +67,7 @@
                     <div class="col-md-9" style="margin-bottom: 20px">
                         <label class="col-md-2">Cantidad</label>
                         <div class="col-md-3">
-                            <asp:TextBox runat="server" ID="txtCantidad" CssClass="form-control"></asp:TextBox>
+                            <asp:TextBox runat="server" ID="txtCantidad" style="text-align:right" CssClass="form-control"></asp:TextBox>
                         </div>
                         <div class="col-md-1">
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="  *  " ControlToValidate="txtCantidad" ValidationGroup="ProductosGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -81,7 +87,7 @@
                                         <th style="width: 25%">Cod. Producto</th>
                                         <th style="width: 40%">Descripcion</th>
                                         <th style="width: 25%">Cant. Consumida</th>
-                                        <%--<th style="width:10%"></th>--%>
+                                        <th style="width:10%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,8 +115,21 @@
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
 
         <script>
+            function borrarProd(idprod) {
+                event.preventDefault();
+                var pepe = document.getElementById('<%= hiddenProd.ClientID%>').value;
+                var reg = "\\d+,+(" + idprod + ")+,+\\d*;*";
+                var re = new RegExp(reg);
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(idprod)) {
+                    document.getElementById('<%= hiddenProd.ClientID%>').value = document.getElementById('<%= hiddenProd.ClientID%>').value.replace(re, "");
+                    var pepe = document.getElementById('<%= hiddenProd.ClientID%>').value;
+                    document.getElementById("prod_"+idprod).outerHTML="";
+                }
+            }
             function pageLoad() {
                 $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                var date = new Date();
+                document.getElementById('<%= txtFecha.ClientID%>').value = date.toLocaleDateString();
             }
 
             function AgregarProductoEnPH() {
@@ -133,20 +152,27 @@
                 });
             }
 
+
             function succesAgregarPr(response) {
                 var obj = JSON.parse(response.d);
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(obj.codigo)) {
+                    return;
+                }
                 $('#tableProductos').append(
-                    "<tr>" +
+                    "<tr id=\"prod_"+obj.codigo+"\">" +
                     "<td> " + obj.codigo + "</td>" +
                     "<td> " + obj.descripcion + "</td>" +
                     "<td> " + obj.cantidad + "</td>" +
+                    "<td> <a class=\"btn btn-info \" onclick=\"javascript: return borrarProd('"+ obj.codigo.toString() +"');\" >" +
+                    "<i class=\"shortcut-icon icon-trash\"></i> </a> " +
+                    "</td > " +
                     "</tr>"
                 );
                 if (document.getElementById('<%= hiddenProd.ClientID%>').value == "") {
-                    document.getElementById('<%= hiddenProd.ClientID%>').value += obj.codigo + "," + obj.cantidad;
+                    document.getElementById('<%= hiddenProd.ClientID%>').value += obj.id + "," + obj.codigo + "," + obj.cantidad;
                 }
                 else {
-                    document.getElementById('<%= hiddenProd.ClientID%>').value += ";" + obj.codigo + "," + obj.cantidad;
+                    document.getElementById('<%= hiddenProd.ClientID%>').value += ";" + obj.id + "," + obj.codigo + "," + obj.cantidad;
                 }
             }
         </script>
