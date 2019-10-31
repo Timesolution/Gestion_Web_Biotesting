@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using Gestor_Solution.Modelo;
@@ -27,13 +28,25 @@ namespace Gestion_Web.Formularios.Clientes
         controladorUsuario contUsuario = new controladorUsuario();
         ControladorEmpresa contEmpresa = new ControladorEmpresa();
         controladorSucursal contSucursal = new controladorSucursal();
-        class ClienteTemporal
+        class ClienteTemporalSpeed
         {
             public string Direccion { get; set; }
             public string Altura { get; set; }
             public string Localidad { get; set; }
             public string Canal { get; set; }
             public string AgrupCanal { get; set; }
+        }
+
+        class ClienteTemporalGestion
+        {
+            public string Apellido { get; set; }
+            public string Nombre { get; set; }
+            public string FechaNacimiento { get; set; }
+            public string Provincia { get; set; }
+            public string Telefono { get; set; }
+            public string CUIT { get; set; }
+            public string Grupo { get; set; }
+            public string Estado { get; set; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -88,7 +101,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        protected void lbtnImportarClientes_Click(object sender, EventArgs e)
+        protected void lbtnImportarUsuarios_Click(object sender, EventArgs e)
         {
             try
             {
@@ -119,7 +132,7 @@ namespace Gestion_Web.Formularios.Clientes
                     while ((linea = sr.ReadLine()) != null)
                     {
                         string[] datos = linea.Split(';');//obtengo datos del registro
-                        ClienteTemporal clienteTemporal = new ClienteTemporal();
+                        ClienteTemporalSpeed clienteTemporal = new ClienteTemporalSpeed();
                         if (datos.Count() >= 4)
                         {
                             List<string> datosExcel = datos.ToList();
@@ -145,7 +158,66 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        private int ImportarCliente(ClienteTemporal clienteTemporal)
+        protected void lbtnImportarClientes_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Boolean fileOK = false;
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension = Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    StreamReader sr = new StreamReader(FileUpload1.FileContent);
+                    Configuracion config = new Configuracion();
+                    string linea;
+                    int contador = 0;
+
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        string[] datos = linea.Split(';');//obtengo datos del registro
+                        ClienteTemporalGestion clienteTemporal = new ClienteTemporalGestion();
+                        if (datos.Count() >= 4)
+                        {
+                            List<string> datosExcel = datos.ToList();
+                            clienteTemporal.Apellido = datos[1].Trim();
+                            clienteTemporal.Nombre = datos[2].Trim();
+                            clienteTemporal.CUIT = datos[11].Trim();
+                            clienteTemporal.FechaNacimiento = datos[4].Trim();
+                            clienteTemporal.Provincia = datos[5].Trim();
+                            clienteTemporal.Telefono = datos[6].Trim();
+                            clienteTemporal.Grupo = datos[12].Trim();
+                            clienteTemporal.Estado = datos[14].Trim();
+
+                            int respuesta = ImportarClienteGestion(clienteTemporal);
+                            if (respuesta <= 0)
+                            {
+                                contador++;
+                            }
+                        }
+                    }
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Lista importada correctamente", null));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private int ImportarCliente(ClienteTemporalSpeed clienteTemporal)
         {
             try
             {
@@ -197,7 +269,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 cliente.origen = 1;
 
-                if(CrearElClienteSiNoExiste(cliente) > 0)
+                if (CrearElClienteSiNoExiste(cliente) > 0)
                 {
                     CrearUsuarioAlCliente(clienteTemporal, cliente);
                 }
@@ -208,6 +280,101 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando cliente. " + ex.Message));
                 return 0;
+            }
+        }
+
+        private int ImportarClienteGestion(ClienteTemporalGestion clienteTemporal)
+        {
+            try
+            {
+                if (Session["ClientesABM_Cliente"] == null)
+                {
+                    Cliente cli = new Cliente();
+                    Session.Add("ClientesABM_Cliente", cli);
+                }
+                Cliente cliente = Session["ClientesABM_Cliente"] as Cliente;
+                string perfil = Session["Login_NombrePerfil"] as string;
+
+                cliente.codigo = (contClienteEntity.ObtenerUltimoIdCliente() + 1).ToString();
+                cliente.tipoCliente.id = 4; //CONSUMIDOR FINAL
+                cliente.tipoCliente.descripcion = "CONSUMIDOR FINAL";
+                cliente.razonSocial = clienteTemporal.CUIT;
+
+                CrearElGrupoSiNoExiste(clienteTemporal.Grupo);
+
+                cliente.grupo.id = contGrupoCliente.obtenerGrupoDesc(clienteTemporal.Grupo).id;
+                cliente.categoria.id = 1;
+                cliente.estado.id = 1;
+                cliente.cuit = "00000000000";
+                cliente.iva = "13";
+                cliente.pais.id = 1;//ARGENTINA
+                cliente.expreso.id = 1;
+                string saldMax = "0";
+                cliente.saldoMax = Convert.ToDecimal(saldMax);
+                cliente.vencFC = 0;
+                cliente.descFC = 0;
+                cliente.observaciones = "";
+
+                //alerta cliente                
+                cliente.alerta.descripcion = "";
+                cliente.alerta.idCliente = cliente.id;
+
+                cliente.hijoDe = 0;
+                cliente.alias = cliente.codigo;
+
+                Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
+                cliente.sucursal.id = vendedor.sucursal;//preguntar
+
+                cliente.vendedor.id = vendedor.id;
+                cliente.lisPrecio.id = 1;
+                cliente.formaPago.id = 1;//CONTADO
+
+                //crear direccion por defecto
+                List<direccion> direcciones = new List<direccion>();
+                direcciones.Add(new direccion
+                {
+                    codPostal = "0000",
+                    direc = "Sin direccion",
+                    localidad = "Sin localidad",
+                    nombre = "Sin nombre",
+                    pais = "Sin Pais",
+                    provincia = "Sin provincia"
+                });
+                cliente.direcciones = direcciones;
+
+                cliente.origen = 1;
+
+                if (CrearElClienteSiNoExiste(cliente, clienteTemporal.CUIT) > 0)
+                {
+                    string cel = clienteTemporal.Telefono.Substring(clienteTemporal.Telefono.Length - 10, 10);
+
+                    contClienteEntity.agregarClienteDatos(new Cliente_Datos
+                    {
+                        IdCliente = cliente.id,
+                        Celular = cel
+                    });
+
+                    CrearElClienteEstadoSiNoExiste(clienteTemporal.Estado);
+                    return 1;
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando cliente. " + ex.Message));
+                return -1;
+            }
+        }
+
+        void CrearElClienteEstadoSiNoExiste(string estadoCliente)
+        {
+            try
+            {
+                contClienteEntity.Crear_EstadoCliente(estadoCliente);
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -245,7 +412,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        private List<direccion> obtenerListDirecciones(ClienteTemporal clienteTemporal, string codigoPostal)
+        private List<direccion> obtenerListDirecciones(ClienteTemporalSpeed clienteTemporal, string codigoPostal)
         {
             try
             {
@@ -286,7 +453,24 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        void CrearUsuarioAlCliente(ClienteTemporal clienteTemporal, Cliente cliente)
+        int CrearElClienteSiNoExiste(Cliente cliente, string CUIT)
+        {
+            try
+            {
+                int respuesta = 0;
+                if (!contClienteEntity.ExisteClienteConEsteCUITEnElCampoRazonSocial(CUIT))
+                {
+                    respuesta = contCliente.agregarCliente(cliente);
+                }
+                return respuesta;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        void CrearUsuarioAlCliente(ClienteTemporalSpeed clienteTemporal, Cliente cliente)
         {
             try
             {
@@ -307,7 +491,7 @@ namespace Gestion_Web.Formularios.Clientes
                 usuario.estado = 1;
                 usuario.vendedor = vendedorCliente;
                 usuario.ptoVenta = puntoDeVenta.FirstOrDefault();
-                contUsuario.agregarUsuarios(usuario);  
+                contUsuario.agregarUsuarios(usuario);
             }
             catch (Exception ex)
             {
