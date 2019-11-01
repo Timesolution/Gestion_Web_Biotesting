@@ -30,24 +30,23 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-md-2">Importar clientes</label>
+                                <label class="col-md-2">Archivo a Importar</label>
                                 <div class="col-md-3">
                                     <asp:FileUpload ID="FileUpload1" runat="server" />
                                     <asp:Label runat="server" ID="lbDropListEmpresaError" Style="display: none" Text="Seleccione un item." ForeColor="Red" Font-Bold="true"></asp:Label>
                                 </div>
                             </div>
-
                         </div>
-
-
 
                         <div class="form-horizontal col-md-12">
                             <div class="col-md-3">
-                                <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="lbtnImportarClientes_Click" />
+                                <asp:Button ID="btnImportarUsuarios" runat="server" Text="Importar Usuarios" class="btn btn-success" OnClick="lbtnImportarUsuarios_Click" />
+                            </div>
+                            <div class="col-md-3">
+                                <asp:Button ID="btnImportarClientes" runat="server" Text="Importar Clientes" class="btn btn-success" OnClick="lbtnImportarClientes_Click" />
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
