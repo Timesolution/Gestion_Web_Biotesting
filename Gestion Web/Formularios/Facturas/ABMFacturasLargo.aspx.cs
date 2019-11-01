@@ -2700,9 +2700,9 @@ namespace Gestion_Web.Formularios.Facturas
                         int i = validarSaldoTarjeta();
                         if (i == 1)
                         {
-                            int j = validarUltimaFactura();
-                            if (j == 1)
-                            {
+                            //int j = validarUltimaFactura();
+                            //if (j == 1)
+                            //{
                                 int t = this.validarTrazasCargadas();
                                 if (t == 1)
                                 {
@@ -2721,11 +2721,11 @@ namespace Gestion_Web.Formularios.Facturas
                                 {
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.1 \", {type: \"error\"});", true);
                                 }
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                            }
+                            //}
+                            //else
+                            //{
+                            //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                            //}
                         }
                         else
                         {
@@ -2735,9 +2735,9 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        int j = validarUltimaFactura();//solo para preimpresa
-                        if (j == 1)
-                        {
+                        //int j = validarUltimaFactura();//solo para preimpresa
+                        //if (j == 1)
+                        //{
                             int t = this.validarTrazasCargadas();
                             if (t == 1)
                             {
@@ -2755,12 +2755,12 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.2 \", {type: \"error\"});", true);
                             }
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                            this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
-                        }
+                        //}
+                        //else
+                        //{
+                        //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                        //    this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
+                        //}
                     }
                 }
                 else
@@ -3623,9 +3623,9 @@ namespace Gestion_Web.Formularios.Facturas
                     int i = validarSaldoTarjeta();
                     if (i == 1)
                     {
-                        int j = validarUltimaFactura();
-                        if (j == 1)
-                        {
+                        //int j = validarUltimaFactura();
+                        //if (j == 1)
+                        //{
                             int t = this.validarTrazasCargadas();
                             if (t == 1)
                             {
@@ -3650,11 +3650,11 @@ namespace Gestion_Web.Formularios.Facturas
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se tiene suficientes trazabilidades para la cantidad a vender. \");", true);
                                 }
                             }
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                        }
+                        //}
+                        //else
+                        //{
+                        //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                        //}
                     }
                     else
                     {
@@ -3664,9 +3664,9 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    int j = validarUltimaFactura();
-                    if (j == 1)
-                    {
+                    //int j = validarUltimaFactura();
+                    //if (j == 1)
+                    //{
                         int t = this.validarTrazasCargadas();
                         if (t == 1)
                         {
@@ -3684,12 +3684,12 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.4 \", {type: \"error\"});", true);
                         }
-                    }
-                    else
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                        this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
-                    }
+                    //}
+                    //else
+                    //{
+                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                    //    this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
+                    //}
                 }
             }
 
