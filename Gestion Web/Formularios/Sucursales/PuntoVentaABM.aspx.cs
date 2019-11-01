@@ -211,6 +211,14 @@ namespace Gestion_Web.Formularios.Sucursales
                     {
                         ptoVenta.retiene_gan = false;
                     }
+                    if (this.chkPyme.Checked)
+                    {
+                        ptoVenta.FacturaPyme = 1;
+                    }
+                    else
+                    {
+                        ptoVenta.FacturaPyme = 0;
+                    }
                     ptoVenta.nombre_fantasia = this.txtNombreFantasia.Text;
                     ptoVenta.direccion = this.txtDireccion.Text;
                     ptoVenta.empresa.id = empresa;
@@ -275,7 +283,14 @@ namespace Gestion_Web.Formularios.Sucursales
                     {
                         ptoVenta.retiene_ib = false;
                     }
-
+                    if (this.chkPyme.Checked)
+                    {
+                        ptoVenta.FacturaPyme = 1;
+                    }
+                    else
+                    {
+                        ptoVenta.FacturaPyme = 0;
+                    }
                     ptoVenta.nombre_fantasia = this.txtNombreFantasia.Text;
                     ptoVenta.direccion = this.txtDireccion.Text;
                     ptoVenta.empresa.id = empresa;

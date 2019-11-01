@@ -87,7 +87,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 VerificarLogin();
                 ConfigurarModoCredito();
-                
+
                 idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
 
                 _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
@@ -178,14 +178,14 @@ namespace Gestion_Web.Formularios.Facturas
                         int idRemito = Convert.ToInt32(Request.QueryString["id_rem"]);
                         GenerarFacturaRemito(idRemito);
                     }
-                    
+
                     //vengo desde pedidos y voy a facturar
                     if (this.accion == 5)
                     {
                         string pedidos = Request.QueryString["pedidos"];
                         GenerarFacturaPedido(pedidos);
                     }
-                    
+
                     //genero nota de creditos desde facturas
                     if (this.accion == 6)
                     {
@@ -279,7 +279,7 @@ namespace Gestion_Web.Formularios.Facturas
                         txtCodigo.Text = codigoArticulo;
                         txtCantidad.Text = "1";
                         cargarProducto(txtCodigo.Text);
-                        if(config.commitante != "1")
+                        if (config.commitante != "1")
                             CargarProductoAFactura();
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     }
@@ -437,7 +437,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             //if (puntoDeVenta.formaFacturar == "Electronica")
             //{
-                //this.cargarPaisesExportacion();
+            //this.cargarPaisesExportacion();
             //}
 
             if (puntoDeVenta.formaFacturar == "Preimpresa")
@@ -2692,7 +2692,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                             return;
                         }
-                    }                    
+                    }
 
                     if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
                     {
@@ -2780,7 +2780,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(factura == null)
+                if (factura == null)
                     factura = Session["Factura"] as Factura;
 
                 if (!factura.tipo.tipo.ToLower().Trim().Contains("factura a") && !factura.tipo.tipo.ToLower().Trim().Contains("nota de credito a") && !factura.tipo.tipo.ToLower().Trim().Contains("nota de debito a"))
@@ -2799,16 +2799,16 @@ namespace Gestion_Web.Formularios.Facturas
                 string neto27Comentario = "NETO 27%: $" + decimal.Round(factura.sumaNeto27, 2).ToString() + "\n";
                 string iva10Comentario = "IVA 10.5%: $" + decimal.Round(factura.sumaIva105, 2).ToString() + "\n";
                 string iva21Comentario = "IVA 21%: $" + decimal.Round(factura.sumaIva21, 2).ToString() + "\n";
-                string iva27Comentario = "IVA 27%: $" + decimal.Round(factura.sumaIva27, 2).ToString();                
+                string iva27Comentario = "IVA 27%: $" + decimal.Round(factura.sumaIva27, 2).ToString();
 
-                string ivaYNetoDiscriminados = "\n" + netoNoGravadoComentario + neto10Comentario + neto21Comentario + neto27Comentario + iva10Comentario + iva21Comentario + iva27Comentario +  "\n";
+                string ivaYNetoDiscriminados = "\n" + netoNoGravadoComentario + neto10Comentario + neto21Comentario + neto27Comentario + iva10Comentario + iva21Comentario + iva27Comentario + "\n";
 
                 txtComentarios.Text += ivaYNetoDiscriminados;
                 factura.comentarioFacturaImpuestosDetallados = ivaYNetoDiscriminados;
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al agregar los comentarios de iva y neto " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al agregar los comentarios de iva y neto " + ex.Message);
             }
         }
 
@@ -3348,7 +3348,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtRetencion.Text = decimal.Round(this.nuevaFactura.retencion, 2).ToString();//PERCERPCION
 
                 this.txtTotal.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
-                this.txtImporteFinanciar.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();                
+                this.txtImporteFinanciar.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
 
                 try
                 {
@@ -3615,7 +3615,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         return;
                     }
-                }                
+                }
 
                 if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
                 {
@@ -3763,7 +3763,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.agregarDatosCombustibleAComentarios(fact);
                     }
                     fact.vendedor.id = Convert.ToInt32(this.DropListVendedor.SelectedValue);
-                    
+
                     fact.fechaEntrega = this.txtFechaEntrega.Text;
                     fact.horaEntrega = this.txtHorarioEntrega.Text;
                     fact.bultosEntrega = this.txtBultosEntrega.Text;
@@ -5146,6 +5146,25 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 }
+                //verifico si el punto de venta es pyme
+                if (pv.FacturaPyme == 1)
+                {
+                    this.checkFacturaCredito.Visible = true;
+                }
+                else
+                {
+                    this.checkFacturaCredito.Visible = false;
+                }
+                if (pv.formaFacturar == "Electronica")
+                {
+                    this.txtFecha.Attributes.Remove("Disabled");
+                    this.hiddenPtoVtaTipo.Value = "1";
+                }
+                else
+                {
+                    this.hiddenPtoVtaTipo.Value = "0";
+                }
+
                 //verifico el cierre de caja del punto de venta
                 this.verificarCierreCaja();
             }
@@ -10925,9 +10944,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(Convert.ToInt32(Session["Login_IdUser"]),"Error","Error al comprobar campos seleccionados! " + ex.Message);
+                Log.EscribirSQL(Convert.ToInt32(Session["Login_IdUser"]), "Error", "Error al comprobar campos seleccionados! " + ex.Message);
                 return new Tuple<string, bool>("Error al comprobar campos seleccionados!", false);
-            }            
+            }
         }
 
         #region javascript Calls

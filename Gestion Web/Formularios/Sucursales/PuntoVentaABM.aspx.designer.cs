@@ -175,6 +175,15 @@ namespace Gestion_Web.Formularios.Sucursales {
         protected global::System.Web.UI.WebControls.TextBox txtCAIVencimiento;
         
         /// <summary>
+        /// chkPyme control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkPyme;
+        
+        /// <summary>
         /// panelContacto control.
         /// </summary>
         /// <remarks>

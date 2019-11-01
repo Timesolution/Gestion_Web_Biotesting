@@ -50,7 +50,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.generarReporte2(idPresupuesto);
                     }
                     //factura a,e
-                    if(accion==1)
+                    if (accion == 1)
                     {
                         this.generarReporte3(idPresupuesto);
                     }
@@ -116,7 +116,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        
+
         //Presupuesto
         private void generarReporte2(int idPresupuesto)
         {
@@ -125,7 +125,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Factura fact = this.controlador.obtenerFacturaId(idPresupuesto);
                 //obtengo detalle de items
                 //DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
-                DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);                
+                DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
 
                 DataRow srCliente = dtDetalle.Rows[0];
@@ -141,10 +141,10 @@ namespace Gestion_Web.Formularios.Facturas
                 try
                 {
                     //obtengo el saldo de la cuenta corriente del cliente                
-                    DataTable dt = this.contCobranza.obtenerTablaTopClientes(DateTime.Today.ToString("dd/MM/yyyy"), fact.fecha.AddHours(23).ToString("dd/MM/yyyy"), fact.cliente.id, 0, fact.sucursal.id, 1,0);
+                    DataTable dt = this.contCobranza.obtenerTablaTopClientes(DateTime.Today.ToString("dd/MM/yyyy"), fact.fecha.AddHours(23).ToString("dd/MM/yyyy"), fact.cliente.id, 0, fact.sucursal.id, 1, 0);
                     saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en generarReporte2. " + ex.Message);
                 }
@@ -161,7 +161,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (String.IsNullOrEmpty(telefono))
                 {
                     telefono = "-";
-                }   
+                }
                 //direccion cliente
                 string direLegal = "-";
                 string direEntrega = "-";
@@ -247,7 +247,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds2 = new ReportDataSource("ItemsPresupuesto", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("DatosPresupuesto", dtDatos);
                 ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
-                
+
 
                 ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
@@ -263,12 +263,12 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param6 = new ReportParameter("CodigoCliente", codigoCliente);
                 ReportParameter param7 = new ReportParameter("TelefonoEntrega", telefono);
                 ReportParameter param8 = new ReportParameter("ParamCambioDolar", cotizacionFecha);
-                
+
                 //ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
                 //this.ReportViewer1.LocalReport.SetParameters(param32);
 
                 ReportParameter param33 = new ReportParameter("ParamSaldoCtaCte", saldoCtaCte.ToString());
-                
+
                 ReportParameter param40 = new ReportParameter("ParamNroPedido", nroPedido);
                 ReportParameter param41 = new ReportParameter("ParamNroRemito", nroRemito);
 
@@ -276,14 +276,14 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
-                this.ReportViewer1.LocalReport.DataSources.Add(rds4);       
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
 
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
                 this.ReportViewer1.LocalReport.SetParameters(param03);
                 this.ReportViewer1.LocalReport.SetParameters(param04);
-                
+
                 this.ReportViewer1.LocalReport.SetParameters(param4);
                 this.ReportViewer1.LocalReport.SetParameters(param5);
                 this.ReportViewer1.LocalReport.SetParameters(param6);
@@ -307,17 +307,17 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //get pdf content
 
-                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);                
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                 this.Response.Clear();
                 this.Response.Buffer = true;
                 this.Response.ContentType = "application/pdf";
                 this.Response.AddHeader("content-length", pdfContent.Length.ToString());
                 this.Response.BinaryWrite(pdfContent);
-                
+
                 this.Response.End();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando reporte de Presupuesto. " + ex.Message);
             }
@@ -338,7 +338,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //datos de encabezado y pie
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
                 //nro remito factura
-                DataTable dtNroRemito = controlador.obtenerNroRemitoByFactura(idPresupuesto);                
+                DataTable dtNroRemito = controlador.obtenerNroRemitoByFactura(idPresupuesto);
 
                 //datos del emisor
                 String razonSoc = String.Empty;
@@ -389,32 +389,22 @@ namespace Gestion_Web.Formularios.Facturas
                     //verifico cual es la empresa de la factura
                     //if ((int)row[0] == )
                     //{
-                        cuitEmpresa = row.ItemArray[1].ToString();
-                        razonSoc = row.ItemArray[2].ToString();
-                        ingBrutos = row.ItemArray[3].ToString();
-                        fechaInicio = Convert.ToDateTime(row["Fecha Inicio"]).ToString("dd/MM/yyyy");// .ItemArray[4].ToString();
-                        //fechaInicio = Convert.ToDateTime(fechaInicio).ToShortDateString();
-                        condIVA = row.ItemArray[5].ToString();
-                        direComer = row.ItemArray[6].ToString();
+                    cuitEmpresa = row.ItemArray[1].ToString();
+                    razonSoc = row.ItemArray[2].ToString();
+                    ingBrutos = row.ItemArray[3].ToString();
+                    fechaInicio = Convert.ToDateTime(row["Fecha Inicio"]).ToString("dd/MM/yyyy");// .ItemArray[4].ToString();
+                                                                                                 //fechaInicio = Convert.ToDateTime(fechaInicio).ToShortDateString();
+                    condIVA = row.ItemArray[5].ToString();
+                    direComer = row.ItemArray[6].ToString();
                     //}
                 }
-                
+
                 //datos factura
                 string auxNro = drDatosFactura["Numero"].ToString();
                 nroFactura = auxNro.Substring(auxNro.Length - 13, 13);
                 //nombre tipo documento para el parametro
                 tipoDoc = auxNro.Substring(0, auxNro.Length - 16);
                 //letra y cod. factura                
-                if (tipoDoc == "Factura E ")
-                {
-                    letraDoc = "E";
-                    CodigoDoc = "Cod. 19";
-                }
-                else
-                {
-                    letraDoc = "A";
-                    CodigoDoc = "Cod. 01";
-                }
 
                 if (drDatosFactura["Cae"] != null)
                 {
@@ -427,12 +417,12 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 ptoVta = drDatosFactura["ptoVenta"].ToString();
                 fechaVto = Convert.ToDateTime(drDatosFactura["Fecha"]).AddDays(10).ToString("ddMMyyyy");
-                codBarra = controlador.obtenerCodigoBarraFactura(drDatosFactura["CUIT"].ToString(),ptoVta,CAE,fechaVto);
-                
+                codBarra = controlador.obtenerCodigoBarraFactura(drDatosFactura["CUIT"].ToString(), ptoVta, CAE, fechaVto);
+
                 if (string.IsNullOrEmpty(codBarra))
                 {
                     codBarra = "0";
- 
+
                 }
 
                 //verifico si el pto de venta es preimpresa para mostrar o no el logo de "cbte no fiscal".
@@ -444,15 +434,32 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         esPreimpresa = 1;
                     }
-                }                
+                }
 
+                if (tipoDoc == "Factura E ")
+                {
+                    letraDoc = "E";
+                    CodigoDoc = "Cod. 19";
+                }
+                else
+                {
+                    letraDoc = "A";
+                    if (pv.FacturaPyme == 1)
+                    {
+                        CodigoDoc = "Cod. 201";
+                    }
+                    else
+                    {
+                        CodigoDoc = "Cod. 01";
+                    }
+                }
                 DataRow srCliente = dtDetalle.Rows[0];
                 string codigoCliente = srCliente[5].ToString();
 
                 //DataTable dtTotal = controlador.obtenerTotalPresupuesto(idPresupuesto);
                 DataTable dtTotales = controlador.obtenerTotalPresupuesto2(idPresupuesto);
 
-                AgregarIvasToTotalesDeFactura(dtTotales,fact);
+                AgregarIvasToTotalesDeFactura(dtTotales, fact);
 
                 DataRow dr = dtTotales.Rows[0];
 
@@ -463,7 +470,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error buscando saldoCtaCte. " + ex.Message);
                 }
@@ -482,7 +489,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //total de la factura
                 decimal total = Convert.ToDecimal(dr[2]);
                 //letras
-                string totalS =  Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+                string totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
                 //string totalS = Numalet.ToCardinal("18.25");
                 //cant unidades
                 decimal cant = 2;
@@ -497,7 +504,7 @@ namespace Gestion_Web.Formularios.Facturas
                 String textoDolares = String.Empty;
                 if (dolar != null)
                 {
-                    TotalDolares = Decimal.Round((total / dolar.cambio),3);
+                    TotalDolares = Decimal.Round((total / dolar.cambio), 3);
                 }
                 if (tipoDoc.Contains("Nota de"))
                 {
@@ -506,7 +513,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
-                }                
+                }
 
                 //direccion cliente
                 string direLegal = "-";
@@ -553,7 +560,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc + "/" + pv.id + "/Logo.jpg");
                 Log.EscribirSQL(1, "INFO", "Ruta Logo " + logo);
                 BarcodeProfessional bcp = new BarcodeProfessional();
-                
+
                 //Barcode settings
                 bcp.Symbology = Neodynamic.WebControls.BarcodeProfessional.Symbology.Code39;
                 bcp.BarHeight = 0.25f;
@@ -569,7 +576,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //Generate the barcode image and store it into the Barcode Column
 
                 //Condición de Pago
-                string condicionPago = String.Empty; 
+                string condicionPago = String.Empty;
                 if (fact.formaPAgo.id == 7)
                 {
                     condicionPago = fact.cliente.vencFC.ToString();
@@ -595,7 +602,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaRE.rdlc");
                     }
-                    
+
                 }
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
@@ -615,8 +622,8 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param31a = new ReportParameter("ParamNoGravado", conceptos.ToString("C"));//Conc No Grav
                 //logo
                 //ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///C:\Imagen\Logo.jpg");
-                ReportParameter param32 = new ReportParameter("ParamImagen",  @"file:///" + logo);
-                
+                ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+
                 Log.EscribirSQL(1, "INFO", @"Asigno Ruta file:///" + logo);
 
                 //string imagePath = Server.MapPath("~/images/Facturas/GS_LOGO.png");
@@ -732,7 +739,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string[] streams;
 
                 //get pdf content
-                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);               
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                 this.Response.Clear();
                 this.Response.Buffer = true;
@@ -805,7 +812,7 @@ namespace Gestion_Web.Formularios.Facturas
                 var drDatosFactura = dtDetalle.Rows[0];
                 //datos empresa emisora
                 DataTable dtEmpresa = controlEmpresa.obtenerEmpresaById((int)drDatosFactura["Empresa"]);
-                
+
                 String razonSoc = String.Empty;
                 String direComer = String.Empty;
                 String condIVA = String.Empty;
@@ -827,7 +834,7 @@ namespace Gestion_Web.Formularios.Facturas
                     ingBrutos = row.ItemArray[3].ToString();
                     fechaInicio = Convert.ToDateTime(row["Fecha Inicio"]).ToString("dd/MM/yyyy");// .ItemArray[4].ToString();                    
                     condIVA = row.ItemArray[5].ToString();
-                    direComer = row.ItemArray[6].ToString();                    
+                    direComer = row.ItemArray[6].ToString();
                 }
 
                 //datos factura
@@ -835,9 +842,9 @@ namespace Gestion_Web.Formularios.Facturas
                 nroFactura = auxNro.Substring(auxNro.Length - 13, 13);
 
                 tipoDoc = auxNro.Substring(0, auxNro.Length - 16);
-                if(configuracion.monotributo == "1")
+                if (configuracion.monotributo == "1")
                 {
-                    if(tipoDoc.Contains("Debito"))
+                    if (tipoDoc.Contains("Debito"))
                     {
                         tipoDoc = "Nota de Debito C";
                     }
@@ -853,7 +860,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                 }
-                
+
 
                 if (drDatosFactura["Cae"].ToString() != "")
                 {
@@ -892,7 +899,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     dtDetalle.Rows[0]["IVA"] = dtDetalle.Rows[0]["IVA2"];
                 }
-                
+
                 //datos cotizacion al momento de fc
                 if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["TipoCambio"].ToString()))
                 {
@@ -916,12 +923,12 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtTotales = controlador.obtenerTotalPresupuesto2(idPresupuesto);
                 DataRow dr = dtTotales.Rows[0];
                 //neto no grabado
-                decimal subtotal = Convert.ToDecimal(dr[4]);                                
+                decimal subtotal = Convert.ToDecimal(dr[4]);
                 //subtotal menos el descuento
                 decimal subtotal2 = Convert.ToDecimal(dr[5]);
                 //iva discriminado de la fact
                 decimal iva = Convert.ToDecimal(dr[3]);
-                subtotal = subtotal + iva;                
+                subtotal = subtotal + iva;
                 //total de la factura
                 decimal total = Convert.ToDecimal(dr[2]);
                 //retenciones
@@ -931,14 +938,14 @@ namespace Gestion_Web.Formularios.Facturas
                 //conceptos no gravados(combustible)
                 decimal conceptos = Convert.ToDecimal(dr["iva21"]);
                 //decimal descuento = Convert.ToDecimal(dr[1]);
-               //sumo el total de items - total de factura y saco el descuento
+                //sumo el total de items - total de factura y saco el descuento
                 DataTable dtDescuento = controlador.obtenerTotalItem2(idPresupuesto);
                 decimal descuento = 0;
                 foreach (DataRow drr in dtDescuento.Rows)
                 {
                     descuento = Convert.ToDecimal(drr[0]);
-                }                
-                descuento = decimal.Round(((descuento + retencion) - total),2);
+                }
+                descuento = decimal.Round(((descuento + retencion) - total), 2);
 
                 if (Math.Abs(descuento) == Convert.ToDecimal(0.01))
                 {
@@ -1038,16 +1045,16 @@ namespace Gestion_Web.Formularios.Facturas
                 //Create an instance of Barcode Professional
                 BarcodeProfessional bcp = new BarcodeProfessional();
                 //Barcode settings                
-                bcp.Symbology = Neodynamic.WebControls.BarcodeProfessional.Symbology.Code39;        
+                bcp.Symbology = Neodynamic.WebControls.BarcodeProfessional.Symbology.Code39;
                 bcp.BarHeight = 0.25f;
-                bcp.Code = codBarra;                
+                bcp.Code = codBarra;
                 byte[] prodBarcode = bcp.GetBarcodeImage(System.Drawing.Imaging.ImageFormat.Png);
                 DataTable dtImagen = new DataTable();
                 DataColumn ColumnImagen = new DataColumn("Imagen", Type.GetType("System.Byte[]"));
-                dtImagen.Columns.Add(ColumnImagen);                
+                dtImagen.Columns.Add(ColumnImagen);
                 dtImagen.Rows.Add(prodBarcode);
                 //Generate the barcode image and store it into the Barcode Column
-        
+
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaRB.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
@@ -1156,9 +1163,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando reporte de factura B. " + ex.Message );
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error generando reporte de factura B. " + ex.Message);
             }
-        }                
+        }
         //Remito
         private void generarReporte5(int idRemito)
         {
@@ -1179,8 +1186,8 @@ namespace Gestion_Web.Formularios.Facturas
                 Sucursal sucursalOrigen = new Sucursal();
                 Sucursal sucursalRemitida = new Sucursal();
                 //Comentario factura
-                DataTable dtComentariosFactura = new DataTable();                
-                
+                DataTable dtComentariosFactura = new DataTable();
+
                 //Si el remito es de una factura.
                 if (dtNroFacturas.Rows.Count > 0)
                 {
@@ -1292,7 +1299,7 @@ namespace Gestion_Web.Formularios.Facturas
                 catch
                 { }
 
-                
+
 
                 DataTable dtComentarios = contRemito.obtenerComentarioRemito(idRemito);
 
@@ -1323,7 +1330,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param7 = new ReportParameter("TotalLetras", totalS);
                 ReportParameter param8 = new ReportParameter("TotalUnidades", cant.ToString());
 
-                ReportParameter param9 = new ReportParameter("ParamSenia", "Seña: $"+senia.ToString());
+                ReportParameter param9 = new ReportParameter("ParamSenia", "Seña: $" + senia.ToString());
                 ReportParameter param10 = new ReportParameter("ParamSeniaLetras", seniaLetras);
 
                 ReportParameter param11 = new ReportParameter("ParamSucursalRemitida", sucursalRemitida.nombre);
@@ -1346,7 +1353,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     catch
                     {
-                        
+
                     }
                 }
 
@@ -1355,15 +1362,15 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter param35 = new ReportParameter("CAI", cai);
 
-                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);     
-                           
+                ReportParameter param36 = new ReportParameter("CAIVencimiento", fechaVencCai);
+
                 ReportParameter param37 = new ReportParameter("Neto", neto.ToString("C"));
 
                 ReportParameter param38 = new ReportParameter("Euro", euro.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                this.ReportViewer1.LocalReport.DataSources.Add(rds2);                
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds4);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds5);
@@ -1430,7 +1437,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCompraEntity contCompra = new controladorCompraEntity();
                 ControladorArticulosEntity contArticulosEnt = new ControladorArticulosEntity();
                 controladorArticulo contArticulo = new controladorArticulo();
-                
+
                 Factura fact = this.controlador.obtenerFacturaId(idPresupuesto);
                 //obtengo detalle de items
                 //DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
@@ -1448,7 +1455,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dni = dni.Substring(2, 8);
                 }
 
-                
+
                 //direccion cliente
                 string direLegal = "-";
                 string direEntrega = "-";
@@ -1459,8 +1466,8 @@ namespace Gestion_Web.Formularios.Facturas
                     if (drl[0].ToString() == "Legal")
                     {
                         direLegal = drl[1].ToString() + " " + drl[2].ToString() + " ";
-                            //+ drl[3].ToString() + " " +
-                            //drl[4].ToString();
+                        //+ drl[3].ToString() + " " +
+                        //drl[4].ToString();
                     }
                     //if (drl[0].ToString() == "Entrega")
                     //{
@@ -1485,7 +1492,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string descripcion = "";
 
                 var rem = controlador.obtenerRemitoByFactura(this.idPresupuesto);
-                
+
                 foreach (var item in fact.items)
                 {
                     if (item.articulo.grupo.descripcion == "MOTOCICLETAS" || item.articulo.grupo.descripcion == "MOTOS")
@@ -1508,7 +1515,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                 }
-                    
+
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
 
@@ -1575,11 +1582,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 return 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return -1;
             }
-            
+
 
         }
 
@@ -1672,6 +1679,6 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: agregarAlicuotaIVAEnLaDescripcionDeLosArticulos. " + ex.Message);
                 return tablaArticulos;
             }
-        }       
+        }
     }
 }
