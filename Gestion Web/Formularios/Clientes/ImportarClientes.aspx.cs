@@ -194,12 +194,12 @@ namespace Gestion_Web.Formularios.Clientes
                             List<string> datosExcel = datos.ToList();
                             clienteTemporal.Apellido = datos[1].Trim();
                             clienteTemporal.Nombre = datos[2].Trim();
-                            clienteTemporal.CUIT = datos[11].Trim();
+                            clienteTemporal.CUIT = datos[10].Trim();
                             clienteTemporal.FechaNacimiento = datos[4].Trim();
                             clienteTemporal.Provincia = datos[5].Trim();
                             clienteTemporal.Telefono = datos[6].Trim();
                             clienteTemporal.Grupo = datos[12].Trim();
-                            clienteTemporal.Estado = datos[14].Trim();
+                            clienteTemporal.Estado = datos[13].Trim();
 
                             int respuesta = ImportarClienteGestion(clienteTemporal);
                             if (respuesta <= 0)
@@ -296,6 +296,10 @@ namespace Gestion_Web.Formularios.Clientes
                 string perfil = Session["Login_NombrePerfil"] as string;
 
                 cliente.codigo = (contClienteEntity.ObtenerUltimoIdCliente() + 1).ToString();
+                if (cliente.codigo == "0")
+                {
+                    cliente.codigo = "1";
+                }
                 cliente.tipoCliente.id = 4; //CONSUMIDOR FINAL
                 cliente.tipoCliente.descripcion = "CONSUMIDOR FINAL";
                 cliente.razonSocial = clienteTemporal.CUIT;
@@ -320,7 +324,7 @@ namespace Gestion_Web.Formularios.Clientes
                 cliente.alerta.idCliente = cliente.id;
 
                 cliente.hijoDe = 0;
-                cliente.alias = cliente.codigo;
+                cliente.alias = clienteTemporal.Apellido + " " + clienteTemporal.Nombre;
 
                 Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
                 cliente.sucursal.id = vendedor.sucursal;//preguntar
