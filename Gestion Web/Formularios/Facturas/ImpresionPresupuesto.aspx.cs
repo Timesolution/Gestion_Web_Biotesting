@@ -726,9 +726,9 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param41);
                 this.ReportViewer1.LocalReport.SetParameters(param42);
 
-                this.ReportViewer1.LocalReport.SetParameters(param43);
-                this.ReportViewer1.LocalReport.SetParameters(param44);
-                this.ReportViewer1.LocalReport.SetParameters(param45);
+                //this.ReportViewer1.LocalReport.SetParameters(param43);
+                //this.ReportViewer1.LocalReport.SetParameters(param44);
+                //this.ReportViewer1.LocalReport.SetParameters(param45);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
