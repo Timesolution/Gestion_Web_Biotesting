@@ -28,7 +28,6 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="lbtnImprimir" runat="server" OnClick="lbtnImprimir_Click">Imprimir</asp:LinkButton>
-
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar Clientes</asp:LinkButton>
@@ -53,14 +52,17 @@
                                                 <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscar_Click">
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
                                             </span>
-
                                         </div>
-                                        <!-- /input-group -->
                                     </div>
                                 </td>
 
-                                <td style="width: 40%"></td>
+                                <td style="width: 35%"></td>
 
+                                <td style="width: 5%">
+                                    <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Filtrar Clientes" href="#modalBusqueda" style="width: 100%">
+                                        <i class="shortcut-icon icon-filter"></i>
+                                    </a>
+                                </td>
                                 <td style="width: 5%">
 
                                     <a href="ClientesABM.aspx?accion=1" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
@@ -75,22 +77,10 @@
                                     </a>
 
                                 </td>
-                                <%--<td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
-                                        <a href="/" id="A1" runat="server" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Imprimir" style="width: 100%">
-
-                                            <i class="shortcut-icon icon-print"></i>
-
-                                        </a>
-                                    </div>
-                                </td>--%>
                             </tr>
                         </table>
                     </div>
-                    <!-- /widget-content -->
-
                 </div>
-                <!-- /widget -->
             </div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked widget-table action-table">
@@ -122,21 +112,14 @@
                                             </tbody>
                                         </table>
                                     </div>
-
-
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
-                        <!-- /.content -->
-
                     </div>
-
                 </div>
             </div>
         </div>
-        <!-- /container -->
     </div>
-    <!-- /main -->
 
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -462,6 +445,61 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Filtrar Clientes</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+
+                                <div class="form-group">
+                                    <label class="col-md-4">Tipo Cliente</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListTipoCliente" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Grupo</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListGruposClientes_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Vendedor</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListVendedores_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Provincia</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListProvincias_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Estado Cliente</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListEstadoCliente_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnFiltrar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnFiltrar_Click" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>

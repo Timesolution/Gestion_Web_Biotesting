@@ -12,6 +12,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
@@ -21,15 +22,23 @@ namespace Gestion_Web.Formularios.Clientes
 {
     public partial class Clientesaspx : System.Web.UI.Page
     {
-        private controladorCliente controlador = new controladorCliente();
+        private controladorCliente contCliente = new controladorCliente();
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-
+        controladorTipoCliente contTipoCliente = new controladorTipoCliente();
         controladorUsuario contUser = new controladorUsuario();
-        Mensajes m = new Mensajes(); 
+        ControladorProvincias contProvincias = new ControladorProvincias();
+        controladorEstadoCliente contEstadoCliente = new controladorEstadoCliente();
+        Mensajes m = new Mensajes();
         public Dictionary<string, string> camposClientes = null;
 
         int accion;
         string busqueda;
+        int tipoCliente;
+        string provincia;
+        int idVendedor;
+        int idGrupoCliente;
+        int idEstadoCliente;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -37,7 +46,13 @@ namespace Gestion_Web.Formularios.Clientes
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.busqueda = Request.QueryString["b"];
-                this.cargarClientes();
+
+                this.tipoCliente = Convert.ToInt32(Request.QueryString["tc"]);
+                this.provincia = Request.QueryString["pr"];
+                this.idVendedor = Convert.ToInt32(Request.QueryString["v"]);
+                this.idGrupoCliente = Convert.ToInt32(Request.QueryString["gc"]);
+                this.idEstadoCliente = Convert.ToInt32(Request.QueryString["ec"]);
+
                 this.cargarVendedor();
 
                 if (!IsPostBack)
@@ -51,11 +66,22 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarListasPrecios();
                     this.cargarFormaPAgo();
                     this.cargarSucursal();
-
+                    this.CargarGruposClientes();
+                    this.cargarDropList_ModalBusqueda();
+                    this.CargarEstadosClientes();
                     this.ListSucursalesMillas.SelectedValue = Session["LogIn_SucUser"].ToString();
                 }
+                //filtro
+                if (this.accion == 2)
+                {
+                    this.filtrar(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
+                }
+                else
+                {
+                    this.cargarClientes();
+                }
 
-                this.txtBusqueda.Focus();                
+                this.txtBusqueda.Focus();
                 Page.Form.DefaultButton = this.lbBuscar.UniqueID;
                 this.verificarConfiguracionIva();
                 this.verificarPermisoCtaCte();
@@ -105,7 +131,7 @@ namespace Gestion_Web.Formularios.Clientes
                         }
                     }
                 }
-                
+
 
                 return 0;
             }
@@ -158,15 +184,9 @@ namespace Gestion_Web.Formularios.Clientes
                     item.Value = dr["id"].ToString();
                     item.Text = dr["nombre"].ToString() + " " + dr["apellido"].ToString();
                     DropListVendedores.Items.Add(item);
+
+                    ListVendedores_ModalBusqueda.Items.Add(item);
                 }
-
-
-
-                //this.DropListVendedor.DataSource = dt;
-                //this.DropListVendedor.DataValueField = "id";
-                //this.DropListVendedor.DataTextField = "nombre" + "apellido";
-
-                //this.DropListVendedor.DataBind();
             }
             catch (Exception ex)
             {
@@ -184,12 +204,55 @@ namespace Gestion_Web.Formularios.Clientes
                 this.ListSucursalesMillas.DataValueField = "Id";
                 this.ListSucursalesMillas.DataTextField = "nombre";
                 this.ListSucursalesMillas.DataBind();
-                this.ListSucursalesMillas.Items.Insert(0, new ListItem("Seleccione...","-1"));
-                this.ListSucursalesMillas.Items.Insert(1, new ListItem("Todos","0"));
+                this.ListSucursalesMillas.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                this.ListSucursalesMillas.Items.Insert(1, new ListItem("Todos", "0"));
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+
+        public void cargarDropList_ModalBusqueda()
+        {
+            cargarDropList_TipoCliente();
+            cargarDropList_Provincias();
+        }
+        public void cargarDropList_TipoCliente()
+        {
+            try
+            {
+                DataTable dt = contTipoCliente.obtenerTiposClientes();
+
+                this.DropListTipoCliente.DataSource = dt;
+                this.DropListTipoCliente.DataValueField = "id";
+                this.DropListTipoCliente.DataTextField = "tipo";
+
+                this.DropListTipoCliente.DataBind();
+                this.DropListTipoCliente.Items.Insert(0, new ListItem("Todos", "0"));
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargarDropList_TipoCliente. " + ex.Message));
+            }
+        }
+        public void cargarDropList_Provincias()
+        {
+            try
+            {
+                var dt = contProvincias.ObtenerProvincias();
+
+                this.ListProvincias_ModalBusqueda.DataSource = dt;
+                this.ListProvincias_ModalBusqueda.DataValueField = "Id";
+                this.ListProvincias_ModalBusqueda.DataTextField = "Provincia1";
+
+                this.ListProvincias_ModalBusqueda.DataBind();
+                this.ListProvincias_ModalBusqueda.Items.Insert(0, new ListItem("Todas", "0"));
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargarDropList_Provincias. " + ex.Message));
             }
         }
         /// <summary>
@@ -209,185 +272,30 @@ namespace Gestion_Web.Formularios.Clientes
                     var idDistribuidor = (int)Session["Login_Vendedor"];
                     if (this.accion > 0 && !String.IsNullOrEmpty(this.busqueda))
                     {
-                        clientes = this.controlador.obtenerClientesAliasDistribuidor(this.busqueda, idDistribuidor);
-                        var cliAux = this.controlador.obtenerClienteID(idDistribuidor);
+                        clientes = this.contCliente.obtenerClientesAliasDistribuidor(this.busqueda, idDistribuidor);
+                        var cliAux = this.contCliente.obtenerClienteID(idDistribuidor);
                         clientes.Add(cliAux);
                     }
-                    else 
+                    else
                     {
-                        clientes = this.controlador.obtenerClientesReducDistribuidor(1, idDistribuidor);
-                        var cliAux = this.controlador.obtenerClienteID(idDistribuidor);
+                        clientes = this.contCliente.obtenerClientesReducDistribuidor(1, idDistribuidor);
+                        var cliAux = this.contCliente.obtenerClienteID(idDistribuidor);
                         clientes.Add(cliAux);
                     }
-
-                    //Visibilizo los dropdownlist para seleccionar el nivel del distribuidor y seleccionarlo
-                    //PanelFamiliaAR.Visible = true;
                 }
                 else
                 {
 
                     if (this.accion > 0 && !String.IsNullOrEmpty(this.busqueda))
                     {
-                        clientes = this.controlador.obtenerClientesAlias(this.busqueda);
+                        clientes = this.contCliente.obtenerClientesAlias(this.busqueda);
                     }
                     else
                     {
-                        clientes = this.controlador.obtenerClientesReduc(1);
+                        clientes = this.contCliente.obtenerClientesReduc(1);
                     }
                 }
-                
-                //else
-                //{
-
-                //}
-                //{
-                //    clientes = this.controlador.obtenerClientesReduc(1);
-                //}
-
-                int i = 0;
-
-                foreach (Cliente cl in clientes)
-                {
-                    //celda
-                    //TableCell celCuit = new TableCell();
-                    //celCuit.Text = cl.cuit;
-
-                    TableCell celCodigo = new TableCell();
-                    celCodigo.Text = cl.codigo;
-                    celCodigo.Width = Unit.Percentage(5);
-                    celCodigo.VerticalAlign = VerticalAlign.Middle;
-
-                    TableCell celRazonSocial = new TableCell();
-                    celRazonSocial.Text = cl.razonSocial;
-                    celRazonSocial.Width = Unit.Percentage(25);
-                    celRazonSocial.VerticalAlign = VerticalAlign.Middle;
-
-                    TableCell celAlias = new TableCell();
-                    celAlias.Text = cl.alias;
-                    celAlias.Width = Unit.Percentage(25);
-                    celAlias.VerticalAlign = VerticalAlign.Middle;
-
-                    //TableCell celTipo = new TableCell();
-                    //celTipo.Text = cl.tipoCliente.descripcion;
-                    //celTipo.Width = Unit.Percentage(15);
-                    //celTipo.VerticalAlign = VerticalAlign.Middle;
-                    List<contacto> contactos = this.controlador.obtenerContactos(cl.id);
-                    string mail = "";
-                    string tel = "";
-                    var contac = contactos.FirstOrDefault();
-                    if (contac != null)
-                    {
-                        mail = contac.mail;
-                        tel = contac.numero;
-                    }
-                    TableCell celMail = new TableCell();
-                    celMail.Text = "<a href='mailto:" + mail + "' target='_top'>" + mail + "</a>";
-                    celMail.Width = Unit.Percentage(7.5);
-                    celMail.VerticalAlign = VerticalAlign.Middle;
-
-                    TableCell celTelefono = new TableCell();
-                    celTelefono.Text = tel;
-                    celTelefono.Width = Unit.Percentage(7.5);
-                    celTelefono.VerticalAlign = VerticalAlign.Middle;
-
-                    TableCell celCuit = new TableCell();
-                    celCuit.Text = this.formatearCuit(cl.cuit);
-                    celCuit.Width = Unit.Percentage(15);
-                    celCuit.VerticalAlign = VerticalAlign.Middle;
-                    
-                    TableCell celImage = new TableCell();
-                    LinkButton btnDetails = new LinkButton();
-                    btnDetails.ID = cl.id.ToString();
-                    btnDetails.CssClass = "btn btn-info ui-tooltip";
-                    btnDetails.Attributes.Add("data-toggle", "tooltip");
-                    btnDetails.Attributes.Add("title data-original-title", "Editar");
-                    btnDetails.Text = "<span class='shortcut-icon icon-search'></span>";
-                    //btnDetails.Height = Unit.Pixel(30);
-                    //btnDetails.Font.Size = 9;
-                    btnDetails.PostBackUrl = "ClientesABM.aspx?accion=2&id=" + cl.id.ToString();
-                    celImage.Controls.Add(btnDetails);
-
-                    if(perfil.ToLower() == "lider")
-                    {
-                        btnDetails.Visible = false;
-                        btnAltaRapida.Visible = false;
-                    }
-
-                    Literal l2 = new Literal();
-                    l2.Text = "&nbsp";
-                    celImage.Controls.Add(l2);
-
-
-                    LinkButton btnEliminar = new LinkButton();
-                    btnEliminar.ID = "btnEliminar_" + cl.id;
-                    btnEliminar.CssClass = "btn btn-info";
-                    btnEliminar.Attributes.Add("data-toggle", "modal");
-                    btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-                    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                    btnEliminar.OnClientClick = "abrirdialog(" + cl.id + ");";
-                    //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
-                    celImage.Controls.Add(btnEliminar);
-
-                    string sistema = WebConfigurationManager.AppSettings.Get("Millas");
-                    if (!String.IsNullOrEmpty(sistema))
-                    {
-
-                        Literal l3 = new Literal();
-                        l3.Text = "&nbsp";
-                        celImage.Controls.Add(l3);
-
-                        LinkButton btnMillas = new LinkButton();
-                        btnMillas.ID = "btnMillas_" + cl.id;
-                        int existe = this.verificarExisteMillas(cl.id);
-                        if (existe > 0)
-                        {
-                            if (existe == 2)
-                            {
-                                btnMillas.CssClass = "btn btn-info ui-tooltip";
-                            }
-                            else
-                            {
-                                btnMillas.CssClass = "btn btn-success ui-tooltip";
-                            }
-                        }
-                        else
-                        {
-                            btnMillas.CssClass = "btn btn-default ui-tooltip";
-                        }
-                        btnMillas.Attributes.Add("data-toggle", "tooltip");
-                        btnMillas.Attributes.Add("title data-original-title", "Sistema beneficios");
-                        btnMillas.Text = "<span class='shortcut-icon icon-credit-card'></span>";
-                        btnMillas.Click += new EventHandler(this.cargarInfoMillas);
-                        celImage.Controls.Add(btnMillas);
-
-                        celImage.Width = Unit.Percentage(15);
-                    }
-                    else
-                    {
-                        celImage.Width = Unit.Percentage(10);
-                    }
-
-                    i++;
-
-                    //fila
-                    TableRow tr = new TableRow();
-                    tr.ID = cl.id + "_1";
-
-                    //agrego celda a filas
-                    //tr.Cells.Add(celCuit);
-                    tr.Cells.Add(celCodigo);
-                    tr.Cells.Add(celRazonSocial);
-                    tr.Cells.Add(celAlias);
-                    tr.Cells.Add(celMail);
-                    tr.Cells.Add(celTelefono);
-                    //tr.Cells.Add(celTelefono);
-                    tr.Cells.Add(celCuit);
-                    tr.Cells.Add(celImage);
-                    //arego fila a tabla
-                    this.phClientes.Controls.Add(tr);
-                }
-                //agrego la tabla al placeholder
-
+                cargarClientesAlPlaceholder(clientes);
             }
             catch (Exception ex)
             {
@@ -479,9 +387,9 @@ namespace Gestion_Web.Formularios.Clientes
                 btnMillas.Text = "<span class='shortcut-icon icon-credit-card'></span>";
                 btnMillas.Click += new EventHandler(this.cargarInfoMillas);
                 celImage.Controls.Add(btnMillas);
-                
+
                 celImage.Width = Unit.Percentage(15);
-                
+
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = cl.id + "_1";
@@ -501,12 +409,12 @@ namespace Gestion_Web.Formularios.Clientes
             //agrego la tabla al placeholder
 
         }
-                
+
         private void buscar(string alias)
         {
             try
             {
-                List<Cliente> cliente =  this.controlador.obtenerClientesAlias(alias);
+                List<Cliente> cliente = this.contCliente.obtenerClientesAlias(alias);
                 this.cargarClientesTable(cliente);
             }
             catch (Exception ex)
@@ -538,7 +446,7 @@ namespace Gestion_Web.Formularios.Clientes
                 int idCliente = Convert.ToInt32(this.txtMovimiento.Text);
 
 
-                int i = this.controlador.eliminarCliente(idCliente);
+                int i = this.contCliente.eliminarCliente(idCliente);
                 if (i == 1)
                 {
                     //agrego bien
@@ -555,7 +463,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarClientes();
 
                 }
-                if(i<=0)
+                if (i <= 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo borrar Cliente"));
 
@@ -650,20 +558,20 @@ namespace Gestion_Web.Formularios.Clientes
                 ControladorClienteEntity contCliEntity = new ControladorClienteEntity();
 
                 string id = (sender as LinkButton).ID.ToString().Split('_')[1];
-                Cliente cl = this.controlador.obtenerClienteID(Convert.ToInt32(id));
+                Cliente cl = this.contCliente.obtenerClienteID(Convert.ToInt32(id));
                 this.lblIdClienteMillas.Text = id;
 
                 int puede = this.verificarPermisoSistemaMillas();
                 if (puede <= 0)
-                {                    
+                {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "$.msgbox(\"No tiene permisos para realizar esta accion.\");", true);
                     return;
                 }
 
-                int existe = this.verificarExisteMillas(Convert.ToInt32(id));                
+                int existe = this.verificarExisteMillas(Convert.ToInt32(id));
                 if (existe <= 0)//si no existe
                 {
-                    
+
                     if (cl != null)
                     {
                         string cuitDoc = cl.cuit;
@@ -679,7 +587,7 @@ namespace Gestion_Web.Formularios.Clientes
                         this.txtNombreMillas.Text = cl.alias;
                         this.txtApellidoMillas.Text = cl.alias.Split(' ')[0];
                         this.txtDNIMillas.Text = dniReal;
-                        
+
                         var mail = contCliEntity.obtenerClienteDatosByCliente(Convert.ToInt32(id));
                         if (mail != null && mail.Count > 0)
                         {
@@ -699,7 +607,7 @@ namespace Gestion_Web.Formularios.Clientes
                         }
 
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "abrirModalMillas();", true);
-                    }                    
+                    }
                 }
                 else//si existe
                 {
@@ -718,10 +626,10 @@ namespace Gestion_Web.Formularios.Clientes
                     int user = (int)Session["Login_IdUser"];
                     Usuario u = this.contUser.obtenerUsuariosID(user);
                     string url = WebConfigurationManager.AppSettings.Get("UrlMillas");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "window.open('" + url + "Login.aspx?u=" + u.usuario + "&p=" + u.contraseña+"&s=" + socio.Id + "','_blank');", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "window.open('" + url + "Login.aspx?u=" + u.usuario + "&p=" + u.contraseña + "&s=" + socio.Id + "','_blank');", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -730,8 +638,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                ControladorSocios contSocios = new ControladorSocios();                
-                Cliente cl = this.controlador.obtenerClienteID(cliente);
+                ControladorSocios contSocios = new ControladorSocios();
+                Cliente cl = this.contCliente.obtenerClienteID(cliente);
                 string cuitDoc = cl.cuit.Replace("-", "");
                 string dniReal = "";
                 if (cuitDoc.Length >= 11)//cuit con guiones
@@ -769,7 +677,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 ControladorSocios contSocios = new ControladorSocios();
-                
+
                 Usuario user = this.contUser.obtenerUsuariosID((int)Session["Login_IdUser"]);
 
                 string origen = WebConfigurationManager.AppSettings.Get("OrigenSMS");
@@ -791,8 +699,8 @@ namespace Gestion_Web.Formularios.Clientes
                 socio.Estado = 1;
                 socio.Extra = this.lblIdClienteMillas.Text;
 
-                this.modificarDatosCliente(Convert.ToInt32(this.lblIdClienteMillas.Text));                
-                
+                this.modificarDatosCliente(Convert.ToInt32(this.lblIdClienteMillas.Text));
+
                 int ok = contSocios.agregrarSocio(socio, socio.Vendedore.Vendedor, socio.Sucursale.Sucursal);
                 if (ok > 0)
                 {
@@ -805,7 +713,7 @@ namespace Gestion_Web.Formularios.Clientes
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\", {type: \"error\"});", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error." + ex.Message));
                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Ocurrio un error. " + ex.Message + ".\", {type: \"error\"});", true);
@@ -900,7 +808,7 @@ namespace Gestion_Web.Formularios.Clientes
                     registro.Telefono = telefono;
                     registro.IdEmpresa = (int)Session["Login_EmpUser"];
                     registro.IdSucursal = (int)Session["Login_SucUser"];
-                    registro.IdVendedor = (int)Session["Login_IdUser"];                    
+                    registro.IdVendedor = (int)Session["Login_IdUser"];
                     int envioCodigo = contPlena.enviarCodigoTelefono(registro);
                     this.lblIdRegistro.Text = registro.Id.ToString();
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "$.msgbox(\"Codigo enviado. \", {type: \"info\"});desbloquearEnvioCod();", true);
@@ -958,7 +866,7 @@ namespace Gestion_Web.Formularios.Clientes
                 {
 
                 }
-                
+
             }
             catch
             {
@@ -976,7 +884,7 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
-        
+
         #endregion
 
         #region alta rapida cliente
@@ -985,7 +893,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                string p = this.controlador.obtenerLastCodigoCliente();
+                string p = this.contCliente.obtenerLastCodigoCliente();
                 int newp = Convert.ToInt32(p);
                 this.txtCodigoAR.Text = newp.ToString().PadLeft(6, '0');
             }
@@ -1065,7 +973,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                this.DropListIvaAR.DataSource = controlador.obtenerIvaClientes();
+                this.DropListIvaAR.DataSource = contCliente.obtenerIvaClientes();
                 this.DropListIvaAR.DataValueField = "id";
                 this.DropListIvaAR.DataTextField = "descripcion";
 
@@ -1085,7 +993,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                DataTable dt = this.controlador.obtenerListaPrecios();
+                DataTable dt = this.contCliente.obtenerListaPrecios();
 
                 //agrego todos
                 DataRow dr = dt.NewRow();
@@ -1125,7 +1033,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 var idDistribuidor = (int)Session["Login_Vendedor"];
-                var cliente = this.controlador.obtenerClienteID(idDistribuidor);
+                var cliente = this.contCliente.obtenerClienteID(idDistribuidor);
                 DataTable dt = this.contClienteEntity.obtenerLideresPorDistribuidor(idDistribuidor);
                 this.DropListFamiliaAR.DataSource = dt;
                 this.DropListFamiliaAR.DataValueField = "Id";
@@ -1156,17 +1064,17 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
-        private void RespuestaAgregarCliente(int i,Cliente cliente)
+        private void RespuestaAgregarCliente(int i, Cliente cliente)
         {
             try
             {
-                
+
                 switch (i)
                 {
                     default:
-                        
+
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Cliente: " + this.txtRazonAR.Text);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cliente agregado", "ClientesABM.aspx?accion=2&id="+cliente.id));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cliente agregado", "ClientesABM.aspx?accion=2&id=" + cliente.id));
                         break;
                     case -1:
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo agregar Cliente"));
@@ -1210,7 +1118,7 @@ namespace Gestion_Web.Formularios.Clientes
                 cRapido.tipoCliente.id = Convert.ToInt32(this.DropListTipoAR.SelectedValue);
                 cRapido.tipoCliente.descripcion = this.DropListTipoAR.SelectedItem.Text;
                 cRapido.grupo.id = Convert.ToInt32(this.DropListGrupoAR.SelectedValue);
-                cRapido.categoria.id = 1;                
+                cRapido.categoria.id = 1;
                 cRapido.cuit = this.txtCuitAR.Text;
                 if (cRapido.cuit.Length < 11)
                     cRapido.cuit = cRapido.cuit.PadLeft(8, '0');
@@ -1231,9 +1139,9 @@ namespace Gestion_Web.Formularios.Clientes
                 cRapido.estado.id = 1;
                 cRapido.pais.id = 1;
 
-                if (this.controlador.validateCuit(this.txtCuitAR.Text,this.DropListTipoAR.SelectedItem.Text))
+                if (this.contCliente.validateCuit(this.txtCuitAR.Text, this.DropListTipoAR.SelectedItem.Text))
                 {
-                    int i = this.controlador.agregarCliente(cRapido);
+                    int i = this.contCliente.agregarCliente(cRapido);
                     cRapido.id = i;
 
                     if (i > 0)
@@ -1262,7 +1170,7 @@ namespace Gestion_Web.Formularios.Clientes
                         }
                     }
 
-                    this.RespuestaAgregarCliente(i,cRapido);
+                    this.RespuestaAgregarCliente(i, cRapido);
                 }
                 else
                 {
@@ -1270,7 +1178,7 @@ namespace Gestion_Web.Formularios.Clientes
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -1294,12 +1202,235 @@ namespace Gestion_Web.Formularios.Clientes
                         PanelFamiliaAR.Visible = false;
                     }
                 }
-                
+
             }
             catch (Exception Ex)
             {
 
             }
         }
+
+        protected void CargarGruposClientes()
+        {
+            try
+            {
+                controladorGrupoCliente contGrupoCliente = new controladorGrupoCliente();
+                DataTable dt = contGrupoCliente.obtenerGruposClientes();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Todos";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.ListGruposClientes_ModalBusqueda.DataSource = dt;
+                this.ListGruposClientes_ModalBusqueda.DataValueField = "id";
+                this.ListGruposClientes_ModalBusqueda.DataTextField = "descripcion";
+
+                this.ListGruposClientes_ModalBusqueda.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
+
+        protected void CargarEstadosClientes()
+        {
+            try
+            {
+                var dt = contEstadoCliente.obtenerEstadosClientes();
+
+                this.ListEstadoCliente_ModalBusqueda.DataSource = dt;
+                this.ListEstadoCliente_ModalBusqueda.DataValueField = "id";
+                this.ListEstadoCliente_ModalBusqueda.DataTextField = "estadoCliente";
+
+                this.ListEstadoCliente_ModalBusqueda.DataBind();
+
+                if (ListEstadoCliente_ModalBusqueda.Items.Count >= 0)
+                {
+                    ListEstadoCliente_ModalBusqueda.Items.Insert(0, new ListItem("Todos", "0"));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
+
+        protected void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("Clientesaspx.aspx?accion=2&tc=" + this.DropListTipoCliente.SelectedValue + "&pr=" + this.ListProvincias_ModalBusqueda.SelectedItem.Text + "&v=" + this.ListVendedores_ModalBusqueda.SelectedValue + "&gc=" + this.ListGruposClientes_ModalBusqueda.SelectedValue + "&ec=" + this.ListEstadoCliente_ModalBusqueda.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
+
+        public void filtrar(int idTipoCliente, string provincia, int idVendedor, int idGrupoCliente, int idEstadoCliente)
+        {
+            try
+            {
+                var clientes = contCliente.FiltrarClientesEnClientesAspx(idTipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
+               
+                List<Cliente> listName = clientes.AsEnumerable().Select(m => new Cliente()
+                {
+                    id = m.Field<int>("id"),
+                    codigo = m.Field<string>("codigo"),
+                    razonSocial = m.Field<string>("razonSocial"),
+                    alias = m.Field<string>("alias"),
+                    cuit = m.Field<string>("cuit"),
+                }).ToList();
+
+                cargarClientesAlPlaceholder(listName);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void cargarClientesAlPlaceholder(List<Cliente> clientes)
+        {
+            try
+            {
+                foreach (Cliente cl in clientes)
+                {
+                    TableCell celCodigo = new TableCell();
+                    celCodigo.Text = cl.codigo;
+                    celCodigo.Width = Unit.Percentage(5);
+                    celCodigo.VerticalAlign = VerticalAlign.Middle;
+
+                    TableCell celRazonSocial = new TableCell();
+                    celRazonSocial.Text = cl.razonSocial;
+                    celRazonSocial.Width = Unit.Percentage(25);
+                    celRazonSocial.VerticalAlign = VerticalAlign.Middle;
+
+                    TableCell celAlias = new TableCell();
+                    celAlias.Text = cl.alias;
+                    celAlias.Width = Unit.Percentage(25);
+                    celAlias.VerticalAlign = VerticalAlign.Middle;
+
+                    List<contacto> contactos = this.contCliente.obtenerContactos(cl.id);
+                    string mail = "";
+                    string tel = "";
+                    var contac = contactos.FirstOrDefault();
+                    if (contac != null)
+                    {
+                        mail = contac.mail;
+                        tel = contac.numero;
+                    }
+                    TableCell celMail = new TableCell();
+                    celMail.Text = "<a href='mailto:" + mail + "' target='_top'>" + mail + "</a>";
+                    celMail.Width = Unit.Percentage(7.5);
+                    celMail.VerticalAlign = VerticalAlign.Middle;
+
+                    TableCell celTelefono = new TableCell();
+                    celTelefono.Text = tel;
+                    celTelefono.Width = Unit.Percentage(7.5);
+                    celTelefono.VerticalAlign = VerticalAlign.Middle;
+
+                    TableCell celCuit = new TableCell();
+                    celCuit.Text = this.formatearCuit(cl.cuit);
+                    celCuit.Width = Unit.Percentage(15);
+                    celCuit.VerticalAlign = VerticalAlign.Middle;
+
+                    TableCell celImage = new TableCell();
+                    LinkButton btnDetails = new LinkButton();
+                    btnDetails.ID = cl.id.ToString();
+                    btnDetails.CssClass = "btn btn-info ui-tooltip";
+                    btnDetails.Attributes.Add("data-toggle", "tooltip");
+                    btnDetails.Attributes.Add("title data-original-title", "Editar");
+                    btnDetails.Text = "<span class='shortcut-icon icon-search'></span>";
+                    btnDetails.PostBackUrl = "ClientesABM.aspx?accion=2&id=" + cl.id.ToString();
+                    celImage.Controls.Add(btnDetails);
+
+                    string perfil = Session["Login_NombrePerfil"] as string;
+                    if (perfil.ToLower() == "lider")
+                    {
+                        btnDetails.Visible = false;
+                        btnAltaRapida.Visible = false;
+                    }
+
+                    Literal l2 = new Literal();
+                    l2.Text = "&nbsp";
+                    celImage.Controls.Add(l2);
+
+
+                    LinkButton btnEliminar = new LinkButton();
+                    btnEliminar.ID = "btnEliminar_" + cl.id;
+                    btnEliminar.CssClass = "btn btn-info";
+                    btnEliminar.Attributes.Add("data-toggle", "modal");
+                    btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                    btnEliminar.OnClientClick = "abrirdialog(" + cl.id + ");";
+                    celImage.Controls.Add(btnEliminar);
+
+                    string sistema = WebConfigurationManager.AppSettings.Get("Millas");
+                    if (!String.IsNullOrEmpty(sistema))
+                    {
+
+                        Literal l3 = new Literal();
+                        l3.Text = "&nbsp";
+                        celImage.Controls.Add(l3);
+
+                        LinkButton btnMillas = new LinkButton();
+                        btnMillas.ID = "btnMillas_" + cl.id;
+                        int existe = this.verificarExisteMillas(cl.id);
+                        if (existe > 0)
+                        {
+                            if (existe == 2)
+                            {
+                                btnMillas.CssClass = "btn btn-info ui-tooltip";
+                            }
+                            else
+                            {
+                                btnMillas.CssClass = "btn btn-success ui-tooltip";
+                            }
+                        }
+                        else
+                        {
+                            btnMillas.CssClass = "btn btn-default ui-tooltip";
+                        }
+                        btnMillas.Attributes.Add("data-toggle", "tooltip");
+                        btnMillas.Attributes.Add("title data-original-title", "Sistema beneficios");
+                        btnMillas.Text = "<span class='shortcut-icon icon-credit-card'></span>";
+                        btnMillas.Click += new EventHandler(this.cargarInfoMillas);
+                        celImage.Controls.Add(btnMillas);
+
+                        celImage.Width = Unit.Percentage(15);
+                    }
+                    else
+                    {
+                        celImage.Width = Unit.Percentage(10);
+                    }
+
+                    //fila
+                    TableRow tr = new TableRow();
+                    tr.ID = cl.id + "_1";
+
+                    //agrego celda a filas
+                    tr.Cells.Add(celCodigo);
+                    tr.Cells.Add(celRazonSocial);
+                    tr.Cells.Add(celAlias);
+                    tr.Cells.Add(celMail);
+                    tr.Cells.Add(celTelefono);
+                    //tr.Cells.Add(celTelefono);
+                    tr.Cells.Add(celCuit);
+                    tr.Cells.Add(celImage);
+                    //arego fila a tabla
+                    this.phClientes.Controls.Add(tr);
+                }
+                //agrego la tabla al placeholder
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
     }
 }
