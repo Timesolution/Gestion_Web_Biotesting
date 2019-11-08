@@ -493,9 +493,9 @@ namespace Gestion_Web.Formularios.Facturas
                 //string totalS = Numalet.ToCardinal("18.25");
                 //cant unidades
                 decimal cant = 2;
-                decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
-                decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
-                decimal totalIva27 = Convert.ToDecimal(dr["TotalIva27"]);
+                //decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
+                //decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
+                //decimal totalIva27 = Convert.ToDecimal(dr["TotalIva27"]);
 
                 //Total equivalente en dolares
                 controladorMoneda contMoneda = new controladorMoneda();
@@ -664,9 +664,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter param42 = new ReportParameter("ParamCondicionPago", condicionPago);
 
-                ReportParameter param43 = new ReportParameter("ParamTotalIva105", totalIva105.ToString("C"));
-                ReportParameter param44 = new ReportParameter("ParamTotalIva21", totalIva21.ToString("C"));
-                ReportParameter param45 = new ReportParameter("ParamTotalIva27", totalIva27.ToString("C"));
+                //ReportParameter param43 = new ReportParameter("ParamTotalIva105", totalIva105.ToString("C"));
+                //ReportParameter param44 = new ReportParameter("ParamTotalIva21", totalIva21.ToString("C"));
+                //ReportParameter param45 = new ReportParameter("ParamTotalIva27", totalIva27.ToString("C"));
 
                 if (pv.monedaFacturacion > 1)
                 {
