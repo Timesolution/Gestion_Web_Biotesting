@@ -2634,6 +2634,10 @@ namespace Gestion_Web.Formularios.Facturas
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
                         return;
                     }
+
+                    if (VerificarSiTotalSuperaLimiteYRequiereCUIT() == 0)
+                        return;
+
                     //Verifico si tiene la alerta de precios de articulos sin actualizar
                     if (!VerificarArticulosSinActualizar())
                     {
@@ -2672,7 +2676,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
                         return;
-                    }
+                    }                    
 
                     //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
                     string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
@@ -4286,10 +4290,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ActualizarStockAlAgregarItem(txtCodigo.Text);
 
-                if (this.verificarNoEnviarMercaderiaNegativa() == 0)
+                if (VerificarNoEnviarMercaderiaNegativa() == 0)
                     return;
 
-                if (this.verificarNoEnviarMercaderiaSiNoHayStock() == 0)
+                if (VerificarNoEnviarMercaderiaSiNoHayStock() == 0)
+                    return;
+
+                if (VerificarSiTotalSuperaLimiteYRequiereCUIT() == 0)
                     return;
 
                 Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
@@ -6070,7 +6077,7 @@ namespace Gestion_Web.Formularios.Facturas
             lbtnStockProd.Text = (Convert.ToDecimal(lbtnStockProd.Text) - Convert.ToDecimal(cantidadARestar)).ToString();
         }
 
-        private int verificarNoEnviarMercaderiaSiNoHayStock()
+        private int VerificarNoEnviarMercaderiaSiNoHayStock()
         {
             try
             {
@@ -6100,7 +6107,28 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private int verificarNoEnviarMercaderiaNegativa()
+        private int VerificarSiTotalSuperaLimiteYRequiereCUIT()
+        {
+            try
+            {
+                var facturaActual = Session["Factura"] as Factura;
+
+                if(facturaActual.total >= Convert.ToInt32(configuracion.TopeLimiteFacturacionParaPedirCuit) && facturaActual.EsFactura() && (facturaActual.cliente.cuit.Length != 11 || facturaActual.cliente.cuit == "00000000000"))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto de la factura es mayor a " + configuracion.TopeLimiteFacturacionParaPedirCuit + ", se requiere CUIT del comprador \", {type: \"alert\"});", true);
+                    return 0;
+                }
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ocurrió un error en fun: VerificarSiTotalSuperaLimiteYRequiereCUIT. Excepción:" + ex.Message + " \", {type: \"error\"});", true);
+                return 0;
+            }
+        }
+        
+        private int VerificarNoEnviarMercaderiaNegativa()
         {
             try
             {
