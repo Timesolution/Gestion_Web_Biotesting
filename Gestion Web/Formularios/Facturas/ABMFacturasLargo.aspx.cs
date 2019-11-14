@@ -5131,9 +5131,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void ListPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
-            {
-                //obtengo el numero de factura
-                this.obtenerNroFactura();
+            {                
                 //si es punto fical muesto el boton cierre Z
                 PuntoVenta pv = this.cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                 if (pv.formaFacturar == "Fiscal")
@@ -5174,6 +5172,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //verifico el cierre de caja del punto de venta
                 this.verificarCierreCaja();
+                //obtengo el numero de factura
+                this.obtenerNroFactura();
             }
             catch (Exception ex)
             {
