@@ -213,7 +213,6 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-
         public void cargarDropList_ModalBusqueda()
         {
             cargarDropList_TipoCliente();
@@ -241,7 +240,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                var dt = contProvincias.ObtenerProvincias();
+                var dt = contProvincias.ObtenerProvincias().OrderBy(x => x.Provincia1).ToList();
 
                 this.ListProvincias_ModalBusqueda.DataSource = dt;
                 this.ListProvincias_ModalBusqueda.DataValueField = "Id";
@@ -445,7 +444,6 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 int idCliente = Convert.ToInt32(this.txtMovimiento.Text);
 
-
                 int i = this.contCliente.eliminarCliente(idCliente);
                 if (i == 1)
                 {
@@ -453,7 +451,6 @@ namespace Gestion_Web.Formularios.Clientes
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Cliente: " + idCliente);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cliente eliminado con exito", null));
                     this.cargarClientes();
-
                 }
                 if (i == 2)
                 {
@@ -461,12 +458,10 @@ namespace Gestion_Web.Formularios.Clientes
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Intento de baja de cliente: " + idCliente + " No fue posible. El cliente tiene saldo. ");
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El cliente Tiene saldo positivo en Cuenta Corriente no se puede eliminar. ", null));
                     this.cargarClientes();
-
                 }
                 if (i <= 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo borrar Cliente"));
-
                 }
             }
             catch (Exception ex)

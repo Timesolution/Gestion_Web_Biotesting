@@ -89,7 +89,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                var listProvincias = contProvincias.ObtenerProvincias();
+                var listProvincias = contProvincias.ObtenerProvincias().OrderBy(x => x.Provincia1).ToList();
 
                 if (listProvincias != null)
                 {
@@ -209,10 +209,14 @@ namespace Gestion_Web.Formularios.Clientes
                             clienteTemporal.Vendedor = datos[10].Trim();
                             clienteTemporal.Grupo = datos[12].Trim();
                             clienteTemporal.Estado = datos[14].Trim();
-                            int respuesta = ImportarClienteGestion(clienteTemporal);
-                            if (respuesta <= 0)
+
+                            if (VerificarQueEstenTodosLosCamposBienCompletados(datos))
                             {
-                                contador++;
+                                int respuesta = ImportarClienteGestion(clienteTemporal);
+                                if (respuesta <= 0)
+                                {
+                                    contador++;
+                                }
                             }
                         }
                     }
@@ -222,6 +226,25 @@ namespace Gestion_Web.Formularios.Clientes
             catch (Exception ex)
             {
 
+            }
+        }
+
+        public bool VerificarQueEstenTodosLosCamposBienCompletados(string[] datos)
+        {
+            try
+            {
+                for (int i = 0; i < 14; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(datos[i]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 
@@ -345,7 +368,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 //crear direccion por defecto
                 List<direccion> direcciones = new List<direccion>();
-                Provincia provincia = contProvincias.ObtenerProvinciaByNombre(clienteTemporal.Provincia);
+                Provincia provincia = contProvincias.ObtenerProvinciaByNombre(clienteTemporal.Provincia.ToUpper());
                 direcciones.Add(new direccion
                 {
                     codPostal = "0000",
