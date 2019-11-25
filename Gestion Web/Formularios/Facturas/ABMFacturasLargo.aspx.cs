@@ -4429,7 +4429,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //agrego abajo
                 //this.factura.items.Add(item);
                 //actualizo totales
-                //this.actualizarTotales();
+                this.ActualizarTotales();
 
                 //borro los campos
                 this.borrarCamposagregarItem();

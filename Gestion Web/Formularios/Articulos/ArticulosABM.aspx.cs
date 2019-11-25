@@ -4093,7 +4093,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 int i = this.contArtEnt.agregarApareceLista(artCat);
 
-                if (i >= 0)
+                if (i > 0)
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", "$.msgbox(\"La información del Articulo fué modificada con éxito.\", {type: \"info\"});", true);
                 else
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", m.mensajeBoxError("Ocurrió un error modificando información del Artículo."), true);
