@@ -60,6 +60,8 @@ namespace Gestion_Web.Formularios.Clientes
         public class CuitsEstados
         {
             public string Cuit { get; set; }
+            public string Apellido { get; set; }
+            public string Nombre { get; set; }
             public string Estado { get; set; }
         }
 
@@ -221,30 +223,24 @@ namespace Gestion_Web.Formularios.Clientes
                             if (VerificarQueEstenTodosLosCamposBienCompletados(datos))
                             {
                                 int respuesta = ImportarClienteGestion(clienteTemporal);
+                                CuitsEstados cuitEstado = new CuitsEstados();
+                                cuitEstado.Apellido = clienteTemporal.Apellido;
+                                cuitEstado.Nombre = clienteTemporal.Nombre;
+                                cuitEstado.Cuit = clienteTemporal.CUIT;
+
                                 switch (respuesta)
                                 {
                                     case 1:
-                                        listaCuits.Add(new CuitsEstados
-                                        {
-                                            Cuit = clienteTemporal.CUIT,
-                                            Estado = "Importado"
-                                        });
+                                        cuitEstado.Estado = "Importado";
                                         break;
                                     case 0:
-                                        listaCuits.Add(new CuitsEstados
-                                        {
-                                            Cuit = clienteTemporal.CUIT,
-                                            Estado = "Modificado"
-                                        });
+                                        cuitEstado.Estado = "Modificado";
                                         break;
                                     case -1:
-                                        listaCuits.Add(new CuitsEstados
-                                        {
-                                            Cuit = clienteTemporal.CUIT,
-                                            Estado = "No_Importado"
-                                        });
+                                        cuitEstado.Estado = "No_Importado";
                                         break;
                                 }
+                                listaCuits.Add(cuitEstado);
                             }
                         }
                     }
@@ -442,6 +438,7 @@ namespace Gestion_Web.Formularios.Clientes
                 //actualiza
                 int idClienteAModificar = contCliente.obtenerClienteCuit(clienteTemporal.CUIT).id;
                 cliente.id = idClienteAModificar;
+                cliente.activo = 1;
                 if (contCliente.modificarCliente(cliente, clienteTemporal.CUIT, cliente.codigo) > 0)
                 {
                     int idClienteDatos = (int)contClienteEntity.obtenerClienteDatosByIdCliente(cliente.id).Id;
@@ -660,6 +657,8 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 DataTable dt = new DataTable();
                 dt.Columns.Add("Cuit");
+                dt.Columns.Add("Nombre");
+                dt.Columns.Add("Apellido");
                 dt.Columns.Add("Estado");
 
                 foreach (var item in listaCuits)
@@ -668,6 +667,8 @@ namespace Gestion_Web.Formularios.Clientes
 
                     dr["Cuit"] = item.Cuit;
                     dr["Estado"] = item.Estado;
+                    dr["Apellido"] = item.Apellido;
+                    dr["Nombre"] = item.Nombre;
                     dt.Rows.Add(dr);
                 }
 
