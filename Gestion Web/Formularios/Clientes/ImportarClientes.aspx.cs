@@ -4,6 +4,7 @@ using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using Gestor_Solution.Modelo;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -54,6 +55,12 @@ namespace Gestion_Web.Formularios.Clientes
             public string Estado { get; set; }
             public string Proveedor { get; set; }
             public string Vendedor { get; set; }
+        }
+
+        public class CuitsEstados
+        {
+            public string Cuit { get; set; }
+            public string Estado { get; set; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -169,6 +176,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                List<CuitsEstados> listaCuits = new List<CuitsEstados>();
+
                 Boolean fileOK = false;
 
                 if (FileUpload1.HasFile)
@@ -190,7 +199,6 @@ namespace Gestion_Web.Formularios.Clientes
                     StreamReader sr = new StreamReader(FileUpload1.FileContent);
                     Configuracion config = new Configuracion();
                     string linea;
-                    int contador = 0;
 
                     while ((linea = sr.ReadLine()) != null)
                     {
@@ -213,13 +221,34 @@ namespace Gestion_Web.Formularios.Clientes
                             if (VerificarQueEstenTodosLosCamposBienCompletados(datos))
                             {
                                 int respuesta = ImportarClienteGestion(clienteTemporal);
-                                if (respuesta <= 0)
+                                switch (respuesta)
                                 {
-                                    contador++;
+                                    case 1:
+                                        listaCuits.Add(new CuitsEstados
+                                        {
+                                            Cuit = clienteTemporal.CUIT,
+                                            Estado = "Importado"
+                                        });
+                                        break;
+                                    case 0:
+                                        listaCuits.Add(new CuitsEstados
+                                        {
+                                            Cuit = clienteTemporal.CUIT,
+                                            Estado = "Modificado"
+                                        });
+                                        break;
+                                    case -1:
+                                        listaCuits.Add(new CuitsEstados
+                                        {
+                                            Cuit = clienteTemporal.CUIT,
+                                            Estado = "No_Importado"
+                                        });
+                                        break;
                                 }
                             }
                         }
                     }
+                    ExportarInformeDelResultado(listaCuits);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Lista importada correctamente", null));
                 }
             }
@@ -335,6 +364,8 @@ namespace Gestion_Web.Formularios.Clientes
                 int idTipoCliente = CrearYObtenerTipoClienteSiNoExiste(clienteTemporal.Proveedor);
 
                 cliente.tipoCliente.id = idTipoCliente;
+                cliente.tipoCliente.descripcion = clienteTemporal.Proveedor;
+
                 cliente.razonSocial = clienteTemporal.CUIT;
 
                 CrearElGrupoSiNoExiste(clienteTemporal.Grupo);
@@ -342,7 +373,7 @@ namespace Gestion_Web.Formularios.Clientes
                 cliente.grupo.id = contGrupoCliente.obtenerGrupoDesc(clienteTemporal.Grupo).id;
                 cliente.categoria.id = 1;
                 cliente.estado.id = 1;
-                cliente.cuit = "00000000000";
+                cliente.cuit = clienteTemporal.CUIT;
                 cliente.iva = "13";
                 cliente.pais.id = 1;//ARGENTINA
                 cliente.expreso.id = 1;
@@ -359,10 +390,11 @@ namespace Gestion_Web.Formularios.Clientes
                 cliente.hijoDe = 0;
                 cliente.alias = clienteTemporal.Apellido + " " + clienteTemporal.Nombre;
 
-                Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
-                cliente.sucursal.id = vendedor.sucursal;//preguntar
+                //Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
 
-                cliente.vendedor.id = vendedor.id;
+                cliente.vencFC = 20;
+
+                //cliente.vendedor.id = vendedor.id;
                 cliente.lisPrecio.id = 1;
                 cliente.formaPago.id = 1;//CONTADO
 
@@ -382,22 +414,47 @@ namespace Gestion_Web.Formularios.Clientes
 
                 cliente.origen = 1;
 
+                string cel = clienteTemporal.Telefono.Substring(clienteTemporal.Telefono.Length - 10, 10);
+                cel = cel.Insert(2, "-");
+
+                var Vendedor = CrearVendedorSiNoExiste(clienteTemporal);
+                cliente.vendedor.id = Vendedor.id;
+                cliente.sucursal.id = Vendedor.sucursal;//preguntar
+                cliente.estado.id = CrearElClienteEstadoSiNoExiste(clienteTemporal.Estado);
+
+                //crea
                 if (!contClienteEntity.ExisteClienteConEsteCUITEnElCampoRazonSocial(clienteTemporal.CUIT))
                 {
-                    string cel = clienteTemporal.Telefono.Substring(clienteTemporal.Telefono.Length - 10, 10);
-                    cel = cel.Insert(2, "-");
-
-                    int idVendedor = CrearVendedorSiNoExiste(clienteTemporal);
-                    cliente.vendedor.id = idVendedor;
-                    cliente.estado.id = CrearElClienteEstadoSiNoExiste(clienteTemporal.Estado);
-                    contCliente.agregarCliente(cliente);
-
-                    contClienteEntity.agregarClienteDatos(new Cliente_Datos
+                    if (contCliente.agregarCliente(cliente) > 0)
                     {
+                        if (contClienteEntity.agregarClienteDatos(new Cliente_Datos
+                        {
+                            IdCliente = cliente.id,
+                            Celular = cel
+                        }) > 0)
+                        {
+                            return 1;
+                        }
+                    }
+                    return -1;
+                }
+
+                //actualiza
+                int idClienteAModificar = contCliente.obtenerClienteCuit(clienteTemporal.CUIT).id;
+                cliente.id = idClienteAModificar;
+                if (contCliente.modificarCliente(cliente, clienteTemporal.CUIT, cliente.codigo) > 0)
+                {
+                    int idClienteDatos = (int)contClienteEntity.obtenerClienteDatosByIdCliente(cliente.id).Id;
+                    if (contClienteEntity.modificarClienteDatos(new Cliente_Datos
+                    {
+                        Id = idClienteDatos,
                         IdCliente = cliente.id,
                         Celular = cel
-                    });
-                    return 1;
+                    }) >= 0)
+                    {
+                        return 0;
+                    }
+                    return -1;
                 }
                 return 0;
             }
@@ -529,18 +586,24 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        private int CrearVendedorSiNoExiste(ClienteTemporalGestion clienteTemporalGestion)
+        private Vendedor CrearVendedorSiNoExiste(ClienteTemporalGestion clienteTemporalGestion)
         {
             try
             {
-                int idVendedor = 0;
-                var vendedor = contVendedor.obtenerVendedorByNombre(clienteTemporalGestion.Vendedor);
+                var vendedor = contVendedorEntity.ObtenerVendedorByNombre(clienteTemporalGestion.Vendedor);
                 Vendedor ven = new Vendedor();
                 if (vendedor == null)
                 {
                     Gestion_Api.Modelo.Empleado emp = new Gestion_Api.Modelo.Empleado();
 
-                    emp.legajo = contClienteEntity.ObtenerUltimoIdCliente() + 1;
+                    if (contClienteEntity.ObtenerUltimoIdCliente() == -1)
+                    {
+                        emp.legajo = 1;
+                    }
+                    else
+                    {
+                        emp.legajo = contClienteEntity.ObtenerUltimoIdCliente() + 1;
+                    }
                     emp.nombre = clienteTemporalGestion.Vendedor;
                     emp.apellido = "";
                     emp.direccion = "";
@@ -558,14 +621,19 @@ namespace Gestion_Web.Formularios.Clientes
                     ven.comision = 0;
                     ven.sucursal = contSucursal.obtenerSucursalesList().FirstOrDefault().id;
 
-                    idVendedor = this.contVendedor.agregarVendedor(ven);
+                    ven.id = this.contVendedor.agregarVendedor(ven);
                 }
-                return idVendedor;
+                else
+                {
+                    ven.id = vendedor.id;
+                    ven.sucursal = (int)vendedor.sucursal;
+                }
+                return ven;
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando Empleado" + ex.Message));
-                return 0;
+                return null;
             }
         }
 
@@ -583,6 +651,57 @@ namespace Gestion_Web.Formularios.Clientes
             catch (Exception ex)
             {
                 return -1;
+            }
+        }
+
+        public void ExportarInformeDelResultado(List<CuitsEstados> listaCuits)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Cuit");
+                dt.Columns.Add("Estado");
+
+                foreach (var item in listaCuits)
+                {
+                    DataRow dr = dt.NewRow();
+
+                    dr["Cuit"] = item.Cuit;
+                    dr["Estado"] = item.Estado;
+                    dt.Rows.Add(dr);
+                }
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("InformeImportarClientes.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("dsInformeImportacionClientes", dt);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get xls content
+                Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                String filename = string.Format("{0}.{1}", "Informe_Importacion_Clientes", "xls");
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/ms-excel";
+                this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                this.Response.BinaryWrite(xlsContent);
+
+                this.Response.End();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al imprimir detalle de ventas generarReporte15. " + ex.Message));
             }
         }
     }

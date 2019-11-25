@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -789,6 +789,17 @@
     </Content>
     <Content Include="Formularios\Articulos\StockValorizadoDetalladoR.rdlc" />
     <Content Include="Formularios\Articulos\ListaCatalogoR.rdlc" />
+    <Content Include="Formularios\Clientes\dsImportacionClientes.xsc">
+      <DependentUpon>dsImportacionClientes.xsd</DependentUpon>
+    </Content>
+    <None Include="Formularios\Clientes\dsImportacionClientes.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsImportacionClientes.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Formularios\Clientes\dsImportacionClientes.xss">
+      <DependentUpon>dsImportacionClientes.xsd</DependentUpon>
+    </Content>
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1442,6 +1453,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Clientes\dsImportacionClientes.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsImportacionClientes.xsd</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
@@ -2458,7 +2474,6 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMRemitos.aspx.cs">
       <DependentUpon>ABMRemitos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\Facturas\ABMRemitos.aspx.designer.cs">
       <DependentUpon>ABMRemitos.aspx</DependentUpon>
@@ -3335,7 +3350,12 @@
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc" />
-    <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc" />
+    <EmbeddedResource Include="Formularios\Clientes\InformeImportarClientes.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Reportes\VentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadSucursal.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosClientes.rdlc" />
