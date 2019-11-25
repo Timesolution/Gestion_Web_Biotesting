@@ -420,6 +420,18 @@
                         <div class="modal-body">
                             <div role="form" class="form-horizontal col-md-12">
                                 <div class="form-group">
+                                    <label class="col-md-4">Nuevo Costo</label>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <asp:TextBox ID="txtCosto" style="text-align:right" runat="server" CssClass="form-control" onkeypress="javascript: return validarNro(event)" Text="0"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:Button ID="btnModificarCosto" runat="server" Text="Actualizar" CssClass="btn btn-success" OnClick="btnModificarCosto_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-4">Porcentaje Costo</label>
                                     <div class="col-md-5">
 
@@ -1348,15 +1360,17 @@
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
+
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
     <script src="../../Scripts/libs/bootstrap.min.js"></script>
-    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+
     <script src="../../Scripts/Application.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
     <script src="../../Scripts/demo/gallery.js"></script>
     <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
     <script src="../../Scripts/demo/notifications.js"></script>
 
     <!-- Page-Level Plugin Scripts - Tables -->
