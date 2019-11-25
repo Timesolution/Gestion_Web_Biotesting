@@ -204,6 +204,7 @@
                                                     <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMEstadosClientes.aspx">Estados</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ImportarClientes.aspx">Importar Clientes</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ActividadClientes.aspx">Actividad</a></li>
                                                 </ul>
                                             </li>
                                             <%--<li><a href="">Contactos</a></li>--%>
