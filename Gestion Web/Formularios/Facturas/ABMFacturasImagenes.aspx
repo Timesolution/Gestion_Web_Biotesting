@@ -1733,7 +1733,7 @@
 
            
 
-        </asp:PlaceHolder>
+        </asp:PlaceHolder>modalCantidadArticulos
 
         <%--UPDATE PANEL FACTURAS IMAGENES--%>
         <div class="main">
@@ -1872,20 +1872,12 @@
                                                                     </div>
                                                                 </div>
                                                             </th>
-                                                            <th style="width: 20%">
-                                                                <div style="text-align: center">
-                                                                    <a class="btn btn-info" data-toggle="modal" href="#modalCantidadArticulos" runat="server" visible="true">
-                                                                        <i class="shortcut-icon icon-bolt"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <!-- /widget-content -->
 
                                         </div>
 
@@ -2201,7 +2193,7 @@
                     <div class="col-md-1">
                         <asp:Button ID="Button3" Text="CANCELAR" data-dismiss="modal" runat="server" type="button" class="btn btn-danger"></asp:Button>
                     </div>
-                    <asp:label id="lb_IdArticulo_ModalCalculadora" runat="server" Text=""></asp:label>
+                    <asp:Label ID="lb_IdArticulo_ModalCalculadora" runat="server" Text=""></asp:Label>
                 </div>
                 <br />
                 <div class="col-md-12 row">
@@ -2270,6 +2262,88 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalCantidadArticulos_Editar" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="col-md-2">
+                        <asp:TextBox runat="server" ID="txtCantidadArticuloEditar" class="form-control"></asp:TextBox>
+                    </div>
+                    <div class="col-md-1">
+                        <asp:Button ID="Button1" OnClientClick="Javascript: return GuardarCantidadDeCalculadoraAlArticuloDeLaFactura();" OnClick="agregarArticuloAventa_Click" Text="ACEPTAR" runat="server" type="button" class="btn btn-success"></asp:Button>
+                    </div>
+                    <div class="col-md-1">
+                        <asp:Button ID="Button5" Text="CANCELARR" data-dismiss="modal" runat="server" type="button" class="btn btn-danger"></asp:Button>
+                    </div>
+                    <asp:Label ID="Label4" runat="server" Text=""></asp:Label>
+                </div>
+                <br />
+                <div class="col-md-12 row">
+                    <div class="col-md-2">
+                        <asp:UpdatePanel ID="UpdatePanel17" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    <asp:Button ID="Button6" Text="1" OnClientClick="javascript:return BotonCalculadoraEditar(1);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button7" Text="2" OnClientClick="javascript:return BotonCalculadoraEditar(2);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button8" Text="3" OnClientClick="javascript:return BotonCalculadoraEditar(3);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <asp:Button ID="Button9" Text="4" OnClientClick="javascript:return BotonCalculadoraEditar(4);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button10" Text="5" OnClientClick="javascript:return BotonCalculadoraEditar(5);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button11" Text="6" OnClientClick="javascript:return BotonCalculadoraEditar(6);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <asp:Button ID="Button12" Text="7" OnClientClick="javascript:return BotonCalculadoraEditar(7);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button13" Text="8" OnClientClick="javascript:return BotonCalculadoraEditar(8);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button14" Text="9" OnClientClick="javascript:return BotonCalculadoraEditar(9);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <asp:Button ID="btnBorrarUltimoNumeroCalculadoraEditar" Text="CE" OnClientClick="javascript:return BorrarElUltimoNumeroCalculadoraEditar();" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button15" Text="0" OnClientClick="javascript:return BotonCalculadoraEditar(0);" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                                <td>
+                                                    <asp:Button ID="Button16" Text="." OnClientClick="javascript:return AgregarPuntoCalculadoraEditar();" runat="server" type="button" class="btn btn-success"></asp:Button>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="col-md-10">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <style>
@@ -2286,7 +2360,7 @@
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
-
+    <script src="../../Scripts/bootstrap.js"></script>
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
     <script src="../../Scripts/libs/bootstrap.min.js"></script>
@@ -2653,18 +2727,38 @@
                     console.log(JSON.stringify(error));
                     $.msgbox("No se pudo filtrar correctamente!", { type: "error" });
                     $(obj).removeAttr('disabled');
-                }
-                ,
+                },
                 success: OnSuccessAgregarCantidadDeCalculadoraAlArticuloDeLaFactura
             });
         }
 
-       function OnSuccessAgregarCantidadDeCalculadoraAlArticuloDeLaFactura(response) {
-<%--            var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');--%>
+        function OnSuccessAgregarCantidadDeCalculadoraAlArticuloDeLaFactura() {
+            var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticulo.ClientID %>');
+            txtCantidadArticulo.value = "";
+        }
 
-            var data = response.d;
-            var obj = JSON.parse(data);
+        function GuardarCantidadDeCalculadoraAlArticuloDeLaFactura() {
+            var controlLabel = document.getElementById('<%= lb_IdArticulo_ModalCalculadora.ClientID %>');
+            var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
 
+            $.ajax({
+                type: "POST",
+                url: "ABMFacturasImagenes.aspx/SetearEnLaSessionIdArticuloYCantidad",
+                data: '{ idArticulo: "' + controlLabel.textContent + '", cantidad: "' + txtCantidadArticulo.value + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar correctamente!", { type: "error" });
+                    $(obj).removeAttr('disabled');
+                },
+                success: OnSuccessGuardarCantidadDeCalculadoraAlArticuloDeLaFactura
+            });
+        }
+
+        function OnSuccessGuardarCantidadDeCalculadoraAlArticuloDeLaFactura() {
+            var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
+            txtCantidadArticulo.value = "";
         }
 
         function BotonCalculadora(numero) {
@@ -2687,6 +2781,34 @@
                 var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticulo.ClientID %>');
                 txtCantidadArticulo.value += '.';
             }
+        }
+
+        function BotonCalculadoraEditar(numero) {
+            var txtCantidadArticuloEditar = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
+            txtCantidadArticuloEditar.value += numero;
+        }
+
+        function BorrarElUltimoNumeroCalculadoraEditar() {
+            var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
+            var texto = txtCantidadArticulo.value;
+            txtCantidadArticulo.value = texto.slice(0, -1)
+        }
+
+        function AgregarPuntoCalculadoraEditar() {
+            var txtCantidadArticuloEditar = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
+            if (!txtCantidadArticuloEditar.value.includes('.')) {
+                if (txtCantidadArticuloEditar.value.length == 0) {
+                    txtCantidadArticuloEditar.value += "0";
+                }
+                var txtCantidadArticuloEditar = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
+                txtCantidadArticuloEditar.value += '.';
+            }
+        }
+
+        function MostrarCalculadoraEditarCantidad(idArticulo) {
+            $("#modalCantidadArticulos_Editar").modal();
+
+            document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>').value = "";
         }
     </script>
 </asp:Content>

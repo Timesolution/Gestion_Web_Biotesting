@@ -570,7 +570,6 @@ namespace Gestion_Web.Formularios.Facturas
                         cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
                     }
                     cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    //cuadroImagen.Linkbutton1.OnClientClick = "Javascript: MostrarCalculadora();";
                     cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
                     String path = Server.MapPath("../../images/Productos/" + item.id + "/");
                     if (Directory.Exists(path))
@@ -685,25 +684,39 @@ namespace Gestion_Web.Formularios.Facturas
         {
             var idLinkButton = (sender as LinkButton).ID;
             int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "MostrarCalculadora("+ idArt + ");", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "MostrarCalculadora(" + idArt + ");", true);
             Session.Add("idArticuloCalculadora", idArt.ToString());
         }
 
         [WebMethod]
         public static string SetearEnLaSessionIdArticuloYCantidad(string idArticulo, string cantidad)
         {
-            Page objp = new Page();
-            objp.Session["idArticuloCalculadora"] = idArticulo;
-            objp.Session["cantidadArticuloCalculadora"] = cantidad;
-            return idArticulo;
+            try
+            {
+                Page objp = new Page();
+                objp.Session["idArticuloCalculadora"] = idArticulo;
+                objp.Session["cantidadArticuloCalculadora"] = cantidad;
+                return idArticulo;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
         }
 
         public void agregarArticuloAventa_Click(object sender, EventArgs e)
         {
-            int idArticulo = Convert.ToInt32(Session["idArticuloCalculadora"]);
-            decimal cantidadArticulo = Convert.ToDecimal(Session["cantidadArticuloCalculadora"]);
-            Articulo articulo = contArticulo.obtenerArticuloByID(idArticulo);
-            guardarArticuloEnFactura(articulo, cantidadArticulo);
+            try
+            {
+                int idArticulo = Convert.ToInt32(Session["idArticuloCalculadora"]);
+                decimal cantidadArticulo = Convert.ToDecimal(Session["cantidadArticuloCalculadora"]);
+                Articulo articulo = contArticulo.obtenerArticuloByID(idArticulo);
+                guardarArticuloEnFactura(articulo, cantidadArticulo);
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         #region FACTURAR IMAGENES PANADERIA
@@ -727,7 +740,6 @@ namespace Gestion_Web.Formularios.Facturas
                     cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
                 }
             }
-
             this.guardarArticuloEnFactura(articulo, cantidad);
         }
 
@@ -860,6 +872,352 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #endregion
+
+        protected void btnIrAHome_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("../../Default.aspx");
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        protected void btnCancelarFactura_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Session.Remove("Factura");
+                Response.Redirect("ABMFacturasImagenes.aspx");
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        protected void btnSetearFormaDePagoPorTarjeta()
+        {
+            try
+            {
+                this.lbFormaDePago.Text = "Forma de pago: Tarjeta";
+                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Tarjeta").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorTarjeta. Ex:" + ex.Message));
+            }
+        }
+
+        protected void btnSetearFormaDePagoPorContado(object sender, EventArgs e)
+        {
+            try
+            {
+                this.lbFormaDePago.Text = "Forma de pago: Contado";
+                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Contado").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorContado. Ex:" + ex.Message));
+            }
+        }
+
+        protected void btntest_Click(object sender, EventArgs e)
+        {
+            string t = "hello world";
+        }
+
+        protected void reproducirSonido()
+        {
+            try
+            {
+                String path = Server.MapPath("../../content/Sounds/pulsar.wav");
+                SoundPlayer soundPlayer = new SoundPlayer(path);
+                soundPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnAgregarArt_Click(object sender, EventArgs e)
+        {
+            this.cargarProductoAFactura(0);
+        }
+
+        private void cargarProductoAFactura(int posArtEnLaSessionFactura)
+        {
+            try
+            {
+                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
+
+                if (this.txtCantidad.Text == "")
+                {
+                    this.txtCantidad.Text = "0";
+                }
+                if (this.TxtDescuentoArri.Text == "")
+                {
+                    this.TxtDescuentoArri.Text = "0";
+                }
+                if (this.txtTotalArri.Text == "")
+                {
+                    this.txtTotalArri.Text = "0";
+                }
+
+
+                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+
+                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
+                if (p != null)
+                {
+                    if (p.PrecioFijo > 0)
+                        this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
+                    else
+                        this.TxtDescuentoArri.Text = p.Descuento.ToString();
+
+                    this.verificarAlertaArticulo(artVerPromo);
+                    this.TxtDescuentoArri.Attributes.Remove("disabled");
+                    this.txtPUnitario.Attributes.Remove("disabled");
+                }
+
+                var medida = contEnt.obtenerMedidasVentaArticulo(artVerPromo.id);
+                if (medida != null)
+                {
+                    if (medida.Count > 0 && this.chkVentaMedidaVenta.Checked == true)
+                    {
+                        this.txtDescripcion.Text += "(" + this.txtCantidad.Text + " " + medida.FirstOrDefault().Medida + " x " + medida.FirstOrDefault().Cantidad + ")";
+                        decimal cantBulto = medida.FirstOrDefault().Cantidad.Value * Convert.ToDecimal(this.txtCantidad.Text);
+                        this.txtCantidad.Text = decimal.Round(cantBulto, 2).ToString();
+                    }
+                }
+
+                //recalculo total
+                this.totalItem();
+
+                //item
+                ItemFactura item = new ItemFactura();
+                item.articulo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
+                decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
+                item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
+                item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
+
+                //cargo la descripcion del articulo que tengo en pantalla
+                item.articulo.descripcion = this.txtDescripcion.Text;
+
+                //agrego//costos
+                item.Costo = item.articulo.costo;
+                item.costoImponible = item.articulo.costoImponible;
+                item.CostoReal = item.articulo.costoReal;
+                //agrego iva 
+                //SI ES FACTURA EXPORTACION LE DEJO 0%
+                item.porcentajeIva = item.articulo.porcentajeIva;
+                if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
+                {
+                    item.porcentajeIva = 0;
+                    item.articulo.porcentajeIva = 0;
+                }
+
+                if (this.txtPUnitario.Text.Contains(','))
+                {
+                    this.txtPUnitario.Text = this.txtPUnitario.Text.Replace(",", "");
+                }
+
+                item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
+                //en base al precio unitario calculo iva del item
+                item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
+
+                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
+                {
+                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
+                    {
+                        item.precioSinIva = item.precioUnitario;
+                    }
+                }
+
+                //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
+                item.precioSinRecargo = item.precioSinIva;
+                item.precioVentaSinRecargo = item.precioUnitario;
+                item.porcentajeIIBB = item.articulo.ingBrutos;
+                item.porcentajeOtrosImpuestos = item.articulo.impInternos;
+
+                //Si es factura de combustibles, seteo los valores al item
+                if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0 && item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
+                {
+                    decimal totalItc = 0;
+                    decimal totalHidrica = 0;
+                    decimal totalVial = 0;
+                    decimal totalMunicipal = 0;
+
+                    var datos = contEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
+                    if (datos != null)
+                    {
+                        totalItc += decimal.Round((datos.ITC.Value), 2);
+                        totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
+                        totalVial += decimal.Round((datos.TasaVial.Value), 2);
+                        totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
+                    }
+
+                    decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
+
+                    item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
+                    item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal;
+                }
+
+                if (desc > 0)
+                {
+                    decimal tot = decimal.Round(item.precioUnitario * item.cantidad, 2);
+                    decimal totDesc = decimal.Round(tot * (desc / 100), 2, MidpointRounding.AwayFromZero);
+                    //item.descuento = decimal.Round(totDesc, 2);
+                    item.descuento = totDesc;
+                }
+                else
+                {
+                    item.descuento = 0;
+                }
+
+                ////si es importado cargo los datos de despacho si tiene alguno cargado
+                //this.agregarInfoDespachoItem(item);
+                this.factura.items.Add(item);
+
+                //lo agrego al session
+                if (Session["Factura"] == null)
+                {
+                    Factura fac = new Factura();
+                    Session.Add("Factura", fac);
+                }
+                Factura f = Session["Factura"] as Factura;
+
+                if (!String.IsNullOrEmpty(this.txtRenglon.Text))
+                    item.nroRenglon = Convert.ToInt32(this.txtRenglon.Text);
+                else
+                    item.nroRenglon = f.items.Count() + 1;
+
+                if (posArtEnLaSessionFactura != -1)
+                {
+                    f.items.Insert(posArtEnLaSessionFactura, item);
+                }
+                else
+                {
+                    f.items.Add(item);
+                }
+
+                Session.Add("Factura", f);
+
+                //lo dibujo en pantalla
+                this.cargarItems();
+
+                //agrego abajo
+                //this.factura.items.Add(item);
+                //actualizo totales
+                this.actualizarTotales();
+
+                //borro los campos
+                this.borrarCamposagregarItem();
+                //this.UpdatePanel1.Update();
+                this.txtCodigo.Focus();
+
+                this.lblMontoOriginal.Text = f.total.ToString();
+                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+
+            }
+            catch (Exception ex)
+            {
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando articulos." + ex.Message + " \", {type: \"error\"});", true);
+            }
+        }
+
+        private void cargarItemsTablaModoImagenes(ItemFactura item)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+
+                TableCell celCodigo = new TableCell();
+                celCodigo.Text = item.articulo.codigo.ToString();
+                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCodigo);
+
+                TableCell celDescripcion = new TableCell();
+                celDescripcion.Text = item.articulo.descripcion;
+                celDescripcion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celDescripcion);
+
+                TableCell celPrecio = new TableCell();
+                celPrecio.Text = item.precioUnitario.ToString();
+                celPrecio.VerticalAlign = VerticalAlign.Middle;
+                celPrecio.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celPrecio);
+
+                TableCell celCantidad = new TableCell();
+                TextBox txtCantidadImagenes = new TextBox();
+                txtCantidadImagenes.ID = "_" + item.articulo.id;
+                txtCantidadImagenes.Text = item.cantidad.ToString();
+                txtCantidadImagenes.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
+                txtCantidadImagenes.CssClass = "form-control disabled";
+                txtCantidadImagenes.Attributes.Add("Disabled", "Disabled");
+                txtCantidadImagenes.TextChanged += new EventHandler(this.agregarArticuloAventa_TextChanged);
+                txtCantidadImagenes.AutoPostBack = true;
+                celCantidad.Controls.Add(txtCantidadImagenes);
+                celCantidad.VerticalAlign = VerticalAlign.Middle;
+                celCantidad.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celCantidad);
+
+                TableCell celTotal = new TableCell();
+                celTotal.Text = Decimal.Round(item.precioUnitario * item.cantidad, 2).ToString();
+                celTotal.VerticalAlign = VerticalAlign.Middle;
+                celTotal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celTotal);
+
+                TableCell celAccion = new TableCell();//botones sumar restar
+
+                LinkButton btnEditarCantidad = new LinkButton();
+                btnEditarCantidad.ID = "btnEditarCantidad" + item.articulo.id;
+                btnEditarCantidad.CssClass = "btn btn-info";
+                btnEditarCantidad.Text = "<span class='shortcut-icon icon-pencil'></span>";
+
+                btnEditarCantidad.OnClientClick = "return MostrarCalculadoraEditarCantidad();";
+                celAccion.Controls.Add(btnEditarCantidad);
+
+                lb_IdArticulo_ModalCalculadora.Text = item.articulo.id.ToString();
+
+                //Literal l = new Literal();
+                //l.Text = "&nbsp";
+                //celAccion.Controls.Add(l);
+
+                //LinkButton btnRestar = new LinkButton();
+                //btnRestar.ID = "btnRestar_" + item.articulo.id;
+                //btnRestar.CssClass = "btn btn-info";
+                //btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
+                //btnRestar.Click += new EventHandler(this.sumarArticuloImagenes);
+                //celAccion.Controls.Add(btnRestar);
+
+                //Literal l2 = new Literal();
+                //l2.Text = "&nbsp";
+                //celAccion.Controls.Add(l2);
+
+                //LinkButton btnSumar = new LinkButton();
+                //btnSumar.ID = "btnSumar_" + item.articulo.id;
+                //btnSumar.CssClass = "btn btn-info";
+                //btnSumar.Text = "<span class='shortcut-icon icon-plus'></span>";
+                //btnSumar.Click += new EventHandler(this.sumarArticuloImagenes);
+                //celAccion.Controls.Add(btnSumar);
+
+                tr.Cells.Add(celAccion);
+
+                this.phItemsModoImagenes.Controls.Add(tr);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         #region original
 
@@ -4256,267 +4614,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         #region items factura
 
-        protected void btnAgregarArt_Click(object sender, EventArgs e)
-        {
-            this.cargarProductoAFactura(0);
-        }
 
-        private void cargarProductoAFactura(int posArtEnLaSessionFactura)
-        {
-            try
-            {
-                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
-
-                if (this.txtCantidad.Text == "")
-                {
-                    this.txtCantidad.Text = "0";
-                }
-                if (this.TxtDescuentoArri.Text == "")
-                {
-                    this.TxtDescuentoArri.Text = "0";
-                }
-                if (this.txtTotalArri.Text == "")
-                {
-                    this.txtTotalArri.Text = "0";
-                }
-
-
-                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
-
-                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-                if (p != null)
-                {
-                    if (p.PrecioFijo > 0)
-                        this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
-                    else
-                        this.TxtDescuentoArri.Text = p.Descuento.ToString();
-
-                    this.verificarAlertaArticulo(artVerPromo);
-                    this.TxtDescuentoArri.Attributes.Remove("disabled");
-                    this.txtPUnitario.Attributes.Remove("disabled");
-                }
-
-                var medida = contEnt.obtenerMedidasVentaArticulo(artVerPromo.id);
-                if (medida != null)
-                {
-                    if (medida.Count > 0 && this.chkVentaMedidaVenta.Checked == true)
-                    {
-                        this.txtDescripcion.Text += "(" + this.txtCantidad.Text + " " + medida.FirstOrDefault().Medida + " x " + medida.FirstOrDefault().Cantidad + ")";
-                        decimal cantBulto = medida.FirstOrDefault().Cantidad.Value * Convert.ToDecimal(this.txtCantidad.Text);
-                        this.txtCantidad.Text = decimal.Round(cantBulto, 2).ToString();
-                    }
-                }
-
-                //recalculo total
-                this.totalItem();
-
-                //item
-                ItemFactura item = new ItemFactura();
-                item.articulo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
-                item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
-                decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
-                item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
-                item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
-
-                //cargo la descripcion del articulo que tengo en pantalla
-                item.articulo.descripcion = this.txtDescripcion.Text;
-
-                //agrego//costos
-                item.Costo = item.articulo.costo;
-                item.costoImponible = item.articulo.costoImponible;
-                item.CostoReal = item.articulo.costoReal;
-                //agrego iva 
-                //SI ES FACTURA EXPORTACION LE DEJO 0%
-                item.porcentajeIva = item.articulo.porcentajeIva;
-                if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
-                {
-                    item.porcentajeIva = 0;
-                    item.articulo.porcentajeIva = 0;
-                }
-
-                if (this.txtPUnitario.Text.Contains(','))
-                {
-                    this.txtPUnitario.Text = this.txtPUnitario.Text.Replace(",", "");
-                }
-
-                item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
-                //en base al precio unitario calculo iva del item
-                item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
-                {
-                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
-                    {
-                        item.precioSinIva = item.precioUnitario;
-                    }
-                }
-
-                //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
-                item.precioSinRecargo = item.precioSinIva;
-                item.precioVentaSinRecargo = item.precioUnitario;
-                item.porcentajeIIBB = item.articulo.ingBrutos;
-                item.porcentajeOtrosImpuestos = item.articulo.impInternos;
-
-                //Si es factura de combustibles, seteo los valores al item
-                if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0 && item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
-                {
-                    decimal totalItc = 0;
-                    decimal totalHidrica = 0;
-                    decimal totalVial = 0;
-                    decimal totalMunicipal = 0;
-
-                    var datos = contEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
-                    if (datos != null)
-                    {
-                        totalItc += decimal.Round((datos.ITC.Value), 2);
-                        totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
-                        totalVial += decimal.Round((datos.TasaVial.Value), 2);
-                        totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
-                    }
-
-                    decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                    item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
-                    item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal;
-                }
-
-                if (desc > 0)
-                {
-                    decimal tot = decimal.Round(item.precioUnitario * item.cantidad, 2);
-                    decimal totDesc = decimal.Round(tot * (desc / 100), 2, MidpointRounding.AwayFromZero);
-                    //item.descuento = decimal.Round(totDesc, 2);
-                    item.descuento = totDesc;
-                }
-                else
-                {
-                    item.descuento = 0;
-                }
-
-                ////si es importado cargo los datos de despacho si tiene alguno cargado
-                //this.agregarInfoDespachoItem(item);
-                this.factura.items.Add(item);
-
-                //lo agrego al session
-                if (Session["Factura"] == null)
-                {
-                    Factura fac = new Factura();
-                    Session.Add("Factura", fac);
-                }
-                Factura f = Session["Factura"] as Factura;
-
-                if (!String.IsNullOrEmpty(this.txtRenglon.Text))
-                    item.nroRenglon = Convert.ToInt32(this.txtRenglon.Text);
-                else
-                    item.nroRenglon = f.items.Count() + 1;
-
-                if (posArtEnLaSessionFactura != -1)
-                {
-                    f.items.Insert(posArtEnLaSessionFactura, item);
-                }
-                else
-                {
-                    f.items.Add(item);
-                }
-
-                Session.Add("Factura", f);
-
-                //lo dibujo en pantalla
-                this.cargarItems();
-
-                //agrego abajo
-                //this.factura.items.Add(item);
-                //actualizo totales
-                this.actualizarTotales();
-
-                //borro los campos
-                this.borrarCamposagregarItem();
-                //this.UpdatePanel1.Update();
-                this.txtCodigo.Focus();
-
-                this.lblMontoOriginal.Text = f.total.ToString();
-                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-
-            }
-            catch (Exception ex)
-            {
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando articulos." + ex.Message + " \", {type: \"error\"});", true);
-            }
-        }
-
-        private void cargarItemsTablaModoImagenes(ItemFactura item)
-        {
-            try
-            {
-                //fila
-                TableRow tr = new TableRow();
-
-                TableCell celCodigo = new TableCell();
-                celCodigo.Text = item.articulo.codigo.ToString();
-                celCodigo.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celCodigo);
-
-                TableCell celDescripcion = new TableCell();
-                celDescripcion.Text = item.articulo.descripcion;
-                celDescripcion.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celDescripcion);
-
-                TableCell celPrecio = new TableCell();
-                celPrecio.Text = item.precioUnitario.ToString();
-                celPrecio.VerticalAlign = VerticalAlign.Middle;
-                celPrecio.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celPrecio);
-
-                TableCell celCantidad = new TableCell();
-                TextBox txtCantidadImagenes = new TextBox();
-                txtCantidadImagenes.ID = "_" + item.articulo.id;
-                txtCantidadImagenes.Text = item.cantidad.ToString();
-                txtCantidadImagenes.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
-                txtCantidadImagenes.CssClass = "form-control";
-                txtCantidadImagenes.TextChanged += new EventHandler(this.agregarArticuloAventa_TextChanged);
-                txtCantidadImagenes.AutoPostBack = true;
-                celCantidad.Controls.Add(txtCantidadImagenes);
-                celCantidad.VerticalAlign = VerticalAlign.Middle;
-                celCantidad.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celCantidad);
-
-                TableCell celTotal = new TableCell();
-                celTotal.Text = Decimal.Round(item.precioUnitario * item.cantidad, 2).ToString();
-                celTotal.VerticalAlign = VerticalAlign.Middle;
-                celTotal.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celTotal);
-
-                TableCell celAccion = new TableCell();//botones sumar restar
-
-                LinkButton btnRestar = new LinkButton();
-                btnRestar.ID = "btnRestar_" + item.articulo.id;
-                btnRestar.CssClass = "btn btn-info";
-                btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
-                btnRestar.Click += new EventHandler(this.sumarArticuloImagenes);
-                celAccion.Controls.Add(btnRestar);
-
-                Literal l = new Literal();
-                l.Text = "&nbsp";
-                celAccion.Controls.Add(l);
-
-                LinkButton btnSumar = new LinkButton();
-                btnSumar.ID = "btnSumar_" + item.articulo.id;
-                btnSumar.CssClass = "btn btn-info";
-                btnSumar.Text = "<span class='shortcut-icon icon-plus'></span>";
-                //btnEliminar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
-                btnSumar.Click += new EventHandler(this.sumarArticuloImagenes);
-                celAccion.Controls.Add(btnSumar);
-
-                tr.Cells.Add(celAccion);
-
-                this.phItemsModoImagenes.Controls.Add(tr);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
 
         private void restarCantidadArticulo(object sender, EventArgs e)
         {
@@ -10644,77 +10742,6 @@ namespace Gestion_Web.Formularios.Facturas
             Response.Redirect("ABMFacturas.aspx");
         }
         #endregion
-
-        protected void btnIrAHome_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Response.Redirect("../../Default.aspx");
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        protected void btnCancelarFactura_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Session.Remove("Factura");
-                Response.Redirect("ABMFacturasImagenes.aspx");
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        protected void btnSetearFormaDePagoPorTarjeta()
-        {
-            try
-            {
-                this.lbFormaDePago.Text = "Forma de pago: Tarjeta";
-                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Tarjeta").Value;
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorTarjeta. Ex:" + ex.Message));
-            }
-        }
-
-        protected void btnSetearFormaDePagoPorContado(object sender, EventArgs e)
-        {
-            try
-            {
-                this.lbFormaDePago.Text = "Forma de pago: Contado";
-                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Contado").Value;
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorContado. Ex:" + ex.Message));
-            }
-        }
-
-        protected void btntest_Click(object sender, EventArgs e)
-        {
-            string t = "hello world";
-        }
-
-        protected void reproducirSonido()
-        {
-            try
-            {
-                String path = Server.MapPath("../../content/Sounds/pulsar.wav");
-                SoundPlayer soundPlayer = new SoundPlayer(path);
-                soundPlayer.Play();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
         #region alta rapida clientes
         protected void btnAltaRapida_Click(object sender, EventArgs e)
         {
@@ -10832,6 +10859,5 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
         #endregion
-
     }
 }
