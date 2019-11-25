@@ -7,13 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Clientes
-{
-
-
-    public partial class ImportarClientes
-    {
-
+namespace Gestion_Web.Formularios.Clientes {
+    
+    
+    public partial class ImportarClientes {
+        
         /// <summary>
         /// dropList_Provincias control.
         /// </summary>
@@ -22,7 +20,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList dropList_Provincias;
-
+        
         /// <summary>
         /// Label1 control.
         /// </summary>
@@ -31,7 +29,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label1;
-
+        
         /// <summary>
         /// dropList_Vendedores control.
         /// </summary>
@@ -40,7 +38,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList dropList_Vendedores;
-
+        
         /// <summary>
         /// FileUpload1 control.
         /// </summary>
@@ -49,7 +47,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
-
+        
         /// <summary>
         /// lbDropListEmpresaError control.
         /// </summary>
@@ -58,7 +56,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbDropListEmpresaError;
-
+        
         /// <summary>
         /// btnImportarUsuarios control.
         /// </summary>
@@ -67,7 +65,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnImportarUsuarios;
-
+        
         /// <summary>
         /// btnImportarClientes control.
         /// </summary>
@@ -76,5 +74,14 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnImportarClientes;
+        
+        /// <summary>
+        /// ReportViewer1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.Reporting.WebForms.ReportViewer ReportViewer1;
     }
 }
