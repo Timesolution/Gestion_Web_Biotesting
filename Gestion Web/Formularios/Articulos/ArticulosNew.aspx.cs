@@ -758,7 +758,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     //accion 1 = busqueda
                     if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
-                        noActu += this.contArticulo.aumentarPrecioPorcentaje(this.hiddenBuscar.Value.ToString(), porcentaje, noActu);
+                        noActu += this.contArticulo.aumentarPrecioPorcentaje(this.hiddenDescripcion.Value.ToString(), porcentaje, noActu);
 
                     //accion 2 = filtro
                     if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
@@ -1657,6 +1657,47 @@ namespace Gestion_Web.Formularios.Articulos
         protected void ListRazonSocial_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        protected void btnModificarCosto_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal costo = Convert.ToDecimal(this.txtCosto.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
+
+                if (Convert.ToInt32(this.hiddenAccion.Value) == 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe Buscar o Filtrar los articulos"));
+                    return;
+                }
+                else
+                {
+                    //accion 1 = busqueda
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 1)
+                        noActu += this.contArticulo.aumentarCosto(this.hiddenDescripcion.Value.ToString(), costo, noActu);
+
+                    //accion 2 = filtro
+                    if (Convert.ToInt32(this.hiddenAccion.Value) == 2)
+                        noActu += this.contArticulo.aumentarCosto(Convert.ToInt32(this.hiddenGrupoValue.Value), Convert.ToInt32(this.hiddenSubGrupoValue.Value), Convert.ToInt32(this.hiddenProveedor.Value), Convert.ToInt32(this.hiddenDiasUltimaActualizacion.Value), Convert.ToInt32(this.hiddenMarca.Value), this.hiddenDescSubGrupo.Value.ToString(), Convert.ToInt32(this.hiddenSoloProveedorPredeterminado.Value), costo, noActu);
+                }
+
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Precios modificados con exito\", {type: \"info\"});", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Precios modificados con exito"));
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Los siguientes articulos no se actualizaron." + noActu + "\" , {type: \"error\"});", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+            }
         }
     }
 
