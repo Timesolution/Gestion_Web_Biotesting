@@ -69,14 +69,9 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 5%">Fecha</th>
-                                        <th style="width: 10%">Documento</th>
-                                        <th style="width: 5%">Cod. Articulo</th>
-                                        <th style="width: 15%">Descripcion</th>
-                                        <th style="width: 5%">Vendedor</th>
-                                        <th style="width: 5%">Neto Item</th>
-                                        <th style="width: 10%">Grupo</th>
-                                        <th style="width: 5%">Comision</th>
-                                        <th style="width: 5%">Total</th>
+                                        <th style="width: 10%">Cliente</th>
+                                        <th style="width: 5%">Codigo</th>
+                                        <th style="width: 15%">Actividad hasta fecha</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -126,13 +121,13 @@
                         <div class="form-group">
                             <label class="col-md-4">Dias Actividad</label>
                             <div class="col-md-6">
-                                <asp:TextBox ID="txtDiasActividad" runat="server" class="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtDiasActividad" TextMode="Number" value="30" runat="server" class="form-control"></asp:TextBox>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnBuscar" OnClientClick="Filtrar(this)" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"/>
+                    <asp:LinkButton ID="lbtnBuscar" OnClientClick="Filtrar()" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"/>
                 </div>
             </div>
         </div>
@@ -159,6 +154,101 @@
             controlDropListSucursal.addEventListener("change", CargarVendedores);
             controlDropListProvincias.addEventListener("change", CargarLocalidades);
         });
+
+        function Filtrar()
+        {
+            event.preventDefault();
+
+            var controlDropListLocalidad = document.getElementById('<%= DropDownListLocalidades.ClientID %>');
+            var controlDropListProvincia = document.getElementById('<%= DropDownListProvincias.ClientID %>');
+            var valorDiasActividad = document.getElementById('<%= txtDiasActividad.ClientID %>').value;
+
+            var localidad = controlDropListLocalidad.selectedOptions[0].text;
+            var provincia = controlDropListProvincia.selectedOptions[0].value;
+
+            $.ajax({
+                type: "POST",
+                url: "ActividadClientes.aspx/Filtrar",
+                contentType: "application/json",
+                data: '{provincia: "' + provincia + '", localidad: "' + localidad + '", diasActividad: "' + valorDiasActividad + '"  }',
+                dataType: 'json',
+                error: function () {
+                    $.msgbox("Error al filtrar.", { type: "error" });
+                },
+                success: OnSuccessFiltro
+            });
+        }
+
+        function OnSuccessFiltro(response)
+        {
+            <%--var controlLabelNeto = document.getElementById('<%= labelNeto.ClientID %>');
+            var controlLabelTotal = document.getElementById('<%= labelTotal.ClientID %>');
+            var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
+            var totalNetoHidden = document.getElementById('<%= labelNetoHidden.ClientID %>');
+            var totalHidden = document.getElementById('<%= labelTotalHidden.ClientID %>');--%>
+
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            document.getElementById('btnCerrarModalBusqueda').click();
+            var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
+            //$("#tablaComisiones").dataTable().fnDestroy();
+            //$('#tablaComisiones').find("tr:gt(0)").remove();
+
+            var totalNeto = 0;
+            var total = 0;
+
+            for (var i = 0; i < obj.length; i++) {
+                table.append(
+                    "<tr>" +
+                    "<td> " + obj[i].fecha + "</td>" +
+                    "<td> " + obj[i].tipo + "</td>" +
+                    "<td> " + obj[i].codigo + "</td>" +
+                    "<td> " + obj[i].descripcion + "</td>" +
+                    "<td> " + obj[i].nombre + "</td>" +
+                    '<td style="text-align:right"> ' + obj[i].precioSinIVA + "</td>" +
+                    "<td> " + obj[i].grupoArticulo + "</td>" +
+                    '<td style="text-align:right"> ' + obj[i].comision + "</td>" +
+                    '<td style="text-align:right"> ' + obj[i].total + "</td>" +
+                    "</tr> ");
+                
+                var splittedNeto = obj[i].precioSinIVA.split("$");
+                var splittedTotal = obj[i].total.split("$");
+
+                var numeroNeto = parseFloat(splittedNeto[1]);
+                var numeroTotal = parseFloat(splittedTotal[1]);
+
+                if (obj[i].tipo.toLowerCase().includes("nota"))
+                {
+                    numeroNeto = numeroNeto * (-1);
+                    numeroTotal = numeroTotal * (-1);
+                }
+
+                totalNeto += parseFloat(numeroNeto);
+                total += parseFloat(numeroTotal);
+            };
+
+            //controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+            //controlLabelTotal.innerHTML = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+
+            //totalNetoHidden.value = totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+            //totalHidden.value = total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+
+            //$('#tablaComisiones').dataTable(
+            //    {                    
+            //        //"bLengthChange": false,
+            //        "bFilter": false,
+            //        "bInfo": false,
+            //        "bAutoWidth": false,
+            //        "bStateSave": true,
+            //        "pageLength": 25,
+            //        "columnDefs": [
+            //            { type: 'date-eu', targets: 5 }
+            //        ]
+            //    });
+
+            //$(controlBotonFiltrar).removeAttr('disabled');
+        }
 
         function CargarLocalidades()
         {

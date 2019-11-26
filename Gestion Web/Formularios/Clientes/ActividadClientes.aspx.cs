@@ -9,8 +9,10 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Controladores.APP;
 using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
+using Gestor_Solution.Controladores;
 using Newtonsoft.Json;
 
 namespace Gestion_Web.Formularios.Clientes
@@ -125,13 +127,38 @@ namespace Gestion_Web.Formularios.Clientes
         }
 
         [WebMethod]
+        public static string Filtrar(int provincia, string localidad,int diasActividad)
+        {
+            controladorCliente controladorCliente = new controladorCliente();
+            ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
+            ControladorPedido controladorPedido = new ControladorPedido();
+
+            var clientes = controladorCliente.ObtenerIdClientesByLocalidad(provincia,localidad);
+
+            List<AlertasAPP> alertas = new List<AlertasAPP>();
+            DataTable pedidos = new DataTable();
+
+            foreach (DataRow cliente in clientes.Rows)
+            {
+                int idCliente = Convert.ToInt32(cliente["id"]);
+                alertas.AddRange(controladorAlertaAPP.ObtenerAlertasPorCliente(idCliente, diasActividad));
+                pedidos.Merge(controladorPedido.ObtenerPedidosPorIdClienteYDiasActividad(idCliente,diasActividad));
+            }
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = JsonConvert.SerializeObject(clientes);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
         public static string ObtenerLocalidades(string provincia)
         {
             controladorPais controladorPais = new controladorPais();
             DataTable localidades = controladorPais.obtenerLocalidadProvincia(provincia);
 
             DataRow dr = localidades.NewRow();
-            dr["Localidad"] = "Todos";
+            dr["Localidad"] = "Todas";
             localidades.Rows.InsertAt(dr, 0);
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
