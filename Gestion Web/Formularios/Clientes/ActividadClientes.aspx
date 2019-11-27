@@ -65,13 +65,14 @@
                 <div class="widget-content">
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="tablaComisiones">
+                            <table class="table table-striped table-bordered table-hover" id="tablaActividades">
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%">Fecha</th>
-                                        <th style="width: 10%">Cliente</th>
+                                        <th style="width: 5%">Cliente</th>
                                         <th style="width: 5%">Codigo</th>
-                                        <th style="width: 15%">Actividad hasta fecha</th>
+                                        <th style="width: 15%">Fecha alerta</th>
+                                        <th style="width: 15%">Fecha pedido</th>
+                                        <th style="width: 15%">Numero Pedido</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -164,7 +165,7 @@
             var valorDiasActividad = document.getElementById('<%= txtDiasActividad.ClientID %>').value;
 
             var localidad = controlDropListLocalidad.selectedOptions[0].text;
-            var provincia = controlDropListProvincia.selectedOptions[0].value;
+            var provincia = controlDropListProvincia.selectedOptions[0].text;
 
             $.ajax({
                 type: "POST",
@@ -191,41 +192,31 @@
             var obj = JSON.parse(data);
 
             document.getElementById('btnCerrarModalBusqueda').click();
-            var table = $('#articulosTablaProveedor').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
-            //$("#tablaComisiones").dataTable().fnDestroy();
-            //$('#tablaComisiones').find("tr:gt(0)").remove();
+            //var table = $('#tablaActividades').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
+            $("#tablaComisiones").dataTable().fnDestroy();
+            $('#tablaComisiones').find("tr:gt(0)").remove();
 
             var totalNeto = 0;
             var total = 0;
 
             for (var i = 0; i < obj.length; i++) {
-                table.append(
+                $('#tablaActividades').append(
                     "<tr>" +
-                    "<td> " + obj[i].fecha + "</td>" +
-                    "<td> " + obj[i].tipo + "</td>" +
+                    "<td> " + obj[i].alias + "</td>" +
                     "<td> " + obj[i].codigo + "</td>" +
-                    "<td> " + obj[i].descripcion + "</td>" +
-                    "<td> " + obj[i].nombre + "</td>" +
-                    '<td style="text-align:right"> ' + obj[i].precioSinIVA + "</td>" +
-                    "<td> " + obj[i].grupoArticulo + "</td>" +
-                    '<td style="text-align:right"> ' + obj[i].comision + "</td>" +
-                    '<td style="text-align:right"> ' + obj[i].total + "</td>" +
-                    "</tr> ");
-                
-                var splittedNeto = obj[i].precioSinIVA.split("$");
-                var splittedTotal = obj[i].total.split("$");
+                    "<td> " + obj[i].fechaAlerta + "</td>" +
+                    "<td> " + obj[i].fechaPedido + "</td>" +
+                    "<td> " + obj[i].numeroPedido + "</td>" +
+                    "</tr> ");                
 
-                var numeroNeto = parseFloat(splittedNeto[1]);
-                var numeroTotal = parseFloat(splittedTotal[1]);
+                //if (obj[i].tipo.toLowerCase().includes("nota"))
+                //{
+                //    numeroNeto = numeroNeto * (-1);
+                //    numeroTotal = numeroTotal * (-1);
+                //}
 
-                if (obj[i].tipo.toLowerCase().includes("nota"))
-                {
-                    numeroNeto = numeroNeto * (-1);
-                    numeroTotal = numeroTotal * (-1);
-                }
-
-                totalNeto += parseFloat(numeroNeto);
-                total += parseFloat(numeroTotal);
+                //totalNeto += parseFloat(numeroNeto);
+                //total += parseFloat(numeroTotal);
             };
 
             //controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
