@@ -49,17 +49,17 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     cargarEmpresas();
                     ListEmpresa.SelectedValue = Session["Login_EmpUser"].ToString();
-                    cargarSucursal(Convert.ToInt32(ListEmpresa.SelectedValue));                    
+                    cargarSucursal(Convert.ToInt32(ListEmpresa.SelectedValue));
                     cargarProveedores();
                     //pongo fecha de hoy
                     txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtImputacionCont.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     if (accion == 2)
-                    {                        
+                    {
                         cargarCompra();
                     }
-                    if(accion == 3)
+                    if (accion == 3)
                     {
                         CargarCompraDesdeRemito();
                     }
@@ -99,7 +99,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 foreach (var remitoCompra in remitosCompra)
                 {
-                    var puntoVenta = remitoCompra.Numero.Substring(0,4);
+                    var puntoVenta = remitoCompra.Numero.Substring(0, 4);
                     var numero = remitoCompra.Numero.Substring(4, 8);
 
                     numerosRemitos += puntoVenta + "-" + numero + " ";
@@ -109,7 +109,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al cargar compra desde orden de compra " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al cargar compra desde orden de compra " + ex.Message);
             }
         }
 
@@ -195,7 +195,7 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 else
                 {
-                    if(idPuntoVenta > 0)
+                    if (idPuntoVenta > 0)
                     {
                         ListPuntoVenta.SelectedValue = idPuntoVenta.ToString();
                     }
@@ -332,7 +332,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.ListEmpresa.SelectedValue = c.IdEmpresa.ToString();
                 this.cargarSucursal(c.IdEmpresa.Value);
                 this.ListSucursal.SelectedValue = c.IdSucursal.ToString();
-                this.cargarPuntoVta(c.IdSucursal.Value,(int)c.IdPuntoVenta);
+                this.cargarPuntoVta(c.IdSucursal.Value, (int)c.IdPuntoVenta);
                 this.txtFecha.Text = Convert.ToDateTime(c.Fecha, new CultureInfo("es-AR")).ToString("dd/MM/yyyy");
                 this.ListTipoDocumento.SelectedValue = c.TipoDocumento;
                 this.txtPVenta.Text = c.PuntoVenta;
@@ -459,7 +459,7 @@ namespace Gestion_Web.Formularios.Compras
                             return 1;
                         }
                     }
-                }                
+                }
 
                 return 0;
             }
@@ -584,13 +584,13 @@ namespace Gestion_Web.Formularios.Compras
             if (!Page.IsValid)
                 return;
 
-            if (this.accion == 1 || this.accion == 3)
+            if (this.accion == 1 || this.accion == 3 || this.accion == 4)
                 this.agregarCompra(0);
-            
-            if (this.accion == 2)            
+
+            if (this.accion == 2)
                 this.modificarCompra(0);
-            
-            if(this.accion == 5)
+
+            if (this.accion == 5)
                 this.GuardarCompraEditada();
 
         }
@@ -620,7 +620,7 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (i > 0)
                         {
-                            if(accion == 3)
+                            if (accion == 3)
                             {
                                 contEntity.AgregarCompra_Remito(c.Id, idRemito);
 
@@ -637,7 +637,7 @@ namespace Gestion_Web.Formularios.Compras
                             {
                                 //Variable que me indica si la compra es en negro o en blanco
                                 int tipoDocumento = 0;
-                                
+
                                 //Verifico si el tipo de documento es presupuesto, si es asi le cambio el valor a la variable creada 
                                 if (this.ListTipoDocumento.SelectedItem.Text.ToLower().Contains("prp") || this.ListTipoDocumento.SelectedItem.Text.ToLower().Contains("presupuesto"))
                                     tipoDocumento = 1;
@@ -668,7 +668,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                Gestion_Api.Entitys.Compra c = this.contEntity.obtenerCompraId(this.idCompra);                
+                Gestion_Api.Entitys.Compra c = this.contEntity.obtenerCompraId(this.idCompra);
 
                 if (c != null)
                 {
@@ -752,7 +752,7 @@ namespace Gestion_Web.Formularios.Compras
         private Gestion_Api.Entitys.Compra obtenerDatosCompra(Gestion_Api.Entitys.Compra c)
         {
             try
-            {                
+            {
                 c.IdEmpresa = Convert.ToInt32(this.ListEmpresa.SelectedValue);
                 c.IdSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
                 c.IdPuntoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
@@ -824,7 +824,7 @@ namespace Gestion_Web.Formularios.Compras
             {
                 this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en select index changes en list Empresa. " + ex.Message));
             }
@@ -861,7 +861,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.txtIvaNeto5.Text = Decimal.Round(iva, 2).ToString();
 
                 //recalculo el total
-                calcularTotal();                
+                calcularTotal();
             }
             catch (Exception ex)
             {
@@ -874,8 +874,8 @@ namespace Gestion_Web.Formularios.Compras
             //calculo el neto del iva en 10.5
             try
             {
-                decimal iva = Decimal.Round(Convert.ToDecimal(this.txtNeto105.Text),2) * (decimal)0.105;
-                this.txtIvaNeto105.Text = Decimal.Round(iva,2).ToString();
+                decimal iva = Decimal.Round(Convert.ToDecimal(this.txtNeto105.Text), 2) * (decimal)0.105;
+                this.txtIvaNeto105.Text = Decimal.Round(iva, 2).ToString();
 
                 //recalculo el total
                 calcularTotal();
@@ -925,7 +925,7 @@ namespace Gestion_Web.Formularios.Compras
         }
 
         private void calcularTotal()
-        {            
+        {
             try
             {
                 decimal neto = Decimal.Round(Convert.ToDecimal(this.txtNetoNoGrabado.Text), 2);
@@ -952,7 +952,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 decimal total = neto + neto2 + neto5 + neto105 + neto21 + neto27 + Iva2 + Iva5 + Iva105 + Iva21 + Iva27 + percepcionIva + impInternos + otros + percepcionIIBB + RetencionIIBB + RetencionIva + RetencionGanancia + ITC + tasaCo2 + RetencionSuss;
                 this.txtTotal.Text = Decimal.Round(total, 2).ToString();
-                
+
             }
             catch (Exception ex)
             {
@@ -1243,7 +1243,7 @@ namespace Gestion_Web.Formularios.Compras
                 int idCta = Convert.ToInt32(this.ListCtaContables.SelectedValue);
                 int idProv = Convert.ToInt32(this.ListProveedor.SelectedValue);
                 if (idCta > 0)
-                {                    
+                {
                     var cta = this.contPlanCta.obtenerCuentaById(idCta);
                     if (cta != null)
                     {
@@ -1256,7 +1256,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                
+
             }
         }
         protected void ListCtaContables1_SelectedIndexChanged(object sender, EventArgs e)
