@@ -127,46 +127,59 @@ namespace Gestion_Web.Formularios.Clientes
         }
 
         [WebMethod]
-        public static string Filtrar(string provincia, string localidad,int diasActividad)
+        public static string ObtenerTotalClientes(string provincia, string localidad)
         {
             controladorCliente controladorCliente = new controladorCliente();
-            ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
-            ControladorPedido controladorPedido = new ControladorPedido();
-
-            var clientes = controladorCliente.ObtenerIdClientesByLocalidad(provincia,localidad);
-
-            List<ActividadCliente> actividadesClientes = new List<ActividadCliente>();
-
-            foreach (DataRow cliente in clientes.Rows)
-            {
-                ActividadCliente actividadCliente = new ActividadCliente();
-                int idCliente = Convert.ToInt32(cliente["id"]);
-                var alerta = controladorAlertaAPP.ObtenerAlertasPorCliente(idCliente, diasActividad);
-                var pedido = controladorPedido.ObtenerPedidosPorIdClienteYDiasActividad(idCliente, diasActividad);
-
-                if (alerta != null || pedido != null)
-                {
-                    actividadCliente.alias = cliente["alias"].ToString();
-                    actividadCliente.codigo = cliente["codigo"].ToString();
-
-                    DateTime valorFechaAlerta = new DateTime();
-
-                    if (alerta != null)
-                    {
-                        valorFechaAlerta = (DateTime)alerta.Fecha;
-                        actividadCliente.fechaAlerta = valorFechaAlerta.ToString("dd/MM/yyyy");
-                    }
-
-                    actividadCliente.fechaPedido = pedido != null ? pedido.fecha.ToString("dd/MM/yyyy") : "";
-                    actividadCliente.numeroPedido = pedido != null ? pedido.numero.ToString() : "";
-
-                    actividadesClientes.Add(actividadCliente);
-                }
-            }
+            var clientes = controladorCliente.ObtenerIdClientesByLocalidad(provincia, localidad);            
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = 5000000;
-            string resultadoJSON = JsonConvert.SerializeObject(actividadesClientes);
+            string resultadoJSON = JsonConvert.SerializeObject(clientes);
+            return resultadoJSON;
+        }
+
+        [WebMethod]
+        public static string Filtrar(string provincia, string localidad,int diasActividad)
+        {
+            controladorCliente controladorCliente = new controladorCliente();
+            //ControladorAlertaAPP controladorAlertaAPP = new ControladorAlertaAPP();
+            //ControladorPedido controladorPedido = new ControladorPedido();
+
+            var actividades = controladorCliente.ObtenerActividadCliente(provincia,localidad,diasActividad);
+            var clientes = controladorCliente.ObtenerIdClientesByLocalidad(provincia,localidad);
+
+            //List<ActividadCliente> actividadesClientes = new List<ActividadCliente>();
+
+            //foreach (DataRow cliente in clientes.Rows)
+            //{
+            //    ActividadCliente actividadCliente = new ActividadCliente();
+            //    int idCliente = Convert.ToInt32(cliente["id"]);
+            //    var alerta = controladorAlertaAPP.ObtenerAlertasPorCliente(idCliente, diasActividad);
+            //    var pedido = controladorPedido.ObtenerPedidosPorIdClienteYDiasActividad(idCliente, diasActividad);
+
+            //    if (alerta != null || pedido != null)
+            //    {
+            //        actividadCliente.alias = cliente["alias"].ToString();
+            //        actividadCliente.codigo = cliente["codigo"].ToString();
+
+            //        DateTime valorFechaAlerta = new DateTime();
+
+            //        if (alerta != null)
+            //        {
+            //            valorFechaAlerta = (DateTime)alerta.Fecha;
+            //            actividadCliente.fechaAlerta = valorFechaAlerta.ToString("dd/MM/yyyy");
+            //        }
+
+            //        actividadCliente.fechaPedido = pedido != null ? pedido.fecha.ToString("dd/MM/yyyy") : "";
+            //        actividadCliente.numeroPedido = pedido != null ? pedido.numero.ToString() : "";
+
+            //        actividadesClientes.Add(actividadCliente);
+            //    }
+            //}
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = 5000000;
+            string resultadoJSON = JsonConvert.SerializeObject(actividades);
             return resultadoJSON;
         }
 

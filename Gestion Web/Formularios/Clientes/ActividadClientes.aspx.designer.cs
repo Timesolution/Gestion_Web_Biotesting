@@ -22,13 +22,13 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.Label lblParametros;
         
         /// <summary>
-        /// labelNeto control.
+        /// labelTotal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelNeto;
+        protected global::System.Web.UI.WebControls.Label labelTotal;
         
         /// <summary>
         /// labelNetoHidden control.
@@ -40,13 +40,13 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.HiddenField labelNetoHidden;
         
         /// <summary>
-        /// labelTotal control.
+        /// labelActivos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelTotal;
+        protected global::System.Web.UI.WebControls.Label labelActivos;
         
         /// <summary>
         /// labelTotalHidden control.

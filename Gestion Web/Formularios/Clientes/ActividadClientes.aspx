@@ -38,12 +38,12 @@
                     <div id="big_stats" class="cf">
                         <div class="stat">
                             <h4>Total</h4>
-                            <asp:Label ID="labelNeto" runat="server" class="value"></asp:Label>
+                            <asp:Label ID="labelTotal" runat="server" class="value"></asp:Label>
                             <asp:HiddenField id="labelNetoHidden" runat="server" />
                         </div>
                         <div class="stat">
                             <h4>Actividad</h4>
-                            <asp:Label ID="labelTotal" runat="server" class="value"></asp:Label>
+                            <asp:Label ID="labelActivos" runat="server" class="value"></asp:Label>
                             <asp:HiddenField id="labelTotalHidden" runat="server" />
                         </div>
                         <div class="stat">
@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="lbtnBuscar" OnClientClick="Filtrar()" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"/>
+                    <asp:LinkButton ID="lbtnBuscar" OnClientClick="Filtrar(this)" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success"/>
                 </div>
             </div>
         </div>
@@ -156,7 +156,21 @@
             controlDropListProvincias.addEventListener("change", CargarLocalidades);
         });
 
-        function Filtrar()
+        function CorregirFecha(fecha)
+        {
+            if (fecha == null)
+                return null;
+
+            var fechaSplitteada = fecha.split("T")[0];
+
+            var fechaSeparada = fechaSplitteada.split("-");
+
+            var fechaNueva = fechaSeparada[2] + "/" + fechaSeparada[1] + "/" + fechaSeparada[0];
+
+            return fechaNueva;
+        }
+
+        function Filtrar(obj)
         {
             event.preventDefault();
 
@@ -167,6 +181,21 @@
             var localidad = controlDropListLocalidad.selectedOptions[0].text;
             var provincia = controlDropListProvincia.selectedOptions[0].text;
 
+            $(obj).attr('disabled', 'disabled');
+
+            $.ajax({
+                type: "POST",
+                url: "ActividadClientes.aspx/ObtenerTotalClientes",
+                contentType: "application/json",
+                data: '{provincia: "' + provincia + '", localidad: "' + localidad + '"  }',
+                dataType: 'json',
+                error: function () {
+                    $.msgbox("Error al filtrar.", { type: "error" });
+                    $(obj).removeAttr('disabled');
+                },
+                success: OnSuccessObtenerClientes
+            });
+
             $.ajax({
                 type: "POST",
                 url: "ActividadClientes.aspx/Filtrar",
@@ -175,70 +204,63 @@
                 dataType: 'json',
                 error: function () {
                     $.msgbox("Error al filtrar.", { type: "error" });
+                    $(obj).removeAttr('disabled');
                 },
                 success: OnSuccessFiltro
-            });
+            });            
         }
 
-        function OnSuccessFiltro(response)
+        function OnSuccessObtenerClientes(response)
         {
-            <%--var controlLabelNeto = document.getElementById('<%= labelNeto.ClientID %>');
             var controlLabelTotal = document.getElementById('<%= labelTotal.ClientID %>');
-            var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
-            var totalNetoHidden = document.getElementById('<%= labelNetoHidden.ClientID %>');
-            var totalHidden = document.getElementById('<%= labelTotalHidden.ClientID %>');--%>
 
             var data = response.d;
             var obj = JSON.parse(data);
 
+            controlLabelTotal.innerHTML = obj.length.toString();
+        }
+
+        function OnSuccessFiltro(response)
+        {
+            var controlLabelActivos = document.getElementById('<%= labelActivos.ClientID %>');
+            var controlLabelPorcentaje = document.getElementById('<%= labelPorcentaje.ClientID %>');
+            var controlLabelTotal = document.getElementById('<%= labelTotal.ClientID %>');
+            var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
+
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            var totalActivos = parseFloat(obj.length);
+            var total = parseFloat(controlLabelTotal.innerHTML);
+            var porcentaje = (total / totalActivos).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+
+            controlLabelActivos.innerHTML = obj.length.toString();
+            controlLabelPorcentaje.innerHTML = porcentaje.toString();
+
             document.getElementById('btnCerrarModalBusqueda').click();
-            //var table = $('#tablaActividades').DataTable({ "paging": false, "bInfo": false, "searching": false, "retrieve": true,"ordering": false});
-            $("#tablaComisiones").dataTable().fnDestroy();
-            $('#tablaComisiones').find("tr:gt(0)").remove();
+            $("#tablaActividades").dataTable().fnDestroy();
+            $('#tablaActividades').find("tr:gt(0)").remove();
 
             var totalNeto = 0;
             var total = 0;
 
-            for (var i = 0; i < obj.length; i++) {
+            for (var i = 0; i < obj.length; i++)
+            {
+                var fechaAlerta = (obj[i].FechaAlerta == null) ? '' : CorregirFecha(obj[i].FechaAlerta);
+                var fechaPedido = (obj[i].FechaPedido == null) ? '' : CorregirFecha(obj[i].FechaPedido);
+                var numeroPedido = (obj[i].numero == null) ? '' : obj[i].numero;
+
                 $('#tablaActividades').append(
                     "<tr>" +
                     "<td> " + obj[i].alias + "</td>" +
                     "<td> " + obj[i].codigo + "</td>" +
-                    "<td> " + obj[i].fechaAlerta + "</td>" +
-                    "<td> " + obj[i].fechaPedido + "</td>" +
-                    "<td> " + obj[i].numeroPedido + "</td>" +
-                    "</tr> ");                
-
-                //if (obj[i].tipo.toLowerCase().includes("nota"))
-                //{
-                //    numeroNeto = numeroNeto * (-1);
-                //    numeroTotal = numeroTotal * (-1);
-                //}
-
-                //totalNeto += parseFloat(numeroNeto);
-                //total += parseFloat(numeroTotal);
+                    "<td> " + fechaAlerta + "</td>" +
+                    "<td> " + fechaPedido + "</td>" +
+                    "<td> " + numeroPedido + "</td>" +
+                    "</tr> ");
             };
 
-            //controlLabelNeto.innerHTML = "$" + totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
-            //controlLabelTotal.innerHTML = "$" + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
-
-            //totalNetoHidden.value = totalNeto.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
-            //totalHidden.value = total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
-
-            //$('#tablaComisiones').dataTable(
-            //    {                    
-            //        //"bLengthChange": false,
-            //        "bFilter": false,
-            //        "bInfo": false,
-            //        "bAutoWidth": false,
-            //        "bStateSave": true,
-            //        "pageLength": 25,
-            //        "columnDefs": [
-            //            { type: 'date-eu', targets: 5 }
-            //        ]
-            //    });
-
-            //$(controlBotonFiltrar).removeAttr('disabled');
+            $(controlBotonFiltrar).removeAttr('disabled');
         }
 
         function CargarLocalidades()
