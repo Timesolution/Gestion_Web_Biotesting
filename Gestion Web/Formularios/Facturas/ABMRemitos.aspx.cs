@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorUsuario contUser = new controladorUsuario();
         //
         controladorArticulo contArticulo = new controladorArticulo();
+        ControladorArticulosEntity contArticuloEntity = new ControladorArticulosEntity();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
         public PlaceHolder phArticulos = new PlaceHolder();
@@ -1502,23 +1503,22 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         string[] datos = linea.Split(',');//obtengo datos del registro
 
-                        if (datos.Count() == 7)
+                        if (datos.Count() >= 7)
                         {
+                            ItemRemitoTemporal itemRemitoTemporal = new ItemRemitoTemporal();
+                            itemRemitoTemporal.codigo = datos[0];
+                            itemRemitoTemporal.cantidad = datos[2];
+                            itemRemitoTemporal.descripcion = datos[3];
+                            itemRemitoTemporal.precioUnitario = datos[4];
+                            itemRemitoTemporal.total = datos[6];
+                            itemRemitoTemporal.linea = contador.ToString();
 
+                            if (VerificarQueLosCamposEstenCorrectos(itemRemitoTemporal))
+                            {
+                                AgregarItemImportadoARemito(itemRemitoTemporal);
+                            }
+                            contador++;
                         }
-                        
-                        ItemRemitoTemporal itemRemitoTemporal = new ItemRemitoTemporal();
-                        itemRemitoTemporal.codigo = datos[0];
-                        itemRemitoTemporal.cantidad = datos[2];
-                        itemRemitoTemporal.descripcion = datos[3];
-                        itemRemitoTemporal.precioUnitario = datos[4];
-                        itemRemitoTemporal.total = datos[6];
-                        itemRemitoTemporal.linea = contador.ToString();
-
-                        VerificarQueLosCamposEstenCorrectos(itemRemitoTemporal);
-                        AgregarItemImportadoARemito(itemRemitoTemporal);
-
-                        contador++;
                     }
                 }
                 else
@@ -1538,7 +1538,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 if (string.IsNullOrWhiteSpace(itemRemitoTemporal.cantidad)) estado = false;
-                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.codigo)) estado = false;
+                //if (string.IsNullOrWhiteSpace(itemRemitoTemporal.codigo)) estado = false;
                 if (string.IsNullOrWhiteSpace(itemRemitoTemporal.descripcion)) estado = false;
                 if (string.IsNullOrWhiteSpace(itemRemitoTemporal.linea)) estado = false;
                 if (string.IsNullOrWhiteSpace(itemRemitoTemporal.total)) estado = false;
@@ -1556,6 +1556,10 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.codigo))
+                {
+                    contArticuloEntity.ObtenerElCodigoDelPrimerArticuloConEstado1();
+                }
                 this.txtCodigo.Text = itemRemitoTemporal.codigo;
                 this.txtCantidad.Text = itemRemitoTemporal.cantidad;
                 this.txtTotalArri.Text = itemRemitoTemporal.total;
