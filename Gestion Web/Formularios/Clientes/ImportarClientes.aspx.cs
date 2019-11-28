@@ -41,6 +41,7 @@ namespace Gestion_Web.Formularios.Clientes
             public string Localidad { get; set; }
             public string Canal { get; set; }
             public string AgrupCanal { get; set; }
+            public string Codigo { get; set; }
         }
 
         class ClienteTemporalGestion
@@ -149,19 +150,24 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         string[] datos = linea.Split(';');//obtengo datos del registro
                         ClienteTemporalSpeed clienteTemporal = new ClienteTemporalSpeed();
-                        if (datos.Count() >= 4)
+                        if (datos.Count() >= 6)
                         {
                             List<string> datosExcel = datos.ToList();
-                            clienteTemporal.Direccion = datos[0].Trim();
-                            clienteTemporal.Altura = datos[1].Trim();
-                            clienteTemporal.Localidad = datos[2].Trim();
-                            clienteTemporal.Canal = datos[3].Trim();
-                            clienteTemporal.AgrupCanal = datos[4].Trim();
 
-                            int respuesta = ImportarCliente(clienteTemporal);
-                            if (respuesta <= 0)
+                            clienteTemporal.Codigo = datos[0].Trim();
+                            clienteTemporal.Direccion = datos[1].Trim();
+                            clienteTemporal.Altura = datos[2].Trim();
+                            clienteTemporal.Localidad = datos[3].Trim();
+                            clienteTemporal.Canal = datos[4].Trim();
+                            clienteTemporal.AgrupCanal = datos[5].Trim();
+
+                            if (VerificarQueEstenTodosLosCamposBienCompletados_ClienteSpeed(datos))
                             {
-                                contador++;
+                                int respuesta = ImportarClienteSpeed(clienteTemporal);
+                                if (respuesta >= 0)
+                                {
+                                    contador++;
+                                }
                             }
                         }
                     }
@@ -220,7 +226,7 @@ namespace Gestion_Web.Formularios.Clientes
                             clienteTemporal.Grupo = datos[12].Trim();
                             clienteTemporal.Estado = datos[14].Trim();
 
-                            if (VerificarQueEstenTodosLosCamposBienCompletados(datos))
+                            if (VerificarQueEstenTodosLosCamposBienCompletados_ClienteGestion(datos))
                             {
                                 int respuesta = ImportarClienteGestion(clienteTemporal);
                                 CuitsEstados cuitEstado = new CuitsEstados();
@@ -254,7 +260,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public bool VerificarQueEstenTodosLosCamposBienCompletados(string[] datos)
+        public bool VerificarQueEstenTodosLosCamposBienCompletados_ClienteGestion(string[] datos)
         {
             try
             {
@@ -273,7 +279,26 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        private int ImportarCliente(ClienteTemporalSpeed clienteTemporal)
+        public bool VerificarQueEstenTodosLosCamposBienCompletados_ClienteSpeed(string[] datos)
+        {
+            try
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    if (string.IsNullOrWhiteSpace(datos[i]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private int ImportarClienteSpeed(ClienteTemporalSpeed clienteTemporal)
         {
             try
             {
@@ -285,10 +310,8 @@ namespace Gestion_Web.Formularios.Clientes
                 Cliente cliente = Session["ClientesABM_Cliente"] as Cliente;
                 string perfil = Session["Login_NombrePerfil"] as string;
 
-                cliente.codigo = (contClienteEntity.ObtenerUltimoIdCliente() + 1).ToString();
                 cliente.tipoCliente.id = 4; //CONSUMIDOR FINAL
                 cliente.tipoCliente.descripcion = "CONSUMIDOR FINAL";
-                cliente.razonSocial = cliente.codigo;
 
                 CrearElGrupoSiNoExiste(clienteTemporal.Canal);
 
@@ -310,7 +333,6 @@ namespace Gestion_Web.Formularios.Clientes
                 cliente.alerta.idCliente = cliente.id;
 
                 cliente.hijoDe = 0;
-                cliente.alias = cliente.codigo;
 
                 Vendedor vendedor = contVendedor.obtenerVendedorID(Convert.ToInt32(dropList_Vendedores.SelectedValue));
                 cliente.sucursal.id = vendedor.sucursal;//preguntar
@@ -321,6 +343,19 @@ namespace Gestion_Web.Formularios.Clientes
 
                 string codigoPostal = ObtenerCodigoPostalByLocalidad(dropList_Provincias.SelectedItem.Text, clienteTemporal.Localidad);
 
+                if (string.IsNullOrWhiteSpace(codigoPostal))
+                {
+                    return -1;
+                }
+
+                cliente.codigo = codigoPostal + clienteTemporal.Codigo;
+                if (string.IsNullOrWhiteSpace(clienteTemporal.Codigo))
+                {
+                    cliente.codigo = (contClienteEntity.ObtenerUltimoIdCliente() + 1).ToString();
+                }
+
+                cliente.alias = cliente.codigo;
+                cliente.razonSocial = cliente.codigo;
                 cliente.direcciones = obtenerListDirecciones(clienteTemporal, codigoPostal);
 
                 cliente.origen = 1;
