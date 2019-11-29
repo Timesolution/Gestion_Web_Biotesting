@@ -6746,10 +6746,10 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!string.IsNullOrWhiteSpace(DropListLista.SelectedValue)) idDropListLista = Convert.ToInt32(DropListLista.SelectedValue);
                 if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue)) idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
 
-                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaTarjeta(idListEmpresa, idListSucursal, idDropListFormaPago, idDropListLista, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), idListTarjetas);
+                List<Gestion_Api.Entitys.Promocione> p = contEnt.obtenerPromocionesValidasTarjeta(idListEmpresa, idListSucursal, idDropListFormaPago, idDropListLista, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), idListTarjetas);
                 if (p != null)
                 {
-                    ValidarExisteArticuloEnPromoTarjeta(p);
+                    Gestion_Api.Entitys.Promocione pr= ValidarExisteArticuloEnPromoTarjeta(p);
                     this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
                     //this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
                     this.ActualizarTotales();
@@ -6757,7 +6757,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
                     this.txtImporteEfectivo.Text = "0";
                     this.lbtnAgregarEfectivo.Visible = false;
-                    this.lblAvisoPromocion.Text = "Tarjeta en Promocion " + p.Descuento.Value.ToString() + "% de dto.";
+                    this.lblAvisoPromocion.Text = "Tarjeta en Promocion " + pr.Descuento.Value.ToString() + "% de dto.";
                     this.lblAvisoPromocion.Visible = true;
                 }
                 else
@@ -6780,18 +6780,18 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        public void ValidarExisteArticuloEnPromoTarjeta(Gestion_Api.Entitys.Promocione promo)
+        public Gestion_Api.Entitys.Promocione ValidarExisteArticuloEnPromoTarjeta(List<Gestion_Api.Entitys.Promocione> promos)
         {
             try
             {
                 ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
 
                 Factura f = Session["Factura"] as Factura;
-
+                Gestion_Api.Entitys.Promocione promo = new Gestion_Api.Entitys.Promocione();
                 foreach (var item in f.items)
                 {
                     Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(item.articulo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(item.cantidad));
-
+                    promo = promos.SingleOrDefault(x => x.Id == p.Id);
                     //TODO si es true que calcule el descuento
                     if (p != null && p.Id == promo.Id)
                     {
@@ -6800,10 +6800,12 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 Session["Factura"] = f;
+                return promo;
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al validar si existe un articulo en la promocion de tarjeta " + ex.Message);
+                return null;
             }
         }
 
