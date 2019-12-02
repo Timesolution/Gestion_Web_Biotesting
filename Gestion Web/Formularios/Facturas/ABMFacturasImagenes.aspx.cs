@@ -21,6 +21,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Script.Serialization;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -696,7 +697,28 @@ namespace Gestion_Web.Formularios.Facturas
                 Page objp = new Page();
                 objp.Session["idArticuloCalculadora"] = idArticulo;
                 objp.Session["cantidadArticuloCalculadora"] = cantidad;
-                return idArticulo;
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                string resultadoJSON = serializer.Serialize(idArticulo);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        [WebMethod]
+        public static string SetearEnLaSessionIdArticulo(string idArticulo)
+        {
+            try
+            {
+                Page objp = new Page();
+                objp.Session["idArticuloCalculadora"] = idArticulo;
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                string resultadoJSON = serializer.Serialize(idArticulo);
+                return resultadoJSON;
             }
             catch (Exception ex)
             {
@@ -708,8 +730,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                int idArticulo = Convert.ToInt32(Session["idArticuloCalculadora"]);
-                decimal cantidadArticulo = Convert.ToDecimal(Session["cantidadArticuloCalculadora"]);
+                int idArticulo;
+                if(!int.TryParse(idArticuloHidden.Value, out idArticulo))
+                {
+                    return;
+                }
+                decimal cantidadArticulo;
+                if (!decimal.TryParse(cantidadArticuloHidden.Value, out cantidadArticulo))
+                {
+                    return;
+                }
                 Articulo articulo = contArticulo.obtenerArticuloByID(idArticulo);
                 guardarArticuloEnFactura(articulo, cantidadArticulo);
             }
@@ -1182,7 +1212,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnEditarCantidad.CssClass = "btn btn-info";
                 btnEditarCantidad.Text = "<span class='shortcut-icon icon-pencil'></span>";
 
-                btnEditarCantidad.OnClientClick = "return MostrarCalculadoraEditarCantidad();";
+                btnEditarCantidad.OnClientClick = "return MostrarCalculadoraEditarCantidad(" + item.articulo.id + ");";
                 celAccion.Controls.Add(btnEditarCantidad);
 
                 lb_IdArticulo_ModalCalculadora.Text = item.articulo.id.ToString();

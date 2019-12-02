@@ -11,7 +11,6 @@
         <%--PH MAIL FACTURAS VIEJO--%>
         <asp:PlaceHolder ID="phMain" runat="server" Visible="false">
             <div class="container">
-
                 <div class="row">
                     <div class="col-md-12 col-xs-12">
 
@@ -1733,10 +1732,11 @@
 
            
 
-        </asp:PlaceHolder>modalCantidadArticulos
-
+        </asp:PlaceHolder>
         <%--UPDATE PANEL FACTURAS IMAGENES--%>
         <div class="main">
+            <asp:HiddenField ID="idArticuloHidden" runat="server" />
+            <asp:HiddenField ID="cantidadArticuloHidden" runat="server" />
             <asp:UpdatePanel runat="server" ID="updatePanelModoImagen">
                 <ContentTemplate>
                     <div class="col-md-12">
@@ -2273,9 +2273,9 @@
                         <asp:Button ID="Button1" OnClientClick="Javascript: return GuardarCantidadDeCalculadoraAlArticuloDeLaFactura();" OnClick="agregarArticuloAventa_Click" Text="ACEPTAR" runat="server" type="button" class="btn btn-success"></asp:Button>
                     </div>
                     <div class="col-md-1">
-                        <asp:Button ID="Button5" Text="CANCELARR" data-dismiss="modal" runat="server" type="button" class="btn btn-danger"></asp:Button>
+                        <asp:Button ID="Button5" Text="CANCELAR" data-dismiss="modal" runat="server" type="button" class="btn btn-danger"></asp:Button>
                     </div>
-                    <asp:Label ID="Label4" runat="server" Text=""></asp:Label>
+                    <asp:Label ID="lb_IdArticulo_ModalCalculadoraEditar" runat="server" Text=""></asp:Label>
                 </div>
                 <br />
                 <div class="col-md-12 row">
@@ -2400,6 +2400,11 @@
             $("#<%= txtMailEntrega.ClientID %>").popover();
             $("#<%= txtCapitalSolicitudManual.ClientID %>").popover();
         }
+
+        $(document).ready(function () {
+            $("#<%= idArticuloHidden.ClientID %>").value = "";
+            $("#<%= cantidadArticuloHidden.ClientID %>").value = "";
+        })
     </script>
     <script>
         $(function () {
@@ -2709,51 +2714,28 @@
 
         function MostrarCalculadora(idArticulo) {
             $('#modalCantidadArticulos').modal('show');
-            var controlLabel = document.getElementById('<%= lb_IdArticulo_ModalCalculadora.ClientID %>');
-            controlLabel.textContent = idArticulo;
+            var hiddenIdArticulo = document.getElementById('<%= idArticuloHidden.ClientID %>');
+            hiddenIdArticulo.value = idArticulo;
         }
 
         function AgregarCantidadDeCalculadoraAlArticuloDeLaFactura() {
-            var controlLabel = document.getElementById('<%= lb_IdArticulo_ModalCalculadora.ClientID %>');
+            var hiddenCantidad = document.getElementById('<%= cantidadArticuloHidden.ClientID %>');
             var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticulo.ClientID %>');
-
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasImagenes.aspx/SetearEnLaSessionIdArticuloYCantidad",
-                data: '{ idArticulo: "' + controlLabel.textContent + '", cantidad: "' + txtCantidadArticulo.value + '" }',
-                contentType: "application/json",
-                dataType: 'json',
-                error: (error) => {
-                    console.log(JSON.stringify(error));
-                    $.msgbox("No se pudo filtrar correctamente!", { type: "error" });
-                    $(obj).removeAttr('disabled');
-                },
-                success: OnSuccessAgregarCantidadDeCalculadoraAlArticuloDeLaFactura
-            });
-        }
-
-        function OnSuccessAgregarCantidadDeCalculadoraAlArticuloDeLaFactura() {
-            var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticulo.ClientID %>');
+            var flo = parseFloat(txtCantidadArticulo.value);
+            if (flo == 0) {
+                txtCantidadArticulo.value = "";
+                return false;
+            }
+            hiddenCantidad.value = txtCantidadArticulo.value;
             txtCantidadArticulo.value = "";
         }
 
         function GuardarCantidadDeCalculadoraAlArticuloDeLaFactura() {
-            var controlLabel = document.getElementById('<%= lb_IdArticulo_ModalCalculadora.ClientID %>');
             var txtCantidadArticulo = document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>');
 
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasImagenes.aspx/SetearEnLaSessionIdArticuloYCantidad",
-                data: '{ idArticulo: "' + controlLabel.textContent + '", cantidad: "' + txtCantidadArticulo.value + '" }',
-                contentType: "application/json",
-                dataType: 'json',
-                error: (error) => {
-                    console.log(JSON.stringify(error));
-                    $.msgbox("No se pudo filtrar correctamente!", { type: "error" });
-                    $(obj).removeAttr('disabled');
-                },
-                success: OnSuccessGuardarCantidadDeCalculadoraAlArticuloDeLaFactura
-            });
+            var hiddenCantidad = document.getElementById('<%= cantidadArticuloHidden.ClientID %>');
+            hiddenCantidad.value = txtCantidadArticulo.value;
+            txtCantidadArticulo.value = "";
         }
 
         function OnSuccessGuardarCantidadDeCalculadoraAlArticuloDeLaFactura() {
@@ -2806,6 +2788,9 @@
         }
 
         function MostrarCalculadoraEditarCantidad(idArticulo) {
+            var hiddenIdArticulo = document.getElementById('<%= idArticuloHidden.ClientID %>');
+            hiddenIdArticulo.value = idArticulo;
+
             $("#modalCantidadArticulos_Editar").modal();
 
             document.getElementById('<%= txtCantidadArticuloEditar.ClientID %>').value = "";

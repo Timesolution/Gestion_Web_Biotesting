@@ -1930,6 +1930,24 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.Button btnCambiarPorcentajeCantidadFacturar;
         
         /// <summary>
+        /// idArticuloHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField idArticuloHidden;
+        
+        /// <summary>
+        /// cantidadArticuloHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField cantidadArticuloHidden;
+        
+        /// <summary>
         /// updatePanelModoImagen control.
         /// </summary>
         /// <remarks>
@@ -2704,13 +2722,13 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.Button Button5;
         
         /// <summary>
-        /// Label4 control.
+        /// lb_IdArticulo_ModalCalculadoraEditar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label4;
+        protected global::System.Web.UI.WebControls.Label lb_IdArticulo_ModalCalculadoraEditar;
         
         /// <summary>
         /// UpdatePanel17 control.
