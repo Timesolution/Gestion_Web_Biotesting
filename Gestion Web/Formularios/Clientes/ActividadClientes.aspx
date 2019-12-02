@@ -5,7 +5,7 @@
         <div class="col-md-12 col-xs-12">
             <div class="widget stacked">
                 <div class="stat">
-                    <h5><i class="icon-map-marker"></i>Maestros > Comisiones > Comisiones Por Vendedores</h5>
+                    <h5><i class="icon-map-marker"></i>Maestros > Clientes > Actividad Clientes</h5>
                 </div>
                 <div class="widget-header">
                     <i class="icon-wrench"></i>
@@ -60,7 +60,7 @@
             <div class="widget stacked widget-table action-table">
                 <div class="widget-header">
                     <i class="icon-money" style="width: 2%"></i>
-                    <h3 style="width: 75%">Comisiones</h3>
+                    <h3 style="width: 75%">Actividades</h3>
                 </div>
                 <div class="widget-content">
                     <div class="panel-body">
@@ -70,9 +70,13 @@
                                     <tr>
                                         <th style="width: 5%">Cliente</th>
                                         <th style="width: 5%">Codigo</th>
-                                        <th style="width: 15%">Fecha alerta</th>
-                                        <th style="width: 15%">Fecha pedido</th>
+                                        <th style="width: 15%">Ultima Fecha alerta</th>
+                                        <th style="width: 15%">Ultima Fecha pedido</th>
                                         <th style="width: 15%">Numero Pedido</th>
+                                        <th style="width: 15%">Dias Ultima Actividad</th>
+                                        <th style="width: 15%">Vendedor</th>
+                                        <th style="width: 15%">Provincia</th>
+                                        <th style="width: 15%">Localidad</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,18 +160,42 @@
             controlDropListProvincias.addEventListener("change", CargarLocalidades);
         });
 
+        function ObtenerFechaActividadMasReciente(fechaAlerta, fechaPedido)
+        {
+            if (fechaAlerta != '' && fechaPedido != '')
+                return fechaAlerta > fechaPedido ? fechaAlerta : fechaPedido;
+
+            if (fechaAlerta != '' && fechaPedido == '')
+                return fechaAlerta;
+
+            else if (fechaAlerta == '' && fechaPedido != '')
+                return fechaPedido;
+
+            else return '';
+        }
+
         function CorregirFecha(fecha)
         {
             if (fecha == null)
                 return null;
+            var fechaSeparada = fecha.split("/");
 
-            var fechaSplitteada = fecha.split("T")[0];
-
-            var fechaSeparada = fechaSplitteada.split("-");
-
-            var fechaNueva = fechaSeparada[2] + "/" + fechaSeparada[1] + "/" + fechaSeparada[0];
+            var fechaNueva = new Date([fechaSeparada[1], fechaSeparada[0], fechaSeparada[2]].join('/'));
 
             return fechaNueva;
+        }
+
+        
+        function ObtenerDiasDiferencias(fecha)
+        {
+            const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            const hoy = new Date();
+            var fechaSplitteada = fecha.split("/");
+
+            const utc1 = Date.UTC(fechaSplitteada[2], fechaSplitteada[1], fechaSplitteada[0]);
+            const utc2 = Date.UTC(hoy.getFullYear(), hoy.getMonth() + 1, hoy.getDate());
+
+            return Math.abs((utc2 - utc1) / _MS_PER_DAY);
         }
 
         function Filtrar(obj)
@@ -193,7 +221,8 @@
                     $.msgbox("Error al filtrar.", { type: "error" });
                     $(obj).removeAttr('disabled');
                 },
-                success: OnSuccessObtenerClientes
+                success: OnSuccessObtenerClientes,
+                async: false
             });
 
             $.ajax({
@@ -206,7 +235,8 @@
                     $.msgbox("Error al filtrar.", { type: "error" });
                     $(obj).removeAttr('disabled');
                 },
-                success: OnSuccessFiltro
+                success: OnSuccessFiltro,
+                async: false
             });            
         }
 
@@ -232,7 +262,7 @@
 
             var totalActivos = parseFloat(obj.length);
             var total = parseFloat(controlLabelTotal.innerHTML);
-            var porcentaje = (total / totalActivos).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",").toString();
+            var porcentaje = (totalActivos * 100 / total).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
             controlLabelActivos.innerHTML = obj.length.toString();
             controlLabelPorcentaje.innerHTML = porcentaje.toString();
@@ -246,9 +276,14 @@
 
             for (var i = 0; i < obj.length; i++)
             {
-                var fechaAlerta = (obj[i].FechaAlerta == null) ? '' : CorregirFecha(obj[i].FechaAlerta);
-                var fechaPedido = (obj[i].FechaPedido == null) ? '' : CorregirFecha(obj[i].FechaPedido);
+                var fechaAlerta = (obj[i].FechaAlerta == null) ? '' : obj[i].FechaAlerta;
+                var fechaPedido = (obj[i].FechaPedido == null) ? '' : obj[i].FechaPedido;
                 var numeroPedido = (obj[i].numero == null) ? '' : obj[i].numero;
+                var fechaUltimaActividad = ObtenerFechaActividadMasReciente(fechaAlerta, fechaPedido);
+                var cantidadDiasUltimaActividad = '';
+
+                if (fechaUltimaActividad != '')
+                    cantidadDiasUltimaActividad = ObtenerDiasDiferencias(fechaUltimaActividad)
 
                 $('#tablaActividades').append(
                     "<tr>" +
@@ -257,6 +292,10 @@
                     "<td> " + fechaAlerta + "</td>" +
                     "<td> " + fechaPedido + "</td>" +
                     "<td> " + numeroPedido + "</td>" +
+                    "<td> " + cantidadDiasUltimaActividad + "</td>" +
+                    "<td> " + obj[i].nombre + "</td>" +
+                    "<td> " + obj[i].provincia + "</td>" +
+                    "<td> " + obj[i].localidad + "</td>" +
                     "</tr> ");
             };
 
