@@ -594,23 +594,23 @@ namespace Gestion_Web.Formularios.Facturas
                     dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                 }
 
-                dtDetalles.Columns.Add("NumSolicitud");
+                //dtDetalles.Columns.Add("NumSolicitud");
 
-                foreach (DataRow item in dtDetalles.Rows)
-                {
-                    if(item["tipo"].ToString() == "Presupuesto")
-                    {
-                        string temp = item["Observaciones"].ToString();
+                //foreach (DataRow item in dtDetalles.Rows)
+                //{
+                //    if(item["tipo"].ToString() == "Presupuesto")
+                //    {
+                //        string temp = item["Observaciones"].ToString();
 
-                        if (temp.ToLower().Contains("solicitud"))
-                        {
-                            string txtReplace = temp.Split(',')[0] + ", ";
-                            temp = temp.Replace(txtReplace, string.Empty);
-                            item["NumSolicitud"] = txtReplace.Substring(0, txtReplace.Length - 2);
-                            item["Observaciones"] = temp;
-                        }
-                    }
-                }
+                //        if (temp.ToLower().Contains("solicitud"))
+                //        {
+                //            string txtReplace = temp.Split(',')[0] + ", ";
+                //            temp = temp.Replace(txtReplace, string.Empty);
+                //            item["NumSolicitud"] = txtReplace.Substring(0, txtReplace.Length - 2);
+                //            item["Observaciones"] = temp;
+                //        }
+                //    }
+                //}
 
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
 
