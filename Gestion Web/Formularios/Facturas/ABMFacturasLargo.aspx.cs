@@ -6747,7 +6747,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue)) idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
 
                 List<Gestion_Api.Entitys.Promocione> p = contEnt.obtenerPromocionesValidasTarjeta(idListEmpresa, idListSucursal, idDropListFormaPago, idDropListLista, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), idListTarjetas);
-                if (p != null)
+                if (p != null && p.Count>0)
                 {
                     Gestion_Api.Entitys.Promocione pr= ValidarExisteArticuloEnPromoTarjeta(p);
                     this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
