@@ -37,12 +37,12 @@
                 <div class="widget-content">
                     <div id="big_stats" class="cf">
                         <div class="stat">
-                            <h4>Total</h4>
+                            <h4>Total Clientes</h4>
                             <asp:Label ID="labelTotal" runat="server" class="value"></asp:Label>
                             <asp:HiddenField id="labelNetoHidden" runat="server" />
                         </div>
                         <div class="stat">
-                            <h4>Actividad</h4>
+                            <h4>Clientes Activos</h4>
                             <asp:Label ID="labelActivos" runat="server" class="value"></asp:Label>
                             <asp:HiddenField id="labelTotalHidden" runat="server" />
                         </div>
