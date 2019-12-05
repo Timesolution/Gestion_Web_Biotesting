@@ -142,7 +142,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (tipoDoc == "0")
                     tipoDoc = null;
 
-                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, suc, puntoVenta, proveedor, tipoFecha);
+                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, suc, puntoVenta, proveedor, tipoFecha, idEmpresa);
 
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
