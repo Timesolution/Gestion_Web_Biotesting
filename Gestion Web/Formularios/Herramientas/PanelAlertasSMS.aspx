@@ -216,11 +216,9 @@
                             </asp:UpdatePanel>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
 
     <div id="modalEnvioSMS" class="modal fade" tabindex="-1" role="dialog">
