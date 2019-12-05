@@ -48,14 +48,8 @@
                                                         <td style="width: 60%">
                                                             <div class="form-group">
                                                                 <div class="col-md-3">
-
                                                                     <asp:TextBox ID="txtFecha" runat="server" class="form-control" disabled="" Style="text-align: center"></asp:TextBox>
                                                                 </div>
-                                                                <%--<div class="col-md-9" style="text-align: right">
-                                                                    <h3>
-                                                                        <asp:Label ID="labelNroFactura" runat="server" Text=""></asp:Label>
-                                                                    </h3>
-                                                                </div>--%>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -1813,38 +1807,38 @@
 
                                             <div class="widget-content">
 
-                                                <table class="table table-striped table-bordered">
+                                                <table class="table table-striped table-bordered col-lg-12">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 20%;">
+                                                            <th class="col-lg-2">
                                                                 <div style="text-align: center">
                                                                     <a class="btn btn-info" onclick="createC();">
                                                                         <i class="shortcut-icon icon-search"></i>
                                                                     </a>
                                                                 </div>
                                                             </th>
-                                                            <th style="width: 20%">
+                                                            <th class="col-lg-2">
                                                                 <div style="text-align: center">
                                                                     <a class="btn btn-info" data-toggle="modal" href="#modalAltaRapida" runat="server" id="btnModalAltaRapida" visible="true">
                                                                         <i class="shortcut-icon icon-bolt"></i>
                                                                     </a>
                                                                 </div>
                                                             </th>
-                                                            <th style="width: 20%">
+                                                            <th class="col-lg-2">
                                                                 <div style="text-align: center">
                                                                     <asp:LinkButton ID="lbtnAbrirModalTarjeta" runat="server" class="btn btn-info" Text="Cancelar" OnClick="btnAbrirModalTarjeta_Click">
                                                                          <i class="shortcut-icon icon-credit-card"></i>
                                                                     </asp:LinkButton>
                                                                 </div>
                                                             </th>
-                                                            <th style="width: 20%">
+                                                            <th class="col-lg-2">
                                                                 <div style="text-align: center">
                                                                     <asp:LinkButton ID="lbtnFormaDePagoContado" runat="server" class="btn btn-info" Text="Cancelar" OnClick="btnSetearFormaDePagoPorContado">
                                                                          <i class="shortcut-icon icon-money"></i>
                                                                     </asp:LinkButton>
                                                                 </div>
                                                             </th>
-                                                            <th style="width: 20%">
+                                                            <th class="col-lg-2">
                                                                 <div style="text-align: center">
                                                                     <div class="btn-group">
                                                                         <asp:LinkButton ID="lbtnAccion" runat="server" class="btn btn-info dropdown-toggle" data-toggle="dropdown" Text="FC <span class='caret'></span>" />
@@ -1870,6 +1864,13 @@
                                                                             </li>
                                                                         </ul>
                                                                     </div>
+                                                                </div>
+                                                            </th>
+                                                            <th class="col-lg-2">
+                                                                <div style="text-align: center">
+                                                                    <asp:LinkButton ID="btnSetearClienteScrap1" runat="server" class="btn btn-info" OnClick="btnSetearClienteScrap_Click">
+                                                                         <i class="shortcut-icon icon-bitbucket"></i>
+                                                                    </asp:LinkButton>
                                                                 </div>
                                                             </th>
                                                         </tr>
