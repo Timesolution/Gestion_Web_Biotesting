@@ -1071,7 +1071,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. 2 " + ex.Message));
             }
         }
 
@@ -1556,11 +1556,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.codigo))
-                {
-                    contArticuloEntity.ObtenerElCodigoDelPrimerArticuloConEstado1();
-                }
-                this.txtCodigo.Text = itemRemitoTemporal.codigo;
+                this.txtCodigo.Text = contArticuloEntity.ObtenerElCodigoDelPrimerArticuloConEstado1();
                 this.txtCantidad.Text = itemRemitoTemporal.cantidad;
                 this.txtTotalArri.Text = itemRemitoTemporal.total;
                 this.TxtDescuentoArri.Text = "0";

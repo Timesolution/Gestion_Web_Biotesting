@@ -53,10 +53,14 @@
           <DataField>Sucursal</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="SubGrupo">
+          <DataField>SubGrupo</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsVentas</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\black\Documents\Trabajo\Gestion\gestion_WEB\Gestion Web\Formularios\Reportes\dsVentas.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\PROYECTOS\GESTION\Gestion_Web\Gestion Web\Formularios\Reportes\dsVentas.xsd</rd:SchemaPath>
         <rd:TableName>ArticulosCategoria</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -87,7 +91,6 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox56</rd:DefaultName>
-            <Top>0cm</Top>
             <Left>3.33939cm</Left>
             <Height>1.25235cm</Height>
             <Width>18.79741cm</Width>
@@ -105,16 +108,19 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>5.92442cm</Width>
+                  <Width>4.55626cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>5.6103cm</Width>
+                  <Width>4.20801cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5.05727cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>5.65065cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>2.73046cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.38711cm</Width>
@@ -245,6 +251,39 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox7">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Sub Grupo</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -452,6 +491,36 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="SubGrupo">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SubGrupo.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SubGrupo</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Cantidad">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -642,6 +711,36 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Cantidad1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -720,6 +819,7 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -741,9 +841,8 @@
               </SortExpression>
             </SortExpressions>
             <Top>1.57868cm</Top>
-            <Left>0cm</Left>
             <Height>1.8cm</Height>
-            <Width>27.60246cm</Width>
+            <Width>27.56248cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -755,7 +854,7 @@
         <Height>1.44803in</Height>
         <Style />
       </Body>
-      <Width>10.86711in</Width>
+      <Width>10.85137in</Width>
       <Page>
         <PageHeader>
           <Height>0.89669cm</Height>

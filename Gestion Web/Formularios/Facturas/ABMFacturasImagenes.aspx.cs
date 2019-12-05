@@ -65,7 +65,6 @@ namespace Gestion_Web.Formularios.Facturas
         int flag_cambioFecha = 0;
 
         int flag_clienteModal = 0;
-        int idArticuloModalCalculadora;
 
         DataTable lstPagosTemp;
         DataTable dtTrazasTemp;
@@ -731,7 +730,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int idArticulo;
-                if(!int.TryParse(idArticuloHidden.Value, out idArticulo))
+                if (!int.TryParse(idArticuloHidden.Value, out idArticulo))
                 {
                     return;
                 }
@@ -745,7 +744,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
@@ -1246,6 +1245,19 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        protected void btnSetearClienteScrap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idClienteScrap = contClienteEntity.ObtenerIdClienteScrapParaPanaderias();
+                this.cargarCliente(idClienteScrap);
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -2437,6 +2449,10 @@ namespace Gestion_Web.Formularios.Facturas
                         this.btnTarjeta.Visible = false;
                     }
 
+                    if (DropListFormaPago.SelectedItem.Text == "Cuenta Corriente")
+                    {
+                        this.lbFormaDePago.Text = "Forma de pago: Cuenta Corriente";
+                    }
                     //pongo en cero por si eligieron un cliente con desc o percepciones y dps lo cambiaron
                     this.txtPorcDescuento.Text = "0";
                     this.txtPorcRetencion.Text = "0";
