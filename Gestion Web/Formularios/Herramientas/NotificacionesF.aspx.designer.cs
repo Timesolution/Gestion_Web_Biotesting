@@ -10,42 +10,33 @@
 namespace Gestion_Web.Formularios.Herramientas {
     
     
-    public partial class Notificaciones {
+    public partial class NotificacionesF {
         
         /// <summary>
-        /// TextBoxNombreCampaña control.
+        /// txtFechaDesde control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxNombreCampaña;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaDesde;
         
         /// <summary>
-        /// TextBoxTituloNotificacion control.
+        /// txtFechaHasta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxTituloNotificacion;
+        protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
         
         /// <summary>
-        /// TextBoxMensaje control.
+        /// lbtnBuscar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxMensaje;
-        
-        /// <summary>
-        /// lbtnEnviarNotificacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnEnviarNotificacion;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
     }
 }

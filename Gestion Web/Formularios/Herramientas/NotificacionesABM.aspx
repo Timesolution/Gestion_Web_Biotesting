@@ -32,9 +32,7 @@
                                     <asp:TextBox ID="TextBoxMensaje" class="form-control" runat="server" TextMode="MultiLine" Rows="4" />
                                 </div>
                             </div>
-                            <div>
-                                <asp:LinkButton ID="lbtnBuscar" OnClientClick="Enviar(this)" runat="server" Text="Enviar" class="btn btn-success" />
-                            </div>
+                            <a class="btn btn-success" onclick="ComprobarCampos()" data-toggle="modal" href="#modalConfirmar" runat="server">Enviar</a>
                         </div>
                     </div>
                 </div>
@@ -42,31 +40,21 @@
         </div>
     </div>
 
-    <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalConfirmar" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" id="btnCerrarModalBusqueda" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Busqueda</h4>
+                    <button type="button" id="btnCerrarModalConfirmacion" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Enviar Notificacion</h4>
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
-                        <div class="form-group">
-                            <label class="col-md-4">Desde</label>
-                            <div class="col-md-6">
-                                <asp:TextBox ID="txtFechaDesde" onchange="javascript:return ComprobacionFechaDesde()" runat="server" class="form-control"></asp:TextBox>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4">Vendedor</label>
-                            <div class="col-md-6">
-                                <asp:DropDownList ID="DropListVendedor" runat="server" class="form-control"></asp:DropDownList>
-                            </div>
-                        </div>
+                        <label style="font-size:large">¿Esta seguro que desea enviar esta notificacion?</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="LinkButton1" OnClientClick="Enviar" runat="server" Text="Enviar" class="btn btn-success"/>
+                    <asp:LinkButton ID="lbtnEnviarNotificacion" OnClick="lbtnEnviarNotificacion_Click" runat="server" Text="Enviar" class="btn btn-success"/>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                 </div>
             </div>
         </div>

@@ -512,7 +512,7 @@
                                                     <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>
-                                                    <li><a href="/../../Formularios/Herramientas/NotificacionesABM.aspx">Notificaciones Push/App</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/NotificacionesF.aspx">Notificaciones Push/App</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">

@@ -360,6 +360,7 @@
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Herramientas\NotificacionesABM.aspx" />
+    <Content Include="Formularios\Herramientas\NotificacionesF.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
@@ -1479,6 +1480,13 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\NotificacionesABM.aspx.designer.cs">
       <DependentUpon>NotificacionesABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesF.aspx.cs">
+      <DependentUpon>NotificacionesF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesF.aspx.designer.cs">
+      <DependentUpon>NotificacionesF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
       <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
