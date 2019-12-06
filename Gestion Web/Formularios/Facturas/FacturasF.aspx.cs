@@ -1484,6 +1484,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
                     }
+                    if (idtildado.Split(';').Count() > 1 && idtildado.Split(';')[1] != "")
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar solo una Factura"));
+                        return;
+                    }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
@@ -1793,7 +1798,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.lblFechaFactura.Text = FC.fecha.ToString("dd/MM/yyyy hh:mm");
                         this.txtNuevaFecha.Text = FC.fecha.ToString("dd/MM/yyyy");
                     }
-                    
+
                     this.txtNuevoNetoFactura.Text = FC.subTotal.ToString();
                     this.txtNuevoIvaFactura.Text = FC.neto21.ToString();
                     this.txtNuevoTotalFactura.Text = FC.total.ToString();
@@ -1962,7 +1967,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnExportarVentasVendedor_Click(object sender, EventArgs e)
         {
             this.ExportToExcel(9);
-        }     
+        }
         protected void btnImprimirVentasVendedor_Click(object sender, EventArgs e)
         {
             this.PrintToPDF(9);
@@ -3647,7 +3652,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string puntoVenta = this.txtNuevoPuntoVenta.Text;
 
                 DateTime horaFactura = new DateTime();
-                string horaFacturaFinal = "";                
+                string horaFacturaFinal = "";
 
                 if (modificoHora == "1")
                 {
@@ -3660,8 +3665,8 @@ namespace Gestion_Web.Formularios.Facturas
                     horaFactura = DateTime.ParseExact(lblFechaFactura.Text, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
                     horaFacturaFinal = horaFactura.ToString("hh:mm");
                 }
-                
-                string fecha = this.txtNuevaFecha.Text  + " " + horaFacturaFinal;
+
+                string fecha = this.txtNuevaFecha.Text + " " + horaFacturaFinal;
                 string numero = this.txtNuevoNumeroFactura.Text;
                 string neto = this.txtNuevoNetoFactura.Text;
                 string iva = this.txtNuevoIvaFactura.Text;
