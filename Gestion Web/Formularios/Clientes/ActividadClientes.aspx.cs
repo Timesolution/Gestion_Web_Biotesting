@@ -140,11 +140,11 @@ namespace Gestion_Web.Formularios.Clientes
         }
 
         [WebMethod]
-        public static string Filtrar(string provincia, string localidad,int diasActividad)
+        public static string Filtrar(string provincia, string localidad,int diasActividad, int vendedor)
         {
             controladorCliente controladorCliente = new controladorCliente();
 
-            var actividades = controladorCliente.ObtenerActividadCliente(provincia,localidad,diasActividad);
+            var actividades = controladorCliente.ObtenerActividadCliente(provincia,localidad,diasActividad,vendedor);
             var clientes = controladorCliente.ObtenerIdClientesByLocalidad(provincia,localidad);
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();

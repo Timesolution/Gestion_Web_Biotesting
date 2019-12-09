@@ -59,7 +59,6 @@
         <div class="col-md-12 col-xs-12">
             <div class="widget stacked widget-table action-table">
                 <div class="widget-header">
-                    <i class="icon-money" style="width: 2%"></i>
                     <h3 style="width: 75%">Actividades</h3>
                 </div>
                 <div class="widget-content">
@@ -205,6 +204,7 @@
             var controlDropListLocalidad = document.getElementById('<%= DropDownListLocalidades.ClientID %>');
             var controlDropListProvincia = document.getElementById('<%= DropDownListProvincias.ClientID %>');
             var valorDiasActividad = document.getElementById('<%= txtDiasActividad.ClientID %>').value;
+            var vendedor = document.getElementById('<%= DropDownListVendedores.ClientID %>').value;
 
             var localidad = controlDropListLocalidad.selectedOptions[0].text;
             var provincia = controlDropListProvincia.selectedOptions[0].text;
@@ -229,7 +229,7 @@
                 type: "POST",
                 url: "ActividadClientes.aspx/Filtrar",
                 contentType: "application/json",
-                data: '{provincia: "' + provincia + '", localidad: "' + localidad + '", diasActividad: "' + valorDiasActividad + '"  }',
+                data: '{provincia: "' + provincia + '", localidad: "' + localidad + '", diasActividad: "' + valorDiasActividad + '", vendedor: "' + vendedor + '"  }',
                 dataType: 'json',
                 error: function () {
                     $.msgbox("Error al filtrar.", { type: "error" });

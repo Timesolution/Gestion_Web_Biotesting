@@ -39,7 +39,6 @@
         <div class="col-md-12 col-xs-12">
             <div class="widget stacked widget-table action-table">
                 <div class="widget-header">
-                    <i class="icon-money" style="width: 2%"></i>
                     <h3 style="width: 75%">Notificaciones</h3>
                 </div>
                 <div class="widget-content">
@@ -199,6 +198,8 @@
 
         function OnSuccessFiltro(response)
         {
+            var controlBotonFiltrar = document.getElementById('<%= lbtnBuscar.ClientID %>');
+
             var data = response.d;
             var obj = JSON.parse(data);
 
