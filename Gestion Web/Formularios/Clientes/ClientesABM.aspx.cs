@@ -1785,30 +1785,29 @@ namespace Gestion_Web.Formularios.Clientes
                         }
 
                         //Verifico si utiliza modo distribución y si quien lo da de alta es dsitribuidor, se agrega al distribuidor como padre 
-                        if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
+                        if (WebConfigurationManager.AppSettings.Get("Distribucion") != "1")
                         {
-                            if (perfil == "Distribuidor")
-                            {
+                            //if (perfil == "Distribuidor")
+                            //{
 
-                                var idDistribuidor = (int)Session["Login_Vendedor"];
-                                if (DropListTipo.SelectedItem.Text == "Lider")
-                                {
-                                    cr.Padre = idDistribuidor;
-                                    cr.Hijo = cliente.id;
-                                }
-                                if (DropListTipo.SelectedItem.Text == "Experta")
-                                {
-                                    cr.Padre = Convert.ToInt32(DropListFamilia.SelectedValue);
-                                    cr.Hijo = cliente.id;
-                                }
-
-                                this.contClienteEntity.modificarClienteReferido(cr);
-                            }
-                        }
-                        else
-                        {
+                            //    var idDistribuidor = (int)Session["Login_Vendedor"];
+                            //    if (DropListTipo.SelectedItem.Text == "Lider")
+                            //    {
+                            //        cr.Padre = idDistribuidor;
+                            //        cr.Hijo = cliente.id;
+                            //    }
+                            //    if (DropListTipo.SelectedItem.Text == "Experta")
+                            //    {
+                            //        cr.Padre = Convert.ToInt32(DropListFamilia.SelectedValue);
+                            //        cr.Hijo = cliente.id;
+                            //    }
+                            //    this.contClienteEntity.modificarClienteReferido(cr);
+                            //}
                             this.contClienteEntity.quitarFormaVentaACliente(idCliente, -1);
                         }
+                        //else
+                        //{
+                        //}
                         this.RespuestaModificarCliente(i);
                     }
                     if (accion == 4)
