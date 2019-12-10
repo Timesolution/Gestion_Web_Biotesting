@@ -204,6 +204,7 @@
                                                     <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMEstadosClientes.aspx">Estados</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ImportarClientes.aspx">Importar Clientes</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ActividadClientes.aspx">Actividad</a></li>
                                                 </ul>
                                             </li>
                                             <%--<li><a href="">Contactos</a></li>--%>
@@ -505,12 +506,13 @@
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">SMS</a>
+                                                <a tabindex="" href="#">Notificaciones</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Herramientas/AdminSMS.aspx">SMS Creditos</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/NotificacionesF.aspx">Notificaciones Push/App</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">

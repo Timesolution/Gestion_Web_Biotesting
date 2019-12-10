@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -355,9 +355,12 @@
     <Content Include="Formularios\Articulos\ArticulosNew.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
+    <Content Include="Formularios\Herramientas\NotificacionesABM.aspx" />
+    <Content Include="Formularios\Herramientas\NotificacionesF.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
@@ -789,17 +792,6 @@
     </Content>
     <Content Include="Formularios\Articulos\StockValorizadoDetalladoR.rdlc" />
     <Content Include="Formularios\Articulos\ListaCatalogoR.rdlc" />
-    <Content Include="Formularios\Clientes\dsImportacionClientes.xsc">
-      <DependentUpon>dsImportacionClientes.xsd</DependentUpon>
-    </Content>
-    <None Include="Formularios\Clientes\dsImportacionClientes.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsImportacionClientes.Designer.cs</LastGenOutput>
-    </None>
-    <Content Include="Formularios\Clientes\dsImportacionClientes.xss">
-      <DependentUpon>dsImportacionClientes.xsd</DependentUpon>
-    </Content>
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1454,10 +1446,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\Clientes\dsImportacionClientes.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsImportacionClientes.xsd</DependentUpon>
+    <Compile Include="Formularios\Clientes\ActividadClientes.aspx.cs">
+      <DependentUpon>ActividadClientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ActividadClientes.aspx.designer.cs">
+      <DependentUpon>ActividadClientes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
@@ -1479,6 +1473,20 @@
     </Compile>
     <Compile Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx.designer.cs">
       <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesABM.aspx.cs">
+      <DependentUpon>NotificacionesABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesABM.aspx.designer.cs">
+      <DependentUpon>NotificacionesABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesF.aspx.cs">
+      <DependentUpon>NotificacionesF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesF.aspx.designer.cs">
+      <DependentUpon>NotificacionesF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
       <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
@@ -2474,6 +2482,7 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMRemitos.aspx.cs">
       <DependentUpon>ABMRemitos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\Facturas\ABMRemitos.aspx.designer.cs">
       <DependentUpon>ABMRemitos.aspx</DependentUpon>
@@ -3350,12 +3359,7 @@
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosListaXFecha.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosSucursalesConImporte.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAgrupadoGrupoSubGrupoMarca.rdlc" />
-    <EmbeddedResource Include="Formularios\Clientes\InformeImportarClientes.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Reportes\VentasBySucursalesAndPuntoDeVenta.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasVendedores.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\RentabilidadSucursal.rdlc" />
     <EmbeddedResource Include="Formularios\Reportes\VentasArticulosClientes.rdlc" />
