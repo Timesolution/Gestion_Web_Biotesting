@@ -3,9 +3,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="main">
-
-        <%--<div class="container">--%><div>
-
+        <%--<div class="container">--%>
+        <div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
@@ -18,7 +17,6 @@
                     <!-- /widget-header -->
 
                     <div class="widget-content">
-
 
                         <table style="width: 100%">
                             <tr>
@@ -40,6 +38,9 @@
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnExportarZona" runat="server" OnClick="lbtnExportarZona_Click">Exportar Clientes x Zona</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <a href="#modalEnviarSMS_A_Clientes" data-toggle="modal" style="width:90%">Enviar SMS a los clientes</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -498,6 +499,47 @@
 
                     <div class="modal-footer">
                         <asp:LinkButton ID="btnFiltrar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnFiltrar_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalEnviarSMS_A_Clientes" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Envio de SMS al cliente</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <h1 style="text-align: center">
+                                        <i class="icon-comment" style="color: blue"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-10">
+                                    <h5>
+                                        <asp:Label runat="server" Font-Size="Medium" Text="Introduzca el mensaje a enviar" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtEnviarSMS" class="form-control"></asp:TextBox>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="btnEnviarSMSUnSoloCliente" Text="Enviar" class="btn btn-info" OnClick="btnEnviarSMSUnSoloCliente_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
             </div>
