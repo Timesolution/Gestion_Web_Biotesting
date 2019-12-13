@@ -311,7 +311,8 @@
                 {
                     var articulo = data[i];
 
-                    var txtCantidad = document.getElementsByName("txtCantidad_" + articulo[0]);
+                    var txtCantidad = document.getElementsByName(`txtCantidad_${articulo[0]}`);
+                    //var txtcant = document.getElementById(`txtCantidad_${articulo[0]}`);
                     var txtPrecio = document.getElementsByName("txtPrecio_" + articulo[0]);
 
                     if (parseInt(txtCantidad[0].value) > 0)
@@ -328,7 +329,7 @@
                 $.ajax({
                     type: "POST",
                     url: "OrdenesCompraABM.aspx/ObtenerArticulosParaGenerarOrdenCompra",
-                    data: JSON.stringify({articulos: articulos}),
+                    data: {articulos: articulosOrdenCompra},
                     contentType: "application/json",
                     dataType: 'json',
                     async: false,
