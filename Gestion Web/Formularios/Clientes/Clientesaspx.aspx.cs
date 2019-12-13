@@ -28,16 +28,17 @@ namespace Gestion_Web.Formularios.Clientes
         controladorUsuario contUser = new controladorUsuario();
         ControladorProvincias contProvincias = new ControladorProvincias();
         controladorEstadoCliente contEstadoCliente = new controladorEstadoCliente();
+        ControladorSMS contSMS = new ControladorSMS();
         Mensajes m = new Mensajes();
         public Dictionary<string, string> camposClientes = null;
 
-        int accion;
-        string busqueda;
-        int tipoCliente;
-        string provincia;
-        int idVendedor;
-        int idGrupoCliente;
-        int idEstadoCliente;
+        public int accion;
+        public string busqueda;
+        public int tipoCliente;
+        public string provincia;
+        public int idVendedor;
+        public int idGrupoCliente;
+        public int idEstadoCliente;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -74,7 +75,7 @@ namespace Gestion_Web.Formularios.Clientes
                 //filtro
                 if (this.accion == 2)
                 {
-                    this.filtrar(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
+                    this.FiltrarClientes();
                 }
                 else
                 {
@@ -1265,13 +1266,29 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public void filtrar(int idTipoCliente, string provincia, int idVendedor, int idGrupoCliente, int idEstadoCliente)
+        public void FiltrarClientes()
         {
             try
             {
-                var clientes = contCliente.FiltrarClientesEnClientesAspx(idTipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
-               
-                List<Cliente> listName = clientes.AsEnumerable().Select(m => new Cliente()
+                List<Cliente> listaClientes = ObtenerClientesFiltrados_List();
+
+                cargarClientesAlPlaceholder(listaClientes);
+
+                lb_cantidadClientesFiltrados.Text = "Cantidad de clientes filtrados: " + listaClientes.Count;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public List<Cliente> ObtenerClientesFiltrados_List()
+        {
+            try
+            {
+                var clientes = contCliente.FiltrarClientesEnClientesAspx(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
+
+                List<Cliente> listaClientes = clientes.AsEnumerable().Select(m => new Cliente()
                 {
                     id = m.Field<int>("id"),
                     codigo = m.Field<string>("codigo"),
@@ -1280,11 +1297,11 @@ namespace Gestion_Web.Formularios.Clientes
                     cuit = m.Field<string>("cuit"),
                 }).ToList();
 
-                cargarClientesAlPlaceholder(listName);
+                return listaClientes;
             }
             catch (Exception ex)
             {
-
+                return null;
             }
         }
 
@@ -1410,6 +1427,7 @@ namespace Gestion_Web.Formularios.Clientes
                     cbSeleccion.ID = "Chk_IdCliente_" + cl.id;
                     cbSeleccion.CssClass = "btn btn-info";
                     cbSeleccion.Font.Size = 12;
+                    cbSeleccion.Attributes.Add("name", "CHK");
                     celImage.Controls.Add(cbSeleccion);
 
                     //fila
@@ -1436,12 +1454,10 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public void btnEnviarSMSUnSoloCliente_Click(object sender, EventArgs e)
+        public void btnEnviarSMS_A_ClientesTildados_Click(object sender, EventArgs e)
         {
             try
             {
-                ControladorSMS contSMS = new ControladorSMS();
-
                 foreach (Control C in phClientes.Controls)
                 {
                     TableRow tr = C as TableRow;
@@ -1449,15 +1465,78 @@ namespace Gestion_Web.Formularios.Clientes
                     if (ch.Checked == true)
                     {
                         int idCliente = Convert.ToInt32(ch.ID.Split('_')[2]);
-                        var cl = contClienteEntity.obtenerClienteDatosByIdCliente(idCliente);
+                        var cliente = contClienteEntity.obtenerClienteDatosByIdCliente(idCliente);
 
-                        if (cl != null)
+                        if (cliente != null)
                         {
-                            if (!string.IsNullOrWhiteSpace(cl.Celular))
-                            {
-                                contSMS.enviarSMS(cl.Celular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
-                            }
+                            EnviarSMS_Al_CLiente(cliente.Celular);
                         }
+                    }
+                }
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensajes enviados correctamente", null));
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void btnEnviarSMS_A_ClientesFiltrados_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var clientes = ObtenerClientesFiltrados_List();
+                if (clientes == null)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe filtrar los clientes antes"));
+                    return;
+                }
+                foreach (var item in clientes)
+                {
+                    var cliente = contClienteEntity.obtenerClienteDatosByIdCliente(item.id);
+                    if (cliente != null)
+                    {
+                        EnviarSMS_Al_CLiente(cliente.Celular);
+                    }
+                }
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensajes enviados correctamente", null));
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al enviar los mensajes para clientes filtrados"));
+            }
+        }
+
+        public void EnviarSMS_Al_CLiente(string numeroCelular)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(numeroCelular))
+                {
+                    numeroCelular = numeroCelular.Replace("-", "");
+                    if (numeroCelular.Length == 10)
+                    {
+                        contSMS.enviarSMS(numeroCelular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en EnviarSMS_Al_CLiente"));
+            }
+        }
+
+        public void btnCargarClientesTildados_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (Control C in phClientes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[6].Controls[6] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                                                
                     }
                 }
             }

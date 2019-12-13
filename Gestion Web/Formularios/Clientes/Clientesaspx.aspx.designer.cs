@@ -573,12 +573,30 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox txtEnviarSMS;
 
         /// <summary>
-        /// btnEnviarSMSUnSoloCliente control.
+        /// lb_cantidadClientesFiltrados control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEnviarSMSUnSoloCliente;
+        protected global::System.Web.UI.WebControls.Label lb_cantidadClientesFiltrados;
+
+        /// <summary>
+        /// lb_cantidadClientesTildados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lb_cantidadClientesTildados;
+
+        /// <summary>
+        /// lbtnCrearRegistro control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnCrearRegistro;
     }
 }
