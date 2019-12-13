@@ -1455,7 +1455,7 @@ namespace Gestion_Web.Formularios.Clientes
                         {
                             if (!string.IsNullOrWhiteSpace(cl.Celular))
                             {
-                                contSMS.enviarSMS("1162833196", txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                                contSMS.enviarSMS(cl.Celular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
                             }
                         }
                     }
