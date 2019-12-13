@@ -2748,6 +2748,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 int iec = this.validarItemsEnCero();
                                 if (iec == 1)
                                 {
+                                Log.EscribirSQL(99, "ELECTRONICA", "Entro en 'this.generarFactura(0);' 2752");
                                     this.generarFactura(0);
                                 }
                                 else
@@ -3880,9 +3881,12 @@ namespace Gestion_Web.Formularios.Facturas
                     int idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                     int porcenOK = this.validarFacturacionPorcentual();
 
+                    Log.EscribirSQL(99, "ELECTRONICA", "porcenOK: " + porcenOK + " idForma: "+ idForma);
+
                     //proceso para facturar mitad y mitad (50 y 50)
                     if (porcenOK == 1 && idForma > 0)
                     {
+                        Log.EscribirSQL(99, "ELECTRONICA", "Entro en 'if (porcenOK == 1 && idForma > 0)' 3887");
                         this.procesoFacturarPorcentual(fact, dtPago, user, generaRemito);
                         return;
                     }

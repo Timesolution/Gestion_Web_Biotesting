@@ -1354,7 +1354,6 @@ namespace Gestion_Web.Formularios.Clientes
                     l2.Text = "&nbsp";
                     celImage.Controls.Add(l2);
 
-
                     LinkButton btnEliminar = new LinkButton();
                     btnEliminar.ID = "btnEliminar_" + cl.id;
                     btnEliminar.CssClass = "btn btn-info";
@@ -1368,9 +1367,9 @@ namespace Gestion_Web.Formularios.Clientes
                     if (!String.IsNullOrEmpty(sistema))
                     {
 
-                        Literal l3 = new Literal();
-                        l3.Text = "&nbsp";
-                        celImage.Controls.Add(l3);
+                        Literal l4 = new Literal();
+                        l4.Text = "&nbsp";
+                        celImage.Controls.Add(l4);
 
                         LinkButton btnMillas = new LinkButton();
                         btnMillas.ID = "btnMillas_" + cl.id;
@@ -1403,6 +1402,16 @@ namespace Gestion_Web.Formularios.Clientes
                         celImage.Width = Unit.Percentage(10);
                     }
 
+                    Literal l3 = new Literal();
+                    l3.Text = "&nbsp";
+                    celImage.Controls.Add(l3);
+
+                    CheckBox cbSeleccion = new CheckBox();
+                    cbSeleccion.ID = "Chk_IdCliente_" + cl.id;
+                    cbSeleccion.CssClass = "btn btn-info";
+                    cbSeleccion.Font.Size = 12;
+                    celImage.Controls.Add(cbSeleccion);
+
                     //fila
                     TableRow tr = new TableRow();
                     tr.ID = cl.id + "_1";
@@ -1427,5 +1436,35 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        public void btnEnviarSMSUnSoloCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorSMS contSMS = new ControladorSMS();
+
+                foreach (Control C in phClientes.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[6].Controls[6] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        int idCliente = Convert.ToInt32(ch.ID.Split('_')[2]);
+                        var cl = contClienteEntity.obtenerClienteDatosByIdCliente(idCliente);
+
+                        if (cl != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(cl.Celular))
+                            {
+                                contSMS.enviarSMS(cl.Celular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }
