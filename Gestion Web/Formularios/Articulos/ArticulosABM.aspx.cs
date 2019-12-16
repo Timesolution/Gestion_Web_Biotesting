@@ -275,11 +275,15 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 int valor = this.contUser.verificarPerfilUsuario((int)Session["Login_IdUser"]);
+
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
                 //if (valor == 1)
                 //{
                 //    this.panelCosto.Visible = false;
                 //}
-                if (valor == 2)
+                if (valor == 2 && String.IsNullOrEmpty(permiso2))
                 {
                     this.panelCosto.Visible = false;
                     this.panelCosto2.Visible = false;
@@ -1130,7 +1134,7 @@ namespace Gestion_Web.Formularios.Articulos
                 artStore.IdArticulo = this.id;
 
                 artStore.Oferta = Convert.ToInt32(this.ListOferta.SelectedValue);
-         
+
                 artStore.Destacado = 0;
                 if (this.ListDestacado.SelectedValue == "SI")
                     artStore.Destacado = 1;
