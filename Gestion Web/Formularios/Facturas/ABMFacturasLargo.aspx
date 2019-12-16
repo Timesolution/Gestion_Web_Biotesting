@@ -27,8 +27,8 @@
                                                 <tr>
                                                     <td style="width: 40%">
                                                         <div class="form-group">
-                                                            <div class="col-md-8">
                                                                 <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
+                                                            <div class="col-md-8">
                                                                 <label class="col-md-4"></label>
                                                             </div>
                                                             <div class="col-md-2">
