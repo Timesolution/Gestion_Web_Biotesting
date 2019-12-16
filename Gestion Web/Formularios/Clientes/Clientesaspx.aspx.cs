@@ -1450,7 +1450,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch (Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
             }
         }
 
@@ -1458,6 +1458,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                int cantMensajesCorrectos = 0;
+                int cantMensajesIncorrectos = 0;
                 foreach (Control C in phClientes.Controls)
                 {
                     TableRow tr = C as TableRow;
@@ -1469,15 +1471,49 @@ namespace Gestion_Web.Formularios.Clientes
 
                         if (cliente != null)
                         {
-                            EnviarSMS_Al_CLiente(cliente.Celular);
+                            if (EnviarSMS_Al_CLiente(cliente.Celular))
+                            {
+                                cantMensajesCorrectos++;
+                            }
+                            else
+                            {
+                                cantMensajesIncorrectos++;
+                            }
                         }
                     }
                 }
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensajes enviados correctamente", null));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(
+                    ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null)
+                    );
             }
             catch (Exception ex)
             {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
 
+        public string ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(int cantMensajesCorrectos, int cantMensajesIncorrectos)
+        {
+            try
+            {
+                string mensaje = "";
+                if (cantMensajesCorrectos > 0)
+                {
+                    mensaje += "Se enviaron " + cantMensajesCorrectos + " mensajes correctamente.";
+                }
+                if (cantMensajesIncorrectos > 0)
+                {
+                    mensaje += " No se enviaron " + cantMensajesIncorrectos + " mensajes.";
+                }
+                if (cantMensajesIncorrectos == 0 && cantMensajesCorrectos == 0)
+                {
+                    mensaje += "No se pudieron enviar los mensajes, verificar que los numeros de telefono esten cargados.";
+                }
+                return mensaje;
+            }
+            catch (Exception ex)
+            {
+                return "Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name + " Ex: " + ex.Message;
             }
         }
 
@@ -1507,7 +1543,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public void EnviarSMS_Al_CLiente(string numeroCelular)
+        public bool EnviarSMS_Al_CLiente(string numeroCelular)
         {
             try
             {
@@ -1516,13 +1552,19 @@ namespace Gestion_Web.Formularios.Clientes
                     numeroCelular = numeroCelular.Replace("-", "");
                     if (numeroCelular.Length == 10)
                     {
-                        contSMS.enviarSMS(numeroCelular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                        int respuesta = contSMS.enviarSMS(numeroCelular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                        if (respuesta > 0)
+                        {
+                            return true;
+                        }
                     }
                 }
+                return false;
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en EnviarSMS_Al_CLiente"));
+                return false;
             }
         }
 
@@ -1536,7 +1578,7 @@ namespace Gestion_Web.Formularios.Clientes
                     CheckBox ch = tr.Cells[6].Controls[6] as CheckBox;
                     if (ch.Checked == true)
                     {
-                                                
+
                     }
                 }
             }

@@ -545,7 +545,7 @@
                             </h5>
                         </div>
                         <div class="row">
-                            <asp:Button runat="server" Text="cargar" class="btn btn-info" OnClick="btnCargarClientesTildados_Click" "/>
+                            <asp:Button runat="server" Text="cargar" class="btn btn-info" OnClick="btnCargarClientesTildados_Click"/>
                             <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
                             <asp:LinkButton ID="lbtnCrearRegistro" OnClientClick="javascript:return ObtenerLosIdDeLosCheckBoxTildados();" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack="false" />
                             <asp:Button runat="server" Text="Enviar a tildados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesTildados_Click" />
