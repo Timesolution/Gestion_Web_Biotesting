@@ -40,7 +40,7 @@
                                                 <asp:LinkButton ID="lbtnExportarZona" runat="server" OnClick="lbtnExportarZona_Click">Exportar Clientes x Zona</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <a href="#modalEnviarSMS_A_Clientes" data-toggle="modal" style="width:90%">Enviar SMS a los clientes</a>
+                                                <a href="#modalEnviarSMS_A_Clientes" data-toggle="modal" style="width: 90%">Enviar SMS a los clientes</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -538,8 +538,19 @@
                     </div>
 
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnEnviarSMSUnSoloCliente" Text="Enviar" class="btn btn-info" OnClick="btnEnviarSMSUnSoloCliente_Click" />
-                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        <div class="row">
+                            <h5>
+                                <asp:Label runat="server" ID="lb_cantidadClientesFiltrados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
+                                <asp:Label runat="server" ID="lb_cantidadClientesTildados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
+                            </h5>
+                        </div>
+                        <div class="row">
+                            <asp:Button runat="server" Text="cargar" class="btn btn-info" OnClick="btnCargarClientesTildados_Click"/>
+                            <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                            <asp:LinkButton ID="lbtnCrearRegistro" OnClientClick="javascript:return ObtenerLosIdDeLosCheckBoxTildados();" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack="false" />
+                            <asp:Button runat="server" Text="Enviar a tildados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesTildados_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -561,6 +572,15 @@
     <script>
         function abrirdialog(valor) {
             document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
+        }
+
+        function ObtenerLosIdDeLosCheckBoxTildados() {
+            var place = document.getElementById('<%=phClientes.ClientID%>')
+            var botones = document.getElementsByName('CHK');
+
+            for (var i in botones) {
+                var boton = botones[i];
+            }
         }
     </script>
     <script>
