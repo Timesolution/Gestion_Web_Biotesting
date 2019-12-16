@@ -159,7 +159,7 @@
                                                         <div class="col-md-4">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">%</span>
-                                                                <asp:TextBox ID="txtIngBrutos" runat="server" class="form-control" Style="text-align: right" Text="0" disabled></asp:TextBox>
+                                                                <asp:TextBox ID="txtIngBrutos" runat="server" class="form-control" Style="text-align: right" Text="0"></asp:TextBox>
 
                                                             </div>
                                                         </div>
