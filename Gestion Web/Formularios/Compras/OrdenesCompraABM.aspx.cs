@@ -225,7 +225,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 this.ListPtoVenta.DataBind();
 
-                if(Convert.ToInt32(ListPtoVenta.SelectedValue) > 0)
+                if (Convert.ToInt32(ListPtoVenta.SelectedValue) > 0)
                     this.obtenerNroOrden(Convert.ToInt32(ListPtoVenta.SelectedValue), "Orden de Compra");
 
             }
@@ -288,7 +288,7 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
-        
+
         private void obtenerNroOrden(int idPtoVta, string tipoDoc)
         {
             try
@@ -322,7 +322,7 @@ namespace Gestion_Web.Formularios.Compras
                 var proveedor = Convert.ToInt32(Request.Form[ListProveedor.UniqueID]);
                 var sucursal = Convert.ToInt32(Request.Form[ListSucursal.UniqueID]);
 
-                if(sucursal <= 0)
+                if (sucursal <= 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se encuentra una sucursal seleccionada"));
                     return;
@@ -390,13 +390,13 @@ namespace Gestion_Web.Formularios.Compras
                         if (this.accion == 2)
                             i = Convert.ToInt32(oc.Id);
 
-                        if(prov.RequiereAutorizacion < 1)
+                        if (prov.RequiereAutorizacion < 1)
                         {
                             this.enviarMail(oc);
                         }
                         else
                         {
-                            if(prov.MontoAutorizacion > 0 && prov.MontoAutorizacion > oc.Total)
+                            if (prov.MontoAutorizacion > 0 && prov.MontoAutorizacion > oc.Total)
                                 this.enviarMail(oc);
                         }
 
@@ -664,7 +664,7 @@ namespace Gestion_Web.Formularios.Compras
                         TextBox txtCantidad = tr.Cells[4].Controls[0] as TextBox;
                         TextBox txtPrecio = tr.Cells[2].Controls[0] as TextBox;
 
-                        if(itemOrdenCompra != null)
+                        if (itemOrdenCompra != null)
                         {
                             txtCantidad.Text = itemOrdenCompra.Cantidad.ToString();
                             txtPrecio.Text = itemOrdenCompra.Precio.ToString();
@@ -675,7 +675,7 @@ namespace Gestion_Web.Formularios.Compras
                             {
                                 txtCantidad.Text = item.Cantidad.ToString();
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -764,7 +764,7 @@ namespace Gestion_Web.Formularios.Compras
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar impresion Orden de Compra a enviar. "));
                     }
                 }
-                
+
             }
             catch (Exception Ex)
             {
@@ -945,7 +945,7 @@ namespace Gestion_Web.Formularios.Compras
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             string resultadoJSON = "";
 
-            if (!String.IsNullOrEmpty(c.alerta.descripcion))            
+            if (!String.IsNullOrEmpty(c.alerta.descripcion))
                 resultadoJSON = serializer.Serialize(c.alerta.descripcion);
 
             return resultadoJSON;
@@ -979,15 +979,15 @@ namespace Gestion_Web.Formularios.Compras
         }
 
         [WebMethod]
-        public static string ObtenerArticulosProveedor(int idProveedor,int idSucursal)
+        public static string ObtenerArticulosProveedor(int idProveedor, int idSucursal)
         {
             if (idProveedor <= 0 || idSucursal <= 0)
                 return "";
 
             controladorArticulo controladorArticulo = new controladorArticulo();
-            ControladorArticulosEntity controladorArticulosEntity = new ControladorArticulosEntity();            
+            ControladorArticulosEntity controladorArticulosEntity = new ControladorArticulosEntity();
 
-            var articulos = controladorArticulo.ObtenerArticulosProveedorOrdenCompra(idProveedor,idSucursal);            
+            var articulos = controladorArticulo.ObtenerArticulosProveedorOrdenCompra(idProveedor, idSucursal);
 
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             serializer.MaxJsonLength = 5000000;
@@ -1089,7 +1089,19 @@ namespace Gestion_Web.Formularios.Compras
         {
             foreach (var articulo in articulos)
             {
-                var articuloTemp = articulo.Replace("&amp;", "&").Split(';');
+                string[] articuloTemp= { };
+                if (articulo.Contains("lt"))
+                {
+                    articuloTemp = articulo.Replace("&lt;", "<").Split(';');
+                }
+                if (articulo.Contains("gt"))
+                {
+                    articuloTemp = articulo.Replace("&gt;", ">").Split(';');
+                }
+                if (articulo.Contains("amp"))
+                {
+                    articuloTemp = articulo.Replace("&amp;", "&").Split(';');
+                }
 
                 ArticulosProveedorTemp articuloProveedorTemp = new ArticulosProveedorTemp();
                 articuloProveedorTemp.codigo = articuloTemp[0];
