@@ -1532,7 +1532,7 @@ namespace Gestion_Web.Formularios.Clientes
                     var cliente = contClienteEntity.obtenerClienteDatosByIdCliente(item.id);
                     if (cliente != null)
                     {
-                        EnviarSMS_Al_CLiente(cliente.Celular);
+                        EnviarSMS_Al_CLiente(cliente);
                     }
                 }
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensajes enviados correctamente", null));
@@ -1543,18 +1543,19 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public bool EnviarSMS_Al_CLiente(string numeroCelular)
+        public bool EnviarSMS_Al_CLiente(Cliente_Datos cliente_Datos)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(numeroCelular))
+                if (!string.IsNullOrWhiteSpace(cliente_Datos.Celular))
                 {
-                    numeroCelular = numeroCelular.Replace("-", "");
-                    if (numeroCelular.Length == 10)
+                    cliente_Datos.Celular = cliente_Datos.Celular.Replace("-", "");
+                    if (cliente_Datos.Celular.Length == 10)
                     {
-                        int respuesta = contSMS.enviarSMS(numeroCelular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                        int respuesta = contSMS.enviarSMS(cliente_Datos.Celular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
                         if (respuesta > 0)
                         {
+                            GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(cliente_Datos);
                             return true;
                         }
                     }
@@ -1581,6 +1582,21 @@ namespace Gestion_Web.Formularios.Clientes
 
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(Cliente_Datos cliente_Datos)
+        {
+            try
+            {
+                SMS_RegistrosEnviados sMS_RegistrosEnviados = new SMS_RegistrosEnviados({
+                    cliente = cliente_Datos
+                })
+                contSMS.SMS_RegistrosEnviados_AddToTable();
             }
             catch (Exception ex)
             {
