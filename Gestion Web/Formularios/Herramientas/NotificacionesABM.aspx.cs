@@ -95,7 +95,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 if(i > 0)
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxInfo("Notificacion enviada con exito!","NotificacionesABM.aspx"));
                 else
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxError("Notificacion enviada con exito!"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", _m.mensajeBoxError("Error al enviar notificacion!"));
             }
             catch (Exception ex)
             {
