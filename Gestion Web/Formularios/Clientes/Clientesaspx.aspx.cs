@@ -1485,9 +1485,7 @@ namespace Gestion_Web.Formularios.Clientes
                         }
                     }
                 }
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(
-                    ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null)
-                    );
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null));
             }
             catch (Exception ex)
             {
@@ -1524,6 +1522,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                int cantMensajesCorrectos = 0;
+                int cantMensajesIncorrectos = 0;
                 var clientes = ObtenerClientesFiltrados_List();
                 if (clientes == null)
                 {
@@ -1535,10 +1535,17 @@ namespace Gestion_Web.Formularios.Clientes
                     var cliente = contClienteEntity.obtenerClienteDatosByIdCliente(item.id);
                     if (cliente != null)
                     {
-                        EnviarSMS_Al_CLiente(cliente);
+                        if (EnviarSMS_Al_CLiente(cliente))
+                        {
+                            cantMensajesCorrectos++;
+                        }
+                        else
+                        {
+                            cantMensajesIncorrectos++;
+                        }
                     }
                 }
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensajes enviados correctamente", null));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null));
             }
             catch (Exception ex)
             {
