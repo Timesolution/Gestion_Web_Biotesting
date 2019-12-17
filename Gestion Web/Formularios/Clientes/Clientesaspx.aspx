@@ -516,11 +516,28 @@
                     <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-12">
                                     <h1 style="text-align: center">
                                         <i class="icon-comment" style="color: blue"></i>
                                     </h1>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5>
+                                        <asp:Label runat="server" Font-Size="Medium" Text="Introduzca el titulo del mensaje a enviar" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtTituloMensaje" class="form-control"></asp:TextBox>
+                                    </h5>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
                                 <div class="col-md-10">
                                     <h5>
                                         <asp:Label runat="server" Font-Size="Medium" Text="Introduzca el mensaje a enviar" Style="text-align: center"></asp:Label>
@@ -530,7 +547,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <h5>
-                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtEnviarSMS" class="form-control"></asp:TextBox>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtCuerpoMensaje" class="form-control"></asp:TextBox>
                                     </h5>
                                 </div>
                             </div>
@@ -545,9 +562,7 @@
                             </h5>
                         </div>
                         <div class="row">
-                            <asp:Button runat="server" Text="cargar" class="btn btn-info" OnClick="btnCargarClientesTildados_Click"/>
-                            <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
-                            <asp:LinkButton ID="lbtnCrearRegistro" OnClientClick="javascript:return ObtenerLosIdDeLosCheckBoxTildados();" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" AutoPostBack="false" />
+                            <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
                             <asp:Button runat="server" Text="Enviar a tildados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesTildados_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>

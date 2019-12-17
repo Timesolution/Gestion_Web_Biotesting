@@ -285,7 +285,6 @@ namespace Gestion_Web.Formularios.Clientes
                 }
                 else
                 {
-
                     if (this.accion > 0 && !String.IsNullOrEmpty(this.busqueda))
                     {
                         clientes = this.contCliente.obtenerClientesAlias(this.busqueda);
@@ -1286,15 +1285,15 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                var clientes = contCliente.FiltrarClientesEnClientesAspx(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
+                DataTable clientes = contCliente.FiltrarClientesEnClientesAspx(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
 
                 List<Cliente> listaClientes = clientes.AsEnumerable().Select(m => new Cliente()
                 {
-                    id = m.Field<int>("id"),
+                    id = Convert.ToInt32(m.Field<int>("id")),
                     codigo = m.Field<string>("codigo"),
                     razonSocial = m.Field<string>("razonSocial"),
                     alias = m.Field<string>("alias"),
-                    cuit = m.Field<string>("cuit"),
+                    cuit = m.Field<string>("cuit")
                 }).ToList();
 
                 return listaClientes;
@@ -1309,6 +1308,10 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                if (clientes == null)
+                {
+                    return;
+                }
                 foreach (Cliente cl in clientes)
                 {
                     TableCell celCodigo = new TableCell();
@@ -1471,7 +1474,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                         if (cliente != null)
                         {
-                            if (EnviarSMS_Al_CLiente(cliente.Celular))
+                            if (EnviarSMS_Al_CLiente(cliente))
                             {
                                 cantMensajesCorrectos++;
                             }
@@ -1482,9 +1485,7 @@ namespace Gestion_Web.Formularios.Clientes
                         }
                     }
                 }
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(
-                    ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null)
-                    );
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null));
             }
             catch (Exception ex)
             {
@@ -1521,6 +1522,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                int cantMensajesCorrectos = 0;
+                int cantMensajesIncorrectos = 0;
                 var clientes = ObtenerClientesFiltrados_List();
                 if (clientes == null)
                 {
@@ -1532,10 +1535,17 @@ namespace Gestion_Web.Formularios.Clientes
                     var cliente = contClienteEntity.obtenerClienteDatosByIdCliente(item.id);
                     if (cliente != null)
                     {
-                        EnviarSMS_Al_CLiente(cliente);
+                        if (EnviarSMS_Al_CLiente(cliente))
+                        {
+                            cantMensajesCorrectos++;
+                        }
+                        else
+                        {
+                            cantMensajesIncorrectos++;
+                        }
                     }
                 }
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Mensajes enviados correctamente", null));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null));
             }
             catch (Exception ex)
             {
@@ -1552,7 +1562,7 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente_Datos.Celular = cliente_Datos.Celular.Replace("-", "");
                     if (cliente_Datos.Celular.Length == 10)
                     {
-                        int respuesta = contSMS.enviarSMS(cliente_Datos.Celular, txtEnviarSMS.Text, (int)Session["Login_IdUser"]);
+                        int respuesta = contSMS.enviarSMS(cliente_Datos.Celular, this.txtCuerpoMensaje.Text, (int)Session["Login_IdUser"]);
                         if (respuesta > 0)
                         {
                             GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(cliente_Datos);
@@ -1569,34 +1579,19 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public void btnCargarClientesTildados_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                foreach (Control C in phClientes.Controls)
-                {
-                    TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[6] as CheckBox;
-                    if (ch.Checked == true)
-                    {
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
         public void GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(Cliente_Datos cliente_Datos)
         {
             try
             {
-                SMS_RegistrosEnviados sMS_RegistrosEnviados = new SMS_RegistrosEnviados({
-                    cliente = cliente_Datos
-                })
-                contSMS.SMS_RegistrosEnviados_AddToTable();
+                SMS_RegistrosEnviados sms_RegistrosEnviados = new SMS_RegistrosEnviados
+                {
+                    Celular = cliente_Datos.Celular,
+                    CuerpoDeMensaje = this.txtCuerpoMensaje.Text,
+                    Fecha = DateTime.Now,
+                    IdCliente = (int)cliente_Datos.IdCliente,
+                    Titulo = this.txtTituloMensaje.Text
+                };
+                contSMS.SMS_RegistrosEnviados_AddToTable(sms_RegistrosEnviados);
             }
             catch (Exception ex)
             {
