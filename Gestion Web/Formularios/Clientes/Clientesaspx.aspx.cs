@@ -1583,7 +1583,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                SMS_RegistrosEnviados sms_RegistrosEnviados = new SMS_RegistrosEnviados
+                SMS_HistorialRegistros sms_Registros = new SMS_HistorialRegistros
                 {
                     Celular = cliente_Datos.Celular,
                     CuerpoDeMensaje = this.txtCuerpoMensaje.Text,
@@ -1591,7 +1591,7 @@ namespace Gestion_Web.Formularios.Clientes
                     IdCliente = (int)cliente_Datos.IdCliente,
                     Titulo = this.txtTituloMensaje.Text
                 };
-                contSMS.SMS_RegistrosEnviados_AddToTable(sms_RegistrosEnviados);
+                contSMS.SMS_HistorialRegistros_AddToTable(sms_Registros);
             }
             catch (Exception ex)
             {

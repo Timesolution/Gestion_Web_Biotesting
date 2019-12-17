@@ -358,6 +358,7 @@
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
+    <Content Include="Formularios\Herramientas\HistorialSMS.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Herramientas\NotificacionesABM.aspx" />
     <Content Include="Formularios\Herramientas\NotificacionesF.aspx" />
@@ -1466,6 +1467,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.designer.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\HistorialSMS.aspx.cs">
+      <DependentUpon>HistorialSMS.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\HistorialSMS.aspx.designer.cs">
+      <DependentUpon>HistorialSMS.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx.cs">
       <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
