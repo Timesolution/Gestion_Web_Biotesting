@@ -3,7 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="main">
-        <%--<div class="container">--%>
         <div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
@@ -14,8 +13,6 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
-
                     <div class="widget-content">
 
                         <table style="width: 100%">
@@ -99,13 +96,13 @@
                                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                             <thead>
                                                 <tr>
-                                                    <th>Codigo</th>
-                                                    <th>Razon Social</th>
-                                                    <th>Alias</th>
-                                                    <th>Mail</th>
-                                                    <th>Telefono</th>
-                                                    <th>CUIT</th>
-                                                    <th class="td-actions"></th>
+                                                    <th style="width: 10%">Codigo</th>
+                                                    <th style="width: 20%">Razon Social</th>
+                                                    <th style="width: 20%">Alias</th>
+                                                    <th style="width: 10%">Mail</th>
+                                                    <th style="width: 10%">Telefono</th>
+                                                    <th style="width: 10%">CUIT</th>
+                                                    <th class="td-actions" style="width: 20%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -147,17 +144,11 @@
                                 <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                             </div>
                         </div>
-                        <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
-                        <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
                     </div>
                 </div>
 
@@ -556,13 +547,17 @@
 
                     <div class="modal-footer">
                         <div class="row">
-                            <h5>
-                                <asp:Label runat="server" ID="lb_cantidadClientesFiltrados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
-                                <asp:Label runat="server" ID="lb_cantidadClientesTildados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
-                            </h5>
+                            <asp:Label runat="server" ID="lb_cantidadClientesFiltrados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
+                            <asp:Label runat="server" ID="lb_cantidadClientesTildados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
                         </div>
                         <div class="row">
-                            <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                            <div style="display: normal">
+                                <asp:Button runat="server" Text="Si" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                                <asp:Button runat="server" Text="No" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                            </div>
+                            <div style="display: none">
+                                <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                            </div>
                             <asp:Button runat="server" Text="Enviar a tildados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesTildados_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>

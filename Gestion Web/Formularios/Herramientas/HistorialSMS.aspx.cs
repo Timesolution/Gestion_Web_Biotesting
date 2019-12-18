@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.Herramientas
             public string Titulo;
             public string CuerpoDeMensaje;
             public string Celular;
+            public string Estado;
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -56,11 +57,12 @@ namespace Gestion_Web.Formularios.Herramientas
                     listaSmsTemporal.Add(new SMSResgistroTemporal
                     {
                         Id = item.Id.ToString(),
-                        Fecha = item.Fecha.Value.ToString("dd/MM/yyyy"),
+                        Fecha = item.Fecha.Value.ToString("dd/MM/yyyy HH:ss"),
                         AliasCliente = item.cliente.alias,
                         Celular = item.Celular,
                         CuerpoDeMensaje = item.CuerpoDeMensaje,
-                        Titulo = item.Titulo
+                        Titulo = item.Titulo,
+                        Estado = item.Estado.ToString()
                     });
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();

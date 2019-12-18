@@ -1316,17 +1316,17 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     TableCell celCodigo = new TableCell();
                     celCodigo.Text = cl.codigo;
-                    celCodigo.Width = Unit.Percentage(5);
+                    //celCodigo.Width = Unit.Percentage(5);
                     celCodigo.VerticalAlign = VerticalAlign.Middle;
 
                     TableCell celRazonSocial = new TableCell();
                     celRazonSocial.Text = cl.razonSocial;
-                    celRazonSocial.Width = Unit.Percentage(25);
+                    //celRazonSocial.Width = Unit.Percentage(25);
                     celRazonSocial.VerticalAlign = VerticalAlign.Middle;
 
                     TableCell celAlias = new TableCell();
                     celAlias.Text = cl.alias;
-                    celAlias.Width = Unit.Percentage(25);
+                    //celAlias.Width = Unit.Percentage(25);
                     celAlias.VerticalAlign = VerticalAlign.Middle;
 
                     List<contacto> contactos = this.contCliente.obtenerContactos(cl.id);
@@ -1340,17 +1340,17 @@ namespace Gestion_Web.Formularios.Clientes
                     }
                     TableCell celMail = new TableCell();
                     celMail.Text = "<a href='mailto:" + mail + "' target='_top'>" + mail + "</a>";
-                    celMail.Width = Unit.Percentage(7.5);
+                    //celMail.Width = Unit.Percentage(7.5);
                     celMail.VerticalAlign = VerticalAlign.Middle;
 
                     TableCell celTelefono = new TableCell();
                     celTelefono.Text = tel;
-                    celTelefono.Width = Unit.Percentage(7.5);
+                    //celTelefono.Width = Unit.Percentage(7.5);
                     celTelefono.VerticalAlign = VerticalAlign.Middle;
 
                     TableCell celCuit = new TableCell();
                     celCuit.Text = this.formatearCuit(cl.cuit);
-                    celCuit.Width = Unit.Percentage(15);
+                    //celCuit.Width = Unit.Percentage(15);
                     celCuit.VerticalAlign = VerticalAlign.Middle;
 
                     TableCell celImage = new TableCell();
@@ -1415,11 +1415,11 @@ namespace Gestion_Web.Formularios.Clientes
                         btnMillas.Click += new EventHandler(this.cargarInfoMillas);
                         celImage.Controls.Add(btnMillas);
 
-                        celImage.Width = Unit.Percentage(15);
+                        //celImage.Width = Unit.Percentage(15);
                     }
                     else
                     {
-                        celImage.Width = Unit.Percentage(10);
+                        //celImage.Width = Unit.Percentage(10);
                     }
 
                     Literal l3 = new Literal();
@@ -1504,7 +1504,7 @@ namespace Gestion_Web.Formularios.Clientes
                 }
                 if (cantMensajesIncorrectos > 0)
                 {
-                    mensaje += " No se enviaron " + cantMensajesIncorrectos + " mensajes.";
+                    mensaje += "\nNo se enviaron " + cantMensajesIncorrectos + " mensajes.";
                 }
                 if (cantMensajesIncorrectos == 0 && cantMensajesCorrectos == 0)
                 {
@@ -1557,18 +1557,25 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                return false; //TODO SACAR ESTO
+                int respuesta = 0;
+                int estadoDelMensaje = 0;
                 if (!string.IsNullOrWhiteSpace(cliente_Datos.Celular))
                 {
                     cliente_Datos.Celular = cliente_Datos.Celular.Replace("-", "");
                     if (cliente_Datos.Celular.Length == 10)
                     {
-                        int respuesta = contSMS.enviarSMS(cliente_Datos.Celular, this.txtCuerpoMensaje.Text, (int)Session["Login_IdUser"]);
+                        respuesta = contSMS.enviarSMS(cliente_Datos.Celular, this.txtCuerpoMensaje.Text, (int)Session["Login_IdUser"]);
                         if (respuesta > 0)
                         {
-                            GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(cliente_Datos);
-                            return true;
+                            estadoDelMensaje = 1;
                         }
+                        GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(cliente_Datos, estadoDelMensaje);
                     }
+                }
+                if (respuesta > 0)
+                {
+                    return true;
                 }
                 return false;
             }
@@ -1579,7 +1586,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public void GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(Cliente_Datos cliente_Datos)
+        public void GuardarMensajeEnLaTabla_SMS_RegistrosEnviados(Cliente_Datos cliente_Datos, int estadoDelMensaje)
         {
             try
             {
@@ -1589,7 +1596,8 @@ namespace Gestion_Web.Formularios.Clientes
                     CuerpoDeMensaje = this.txtCuerpoMensaje.Text,
                     Fecha = DateTime.Now,
                     IdCliente = (int)cliente_Datos.IdCliente,
-                    Titulo = this.txtTituloMensaje.Text
+                    Titulo = this.txtTituloMensaje.Text,
+                    Estado = estadoDelMensaje
                 };
                 contSMS.SMS_HistorialRegistros_AddToTable(sms_Registros);
             }
