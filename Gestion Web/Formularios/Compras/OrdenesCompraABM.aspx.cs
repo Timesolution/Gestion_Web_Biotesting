@@ -1089,18 +1089,22 @@ namespace Gestion_Web.Formularios.Compras
         {
             foreach (var articulo in articulos)
             {
-                string[] articuloTemp= { };
+                string[] articuloTemp = { };
                 if (articulo.Contains("lt"))
                 {
                     articuloTemp = articulo.Replace("&lt;", "<").Split(';');
                 }
-                if (articulo.Contains("gt"))
+                else if (articulo.Contains("gt"))
                 {
                     articuloTemp = articulo.Replace("&gt;", ">").Split(';');
                 }
-                if (articulo.Contains("amp"))
+                else if (articulo.Contains("amp"))
                 {
                     articuloTemp = articulo.Replace("&amp;", "&").Split(';');
+                }
+                else
+                {
+                    articuloTemp = articulo.Split(';');
                 }
 
                 ArticulosProveedorTemp articuloProveedorTemp = new ArticulosProveedorTemp();
