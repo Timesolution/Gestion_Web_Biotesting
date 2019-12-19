@@ -551,13 +551,10 @@
                             <asp:Label runat="server" ID="lb_cantidadClientesTildados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
                         </div>
                         <div class="row">
-                            <div style="display: normal">
-                                <asp:Button runat="server" Text="Si" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
-                                <asp:Button runat="server" Text="No" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
-                            </div>
-                            <div style="display: none">
-                                <asp:Button runat="server" Text="Enviar a Filtrados" class="btn btn-primary" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
-                            </div>
+                            <asp:Label runat="server" ID="lbEnviarATodosLosFiltrados" Font-Size="Medium" Text="Enviar a todos los filtrados?" Style="text-align: center; display: none"></asp:Label>
+                            <asp:Button runat="server" ID="btnSi_EnviarAFiltrados" Style="display: none" Text="Si" class="btn btn-success" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                            <asp:Button runat="server" ID="btnNo_EnviarAFiltrados" Style="display: none" Text="No" class="btn btn-danger" OnClientClick="javascript:return OcultarConfirmacionParaEnviarSMS_A_Filtrados()" />
+                            <asp:Button runat="server" ID="btn_MostrarConfirmacionClientesFiltrados" Style="display: initial" Text="Enviar a Filtrados" class="btn btn-primary" OnClientClick="javascript:return MostrarConfirmacionParaEnviarSMS_A_Filtrados()" />
                             <asp:Button runat="server" Text="Enviar a tildados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesTildados_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
@@ -572,6 +569,24 @@
             $("#<%= txtFechaNacMillas.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= lbtnEnviarCodigoMillas.ClientID %>").tooltip();
             $("#<%= lbtnValidarLuegoMillas.ClientID %>").tooltip();
+        }
+
+        function OcultarConfirmacionParaEnviarSMS_A_Filtrados() {
+            document.getElementById('<%= lbEnviarATodosLosFiltrados.ClientID %>').style.display = 'none';
+            document.getElementById('<%= btnSi_EnviarAFiltrados.ClientID %>').style.display = 'none';
+            document.getElementById('<%= btnNo_EnviarAFiltrados.ClientID %>').style.display = 'none';
+            document.getElementById('<%= btn_MostrarConfirmacionClientesFiltrados.ClientID %>').style.display = 'initial';
+
+            return false;
+        }
+
+        function MostrarConfirmacionParaEnviarSMS_A_Filtrados() {
+            document.getElementById('<%= lbEnviarATodosLosFiltrados.ClientID %>').style.display = 'initial';
+            document.getElementById('<%= btnSi_EnviarAFiltrados.ClientID %>').style.display = 'initial';
+            document.getElementById('<%= btnNo_EnviarAFiltrados.ClientID %>').style.display = 'initial';
+            document.getElementById('<%= btn_MostrarConfirmacionClientesFiltrados.ClientID %>').style.display = 'none';
+
+            return false;
         }
     </script>
     <script>

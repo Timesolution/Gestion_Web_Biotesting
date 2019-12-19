@@ -1461,14 +1461,17 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                bool tildoAlgunCliente = false;
                 int cantMensajesCorrectos = 0;
                 int cantMensajesIncorrectos = 0;
+                
                 foreach (Control C in phClientes.Controls)
                 {
                     TableRow tr = C as TableRow;
                     CheckBox ch = tr.Cells[6].Controls[6] as CheckBox;
                     if (ch.Checked == true)
                     {
+                        tildoAlgunCliente = true;
                         int idCliente = Convert.ToInt32(ch.ID.Split('_')[2]);
                         var cliente = contClienteEntity.obtenerClienteDatosByIdCliente(idCliente);
 
@@ -1485,11 +1488,17 @@ namespace Gestion_Web.Formularios.Clientes
                         }
                     }
                 }
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos), null));
+                if (!tildoAlgunCliente)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe tildar algun cliente"));
+                    return; 
+                }
+                string mensaje = ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(mensaje, null));
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name + " Ex: " + ex.Message));
             }
         }
 
@@ -1504,7 +1513,7 @@ namespace Gestion_Web.Formularios.Clientes
                 }
                 if (cantMensajesIncorrectos > 0)
                 {
-                    mensaje += "\nNo se enviaron " + cantMensajesIncorrectos + " mensajes.";
+                    mensaje += " No se enviaron " + cantMensajesIncorrectos + " mensajes.";
                 }
                 if (cantMensajesIncorrectos == 0 && cantMensajesCorrectos == 0)
                 {
@@ -1557,7 +1566,6 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                return false; //TODO SACAR ESTO
                 int respuesta = 0;
                 int estadoDelMensaje = 0;
                 if (!string.IsNullOrWhiteSpace(cliente_Datos.Celular))
