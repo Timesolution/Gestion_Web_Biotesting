@@ -35,6 +35,7 @@
                                 <li class=""><a href="#Ganancias" id="linkGanancias" runat="server" data-toggle="tab" visible="false">Ganancias</a></li>
                                 <li class=""><a href="#OrdenesCompra" id="linkOrdenesCompra" runat="server" data-toggle="tab" visible="false">Orden de Compra</a></li>
                                 <li class=""><a href="#CodigoBTB" id="linkCodigoBTB" runat="server" data-toggle="tab" visible="false">Codigo BTB</a></li>
+                                <li class=""><a href="#IngresosBrutos" id="linkIngresosBrutos" runat="server" data-toggle="tab" visible="true">Ingresos Brutos</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade active in" id="home">
@@ -1188,37 +1189,76 @@
                                 </div>
 
                                 <div class="tab-pane fade" id="CodigoBTB">
-                                   <%-- <asp:UpdatePanel ID="UpdatePanel17" UpdateMode="Always" runat="server">
+                                    <%-- <asp:UpdatePanel ID="UpdatePanel17" UpdateMode="Always" runat="server">
                                         <ContentTemplate>--%>
-                                            <div role="form" class="form-horizontal col-md-12">
-                                                <div class="form-group">
-                                                    <label for="name" class="col-md-4">Codigo BTB</label>
-                                                    <div class="col-md-4">
-                                                        <asp:TextBox ID="txtCodigoBTB1" runat="server" class="form-control" maxLength="5"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                                <asp:placeholder runat="server" ID="phCodigoBTB2" Visible="false">
-                                                <div class="form-group">
-                                                    <label for="name" class="col-md-4">Codigo BTB</label>
-                                                    <div class="col-md-4">
-                                                        <asp:TextBox ID="txtCodigoBTB2" runat="server" class="form-control" maxLength="5"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                                </asp:placeholder>
-                                                <div class="form-group">
-                                                    <div class="col-md-4">
-                                                        <asp:LinkButton ID="lbtnCodigoBTB" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
-                                                    </div>
+                                    <div role="form" class="form-horizontal col-md-12">
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-4">Codigo BTB</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtCodigoBTB1" runat="server" class="form-control" MaxLength="5"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <asp:PlaceHolder runat="server" ID="phCodigoBTB2" Visible="false">
+                                            <div class="form-group">
+                                                <label for="name" class="col-md-4">Codigo BTB</label>
+                                                <div class="col-md-4">
+                                                    <asp:TextBox ID="txtCodigoBTB2" runat="server" class="form-control" MaxLength="5"></asp:TextBox>
                                                 </div>
                                             </div>
+                                        </asp:PlaceHolder>
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                                <asp:LinkButton ID="lbtnCodigoBTB" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                        <%--</ContentTemplate>
+                                    <%--</ContentTemplate>
                                         <Triggers>
                                         </Triggers>
                                     </asp:UpdatePanel>--%>
                                 </div>
 
-                                <%-- Fin Ordenes de Compra --%>
+                                <div class="tab-pane fade" id="IngresosBrutos">
+                                    <div role="form" class="form-horizontal col-md-12">
+                                        <%--<div class="form-group">
+                                            <label for="name" class="col-md-4">Codigo BTB</label>
+                                        </div>--%>
+                                        <asp:PlaceHolder runat="server" ID="Placeholder1">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-1">
+                                                        <label for="name">Provincia</label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:DropDownList ID="IngresosBrutos_DropList_Provincias" runat="server" class="form-control"></asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-1">
+                                                        <label for="name">Percepcion</label>
+                                                    </div>
+                                                    <div class="input-group col-xs-2">
+                                                        <asp:TextBox ID="TextBox3" runat="server" Style="max-width: 100%" class="form-control" TextMode="Number"></asp:TextBox>
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
+                                                    <div class="col-ms-2">
+                                                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </asp:PlaceHolder>
+                                        <div class="form-group">
+                                            <div class="col-md-4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -1766,8 +1806,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
@@ -1811,8 +1850,7 @@
             if (key < 48 || key > 57) {
                 if (key == 45) // Detectar  guion medio (-)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
