@@ -690,6 +690,13 @@ namespace Gestion_Web.Formularios.Clientes
 
                 this.ListProvincia.DataBind();
                 this.ListProvincia.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+                this.IngresosBrutos_DropList_Provincias.DataSource = controladorPais.obtenerPRovincias();
+                this.IngresosBrutos_DropList_Provincias.DataValueField = "Provincia";
+                this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia";
+                this.IngresosBrutos_DropList_Provincias.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                this.IngresosBrutos_DropList_Provincias.DataBind();
+
                 //cargo la localidad
                 //this.cargarLocalidades(this.ListProvincia.SelectedValue);
             }

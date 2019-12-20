@@ -1242,11 +1242,38 @@
                                                         <label for="name">Percepcion</label>
                                                     </div>
                                                     <div class="input-group col-xs-2">
-                                                        <asp:TextBox ID="TextBox3" runat="server" Style="max-width: 100%" class="form-control" TextMode="Number"></asp:TextBox>
+                                                        <asp:TextBox ID="IngresosBrutos_TxtPercepcion" runat="server" Style="max-width: 100%" class="form-control" TextMode="Number"></asp:TextBox>
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                     <div class="col-ms-2">
+                                                        <asp:Button runat="server" ID="btn_PensaniaIngresosBrutos_AgregarPercepcion" Style="display: none" Text="No" class="btn btn-danger" OnClientClick="javascript:return AgregarALaTablaLaPercepcion(this)" />
                                                         <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+
+                                                <div class="widget stacked widget-table">
+
+                                                    <div class="widget-header">
+                                                        <span class="icon-external-link"></span>
+                                                        <h3>Percepciones</h3>
+                                                    </div>
+
+                                                    <div class="widget-content">
+                                                        <table class="table table-bordered table-striped" id="tabla_IngresosBrutos">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width: 25%">Provincia</th>
+                                                                    <th style="width: 25%">Percepcion</th>
+                                                                    <th style="width: 10%"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <asp:PlaceHolder ID="PlaceHolder2" runat="server"></asp:PlaceHolder>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1853,6 +1880,60 @@
                 else { return false; }
             }
             return true;
+        }
+
+        function AgregarALaTablaLaPercepcion(obj) {
+            var controlProvincia = document.getElementById('<%= IngresosBrutos_DropList_Provincias.ClientID %>');
+            var controlTxtPercepcion = document.getElementById('<%= IngresosBrutos_TxtPercepcion.ClientID %>');
+          
+            $(obj).attr('disabled', 'disabled');
+
+            $.ajax({
+                type: "POST",
+                url: "ClientesABM.aspx/AgregarPercepcion",
+                data: '{ provincia: "' + provincia + '", percepcion: "' +  + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar !", { type: "error" });
+                    $(obj).removeAttr('disabled');
+                }
+                ,
+                success: OnSuccessFiltro
+            });
+        }
+
+        function OnSuccessFiltro(response) {
+            var controlBotonFiltrar = document.getElementById('<%= lbtnFiltrar.ClientID %>');
+
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            document.getElementById('btnCerrarModalBusqueda').click();
+            $('#tabla_IngresosBrutos').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                var color = 'green';
+                var estado = 'Enviado';
+                if (obj[i].Estado == 0) {
+                    estado = 'No Enviado';
+                    color = 'red';
+                }
+                $('#tabla_IngresosBrutos').append(
+                    "<tr>" +
+                    "<td> " + obj[i].Fecha + "</td>" +
+                    "<td> " + obj[i].AliasCliente + "</td>" +
+                    "<td> " + obj[i].Titulo + "</td>" +
+                    "<td> " + obj[i].CuerpoDeMensaje + "</td>" +
+                    '<td style="text-align:right">' + obj[i].Celular + "</td>" +
+                    "<td style='color: " + color + "'> " + estado + "</td>" +
+                    "</tr> ");
+            };
+            $(controlBotonFiltrar).removeAttr('disabled');
+
+            var objeto = document.getElementById('<%= labelTotal.ClientID %>');
+            objeto.textContent = obj.length;
         }
     </script>
 
