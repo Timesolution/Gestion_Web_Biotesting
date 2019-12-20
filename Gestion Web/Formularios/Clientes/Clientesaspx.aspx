@@ -564,6 +564,31 @@
         </div>
     </div>
 
+    <!-- Core Scripts - Include with every page -->
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
+
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+
+    <script src="../../Scripts/Application.js"></script>
+
+    <script src="../../Scripts/demo/gallery.js"></script>
+
+    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+
     <script>
         function pageLoad() {
             $("#<%= txtFechaNacMillas.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -687,32 +712,6 @@
             return true;
         }
     </script>
-
-    <!-- Core Scripts - Include with every page -->
-    <script src="../../Scripts/jquery-1.10.2.js"></script>
-    <script src="../../Scripts/bootstrap.min.js"></script>
-    <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
-
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
-
-    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
-
-    <script src="../../Scripts/Application.js"></script>
-
-    <script src="../../Scripts/demo/gallery.js"></script>
-
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-    <script src="../../Scripts/demo/notifications.js"></script>
-
-    <!-- Page-Level Plugin Scripts - Tables -->
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-
 
     <script>
         $(document).ready(function () {

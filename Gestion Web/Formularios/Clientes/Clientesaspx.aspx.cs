@@ -334,7 +334,8 @@ namespace Gestion_Web.Formularios.Clientes
                 celCuit.Width = Unit.Percentage(15);
                 celCuit.VerticalAlign = VerticalAlign.Middle;
 
-                TableCell celImage = new TableCell();
+                TableCell celdaBotones = new TableCell();
+
                 LinkButton btnDetails = new LinkButton();
                 btnDetails.ID = cl.id.ToString();
                 btnDetails.CssClass = "btn btn-info ui-tooltip";
@@ -343,11 +344,11 @@ namespace Gestion_Web.Formularios.Clientes
                 btnDetails.Text = "<span class='shortcut-icon icon-pencil'></span>";
                 btnDetails.PostBackUrl = "ClientesABM.aspx?accion=2&id=" + cl.id.ToString();
                 //btnDetails.Click += new EventHandler(this.mostrarClienteDetalles);
-                celImage.Controls.Add(btnDetails);
+                celdaBotones.Controls.Add(btnDetails);
 
                 Literal l2 = new Literal();
                 l2.Text = "&nbsp";
-                celImage.Controls.Add(l2);
+                celdaBotones.Controls.Add(l2);
 
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.ID = "btnEliminar_" + cl.id;
@@ -356,11 +357,11 @@ namespace Gestion_Web.Formularios.Clientes
                 btnEliminar.Attributes.Add("href", "#modalConfirmacion");
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
                 btnEliminar.OnClientClick = "abrirdialog(" + cl.id + ");";
-                celImage.Controls.Add(btnEliminar);
+                celdaBotones.Controls.Add(btnEliminar);
 
                 Literal l3 = new Literal();
                 l3.Text = "&nbsp";
-                celImage.Controls.Add(l3);
+                celdaBotones.Controls.Add(l3);
 
                 LinkButton btnMillas = new LinkButton();
                 btnMillas.ID = "btnMillas_" + cl.id;
@@ -385,9 +386,9 @@ namespace Gestion_Web.Formularios.Clientes
                 btnMillas.Attributes.Add("title data-original-title", "Sist. Millas");
                 btnMillas.Text = "<span class='shortcut-icon icon-credit-card'></span>";
                 btnMillas.Click += new EventHandler(this.cargarInfoMillas);
-                celImage.Controls.Add(btnMillas);
+                celdaBotones.Controls.Add(btnMillas);
 
-                celImage.Width = Unit.Percentage(15);
+                celdaBotones.Width = Unit.Percentage(15);
 
                 //fila
                 TableRow tr = new TableRow();
@@ -400,7 +401,7 @@ namespace Gestion_Web.Formularios.Clientes
                 tr.Cells.Add(celAlias);
                 tr.Cells.Add(celTipo);
                 tr.Cells.Add(celCuit);
-                tr.Cells.Add(celImage);
+                tr.Cells.Add(celdaBotones);
                 //arego fila a tabla
                 this.phClientes.Controls.Add(tr);
 
@@ -1464,11 +1465,18 @@ namespace Gestion_Web.Formularios.Clientes
                 bool tildoAlgunCliente = false;
                 int cantMensajesCorrectos = 0;
                 int cantMensajesIncorrectos = 0;
-                
+
+                int posicion = 4;
+                string sistema = WebConfigurationManager.AppSettings.Get("Millas");
+                if (!String.IsNullOrEmpty(sistema))
+                {
+                    posicion = 6;
+                }
+
                 foreach (Control C in phClientes.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[6].Controls[6] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[posicion] as CheckBox;
                     if (ch.Checked == true)
                     {
                         tildoAlgunCliente = true;
