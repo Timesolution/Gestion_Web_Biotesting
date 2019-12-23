@@ -471,9 +471,10 @@ namespace Gestion_Web.Formularios.Clientes
                 }
 
                 //actualiza
-                int idClienteAModificar = contCliente.obtenerClienteCuit(clienteTemporal.CUIT).id;
-                cliente.id = idClienteAModificar;
+                Cliente clienteExistente = contCliente.obtenerClienteCuit(clienteTemporal.CUIT);
+                cliente.id = clienteExistente.id;
                 cliente.activo = 1;
+                cliente.codigo = clienteExistente.codigo;
                 if (contCliente.modificarCliente(cliente, clienteTemporal.CUIT, cliente.codigo) > 0)
                 {
                     int idClienteDatos = (int)contClienteEntity.obtenerClienteDatosByIdCliente(cliente.id).Id;

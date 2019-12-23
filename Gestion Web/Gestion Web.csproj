@@ -883,6 +883,8 @@
     </Content>
     <Content Include="Properties\DataSources\Gestion_Web.Formularios.Facturas.dsPresupuesto.datasource" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\publicacion gestion web.pubxml" />
     <None Include="Properties\PublishProfiles\Publicacion.pubxml" />
     <None Include="Properties\PublishProfiles\Publicación.pubxml" />

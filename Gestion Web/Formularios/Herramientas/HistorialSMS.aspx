@@ -23,6 +23,18 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="widget big-stats-container stacked">
+                    <div class="widget-content">
+                        <div id="big_stats" class="cf">
+                            <div class="stat">
+                                <h4>Total SMS</h4>
+                                <asp:Label ID="labelTotal" runat="server" Text="0" class="value"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="widget stacked widget-table action-table">
                     <div class="widget-header">
                         <i class="icon-bookmark"></i>
@@ -39,6 +51,7 @@
                                             <th>Titulo</th>
                                             <th>Mensaje</th>
                                             <th>Celular</th>
+                                            <th>Estado</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -83,6 +96,44 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .col-xs-5ths,
+        .col-sm-5ths,
+        .col-md-5ths,
+        .col-lg-5ths {
+            position: relative;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .col-xs-5ths {
+            width: 20%;
+            float: left;
+        }
+
+        @media (min-width: 768px) {
+            .col-sm-5ths {
+                width: 20%;
+                float: left;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .col-md-5ths {
+                width: 20%;
+                float: left;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-lg-5ths {
+                width: 20%;
+                float: left;
+            }
+        }
+    </style>
 
     <script src="../../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
@@ -139,26 +190,29 @@
             var obj = JSON.parse(data);
 
             document.getElementById('btnCerrarModalBusqueda').click();
+            $('#tablaSMS').find("tr:gt(0)").remove();
 
             for (var i = 0; i < obj.length; i++) {
-                $('#tablaMayor').append(
+                var color = 'green';
+                var estado = 'Enviado';
+                if (obj[i].Estado == 0) {
+                    estado = 'No Enviado';
+                    color = 'red';
+                }
+                $('#tablaSMS').append(
                     "<tr>" +
                     "<td> " + obj[i].Fecha + "</td>" +
-                    "<td> " + obj[i].TipoMovimiento + "</td>" +
-                    "<td> " + obj[i].NumeroDocumento + "</td>" +
-                    '<td style="text-align:right">' + obj[i].Debito + "</td>" +
-                    '<td style="text-align:right">' + obj[i].Credito + "</td>" +
-                    "<td> " + obj[i].Empresa + "</td>" +
-                    "<td> " + obj[i].Sucursal + "</td>" +
-                    '<td style="text-align:right">' + obj[i].PuntoDeVenta + "</td>" +
-                    "<td> " + obj[i].Nivel1 + "</td>" +
-                    "<td> " + obj[i].Nivel2 + "</td>" +
-                    "<td> " + obj[i].Nivel3 + "</td>" +
-                    "<td> " + obj[i].Nivel4 + "</td>" +
-                    "<td> " + obj[i].Nivel5 + "</td>" +
+                    "<td> " + obj[i].AliasCliente + "</td>" +
+                    "<td> " + obj[i].Titulo + "</td>" +
+                    "<td> " + obj[i].CuerpoDeMensaje + "</td>" +
+                    '<td style="text-align:right">' + obj[i].Celular + "</td>" +
+                    "<td style='color: " + color + "'> " + estado + "</td>" +
                     "</tr> ");
             };
             $(controlBotonFiltrar).removeAttr('disabled');
+
+            var objeto = document.getElementById('<%= labelTotal.ClientID %>'); 
+            objeto.textContent = obj.length;
         }
     </script>
 </asp:Content>

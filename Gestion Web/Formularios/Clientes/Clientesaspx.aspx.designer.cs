@@ -598,5 +598,41 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lb_cantidadClientesTildados;
+
+        /// <summary>
+        /// lbEnviarATodosLosFiltrados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbEnviarATodosLosFiltrados;
+
+        /// <summary>
+        /// btnSi_EnviarAFiltrados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSi_EnviarAFiltrados;
+
+        /// <summary>
+        /// btnNo_EnviarAFiltrados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnNo_EnviarAFiltrados;
+
+        /// <summary>
+        /// btn_MostrarConfirmacionClientesFiltrados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_MostrarConfirmacionClientesFiltrados;
     }
 }
