@@ -19,10 +19,10 @@
 
                     <div class="widget-content">
 
-                    <div class="pricing-header" style="margin-bottom: .65em;font-size: 40px;font-weight: 600; text-align:center;">
-						<h1>Time Solution</h1>
-						
-					</div>
+                        <div class="pricing-header" style="margin-bottom: .65em; font-size: 40px; font-weight: 600; text-align: center;">
+                            <h1>Time Solution</h1>
+
+                        </div>
                         <!-- /.pricing-header -->
 
                         <div class="pricing-plans plans-4">
@@ -153,26 +153,43 @@
 
                             </div>
                             <!-- /plan-container -->
-
-
+                            <div class="plan-container">
+                                <div class="plan stacked">
+                                    <div class="plan-header">
+                                        <div class="plan-title">
+                                            AnyDesk	        		
+                                        </div>
+                                        <div class="plan-price">
+                                            <span class="note"></span><i class="fas fa-life-ring"></i>
+                                        </div>
+                                    </div>
+                                    <div class="plan-features">
+                                        <ul>
+                                            <li><strong>Ingresar: </strong><a href="https://anydesk.com/es" target="_blank">Aquí</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!-- /pricing-plans -->
 
-                        <div class="clear"></div>
-
-                        <br />
-                        <br />
-                        <hr />
-                        <br />
-                        <br />
                     </div>
-                    <!-- /widget-content -->
+                    <!-- /pricing-plans -->
+
+                    <div class="clear"></div>
+
+                    <br />
+                    <br />
+                    <hr />
+                    <br />
+                    <br />
                 </div>
-                <!-- /widget -->
+                <!-- /widget-content -->
             </div>
-            <!-- /span12 -->
+            <!-- /widget -->
         </div>
-        <!-- /row -->
+        <!-- /span12 -->
+    </div>
+    <!-- /row -->
     </div>
     <!-- /container -->
     <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
