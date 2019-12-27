@@ -128,6 +128,10 @@
           <DataField>NumSolicitud</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Solicitud">
+          <DataField>Solicitud</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsPresupuesto</rd:DataSetName>
@@ -243,7 +247,7 @@
                   <Width>2.12958cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.5cm</Width>
+                  <Width>1.865cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1756,14 +1760,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox27">
+                        <Textbox Name="Solicitud">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!Solicitud.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -1774,7 +1778,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox27</rd:DefaultName>
+                          <rd:DefaultName>Solicitud</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2555,7 +2559,7 @@
             <DataSetName>DetalleFacturas</DataSetName>
             <Left>0.3175cm</Left>
             <Height>1.64125cm</Height>
-            <Width>56.95473cm</Width>
+            <Width>56.31973cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2566,7 +2570,7 @@
         <Height>0.89583in</Height>
         <Style />
       </Body>
-      <Width>22.54812in</Width>
+      <Width>22.36062in</Width>
       <Page>
         <PageHeader>
           <Height>1.27cm</Height>

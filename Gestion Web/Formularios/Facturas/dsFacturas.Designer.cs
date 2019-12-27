@@ -487,8 +487,6 @@ namespace Gestion_Web.Formularios.Facturas {
             
             private global::System.Data.DataColumn columnCategoria;
             
-            private global::System.Data.DataColumn columnSolicitud;
-            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DetalleFacturasDataTable() {
@@ -796,14 +794,6 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn SolicitudColumn {
-                get {
-                    return this.columnSolicitud;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -873,8 +863,7 @@ namespace Gestion_Web.Formularios.Facturas {
                         string ptoVenta, 
                         string TotalTasaMunicipal, 
                         string CostoSinIva, 
-                        string Categoria, 
-                        string Solicitud) {
+                        string Categoria) {
                 DetalleFacturasRow rowDetalleFacturasRow = ((DetalleFacturasRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         fecha,
@@ -910,8 +899,7 @@ namespace Gestion_Web.Formularios.Facturas {
                         ptoVenta,
                         TotalTasaMunicipal,
                         CostoSinIva,
-                        Categoria,
-                        Solicitud};
+                        Categoria};
                 rowDetalleFacturasRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDetalleFacturasRow);
                 return rowDetalleFacturasRow;
@@ -968,7 +956,6 @@ namespace Gestion_Web.Formularios.Facturas {
                 this.columnTotalTasaMunicipal = base.Columns["TotalTasaMunicipal"];
                 this.columnCostoSinIva = base.Columns["CostoSinIva"];
                 this.columnCategoria = base.Columns["Categoria"];
-                this.columnSolicitud = base.Columns["Solicitud"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1042,8 +1029,6 @@ namespace Gestion_Web.Formularios.Facturas {
                 base.Columns.Add(this.columnCostoSinIva);
                 this.columnCategoria = new global::System.Data.DataColumn("Categoria", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCategoria);
-                this.columnSolicitud = new global::System.Data.DataColumn("Solicitud", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSolicitud);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2942,22 +2927,6 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Solicitud {
-                get {
-                    try {
-                        return ((string)(this[this.tableDetalleFacturas.SolicitudColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Solicitud\' in table \'DetalleFacturas\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableDetalleFacturas.SolicitudColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsfechaNull() {
                 return this.IsNull(this.tableDetalleFacturas.fechaColumn);
             }
@@ -3362,18 +3331,6 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCategoriaNull() {
                 this[this.tableDetalleFacturas.CategoriaColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsSolicitudNull() {
-                return this.IsNull(this.tableDetalleFacturas.SolicitudColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetSolicitudNull() {
-                this[this.tableDetalleFacturas.SolicitudColumn] = global::System.Convert.DBNull;
             }
         }
         
