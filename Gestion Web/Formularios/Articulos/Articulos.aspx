@@ -582,10 +582,11 @@
                                         <div class="input-group">
                                             <asp:CheckBox ID="CheckIncluirInactivos" runat="server" Text="&nbsp INCLUIR ARTICULOS INACTIVOS" />
                                         </div>
+                                        <div class="input-group">
+                                            <asp:CheckBox ID="CheckIncluirPendientes" runat="server" Text="&nbsp INCLUIR ARTICULOS PENDIENTES ACEPTACION" />
+                                        </div>
                                     </div>
                                 </div>
-
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -1298,6 +1299,8 @@
         var chk1 = $("#<%= CheckIncluirCeros.ClientID %>");
         var chk2 = $("#<%= CheckBoxStockFaltante.ClientID %>");
         var chk3 = $("#<%= CheckBoxUnicoSucursal.ClientID %>");
+        var chk4 = $("#<%= CheckIncluirPendientes.ClientID %>");
+        var chk5 = $("#<%= CheckIncluirInactivos.ClientID %>");
 
         chk1.on('change', function () {
             chk3.prop('checked', checked = false);
@@ -1314,6 +1317,12 @@
 
         });
 
+        chk4.on('change', function () {
+            chk1.prop('checked', checked = false);
+            chk2.prop('checked', checked = false);
+            chk3.prop('checked', checked = false);
+            chk5.prop('checked', checked = false);
+        });
     </script>
     <script>
 

@@ -72,6 +72,10 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         this.cargarInforme3();
                     }
+                    if (accion == 7)
+                    {
+                        this.cargarInforme4();
+                    }
                 }
             }
             catch (Exception ex)
@@ -283,6 +287,76 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
+        private void cargarInforme4()
+        {
+            try
+            {
+                string sdias = null;
+                if (dias > 0)
+                {
+                    sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
+                }
+                var stock = contArticulos.obtenerStocksArticulosBySucConArticulosPendientes(sucursal, grupo, subgrupo, proveedor, sdias, ceros, marca, this.inactivos);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ReporteStockR.rdlc");
+                ReportDataSource rds = new ReportDataSource("DSStocks", stock);
+
+                string fecha = DateTime.Today.ToString("dd/MM/yyyy");
+                ReportParameter rp = new ReportParameter("ParamFecha", fecha);
+
+                controladorSucursal cont = new controladorSucursal();
+                var suc = cont.obtenerSucursalID(this.sucursal);
+                ReportParameter rp2 = new ReportParameter("ParamSucursal", suc.nombre);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.SetParameters(rp);
+                this.ReportViewer1.LocalReport.SetParameters(rp2);
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Stocks", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
         private void cargarInformeEtiquetas(int lista)
         {
             try
