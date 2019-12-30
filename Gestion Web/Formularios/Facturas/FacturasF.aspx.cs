@@ -2203,7 +2203,10 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionFacturas.aspx?a=13&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue) + "&e=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                         }
-
+                        if (accion == 14)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue) + "&e=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        }
                     }
                     else
                     {
@@ -2290,6 +2293,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (accion == 12)
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=13&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        }
+                        if (accion == 14)
+                        {
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
                     }
                     else
@@ -4116,5 +4123,14 @@ namespace Gestion_Web.Formularios.Facturas
             return (Convert.ToInt32(compras.LastOrDefault().Numero) + 1).ToString("D8");
         }
 
+        protected void btnExportarVentasConSolicitudes_Click(object sender, EventArgs e)
+        {
+            this.ExportToExcel(14);
+        }
+
+        protected void btnImprimirVentasConSolicitudes_Click(object sender, EventArgs e)
+        {
+            this.PrintToPDF(14);
+        }
     }
 }
