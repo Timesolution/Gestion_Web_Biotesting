@@ -1827,12 +1827,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.txtPorcDescuento.Text = Decimal.Round(this.cliente.descFC, 2).ToString();
                     }
-                    //cargo Ingresos brutos
-                    var IIBB = this.contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
-                    if (IIBB != null)
-                    {
-                        this.txtPorcRetencion.Text = IIBB.Percepcion.ToString();
-                    }
+
+                    CargarIngresosBrutos(idCliente);
+
                     //cargar forma venta si es porcentual
                     try
                     {
@@ -1938,6 +1935,25 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+            }
+        }
+
+
+        private void CargarIngresosBrutos(int idCliente)
+        {
+            try
+            {
+                var IIBB_Provincia = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+                decimal sumaIngresosBrutos = 0;
+                foreach (var item in IIBB_Provincia)
+                {
+                    sumaIngresosBrutos += item.Percepcion;
+                }
+                this.txtPorcRetencion.Text = sumaIngresosBrutos.ToString();
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -2676,7 +2692,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
                         return;
-                    }                    
+                    }
 
                     //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
                     string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
@@ -2707,24 +2723,24 @@ namespace Gestion_Web.Formularios.Facturas
                             //int j = validarUltimaFactura();
                             //if (j == 1)
                             //{
-                                int t = this.validarTrazasCargadas();
-                                if (t == 1)
+                            int t = this.validarTrazasCargadas();
+                            if (t == 1)
+                            {
+                                int iec = this.validarItemsEnCero();
+                                if (iec == 1)
                                 {
-                                    int iec = this.validarItemsEnCero();
-                                    if (iec == 1)
-                                    {
-                                        this.generarFactura(0);
-                                    }
-                                    else
-                                    {
-                                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                                    }
-
+                                    this.generarFactura(0);
                                 }
                                 else
                                 {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.1 \", {type: \"error\"});", true);
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
                                 }
+
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.1 \", {type: \"error\"});", true);
+                            }
                             //}
                             //else
                             //{
@@ -2742,24 +2758,24 @@ namespace Gestion_Web.Formularios.Facturas
                         //int j = validarUltimaFactura();//solo para preimpresa
                         //if (j == 1)
                         //{
-                            int t = this.validarTrazasCargadas();
-                            if (t == 1)
+                        int t = this.validarTrazasCargadas();
+                        if (t == 1)
+                        {
+                            int iec = this.validarItemsEnCero();
+                            if (iec == 1)
                             {
-                                int iec = this.validarItemsEnCero();
-                                if (iec == 1)
-                                {
                                 Log.EscribirSQL(99, "ELECTRONICA", "Entro en 'this.generarFactura(0);' 2752");
-                                    this.generarFactura(0);
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                                }
+                                this.generarFactura(0);
                             }
                             else
                             {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.2 \", {type: \"error\"});", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
                             }
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.2 \", {type: \"error\"});", true);
+                        }
                         //}
                         //else
                         //{
@@ -2808,12 +2824,36 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string ivaYNetoDiscriminados = "\n" + netoNoGravadoComentario + neto10Comentario + neto21Comentario + neto27Comentario + iva10Comentario + iva21Comentario + iva27Comentario + "\n";
 
+                ivaYNetoDiscriminados += ObtenerComentarioIngresosBrutosPorProvinciasDelCliente(factura.cliente.id, factura.neto);
+
                 txtComentarios.Text += ivaYNetoDiscriminados;
+
                 factura.comentarioFacturaImpuestosDetallados = ivaYNetoDiscriminados;
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al agregar los comentarios de iva y neto " + ex.Message);
+            }
+        }
+
+        string ObtenerComentarioIngresosBrutosPorProvinciasDelCliente(int idCliente, decimal netoDeLaFactura)
+        {
+            try
+            {
+                var iIBB_Provincias = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+                string ingresosBrutosString = "";
+                ingresosBrutosString += "\n" + " Ingresos Brutos. \n\n";
+                ingresosBrutosString += "Provincia".PadRight(20, ' ') + " Porcentaje       Monto \n";
+                foreach (var item in iIBB_Provincias)
+                {
+                    ingresosBrutosString += item.Provincia.Provincia1.ToLower().PadRight(20, ' ') + "  " + item.Percepcion.ToString().PadLeft(10, ' ') + (item.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
+                }
+                ingresosBrutosString += "\n";
+                return ingresosBrutosString;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
 
@@ -3631,30 +3671,30 @@ namespace Gestion_Web.Formularios.Facturas
                         //int j = validarUltimaFactura();
                         //if (j == 1)
                         //{
-                            int t = this.validarTrazasCargadas();
-                            if (t == 1)
+                        int t = this.validarTrazasCargadas();
+                        if (t == 1)
+                        {
+                            int iec = this.validarItemsEnCero();
+                            if (iec == 1)
                             {
-                                int iec = this.validarItemsEnCero();
-                                if (iec == 1)
-                                {
-                                    this.generarFactura(1);
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                                }
+                                this.generarFactura(1);
                             }
                             else
                             {
-                                if (t == -1)
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.3 \", {type: \"error\"});", true);
-                                }
-                                else
-                                {
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se tiene suficientes trazabilidades para la cantidad a vender. \");", true);
-                                }
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
                             }
+                        }
+                        else
+                        {
+                            if (t == -1)
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.3 \", {type: \"error\"});", true);
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se tiene suficientes trazabilidades para la cantidad a vender. \");", true);
+                            }
+                        }
                         //}
                         //else
                         //{
@@ -3672,23 +3712,23 @@ namespace Gestion_Web.Formularios.Facturas
                     //int j = validarUltimaFactura();
                     //if (j == 1)
                     //{
-                        int t = this.validarTrazasCargadas();
-                        if (t == 1)
+                    int t = this.validarTrazasCargadas();
+                    if (t == 1)
+                    {
+                        int iec = this.validarItemsEnCero();
+                        if (iec == 1)
                         {
-                            int iec = this.validarItemsEnCero();
-                            if (iec == 1)
-                            {
-                                this.generarFactura(1);
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                            }
+                            this.generarFactura(1);
                         }
                         else
                         {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.4 \", {type: \"error\"});", true);
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
                         }
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.4 \", {type: \"error\"});", true);
+                    }
                     //}
                     //else
                     //{
@@ -3881,7 +3921,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                     int porcenOK = this.validarFacturacionPorcentual();
 
-                    Log.EscribirSQL(99, "ELECTRONICA", "porcenOK: " + porcenOK + " idForma: "+ idForma);
+                    Log.EscribirSQL(99, "ELECTRONICA", "porcenOK: " + porcenOK + " idForma: " + idForma);
 
                     //proceso para facturar mitad y mitad (50 y 50)
                     if (porcenOK == 1 && idForma > 0)
@@ -5135,7 +5175,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void ListPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 //si es punto fical muesto el boton cierre Z
                 PuntoVenta pv = this.cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                 if (pv.formaFacturar == "Fiscal")
@@ -6117,7 +6157,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 var facturaActual = Session["Factura"] as Factura;
 
-                if(facturaActual.total >= Convert.ToInt32(configuracion.TopeLimiteFacturacionParaPedirCuit) && facturaActual.EsFactura() && (facturaActual.cliente.cuit.Length != 11 || facturaActual.cliente.cuit == "00000000000"))
+                if (facturaActual.total >= Convert.ToInt32(configuracion.TopeLimiteFacturacionParaPedirCuit) && facturaActual.EsFactura() && (facturaActual.cliente.cuit.Length != 11 || facturaActual.cliente.cuit == "00000000000"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto de la factura es mayor a " + configuracion.TopeLimiteFacturacionParaPedirCuit + ", se requiere CUIT del comprador \", {type: \"alert\"});", true);
                     return 0;
@@ -6131,7 +6171,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
             }
         }
-        
+
         private int VerificarNoEnviarMercaderiaNegativa()
         {
             try
@@ -6751,9 +6791,9 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!string.IsNullOrWhiteSpace(ListTarjetas.SelectedValue)) idListTarjetas = Convert.ToInt32(ListTarjetas.SelectedValue);
 
                 List<Gestion_Api.Entitys.Promocione> p = contEnt.obtenerPromocionesValidasTarjeta(idListEmpresa, idListSucursal, idDropListFormaPago, idDropListLista, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), idListTarjetas);
-                if (p != null && p.Count>0)
+                if (p != null && p.Count > 0)
                 {
-                    Gestion_Api.Entitys.Promocione pr= ValidarExisteArticuloEnPromoTarjeta(p);
+                    Gestion_Api.Entitys.Promocione pr = ValidarExisteArticuloEnPromoTarjeta(p);
                     this.txtImporteEfectivo.Attributes.Add("disabled", "disabled");
                     //this.txtPorcDescuento.Text = p.Descuento.Value.ToString();
                     this.ActualizarTotales();

@@ -33,6 +33,15 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.Label labelNombreCliente;
 
         /// <summary>
+        /// hiddenIdCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenIdCliente;
+
+        /// <summary>
         /// linkSucursales control.
         /// </summary>
         /// <remarks>
@@ -1536,13 +1545,13 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtPercepcion;
 
         /// <summary>
-        /// btn_PensaniaIngresosBrutos_AgregarPercepcion control.
+        /// IngresosBrutos_TxtRetencion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_PensaniaIngresosBrutos_AgregarPercepcion;
+        protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtRetencion;
 
         /// <summary>
         /// LinkButton1 control.
@@ -1552,15 +1561,6 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
-
-        /// <summary>
-        /// PlaceHolder2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder2;
 
         /// <summary>
         /// txtTipoCliente2 control.

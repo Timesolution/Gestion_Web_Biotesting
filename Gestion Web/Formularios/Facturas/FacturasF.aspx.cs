@@ -860,12 +860,20 @@ namespace Gestion_Web.Formularios.Facturas
                     f.total = f.total * -1;
                 }
 
-                TableCell celNeto = new TableCell();
-                celNeto.Text = "$" + f.subTotal;
+                TableCell calSumaIIBB_Provincias = new TableCell();
+                calSumaIIBB_Provincias.Text = "$" + f.subTotal;
                 //celNeto.Text = "$" + f.netoNGrabado;
-                celNeto.VerticalAlign = VerticalAlign.Middle;
-                celNeto.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celNeto);
+                calSumaIIBB_Provincias.VerticalAlign = VerticalAlign.Middle;
+                calSumaIIBB_Provincias.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(calSumaIIBB_Provincias);
+
+
+                //TableCell celNeto = new TableCell();
+                //celNeto.Text = "$" + f.subTotal;
+                ////celNeto.Text = "$" + f.netoNGrabado;
+                //celNeto.VerticalAlign = VerticalAlign.Middle;
+                //celNeto.HorizontalAlign = HorizontalAlign.Right;
+                //tr.Cells.Add(celNeto);
 
                 TableCell celIva = new TableCell();
                 celIva.Text = "$" + f.neto21;

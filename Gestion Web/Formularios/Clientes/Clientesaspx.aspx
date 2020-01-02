@@ -538,7 +538,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <h5>
-                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtCuerpoMensaje" autocomplete="off" onkeypress="javascript:return ContadorDeCaracteresIngresados(event);" class="form-control"></asp:TextBox>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtCuerpoMensaje" MaxLength="160" autocomplete="off" onkeypress="javascript:return ContadorDeCaracteresIngresados(event);" class="form-control"></asp:TextBox>
                                         <br />
                                         &nbsp<asp:Label runat="server" ID="lbCantidadCaracteresRestantesSMS" Font-Size="Medium" Text="Caracteres restantes: 160"></asp:Label>
                                     </h5>

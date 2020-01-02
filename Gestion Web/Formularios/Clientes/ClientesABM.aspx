@@ -11,13 +11,12 @@
 
                     <div class="widget-header">
                         <i class="icon-pencil"></i>
-                        <%--<h3>Cliente</h3>--%>
                         <h3>
                             <asp:Label ID="labelNombre" runat="server" Text=""></asp:Label>
                             <asp:Label ID="labelNombreCliente" runat="server" Text=""></asp:Label>
+                            <asp:HiddenField ID="hiddenIdCliente" runat="server"></asp:HiddenField>
                         </h3>
                     </div>
-                    <!-- /.widget-header -->
                     <div class="widget-content">
                         <div class="bs-example">
                             <ul id="myTab" class="nav nav-tabs">
@@ -1245,9 +1244,15 @@
                                                         <asp:TextBox ID="IngresosBrutos_TxtPercepcion" runat="server" Style="max-width: 100%" class="form-control" TextMode="Number"></asp:TextBox>
                                                         <span class="input-group-addon">%</span>
                                                     </div>
+                                                    <div class="col-md-1">
+                                                        <label for="name">Retencion</label>
+                                                    </div>
+                                                    <div class="input-group col-xs-2">
+                                                        <asp:TextBox ID="IngresosBrutos_TxtRetencion" runat="server" Style="max-width: 100%" class="form-control" TextMode="Number"></asp:TextBox>
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
                                                     <div class="col-ms-2">
-                                                        <asp:Button runat="server" ID="btn_PensaniaIngresosBrutos_AgregarPercepcion" Style="display: none" Text="No" class="btn btn-danger" OnClientClick="javascript:return AgregarALaTablaLaPercepcion(this)" />
-                                                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
+                                                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:return AgregarALaTablaLaPercepcion(this)" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1267,11 +1272,11 @@
                                                                 <tr>
                                                                     <th style="width: 25%">Provincia</th>
                                                                     <th style="width: 25%">Percepcion</th>
-                                                                    <th style="width: 10%"></th>
+                                                                    <th style="width: 25%">Retencion</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <asp:PlaceHolder ID="PlaceHolder2" runat="server"></asp:PlaceHolder>
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -1470,7 +1475,6 @@
         </div>
     </div>
     <%--Fin modalGrupo--%>
-
     <div id="modalVendedor" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1793,6 +1797,8 @@
     <script>
         function pageLoad() {
             $("#<%= txtFechaEvento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            ObtenerRegistrosYLLenarTablaIIBB();
         };
     </script>
 
@@ -1883,59 +1889,87 @@
         }
 
         function AgregarALaTablaLaPercepcion(obj) {
+            var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
             var controlProvincia = document.getElementById('<%= IngresosBrutos_DropList_Provincias.ClientID %>');
+            var controlTxtRetencion = document.getElementById('<%= IngresosBrutos_TxtRetencion.ClientID %>');
             var controlTxtPercepcion = document.getElementById('<%= IngresosBrutos_TxtPercepcion.ClientID %>');
-          
-            $(obj).attr('disabled', 'disabled');
 
             $.ajax({
                 type: "POST",
-                url: "ClientesABM.aspx/AgregarPercepcion",
-                data: '{ provincia: "' + provincia + '", percepcion: "' +  + '" }',
+                url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",
+                data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", provincia: "' + controlProvincia.value +
+                      '", percepcion: "' + controlTxtPercepcion.value + '", retencion: "' +  controlTxtRetencion.value + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: (error) => {
                     console.log(JSON.stringify(error));
                     $.msgbox("No se pudo filtrar !", { type: "error" });
-                    $(obj).removeAttr('disabled');
-                }
-                ,
-                success: OnSuccessFiltro
+                },
+                success: CargarTablaIIBB
             });
+
+            controlTxtPercepcion.value = "";
+            controlTxtRetencion.value = "";
+
+            return false;
         }
 
-        function OnSuccessFiltro(response) {
-            var controlBotonFiltrar = document.getElementById('<%= lbtnFiltrar.ClientID %>');
+        function ObtenerRegistrosYLLenarTablaIIBB() {
+            var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
 
+            $.ajax({
+                type: "POST",
+                url: "ClientesABM.aspx/ObtenerRegistrosIIBBProvinciaByCliente",
+                data: '{ IdCliente: "' + controlHiddenIdCliente.value + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar !", { type: "error" });
+                }
+                ,
+                success: CargarTablaIIBB
+            });
+            return false;
+        }
+
+        function CargarTablaIIBB(response) {
             var data = response.d;
             var obj = JSON.parse(data);
 
-            document.getElementById('btnCerrarModalBusqueda').click();
+            if (obj == "-2") {
+                $.msgbox("Provincia ya existente", { type: "error" });
+            }
+
             $('#tabla_IngresosBrutos').find("tr:gt(0)").remove();
 
             for (var i = 0; i < obj.length; i++) {
-                var color = 'green';
-                var estado = 'Enviado';
-                if (obj[i].Estado == 0) {
-                    estado = 'No Enviado';
-                    color = 'red';
-                }
                 $('#tabla_IngresosBrutos').append(
                     "<tr>" +
-                    "<td> " + obj[i].Fecha + "</td>" +
-                    "<td> " + obj[i].AliasCliente + "</td>" +
-                    "<td> " + obj[i].Titulo + "</td>" +
-                    "<td> " + obj[i].CuerpoDeMensaje + "</td>" +
-                    '<td style="text-align:right">' + obj[i].Celular + "</td>" +
-                    "<td style='color: " + color + "'> " + estado + "</td>" +
+                    "<td> " + obj[i].Provincia + "</td>" +
+                    '<td style="text-align:right">' + obj[i].Percepcion + "</td>" +
+                    '<td style="text-align:right">' + obj[i].Retencion + "</td>" +
+                    '<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
                     "</tr> ");
             };
-            $(controlBotonFiltrar).removeAttr('disabled');
-
-            var objeto = document.getElementById('<%= labelTotal.ClientID %>');
-            objeto.textContent = obj.length;
         }
-    </script>
+
+        function EliminarRegistroDeTabla(IdIIBBProvincia, IdCliente) {
+            $.ajax({
+                type: "POST",
+                url: "ClientesABM.aspx/EliminarRegistroIIBBProvincia",
+                data: '{ IdIIBBProvincia: "' + IdIIBBProvincia + '", IdCliente: "' + IdCliente + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar !", { type: "error" });
+                }
+                ,
+                success: CargarTablaIIBB
+            });
+        }
+</script>
 
 
 </asp:Content>
