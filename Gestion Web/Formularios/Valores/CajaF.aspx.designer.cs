@@ -112,6 +112,15 @@ namespace Gestion_Web.Formularios.Valores {
         protected global::System.Web.UI.WebControls.PlaceHolder phPasarBanco;
         
         /// <summary>
+        /// hiddenPermiso control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenPermiso;
+        
+        /// <summary>
         /// lblSaldo control.
         /// </summary>
         /// <remarks>
