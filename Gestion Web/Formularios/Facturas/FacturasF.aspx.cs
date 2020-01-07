@@ -860,20 +860,12 @@ namespace Gestion_Web.Formularios.Facturas
                     f.total = f.total * -1;
                 }
 
-                TableCell calSumaIIBB_Provincias = new TableCell();
-                calSumaIIBB_Provincias.Text = "$" + f.subTotal;
+                TableCell celNeto = new TableCell();
+                celNeto.Text = "$" + f.subTotal;
                 //celNeto.Text = "$" + f.netoNGrabado;
-                calSumaIIBB_Provincias.VerticalAlign = VerticalAlign.Middle;
-                calSumaIIBB_Provincias.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(calSumaIIBB_Provincias);
-
-
-                //TableCell celNeto = new TableCell();
-                //celNeto.Text = "$" + f.subTotal;
-                ////celNeto.Text = "$" + f.netoNGrabado;
-                //celNeto.VerticalAlign = VerticalAlign.Middle;
-                //celNeto.HorizontalAlign = HorizontalAlign.Right;
-                //tr.Cells.Add(celNeto);
+                celNeto.VerticalAlign = VerticalAlign.Middle;
+                celNeto.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celNeto);
 
                 TableCell celIva = new TableCell();
                 celIva.Text = "$" + f.neto21;
@@ -950,6 +942,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
         private bool ExisteFilaAndTieneDatos(DataRow fila, string nombreCampo)
         {
             try
@@ -971,6 +964,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int idFactura = Convert.ToInt32(row["id"]);
                 string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
 
                 //fila
@@ -1035,6 +1029,19 @@ namespace Gestion_Web.Formularios.Facturas
                     row["subtotal"] = Convert.ToDecimal(row["subtotal"]) * -1;
                     row["total"] = Convert.ToDecimal(row["total"]) * -1;
                 }
+
+                TableCell calSumaIIBB_Provincias = new TableCell();
+                decimal porcentajeSumaIIBB = contFactEntity.ObtenerSumaIngresosBrutosDeLasProvinciasByFactura(idFactura);
+                decimal neto = Convert.ToDecimal(row["subtotal"]);
+                calSumaIIBB_Provincias.Text = "$ 0.00";
+                if (porcentajeSumaIIBB > 0)
+                {
+                    calSumaIIBB_Provincias.Text = "$ " + Math.Round(porcentajeSumaIIBB * neto / 100, 2).ToString();
+                }
+                calSumaIIBB_Provincias.VerticalAlign = VerticalAlign.Middle;
+                calSumaIIBB_Provincias.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(calSumaIIBB_Provincias);
+
                 TableCell celNeto = new TableCell();
                 celNeto.Text = "$" + row["subtotal"].ToString();
                 //celNeto.Text = "$" + f.netoNGrabado;

@@ -1252,7 +1252,7 @@
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                     <div class="col-ms-2">
-                                                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:return AgregarALaTablaLaPercepcion(this)" />
+                                                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:return AgregarALaTablaLaPercepcion()" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1865,8 +1865,6 @@
         }
     </script>
 
-
-
     <script>
         //valida los campos solo numeros
         function validarNroGuion(e) {
@@ -1888,7 +1886,7 @@
             return true;
         }
 
-        function AgregarALaTablaLaPercepcion(obj) {
+        function AgregarALaTablaLaPercepcion() {
             var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
             var controlProvincia = document.getElementById('<%= IngresosBrutos_DropList_Provincias.ClientID %>');
             var controlTxtRetencion = document.getElementById('<%= IngresosBrutos_TxtRetencion.ClientID %>');
@@ -1939,6 +1937,7 @@
 
             if (obj == "-2") {
                 $.msgbox("Provincia ya existente", { type: "error" });
+                return false;
             }
 
             $('#tabla_IngresosBrutos').find("tr:gt(0)").remove();
