@@ -7,13 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Facturas
-{
-
-
-    public partial class RetencionesF
-    {
-
+namespace Gestion_Web.Formularios.Ventas {
+    
+    
+    public partial class RetencionesF {
+        
         /// <summary>
         /// btnAccion control.
         /// </summary>
@@ -22,7 +20,16 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
-
+        
+        /// <summary>
+        /// lbtnExportar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnExportar;
+        
         /// <summary>
         /// lblParametros control.
         /// </summary>
@@ -31,7 +38,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblParametros;
-
+        
         /// <summary>
         /// lbImpresion control.
         /// </summary>
@@ -40,7 +47,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbImpresion;
-
+        
         /// <summary>
         /// labelSaldo control.
         /// </summary>
@@ -49,7 +56,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labelSaldo;
-
+        
         /// <summary>
         /// lblSaldo control.
         /// </summary>
@@ -58,7 +65,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSaldo;
-
+        
         /// <summary>
         /// phFacturas control.
         /// </summary>
@@ -67,7 +74,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phFacturas;
-
+        
         /// <summary>
         /// txtFechaDesde control.
         /// </summary>
@@ -76,7 +83,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaDesde;
-
+        
         /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
@@ -85,7 +92,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-
+        
         /// <summary>
         /// txtFechaHasta control.
         /// </summary>
@@ -94,7 +101,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
-
+        
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -103,7 +110,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-
+        
         /// <summary>
         /// DropListSucursal control.
         /// </summary>
@@ -112,7 +119,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSucursal;
-
+        
         /// <summary>
         /// RequiredFieldValidator2 control.
         /// </summary>
@@ -121,25 +128,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-
-        /// <summary>
-        /// DropListProvincias control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListProvincias;
-
-        /// <summary>
-        /// RequiredFieldValidator4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
-
+        
         /// <summary>
         /// lbtnBuscar control.
         /// </summary>

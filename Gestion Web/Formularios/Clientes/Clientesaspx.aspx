@@ -538,7 +538,9 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <h5>
-                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtCuerpoMensaje" class="form-control"></asp:TextBox>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtCuerpoMensaje" MaxLength="160" autocomplete="off" onkeypress="javascript:return ContadorDeCaracteresIngresados(event);" class="form-control"></asp:TextBox>
+                                        <br />
+                                        &nbsp<asp:Label runat="server" ID="lbCantidadCaracteresRestantesSMS" Font-Size="Medium" Text="Caracteres restantes: 160"></asp:Label>
                                     </h5>
                                 </div>
                             </div>
@@ -612,6 +614,37 @@
             document.getElementById('<%= btn_MostrarConfirmacionClientesFiltrados.ClientID %>').style.display = 'none';
 
             return false;
+        }
+
+        function ContadorDeCaracteresIngresados(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            var txtCuerpoMensaje = document.getElementById('<%= txtCuerpoMensaje.ClientID %>');
+            var lbCantidadCaracteresRestantesSMS = document.getElementById('<%= lbCantidadCaracteresRestantesSMS.ClientID %>');
+            var cantidadCaracteres;
+            if (txtCuerpoMensaje.value.length == 0 && key!=0) {
+                cantidadCaracteres = 1;
+            }
+            else {
+                cantidadCaracteres = txtCuerpoMensaje.value.length+1;
+            }
+            
+            lbCantidadCaracteresRestantesSMS.textContent = "Caracteres restantes: " + (160 - cantidadCaracteres);
+
+            if (cantidadCaracteres == 160) {
+                return false;
+            }
+            else {
+                return true;
+            }
         }
     </script>
     <script>

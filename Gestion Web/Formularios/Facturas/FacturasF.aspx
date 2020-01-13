@@ -394,6 +394,7 @@
                                             <th>Tipo</th>
                                             <th>Numero</th>
                                             <th>Razon</th>
+                                            <th style="text-align: right;">IIBB</th>
                                             <th style="text-align: right;">Neto</th>
                                             <th style="text-align: right;">IVA</th>
                                             <th style="text-align: right;">P. IIBB</th>

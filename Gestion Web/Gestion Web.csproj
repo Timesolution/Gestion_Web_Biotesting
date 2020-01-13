@@ -358,6 +358,7 @@
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
+    <Content Include="Formularios\Facturas\RetencionesF.aspx" />
     <Content Include="Formularios\Herramientas\HistorialSMS.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
     <Content Include="Formularios\Herramientas\NotificacionesABM.aspx" />
@@ -430,7 +431,7 @@
     <Content Include="Formularios\Facturas\DespachosF.aspx" />
     <Content Include="Formularios\Facturas\LotesImportadosF.aspx" />
     <Content Include="Formularios\Facturas\PedidosModula.aspx" />
-    <Content Include="Formularios\Facturas\RetencionesF.aspx" />
+    <Content Include="Formularios\Facturas\RetencionesFOld.aspx" />
     <Content Include="Formularios\Facturas\TestOpen.aspx" />
     <Content Include="Formularios\Formas\FormasPagoF.aspx" />
     <Content Include="Formularios\Herramientas\ABMAsuntosSMS.aspx" />
@@ -1470,6 +1471,13 @@
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.designer.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\RetencionesF.aspx.cs">
+      <DependentUpon>RetencionesF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\RetencionesF.aspx.designer.cs">
+      <DependentUpon>RetencionesF.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Herramientas\HistorialSMS.aspx.cs">
       <DependentUpon>HistorialSMS.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1772,12 +1780,12 @@
     <Compile Include="Formularios\Facturas\PedidosModula.aspx.designer.cs">
       <DependentUpon>PedidosModula.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\Facturas\RetencionesF.aspx.cs">
-      <DependentUpon>RetencionesF.aspx</DependentUpon>
+    <Compile Include="Formularios\Facturas\RetencionesFOld.aspx.cs">
+      <DependentUpon>RetencionesFOld.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Formularios\Facturas\RetencionesF.aspx.designer.cs">
-      <DependentUpon>RetencionesF.aspx</DependentUpon>
+    <Compile Include="Formularios\Facturas\RetencionesFOld.aspx.designer.cs">
+      <DependentUpon>RetencionesFOld.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\TestOpen.aspx.cs">
       <DependentUpon>TestOpen.aspx</DependentUpon>
