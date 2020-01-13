@@ -33,6 +33,15 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.Label labelNombreCliente;
 
         /// <summary>
+        /// hiddenIdCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenIdCliente;
+
+        /// <summary>
         /// linkSucursales control.
         /// </summary>
         /// <remarks>
@@ -1527,13 +1536,22 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.DropDownList IngresosBrutos_DropList_Provincias;
 
         /// <summary>
-        /// TextBox3 control.
+        /// IngresosBrutos_TxtPercepcion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox3;
+        protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtPercepcion;
+
+        /// <summary>
+        /// IngresosBrutos_TxtRetencion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtRetencion;
 
         /// <summary>
         /// LinkButton1 control.
