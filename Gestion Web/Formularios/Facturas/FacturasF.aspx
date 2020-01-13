@@ -180,6 +180,24 @@
                                                 </li>
                                             </ul>
                                         </li>
+
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Detalle Ventas Con Solicitudes</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="btnExportarVentasConSolicitudes" runat="server" OnClick="btnExportarVentasConSolicitudes_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                    </asp:LinkButton>
+                                                </li>
+                                                <li>
+                                                    <asp:LinkButton ID="btnImprimirVentasConSolicitudes" runat="server" OnClick="btnImprimirVentasConSolicitudes_Click">
+                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                        &nbsp Imprimir
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
+
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" data-toggle="modal" href="#modalDescuentos">Detalle descuentos</a>
                                         </li>

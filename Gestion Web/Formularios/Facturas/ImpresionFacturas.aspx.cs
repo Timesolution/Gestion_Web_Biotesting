@@ -5,6 +5,7 @@ using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -109,9 +110,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte13(fechaD, fechaH, suc, tipo, cliente);//Impresion busqueda actual
                     }
-                    if (accion == 13)
+                    if (accion == 14)
                     {
-                        this.generarReporte14(fechaD, fechaH, suc, tipo, cliente);// REPORTE VENTAS x Vendedor x sucursal y categoria
+                        this.generarReporte15(fechaD, fechaH, suc, tipo, cliente);//Detalle ventas con solicitudes
                     }
                 }
             }
@@ -594,50 +595,9 @@ namespace Gestion_Web.Formularios.Facturas
                     dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                 }
 
-                //dtDetalles.Columns.Add("NumSolicitud");
-
-                //foreach (DataRow item in dtDetalles.Rows)
-                //{
-                //    if(item["tipo"].ToString() == "Presupuesto")
-                //    {
-                //        string temp = item["Observaciones"].ToString();
-
-                //        if (temp.ToLower().Contains("solicitud"))
-                //        {
-                //            string txtReplace = temp.Split(',')[0] + ", ";
-                //            temp = temp.Replace(txtReplace, string.Empty);
-                //            item["NumSolicitud"] = txtReplace.Substring(0, txtReplace.Length - 2);
-                //            item["Observaciones"] = temp;
-                //        }
-                //    }
-                //}
-
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
 
                 Decimal total = 0;
-
-                //if (dtDetalles.Rows.Count > 0)
-                //{
-                //    foreach (DataRow row in dtDetalles.Rows)
-                //    {
-                //        if (row["tipo"].ToString().Contains("Credito"))
-                //        {
-                //            row["iva"] = Convert.ToDecimal(row["iva"].ToString()) * -1;
-                //            row["neto"] = Convert.ToDecimal(row["neto"].ToString()) * -1;
-                //            row["pSinIva"] = Convert.ToDecimal(row["pSinIva"].ToString()) * -1;
-
-                //        }
-
-                //        if (row["estado"].ToString() == "0")
-                //        {
-                //            row["iva"] = Convert.ToDecimal(0);
-                //            row["neto"] = Convert.ToDecimal(0);
-                //            row["pSinIva"] = Convert.ToDecimal(0);
-                //        }
-
-                //        //total += Convert.ToDecimal(row["Total"].ToString());
-                //    }
-                //}
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetallesVentasR.rdlc");
@@ -695,9 +655,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.Response.End();
                 }
-
-
-
             }
             catch(Exception ex)
             {
@@ -1412,6 +1369,101 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
             catch
+            {
+
+            }
+        }
+
+        private void generarReporte15(string fechaD, string fechaH, int idSuc, int tipo, int cliente)
+        {
+            try
+            {
+                controladorSucursal controladorSucursal = new controladorSucursal();
+                ControladorPlenario controladorPlenario = new ControladorPlenario();
+                controladorFacturacion controladorFacturacion = new controladorFacturacion();
+
+                DataTable dtDetalles = new DataTable();
+
+                DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
+                DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+
+                dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
+
+                List<Planario_Api.Entidades.SolicitudPlenario> solicitudes = controladorPlenario.obtenerSolicitudesPlenariosByFecha(desde, hasta, emp);
+
+                DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, emp);
+
+                Decimal total = 0;
+
+                dtDetalles.Columns.Add("Solicitud", typeof(System.Int32));
+
+                foreach (DataRow dr in dtDetalles.Rows)
+                {
+                    long idFactura = Convert.ToInt64(dr["id"]);
+                    var solicitud = solicitudes.FirstOrDefault(x => x.Factura == idFactura);
+
+                    if(solicitud != null)
+                        dr["Solicitud"] = solicitud.NroSolicitud;
+                }
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetallesVentasSolicitudesR.rdlc");
+                ReportDataSource rds = new ReportDataSource("DetalleFacturas", dtDetalles);
+                ReportDataSource rds2 = new ReportDataSource("DatosFacturas", dtDatos);
+
+                ReportParameter param = new ReportParameter("ParamDesde", fechaD);
+                ReportParameter param2 = new ReportParameter("ParamHasta", fechaH);
+                ReportParameter param3 = new ReportParameter("ParamTotal", total.ToString("C"));
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Reporte_Detalle_Ventas", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+            }
+            catch (Exception ex)
             {
 
             }
