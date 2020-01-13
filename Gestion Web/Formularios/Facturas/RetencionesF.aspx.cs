@@ -22,8 +22,12 @@ namespace Gestion_Web.Formularios.Facturas
             public string Id { get; set; }
             public string Fecha { get; set; }
             public string Provincia { get; set; }
-            public string Retencion { get; set; }
+            public string Percepcion { get; set; }
+            public string RazonSocial{ get; set; }
+            public string Neto { get; set; }
+            public string MontoPercepcion { get; set; }
             public string Factura { get; set; }
+            public string CUIT { get; set; }
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -69,17 +73,13 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerSucursales();
 
-                DataRow dr = dt.NewRow();
-                dr["nombre"] = "Seleccione...";
-                dr["id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();
 
+                DropListSucursal.Items.Insert(0, new ListItem("Todos", "0"));
             }
             catch (Exception ex)
             {
@@ -92,10 +92,16 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 controladorPais controladorPais = new controladorPais();
-                this.DropListProvincias.DataSource = controladorPais.obtenerPRovincias();
+                DataTable dt = controladorPais.obtenerPRovincias();
+                this.DropListProvincias.DataSource = dt;
                 this.DropListProvincias.DataValueField = "Provincia";
                 this.DropListProvincias.DataTextField = "Provincia";
-                this.DropListProvincias.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["Provincia"] = "Todas";
+                dt.Rows.InsertAt(dr, 0);
+
                 this.DropListProvincias.DataBind();
             }
             catch (Exception ex)
@@ -105,26 +111,31 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         [WebMethod]
-        public static string TraerRegistrosDe_CuentasContables_MayorTipoMovimiento()
+        public static string TraerRegistrosDe_CuentasContables_MayorTipoMovimiento(string FechaDesde, string FechaHasta, string Provincia, string Sucursal)
         {
             try
             {
+                controladorFacturacion controladorFacturacion = new controladorFacturacion();
                 controladorFactEntity contFactEntity = new controladorFactEntity();
-                var facturas_IIBB = contFactEntity.GetAll_Facturas_IIBB_Provincias();
+                var facturas_IIBB = contFactEntity.GetAll_Facturas_IIBB_Provincias(FechaDesde, FechaHasta, Provincia, Convert.ToInt32(Sucursal));
                 List<Facturas_IIBB_Provincias_Temporal> facturas_IIBB_Provincias_Temporal = new List<Facturas_IIBB_Provincias_Temporal>();
 
                 foreach (var item in facturas_IIBB)
                 {
+                    var fact = controladorFacturacion.obtenerFacturaId(item.IdFactura);
                     facturas_IIBB_Provincias_Temporal.Add(new Facturas_IIBB_Provincias_Temporal
                     {
                         Id = item.Id.ToString(),
-                        Factura = item.factura.numero,
+                        Factura = fact.numero,
                         Provincia = item.Cliente_IIBB_Provincias.Provincia.Provincia1,
-                        Fecha = item.factura.fecha.ToString(),
-                        Retencion = Math.Round(item.Cliente_IIBB_Provincias.Retencion, 2).ToString()
+                        Fecha = fact.fecha.ToString("dd/MM/yyyy"),
+                        Percepcion = Math.Round(item.Cliente_IIBB_Provincias.Percepcion, 2).ToString(),
+                        MontoPercepcion = Math.Round(fact.netoNGrabado * item.Cliente_IIBB_Provincias.Percepcion / 100, 2).ToString(),
+                        Neto = Math.Round(fact.netoNGrabado,2).ToString(),
+                        RazonSocial = fact.cliente.razonSocial,
+                        CUIT = fact.cliente.cuit
                     });
                 }
-
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 serializer.MaxJsonLength = 5000000;
                 string resultadoJSON = serializer.Serialize(facturas_IIBB_Provincias_Temporal);
