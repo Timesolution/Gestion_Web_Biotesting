@@ -42,6 +42,15 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.HiddenField hiddenIdCliente;
 
         /// <summary>
+        /// hiddenOrigenCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenOrigenCliente;
+
+        /// <summary>
         /// linkSucursales control.
         /// </summary>
         /// <remarks>
@@ -1518,15 +1527,6 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.LinkButton lbtnCodigoBTB;
 
         /// <summary>
-        /// Placeholder1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder Placeholder1;
-
-        /// <summary>
         /// IngresosBrutos_DropList_Provincias control.
         /// </summary>
         /// <remarks>
@@ -1536,22 +1536,22 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.DropDownList IngresosBrutos_DropList_Provincias;
 
         /// <summary>
-        /// IngresosBrutos_TxtPercepcion control.
+        /// lbPercepcionORetencion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtPercepcion;
+        protected global::System.Web.UI.WebControls.Label lbPercepcionORetencion;
 
         /// <summary>
-        /// IngresosBrutos_TxtRetencion control.
+        /// IngresosBrutos_TxtPercepcionORetencion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtRetencion;
+        protected global::System.Web.UI.WebControls.TextBox IngresosBrutos_TxtPercepcionORetencion;
 
         /// <summary>
         /// LinkButton1 control.
@@ -1561,6 +1561,15 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+
+        /// <summary>
+        /// lbColumnaRetencionOPercepcion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbColumnaRetencionOPercepcion;
 
         /// <summary>
         /// txtTipoCliente2 control.
