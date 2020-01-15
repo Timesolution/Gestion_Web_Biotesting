@@ -16,7 +16,6 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
 
                     <div class="widget-content">
                         <table style="width: 100%">
@@ -83,7 +82,6 @@
                     </div>
                     <div class="widget-content">
                         <div class="panel-body">
-
                             <div class="table-responsive">
                                 <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
                                 <table class="table table-striped table-bordered table-hover" id="tabla_IngresosBrutos">
@@ -98,22 +96,14 @@
                                             <th>Percepcion %</th>
                                             <th>Monto Percibido</th>
                                         </tr>
-
                                     </thead>
                                     <tbody>
                                         <asp:PlaceHolder ID="phFacturas" runat="server"></asp:PlaceHolder>
                                     </tbody>
                                 </table>
-
                             </div>
-
-
-
                         </div>
-
-
                     </div>
-
                 </div>
             </div>
         </div>
@@ -154,7 +144,6 @@
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label class="col-md-4">Provincia</label>
                                 <div class="col-md-6">

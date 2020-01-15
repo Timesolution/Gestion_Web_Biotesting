@@ -43,7 +43,7 @@ namespace Gestion_Web.Formularios.Clientes
         //private string cuit;
         private int idCliente;
         //cliente del formulario
-        private Cliente cl;
+        private cliente cl;
         private string codigo;
         private string cuit;
         private int EditarDir;
@@ -76,6 +76,8 @@ namespace Gestion_Web.Formularios.Clientes
 
                 if (!IsPostBack)
                 {
+                    cl = contClienteEntity.ObtenerClienteId(idCliente);
+                    hiddenOrigenCliente.Value = cl.origen.ToString();
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     //Confirguraciones
                     this.LitCliente_1.Text = WebConfigurationManager.AppSettings.Get("Clientes_1");
@@ -3919,15 +3921,19 @@ namespace Gestion_Web.Formularios.Clientes
 
         #region IngresosBrutos/Percepciones
         [WebMethod]
-        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string percepcion, string retencion)
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string origenCliente, string percepcionORetencion)
         {
             try
             {
                 int idCliente = Convert.ToInt32(idClienteString);
                 int respuesta = 0;
+                decimal percepcion = 0;
+                decimal retencion = 0;
+
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 serializer.MaxJsonLength = 5000000;
                 string resultadoJSON;
+
                 List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
                 ControladorProvincias controladorProvincias = new ControladorProvincias();
 
@@ -3936,18 +3942,18 @@ namespace Gestion_Web.Formularios.Clientes
                 var prov = controladorProvincias.ObtenerProvinciaByNombre(provincia);
                 if (prov != null)
                 {
-                    ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                    if (string.IsNullOrWhiteSpace(percepcion))
+                    if (Convert.ToInt32(origenCliente) == 1)
                     {
-                        percepcion = "0";
+                        percepcion = Convert.ToDecimal(percepcionORetencion);
                     }
-                    if (string.IsNullOrWhiteSpace(retencion))
+                    else
                     {
-                        retencion = "0";
+                        retencion = Convert.ToDecimal(percepcionORetencion);
                     }
-                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, Convert.ToDecimal(percepcion), Convert.ToDecimal(retencion));
-                }
 
+                    ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion);
+                }
                 resultadoJSON = respuesta.ToString();
 
                 if (respuesta > 0)
