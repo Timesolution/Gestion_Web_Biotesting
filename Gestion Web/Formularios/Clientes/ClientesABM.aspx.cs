@@ -12,6 +12,8 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Task_Api;
@@ -25,6 +27,7 @@ namespace Gestion_Web.Formularios.Clientes
         Mensajes m = new Mensajes();
         //controladores
         private controladorCliente controlador = new controladorCliente();
+        private ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         private controladorTipoCliente controladorTipoCliente = new controladorTipoCliente();
         private controladorGrupoCliente controladorGrupoCliente = new controladorGrupoCliente();
         private controladorCategoria controladorCatCliente = new controladorCategoria();
@@ -35,20 +38,27 @@ namespace Gestion_Web.Formularios.Clientes
         private controladorZona contZona = new controladorZona();
         ControladorPlanCuentas contPlanCta = new ControladorPlanCuentas();
 
-        //controlador  
-        ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         //para saber si es alta(1) o modificacion(2)
         private int accion;
         //private string cuit;
         private int idCliente;
         //cliente del formulario
-        private Cliente cl;
+        private cliente cl;
         private string codigo;
         private string cuit;
         private int EditarDir;
         private int EditarCon;
         private int PosDir;
         private int PosCon;
+
+        public class IIBBTemporal
+        {
+            public string Id { get; set; }
+            public string Provincia { get; set; }
+            public string Percepcion { get; set; }
+            public string Retencion { get; set; }
+            public string IdCliente { get; set; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -57,6 +67,7 @@ namespace Gestion_Web.Formularios.Clientes
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
+                hiddenIdCliente.Value = idCliente.ToString();
                 string perfil = Session["Login_NombrePerfil"] as string;
 
                 this.verificarPermisos();
@@ -65,6 +76,8 @@ namespace Gestion_Web.Formularios.Clientes
 
                 if (!IsPostBack)
                 {
+                    cl = contClienteEntity.ObtenerClienteId(idCliente);
+                    hiddenOrigenCliente.Value = cl.origen.ToString();
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     //Confirguraciones
                     this.LitCliente_1.Text = WebConfigurationManager.AppSettings.Get("Clientes_1");
@@ -133,8 +146,8 @@ namespace Gestion_Web.Formularios.Clientes
                         this.cargarCuentas();
                         this.cargarGanancias();
                         this.cargarProveedor_OC();
-                        this.cargarDatosCuentaProveedor();                        
-                        this.cargarProveedor(this.idCliente); 
+                        this.cargarDatosCuentaProveedor();
+                        this.cargarProveedor(this.idCliente);
                     }
                     //si es nuevo genero codigo
                     if (this.accion == 1 || this.accion == 3)
@@ -169,6 +182,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        #region Verificaciones
         private void VerificarLogin()
         {
             try
@@ -196,7 +210,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 string perfil = Session["Login_NombrePerfil"] as string;
-                if(perfil.ToLower() == "lider")
+                if (perfil.ToLower() == "lider")
                 {
                     return 0;
                 }
@@ -244,7 +258,7 @@ namespace Gestion_Web.Formularios.Clientes
                 //verifico si puede
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
-                string permiso2 = listPermisos.Where(x => x == "103").FirstOrDefault();                
+                string permiso2 = listPermisos.Where(x => x == "103").FirstOrDefault();
                 if (permiso2 == null)
                 {
                     if (this.accion == 1 || this.accion == 3)
@@ -280,7 +294,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 this.verificarPermisoModificarEstadoCliente();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en verificarPermisoModificarEstadoCliente. ex: " + ex.Message));
             }
@@ -316,10 +330,10 @@ namespace Gestion_Web.Formularios.Clientes
                     labelNombre.Text = "Proveedor";
                     this.panel1.Visible = false;
                 }
-                if(accion==2)
+                if (accion == 2)
                 {
                     Cliente c = this.controlador.obtenerClienteID(this.idCliente);
-                    if(c!=null)
+                    if (c != null)
                     {
                         labelNombreCliente.Text = c.razonSocial;
                     }
@@ -330,6 +344,7 @@ namespace Gestion_Web.Formularios.Clientes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error"));
             }
         }
+        #endregion
 
         #region carga datos
         public void cargarFormaPAgo()
@@ -351,7 +366,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 this.DropListFormaPago.DataBind();
 
-                
+
             }
             catch (Exception ex)
             {
@@ -404,7 +419,7 @@ namespace Gestion_Web.Formularios.Clientes
                 controladorEmpleado contEmpleado = new controladorEmpleado();
                 List<Gestion_Api.Modelo.Empleado> empleados = contEmpleado.obtenerEmpleadosReduc();
 
-                foreach (Gestion_Api.Modelo.Empleado emp in empleados.OrderBy(x=> x.nombre).OrderBy(y=> y.apellido))
+                foreach (Gestion_Api.Modelo.Empleado emp in empleados.OrderBy(x => x.nombre).OrderBy(y => y.apellido))
                 {
                     this.listEmpleados.Items.Add(new ListItem
                     {
@@ -690,6 +705,13 @@ namespace Gestion_Web.Formularios.Clientes
 
                 this.ListProvincia.DataBind();
                 this.ListProvincia.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+                this.IngresosBrutos_DropList_Provincias.DataSource = controladorPais.obtenerPRovincias();
+                this.IngresosBrutos_DropList_Provincias.DataValueField = "Provincia";
+                this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia";
+                this.IngresosBrutos_DropList_Provincias.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                this.IngresosBrutos_DropList_Provincias.DataBind();
+
                 //cargo la localidad
                 //this.cargarLocalidades(this.ListProvincia.SelectedValue);
             }
@@ -791,7 +813,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch
             {
-                
+
             }
         }
         #endregion
@@ -838,7 +860,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.ListListaPrecios.SelectedValue = cl.lisPrecio.id.ToString();
                     this.ListVendedores.SelectedValue = cl.vendedor.id.ToString();
                     this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
-                    if(clDatos.Count > 0)
+                    if (clDatos.Count > 0)
                         this.ListDescuentoPorCantidad.SelectedValue = clDatos[0].AplicaDescuentoCantidad.ToString();
 
                     codigo = cl.codigo;
@@ -879,12 +901,12 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarDatosMillas();
 
                     this.cargarEventosCliente();
-                    if(perfil=="Distribuidor")
+                    if (perfil == "Distribuidor")
                     {
                         var cr = this.contClienteEntity.obtenerClienteReferidoPorHijo(cl.id);
-                        if(cr!=null)
+                        if (cr != null)
                         {
-                            if(this.DropListTipo.SelectedItem.Text.ToLower() == "experta")
+                            if (this.DropListTipo.SelectedItem.Text.ToLower() == "experta")
                             {
                                 this.PanelFamilia.Visible = true;
                                 this.cargarClientesFamilia();
@@ -1455,7 +1477,7 @@ namespace Gestion_Web.Formularios.Clientes
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El tipo de iva Resp. Inscripto requiere de un CUIT de 11 digitos."));
                     return;
                 }
-                
+
 
                 //alerta cliente                
                 cliente.alerta.descripcion = this.txtAlerta.Text;
@@ -2029,6 +2051,8 @@ namespace Gestion_Web.Formularios.Clientes
         }
 
         #endregion
+
+        #region Funcion botones
         protected void btnAgregarDireccion_Click(object sender, EventArgs e)
         {
             if (accion == 1 || accion == 3)
@@ -2157,7 +2181,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error dibujando contactos" + ex.Message));
             }
-        }        
+        }
         public void cargarPHContacto(contacto ct, int id)
         {
             try
@@ -2292,7 +2316,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error editando contacto " + ex.Message));
             }
-        }       
+        }
         protected void btnAgregarLista_Click(object sender, EventArgs e)
         {
             try
@@ -2327,7 +2351,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
 
             }
-        }        
+        }
         private void generarCodigo()
         {
             try
@@ -2529,6 +2553,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
             return cuit;
         }
+        #endregion
 
         #region Direccion
 
@@ -2973,7 +2998,7 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         //cargo datos de IIBB
                         this.cargarIBBProveedor();
-                    }                    
+                    }
                 }
                 else
                 {
@@ -2990,7 +3015,8 @@ namespace Gestion_Web.Formularios.Clientes
         #endregion
 
         #region datos mail cumpleaños sms
-        private void modificarDatosCliente(Cliente cliente){
+        private void modificarDatosCliente(Cliente cliente)
+        {
             try
             {
                 var datosMail = this.contClienteEntity.obtenerClienteDatosByCliente(cliente.id);
@@ -3120,7 +3146,7 @@ namespace Gestion_Web.Formularios.Clientes
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -3134,7 +3160,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.agregarClienteMillas();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -3197,7 +3223,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarEventosClientePH(e);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -3253,7 +3279,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 int id = Convert.ToInt32(this.lblIdEventoCliente.Text);
-                if(id == 0)
+                if (id == 0)
                 {
                     this.agregarEventoCliente();
                 }
@@ -3262,7 +3288,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.modificarEventoCliente();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
@@ -3299,7 +3325,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));                
+                Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
                 ev.Descripcion = this.txtDetalleEvento.Text;
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
 
@@ -3337,7 +3363,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.lblIdEventoCliente.Text = ev.Id.ToString();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -3347,7 +3373,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 int idEvento = Convert.ToInt32(this.txtMovimientoEventoCliente.Text);
-                Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);                
+                Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
                 int i = this.contClienteEntity.eliminarEventoCliente(ev);
                 if (i > 0)
                 {
@@ -3401,8 +3427,8 @@ namespace Gestion_Web.Formularios.Clientes
                 List<Cuentas_Contables> cuentas = this.contPlanCta.obtenerCuentasContables();
                 if (cuentas.Count > 0)
                 {
-                    this.cargarCuentasNivel1();     
-                    this.PanelCtaCtble.Visible = true;                    
+                    this.cargarCuentasNivel1();
+                    this.PanelCtaCtble.Visible = true;
                 }
             }
             catch
@@ -3514,7 +3540,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando cta contable a proveedor. " + ex.Message));
             }
@@ -3604,14 +3630,14 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 controladorEmpleado contEmpleado = new controladorEmpleado();
-                                
+
                 var emp = contEmpleado.obtenerEmpleadoID(Convert.ToInt32(this.listEmpleados.SelectedValue));
                 this.listEmpleados.SelectedValue = emp.id.ToString();
                 this.txtNombreEepleado.Text = emp.nombre;
                 this.txtApellidoEmpleado.Text = emp.apellido;
                 this.txtDNIEmpleado.Text = emp.dni;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando datos empleado en el formulario." + ex.Message));
             }
@@ -3653,7 +3679,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.ListClientesReferir.SelectedIndex = 0;
                     this.cargarReferidosCliente();
                 }
-                if(i==-2)
+                if (i == -2)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel9, UpdatePanel9.GetType(), "alert", "$.msgbox(\"El cliente ya se encuentra referido. " + "\", {type: \"error\"});", true);
                 }
@@ -3747,7 +3773,7 @@ namespace Gestion_Web.Formularios.Clientes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando distribuidores a la lista. Excepcion: " + Ex.Message));
             }
         }
-       
+
         #endregion
 
         #region Ganancias
@@ -3776,7 +3802,7 @@ namespace Gestion_Web.Formularios.Clientes
                 g.Retencion = Convert.ToDecimal(this.txtRetencionGanancias.Text);
                 g.Proveedor = this.idCliente;
                 int i = this.contClienteEntity.agregarGanancias(g);
-                if(i>0)
+                if (i > 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Se cargaron los datos de ganancias correctamente."));
                 }
@@ -3792,7 +3818,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 Ganancia g = new Ganancia();
                 g = this.contClienteEntity.obtenerGananciasPorProveedor(this.idCliente);
-                if(g!=null)
+                if (g != null)
                 {
                     this.txtMinimoNoImponible.Text = g.MinimoNoImponible.ToString();
                     this.txtRetencionGanancias.Text = g.Retencion.ToString();
@@ -3837,7 +3863,7 @@ namespace Gestion_Web.Formularios.Clientes
                 int i = this.contClienteEntity.agregarProveedor_OC(poc);
                 if (i > 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se cargaron los datos para las Ordenes de Compra correctamente.",null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se cargaron los datos para las Ordenes de Compra correctamente.", null));
                 }
             }
             catch (Exception Ex)
@@ -3874,24 +3900,149 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 Clientes_CodigoBTB cliBTB = new Clientes_CodigoBTB();
                 cliBTB.Cliente = this.idCliente;
-                cliBTB.CodigoBTB1 = this.txtCodigoBTB1.Text.PadLeft(5,'0');
+                cliBTB.CodigoBTB1 = this.txtCodigoBTB1.Text.PadLeft(5, '0');
                 cliBTB.CodigoBTB2 = this.txtCodigoBTB2.Text.PadLeft(5, '0');
                 int ok = contClienteEntity.generarCodigoBTB(cliBTB);
-                if(ok >= 0)
+                if (ok >= 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Codigo BTB actualizado con exito.",null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Codigo BTB actualizado con exito.", null));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando codigo BTB." ));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando codigo BTB."));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("SE ha producido un error en ClientesABM. Metodo: lbtnCodigoBTB_Click. Exception: " + ex.Message));
             }
         }
         #endregion
 
+        #region IngresosBrutos/Percepciones
+        [WebMethod]
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string origenCliente, string percepcionORetencion)
+        {
+            try
+            {
+                int idCliente = Convert.ToInt32(idClienteString);
+                int respuesta = 0;
+                decimal percepcion = 0;
+                decimal retencion = 0;
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON;
+
+                List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
+                ControladorProvincias controladorProvincias = new ControladorProvincias();
+
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                var cliente = controladorClienteEntity.ObtenerClienteId(Convert.ToInt32(idCliente));
+                var prov = controladorProvincias.ObtenerProvinciaByNombre(provincia);
+                if (prov != null)
+                {
+                    if (Convert.ToInt32(origenCliente) == 1)
+                    {
+                        percepcion = Convert.ToDecimal(percepcionORetencion);
+                    }
+                    else
+                    {
+                        retencion = Convert.ToDecimal(percepcionORetencion);
+                    }
+
+                    ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion);
+                }
+                resultadoJSON = respuesta.ToString();
+
+                if (respuesta > 0)
+                {
+                    List<Cliente_IIBB_Provincias> listaIIBB = controladorClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+                    foreach (var item in listaIIBB)
+                    {
+                        listaTemporal.Add(new IIBBTemporal
+                        {
+                            Id = item.Id.ToString(),
+                            IdCliente = item.IdCliente.ToString(),
+                            Provincia = item.Provincia.Provincia1,
+                            Percepcion = item.Percepcion.ToString(),
+                            Retencion = item.Retencion.ToString()
+                        });
+                    }
+                    resultadoJSON = serializer.Serialize(listaTemporal);
+                }
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "-1";
+            }
+        }
+
+        [WebMethod]
+        public static string ObtenerRegistrosIIBBProvinciaByCliente(string IdCliente)
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
+                List<Cliente_IIBB_Provincias> listaIIBB = controladorClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(Convert.ToInt32(IdCliente));
+                List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
+                foreach (var item in listaIIBB)
+                {
+                    listaTemporal.Add(new IIBBTemporal
+                    {
+                        Id = item.Id.ToString(),
+                        IdCliente = item.IdCliente.ToString(),
+                        Provincia = item.Provincia.Provincia1,
+                        Percepcion = item.Percepcion.ToString(),
+                        Retencion = item.Retencion.ToString()
+                    });
+                }
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON = serializer.Serialize(listaTemporal);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        [WebMethod]
+        public static string EliminarRegistroIIBBProvincia(string IdIIBBProvincia, string IdCliente)
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                int resultado = controladorClienteEntity.EliminarIngresoBrutoDelCliente_IIBB_Provincia(Convert.ToInt32(IdIIBBProvincia));
+
+                List<Cliente_IIBB_Provincias> listaIIBB = controladorClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(Convert.ToInt32(IdCliente));
+                List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
+                foreach (var item in listaIIBB)
+                {
+                    listaTemporal.Add(new IIBBTemporal
+                    {
+                        Id = item.Id.ToString(),
+                        IdCliente = item.IdCliente.ToString(),
+                        Provincia = item.Provincia.Provincia1,
+                        Percepcion = item.Percepcion.ToString(),
+                        Retencion = item.Retencion.ToString()
+                    });
+                }
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON = serializer.Serialize(listaTemporal);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        #endregion
     }
 }

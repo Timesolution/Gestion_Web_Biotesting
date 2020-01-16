@@ -582,6 +582,15 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox txtCuerpoMensaje;
 
         /// <summary>
+        /// lbCantidadCaracteresRestantesSMS control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCantidadCaracteresRestantesSMS;
+
+        /// <summary>
         /// lb_cantidadClientesFiltrados control.
         /// </summary>
         /// <remarks>

@@ -942,6 +942,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
         private bool ExisteFilaAndTieneDatos(DataRow fila, string nombreCampo)
         {
             try
@@ -963,6 +964,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int idFactura = Convert.ToInt32(row["id"]);
                 string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
 
                 //fila
@@ -1027,6 +1029,19 @@ namespace Gestion_Web.Formularios.Facturas
                     row["subtotal"] = Convert.ToDecimal(row["subtotal"]) * -1;
                     row["total"] = Convert.ToDecimal(row["total"]) * -1;
                 }
+
+                TableCell calSumaIIBB_Provincias = new TableCell();
+                decimal porcentajeSumaIIBB = contFactEntity.ObtenerSumaIngresosBrutosDeLasProvinciasByFactura(idFactura);
+                decimal neto = Convert.ToDecimal(row["subtotal"]);
+                calSumaIIBB_Provincias.Text = "$ 0.00";
+                if (porcentajeSumaIIBB > 0)
+                {
+                    calSumaIIBB_Provincias.Text = "$ " + Math.Round(porcentajeSumaIIBB * neto / 100, 2).ToString();
+                }
+                calSumaIIBB_Provincias.VerticalAlign = VerticalAlign.Middle;
+                calSumaIIBB_Provincias.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(calSumaIIBB_Provincias);
+
                 TableCell celNeto = new TableCell();
                 celNeto.Text = "$" + row["subtotal"].ToString();
                 //celNeto.Text = "$" + f.netoNGrabado;
@@ -1218,7 +1233,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1358,7 +1373,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true && tr.Cells[1].Text.Contains("Presupuesto"))
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -1427,7 +1442,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
@@ -1479,7 +1494,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
@@ -1512,7 +1527,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1655,7 +1670,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idsListaFacturasTildados += ch.ID.Split('_')[1] + ";";
@@ -1708,7 +1723,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
@@ -1769,7 +1784,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true && !tr.Cells[1].Text.Contains("Presupuesto") && !tr.Cells[1].Text.Contains("Nota de Credito PRP"))
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -1857,7 +1872,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1895,7 +1910,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idTildado = Convert.ToInt32(ch.ID.Split('_')[1]);
@@ -2053,7 +2068,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
 
                     if (ch.Checked)
                     {
@@ -3837,7 +3852,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idTildado = ch.ID.Split('_')[1];
@@ -3984,7 +3999,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1];
@@ -4009,7 +4024,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         facturasTildadas.Add(Convert.ToInt32(ch.ID.Split('_')[1]));

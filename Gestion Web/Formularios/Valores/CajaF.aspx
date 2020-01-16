@@ -95,8 +95,8 @@
                                 </td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
-
-                                        <a class="btn btn-primary ui-tooltip" title data-original-title="Agregar Movimiento" data-toggle="modal" href="#modalAgregar" style="width: 100%">
+                                        <asp:HiddenField ID="hiddenPermiso" runat="server" />
+                                        <a class="btn btn-primary ui-tooltip" title data-original-title="Agregar Movimiento" onclick="javascript: validarPermisoAgregarMovimientoCaja()" style="width: 100%">
                                             <i class="shortcut-icon icon-plus"></i>
                                         </a>
                                     </div>
@@ -780,6 +780,18 @@
         <script src="../../js/moment/moment.js"></script>
 
         <script>
+            function validarPermisoAgregarMovimientoCaja() {
+                var hiddenPerm = document.getElementById('<%= hiddenPermiso.ClientID%>');
+                var permvalue = hiddenPerm.value;
+                if (permvalue == 0) {
+                    //alert("Acceso Denegado!!");
+                    window.location = "../../default.aspx?m=1";
+                }
+                else {
+                    $('#modalAgregar').modal();
+                }
+            }
+
             function validarQueLaFechaSeaMenorOIgualALaActual(e) {
                 var txtFechaModalAgregarCaja = $("#<%= txtFechaModalAgregarCaja.ClientID %>");
 

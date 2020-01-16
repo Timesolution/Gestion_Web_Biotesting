@@ -10832,6 +10832,7 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCantidadImagenes.Text = item.cantidad.ToString();
                 txtCantidadImagenes.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
                 txtCantidadImagenes.CssClass = "form-control disabled";
+                txtCantidadImagenes.Width = 55;
                 txtCantidadImagenes.Attributes.Add("Disabled", "Disabled");
                 txtCantidadImagenes.TextChanged += new EventHandler(this.agregarArticuloAventa_TextChanged);
                 txtCantidadImagenes.AutoPostBack = true;

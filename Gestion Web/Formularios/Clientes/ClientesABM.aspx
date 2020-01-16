@@ -11,13 +11,13 @@
 
                     <div class="widget-header">
                         <i class="icon-pencil"></i>
-                        <%--<h3>Cliente</h3>--%>
                         <h3>
                             <asp:Label ID="labelNombre" runat="server" Text=""></asp:Label>
                             <asp:Label ID="labelNombreCliente" runat="server" Text=""></asp:Label>
+                            <asp:HiddenField ID="hiddenIdCliente" runat="server"></asp:HiddenField>
+                            <asp:HiddenField ID="hiddenOrigenCliente" runat="server"></asp:HiddenField>
                         </h3>
                     </div>
-                    <!-- /.widget-header -->
                     <div class="widget-content">
                         <div class="bs-example">
                             <ul id="myTab" class="nav nav-tabs">
@@ -1212,59 +1212,62 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <%--</ContentTemplate>
-                                        <Triggers>
-                                        </Triggers>
-                                    </asp:UpdatePanel>--%>
                                 </div>
 
                                 <div class="tab-pane fade" id="IngresosBrutos">
                                     <div role="form" class="form-horizontal col-md-12">
-                                        <%--<div class="form-group">
-                                            <label for="name" class="col-md-4">Codigo BTB</label>
-                                        </div>--%>
-                                        <asp:PlaceHolder runat="server" ID="Placeholder1">
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <div class="col-md-1">
-                                                        <label for="name">Provincia</label>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <asp:DropDownList ID="IngresosBrutos_DropList_Provincias" runat="server" class="form-control"></asp:DropDownList>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <div class="col-md-1">
-                                                        <label for="name">Percepcion</label>
-                                                    </div>
-                                                    <div class="input-group col-xs-2">
-                                                        <asp:TextBox ID="TextBox3" runat="server" Style="max-width: 100%" class="form-control" TextMode="Number"></asp:TextBox>
-                                                        <span class="input-group-addon">%</span>
-                                                    </div>
-                                                    <div class="col-ms-2">
-                                                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnCodigoBTB_Click" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </asp:PlaceHolder>
                                         <div class="form-group">
-                                            <div class="col-md-4">
+                                            <div class="col-md-12">
+                                                <div class="col-md-1">
+                                                    <label for="name">Provincia</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <asp:DropDownList ID="IngresosBrutos_DropList_Provincias" runat="server" class="form-control"></asp:DropDownList>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <div class="col-md-1">
+                                                    <asp:Label ID="lbPercepcionORetencion" Font-Bold="true" runat="server"></asp:Label>
+                                                </div>
+                                                <div class="input-group col-xs-2">
+                                                    <span class="input-group-addon">%</span>
+                                                    <asp:TextBox ID="IngresosBrutos_TxtPercepcionORetencion" Text="0" runat="server" Style="max-width: 100%; text-align:right" class="form-control" TextMode="Number"></asp:TextBox>
+                                                </div>
+                                                <div class="col-ms-2">
+                                                    <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:return AgregarALaTablaLaPercepcion()" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-5">
+                                            <div class="widget stacked widget-table">
+                                                <div class="widget-header">
+                                                    <span class="icon-external-link"></span>
+                                                    <h3>Percepciones</h3>
+                                                </div>
+                                                <div class="widget-content">
+                                                    <table class="table table-bordered table-striped" id="tabla_IngresosBrutos">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 50%">Provincia</th>
+                                                                <th style="width: 30%">
+                                                                    <asp:Label ID="lbColumnaRetencionOPercepcion" runat="server"></asp:Label>
+                                                                </th>
+                                                                <th style="width: 20%"></th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
@@ -1352,7 +1355,6 @@
                 <div class="modal-footer">
                     <asp:Button ID="btnAgregarCategoria" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarCategoria_Click" ValidationGroup="CategoriaClienteGroup" />
                 </div>
-
             </div>
         </div>
     </div>
@@ -1443,7 +1445,6 @@
         </div>
     </div>
     <%--Fin modalGrupo--%>
-
     <div id="modalVendedor" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1739,7 +1740,6 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -1748,6 +1748,8 @@
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
     <script>
+        var hiddenOrigenCliente;
+
         $(function () {
             $("#<%= txtFechaNacimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaNacimientoSMS.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -1766,6 +1768,21 @@
     <script>
         function pageLoad() {
             $("#<%= txtFechaEvento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            ObtenerRegistrosYLLenarTablaIIBB();
+
+            hiddenOrigenCliente = this.document.getElementById('<%= hiddenOrigenCliente.ClientID %>');
+            var lbPercepcionORetencion = this.document.getElementById('<%= lbPercepcionORetencion.ClientID %>');
+            var lbColumnaRetencionOPercepcion = this.document.getElementById('<%= lbColumnaRetencionOPercepcion.ClientID %>');
+
+            if (hiddenOrigenCliente.value == 1) {//es cliente mostrar solo IIBB percepcion
+                lbPercepcionORetencion.textContent = "Percepcion";
+                lbColumnaRetencionOPercepcion.textContent = "Percepcion";
+            }
+            else {
+                lbPercepcionORetencion.textContent = "Retencion";
+                lbColumnaRetencionOPercepcion.textContent = "Retencion";
+            }
         };
     </script>
 
@@ -1832,8 +1849,6 @@
         }
     </script>
 
-
-
     <script>
         //valida los campos solo numeros
         function validarNroGuion(e) {
@@ -1853,6 +1868,93 @@
                 else { return false; }
             }
             return true;
+        }
+
+        function AgregarALaTablaLaPercepcion() {
+            var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
+            var controlProvincia = document.getElementById('<%= IngresosBrutos_DropList_Provincias.ClientID %>');
+            var controlTxtPercepcionORetencion = document.getElementById('<%= IngresosBrutos_TxtPercepcionORetencion.ClientID %>');
+
+            if (controlTxtPercepcionORetencion.value == "0") {
+                return false;
+            }
+           
+            $.ajax({
+                type: "POST",
+                url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",
+                data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", provincia: "' + controlProvincia.value +
+                    '", origenCliente: "' + hiddenOrigenCliente.value + '", percepcionORetencion: "' + Math.abs(controlTxtPercepcionORetencion.value) + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar!", { type: "error" });
+                },
+                success: CargarTablaIIBB
+            });
+            controlTxtPercepcionORetencion.value = "0";
+            return false;
+        }
+
+        function ObtenerRegistrosYLLenarTablaIIBB() {
+            var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
+
+            $.ajax({
+                type: "POST",
+                url: "ClientesABM.aspx/ObtenerRegistrosIIBBProvinciaByCliente",
+                data: '{ IdCliente: "' + controlHiddenIdCliente.value + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar !", { type: "error" });
+                }
+                ,
+                success: CargarTablaIIBB
+            });
+            return false;
+        }
+
+        function CargarTablaIIBB(response) {
+            var data = response.d;
+            var obj = JSON.parse(data);
+
+            if (obj == "-2") {
+                $.msgbox("Provincia ya existente", { type: "error" });
+                return false;
+            }
+
+            $('#tabla_IngresosBrutos').find("tr:gt(0)").remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                var percepcionORetencion = 0;
+                percepcionORetencion = obj[i].Retencion;
+                if (hiddenOrigenCliente.value == "1") {
+                    percepcionORetencion = obj[i].Percepcion;
+                }
+                $('#tabla_IngresosBrutos').append(
+                    "<tr>" +
+                    "<td> " + obj[i].Provincia + "</td>" +
+                    '<td style="text-align:right">' + percepcionORetencion + "</td>" +
+                    '<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
+                    "</tr> ");
+            };
+        }
+
+        function EliminarRegistroDeTabla(IdIIBBProvincia, IdCliente) {
+            $.ajax({
+                type: "POST",
+                url: "ClientesABM.aspx/EliminarRegistroIIBBProvincia",
+                data: '{ IdIIBBProvincia: "' + IdIIBBProvincia + '", IdCliente: "' + IdCliente + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    $.msgbox("No se pudo filtrar !", { type: "error" });
+                }
+                ,
+                success: CargarTablaIIBB
+            });
         }
     </script>
 
