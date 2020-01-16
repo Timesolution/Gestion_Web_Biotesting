@@ -1338,6 +1338,8 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param12 = new ReportParameter("ParamReimprime", this.original.ToString());
 
                 ReportParameter param13 = new ReportParameter("ParamSucursal", sucursalOrigen.nombre);
+                ReportParameter param14 = new ReportParameter("ParamSucursalDir", sucursalOrigen.direccion);
+
 
                 ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
 
@@ -1394,6 +1396,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param11);
                 this.ReportViewer1.LocalReport.SetParameters(param12);
                 this.ReportViewer1.LocalReport.SetParameters(param13);
+                this.ReportViewer1.LocalReport.SetParameters(param14);
 
                 this.ReportViewer1.LocalReport.SetParameters(param32);
 
