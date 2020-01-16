@@ -760,6 +760,24 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.Button btnCancelar;
         
         /// <summary>
+        /// lblArtTotales1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblArtTotales1;
+        
+        /// <summary>
+        /// lblArtTotales2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblArtTotales2;
+        
+        /// <summary>
         /// ReportViewer1 control.
         /// </summary>
         /// <remarks>
