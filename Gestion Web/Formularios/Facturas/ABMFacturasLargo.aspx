@@ -675,7 +675,7 @@
                                                                     <div class="col-md-9">
                                                                         <div class="input-group">
                                                                             <span class="input-group-addon">$</span>
-                                                                            <asp:TextBox ID="txtTotal" Style="text-align: right" runat="server" class="form-control" Text="0.00" disabled Font-Bold="True"></asp:TextBox>
+                                                                            <asp:TextBox ID="txtTotal" Style="text-align: right" runat="server" class="form-control" onchange="javascript:return ActualizarTotalArticulos();" Text="0.00" disabled Font-Bold="True"></asp:TextBox>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -774,13 +774,17 @@
                                 <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
                                     <ContentTemplate>
                                         <div role="form" class="form-horizontal col-md-12">
-                                            <div class="col-md-12">
+                                            <div class="col-md-8">
                                                 <asp:Button ID="btnAgregar" runat="server" Text="Facturar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="FacturaGroup" />
                                                 <a class="btn btn-success" data-toggle="modal" href="#modalFacturaE" runat="server" id="btnFacturaE" visible="false">Siguiente</a>
                                                 <asp:Button ID="btnAgregarRemitir" runat="server" Text="Facturar y Remitir" class="btn btn-success" ValidationGroup="FacturaGroup" OnClick="btnAgregarRemitir_Click" />
                                                 <asp:Button ID="btnNueva" Visible="false" runat="server" Text="Nueva Factura" class="btn btn-success" OnClick="btnNueva_Click" />
                                                 <asp:Button ID="btnRefacturar" runat="server" Visible="false" Text="Refacturar" CssClass="btn btn-success" OnClick="btnRefacturar_Click" />
                                                 <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="~/Default.aspx" />
+                                            </div>
+                                            <div class="alert alert-warning alert-dismissable col-sm-4" style="text-align:center">
+                                                <asp:Label runat="server" ID="lblArtTotales1" Font-Bold="true"  >Articulos Totales: </asp:Label>
+                                                <asp:Label runat="server" ID="lblArtTotales2" Font-Bold="true"  >0</asp:Label>
                                             </div>
                                         </div>
                                     </ContentTemplate>
@@ -2606,6 +2610,14 @@
         }
     </script>
     <script>
+        function ActualizarTotalArticulos() {
+            var cant = 0;
+            for (var i = 1; i < document.getElementById('articulosTabla').rows.length; i++) {
+                cant += document.getElementById('articulosTabla').rows[i].cells[1].childNodes[0].value;
+            }
+            document.getElementById('<%= lblArtTotales2%>').value = cant;
+            return false;
+        }
 
         function createC() {
             //var d = document.getElementById("TheBody_txtDescripcion").value;
