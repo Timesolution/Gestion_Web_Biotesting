@@ -3392,6 +3392,7 @@
     <EmbeddedResource Include="Formularios\Valores\ChequesR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ChequesR_2.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ComprobanteCajaR.rdlc" />
+    <EmbeddedResource Include="Formularios\Valores\GastosR_ByEmpAndSucAndCuentaContable.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\GastosR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\InformeCierresR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\PagaresR.rdlc" />
