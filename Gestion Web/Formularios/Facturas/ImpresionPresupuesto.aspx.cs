@@ -356,7 +356,7 @@ namespace Gestion_Web.Formularios.Facturas
                 String codBarra = String.Empty;
                 String fechaVto = string.Empty;
                 String cotizacionFecha = String.Empty;
-
+                string fechaV = string.Empty;
                 //levanto los datos de la factura
                 var drDatosFactura = dtDetalle.Rows[0];
                 if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["CondicionIva"].ToString()))
@@ -447,6 +447,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (pv.FacturaPyme == 1)
                     {
                         CodigoDoc = "Cod. 201";
+                        fechaV = Convert.ToDateTime(dtDetalle.Rows[0]["Fecha"]).AddDays(fact.cliente.vencFC).ToString("dd/MM/yyyy");
                     }
                     else
                     {
@@ -617,7 +618,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
                 ReportParameter param3 = new ReportParameter("Descuento", descuento.ToString("C"));
                 ReportParameter param03 = new ReportParameter("ParamSucFact", sucursalFact);//sucursalFact                
-
+                ReportParameter param4c = new ReportParameter("FechaVen", fechaV);
                 ReportParameter param31 = new ReportParameter("ParamRetencion", retencion.ToString("C"));
                 ReportParameter param31a = new ReportParameter("ParamNoGravado", conceptos.ToString("C"));//Conc No Grav
                 //logo
@@ -691,6 +692,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.ReportViewer1.LocalReport.SetParameters(param3b);
                 this.ReportViewer1.LocalReport.SetParameters(param4b);
+                this.ReportViewer1.LocalReport.SetParameters(param4c);
 
                 this.ReportViewer1.LocalReport.SetParameters(param5);
                 this.ReportViewer1.LocalReport.SetParameters(param6);
