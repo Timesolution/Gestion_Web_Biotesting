@@ -3968,10 +3968,6 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
                     }
-                    if (this.checkFacturaCredito.Checked == true)
-                    {
-                        fact.comentario += " - Fecha de vencimiento: " + fact.fecha.AddDays(fact.cliente.vencFC);
-                    }
                     //facturo
                     int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
                     if (i > 0)
