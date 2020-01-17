@@ -5,7 +5,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
-
         <div class="container">
 
             <div class="row">
@@ -15,6 +14,7 @@
                         <div class="widget-content">
                             <asp:UpdatePanel ID="UpdatePanel2" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
+                                    <asp:HiddenField ID="HiddenField_IdCliente" runat="server" />
                                     <div class="col-md-12" style="padding: 0px;">
                                         <table class="table table-striped table-bordered">
                                             <thead>
@@ -413,49 +413,59 @@
                                                                 <tr>
                                                                     <td>
                                                                         <asp:PlaceHolder ID="phDatosEntrega" Visible="false" runat="server">
-                                                                            <div class="form-group">
-                                                                                <label class="col-md-3">Ticket de cambio:</label>
+                                                                            <asp:UpdatePanel ID="UpdatePanel123" UpdateMode="Always" runat="server">
+                                                                                <ContentTemplate>
+                                                                                    <div class="form-group">
+                                                                                        <label class="col-md-3">Ticket de cambio:</label>
 
-                                                                                <div class="col-md-1">
-                                                                                    <asp:CheckBox ID="chkImprimirTicketDeCambio" runat="server" />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label class="col-md-3">Fecha Entrega: </label>
-
-                                                                                <div class="col-md-4">
-                                                                                    <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label class="col-md-3">Hora Entrega: </label>
-                                                                                <div class="col-md-4">
-                                                                                    <asp:TextBox ID="txtHorarioEntrega" runat="server" class="form-control"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label class="col-md-3">Bultos Entrega: </label>
-                                                                                <div class="col-md-4">
-                                                                                    <asp:TextBox ID="txtBultosEntrega" runat="server" class="form-control"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <label class="col-md-3">Mail Entrega: </label>
-                                                                                <div class="col-md-4">
-                                                                                    <div class="input-group">
-                                                                                        <span class="input-group-addon">@</span>
-                                                                                        <asp:TextBox ID="txtMailEntrega" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Puede enviar a varios destinatarios separando las casillas de correo por punto y coma (;). Ej.: Mail1@gmail.com;Mail2@yahoo.com;..." title="" data-original-title="Ayuda"></asp:TextBox>
+                                                                                        <div class="col-md-1">
+                                                                                            <asp:CheckBox ID="chkImprimirTicketDeCambio" runat="server" />
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-md-2">
-                                                                                    <asp:CheckBox ID="chkEnviarMail" runat="server" AutoPostBack="true" Text="Enviar mail" OnCheckedChanged="chkEnviarMail_CheckedChanged" />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group">
-                                                                                <div class="col-md-12">
-                                                                                    <asp:TextBox placeholder="AGREGUE AQUI OBSERVACIONES" ID="txtComentarios" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
+                                                                                    <div class="form-group" style="display: normal">
+                                                                                        <label class="col-md-3">Domicilio Entrega:</label>
+                                                                                        <div class="col-md-4">
+                                                                                            <asp:DropDownList ID="dropList_DomicilioEntrega" OnSelectedIndexChanged="DropList_DomicilioDeEntrega_SelectIndexChanged" runat="server" AutoPostBack="true" class="form-control"></asp:DropDownList>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label class="col-md-3">Fecha Entrega: </label>
+
+                                                                                        <div class="col-md-4">
+                                                                                            <asp:TextBox ID="txtFechaEntrega" runat="server" class="form-control"></asp:TextBox>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group" style="display: none">
+                                                                                        <label class="col-md-3">Hora Entrega:</label>
+                                                                                        <div class="col-md-4">
+                                                                                            <asp:TextBox ID="txtHorarioEntrega" runat="server" class="form-control"></asp:TextBox>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group" style="display: none">
+                                                                                        <label class="col-md-3">Bultos Entrega: </label>
+                                                                                        <div class="col-md-4">
+                                                                                            <asp:TextBox ID="txtBultosEntrega" runat="server" class="form-control"></asp:TextBox>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label class="col-md-3">Mail Entrega: </label>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="input-group">
+                                                                                                <span class="input-group-addon">@</span>
+                                                                                                <asp:TextBox ID="txtMailEntrega" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Puede enviar a varios destinatarios separando las casillas de correo por punto y coma (;). Ej.: Mail1@gmail.com;Mail2@yahoo.com;..." title="" data-original-title="Ayuda"></asp:TextBox>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-2">
+                                                                                            <asp:CheckBox ID="chkEnviarMail" runat="server" AutoPostBack="true" Text="Enviar mail" OnCheckedChanged="chkEnviarMail_CheckedChanged" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-md-12">
+                                                                                            <asp:TextBox placeholder="AGREGUE AQUI OBSERVACIONES" ID="txtComentarios" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </ContentTemplate>
+                                                                            </asp:UpdatePanel>
                                                                         </asp:PlaceHolder>
 
                                                                         <div class="col-md-12">
