@@ -307,13 +307,13 @@ namespace Gestion_Web.Formularios.Articulos
                 ReportParameter rp = new ReportParameter("ParamFecha", fecha);
 
                 controladorSucursal cont = new controladorSucursal();
-                var suc = cont.obtenerSucursalID(this.sucursal);
-                ReportParameter rp2 = new ReportParameter("ParamSucursal", suc.nombre);
+                //var suc = cont.obtenerSucursalID(this.sucursal);
+                //ReportParameter rp2 = new ReportParameter("ParamSucursal", suc.nombre);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.SetParameters(rp);
-                this.ReportViewer1.LocalReport.SetParameters(rp2);
+                //this.ReportViewer1.LocalReport.SetParameters(rp2);
 
                 Warning[] warnings;
 
@@ -351,9 +351,9 @@ namespace Gestion_Web.Formularios.Articulos
 
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Log.EscribirSQL(1, "Error", "Error al sacar reporte de stock pendiente " + ex.Message);
             }
         }
 
