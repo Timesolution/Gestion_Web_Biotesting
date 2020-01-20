@@ -297,11 +297,11 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
                 }
-                var stock = contArticulos.obtenerStocksArticulosBySucConArticulosPendientes(sucursal, grupo, subgrupo, proveedor, sdias, ceros, marca, this.inactivos);
+                var stock = contArticulos.obtenerStocksArticulosBySucConArticulosPendientes(sucursal, grupo, subgrupo, proveedor, sdias, ceros, marca);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ReporteStockR.rdlc");
-                ReportDataSource rds = new ReportDataSource("DSStocks", stock);
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ReporteStockPendienteR.rdlc");
+                ReportDataSource rds = new ReportDataSource("DsStocks", stock);
 
                 string fecha = DateTime.Today.ToString("dd/MM/yyyy");
                 ReportParameter rp = new ReportParameter("ParamFecha", fecha);
