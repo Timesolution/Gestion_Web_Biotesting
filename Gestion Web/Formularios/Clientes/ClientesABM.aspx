@@ -6,9 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
                 <div class="widget stacked ">
-
                     <div class="widget-header">
                         <i class="icon-pencil"></i>
                         <h3>
@@ -22,20 +20,20 @@
                         <div class="bs-example">
                             <ul id="myTab" class="nav nav-tabs">
                                 <li class="active"><a href="#home" data-toggle="tab">Datos</a></li>
-                                <li class=""><a href="#profile" data-toggle="tab">Direccion</a></li>
-                                <li class=""><a href="#Contacto" data-toggle="tab">Contacto</a></li>
-                                <li class=""><a href="#Expreso" id="linkSucursales" runat="server" visible="false" data-toggle="tab">Cliente interno</a></li>
-                                <li class=""><a href="#Expreso2" id="linkExpreso" runat="server" visible="false" data-toggle="tab">Expreso</a></li>
-                                <li class=""><a href="#Entregas" id="linkEntregas" runat="server" visible="false" data-toggle="tab">Entregas</a></li>
-                                <li class=""><a href="#Exportacion" id="linkExportacion" runat="server" visible="false" data-toggle="tab">Exportacion</a></li>
-                                <li class=""><a href="#Millas" id="linkMillas" runat="server" data-toggle="tab" visible="false">Millas</a></li>
-                                <li class=""><a href="#Eventos" id="linkEventos" runat="server" data-toggle="tab" visible="false">Eventos</a></li>
-                                <li class=""><a href="#Empleado" id="linkEmpleado" runat="server" visible="false" data-toggle="tab">Cliente Empleado</a></li>
-                                <li class=""><a href="#Familia" id="linkFamilia" runat="server" data-toggle="tab" visible="false">Familia</a></li>
-                                <li class=""><a href="#Ganancias" id="linkGanancias" runat="server" data-toggle="tab" visible="false">Ganancias</a></li>
-                                <li class=""><a href="#OrdenesCompra" id="linkOrdenesCompra" runat="server" data-toggle="tab" visible="false">Orden de Compra</a></li>
-                                <li class=""><a href="#CodigoBTB" id="linkCodigoBTB" runat="server" data-toggle="tab" visible="false">Codigo BTB</a></li>
-                                <li class=""><a href="#IngresosBrutos" id="linkIngresosBrutos" runat="server" data-toggle="tab" visible="true">Ingresos Brutos</a></li>
+                                <li><a href="#profile" data-toggle="tab">Direccion</a></li>
+                                <li><a href="#Contacto" data-toggle="tab">Contacto</a></li>
+                                <li><a href="#Expreso" id="linkSucursales" runat="server" visible="false" data-toggle="tab">Cliente interno</a></li>
+                                <li><a href="#Expreso2" id="linkExpreso" runat="server" visible="false" data-toggle="tab">Expreso</a></li>
+                                <li><a href="#Entregas" id="linkEntregas" runat="server" visible="false" data-toggle="tab">Entregas</a></li>
+                                <li><a href="#Exportacion" id="linkExportacion" runat="server" visible="false" data-toggle="tab">Exportacion</a></li>
+                                <li><a href="#Millas" id="linkMillas" runat="server" data-toggle="tab" visible="false">Millas</a></li>
+                                <li><a href="#Eventos" id="linkEventos" runat="server" data-toggle="tab" visible="false">Eventos</a></li>
+                                <li><a href="#Empleado" id="linkEmpleado" runat="server" visible="false" data-toggle="tab">Cliente Empleado</a></li>
+                                <li><a href="#Familia" id="linkFamilia" runat="server" data-toggle="tab" visible="false">Familia</a></li>
+                                <li><a href="#Ganancias" id="linkGanancias" runat="server" data-toggle="tab" visible="false">Ganancias</a></li>
+                                <li><a href="#OrdenesCompra" id="linkOrdenesCompra" runat="server" data-toggle="tab" visible="false">Orden de Compra</a></li>
+                                <li><a href="#CodigoBTB" id="linkCodigoBTB" runat="server" data-toggle="tab" visible="false">Codigo BTB</a></li>
+                                <li><a href="#IngresosBrutos" id="linkIngresosBrutos" runat="server" data-toggle="tab" visible="true">IIBB Otras Jurisdicciones</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade active in" id="home">
@@ -156,27 +154,17 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label for="name" class="col-md-4">Ingresos Brutos</label>
+                                                        <label for="name" class="col-md-4">IIBB Pcia. Bs. As.</label>
                                                         <div class="col-md-4">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">%</span>
                                                                 <asp:TextBox ID="txtIngBrutos" runat="server" class="form-control" Style="text-align: right" Text="0"></asp:TextBox>
-
                                                             </div>
                                                         </div>
                                                         <div class="col-md-1">
                                                             <asp:LinkButton ID="btnActualizarIngrBrutos" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" OnClick="btnActualizarIngrBrutos_Click" />
-                                                            <%--<a class="btn btn-info" data-toggle="modal" href="#modalDescuentos">
-                                                                    <i class="shortcut-icon icon-plus"></i>
-                                                                </a>--%>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator35" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDescFC" ValidationGroup="ClienteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
-                                                        </div>
-                                                        <div class="col-md-4">
                                                         </div>
                                                     </div>
-
 
                                                     <div class="form-group">
                                                         <label for="name" class="col-md-4">Saldo Maximo</label>
@@ -1230,6 +1218,20 @@
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <div class="col-md-1">
+                                                    <label for="name">Modo</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <asp:DropDownList ID="IngresosBrutos_DropList_Modo" runat="server" class="form-control">
+                                                        <asp:ListItem Value="0" Text="Siempre"></asp:ListItem>
+                                                        <asp:ListItem Value="1" Text="Segun domicilio de entrega"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <div class="col-md-1">
                                                     <asp:Label ID="lbPercepcionORetencion" Font-Bold="true" runat="server"></asp:Label>
                                                 </div>
                                                 <div class="input-group col-xs-2">
@@ -1246,16 +1248,17 @@
                                             <div class="widget stacked widget-table">
                                                 <div class="widget-header">
                                                     <span class="icon-external-link"></span>
-                                                    <h3>Percepciones</h3>
+                                                    <h3 ID="lbPercepcionORetencionTituloTabla" Font-Bold="true" runat="server"></h3>
                                                 </div>
                                                 <div class="widget-content">
                                                     <table class="table table-bordered table-striped" id="tabla_IngresosBrutos">
                                                         <thead>
                                                             <tr>
                                                                 <th style="width: 50%">Provincia</th>
-                                                                <th style="width: 30%">
+                                                                <th style="width: 10%">
                                                                     <asp:Label ID="lbColumnaRetencionOPercepcion" runat="server"></asp:Label>
                                                                 </th>
+                                                                <th>Modo</th>
                                                                 <th style="width: 20%"></th>
                                                             </tr>
                                                         </thead>
@@ -1773,15 +1776,18 @@
 
             hiddenOrigenCliente = this.document.getElementById('<%= hiddenOrigenCliente.ClientID %>');
             var lbPercepcionORetencion = this.document.getElementById('<%= lbPercepcionORetencion.ClientID %>');
+            var lbPercepcionORetencionTituloTabla = this.document.getElementById('<%= lbPercepcionORetencionTituloTabla.ClientID %>');
             var lbColumnaRetencionOPercepcion = this.document.getElementById('<%= lbColumnaRetencionOPercepcion.ClientID %>');
 
             if (hiddenOrigenCliente.value == 1) {//es cliente mostrar solo IIBB percepcion
                 lbPercepcionORetencion.textContent = "Percepcion";
                 lbColumnaRetencionOPercepcion.textContent = "Percepcion";
+                lbPercepcionORetencionTituloTabla.textContent = "Percepciones";
             }
             else {
                 lbPercepcionORetencion.textContent = "Retencion";
                 lbColumnaRetencionOPercepcion.textContent = "Retencion";
+                lbPercepcionORetencionTituloTabla.textContent = "Retenciones";
             }
         };
     </script>
@@ -1936,6 +1942,7 @@
                     "<tr>" +
                     "<td> " + obj[i].Provincia + "</td>" +
                     '<td style="text-align:right">' + percepcionORetencion + "</td>" +
+                    '<td style="text-align:right">' + Modo + "</td>" +
                     '<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
                     "</tr> ");
             };

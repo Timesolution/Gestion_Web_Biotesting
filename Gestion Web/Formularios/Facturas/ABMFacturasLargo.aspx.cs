@@ -1829,6 +1829,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     CargarIngresosBrutos(idCliente);
+                    HiddenField_IdCliente.Value = idCliente.ToString();
 
                     //cargar forma venta si es porcentual
                     try
@@ -1923,10 +1924,7 @@ namespace Gestion_Web.Formularios.Facturas
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No tiene permiso para facturarle a un cliente interno!"));
                         }
                     }
-
-
                 }
-
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra cliente "));
@@ -1938,22 +1936,68 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        protected void DropList_DomicilioDeEntrega_SelectIndexChanged(object sender, EventArgs e)
+        {
+            CargarIngresosBrutos(Convert.ToInt32(HiddenField_IdCliente.Value));
+        }
 
         private void CargarIngresosBrutos(int idCliente)
         {
             try
             {
-                var IIBB_Provincia = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
-                decimal sumaIngresosBrutos = 0;
-                foreach (var item in IIBB_Provincia)
-                {
-                    sumaIngresosBrutos += item.Percepcion;
-                }
-                this.txtPorcRetencion.Text = sumaIngresosBrutos.ToString();
+                decimal ingresosBrutos = 0;
+                decimal percepcionBSAS = (decimal)this.contClienteEntity.obtenerIngresosBrutoCliente(idCliente).Percepcion;
+                ingresosBrutos = percepcionBSAS;
+                ingresosBrutos += ObtenerEl_IIBB_ProvinciasConModo_Siempre_(idCliente);
+                ingresosBrutos += ObtenerEl_IIBB_ProvinciasSegunDomicilioEntregaSeleccionado_Y_SuModoSea_SEGUN_PROVINCIA(idCliente);
+
+                this.txtPorcRetencion.Text = ingresosBrutos.ToString();
             }
             catch (Exception ex)
             {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en CargarIngresosBrutos(). " + ex.Message));
+            }
+        }
 
+        private decimal ObtenerEl_IIBB_ProvinciasConModo_Siempre_(int idCliente)
+        {
+            try
+            {
+                decimal sumaIngresosBrutos = 0;
+                var IIBB_Provincia = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+
+                sumaIngresosBrutos = IIBB_Provincia.Where(x => x.Modo == "Siempre").Select(i => i.Percepcion).Sum();
+
+                return sumaIngresosBrutos;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        private decimal ObtenerEl_IIBB_ProvinciasSegunDomicilioEntregaSeleccionado_Y_SuModoSea_SEGUN_PROVINCIA(int idCliente)
+        {
+            try
+            {
+                decimal sumaIngresosBrutos = 0;
+
+                if (dropList_DomicilioEntrega.SelectedValue != "Seleccione" && !string.IsNullOrWhiteSpace(dropList_DomicilioEntrega.SelectedValue))
+                {
+                    var IIBB_Provincia = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+                    foreach (var item in IIBB_Provincia)
+                    {
+                        if (item.Provincia.Provincia1 == dropList_DomicilioEntrega.SelectedValue.ToUpper())
+                        {
+                            sumaIngresosBrutos += item.Percepcion;
+                        }
+                    }
+                }
+                return sumaIngresosBrutos;
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
 
@@ -2615,6 +2659,37 @@ namespace Gestion_Web.Formularios.Facturas
                     Text = "Credito",
                     Value = "0"
                 });
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void CargarDropList_DireccionesDeEntregaDelCliente(int idCliente)
+        {
+            try
+            {
+                var direcciones = contCliente.obtenerDireccionesById(idCliente);
+
+                dropList_DomicilioEntrega.Items.Clear();
+
+                dropList_DomicilioEntrega.Items.Add(new ListItem("Seleccione", "Seleccione"));
+                foreach (DataRow item in direcciones.Rows)
+                {
+                    if (item.ItemArray[0].ToString() == "Entrega")
+                    {
+                        dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
+                    }
+                }
+                if (dropList_DomicilioEntrega.Items.Count > 0)
+                {
+
+                }
+                else
+                {
+
+                }
             }
             catch (Exception ex)
             {
@@ -5271,12 +5346,14 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarCliente((int)usuario_cliente.IdCliente);
                 this.obtenerNroFactura();
 
+                CargarDropList_DireccionesDeEntregaDelCliente((int)usuario_cliente.IdCliente);
             }
             catch
             {
 
             }
         }
+
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));

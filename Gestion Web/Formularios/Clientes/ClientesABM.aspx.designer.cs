@@ -1536,6 +1536,15 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.DropDownList IngresosBrutos_DropList_Provincias;
 
         /// <summary>
+        /// IngresosBrutos_DropList_Modo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList IngresosBrutos_DropList_Modo;
+
+        /// <summary>
         /// lbPercepcionORetencion control.
         /// </summary>
         /// <remarks>
@@ -1561,6 +1570,15 @@ namespace Gestion_Web.Formularios.Clientes
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+
+        /// <summary>
+        /// lbPercepcionORetencionTituloTabla control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lbPercepcionORetencionTituloTabla;
 
         /// <summary>
         /// lbColumnaRetencionOPercepcion control.
