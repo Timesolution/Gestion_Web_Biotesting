@@ -57,6 +57,7 @@ namespace Gestion_Web.Formularios.Clientes
             public string Provincia { get; set; }
             public string Percepcion { get; set; }
             public string Retencion { get; set; }
+            public string Modo { get; set; }
             public string IdCliente { get; set; }
         }
 
@@ -702,18 +703,14 @@ namespace Gestion_Web.Formularios.Clientes
                 this.ListProvincia.DataSource = controladorPais.obtenerPRovincias();
                 this.ListProvincia.DataValueField = "Provincia";
                 this.ListProvincia.DataTextField = "Provincia";
-
                 this.ListProvincia.DataBind();
                 this.ListProvincia.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
                 this.IngresosBrutos_DropList_Provincias.DataSource = controladorPais.obtenerPRovincias();
                 this.IngresosBrutos_DropList_Provincias.DataValueField = "Provincia";
                 this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia";
-                this.IngresosBrutos_DropList_Provincias.Items.Insert(0, new ListItem("Seleccione...", "-1"));
                 this.IngresosBrutos_DropList_Provincias.DataBind();
-
-                //cargo la localidad
-                //this.cargarLocalidades(this.ListProvincia.SelectedValue);
+                this.IngresosBrutos_DropList_Provincias.Items.RemoveAt(0);
             }
             catch (Exception ex)
             {
@@ -3967,7 +3964,8 @@ namespace Gestion_Web.Formularios.Clientes
                             IdCliente = item.IdCliente.ToString(),
                             Provincia = item.Provincia.Provincia1,
                             Percepcion = item.Percepcion.ToString(),
-                            Retencion = item.Retencion.ToString()
+                            Retencion = item.Retencion.ToString(),
+                            Modo = item.Modo
                         });
                     }
                     resultadoJSON = serializer.Serialize(listaTemporal);

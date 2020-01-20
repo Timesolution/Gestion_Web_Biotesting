@@ -23,7 +23,6 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
 
                     <div class="widget-content">
                         <table style="width: 100%">
@@ -34,11 +33,9 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="lbtnaTarjeta" runat="server" Visible="false" data-toggle="modal" href="#modalConfirmacion">Mover caja Efectivo - Tarjeta</asp:LinkButton>
-
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnaEfectivo" runat="server" Visible="false" data-toggle="modal" href="#modalConfirmacion2">Mover caja Tarjeta - Efectivo</asp:LinkButton>
-
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar a Excel</asp:LinkButton>
@@ -60,7 +57,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <!-- /btn-group -->
                                 </td>
                                 <td style="width: 65%">
                                     <h5>

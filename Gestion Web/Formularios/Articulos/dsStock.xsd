@@ -88,6 +88,9 @@
               <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:string" minOccurs="0" />
               <xs:element name="Sucursal" msprop:Generator_ColumnVarNameInTable="columnSucursal" msprop:Generator_ColumnPropNameInRow="Sucursal" msprop:Generator_ColumnPropNameInTable="SucursalColumn" msprop:Generator_UserColumnName="Sucursal" type="xs:string" minOccurs="0" />
               <xs:element name="codigo" msprop:Generator_ColumnVarNameInTable="columncodigo" msprop:Generator_ColumnPropNameInRow="codigo" msprop:Generator_ColumnPropNameInTable="codigoColumn" msprop:Generator_UserColumnName="codigo" type="xs:string" minOccurs="0" />
+              <xs:element name="Grupo" msprop:Generator_ColumnVarNameInTable="columnGrupo" msprop:Generator_ColumnPropNameInRow="Grupo" msprop:Generator_ColumnPropNameInTable="GrupoColumn" msprop:Generator_UserColumnName="Grupo" type="xs:string" minOccurs="0" />
+              <xs:element name="SubGrupo" msprop:Generator_ColumnVarNameInTable="columnSubGrupo" msprop:Generator_ColumnPropNameInRow="SubGrupo" msprop:Generator_ColumnPropNameInTable="SubGrupoColumn" msprop:Generator_UserColumnName="SubGrupo" type="xs:string" minOccurs="0" />
+              <xs:element name="Marca" msprop:Generator_ColumnVarNameInTable="columnMarca" msprop:Generator_ColumnPropNameInRow="Marca" msprop:Generator_ColumnPropNameInTable="MarcaColumn" msprop:Generator_UserColumnName="Marca" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

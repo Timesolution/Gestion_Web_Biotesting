@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.Valores
         ControladorBanco contBanco = new ControladorBanco();
 
         private int suc;
+        private int idEmpresa;
         private int ptoVenta;
         private string fechaD;
         private string fechaH;
@@ -69,6 +70,7 @@ namespace Gestion_Web.Formularios.Valores
                     this.estadoCh = Convert.ToInt32(Request.QueryString["e"]);
                     this.idSucPago = Convert.ToInt32(Request.QueryString["SP"]);
 
+                    this.idEmpresa = Convert.ToInt32(Request.QueryString["idEmp"]);
                     this.suc = Convert.ToInt32(Request.QueryString["S"]);
                     this.ptoVenta = Convert.ToInt32(Request.QueryString["PV"]);
                     this.tipoPago = Convert.ToInt32(Request.QueryString["TP"]);
@@ -132,6 +134,10 @@ namespace Gestion_Web.Formularios.Valores
                     if (accion == 11)
                     {
                         generarReporte11(); //Remesa
+                    }
+                    if (accion == 12)
+                    {
+                        generarReporte12(); //Reporte gastos por empresa
                     }
                 }
 
@@ -506,7 +512,6 @@ namespace Gestion_Web.Formularios.Valores
                 
                 ControladorCaja contCaja = new ControladorCaja();
                 DataTable dtGastos = contCaja.obtenerGastosCajaBySuc(desde.ToString(), hasta.ToString(), this.suc);
-
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("GastosR.rdlc");
@@ -1459,6 +1464,58 @@ namespace Gestion_Web.Formularios.Valores
                 }
             }
             catch (Exception Ex)
+            {
+
+            }
+        }
+
+        private void generarReporte12()
+        {
+            try
+            {
+                DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
+                DateTime hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));
+                hasta = hasta.AddHours(23).AddMinutes(59).AddSeconds(59);//23:59:00hs
+
+                ControladorCaja contCaja = new ControladorCaja();
+                DataTable dtGastos = contCaja.obtenerGastosCajaByEmpAndSuc(desde.ToString(), hasta.ToString(), this.suc, this.idEmpresa);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("GastosR_ByEmpAndSucAndCuentaContable.rdlc");
+
+                ReportDataSource rds = new ReportDataSource("DatosGastos", dtGastos);
+
+                ReportParameter param1 = new ReportParameter("ParamDesde", this.fechaD);
+                ReportParameter param2 = new ReportParameter("ParamHasta", this.fechaH);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param1);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get xls content
+                Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                String filename = string.Format("{0}.{1}", "Gastos", "xls");
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/ms-excel";
+                this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                this.Response.BinaryWrite(xlsContent);
+
+                this.Response.End();
+            }
+            catch (Exception ex)
             {
 
             }

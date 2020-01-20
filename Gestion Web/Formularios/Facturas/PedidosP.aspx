@@ -108,7 +108,7 @@
                                     </a>
                                 </div>
                             </td>
-                            <td style="width: 5%" >
+                            <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
                                     <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%" runat="server" id="iconoBusqueda">
                                         <i class="shortcut-icon icon-filter"></i>
@@ -180,7 +180,31 @@
                                         <th>Lineas</th>
                                         <th>Bultos</th>
                                         <th>Tiempo</th>
-                                        <th></th>
+                                        <th>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
+                                                            <ContentTemplate>
+                                                                <asp:LinkButton ID="LinkButton2" runat="server" Text="<span class='shortcut-icon icon-check'></span>" class="btn btn-success" OnClientClick="javascript:CheckAll();" />
+                                                            </ContentTemplate>
+                                                            <Triggers>
+                                                            </Triggers>
+                                                        </asp:UpdatePanel>
+                                                    </td>
+                                                    <td>
+                                                        <asp:UpdatePanel ID="UpdatePanel8" UpdateMode="Always" runat="server">
+                                                            <ContentTemplate>
+                                                                <asp:LinkButton ID="LinkButton3" runat="server" Text="<span class='shortcut-icon icon-remove'></span>" class="btn btn-success" OnClientClick="javascript:CheckNone();" />
+                                                            </ContentTemplate>
+                                                            <Triggers>
+                                                            </Triggers>
+                                                        </asp:UpdatePanel>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </th>
                                     </tr>
 
                                 </thead>
@@ -546,11 +570,11 @@
                             <asp:LinkButton ID="lbtnImprimirCantidadNeto" runat="server" class="btn btn-success" Text="Imprimir" OnClick="lbtnImprimirCantidadNeto_Click" ValidationGroup="CantidadGroup" />
                             <asp:LinkButton ID="lbtnExportarCantidadNeto" runat="server" class="btn btn-success" Text="Exportar" OnClick="lbtnExportarCantidadNeto_Click" ValidationGroup="CantidadGroup" />
 
-                           
+
                         </div>
                         <div class="modal-footer">
-                             <asp:LinkButton ID="lbtnImprimirPedCliente" runat="server" class="btn btn-success" Text="Imprimir Por Clientes" OnClick="lbtnImprimirPedCliente_Click" ValidationGroup="CantidadGroup" />
-                            </div>
+                            <asp:LinkButton ID="lbtnImprimirPedCliente" runat="server" class="btn btn-success" Text="Imprimir Por Clientes" OnClick="lbtnImprimirPedCliente_Click" ValidationGroup="CantidadGroup" />
+                        </div>
                     </div>
 
                 </div>
@@ -649,7 +673,7 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListClientesFamilia" InitialValue="-1" ValidationGroup="BusquedaFamiliaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label class="col-md-3">Estado</label>
                                         <div class="col-md-6">
@@ -714,38 +738,56 @@
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
     <script>
+        function CheckAll() {
+            var total = 0;
+            for (var i = 1; i < document.getElementById('dataTablesP-example').rows.length; i++) {
+                document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = true;
+            }
+        }
+    </script>
+
+    <script>
+            function CheckNone() {
+                var total = 0;
+                for (var i = 1; i < document.getElementById('dataTablesP-example').rows.length; i++) {
+                    document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = false;
+                }
+            }
+    </script>
+
+    <script>
 
 
-        $(function () {
-            $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaDesdeCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaDesdeCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaHastaCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaHastaCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaDesdeFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaDesdeFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-        $(function () {
-            $("#<%= txtFechaHastaFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaHastaFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
     </script>
