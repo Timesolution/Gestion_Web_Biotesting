@@ -78,7 +78,24 @@ namespace Gestion_Web.Formularios.Clientes
                 if (!IsPostBack)
                 {
                     cl = contClienteEntity.ObtenerClienteId(idCliente);
-                    hiddenOrigenCliente.Value = cl.origen.ToString();
+                    if (cl != null)
+                    {
+                        hiddenOrigenCliente.Value = cl.origen.ToString();
+                    }
+                    else
+                    {
+                        switch (accion)
+                        {
+                            case 1:
+                                hiddenOrigenCliente.Value = "1";
+                                break;
+                            case 3:
+                                hiddenOrigenCliente.Value = "2";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     //Confirguraciones
                     this.LitCliente_1.Text = WebConfigurationManager.AppSettings.Get("Clientes_1");
