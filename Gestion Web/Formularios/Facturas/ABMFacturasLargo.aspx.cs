@@ -3372,7 +3372,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.nuevaFactura.total = decimal.Round((this.nuevaFactura.subTotal + this.nuevaFactura.neto21 + this.nuevaFactura.iva10 + this.nuevaFactura.retencion), 2, MidpointRounding.AwayFromZero);
                 }
-                int cant = 0;
+                decimal cant = 0;
                 if (phArticulos.Controls.Count > 0)
                 {
                     foreach (Control item in phArticulos.Controls)
@@ -3382,7 +3382,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (art.Controls.Count > 0 && art.Controls[0] is TextBox)
                             {
                                 TextBox txt = (TextBox)art.Controls[0];
-                                cant += Convert.ToInt32(txt.Text);
+                                cant += Convert.ToDecimal(txt.Text);
                             }
                         }
                     }
