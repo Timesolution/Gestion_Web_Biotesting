@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -14,6 +15,15 @@ using System.Web.UI.WebControls;
 
 namespace Gestion_Web.Formularios.Facturas
 {
+    public class ItemRemitoTemporal
+    {
+        public string codigo { get; set; }
+        public string cantidad { get; set; }
+        public string descripcion { get; set; }
+        public string precioUnitario { get; set; }
+        public string total { get; set; }
+        public string linea { get; set; }
+    }
     public partial class ABMRemitos : System.Web.UI.Page
     {
         Mensajes m = new Mensajes();
@@ -21,6 +31,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorUsuario contUser = new controladorUsuario();
         //
         controladorArticulo contArticulo = new controladorArticulo();
+        ControladorArticulosEntity contArticuloEntity = new ControladorArticulosEntity();
         controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
         public PlaceHolder phArticulos = new PlaceHolder();
@@ -118,7 +129,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                
+
                 if (Session["RemitosABM_ClienteModal"] != null)
                 {
                     //obtengo codigo
@@ -481,7 +492,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ir.precioUnitario = art.precioVenta;
                 ir.total = art.precioVenta;
 
-                this.agregarItemRemito(ir,0);
+                this.agregarItemRemito(ir, 0);
 
                 r.items.Add(ir);
                 r.cliente = contCliente.obtenerClienteID(idCliente);
@@ -612,7 +623,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     this.obtenerRemito(this.cliente.iva);
 
-                    try { this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();}
+                    try { this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString(); }
                     catch { }
 
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
@@ -672,7 +683,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error verificando cliente por defecto. " + ex.Message));                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error verificando cliente por defecto. " + ex.Message));
             }
         }
 
@@ -895,7 +906,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     item.descuento = 0;
                 }
-                this.remito.items.Add(item);
+                //this.remito.items.Add(item); //TODO si hay eeror en remitos ver esta linea q hace
                 //lo agrego al session
                 if (Session["Remito"] == null)
                 {
@@ -961,7 +972,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (ItemRemito item in r.items)
                 {
                     pos = r.items.IndexOf(item);
-                    this.agregarItemRemito(item,pos);
+                    this.agregarItemRemito(item, pos);
                 }
             }
             catch (Exception ex)
@@ -1060,7 +1071,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. 2 " + ex.Message));
             }
         }
 
@@ -1101,13 +1112,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //retencion sobre el sub total
                 this.remito.retencion = this.remito.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100);
 
-                //total: subtotal + iva + retencion 
                 this.remito.total = this.remito.subTotal + this.remito.neto21 + this.remito.retencion;
-
 
                 //cargo en pantalla
                 string neto = decimal.Round(this.remito.neto, 2).ToString();
-                //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
                 this.txtNeto.Text = neto;
 
                 this.txtDescuento.Text = decimal.Round(this.remito.descuento, 2).ToString();
@@ -1118,9 +1126,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.txtRetencion.Text = decimal.Round(this.remito.retencion, 2).ToString();
 
-                //string Stotal = .ToString();
                 this.txtTotal.Text = decimal.Round(this.remito.total, 2).ToString();
-                //this.txtImporteEfectivo.Text = decimal.Round(this.remito.total, 2).ToString();
 
                 Remito f = this.remito;
 
@@ -1131,70 +1137,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando totales. " + ex.Message));
             }
-            //try
-            //{
-            //    this.remito = Session["Remito"] as Remito;
-
-            //    //obtengo total de suma de item
-            //    decimal totalC = this.remito.obtenerTotalNeto(); 
-            //    decimal total = decimal.Round(totalC, 2);
-            //    this.remito.neto = total;
-
-
-            //    //Subtotal = neto menos el descuento
-            //    this.remito.descuento = this.remito.neto * (Convert.ToDecimal(this.txtPorcDescuento.Text) / 100);
-            //    this.remito.subTotal = this.remito.neto - this.remito.descuento;
-
-            //    ///
-            //    string[] lbl = this.labelNroRemito.Text.Split('°');
-            //    if (lbl[0] == "Presupuesto N")
-            //    {
-            //        Configuracion c = new Configuracion();
-            //        this.remito.neto21 = (this.remito.subTotal * Convert.ToDecimal(c.porcentajeIva, CultureInfo.InvariantCulture) / 100);
-            //    }
-            //    else
-            //    {
-            //        decimal iva = decimal.Round(this.remito.obtenerTotalIva(), 2);//cambiar
-            //        decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
-            //        this.remito.neto21 = iva - decimal.Round(descuento, 2);
-            //    }
-            //    //agregar
-            //    this.remito.totalSinDescuento = this.remito.neto + this.remito.obtenerTotalIva();
-
-            //    //retencion sobre el sub total
-            //    this.remito.retencion = this.remito.subTotal * (Convert.ToDecimal(this.txtPorcRetencion.Text) / 100);
-
-            //    //total: subtotal + iva + retencion 
-            //    this.remito.total = this.remito.subTotal + this.remito.neto21 + this.remito.retencion;
-
-
-            //    //cargo en pantalla
-            //    string neto = decimal.Round(this.remito.neto, 2).ToString();
-            //    //this.txtNeto.Text = decimal.Round(this.factura.neto, 2).ToString();
-            //    this.txtNeto.Text = neto;
-
-            //    this.txtDescuento.Text = decimal.Round(this.remito.descuento, 2).ToString();
-
-            //    this.txtsubTotal.Text = decimal.Round(this.remito.subTotal, 2).ToString();
-
-            //    this.txtIvaTotal.Text = decimal.Round(this.remito.neto21, 2).ToString();
-
-            //    this.txtRetencion.Text = decimal.Round(this.remito.retencion, 2).ToString();
-
-            //    //string Stotal = .ToString();
-            //    //this.txtTotal.Text = decimal.Round(this.factura.total,2).ToString();
-            //    this.txtTotal.Text = decimal.Round(this.remito.total, 2).ToString();
-            //    //this.txtImporteEfectivo.Text = decimal.Round(this.factura.total, 2).ToString();
-
-            //    Remito r = this.remito;
-
-            //    Session.Add("Remito", r);
-            //    //----------------------------------
-            //}
-            //catch (Exception ex)
-            //{
-            //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando totales. " + ex.Message));
-            //}
         }
 
         protected void ActualizarTotalPH(object sender, EventArgs e)
@@ -1274,7 +1216,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (i > 0)
                     {
                         Session.Remove("Remito");
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta " + labelNroRemito.Text);                        
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta " + labelNroRemito.Text);
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=3&Presupuesto=" + rem.id + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMRemitos.aspx';", true);
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Remito agregado", "ABMRemitos.aspx"));
                     }
@@ -1521,9 +1463,112 @@ namespace Gestion_Web.Formularios.Facturas
                     this.phDatosEntrega.Visible = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
- 
+
+            }
+        }
+
+        public void btnImportarRemito_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Remito r = Session["Remito"] as Remito;
+                r.items.Clear();
+
+                Boolean fileOK = false;
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension = Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    StreamReader sr = new StreamReader(FileUpload1.FileContent);
+                    Configuracion config = new Configuracion();
+                    string linea;
+                    int contador = 1;
+                    sr.ReadLine();
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        string[] datos = linea.Split(',');//obtengo datos del registro
+
+                        if (datos.Count() >= 7)
+                        {
+                            ItemRemitoTemporal itemRemitoTemporal = new ItemRemitoTemporal();
+                            itemRemitoTemporal.codigo = datos[0];
+                            itemRemitoTemporal.cantidad = datos[2];
+                            itemRemitoTemporal.descripcion = datos[3];
+                            itemRemitoTemporal.precioUnitario = datos[4];
+                            itemRemitoTemporal.total = datos[6];
+                            itemRemitoTemporal.linea = contador.ToString();
+
+                            if (VerificarQueLosCamposEstenCorrectos(itemRemitoTemporal))
+                            {
+                                AgregarItemImportadoARemito(itemRemitoTemporal);
+                            }
+                            contador++;
+                        }
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .csv"));
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        public bool VerificarQueLosCamposEstenCorrectos(ItemRemitoTemporal itemRemitoTemporal)
+        {
+            bool estado = true;
+            try
+            {
+                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.cantidad)) estado = false;
+                //if (string.IsNullOrWhiteSpace(itemRemitoTemporal.codigo)) estado = false;
+                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.descripcion)) estado = false;
+                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.linea)) estado = false;
+                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.total)) estado = false;
+                if (string.IsNullOrWhiteSpace(itemRemitoTemporal.precioUnitario)) estado = false;
+
+                return estado;
+            }
+            catch (Exception ex)
+            {
+                return estado;
+            }
+        }
+
+        private void AgregarItemImportadoARemito(ItemRemitoTemporal itemRemitoTemporal)
+        {
+            try
+            {
+                this.txtCodigo.Text = contArticuloEntity.ObtenerElCodigoDelPrimerArticuloConEstado1();
+                this.txtCantidad.Text = itemRemitoTemporal.cantidad;
+                this.txtTotalArri.Text = itemRemitoTemporal.total;
+                this.TxtDescuentoArri.Text = "0";
+                this.txtPUnitario.Text = itemRemitoTemporal.precioUnitario;
+                this.txtDescripcion.Text = itemRemitoTemporal.descripcion;
+                this.txtRenglon.Text = itemRemitoTemporal.linea;
+
+                cargarProductoARemito();
+            }
+            catch
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error AgregarItemImportadoARemito."));
             }
         }
     }

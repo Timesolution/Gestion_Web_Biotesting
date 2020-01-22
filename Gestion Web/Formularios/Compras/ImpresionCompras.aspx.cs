@@ -26,7 +26,7 @@ namespace Gestion_Web.Formularios.Compras
         private int suc;
         private string fechaD;
         private string fechaH;
-        private string tipoDoc; 
+        private string tipoDoc;
         private int puntoVenta;
         private int accion;
         private int excel;
@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Compras
         private int proveedor;
         private int tipoFecha;
         private int idArticulo;
+        private int idEmpresa;
         private int idGrupo;
         private int tipo;//Remito compra
         private string idsRemitos;
@@ -47,23 +48,24 @@ namespace Gestion_Web.Formularios.Compras
         controladorArticulo contArticulo = new controladorArticulo();
         controladorPagos controladorPagos = new controladorPagos();
         controladorCliente controladorCliente = new controladorCliente();
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 if (!IsPostBack)
-                {                    
+                {
                     this.fechaD = Request.QueryString["fd"];
                     this.fechaH = Request.QueryString["fh"];
                     this.tipoFecha = Convert.ToInt32(Request.QueryString["tf"]);
                     this.suc = Convert.ToInt32(Request.QueryString["s"]);
                     this.puntoVenta = Convert.ToInt32(Request.QueryString["pv"]);
                     this.tipoDoc = Request.QueryString["t"];
-                    this.accion = Convert.ToInt32(Request.QueryString["a"]);  
+                    this.accion = Convert.ToInt32(Request.QueryString["a"]);
                     this.excel = Convert.ToInt32(Request.QueryString["ex"]);
                     this.ordenCompra = Convert.ToInt32(Request.QueryString["oc"]);
                     this.idRemito = Convert.ToInt32(Request.QueryString["rc"]);
+                    this.idEmpresa = Convert.ToInt32(Request.QueryString["e"]);
                     this.proveedor = Convert.ToInt32(Request.QueryString["prov"]);
                     this.tipo = Convert.ToInt32(Request.QueryString["tipo"]);//tipo RC = FC,PRP o ANULADOS
                     this.idsRemitos = Request.QueryString["ids"];
@@ -80,7 +82,7 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         this.generarReporte2();//citi compras
                     }
-                    if(accion == 3)
+                    if (accion == 3)
                     {
                         this.generarReporte3();//ordenes de compra
                     }
@@ -116,13 +118,13 @@ namespace Gestion_Web.Formularios.Compras
                     {
                         this.generarReporte11();//Remito Compra Etiquetas
                     }
-                    if(accion == 12)
+                    if (accion == 12)
                     {
                         GenerarReporte12();
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -135,13 +137,13 @@ namespace Gestion_Web.Formularios.Compras
                 controladorCliente cont = new controladorCliente();
 
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
-                DateTime Hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));               
+                DateTime Hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));
 
                 if (tipoDoc == "0")
                     tipoDoc = null;
 
-                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, suc, puntoVenta,proveedor,tipoFecha);
-                
+                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, suc, puntoVenta, proveedor, tipoFecha, idEmpresa);
+
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
                 dtCompras.Columns.Add("razonSocial", typeof(string));
@@ -168,7 +170,7 @@ namespace Gestion_Web.Formularios.Compras
                         row["PIva"] = Convert.ToDecimal(row["PIva"]) * -1;
                         row["ImpuestosInternos"] = Convert.ToDecimal(row["ImpuestosInternos"]) * -1;
                         row["Otros"] = Convert.ToDecimal(row["Otros"]) * -1;
-                        row["Total"] = Convert.ToDecimal(row["Total"]) * -1;                        
+                        row["Total"] = Convert.ToDecimal(row["Total"]) * -1;
                     }
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
@@ -180,7 +182,7 @@ namespace Gestion_Web.Formularios.Compras
                         row["PlanDeCuentas"] = contPlanCuentas.obtenerCuentaContableCompra(temp).Cuentas_Contables.Codigo + " - " + contPlanCuentas.obtenerCuentaContableCompra(temp).Cuentas_Contables.Descripcion;
                     }
                     catch { };
-                }   
+                }
 
 
 
@@ -188,7 +190,7 @@ namespace Gestion_Web.Formularios.Compras
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ComprasR.rdlc");
 
                 ReportDataSource rds = new ReportDataSource("DatosCompras", dtCompras);
-                ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString("C"));                
+                ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString("C"));
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -243,8 +245,8 @@ namespace Gestion_Web.Formularios.Compras
             {
                 controladorReportes contReport = new controladorReportes();
 
-                String rutaTxt = Server.MapPath("CitiCompras.txt");                
-                String comprobante = contReport.generarCitiCompra(fechaD, fechaH, tipoDoc, suc, puntoVenta, rutaTxt,proveedor,tipoFecha);
+                String rutaTxt = Server.MapPath("CitiCompras.txt");
+                String comprobante = contReport.generarCitiCompra(fechaD, fechaH, tipoDoc, suc, puntoVenta, rutaTxt, proveedor, tipoFecha);
 
                 if (comprobante != null)
                 {
@@ -260,7 +262,7 @@ namespace Gestion_Web.Formularios.Compras
                     this.Response.Buffer = true;
                     this.Response.ContentType = "application/octet-stream";
                     //this.Response.AddHeader("content-length", comprobante.Length.ToString());
-                    this.Response.AddHeader("Content-disposition", "attachment; filename= "+ DateTime.Today.Date.ToShortDateString() +"CitiCompras.txt");
+                    this.Response.AddHeader("Content-disposition", "attachment; filename= " + DateTime.Today.Date.ToShortDateString() + "CitiCompras.txt");
                     this.Response.BinaryWrite(btFile);
 
                     this.Response.End();
@@ -299,7 +301,7 @@ namespace Gestion_Web.Formularios.Compras
                 String Observacion = "-";
 
                 foreach (DataRow row in dtEmpresa.Rows)//Datos empresa 
-                {                    
+                {
                     razonSoc = row["Razon Social"].ToString();
                     condIVA = row["Condicion IVA"].ToString();
                     direComer = row["Direccion"].ToString();
@@ -450,11 +452,11 @@ namespace Gestion_Web.Formularios.Compras
 
                 ReportDataSource rds = new ReportDataSource("DatosImpagas", dtImpagas);
                 ReportParameter param1 = new ReportParameter("ParamFecha", this.fechaH);
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
 
-                this.ReportViewer1.LocalReport.SetParameters(param1);                
+                this.ReportViewer1.LocalReport.SetParameters(param1);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
@@ -507,8 +509,8 @@ namespace Gestion_Web.Formularios.Compras
                 DateTime desde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
                 DateTime Hasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR"));
 
-                DataTable dtDetalleRemitos = this.contCompraEntity.obtenerDetallesRemitosDT(desde, Hasta, this.proveedor, this.suc,this.tipo);               
-                
+                DataTable dtDetalleRemitos = this.contCompraEntity.obtenerDetallesRemitosDT(desde, Hasta, this.proveedor, this.suc, this.tipo);
+
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("RemitosCompraR.rdlc");
@@ -582,7 +584,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtDetalleCuenta = new DataTable();
 
                 dtDetalleCuenta = ListToDataTable(listCuentaProv);
-                
+
                 controladorCliente contCliente = new controladorCliente();
                 Cliente proveedor = contCliente.obtenerProveedorID(this.proveedor);
 
@@ -593,19 +595,19 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     string tipoDocumento = " FC ";
                     int idFact = Convert.ToInt32(row["Id"]);
-                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();                    
+                    MovimientosCCP m = listCuentaProv.Where(x => x.Id == idFact).FirstOrDefault();
 
                     if (m.Ftp == 1)
                         tipoDocumento = " PRP ";
                     if (m.Ftp == 2)
                         tipoDocumento = " ";
-                    
+
                     if (row["TipoDocumento"].ToString() == "19")
                     {
                         if (m.Compra.TipoDocumento.ToLower().Contains("credito") || m.Compra.TipoDocumento.ToLower().Contains("crédito"))
                             tipoDocumento = " NC ";
 
-                        row["Tipo"] =  tipoDocumento + "  Nº";
+                        row["Tipo"] = tipoDocumento + "  Nº";
                     }
                     if (row["TipoDocumento"].ToString() == "21")
                     {
@@ -613,7 +615,7 @@ namespace Gestion_Web.Formularios.Compras
                     }
                     if (Convert.ToDecimal(row["Debe"]) > 0)
                     {
-                        saldoAcumulado += Convert.ToDecimal(row["Debe"]);                        
+                        saldoAcumulado += Convert.ToDecimal(row["Debe"]);
                     }
                     if (Convert.ToDecimal(row["Haber"]) > 0)
                     {
@@ -691,7 +693,7 @@ namespace Gestion_Web.Formularios.Compras
                 if (tipoDoc == "0")
                     tipoDoc = null;
 
-                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, suc, puntoVenta, proveedor, tipoFecha);
+                List<Gestion_Api.Entitys.Compra> compras = this.contCompraEntity.buscarCompras(desde, Hasta, tipoDoc, suc, puntoVenta, proveedor, tipoFecha, idEmpresa);
 
                 DataTable dtCompras = new DataTable();
                 dtCompras = ListToDataTable(compras);
@@ -722,7 +724,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     if (cuentaContable != null)
                         row["PlanDeCuentas"] = cuentaContable.Cuentas_Contables.Codigo + " " + cuentaContable.Cuentas_Contables.Descripcion;
-                    
+
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
                     row["razonSocial"] = p.razonSocial;
@@ -850,7 +852,7 @@ namespace Gestion_Web.Formularios.Compras
                     dr["Lote"] = item.Lote;
                     dr["Vencimiento"] = item.Vencimiento;
                     dtItems.Rows.Add(dr);
-                }                
+                }
 
                 string logo = Server.MapPath("../../Facturas/" + s.empresa.id + "/Logo.jpg");
                 Log.EscribirSQL(1, "INFO", "Logo Remito Compra: " + logo);
@@ -867,7 +869,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 ReportDataSource rds = new ReportDataSource("DatosRemito", dtDatos);
                 ReportDataSource rds2 = new ReportDataSource("ItemsRemito", dtItems);
-                
+
                 ReportParameter param1 = new ReportParameter("ParamImagen", @"file:///" + logo);
                 ReportParameter param12 = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param13 = new ReportParameter("ParamDomComer", direComer);
@@ -936,7 +938,7 @@ namespace Gestion_Web.Formularios.Compras
                 DataTable dtItems = new DataTable();
                 dtItems.Columns.Add("Codigo");
                 dtItems.Columns.Add("Descripcion");
-                dtItems.Columns.Add("Cantidad",typeof(decimal));
+                dtItems.Columns.Add("Cantidad", typeof(decimal));
                 dtItems.Columns.Add("Imagen");
                 dtItems.Columns.Add("CodigoBarras");
 
@@ -951,7 +953,7 @@ namespace Gestion_Web.Formularios.Compras
 
                             for (int i = 0; i < item.Cantidad.Value; i++)
                             {
-                                DataRow row = dtItems.NewRow();                                
+                                DataRow row = dtItems.NewRow();
                                 row["Codigo"] = art.codigo;
                                 row["Descripcion"] = art.descripcion;
                                 row["Cantidad"] = item.Cantidad.Value;
@@ -967,7 +969,7 @@ namespace Gestion_Web.Formularios.Compras
                                 }
 
                                 dtItems.Rows.Add(row);
-                            }   
+                            }
                         }
                     }
                 }
@@ -979,7 +981,7 @@ namespace Gestion_Web.Formularios.Compras
                 ReportDataSource rds = new ReportDataSource("DatosItems", dtItems);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
-                this.ReportViewer1.LocalReport.DataSources.Add(rds);               
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
@@ -1042,7 +1044,7 @@ namespace Gestion_Web.Formularios.Compras
                 dtItems.Columns.Add("Campo7");
                 dtItems.Columns.Add("Campo8");
                 dtItems.Columns.Add("Campo9");
-                dtItems.Columns.Add("Campo10"); 
+                dtItems.Columns.Add("Campo10");
                 dtItems.Columns.Add("Imagen");
                 dtItems.Columns.Add("Codigo");
 
@@ -1061,17 +1063,17 @@ namespace Gestion_Web.Formularios.Compras
                             drItem["Imagen"] = @"file:///" + imagen;
 
                             //Agrego codigo
-                            try {drItem["Codigo"] = drDatos[0].ToString();}
+                            try { drItem["Codigo"] = drDatos[0].ToString(); }
                             catch { }
                         }
-                        
+
                         drItem[i] = drDatos[2] + ": " + drDatos[3];
                         i++;
                         cont++;
                     }
                     dtItems.Rows.Add(drItem);
                 }
-                
+
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("EtiquetasTrazas.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
@@ -1080,9 +1082,9 @@ namespace Gestion_Web.Formularios.Compras
 
                 //ReportParameter param12 = new ReportParameter("CodigoBarra", "9834320");
 
-                
 
-                
+
+
                 //ReportParameter rp16 = new ReportParameter("rpImagen", @"file:///" + imagen);
 
 
@@ -1382,14 +1384,14 @@ namespace Gestion_Web.Formularios.Compras
             try
             {
                 string numerosTelefonicos = string.Empty;
-                
+
                 List<contacto> contactosCliente = controladorCliente.obtenerContactos(Convert.ToInt32(filaProveedor["id"]));
                 foreach (var contacto in contactosCliente)
                 {
                     numerosTelefonicos += contacto.numero + " | ";
                 }
 
-                filaProveedor["Telefono"] = numerosTelefonicos.Substring(0,numerosTelefonicos.Length - 2);
+                filaProveedor["Telefono"] = numerosTelefonicos.Substring(0, numerosTelefonicos.Length - 2);
             }
             catch
             {

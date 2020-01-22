@@ -3,9 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="main">
-
-        <%--<div class="container">--%><div>
-
+        <div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
@@ -15,10 +13,7 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
-
                     <div class="widget-content">
-
 
                         <table style="width: 100%">
                             <tr>
@@ -28,7 +23,6 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="lbtnImprimir" runat="server" OnClick="lbtnImprimir_Click">Imprimir</asp:LinkButton>
-
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar Clientes</asp:LinkButton>
@@ -42,6 +36,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnExportarZona" runat="server" OnClick="lbtnExportarZona_Click">Exportar Clientes x Zona</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <a href="#modalEnviarSMS_A_Clientes" data-toggle="modal" style="width: 90%">Enviar SMS a los clientes</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -53,14 +50,17 @@
                                                 <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscar_Click">
                                                     <i class="shortcut-icon icon-search"></i></asp:LinkButton>
                                             </span>
-
                                         </div>
-                                        <!-- /input-group -->
                                     </div>
                                 </td>
 
-                                <td style="width: 40%"></td>
+                                <td style="width: 35%"></td>
 
+                                <td style="width: 5%">
+                                    <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Filtrar Clientes" href="#modalBusqueda" style="width: 100%">
+                                        <i class="shortcut-icon icon-filter"></i>
+                                    </a>
+                                </td>
                                 <td style="width: 5%">
 
                                     <a href="ClientesABM.aspx?accion=1" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
@@ -75,22 +75,10 @@
                                     </a>
 
                                 </td>
-                                <%--<td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
-                                        <a href="/" id="A1" runat="server" class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Imprimir" style="width: 100%">
-
-                                            <i class="shortcut-icon icon-print"></i>
-
-                                        </a>
-                                    </div>
-                                </td>--%>
                             </tr>
                         </table>
                     </div>
-                    <!-- /widget-content -->
-
                 </div>
-                <!-- /widget -->
             </div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked widget-table action-table">
@@ -108,13 +96,13 @@
                                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                             <thead>
                                                 <tr>
-                                                    <th>Codigo</th>
-                                                    <th>Razon Social</th>
-                                                    <th>Alias</th>
-                                                    <th>Mail</th>
-                                                    <th>Telefono</th>
-                                                    <th>CUIT</th>
-                                                    <th class="td-actions"></th>
+                                                    <th style="width: 10%">Codigo</th>
+                                                    <th style="width: 20%">Razon Social</th>
+                                                    <th style="width: 20%">Alias</th>
+                                                    <th style="width: 10%">Mail</th>
+                                                    <th style="width: 10%">Telefono</th>
+                                                    <th style="width: 10%">CUIT</th>
+                                                    <th class="td-actions" style="width: 20%"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -122,21 +110,14 @@
                                             </tbody>
                                         </table>
                                     </div>
-
-
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
-                        <!-- /.content -->
-
                     </div>
-
                 </div>
             </div>
         </div>
-        <!-- /container -->
     </div>
-    <!-- /main -->
 
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -163,17 +144,11 @@
                                 <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
                             </div>
                         </div>
-                        <%--                                <div class="form-group">
-                                    
-                                </div>--%>
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
-                        <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
                     </div>
                 </div>
 
@@ -466,11 +441,210 @@
         </div>
     </div>
 
+    <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Filtrar Clientes</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+
+                                <div class="form-group">
+                                    <label class="col-md-4">Tipo Cliente</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListTipoCliente" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Grupo</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListGruposClientes_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Vendedor</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListVendedores_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Provincia</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListProvincias_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Estado Cliente</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListEstadoCliente_ModalBusqueda" runat="server" class="form-control" AutoPostBack="false"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnFiltrar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnFiltrar_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalEnviarSMS_A_Clientes" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Envio de SMS al cliente</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h1 style="text-align: center">
+                                        <i class="icon-comment" style="color: blue"></i>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5>
+                                        <asp:Label runat="server" Font-Size="Medium" Text="Introduzca el titulo del mensaje a enviar" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtTituloMensaje" class="form-control"></asp:TextBox>
+                                    </h5>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <h5>
+                                        <asp:Label runat="server" Font-Size="Medium" Text="Introduzca el mensaje a enviar" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5>
+                                        <asp:TextBox runat="server" Style="max-width: unset" ID="txtCuerpoMensaje" MaxLength="160" autocomplete="off" onkeypress="javascript:return ContadorDeCaracteresIngresados(event);" class="form-control"></asp:TextBox>
+                                        <br />
+                                        &nbsp<asp:Label runat="server" ID="lbCantidadCaracteresRestantesSMS" Font-Size="Medium" Text="Caracteres restantes: 160"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <asp:Label runat="server" ID="lb_cantidadClientesFiltrados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
+                            <asp:Label runat="server" ID="lb_cantidadClientesTildados" Font-Size="Medium" Text="" Style="text-align: center"></asp:Label>
+                        </div>
+                        <div class="row">
+                            <asp:Label runat="server" ID="lbEnviarATodosLosFiltrados" Font-Size="Medium" Text="Enviar a todos los filtrados?" Style="text-align: center; display: none"></asp:Label>
+                            <asp:Button runat="server" ID="btnSi_EnviarAFiltrados" Style="display: none" Text="Si" class="btn btn-success" OnClick="btnEnviarSMS_A_ClientesFiltrados_Click" />
+                            <asp:Button runat="server" ID="btnNo_EnviarAFiltrados" Style="display: none" Text="No" class="btn btn-danger" OnClientClick="javascript:return OcultarConfirmacionParaEnviarSMS_A_Filtrados()" />
+                            <asp:Button runat="server" ID="btn_MostrarConfirmacionClientesFiltrados" Style="display: initial" Text="Enviar a Filtrados" class="btn btn-primary" OnClientClick="javascript:return MostrarConfirmacionParaEnviarSMS_A_Filtrados()" />
+                            <asp:Button runat="server" Text="Enviar a tildados" class="btn btn-info" OnClick="btnEnviarSMS_A_ClientesTildados_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Scripts - Include with every page -->
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+    <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
+
+    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+
+    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+
+    <script src="../../Scripts/Application.js"></script>
+
+    <script src="../../Scripts/demo/gallery.js"></script>
+
+    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+    <script src="../../Scripts/demo/notifications.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+
     <script>
         function pageLoad() {
             $("#<%= txtFechaNacMillas.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= lbtnEnviarCodigoMillas.ClientID %>").tooltip();
             $("#<%= lbtnValidarLuegoMillas.ClientID %>").tooltip();
+        }
+
+        function OcultarConfirmacionParaEnviarSMS_A_Filtrados() {
+            document.getElementById('<%= lbEnviarATodosLosFiltrados.ClientID %>').style.display = 'none';
+            document.getElementById('<%= btnSi_EnviarAFiltrados.ClientID %>').style.display = 'none';
+            document.getElementById('<%= btnNo_EnviarAFiltrados.ClientID %>').style.display = 'none';
+            document.getElementById('<%= btn_MostrarConfirmacionClientesFiltrados.ClientID %>').style.display = 'initial';
+
+            return false;
+        }
+
+        function MostrarConfirmacionParaEnviarSMS_A_Filtrados() {
+            document.getElementById('<%= lbEnviarATodosLosFiltrados.ClientID %>').style.display = 'initial';
+            document.getElementById('<%= btnSi_EnviarAFiltrados.ClientID %>').style.display = 'initial';
+            document.getElementById('<%= btnNo_EnviarAFiltrados.ClientID %>').style.display = 'initial';
+            document.getElementById('<%= btn_MostrarConfirmacionClientesFiltrados.ClientID %>').style.display = 'none';
+
+            return false;
+        }
+
+        function ContadorDeCaracteresIngresados(e) {
+            var key;
+            if (window.event) // IE
+            {
+                key = e.keyCode;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                key = e.which;
+            }
+
+            var txtCuerpoMensaje = document.getElementById('<%= txtCuerpoMensaje.ClientID %>');
+            var lbCantidadCaracteresRestantesSMS = document.getElementById('<%= lbCantidadCaracteresRestantesSMS.ClientID %>');
+            var cantidadCaracteres;
+            if (txtCuerpoMensaje.value.length == 0 && key!=0) {
+                cantidadCaracteres = 1;
+            }
+            else {
+                cantidadCaracteres = txtCuerpoMensaje.value.length+1;
+            }
+            
+            lbCantidadCaracteresRestantesSMS.textContent = "Caracteres restantes: " + (160 - cantidadCaracteres);
+
+            if (cantidadCaracteres == 160) {
+                return false;
+            }
+            else {
+                return true;
+            }
         }
     </script>
     <script>
@@ -481,6 +655,15 @@
     <script>
         function abrirdialog(valor) {
             document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
+        }
+
+        function ObtenerLosIdDeLosCheckBoxTildados() {
+            var place = document.getElementById('<%=phClientes.ClientID%>')
+            var botones = document.getElementsByName('CHK');
+
+            for (var i in botones) {
+                var boton = botones[i];
+            }
         }
     </script>
     <script>
@@ -562,32 +745,6 @@
             return true;
         }
     </script>
-
-    <!-- Core Scripts - Include with every page -->
-    <script src="../../Scripts/jquery-1.10.2.js"></script>
-    <script src="../../Scripts/bootstrap.min.js"></script>
-    <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
-
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
-
-    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
-
-    <script src="../../Scripts/Application.js"></script>
-
-    <script src="../../Scripts/demo/gallery.js"></script>
-
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-    <script src="../../Scripts/demo/notifications.js"></script>
-
-    <!-- Page-Level Plugin Scripts - Tables -->
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-
 
     <script>
         $(document).ready(function () {

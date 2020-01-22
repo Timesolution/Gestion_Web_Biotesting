@@ -58,12 +58,30 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.Label lbDropListEmpresaError;
         
         /// <summary>
-        /// btnImportarPedido control.
+        /// btnImportarUsuarios control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnImportarPedido;
+        protected global::System.Web.UI.WebControls.Button btnImportarUsuarios;
+        
+        /// <summary>
+        /// btnImportarClientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnImportarClientes;
+        
+        /// <summary>
+        /// ReportViewer1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.Reporting.WebForms.ReportViewer ReportViewer1;
     }
 }

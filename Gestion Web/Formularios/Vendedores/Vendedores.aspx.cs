@@ -172,7 +172,6 @@ namespace Gestion_Web.Formularios.Vendedores
         {
             try
             {
-
                 phVendedores.Controls.Clear();
 
                 //Table table = new Table();

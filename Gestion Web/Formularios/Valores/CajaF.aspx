@@ -23,7 +23,6 @@
                         <i class="icon-wrench"></i>
                         <h3>Herramientas</h3>
                     </div>
-                    <!-- /widget-header -->
 
                     <div class="widget-content">
                         <table style="width: 100%">
@@ -34,11 +33,9 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <asp:LinkButton ID="lbtnaTarjeta" runat="server" Visible="false" data-toggle="modal" href="#modalConfirmacion">Mover caja Efectivo - Tarjeta</asp:LinkButton>
-
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnaEfectivo" runat="server" Visible="false" data-toggle="modal" href="#modalConfirmacion2">Mover caja Tarjeta - Efectivo</asp:LinkButton>
-
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar a Excel</asp:LinkButton>
@@ -60,7 +57,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <!-- /btn-group -->
                                 </td>
                                 <td style="width: 65%">
                                     <h5>
@@ -95,8 +91,8 @@
                                 </td>
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
-
-                                        <a class="btn btn-primary ui-tooltip" title data-original-title="Agregar Movimiento" data-toggle="modal" href="#modalAgregar" style="width: 100%">
+                                        <asp:HiddenField ID="hiddenPermiso" runat="server" />
+                                        <a class="btn btn-primary ui-tooltip" title data-original-title="Agregar Movimiento" onclick="javascript: validarPermisoAgregarMovimientoCaja()" style="width: 100%">
                                             <i class="shortcut-icon icon-plus"></i>
                                         </a>
                                     </div>
@@ -780,6 +776,18 @@
         <script src="../../js/moment/moment.js"></script>
 
         <script>
+            function validarPermisoAgregarMovimientoCaja() {
+                var hiddenPerm = document.getElementById('<%= hiddenPermiso.ClientID%>');
+                var permvalue = hiddenPerm.value;
+                if (permvalue == 0) {
+                    //alert("Acceso Denegado!!");
+                    window.location = "../../default.aspx?m=1";
+                }
+                else {
+                    $('#modalAgregar').modal();
+                }
+            }
+
             function validarQueLaFechaSeaMenorOIgualALaActual(e) {
                 var txtFechaModalAgregarCaja = $("#<%= txtFechaModalAgregarCaja.ClientID %>");
 

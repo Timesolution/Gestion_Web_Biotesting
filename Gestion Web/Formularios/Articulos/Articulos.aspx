@@ -1,4 +1,4 @@
-﻿<%@ Page EnableEventValidation = "false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Gestion_Web.Formularios.Articulos.Articulos" %>
+﻿<%@ Page EnableEventValidation="false" Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Gestion_Web.Formularios.Articulos.Articulos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -402,6 +402,18 @@
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
                         <div class="form-group">
+                            <label class="col-md-4">Nuevo Costo</label>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <asp:TextBox ID="txtCosto" Style="text-align: right" runat="server" CssClass="form-control" onkeypress="javascript: return validarNro(event)" Text="0"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <asp:Button ID="btnModificarCosto" runat="server" Text="Actualizar" CssClass="btn btn-success" OnClick="btnModificarCosto_Click" />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-4">Porcentaje Costo</label>
                             <div class="col-md-5">
                                 <div class="input-group">
@@ -489,9 +501,9 @@
                                     <br />
                                     <asp:Label ID="lblFormato" runat="server" ForeColor="#999999" Text="*Los precios deben estar en formato (1234.00) sin separador de miles."></asp:Label>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
-                        
+
                     </ContentTemplate>
                 </asp:UpdatePanel>
                 <div class="modal-footer">
@@ -570,10 +582,11 @@
                                         <div class="input-group">
                                             <asp:CheckBox ID="CheckIncluirInactivos" runat="server" Text="&nbsp INCLUIR ARTICULOS INACTIVOS" />
                                         </div>
+                                        <div class="input-group">
+                                            <asp:CheckBox ID="CheckIncluirPendientes" runat="server" Text="&nbsp INCLUIR ARTICULOS PENDIENTES ACEPTACION" />
+                                        </div>
                                     </div>
                                 </div>
-
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -678,15 +691,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                        <label class="col-md-4">Buscar Proveedor</label>
-                                        <div class="col-md-6">
-                                            <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <asp:HiddenField runat="server" ID="idProveedorHF" />
-                                            <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
-                                        </div>
+                                    <label class="col-md-4">Buscar Proveedor</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtBuscarProveedorListaPrecios" class="form-control" runat="server"></asp:TextBox>
                                     </div>
+                                    <div class="col-md-2">
+                                        <asp:HiddenField runat="server" ID="idProveedorHF" />
+                                        <asp:LinkButton ID="lbtnBuscarProveedor" OnClientClick="ObtenerProveedor()" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" />
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Proveedor</label>
                                     <div class="col-md-6">
@@ -800,12 +813,12 @@
                                     </div>
                                     <div class="col-md-2">
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal_St2" InitialValue="-1" ValidationGroup="StockValorizado" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4">Stock Detallado</label>
                                     <div class="col-md-6">
-                                        <asp:CheckBox ID="cbStockDetallado" Checked="false" runat="server"/>
+                                        <asp:CheckBox ID="cbStockDetallado" Checked="false" runat="server" />
                                     </div>
                                 </div>
                             </ContentTemplate>
@@ -1286,6 +1299,8 @@
         var chk1 = $("#<%= CheckIncluirCeros.ClientID %>");
         var chk2 = $("#<%= CheckBoxStockFaltante.ClientID %>");
         var chk3 = $("#<%= CheckBoxUnicoSucursal.ClientID %>");
+        var chk4 = $("#<%= CheckIncluirPendientes.ClientID %>");
+        var chk5 = $("#<%= CheckIncluirInactivos.ClientID %>");
 
         chk1.on('change', function () {
             chk3.prop('checked', checked = false);
@@ -1302,19 +1317,23 @@
 
         });
 
+        chk4.on('change', function () {
+            chk1.prop('checked', checked = false);
+            chk2.prop('checked', checked = false);
+            chk3.prop('checked', checked = false);
+            chk5.prop('checked', checked = false);
+        });
     </script>
     <script>
 
-        function AsignarProveedor()
-        {
+        function AsignarProveedor() {
             var idProveedor = document.getElementById('<%= DropListProveedor.ClientID %>').value;
             var idProveedorHF = document.getElementById('<%= idProveedorHF.ClientID %>');
 
             idProveedorHF.value = idProveedor;
         };
 
-        function ObtenerProveedor()
-        {
+        function ObtenerProveedor() {
             event.preventDefault();
             var descripcionProveedor = document.getElementById('<%= txtBuscarProveedorListaPrecios.ClientID %>').value;
 
@@ -1331,8 +1350,7 @@
             });
         };
 
-        function OnSuccessObtenerProveedor(response)
-        {
+        function OnSuccessObtenerProveedor(response) {
             var controlDropListProveedor = document.getElementById('<%= DropListProveedor.ClientID %>');
 
             while (controlDropListProveedor.options.length > 0) {

@@ -45,14 +45,10 @@ namespace Gestion_Web.Formularios.Seguridad
                         this.cargarUsuario(idUsuario);
                     }
                 }
-
-                //esto va afuera del post back porque sino te pisa los datos de los textbox
-                
-
             }
-            catch
+            catch(Exception ex)
             {
-
+                Log.EscribirSQL(1,"Error","Error en el pageload de usuarios. " + ex.Message);
             }
         }
 
@@ -110,7 +106,12 @@ namespace Gestion_Web.Formularios.Seguridad
             {
                 ListVendedores.Items.Clear();
                 controladorVendedor contVendedor = new controladorVendedor();
+
+                Log.EscribirSQL(1, "INFO", "Voy a obtener vendedores");
+
                 DataTable dt = contVendedor.obtenerVendedores();
+
+                Log.EscribirSQL(1,"vendedores", dt.Rows.Count.ToString());
 
                 //agrego todos
                 DataRow dr2 = dt.NewRow();
@@ -125,18 +126,11 @@ namespace Gestion_Web.Formularios.Seguridad
                     item.Text = dr["nombre"].ToString() + " " + dr["apellido"].ToString();
                     ListVendedores.Items.Add(item);
                 }
-
-
-
-                //this.DropListVendedor.DataSource = dt;
-                //this.DropListVendedor.DataValueField = "id";
-                //this.DropListVendedor.DataTextField = "nombre" + "apellido";
-
-                //this.DropListVendedor.DataBind();
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Vendedores. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al cargar vendedores " + ex.Message + ". " + ex.InnerException.Message);
             }
         }
 
@@ -572,41 +566,31 @@ namespace Gestion_Web.Formularios.Seguridad
         {
             try
             {
-                //if (this.DropListPerfil.SelectedItem.Text == "Cliente")                
-                //    this.btnAgregarStore.Visible = true;
-                //else
-                //    this.btnAgregarStore.Visible = false;
                 VerificarEstadoAgregarStore();
 
                 if (this.DropListPerfil.SelectedItem.Text == "Vendedor" || this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                 {
+                    
                     if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                     {
+                        
                         //cargo clientes en vez de vendedores
                         this.panelClientes.Visible = true;
                         this.panelVendedor.Visible = false;
                     }
                     else
                     {
+                        
                         this.panelVendedor.Visible = true;
                         this.panelClientes.Visible = false;
                     }
                 }
                 else
                 {
+                    
                     this.panelVendedor.Visible = false;
                     this.panelClientes.Visible = false;
                 }
-
-                //if(this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
-                //{
-                //    this.PanelFamilia.Visible = true;
-                //}
-                //else
-                //{
-                //    this.PanelFamilia.Visible = false;
-                //}
-
             }
             catch (Exception Ex)
             {

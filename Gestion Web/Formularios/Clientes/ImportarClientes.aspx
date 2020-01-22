@@ -1,5 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" CodeBehind="ImportarClientes.aspx.cs" Inherits="Gestion_Web.Formularios.Clientes.ImportarClientes" %>
 
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+<%@ Register Assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" Namespace="CrystalDecisions.Web" TagPrefix="CR" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
         <div class="row">
@@ -30,24 +33,28 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="col-md-2">Importar clientes</label>
+                                <label class="col-md-2">Archivo a Importar</label>
                                 <div class="col-md-3">
                                     <asp:FileUpload ID="FileUpload1" runat="server" />
                                     <asp:Label runat="server" ID="lbDropListEmpresaError" Style="display: none" Text="Seleccione un item." ForeColor="Red" Font-Bold="true"></asp:Label>
                                 </div>
                             </div>
-
                         </div>
-
-
 
                         <div class="form-horizontal col-md-12">
                             <div class="col-md-3">
-                                <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="lbtnImportarClientes_Click" />
+                                <asp:Button ID="btnImportarUsuarios" runat="server" Text="Importar Usuarios" class="btn btn-success" OnClick="lbtnImportarUsuarios_Click" />
+                            </div>
+                            <div class="col-md-3">
+                                <asp:Button ID="btnImportarClientes" runat="server" Text="Importar Clientes" class="btn btn-success" OnClick="lbtnImportarClientes_Click" />
                             </div>
                         </div>
-                    </div>
 
+                        <rsweb:ReportViewer ID="ReportViewer1" Visible="false" runat="server" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
+                            <LocalReport ReportEmbeddedResource="Gestion_Web.Formularios.Cobros.Cobros.rdlc">
+                            </LocalReport>
+                        </rsweb:ReportViewer>
+                    </div>
                 </div>
             </div>
         </div>

@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -355,9 +355,14 @@
     <Content Include="Formularios\Articulos\ArticulosNew.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
+    <Content Include="Formularios\Facturas\RetencionesF.aspx" />
+    <Content Include="Formularios\Herramientas\HistorialSMS.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
+    <Content Include="Formularios\Herramientas\NotificacionesABM.aspx" />
+    <Content Include="Formularios\Herramientas\NotificacionesF.aspx" />
     <Content Include="Formularios\Listas\ImportarListaDePrecio.aspx" />
     <Content Include="Formularios\Articulos\ImpresionListaPrecios.aspx" />
     <Content Include="Formularios\Articulos\ImpresionMovStock.aspx" />
@@ -426,7 +431,7 @@
     <Content Include="Formularios\Facturas\DespachosF.aspx" />
     <Content Include="Formularios\Facturas\LotesImportadosF.aspx" />
     <Content Include="Formularios\Facturas\PedidosModula.aspx" />
-    <Content Include="Formularios\Facturas\RetencionesF.aspx" />
+    <Content Include="Formularios\Facturas\RetencionesFOld.aspx" />
     <Content Include="Formularios\Facturas\TestOpen.aspx" />
     <Content Include="Formularios\Formas\FormasPagoF.aspx" />
     <Content Include="Formularios\Herramientas\ABMAsuntosSMS.aspx" />
@@ -879,6 +884,8 @@
     </Content>
     <Content Include="Properties\DataSources\Gestion_Web.Formularios.Facturas.dsPresupuesto.datasource" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\publicacion gestion web.pubxml" />
     <None Include="Properties\PublishProfiles\Publicacion.pubxml" />
     <None Include="Properties\PublishProfiles\Publicación.pubxml" />
@@ -1443,6 +1450,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Clientes\ActividadClientes.aspx.cs">
+      <DependentUpon>ActividadClientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ActividadClientes.aspx.designer.cs">
+      <DependentUpon>ActividadClientes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1457,12 +1471,40 @@
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.designer.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\RetencionesF.aspx.cs">
+      <DependentUpon>RetencionesF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\RetencionesF.aspx.designer.cs">
+      <DependentUpon>RetencionesF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\HistorialSMS.aspx.cs">
+      <DependentUpon>HistorialSMS.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\HistorialSMS.aspx.designer.cs">
+      <DependentUpon>HistorialSMS.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx.cs">
       <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx.designer.cs">
       <DependentUpon>ImportacionPedidosAPP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesABM.aspx.cs">
+      <DependentUpon>NotificacionesABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesABM.aspx.designer.cs">
+      <DependentUpon>NotificacionesABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesF.aspx.cs">
+      <DependentUpon>NotificacionesF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Herramientas\NotificacionesF.aspx.designer.cs">
+      <DependentUpon>NotificacionesF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Listas\ImportarListaDePrecio.aspx.cs">
       <DependentUpon>ImportarListaDePrecio.aspx</DependentUpon>
@@ -1738,12 +1780,12 @@
     <Compile Include="Formularios\Facturas\PedidosModula.aspx.designer.cs">
       <DependentUpon>PedidosModula.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\Facturas\RetencionesF.aspx.cs">
-      <DependentUpon>RetencionesF.aspx</DependentUpon>
+    <Compile Include="Formularios\Facturas\RetencionesFOld.aspx.cs">
+      <DependentUpon>RetencionesFOld.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Formularios\Facturas\RetencionesF.aspx.designer.cs">
-      <DependentUpon>RetencionesF.aspx</DependentUpon>
+    <Compile Include="Formularios\Facturas\RetencionesFOld.aspx.designer.cs">
+      <DependentUpon>RetencionesFOld.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\TestOpen.aspx.cs">
       <DependentUpon>TestOpen.aspx</DependentUpon>
@@ -2458,7 +2500,6 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ABMRemitos.aspx.cs">
       <DependentUpon>ABMRemitos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Formularios\Facturas\ABMRemitos.aspx.designer.cs">
       <DependentUpon>ABMRemitos.aspx</DependentUpon>
@@ -3227,6 +3268,7 @@
     <EmbeddedResource Include="Formularios\Articulos\MovStockSucursalR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\MovimientoStockR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\NominaArticulosR.rdlc" />
+    <EmbeddedResource Include="Formularios\Articulos\ReporteStockPendienteR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ReporteStockR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasChicas.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasGrandes.rdlc" />

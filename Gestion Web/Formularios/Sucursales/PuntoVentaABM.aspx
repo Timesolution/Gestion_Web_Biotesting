@@ -158,6 +158,16 @@
                                             </div>
                                         </div> 
 
+                                        <div class="form-group">
+                                            <label for="name" class="col-md-4">Factura Pyme: </label>
+                                            <div class="col-md-3">
+                                                <asp:CheckBox ID="chkPyme" runat="server"></asp:CheckBox>
+                                            </div>
+                                            <div class="col-md-4">
+                                                
+                                            </div>
+                                        </div> 
+
                                         <asp:Panel ID="panelContacto" runat="server" Visible="false">
                                             <div class="form-group">
                                                 <label for="name" class="col-md-4">Datos contacto</label>                                            

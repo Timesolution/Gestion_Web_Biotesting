@@ -537,7 +537,7 @@ namespace Gestion_Web.Formularios.Compras
                         if (this.RadioFechaCompra.Checked == true)
                         {
                             //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                            Response.Redirect("ComprasF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&s=" + DropListSucursal.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&pv=" + ListPuntoVenta.SelectedValue + "&prov=" + this.DropListProveedor.SelectedValue + "&e=" + this.DropListEmpresa.SelectedValue) ;
+                            Response.Redirect("ComprasF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&s=" + DropListSucursal.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&pv=" + ListPuntoVenta.SelectedValue + "&prov=" + this.DropListProveedor.SelectedValue + "&e=" + this.DropListEmpresa.SelectedValue);
                         }
                         else
                         {
@@ -781,7 +781,7 @@ namespace Gestion_Web.Formularios.Compras
                     fechaD = DateTime.Today.AddMonths(-2).ToString("dd/MM/yyyy");
                     fechaH = DateTime.Today.ToString("dd/MM/yyyy");
                 }
-                Response.Redirect("ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=1");
+                Response.Redirect("ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&e=" + this.empresa + "&t=" + this.tipoDoc + "&ex=1");
             }
             catch (Exception ex)
             {
@@ -798,7 +798,7 @@ namespace Gestion_Web.Formularios.Compras
                     fechaH = DateTime.Today.ToString("dd/MM/yyyy");
                 }
                 //Response.Redirect("ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=0");
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&e="+ this.empresa + "&t=" + this.tipoDoc + "&ex=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch (Exception ex)
             {
@@ -814,7 +814,7 @@ namespace Gestion_Web.Formularios.Compras
                     fechaD = DateTime.Today.AddMonths(-2).ToString("dd/MM/yyyy");
                     fechaH = DateTime.Today.ToString("dd/MM/yyyy");
                 }
-                Response.Redirect("ImpresionCompras.aspx?a=7&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=1");
+                Response.Redirect("ImpresionCompras.aspx?a=7&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&e=" + this.empresa + "&ex=1");
             }
             catch
             {
@@ -831,7 +831,7 @@ namespace Gestion_Web.Formularios.Compras
                     fechaH = DateTime.Today.ToString("dd/MM/yyyy");
                 }
                 //Response.Redirect("ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=0");
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=7&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=7&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&e=" + this.empresa + "&ex=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch
             {

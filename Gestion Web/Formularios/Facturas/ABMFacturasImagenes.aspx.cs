@@ -17,10 +17,12 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Net.Mail;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Script.Serialization;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -33,24 +35,21 @@ namespace Gestion_Web.Formularios.Facturas
     {
         Mensajes m = new Mensajes();
         controladorFacturacion controlador = new controladorFacturacion();
-        controladorUsuario contUser = new controladorUsuario();
         controladorArticulo contArticulo = new controladorArticulo();
         ControladorArticulosEntity contArticuloEntity = new ControladorArticulosEntity();
-        controladorVendedor contVendedor = new controladorVendedor();
         controladorCliente contCliente = new controladorCliente();
         public PlaceHolder phArticulos = new PlaceHolder();
         controladorRemitos cr = new controladorRemitos();
         controladorSucursal cs = new controladorSucursal();
-        ControladorPedido cp = new ControladorPedido();
         controladorTarjeta ct = new controladorTarjeta();
         Configuracion configuracion = new Configuracion();
-
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+        ControladorVendedorEntity contVendedorEntity = new ControladorVendedorEntity();
+        controladorGrupoCliente contGrupoCliente = new controladorGrupoCliente();
 
         //factura
         Factura factura = new Factura();
         Cliente cliente = new Cliente();
-        TipoDocumento tp = new TipoDocumento();
 
         Configuracion c = new Configuracion();
 
@@ -64,7 +63,6 @@ namespace Gestion_Web.Formularios.Facturas
         int flag_cambioFecha = 0;
 
         int flag_clienteModal = 0;
-        int idArticuloModalCalculadora;
 
         DataTable lstPagosTemp;
         DataTable dtTrazasTemp;
@@ -339,527 +337,6 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
         }
-
-        override protected void OnInit(EventArgs e)
-        {
-            try
-            {
-                this.cargasInicialesModoImagen();
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void VerificarLogin()
-        {
-            try
-            {
-                if (Session["User"] == null)
-                {
-                    Response.Redirect("../../Account/Login.aspx");
-                }
-                else
-                {
-                    if (this.verificarAcceso() != 1)
-                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
-                    {
-                        Response.Redirect("/Default.aspx?m=1", false);
-                    }
-                }
-            }
-            catch
-            {
-                Response.Redirect("../../Account/Login.aspx");
-            }
-        }
-
-        private int verificarAcceso()
-        {
-            try
-            {
-                int valor = 0;
-
-                string permisos = Session["Login_Permisos"] as string;
-                string[] listPermisos = permisos.Split(';');
-                foreach (string s in listPermisos)
-                {
-                    if (!String.IsNullOrEmpty(s))
-                    {
-                        if (s == "39")
-                        {
-                            string perfil = Session["Login_NombrePerfil"] as string;
-                            if (perfil == "SuperAdministrador")
-                            {
-                                this.ListSucursal.Attributes.Remove("disabled");
-                                this.ListEmpresa.Attributes.Remove("disabled");
-                            }
-                            else
-                            {
-
-                            }
-                            valor = 1;
-                        }
-                        if (s == "75")
-                        {
-                            this.ListSucursal.Attributes.Remove("disabled");
-                            this.ListEmpresa.Attributes.Remove("disabled");
-                        }
-
-                        //Permiso para que pueda modificar forma de pago
-                        if (s == "123")
-                            this.DropListFormaPago.Attributes.Remove("disabled");
-
-                        //Permiso para bloquear la lista de precios
-                        if (s == "150")
-                            this.DropListLista.Attributes.Add("disabled", "disabled");
-                    }
-                }
-
-                return valor;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-
-        private void cargasInicialesModoImagen()
-        {
-            //dibujo los items en la tabla
-            this.cargarGruposPh();
-        }
-
-        private void cargarGruposPh()
-        {
-            try
-            {
-                List<grupo> grupos = contArticulo.obtenerGruposArticulosList().ToList();
-                this.phImagenCuadroGrupos.Controls.Clear();
-                foreach (var item in grupos)
-                {
-                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                    cuadroImagen.Linkbutton1.ID = item.id.ToString();
-                    cuadroImagen.Label1.Text = item.descripcion;
-                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(MostrarSubGruposArticulos);
-                    String path = Server.MapPath("../../images/Grupos/" + item.id + "/");
-                    if (Directory.Exists(path))
-                    {
-                        DirectoryInfo di = new DirectoryInfo(path);
-                        var files = di.GetFiles();
-                        foreach (var f in files)
-                        {
-                            cuadroImagen.Image1.ImageUrl = "../../images/Grupos/" + item.id + "/" + f.Name;
-                        }
-                    }
-
-                    CargarSubGruposPh(item.id);
-
-                    this.phImagenCuadroGrupos.Controls.Add(cuadroImagen);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private void CargarSubGruposPh(int idGrupo)
-        {
-            try
-            {
-                PlaceHolder phSubGruposArticulos = new PlaceHolder();
-                phSubGruposArticulos.ID = "phSubGrupo_" + idGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
-                phSubGruposArticulos.Visible = false;
-
-                //CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                //cuadroImagenVolver.Linkbutton1.ID = idGrupo.ToString();
-                //cuadroImagenVolver.Label1.Text = "volver";
-                //cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
-                //cuadroImagenVolver.Linkbutton1.Click += new EventHandler(OcultarSubGrupos);
-                //phSubGruposArticulos.Controls.Add(cuadroImagenVolver);
-
-                var subGruposArticulos = contArticulo.obtenerSubGrupoByGrupo(idGrupo);
-                foreach (var item in subGruposArticulos)
-                {
-                    CuadroImagen imagenSubGrupo = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                    imagenSubGrupo.Linkbutton1.ID = "_" + item.id.ToString();
-                    imagenSubGrupo.Label1.Text = item.descripcion;
-                    imagenSubGrupo.Image1.ImageUrl = "/images/no_picture.jpg";
-                    imagenSubGrupo.Linkbutton1.Click += new EventHandler(mostrarArticulosSubGrupo);
-
-                    string path = Server.MapPath("../../images/SubGrupos/" + item.id + "/");
-                    if (Directory.Exists(path))
-                    {
-                        DirectoryInfo di = new DirectoryInfo(path);
-                        var files = di.GetFiles();
-                        foreach (var f in files)
-                        {
-                            imagenSubGrupo.Image1.ImageUrl = "../../images/SubGrupos/" + item.id + "/" + f.Name;
-                        }
-                    }
-
-                    cargarArticulosPh(item.id);
-
-                    phSubGruposArticulos.Controls.Add(imagenSubGrupo);
-                }
-
-                phImagenCuadroSubGruposGrupos.Controls.Add(phSubGruposArticulos);
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void cargarArticulosPh(int idSubGrupo)
-        {
-            try
-            {
-                PlaceHolder placeHolder = new PlaceHolder();
-                placeHolder.ID = "phArticulo_" + idSubGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
-                placeHolder.Visible = false;
-
-                var articulos = contArticuloEntity.obtenerArticulosEntityByIdSubGrupo(Convert.ToInt32(idSubGrupo)).ToList();
-                foreach (var item in articulos)
-                {
-                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                    cuadroImagen.Linkbutton1.ID = "_" + item.id.ToString();
-                    cuadroImagen.Label1.Text = item.descripcion.ToLower();
-                    if (item.descripcion.Length >= 40)
-                    {
-                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
-                    }
-                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
-                    String path = Server.MapPath("../../images/Productos/" + item.id + "/");
-                    if (Directory.Exists(path))
-                    {
-                        DirectoryInfo di = new DirectoryInfo(path);
-                        var files = di.GetFiles();
-                        foreach (var f in files)
-                        {
-                            cuadroImagen.Image1.ImageUrl = "../../images/Productos/" + item.id + "/" + f.Name;
-                        }
-                    }
-                    placeHolder.Controls.Add(cuadroImagen);
-                }
-                phImagenCuadroArt.Controls.Add(placeHolder);
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private void cargarArticulosFavoritosPh()
-        {
-            try
-            {
-                var artStore = contArticuloEntity.obtenerArticulosStore();
-                this.phImagenCuadroArticulosFavoritos.Controls.Clear();
-                foreach (var item in artStore)
-                {
-                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
-                    cuadroImagen.Linkbutton1.ID = "_" + item.id.ToString();
-                    cuadroImagen.Label1.Text = item.descripcion.ToLower();
-                    if (item.descripcion.Length >= 40)
-                    {
-                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
-                    }
-                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
-                    //cuadroImagen.Linkbutton1.OnClientClick = "Javascript: MostrarCalculadora();";
-                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
-                    String path = Server.MapPath("../../images/Productos/" + item.id + "/");
-                    if (Directory.Exists(path))
-                    {
-                        DirectoryInfo di = new DirectoryInfo(path);
-                        var files = di.GetFiles();
-                        foreach (var f in files)
-                        {
-                            cuadroImagen.Image1.ImageUrl = "../../images/Productos/" + item.id + "/" + f.Name;
-                        }
-                    }
-                    this.phImagenCuadroArticulosFavoritos.Controls.Add(cuadroImagen);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private void MostrarSubGruposArticulos(object sender, EventArgs e)
-        {
-            var idGrupo = (sender as LinkButton).ID;
-
-            phImagenCuadroSubGruposGrupos.Visible = true;
-
-            foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
-            {
-                var idPlaceHolder = item.ID.Split('_')[1];
-                if (idGrupo == idPlaceHolder)
-                {
-                    item.Visible = true;
-                }
-                else
-                {
-                    item.Visible = false;
-                }
-            }
-
-            //phImagenCuadroGrupos.Visible = false;
-        }
-
-        private void OcultarSubGrupos(object sender, EventArgs e)
-        {
-            //phImagenCuadroSubGruposGrupos.Visible = false;
-            phImagenCuadroArt.Visible = false;
-            //phImagenCuadroGrupos.Visible = true;
-        }
-
-        private void mostrarArticulosSubGrupo(object sender, EventArgs e)
-        {
-            try
-            {
-                var idSubGrupo = (sender as LinkButton).ID.Split('_')[1];
-
-                phImagenCuadroArt.Visible = true;
-
-                foreach (Control item in phImagenCuadroArt.Controls)
-                {
-                    var idPlaceHolder = item.ID.Split('_')[1];
-                    if (idSubGrupo == idPlaceHolder)
-                    {
-                        item.Visible = true;
-                    }
-                    else
-                    {
-                        item.Visible = false;
-                    }
-                }
-
-                //phImagenCuadroGrupos.Visible = false;
-                //phImagenCuadroSubGruposGrupos.Visible = false;
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private void ocultarArticulosSubGrupo(object sender, EventArgs e)
-        {
-            try
-            {
-                var idSubGrupo = (sender as LinkButton).ID;
-
-                var grupo = contArticulo.obtenerSubGrupoID(Convert.ToInt32(idSubGrupo)).grupo.id;
-
-                phImagenCuadroSubGruposGrupos.Visible = true;
-
-                foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
-                {
-                    var idPlaceHolder = item.ID.Split('_')[1];
-                    if (grupo.ToString() == idPlaceHolder)
-                    {
-                        item.Visible = true;
-                    }
-                    else
-                    {
-                        item.Visible = false;
-                    }
-                }
-                phImagenCuadroArt.Visible = false;
-                phImagenCuadroGrupos.Visible = false;
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void MostrarPopUpCalculadora(object sender, EventArgs e)
-        {
-            var idLinkButton = (sender as LinkButton).ID;
-            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "MostrarCalculadora("+ idArt + ");", true);
-            Session.Add("idArticuloCalculadora", idArt.ToString());
-        }
-
-        [WebMethod]
-        public static string SetearEnLaSessionIdArticuloYCantidad(string idArticulo, string cantidad)
-        {
-            Page objp = new Page();
-            objp.Session["idArticuloCalculadora"] = idArticulo;
-            objp.Session["cantidadArticuloCalculadora"] = cantidad;
-            return idArticulo;
-        }
-
-        public void agregarArticuloAventa_Click(object sender, EventArgs e)
-        {
-            int idArticulo = Convert.ToInt32(Session["idArticuloCalculadora"]);
-            decimal cantidadArticulo = Convert.ToDecimal(Session["cantidadArticuloCalculadora"]);
-            Articulo articulo = contArticulo.obtenerArticuloByID(idArticulo);
-            guardarArticuloEnFactura(articulo, cantidadArticulo);
-        }
-
-        #region FACTURAR IMAGENES PANADERIA
-        private void agregarArticuloAventa_TextChanged(object sender, EventArgs e)
-        {
-            var idLinkButton = (sender as TextBox).ID;
-            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
-            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
-            decimal cantidad = 0;
-
-            TableRow tr;
-            foreach (Control cr in this.phItemsModoImagenes.Controls)
-            {
-                tr = cr as TableRow;
-                TextBox txtBoxCantidad = tr.Cells[3].Controls[0] as TextBox;
-                int idArtPh = Convert.ToInt32(txtBoxCantidad.ID.Split('_')[1]);
-
-                if (idArt == idArtPh)
-                {
-                    txtBoxCantidad.Text = txtBoxCantidad.Text.Replace(',', '.');
-                    cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
-                }
-            }
-
-            this.guardarArticuloEnFactura(articulo, cantidad);
-        }
-
-        private void sumarArticuloImagenes(object sender, EventArgs e)
-        {
-            var idLinkButton = (sender as LinkButton).ID;
-            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
-            bool restar = (sender as LinkButton).ID.Contains("Restar");
-            decimal cantidad = 0;
-            TableRow tr;
-
-            foreach (Control cr in this.phItemsModoImagenes.Controls)
-            {
-                tr = cr as TableRow;
-                TextBox txtBoxCantidad = tr.Cells[3].Controls[0] as TextBox;
-                int idArtPh = Convert.ToInt32(txtBoxCantidad.ID.Split('_')[1]);
-
-                if (idArt == idArtPh)
-                {
-                    cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
-                }
-            }
-            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
-            if (restar)
-            {
-                cantidad -= 1;
-            }
-            else
-            {
-                cantidad += 1;
-            }
-            guardarArticuloEnFactura(articulo, cantidad);
-        }
-
-        private void guardarArticuloEnFactura(Articulo articulo, decimal cantidad)
-        {
-            try
-            {
-                reproducirSonido();
-
-                string cant = cantidad.ToString();
-
-                this.txtCodigo.Text = articulo.codigo;
-                this.txtCantidad.Text = cant.ToString();
-                this.txtDescripcion.Text = articulo.descripcion;
-                this.txtPUnitario.Text = articulo.precioVenta.ToString();
-
-                Factura f = Session["Factura"] as Factura;
-
-                //verifico si el articulo ya existe lo borro le sumo 1 y lo agrega a la session
-                var articuloDeFactura = f.items.Where(x => x.articulo.id == Convert.ToInt32(articulo.id)).FirstOrDefault();
-                int posArtEnLaSessionFactura = f.items.IndexOf(articuloDeFactura);
-                if (articuloDeFactura != null)
-                {
-                    f.items.Remove(articuloDeFactura);
-                    if (cantidad <= 0)
-                    {
-                        this.QuitarItem(articuloDeFactura);
-                    }
-                    else
-                    {
-                        this.cargarProductoAFactura(posArtEnLaSessionFactura);
-                    }
-                }
-                else
-                {
-                    //if(f.items.Count > 0){
-                    //    this.cargarProductoAFactura(f.items.Count - 1);
-                    //}
-                    //else
-                    //{
-                    this.cargarProductoAFactura(-1);
-                    //}
-                }
-                this.cargarTablaArticulosModoImagenes();
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en agregarArticuloAventa. Excepcion: " + ex.Message));
-            }
-        }
-
-        private void cargarTablaArticulosModoImagenes()//agrega el articulo seleccionado a la tabla de articulos a facturar
-        {
-            Factura f = Session["Factura"] as Factura;
-
-            this.phItemsModoImagenes.Controls.Clear();
-            foreach (var item in f.items)
-            {
-                cargarItemsTablaModoImagenes(item);
-            }
-
-            //limpio la tabla de total y la cargo devuelta
-            this.phTotalModoImagen.Controls.Clear();
-            //fila
-            TableRow tr = new TableRow();
-
-            TableCell celTxtTotal = new TableCell();
-            celTxtTotal.Text = "<h3><b>Total:</b></h3>";
-            celTxtTotal.VerticalAlign = VerticalAlign.Middle;
-            celTxtTotal.HorizontalAlign = HorizontalAlign.Right;
-            tr.Cells.Add(celTxtTotal);
-
-            TableCell celTotal = new TableCell();
-            celTotal.Text = "<h3><b>" + f.total.ToString("C") + "</b></h3>";
-            celTotal.VerticalAlign = VerticalAlign.Middle;
-            celTotal.HorizontalAlign = HorizontalAlign.Right;
-            tr.Cells.Add(celTotal);
-
-            this.phTotalModoImagen.Controls.Add(tr);
-        }
-
-        protected void btnFacturarImagen_Click(object sender, EventArgs e)
-        {
-            this.generarFactura(0);
-        }
-
-        protected void btnAbrirModalTarjeta_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.btnSetearFormaDePagoPorTarjeta();
-
-                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "openModalTarjeta();", true);
-            }
-            catch (Exception ex)
-            {
-                ScriptManager.RegisterClientScriptBlock(this.updatePanelModoImagen, updatePanelModoImagen.GetType(), "alert", "$.msgbox(\"No se pudo agregar cliente. Ex: " + ex.Message + " \");", true);
-            }
-        }
-
-        #endregion
 
         #region original
 
@@ -2049,6 +1526,10 @@ namespace Gestion_Web.Formularios.Facturas
                         this.btnTarjeta.Visible = false;
                     }
 
+                    if (DropListFormaPago.SelectedItem.Text == "Cuenta Corriente")
+                    {
+                        this.lbFormaDePago.Text = "Forma de pago: Cuenta Corriente";
+                    }
                     //pongo en cero por si eligieron un cliente con desc o percepciones y dps lo cambiaron
                     this.txtPorcDescuento.Text = "0";
                     this.txtPorcRetencion.Text = "0";
@@ -4256,267 +3737,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         #region items factura
 
-        protected void btnAgregarArt_Click(object sender, EventArgs e)
-        {
-            this.cargarProductoAFactura(0);
-        }
 
-        private void cargarProductoAFactura(int posArtEnLaSessionFactura)
-        {
-            try
-            {
-                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
-
-                if (this.txtCantidad.Text == "")
-                {
-                    this.txtCantidad.Text = "0";
-                }
-                if (this.TxtDescuentoArri.Text == "")
-                {
-                    this.TxtDescuentoArri.Text = "0";
-                }
-                if (this.txtTotalArri.Text == "")
-                {
-                    this.txtTotalArri.Text = "0";
-                }
-
-
-                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
-
-                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
-                if (p != null)
-                {
-                    if (p.PrecioFijo > 0)
-                        this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
-                    else
-                        this.TxtDescuentoArri.Text = p.Descuento.ToString();
-
-                    this.verificarAlertaArticulo(artVerPromo);
-                    this.TxtDescuentoArri.Attributes.Remove("disabled");
-                    this.txtPUnitario.Attributes.Remove("disabled");
-                }
-
-                var medida = contEnt.obtenerMedidasVentaArticulo(artVerPromo.id);
-                if (medida != null)
-                {
-                    if (medida.Count > 0 && this.chkVentaMedidaVenta.Checked == true)
-                    {
-                        this.txtDescripcion.Text += "(" + this.txtCantidad.Text + " " + medida.FirstOrDefault().Medida + " x " + medida.FirstOrDefault().Cantidad + ")";
-                        decimal cantBulto = medida.FirstOrDefault().Cantidad.Value * Convert.ToDecimal(this.txtCantidad.Text);
-                        this.txtCantidad.Text = decimal.Round(cantBulto, 2).ToString();
-                    }
-                }
-
-                //recalculo total
-                this.totalItem();
-
-                //item
-                ItemFactura item = new ItemFactura();
-                item.articulo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
-                item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
-                decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
-                item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
-                item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
-
-                //cargo la descripcion del articulo que tengo en pantalla
-                item.articulo.descripcion = this.txtDescripcion.Text;
-
-                //agrego//costos
-                item.Costo = item.articulo.costo;
-                item.costoImponible = item.articulo.costoImponible;
-                item.CostoReal = item.articulo.costoReal;
-                //agrego iva 
-                //SI ES FACTURA EXPORTACION LE DEJO 0%
-                item.porcentajeIva = item.articulo.porcentajeIva;
-                if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
-                {
-                    item.porcentajeIva = 0;
-                    item.articulo.porcentajeIva = 0;
-                }
-
-                if (this.txtPUnitario.Text.Contains(','))
-                {
-                    this.txtPUnitario.Text = this.txtPUnitario.Text.Replace(",", "");
-                }
-
-                item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
-                //en base al precio unitario calculo iva del item
-                item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
-                {
-                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
-                    {
-                        item.precioSinIva = item.precioUnitario;
-                    }
-                }
-
-                //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
-                item.precioSinRecargo = item.precioSinIva;
-                item.precioVentaSinRecargo = item.precioUnitario;
-                item.porcentajeIIBB = item.articulo.ingBrutos;
-                item.porcentajeOtrosImpuestos = item.articulo.impInternos;
-
-                //Si es factura de combustibles, seteo los valores al item
-                if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0 && item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
-                {
-                    decimal totalItc = 0;
-                    decimal totalHidrica = 0;
-                    decimal totalVial = 0;
-                    decimal totalMunicipal = 0;
-
-                    var datos = contEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
-                    if (datos != null)
-                    {
-                        totalItc += decimal.Round((datos.ITC.Value), 2);
-                        totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
-                        totalVial += decimal.Round((datos.TasaVial.Value), 2);
-                        totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
-                    }
-
-                    decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
-
-                    item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
-                    item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal;
-                }
-
-                if (desc > 0)
-                {
-                    decimal tot = decimal.Round(item.precioUnitario * item.cantidad, 2);
-                    decimal totDesc = decimal.Round(tot * (desc / 100), 2, MidpointRounding.AwayFromZero);
-                    //item.descuento = decimal.Round(totDesc, 2);
-                    item.descuento = totDesc;
-                }
-                else
-                {
-                    item.descuento = 0;
-                }
-
-                ////si es importado cargo los datos de despacho si tiene alguno cargado
-                //this.agregarInfoDespachoItem(item);
-                this.factura.items.Add(item);
-
-                //lo agrego al session
-                if (Session["Factura"] == null)
-                {
-                    Factura fac = new Factura();
-                    Session.Add("Factura", fac);
-                }
-                Factura f = Session["Factura"] as Factura;
-
-                if (!String.IsNullOrEmpty(this.txtRenglon.Text))
-                    item.nroRenglon = Convert.ToInt32(this.txtRenglon.Text);
-                else
-                    item.nroRenglon = f.items.Count() + 1;
-
-                if (posArtEnLaSessionFactura != -1)
-                {
-                    f.items.Insert(posArtEnLaSessionFactura, item);
-                }
-                else
-                {
-                    f.items.Add(item);
-                }
-
-                Session.Add("Factura", f);
-
-                //lo dibujo en pantalla
-                this.cargarItems();
-
-                //agrego abajo
-                //this.factura.items.Add(item);
-                //actualizo totales
-                this.actualizarTotales();
-
-                //borro los campos
-                this.borrarCamposagregarItem();
-                //this.UpdatePanel1.Update();
-                this.txtCodigo.Focus();
-
-                this.lblMontoOriginal.Text = f.total.ToString();
-                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
-
-            }
-            catch (Exception ex)
-            {
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando articulos." + ex.Message + " \", {type: \"error\"});", true);
-            }
-        }
-
-        private void cargarItemsTablaModoImagenes(ItemFactura item)
-        {
-            try
-            {
-                //fila
-                TableRow tr = new TableRow();
-
-                TableCell celCodigo = new TableCell();
-                celCodigo.Text = item.articulo.codigo.ToString();
-                celCodigo.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celCodigo);
-
-                TableCell celDescripcion = new TableCell();
-                celDescripcion.Text = item.articulo.descripcion;
-                celDescripcion.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celDescripcion);
-
-                TableCell celPrecio = new TableCell();
-                celPrecio.Text = item.precioUnitario.ToString();
-                celPrecio.VerticalAlign = VerticalAlign.Middle;
-                celPrecio.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celPrecio);
-
-                TableCell celCantidad = new TableCell();
-                TextBox txtCantidadImagenes = new TextBox();
-                txtCantidadImagenes.ID = "_" + item.articulo.id;
-                txtCantidadImagenes.Text = item.cantidad.ToString();
-                txtCantidadImagenes.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
-                txtCantidadImagenes.CssClass = "form-control";
-                txtCantidadImagenes.TextChanged += new EventHandler(this.agregarArticuloAventa_TextChanged);
-                txtCantidadImagenes.AutoPostBack = true;
-                celCantidad.Controls.Add(txtCantidadImagenes);
-                celCantidad.VerticalAlign = VerticalAlign.Middle;
-                celCantidad.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celCantidad);
-
-                TableCell celTotal = new TableCell();
-                celTotal.Text = Decimal.Round(item.precioUnitario * item.cantidad, 2).ToString();
-                celTotal.VerticalAlign = VerticalAlign.Middle;
-                celTotal.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celTotal);
-
-                TableCell celAccion = new TableCell();//botones sumar restar
-
-                LinkButton btnRestar = new LinkButton();
-                btnRestar.ID = "btnRestar_" + item.articulo.id;
-                btnRestar.CssClass = "btn btn-info";
-                btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
-                btnRestar.Click += new EventHandler(this.sumarArticuloImagenes);
-                celAccion.Controls.Add(btnRestar);
-
-                Literal l = new Literal();
-                l.Text = "&nbsp";
-                celAccion.Controls.Add(l);
-
-                LinkButton btnSumar = new LinkButton();
-                btnSumar.ID = "btnSumar_" + item.articulo.id;
-                btnSumar.CssClass = "btn btn-info";
-                btnSumar.Text = "<span class='shortcut-icon icon-plus'></span>";
-                //btnEliminar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
-                btnSumar.Click += new EventHandler(this.sumarArticuloImagenes);
-                celAccion.Controls.Add(btnSumar);
-
-                tr.Cells.Add(celAccion);
-
-                this.phItemsModoImagenes.Controls.Add(tr);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
 
         private void restarCantidadArticulo(object sender, EventArgs e)
         {
@@ -10643,77 +9864,6 @@ namespace Gestion_Web.Formularios.Facturas
             Session.Remove("Factura");
             Response.Redirect("ABMFacturas.aspx");
         }
-        #endregion
-
-        protected void btnIrAHome_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Response.Redirect("../../Default.aspx");
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        protected void btnCancelarFactura_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Session.Remove("Factura");
-                Response.Redirect("ABMFacturasImagenes.aspx");
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        protected void btnSetearFormaDePagoPorTarjeta()
-        {
-            try
-            {
-                this.lbFormaDePago.Text = "Forma de pago: Tarjeta";
-                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Tarjeta").Value;
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorTarjeta. Ex:" + ex.Message));
-            }
-        }
-
-        protected void btnSetearFormaDePagoPorContado(object sender, EventArgs e)
-        {
-            try
-            {
-                this.lbFormaDePago.Text = "Forma de pago: Contado";
-                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Contado").Value;
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorContado. Ex:" + ex.Message));
-            }
-        }
-
-        protected void btntest_Click(object sender, EventArgs e)
-        {
-            string t = "hello world";
-        }
-
-        protected void reproducirSonido()
-        {
-            try
-            {
-                String path = Server.MapPath("../../content/Sounds/pulsar.wav");
-                SoundPlayer soundPlayer = new SoundPlayer(path);
-                soundPlayer.Play();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
 
         #region alta rapida clientes
         protected void btnAltaRapida_Click(object sender, EventArgs e)
@@ -10833,5 +9983,1017 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
+        #endregion
+        override protected void OnInit(EventArgs e)
+        {
+            try
+            {
+                this.cargasInicialesModoImagen();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../Account/Login.aspx");
+                }
+                else
+                {
+                    if (this.verificarAcceso() != 1)
+                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Herramientas.Presupuesto") != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../Account/Login.aspx");
+            }
+        }
+
+        private int verificarAcceso()
+        {
+            try
+            {
+                int valor = 0;
+
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+                foreach (string s in listPermisos)
+                {
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        if (s == "39")
+                        {
+                            string perfil = Session["Login_NombrePerfil"] as string;
+                            if (perfil == "SuperAdministrador")
+                            {
+                                this.ListSucursal.Attributes.Remove("disabled");
+                                this.ListEmpresa.Attributes.Remove("disabled");
+                            }
+                            else
+                            {
+
+                            }
+                            valor = 1;
+                        }
+                        if (s == "75")
+                        {
+                            this.ListSucursal.Attributes.Remove("disabled");
+                            this.ListEmpresa.Attributes.Remove("disabled");
+                        }
+
+                        //Permiso para que pueda modificar forma de pago
+                        if (s == "123")
+                            this.DropListFormaPago.Attributes.Remove("disabled");
+
+                        //Permiso para bloquear la lista de precios
+                        if (s == "150")
+                            this.DropListLista.Attributes.Add("disabled", "disabled");
+                    }
+                }
+
+                return valor;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        #region FACTURAR IMAGENES PANADERIA
+        [WebMethod]
+        public static string SetearEnLaSessionIdArticuloYCantidad(string idArticulo, string cantidad)
+        {
+            try
+            {
+                Page objp = new Page();
+                objp.Session["idArticuloCalculadora"] = idArticulo;
+                objp.Session["cantidadArticuloCalculadora"] = cantidad;
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                string resultadoJSON = serializer.Serialize(idArticulo);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        [WebMethod]
+        public static string SetearEnLaSessionIdArticulo(string idArticulo)
+        {
+            try
+            {
+                Page objp = new Page();
+                objp.Session["idArticuloCalculadora"] = idArticulo;
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                string resultadoJSON = serializer.Serialize(idArticulo);
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
+
+        public void agregarArticuloAventa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idArticulo;
+                if (!int.TryParse(idArticuloHidden.Value, out idArticulo))
+                {
+                    return;
+                }
+                decimal cantidadArticulo;
+                if (!decimal.TryParse(cantidadArticuloHidden.Value, out cantidadArticulo))
+                {
+                    return;
+                }
+                Articulo articulo = contArticulo.obtenerArticuloByID(idArticulo);
+                guardarArticuloEnFactura(articulo, cantidadArticulo);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void agregarArticuloAventa_TextChanged(object sender, EventArgs e)
+        {
+            var idLinkButton = (sender as TextBox).ID;
+            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
+            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+            decimal cantidad = 0;
+
+            TableRow tr;
+            foreach (Control cr in this.phItemsModoImagenes.Controls)
+            {
+                tr = cr as TableRow;
+                TextBox txtBoxCantidad = tr.Cells[3].Controls[0] as TextBox;
+                int idArtPh = Convert.ToInt32(txtBoxCantidad.ID.Split('_')[1]);
+
+                if (idArt == idArtPh)
+                {
+                    txtBoxCantidad.Text = txtBoxCantidad.Text.Replace(',', '.');
+                    cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
+                }
+            }
+            this.guardarArticuloEnFactura(articulo, cantidad);
+        }
+
+        private void sumarArticuloImagenes(object sender, EventArgs e)
+        {
+            var idLinkButton = (sender as LinkButton).ID;
+            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
+            bool restar = (sender as LinkButton).ID.Contains("Restar");
+            decimal cantidad = 0;
+            TableRow tr;
+
+            foreach (Control cr in this.phItemsModoImagenes.Controls)
+            {
+                tr = cr as TableRow;
+                TextBox txtBoxCantidad = tr.Cells[3].Controls[0] as TextBox;
+                int idArtPh = Convert.ToInt32(txtBoxCantidad.ID.Split('_')[1]);
+
+                if (idArt == idArtPh)
+                {
+                    cantidad = Convert.ToDecimal(txtBoxCantidad.Text);
+                }
+            }
+            Articulo articulo = contArticulo.obtenerArticuloByID(Convert.ToInt32(idArt));
+            if (restar)
+            {
+                cantidad -= 1;
+            }
+            else
+            {
+                cantidad += 1;
+            }
+            guardarArticuloEnFactura(articulo, cantidad);
+        }
+
+        private void guardarArticuloEnFactura(Articulo articulo, decimal cantidad)
+        {
+            try
+            {
+                reproducirSonido();
+
+                string cant = cantidad.ToString();
+
+                this.txtCodigo.Text = articulo.codigo;
+                this.txtCantidad.Text = cant.ToString();
+                this.txtDescripcion.Text = articulo.descripcion;
+                this.txtPUnitario.Text = articulo.precioVenta.ToString();
+
+                Factura f = Session["Factura"] as Factura;
+
+                //verifico si el articulo ya existe lo borro le sumo 1 y lo agrega a la session
+                var articuloDeFactura = f.items.Where(x => x.articulo.id == Convert.ToInt32(articulo.id)).FirstOrDefault();
+                int posArtEnLaSessionFactura = f.items.IndexOf(articuloDeFactura);
+                if (articuloDeFactura != null)
+                {
+                    f.items.Remove(articuloDeFactura);
+                    if (cantidad <= 0)
+                    {
+                        this.QuitarItem(articuloDeFactura);
+                    }
+                    else
+                    {
+                        this.cargarProductoAFactura(posArtEnLaSessionFactura);
+                    }
+                }
+                else
+                {
+                    //if(f.items.Count > 0){
+                    //    this.cargarProductoAFactura(f.items.Count - 1);
+                    //}
+                    //else
+                    //{
+                    this.cargarProductoAFactura(-1);
+                    //}
+                }
+                this.cargarTablaArticulosModoImagenes();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error en agregarArticuloAventa. Excepcion: " + ex.Message));
+            }
+        }
+
+        private void cargarTablaArticulosModoImagenes()//agrega el articulo seleccionado a la tabla de articulos a facturar
+        {
+            Factura f = Session["Factura"] as Factura;
+
+            this.phItemsModoImagenes.Controls.Clear();
+            foreach (var item in f.items)
+            {
+                cargarItemsTablaModoImagenes(item);
+            }
+
+            //limpio la tabla de total y la cargo devuelta
+            this.phTotalModoImagen.Controls.Clear();
+            //fila
+            TableRow tr = new TableRow();
+
+            TableCell celTxtTotal = new TableCell();
+            celTxtTotal.Text = "<h3><b>Total:</b></h3>";
+            celTxtTotal.VerticalAlign = VerticalAlign.Middle;
+            celTxtTotal.HorizontalAlign = HorizontalAlign.Right;
+            tr.Cells.Add(celTxtTotal);
+
+            TableCell celTotal = new TableCell();
+            celTotal.Text = "<h3><b>" + f.total.ToString("C") + "</b></h3>";
+            celTotal.VerticalAlign = VerticalAlign.Middle;
+            celTotal.HorizontalAlign = HorizontalAlign.Right;
+            tr.Cells.Add(celTotal);
+
+            this.phTotalModoImagen.Controls.Add(tr);
+        }
+
+        protected void btnFacturarImagen_Click(object sender, EventArgs e)
+        {
+            this.generarFactura(0);
+        }
+
+        protected void btnAbrirModalTarjeta_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.btnSetearFormaDePagoPorTarjeta();
+
+                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "openModalTarjeta();", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelModoImagen, updatePanelModoImagen.GetType(), "alert", "$.msgbox(\"No se pudo agregar cliente. Ex: " + ex.Message + " \");", true);
+            }
+        }
+
+        private void cargasInicialesModoImagen()
+        {
+            //dibujo los items en la tabla
+            this.cargarGruposPh();
+        }
+
+        private void cargarGruposPh()
+        {
+            try
+            {
+                List<grupo> grupos = contArticulo.obtenerGruposArticulosList().ToList();
+                this.phImagenCuadroGrupos.Controls.Clear();
+                foreach (var item in grupos)
+                {
+                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    cuadroImagen.Linkbutton1.ID = item.id.ToString();
+                    cuadroImagen.Label1.Text = item.descripcion;
+                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(MostrarSubGruposArticulos);
+                    String path = Server.MapPath("../../images/Grupos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            cuadroImagen.Image1.ImageUrl = "../../images/Grupos/" + item.id + "/" + f.Name;
+                        }
+                    }
+
+                    CargarSubGruposPh(item.id);
+
+                    this.phImagenCuadroGrupos.Controls.Add(cuadroImagen);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void CargarSubGruposPh(int idGrupo)
+        {
+            try
+            {
+                PlaceHolder phSubGruposArticulos = new PlaceHolder();
+                phSubGruposArticulos.ID = "phSubGrupo_" + idGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
+                phSubGruposArticulos.Visible = false;
+
+                //CuadroImagen cuadroImagenVolver = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                //cuadroImagenVolver.Linkbutton1.ID = idGrupo.ToString();
+                //cuadroImagenVolver.Label1.Text = "volver";
+                //cuadroImagenVolver.Image1.ImageUrl = "/images/flecha_volver.png";
+                //cuadroImagenVolver.Linkbutton1.Click += new EventHandler(OcultarSubGrupos);
+                //phSubGruposArticulos.Controls.Add(cuadroImagenVolver);
+
+                var subGruposArticulos = contArticulo.obtenerSubGrupoByGrupo(idGrupo);
+                foreach (var item in subGruposArticulos)
+                {
+                    CuadroImagen imagenSubGrupo = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    imagenSubGrupo.Linkbutton1.ID = "_" + item.id.ToString();
+                    imagenSubGrupo.Label1.Text = item.descripcion;
+                    imagenSubGrupo.Image1.ImageUrl = "/images/no_picture.jpg";
+                    imagenSubGrupo.Linkbutton1.Click += new EventHandler(mostrarArticulosSubGrupo);
+
+                    string path = Server.MapPath("../../images/SubGrupos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            imagenSubGrupo.Image1.ImageUrl = "../../images/SubGrupos/" + item.id + "/" + f.Name;
+                        }
+                    }
+
+                    cargarArticulosPh(item.id);
+
+                    phSubGruposArticulos.Controls.Add(imagenSubGrupo);
+                }
+
+                phImagenCuadroSubGruposGrupos.Controls.Add(phSubGruposArticulos);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void cargarArticulosPh(int idSubGrupo)
+        {
+            try
+            {
+                PlaceHolder placeHolder = new PlaceHolder();
+                placeHolder.ID = "phArticulo_" + idSubGrupo + "_" + DateTime.Now.ToString("hhmmssfff");
+                placeHolder.Visible = false;
+
+                var articulos = contArticuloEntity.obtenerArticulosEntityByIdSubGrupo(Convert.ToInt32(idSubGrupo)).ToList();
+                foreach (var item in articulos)
+                {
+                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    cuadroImagen.Linkbutton1.ID = "_" + item.id.ToString();
+                    cuadroImagen.Label1.Text = item.descripcion.ToLower();
+                    if (item.descripcion.Length >= 40)
+                    {
+                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
+                    }
+                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
+                    String path = Server.MapPath("../../images/Productos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            cuadroImagen.Image1.ImageUrl = "../../images/Productos/" + item.id + "/" + f.Name;
+                        }
+                    }
+                    placeHolder.Controls.Add(cuadroImagen);
+                }
+                phImagenCuadroArt.Controls.Add(placeHolder);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void cargarArticulosFavoritosPh()
+        {
+            try
+            {
+                var artStore = contArticuloEntity.obtenerArticulosStore();
+                this.phImagenCuadroArticulosFavoritos.Controls.Clear();
+                foreach (var item in artStore)
+                {
+                    CuadroImagen cuadroImagen = (CuadroImagen)Page.LoadControl("CuadroImagen.ascx");
+                    cuadroImagen.Linkbutton1.ID = "_" + item.id.ToString();
+                    cuadroImagen.Label1.Text = item.descripcion.ToLower();
+                    if (item.descripcion.Length >= 40)
+                    {
+                        cuadroImagen.Label1.Text = item.descripcion.Substring(0, 40).ToLower();
+                    }
+                    cuadroImagen.Image1.ImageUrl = "/images/no_picture.jpg";
+                    cuadroImagen.Linkbutton1.Click += new EventHandler(this.MostrarPopUpCalculadora);
+                    String path = Server.MapPath("../../images/Productos/" + item.id + "/");
+                    if (Directory.Exists(path))
+                    {
+                        DirectoryInfo di = new DirectoryInfo(path);
+                        var files = di.GetFiles();
+                        foreach (var f in files)
+                        {
+                            cuadroImagen.Image1.ImageUrl = "../../images/Productos/" + item.id + "/" + f.Name;
+                        }
+                    }
+                    this.phImagenCuadroArticulosFavoritos.Controls.Add(cuadroImagen);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void MostrarSubGruposArticulos(object sender, EventArgs e)
+        {
+            var idGrupo = (sender as LinkButton).ID;
+
+            phImagenCuadroSubGruposGrupos.Visible = true;
+
+            foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
+            {
+                var idPlaceHolder = item.ID.Split('_')[1];
+                if (idGrupo == idPlaceHolder)
+                {
+                    item.Visible = true;
+                }
+                else
+                {
+                    item.Visible = false;
+                }
+            }
+
+            //phImagenCuadroGrupos.Visible = false;
+        }
+
+        private void OcultarSubGrupos(object sender, EventArgs e)
+        {
+            //phImagenCuadroSubGruposGrupos.Visible = false;
+            phImagenCuadroArt.Visible = false;
+            //phImagenCuadroGrupos.Visible = true;
+        }
+
+        private void mostrarArticulosSubGrupo(object sender, EventArgs e)
+        {
+            try
+            {
+                var idSubGrupo = (sender as LinkButton).ID.Split('_')[1];
+
+                phImagenCuadroArt.Visible = true;
+
+                foreach (Control item in phImagenCuadroArt.Controls)
+                {
+                    var idPlaceHolder = item.ID.Split('_')[1];
+                    if (idSubGrupo == idPlaceHolder)
+                    {
+                        item.Visible = true;
+                    }
+                    else
+                    {
+                        item.Visible = false;
+                    }
+                }
+
+                //phImagenCuadroGrupos.Visible = false;
+                //phImagenCuadroSubGruposGrupos.Visible = false;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void ocultarArticulosSubGrupo(object sender, EventArgs e)
+        {
+            try
+            {
+                var idSubGrupo = (sender as LinkButton).ID;
+
+                var grupo = contArticulo.obtenerSubGrupoID(Convert.ToInt32(idSubGrupo)).grupo.id;
+
+                phImagenCuadroSubGruposGrupos.Visible = true;
+
+                foreach (Control item in phImagenCuadroSubGruposGrupos.Controls)
+                {
+                    var idPlaceHolder = item.ID.Split('_')[1];
+                    if (grupo.ToString() == idPlaceHolder)
+                    {
+                        item.Visible = true;
+                    }
+                    else
+                    {
+                        item.Visible = false;
+                    }
+                }
+                phImagenCuadroArt.Visible = false;
+                phImagenCuadroGrupos.Visible = false;
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void MostrarPopUpCalculadora(object sender, EventArgs e)
+        {
+            var idLinkButton = (sender as LinkButton).ID;
+            int idArt = Convert.ToInt32(idLinkButton.Split('_')[1]);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "MostrarCalculadora(" + idArt + ");", true);
+            Session.Add("idArticuloCalculadora", idArt.ToString());
+        }
+
+        protected void btnIrAHome_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("../../Default.aspx");
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        protected void btnCancelarFactura_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Session.Remove("Factura");
+                Response.Redirect("ABMFacturasImagenes.aspx");
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        protected void btnSetearFormaDePagoPorTarjeta()
+        {
+            try
+            {
+                this.lbFormaDePago.Text = "Forma de pago: Tarjeta";
+                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Tarjeta").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorTarjeta. Ex:" + ex.Message));
+            }
+        }
+
+        protected void btnSetearFormaDePagoPorContado(object sender, EventArgs e)
+        {
+            try
+            {
+                this.lbFormaDePago.Text = "Forma de pago: Contado";
+                this.DropListFormaPago.SelectedValue = this.DropListFormaPago.Items.FindByText("Contado").Value;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: btnSetearFormaDePagoPorContado. Ex:" + ex.Message));
+            }
+        }
+
+        protected void btntest_Click(object sender, EventArgs e)
+        {
+            string t = "hello world";
+        }
+
+        protected void reproducirSonido()
+        {
+            try
+            {
+                String path = Server.MapPath("../../content/Sounds/pulsar.wav");
+                SoundPlayer soundPlayer = new SoundPlayer(path);
+                soundPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnAgregarArt_Click(object sender, EventArgs e)
+        {
+            this.cargarProductoAFactura(0);
+        }
+
+        private void cargarProductoAFactura(int posArtEnLaSessionFactura)
+        {
+            try
+            {
+                ControladorArticulosEntity contEnt = new ControladorArticulosEntity();
+
+                if (this.txtCantidad.Text == "")
+                {
+                    this.txtCantidad.Text = "0";
+                }
+                if (this.TxtDescuentoArri.Text == "")
+                {
+                    this.TxtDescuentoArri.Text = "0";
+                }
+                if (this.txtTotalArri.Text == "")
+                {
+                    this.txtTotalArri.Text = "0";
+                }
+
+
+                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+
+                Gestion_Api.Entitys.Promocione p = contEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
+                if (p != null)
+                {
+                    if (p.PrecioFijo > 0)
+                        this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
+                    else
+                        this.TxtDescuentoArri.Text = p.Descuento.ToString();
+
+                    this.verificarAlertaArticulo(artVerPromo);
+                    this.TxtDescuentoArri.Attributes.Remove("disabled");
+                    this.txtPUnitario.Attributes.Remove("disabled");
+                }
+
+                var medida = contEnt.obtenerMedidasVentaArticulo(artVerPromo.id);
+                if (medida != null)
+                {
+                    if (medida.Count > 0 && this.chkVentaMedidaVenta.Checked == true)
+                    {
+                        this.txtDescripcion.Text += "(" + this.txtCantidad.Text + " " + medida.FirstOrDefault().Medida + " x " + medida.FirstOrDefault().Cantidad + ")";
+                        decimal cantBulto = medida.FirstOrDefault().Cantidad.Value * Convert.ToDecimal(this.txtCantidad.Text);
+                        this.txtCantidad.Text = decimal.Round(cantBulto, 2).ToString();
+                    }
+                }
+
+                //recalculo total
+                this.totalItem();
+
+                //item
+                ItemFactura item = new ItemFactura();
+                item.articulo = contArticulo.obtenerArticuloFacturar(this.txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                item.cantidad = Convert.ToDecimal(this.txtCantidad.Text, CultureInfo.InvariantCulture);
+                decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
+                item.porcentajeDescuento = Convert.ToDecimal(this.TxtDescuentoArri.Text, CultureInfo.InvariantCulture);
+                item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
+
+                //cargo la descripcion del articulo que tengo en pantalla
+                item.articulo.descripcion = this.txtDescripcion.Text;
+
+                //agrego//costos
+                item.Costo = item.articulo.costo;
+                item.costoImponible = item.articulo.costoImponible;
+                item.CostoReal = item.articulo.costoReal;
+                //agrego iva 
+                //SI ES FACTURA EXPORTACION LE DEJO 0%
+                item.porcentajeIva = item.articulo.porcentajeIva;
+                if (this.labelNroFactura.Text.Contains("Factura E") || this.labelNroFactura.Text.Contains("Nota de Credito E") || this.labelNroFactura.Text.Contains("Nota de Debito E"))
+                {
+                    item.porcentajeIva = 0;
+                    item.articulo.porcentajeIva = 0;
+                }
+
+                if (this.txtPUnitario.Text.Contains(','))
+                {
+                    this.txtPUnitario.Text = this.txtPUnitario.Text.Replace(",", "");
+                }
+
+                item.precioUnitario = Convert.ToDecimal(this.txtPUnitario.Text, CultureInfo.InvariantCulture);
+                //en base al precio unitario calculo iva del item
+                item.precioSinIva = decimal.Round(item.precioUnitario / (1 + (item.articulo.porcentajeIva / 100)), 2);
+
+                if (!string.IsNullOrEmpty(WebConfigurationManager.AppSettings["PrecioFacturaA"]) && WebConfigurationManager.AppSettings["PrecioFacturaA"] == "1")
+                {
+                    if (this.labelNroFactura.Text.Contains("Factura A") || this.labelNroFactura.Text.Contains("Nota de Credito A") || this.labelNroFactura.Text.Contains("Nota de Debito A"))
+                    {
+                        item.precioSinIva = item.precioUnitario;
+                    }
+                }
+
+                //guardo los precios originales por si hago recalculos por recargo con tarjeta de credito
+                item.precioSinRecargo = item.precioSinIva;
+                item.precioVentaSinRecargo = item.precioUnitario;
+                item.porcentajeIIBB = item.articulo.ingBrutos;
+                item.porcentajeOtrosImpuestos = item.articulo.impInternos;
+
+                //Si es factura de combustibles, seteo los valores al item
+                if (Convert.ToInt32(this.ListProveedorCombustible.SelectedValue) > 0 && item.articulo.grupo.descripcion.ToLower().Contains("combustible"))
+                {
+                    decimal totalItc = 0;
+                    decimal totalHidrica = 0;
+                    decimal totalVial = 0;
+                    decimal totalMunicipal = 0;
+
+                    var datos = contEnt.obtenerDatosCombustibleByArticuloProveedor(item.articulo.id, Convert.ToInt32(ListProveedorCombustible.SelectedValue));
+                    if (datos != null)
+                    {
+                        totalItc += decimal.Round((datos.ITC.Value), 2);
+                        totalHidrica += decimal.Round((datos.TasaHidrica.Value), 2);
+                        totalVial += decimal.Round((datos.TasaVial.Value), 2);
+                        totalMunicipal += decimal.Round((datos.TasaMunicipal.Value), 2);
+                    }
+
+                    decimal precioConIva = decimal.Round(item.precioUnitario * (1 + (item.articulo.porcentajeIva / 100)), 2);
+
+                    item.precioSinIva = item.precioUnitario; //Como es factura de combustible, hago esta asignacion, ya que en este momento el precio unitario del item es el precio del item sin iva
+                    item.precioUnitario = precioConIva + totalItc + totalHidrica + totalVial + totalMunicipal;
+                }
+
+                if (desc > 0)
+                {
+                    decimal tot = decimal.Round(item.precioUnitario * item.cantidad, 2);
+                    decimal totDesc = decimal.Round(tot * (desc / 100), 2, MidpointRounding.AwayFromZero);
+                    //item.descuento = decimal.Round(totDesc, 2);
+                    item.descuento = totDesc;
+                }
+                else
+                {
+                    item.descuento = 0;
+                }
+
+                ////si es importado cargo los datos de despacho si tiene alguno cargado
+                //this.agregarInfoDespachoItem(item);
+                this.factura.items.Add(item);
+
+                //lo agrego al session
+                if (Session["Factura"] == null)
+                {
+                    Factura fac = new Factura();
+                    Session.Add("Factura", fac);
+                }
+                Factura f = Session["Factura"] as Factura;
+
+                if (!String.IsNullOrEmpty(this.txtRenglon.Text))
+                    item.nroRenglon = Convert.ToInt32(this.txtRenglon.Text);
+                else
+                    item.nroRenglon = f.items.Count() + 1;
+
+                if (posArtEnLaSessionFactura != -1)
+                {
+                    f.items.Insert(posArtEnLaSessionFactura, item);
+                }
+                else
+                {
+                    f.items.Add(item);
+                }
+
+                Session.Add("Factura", f);
+
+                //lo dibujo en pantalla
+                this.cargarItems();
+
+                //agrego abajo
+                //this.factura.items.Add(item);
+                //actualizo totales
+                this.actualizarTotales();
+
+                //borro los campos
+                this.borrarCamposagregarItem();
+                //this.UpdatePanel1.Update();
+                this.txtCodigo.Focus();
+
+                this.lblMontoOriginal.Text = f.total.ToString();
+                this.lblTotalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.factura.total, 2).ToString();
+
+            }
+            catch (Exception ex)
+            {
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando articulos." + ex.Message + " \", {type: \"error\"});", true);
+            }
+        }
+
+        private void cargarItemsTablaModoImagenes(ItemFactura item)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+
+                TableCell celCodigo = new TableCell();
+                celCodigo.Text = item.articulo.codigo.ToString();
+                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCodigo);
+
+                TableCell celDescripcion = new TableCell();
+                celDescripcion.Text = item.articulo.descripcion;
+                celDescripcion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celDescripcion);
+
+                TableCell celPrecio = new TableCell();
+                celPrecio.Text = item.precioUnitario.ToString();
+                celPrecio.VerticalAlign = VerticalAlign.Middle;
+                celPrecio.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celPrecio);
+
+                TableCell celCantidad = new TableCell();
+                TextBox txtCantidadImagenes = new TextBox();
+                txtCantidadImagenes.ID = "_" + item.articulo.id;
+                txtCantidadImagenes.Text = item.cantidad.ToString();
+                txtCantidadImagenes.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
+                txtCantidadImagenes.CssClass = "form-control disabled";
+                txtCantidadImagenes.Width = 55;
+                txtCantidadImagenes.Attributes.Add("Disabled", "Disabled");
+                txtCantidadImagenes.TextChanged += new EventHandler(this.agregarArticuloAventa_TextChanged);
+                txtCantidadImagenes.AutoPostBack = true;
+                celCantidad.Controls.Add(txtCantidadImagenes);
+                celCantidad.VerticalAlign = VerticalAlign.Middle;
+                celCantidad.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celCantidad);
+
+                TableCell celTotal = new TableCell();
+                celTotal.Text = Decimal.Round(item.precioUnitario * item.cantidad, 2).ToString();
+                celTotal.VerticalAlign = VerticalAlign.Middle;
+                celTotal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celTotal);
+
+                TableCell celAccion = new TableCell();//botones sumar restar
+
+                LinkButton btnEditarCantidad = new LinkButton();
+                btnEditarCantidad.ID = "btnEditarCantidad" + item.articulo.id;
+                btnEditarCantidad.CssClass = "btn btn-info";
+                btnEditarCantidad.Text = "<span class='shortcut-icon icon-pencil'></span>";
+
+                btnEditarCantidad.OnClientClick = "return MostrarCalculadoraEditarCantidad(" + item.articulo.id + ");";
+                celAccion.Controls.Add(btnEditarCantidad);
+
+                lb_IdArticulo_ModalCalculadora.Text = item.articulo.id.ToString();
+
+                //Literal l = new Literal();
+                //l.Text = "&nbsp";
+                //celAccion.Controls.Add(l);
+
+                //LinkButton btnRestar = new LinkButton();
+                //btnRestar.ID = "btnRestar_" + item.articulo.id;
+                //btnRestar.CssClass = "btn btn-info";
+                //btnRestar.Text = "<span class='shortcut-icon icon-minus'></span>";
+                //btnRestar.Click += new EventHandler(this.sumarArticuloImagenes);
+                //celAccion.Controls.Add(btnRestar);
+
+                //Literal l2 = new Literal();
+                //l2.Text = "&nbsp";
+                //celAccion.Controls.Add(l2);
+
+                //LinkButton btnSumar = new LinkButton();
+                //btnSumar.ID = "btnSumar_" + item.articulo.id;
+                //btnSumar.CssClass = "btn btn-info";
+                //btnSumar.Text = "<span class='shortcut-icon icon-plus'></span>";
+                //btnSumar.Click += new EventHandler(this.sumarArticuloImagenes);
+                //celAccion.Controls.Add(btnSumar);
+
+                tr.Cells.Add(celAccion);
+
+                this.phItemsModoImagenes.Controls.Add(tr);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        protected void btnSetearClienteScrap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idClienteScrap = contClienteEntity.ObtenerIdClienteScrapParaPanaderias();
+                if (idClienteScrap == 0)
+                {
+                    idClienteScrap = CrearElClienteScrapYObtenerElId();
+                }
+                this.cargarCliente(idClienteScrap);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
+
+        public int CrearElClienteScrapYObtenerElId()
+        {
+            try
+            {
+                if (Session["ClientesABM_Cliente"] == null)
+                {
+                    Cliente cli = new Cliente();
+                    Session.Add("ClientesABM_Cliente", cli);
+                }
+                Cliente cliente = Session["ClientesABM_Cliente"] as Cliente;
+                string perfil = Session["Login_NombrePerfil"] as string;
+
+                string p = this.contCliente.obtenerLastCodigoCliente();
+                int newp = Convert.ToInt32(p);
+                cliente.codigo = newp.ToString().PadLeft(6, '0');
+
+                cliente.tipoCliente.id = 6;
+
+                cliente.razonSocial = "Scrap";
+
+                CrearElGrupoSiNoExiste("Scrap");
+
+                cliente.grupo.id = contGrupoCliente.obtenerGrupoDesc("Scrap").id;
+                cliente.categoria.id = 1;
+                cliente.estado.id = 1;
+                cliente.cuit = "00000000000";
+                cliente.iva = "13";
+                cliente.pais.id = 1;//ARGENTINA
+                cliente.expreso.id = 1;
+                string saldMax = "0";
+                cliente.saldoMax = Convert.ToDecimal(saldMax);
+                cliente.vencFC = 0;
+                cliente.descFC = 0;
+                cliente.observaciones = "";
+
+                //alerta cliente                
+                cliente.alerta.descripcion = "";
+                cliente.alerta.idCliente = cliente.id;
+
+                cliente.hijoDe = 0;
+                cliente.alias = "Scrap";
+
+                cliente.vencFC = 0;
+
+                cliente.lisPrecio.id = 1;
+                cliente.formaPago.id = 7;//cuenta corriente
+
+                cliente.origen = 1;
+
+                var Vendedor = contVendedorEntity.ObtenerPrimerVendedorDisponible();
+                cliente.vendedor.id = Vendedor.id;
+                cliente.sucursal.id = (int)Vendedor.sucursal;//preguntar
+                cliente.estado.id = 1;
+
+                if (contCliente.agregarCliente(cliente) > 0)
+                {
+                    if (contClienteEntity.agregarClienteDatos(new Gestion_Api.Entitys.Cliente_Datos
+                    {
+                        IdCliente = cliente.id
+                    }) > 0)
+                    {}
+                }
+                return cliente.id;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+                return 0;
+            }
+        }
+
+        void CrearElGrupoSiNoExiste(string nombreDelGrupo)
+        {
+            try
+            {
+                string grupoDB = contGrupoCliente.obtenerGrupoDesc(nombreDelGrupo).descripcion;
+                if (grupoDB != nombreDelGrupo)
+                {
+                    int i = contGrupoCliente.agregarGrupo(nombreDelGrupo);
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en clase: " + this + " Funcion: " + MethodBase.GetCurrentMethod().Name) + " Ex: " + ex.Message);
+            }
+        }
+        #endregion
     }
 }

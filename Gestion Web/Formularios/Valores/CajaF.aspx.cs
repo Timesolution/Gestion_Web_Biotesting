@@ -194,6 +194,8 @@ namespace Gestion_Web.Formularios.Valores
 
                         if (s == "193")
                             lbtnRemesa.Visible = true;
+                        if (s == "214")
+                            hiddenPermiso.Value = "1";
                     }
                 }
 

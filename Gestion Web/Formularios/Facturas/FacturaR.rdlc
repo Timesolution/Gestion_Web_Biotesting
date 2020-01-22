@@ -41,30 +41,10 @@
           <DataField>codigo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Porcentaje">
-          <DataField>Porcentaje</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="descuento">
-          <DataField>descuento</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="FormaPago">
-          <DataField>FormaPago</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ListaPrecio">
-          <DataField>ListaPrecio</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Vendedor">
-          <DataField>Vendedor</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsPresupuesto</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Lucas\Documents\SVN\Gestion Web\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\One\Time_Solution\Gestion\Gestion_Web\Gestion Web\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
         <rd:TableName>DatosPresupuesto</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -121,18 +101,10 @@
           <DataField>DescuentoSinIva</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="NroRenglon">
-          <DataField>NroRenglon</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Procedencia">
-          <DataField>Procedencia</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsPresupuesto</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Lucas\Documents\SVN\Gestion Web\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\One\Time_Solution\Gestion\SVN\Gestion Web\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
         <rd:TableName>DatosFactura</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -224,55 +196,14 @@
     <ReportSection>
       <Body>
         <ReportItems>
-          <Textbox Name="Textbox23">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>DOCUMENTO NO VÁLIDO COMO FACTURA</Value>
-                    <Style>
-                      <FontSize>40pt</FontSize>
-                      <Color>Silver</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox4</rd:DefaultName>
-            <Top>1.55983cm</Top>
-            <Left>0.6046cm</Left>
-            <Height>3.3179cm</Height>
-            <Width>19.7383cm</Width>
-            <Visibility>
-              <Hidden>=Microsoft.VisualBasic.Interaction.IIf(Parameters!ParamPreimpresa.Value = 1, False, True)</Hidden>
-            </Visibility>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Bottom</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Tablix Name="Tablix1">
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.68236cm</Width>
+                  <Width>2.32642cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.2574cm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>7.56741cm</Width>
+                  <Width>8.1768cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.13514cm</Width>
@@ -291,39 +222,6 @@
                 <TablixRow>
                   <Height>0.6cm</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox17">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>#</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox17</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox18">
@@ -525,39 +423,8 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.57354cm</Height>
+                  <Height>0.6cm</Height>
                   <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="NroRenglon">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!NroRenglon.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>NroRenglon</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Codigo">
@@ -757,37 +624,6 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox31">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox31</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Textbox8">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -826,7 +662,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Total Unidades: </Value>
+                                  <Value>Total Unidades / Total Kilogramos: </Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -984,7 +820,6 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1001,17 +836,271 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DatosFactura</DataSetName>
-            <Top>0.05292cm</Top>
-            <Left>0.50969cm</Left>
-            <Height>1.77354cm</Height>
-            <Width>19.91627cm</Width>
-            <ZIndex>1</ZIndex>
+            <Top>3.9642cm</Top>
+            <Left>0.51364cm</Left>
+            <Height>1.8cm</Height>
+            <Width>19.91232cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
+          <Rectangle Name="Rectangle2">
+            <ReportItems>
+              <Textbox Name="RazonSocial">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=First(Fields!RazonSocial.Value, "DetallePresupuesto")</Value>
+                        <Style>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value xml:space="preserve"> </Value>
+                        <Style>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>=Parameters!CodigoCliente.Value</Value>
+                        <Style>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value xml:space="preserve"> </Value>
+                        <Style>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>=Parameters!ParamSucFact.Value</Value>
+                        <Style>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>RazonSocial</rd:DefaultName>
+                <Top>0.16466cm</Top>
+                <Left>10.72279cm</Left>
+                <Height>0.81167cm</Height>
+                <Width>9.44176cm</Width>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="CUIT">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>CUIT: </Value>
+                        <Style />
+                      </TextRun>
+                      <TextRun>
+                        <Value>=First(Fields!CUIT.Value, "DetallePresupuesto")</Value>
+                        <Style />
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Left</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>CUIT</rd:DefaultName>
+                <Top>0.16466cm</Top>
+                <Left>0.25223cm</Left>
+                <Height>0.70583cm</Height>
+                <Width>7.95082cm</Width>
+                <ZIndex>1</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="CUIT2">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Domicilio Legal: </Value>
+                        <Style />
+                      </TextRun>
+                      <TextRun>
+                        <Value>=Parameters!DomicilioLegal.Value</Value>
+                        <Style />
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>CUIT</rd:DefaultName>
+                <Top>1.87619cm</Top>
+                <Left>0.25223cm</Left>
+                <Height>0.56472cm</Height>
+                <Width>18.42138cm</Width>
+                <ZIndex>2</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="CUIT3">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Domicilio de Entrega: </Value>
+                        <Style />
+                      </TextRun>
+                      <TextRun>
+                        <Value>=Parameters!DomicilioEntrega.Value</Value>
+                        <Style />
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>CUIT</rd:DefaultName>
+                <Top>1.15272cm</Top>
+                <Left>0.25223cm</Left>
+                <Height>0.58236cm</Height>
+                <Width>18.42138cm</Width>
+                <ZIndex>3</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="IVA">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Condicion frente al IVA: </Value>
+                        <Style />
+                      </TextRun>
+                      <TextRun>
+                        <Value>=First(Fields!IVA.Value, "DetallePresupuesto")</Value>
+                        <Style />
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>IVA</rd:DefaultName>
+                <Top>2.54674cm</Top>
+                <Left>0.25223cm</Left>
+                <Height>0.70583cm</Height>
+                <Width>7.95082cm</Width>
+                <ZIndex>4</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+              <Textbox Name="RazonSocial2">
+                <CanGrow>true</CanGrow>
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>Fecha de Vencimiento : </Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                        </Style>
+                      </TextRun>
+                      <TextRun>
+                        <Value>=Parameters!FechaVen.Value</Value>
+                        <Style>
+                          <FontStyle>Normal</FontStyle>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Normal</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style />
+                  </Paragraph>
+                </Paragraphs>
+                <rd:DefaultName>RazonSocial</rd:DefaultName>
+                <Top>2.51147cm</Top>
+                <Left>10.72279cm</Left>
+                <Height>0.81167cm</Height>
+                <Width>9.44176cm</Width>
+                <ZIndex>5</ZIndex>
+                <Style>
+                  <Border>
+                    <Style>None</Style>
+                  </Border>
+                  <PaddingLeft>2pt</PaddingLeft>
+                  <PaddingRight>2pt</PaddingRight>
+                  <PaddingTop>2pt</PaddingTop>
+                  <PaddingBottom>2pt</PaddingBottom>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <KeepTogether>true</KeepTogether>
+            <Top>0.17639cm</Top>
+            <Left>0.26141cm</Left>
+            <Height>3.4525cm</Height>
+            <Width>20.5072cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Rectangle>
           <Tablix Name="Tablix2">
             <TablixBody>
               <TablixColumns>
@@ -1055,94 +1144,6 @@
                     </TablixCell>
                   </TablixCells>
                 </TablixRow>
-                <TablixRow>
-                  <Height>0.6cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="FechaEntrega">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Fecha Entrega: </Value>
-                                  <Style>
-                                    <Format>dd/MM/yyyy</Format>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!FechaEntrega.Value</Value>
-                                  <Style>
-                                    <Format>dd/MM/yyyy</Format>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>FechaEntrega</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.6cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="HoraEntrega">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Hora Entrega: </Value>
-                                  <Style />
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!HoraEntrega.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>HoraEntrega</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
@@ -1154,18 +1155,13 @@
               <TablixMembers>
                 <TablixMember>
                   <Group Name="Detalles1" />
-                  <TablixMembers>
-                    <TablixMember />
-                    <TablixMember />
-                    <TablixMember />
-                  </TablixMembers>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DetalleComentario</DataSetName>
-            <Top>2.15047cm</Top>
-            <Left>0.50969cm</Left>
-            <Height>1.82646cm</Height>
+            <Top>6.09301cm</Top>
+            <Left>0.51364cm</Left>
+            <Height>0.62646cm</Height>
             <Width>19.91627cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
@@ -1183,6 +1179,7 @@
                   <TextRun>
                     <Value>=Parameters!ParamTotalDolares.Value</Value>
                     <Style>
+                      <FontSize>9pt</FontSize>
                       <Format>'$'#,0.00</Format>
                       <rd:FormatSymbolCulture>es-AR</rd:FormatSymbolCulture>
                     </Style>
@@ -1194,14 +1191,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox13</rd:DefaultName>
-            <Top>4.15332cm</Top>
-            <Left>2.83611cm</Left>
-            <Height>1.47312cm</Height>
+            <Top>6.86058cm</Top>
+            <Left>2.84006cm</Left>
+            <Height>1.26145cm</Height>
             <Width>14.2703cm</Width>
             <ZIndex>3</ZIndex>
-            <Visibility>
-              <Hidden>true</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1216,7 +1210,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>8.55496cm</Width>
+                  <Width>6.95074cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1317,40 +1311,91 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>NumeroRemito</DataSetName>
-            <Top>5.80283cm</Top>
-            <Left>0.50969cm</Left>
+            <Top>9.05634cm</Top>
+            <Left>0.52726cm</Left>
             <Height>1.2cm</Height>
-            <Width>8.55496cm</Width>
+            <Width>6.95074cm</Width>
             <ZIndex>4</ZIndex>
-            <Visibility>
-              <Hidden>true</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Textbox30">
+          <Image Name="Image4">
+            <Source>Embedded</Source>
+            <Value>LOGOOOOOOOOOOO</Value>
+            <Sizing>FitProportional</Sizing>
+            <Top>9.29475cm</Top>
+            <Left>7.58383cm</Left>
+            <Height>1.2cm</Height>
+            <Width>6.16479cm</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+          <Textbox Name="Textbox23">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!ParamCambioDolar.Value</Value>
+                    <Value>CERTIFICACION ISO 9001</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox21</rd:DefaultName>
+            <Top>10.49475cm</Top>
+            <Left>7.58383cm</Left>
+            <Height>0.48535cm</Height>
+            <Width>6.16479cm</Width>
+            <ZIndex>6</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox17">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Bultos: </Value>
+                    <Style />
+                  </TextRun>
+                  <TextRun>
+                    <Value>=First(Fields!Bultos.Value, "DetalleComentario")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <rd:DefaultName>Textbox30</rd:DefaultName>
-            <Top>4.91301cm</Top>
-            <Left>0.6046cm</Left>
+            <rd:DefaultName>Textbox17</rd:DefaultName>
+            <Top>6.8253cm</Top>
+            <Left>0.54892cm</Left>
             <Height>0.6cm</Height>
-            <Width>3.84662cm</Width>
-            <ZIndex>5</ZIndex>
+            <Width>6.91151cm</Width>
+            <ZIndex>7</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
             </Visibility>
@@ -1364,14 +1409,50 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Textbox Name="Textbox15">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>AJUSTANDOSE CON NOTA DE CREDITO O DEBITO SEGUN CORRESPONDA</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontWeight>Bold</FontWeight>
+                      <TextDecoration>Underline</TextDecoration>
+                      <Color>#000000</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox15</rd:DefaultName>
+            <Top>7.83099cm</Top>
+            <Left>3.73684cm</Left>
+            <Height>0.5559cm</Height>
+            <Width>13.90047cm</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
-        <Height>2.78447in</Height>
+        <Height>4.32287in</Height>
         <Style />
       </Body>
-      <Width>8.29838in</Width>
+      <Width>8.24705in</Width>
       <Page>
         <PageHeader>
-          <Height>9.10855cm</Height>
+          <Height>5.69542cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1779,325 +1860,6 @@
                 </Border>
               </Style>
             </Rectangle>
-            <Rectangle Name="Rectangle2">
-              <ReportItems>
-                <Textbox Name="RazonSocial">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=First(Fields!RazonSocial.Value, "DetallePresupuesto")</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value xml:space="preserve"> </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=Parameters!CodigoCliente.Value</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value xml:space="preserve"> </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=Parameters!ParamSucFact.Value</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Right</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>RazonSocial</rd:DefaultName>
-                  <Top>0.16466cm</Top>
-                  <Left>9.48771cm</Left>
-                  <Height>0.44125cm</Height>
-                  <Width>10.67684cm</Width>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="CUIT">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>CUIT: </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=First(Fields!CUIT.Value, "DetallePresupuesto")</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>CUIT</rd:DefaultName>
-                  <Top>0.16466cm</Top>
-                  <Left>0.25223cm</Left>
-                  <Height>0.44125cm</Height>
-                  <Width>8.75298cm</Width>
-                  <ZIndex>1</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="CUIT2">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>Domicilio Legal: </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=Parameters!DomicilioLegal.Value</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>CUIT</rd:DefaultName>
-                  <Top>1.83209cm</Top>
-                  <Left>0.24828cm</Left>
-                  <Height>0.49416cm</Height>
-                  <Width>19.91627cm</Width>
-                  <ZIndex>2</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="CUIT3">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>Domicilio de Entrega: </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=Parameters!DomicilioEntrega.Value</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>CUIT</rd:DefaultName>
-                  <Top>1.24973cm</Top>
-                  <Left>0.24828cm</Left>
-                  <Height>0.54708cm</Height>
-                  <Width>19.91627cm</Width>
-                  <ZIndex>3</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="IVA">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>Condicion frente al IVA: </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=First(Fields!IVA.Value, "DetallePresupuesto")</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>IVA</rd:DefaultName>
-                  <Top>2.36153cm</Top>
-                  <Left>0.24828cm</Left>
-                  <Height>0.4677cm</Height>
-                  <Width>7.95082cm</Width>
-                  <ZIndex>4</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="Textbox15">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>=First(Fields!FormaPago.Value, "DetallePresupuesto")</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value xml:space="preserve"> </Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox3</rd:DefaultName>
-                  <Top>0.72911cm</Top>
-                  <Left>0.24828cm</Left>
-                  <Height>0.41479cm</Height>
-                  <Width>8.7177cm</Width>
-                  <ZIndex>5</ZIndex>
-                  <Visibility>
-                    <Hidden>true</Hidden>
-                  </Visibility>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-                <Textbox Name="Textbox33">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>Saldo cta. cte.: $</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                          </Style>
-                        </TextRun>
-                        <TextRun>
-                          <Value>=Parameters!ParamSaldoCtaCte.Value</Value>
-                          <Style>
-                            <FontSize>9pt</FontSize>
-                            <FontWeight>Bold</FontWeight>
-                            <Format>'$'#,0.00</Format>
-                            <rd:FormatSymbolCulture>es-AR</rd:FormatSymbolCulture>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Right</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox24</rd:DefaultName>
-                  <Top>0.72911cm</Top>
-                  <Left>9.48376cm</Left>
-                  <Height>0.44125cm</Height>
-                  <Width>10.68474cm</Width>
-                  <ZIndex>6</ZIndex>
-                  <Visibility>
-                    <Hidden>true</Hidden>
-                  </Visibility>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <PaddingLeft>2pt</PaddingLeft>
-                    <PaddingRight>2pt</PaddingRight>
-                    <PaddingTop>2pt</PaddingTop>
-                    <PaddingBottom>2pt</PaddingBottom>
-                  </Style>
-                </Textbox>
-              </ReportItems>
-              <KeepTogether>true</KeepTogether>
-              <Top>5.53641cm</Top>
-              <Left>0.26141cm</Left>
-              <Height>2.96206cm</Height>
-              <Width>20.5072cm</Width>
-              <ZIndex>1</ZIndex>
-              <Style>
-                <Border>
-                  <Style>Solid</Style>
-                </Border>
-              </Style>
-            </Rectangle>
           </ReportItems>
           <Style>
             <Border>
@@ -2106,7 +1868,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>11.93368cm</Height>
+          <Height>6.52058cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2118,9 +1880,7 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=Parameters!TotalPresupuesto.Value</Value>
-                      <Style>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style>
@@ -2129,14 +1889,18 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>5.28451cm</Top>
-              <Left>17.67372cm</Left>
+              <Top>1.34109cm</Top>
+              <Left>16.81551cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
+              <Width>3.61045cm</Width>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <TopBorder>
+                  <Style>None</Style>
+                </TopBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2161,7 +1925,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>11.13896cm</Top>
+              <Top>5.78827cm</Top>
               <Left>15.79916cm</Left>
               <Height>0.6cm</Height>
               <Width>4.93417cm</Width>
@@ -2193,15 +1957,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>1.08451cm</Top>
-              <Left>17.67372cm</Left>
+              <Top>1.34109cm</Top>
+              <Left>4.44727cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
+              <Width>3.01316cm</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <TopBorder>
+                  <Style>None</Style>
+                </TopBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2225,15 +1993,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>0.48451cm</Top>
-              <Left>17.67372cm</Left>
+              <Top>1.34109cm</Top>
+              <Left>0.51364cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
+              <Width>3.93758cm</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <TopBorder>
+                  <Style>None</Style>
+                </TopBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2257,15 +2029,55 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>1.68451cm</Top>
-              <Left>17.67372cm</Left>
+              <Top>1.34109cm</Top>
+              <Left>7.46043cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
+              <Width>3.84568cm</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <TopBorder>
+                  <Style>None</Style>
+                </TopBorder>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Iva">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Parameters!Iva.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Iva</rd:DefaultName>
+              <Top>1.34109cm</Top>
+              <Left>11.29662cm</Left>
+              <Height>0.6cm</Height>
+              <Width>2.56177cm</Width>
+              <ZIndex>5</ZIndex>
+              <Style>
+                <Border>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
+                </Border>
+                <TopBorder>
+                  <Style>None</Style>
+                </TopBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2287,11 +2099,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalLetras</rd:DefaultName>
-              <Top>5.65417cm</Top>
-              <Left>0.6046cm</Left>
+              <Top>0.03526cm</Top>
+              <Left>0.54892cm</Left>
               <Height>0.6cm</Height>
-              <Width>12.39542cm</Width>
-              <ZIndex>5</ZIndex>
+              <Width>13.30948cm</Width>
+              <ZIndex>6</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2321,11 +2133,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>7.88488cm</Top>
-              <Left>14.7269cm</Left>
+              <Top>3.38764cm</Top>
+              <Left>14.76218cm</Left>
               <Height>0.6cm</Height>
-              <Width>6.00643cm</Width>
-              <ZIndex>6</ZIndex>
+              <Width>5.97115cm</Width>
+              <ZIndex>7</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2355,11 +2167,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>8.62599cm</Top>
-              <Left>18.02537cm</Left>
+              <Top>4.02291cm</Top>
+              <Left>18.13121cm</Left>
               <Height>0.6cm</Height>
-              <Width>2.67268cm</Width>
-              <ZIndex>7</ZIndex>
+              <Width>2.6374cm</Width>
+              <ZIndex>8</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2387,11 +2199,11 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>7.84959cm</Top>
-              <Left>4.41199cm</Left>
+              <Top>3.35235cm</Top>
+              <Left>4.44727cm</Left>
               <Height>0.6cm</Height>
               <Width>5.1077cm</Width>
-              <ZIndex>8</ZIndex>
+              <ZIndex>9</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2406,11 +2218,11 @@
               <Source>Embedded</Source>
               <Value>afip</Value>
               <Sizing>Fit</Sizing>
-              <Top>6.39528cm</Top>
-              <Left>0.51364cm</Left>
+              <Top>1.89804cm</Top>
+              <Left>0.54892cm</Left>
               <Height>3.36987cm</Height>
               <Width>3.9023cm</Width>
-              <ZIndex>9</ZIndex>
+              <ZIndex>10</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2435,11 +2247,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>8.52015cm</Top>
-              <Left>0.51364cm</Left>
+              <Top>4.02291cm</Top>
+              <Left>0.54892cm</Left>
               <Height>0.6cm</Height>
               <Width>10.70847cm</Width>
-              <ZIndex>10</ZIndex>
+              <ZIndex>11</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2467,11 +2279,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>8.62599cm</Top>
-              <Left>14.7269cm</Left>
+              <Top>4.02291cm</Top>
+              <Left>14.76218cm</Left>
               <Height>0.6cm</Height>
               <Width>3.29847cm</Width>
-              <ZIndex>11</ZIndex>
+              <ZIndex>12</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2499,11 +2311,11 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>10.28551cm</Top>
-              <Left>0.51364cm</Left>
+              <Top>5.78827cm</Top>
+              <Left>0.54892cm</Left>
               <Height>0.6cm</Height>
               <Width>9.01cm</Width>
-              <ZIndex>12</ZIndex>
+              <ZIndex>13</ZIndex>
               <Visibility>
                 <Hidden>true</Hidden>
               </Visibility>
@@ -2536,15 +2348,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>4.08451cm</Top>
-              <Left>17.67372cm</Left>
+              <Top>1.34109cm</Top>
+              <Left>13.85445cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
-              <ZIndex>13</ZIndex>
+              <Width>2.96106cm</Width>
+              <ZIndex>14</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <TopBorder>
+                  <Style>None</Style>
+                </TopBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2571,15 +2387,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>5.28451cm</Top>
-              <Left>14.65335cm</Left>
+              <Top>0.74109cm</Top>
+              <Left>16.81946cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>14</ZIndex>
+              <Width>3.61045cm</Width>
+              <ZIndex>15</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <BottomBorder>
+                  <Style>None</Style>
+                </BottomBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2603,15 +2423,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>1.08451cm</Top>
-              <Left>14.65335cm</Left>
+              <Top>0.74109cm</Top>
+              <Left>4.45122cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>15</ZIndex>
+              <Width>3.01316cm</Width>
+              <ZIndex>16</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <BottomBorder>
+                  <Style>None</Style>
+                </BottomBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2635,15 +2459,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>0.48451cm</Top>
-              <Left>14.65335cm</Left>
+              <Top>0.74109cm</Top>
+              <Left>0.51759cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>16</ZIndex>
+              <Width>3.93363cm</Width>
+              <ZIndex>17</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <BottomBorder>
+                  <Style>None</Style>
+                </BottomBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2667,15 +2495,55 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>1.68451cm</Top>
-              <Left>14.65335cm</Left>
+              <Top>0.74109cm</Top>
+              <Left>7.46438cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>17</ZIndex>
+              <Width>3.84173cm</Width>
+              <ZIndex>18</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <BottomBorder>
+                  <Style>None</Style>
+                </BottomBorder>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Iva2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>IVA</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Iva</rd:DefaultName>
+              <Top>0.74109cm</Top>
+              <Left>11.29662cm</Left>
+              <Height>0.6cm</Height>
+              <Width>2.56178cm</Width>
+              <ZIndex>19</ZIndex>
+              <Style>
+                <Border>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
+                </Border>
+                <BottomBorder>
+                  <Style>None</Style>
+                </BottomBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2701,15 +2569,19 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>4.08451cm</Top>
-              <Left>14.65335cm</Left>
+              <Top>0.74109cm</Top>
+              <Left>13.8584cm</Left>
               <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>18</ZIndex>
+              <Width>2.95711cm</Width>
+              <ZIndex>20</ZIndex>
               <Style>
                 <Border>
-                  <Style>None</Style>
+                  <Color>Silver</Color>
+                  <Style>Solid</Style>
                 </Border>
+                <BottomBorder>
+                  <Style>None</Style>
+                </BottomBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
@@ -2722,296 +2594,17 @@
               <Value>=First(Fields!Imagen.Value, "dtImagen")</Value>
               <MIMEType>image/png</MIMEType>
               <Sizing>FitProportional</Sizing>
-              <Top>9.14403cm</Top>
-              <Left>0.47836cm</Left>
+              <Top>4.64679cm</Top>
+              <Left>0.51364cm</Left>
               <Height>0.85573cm</Height>
               <Width>13.19969cm</Width>
-              <ZIndex>19</ZIndex>
+              <ZIndex>21</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
               </Style>
             </Image>
-            <Textbox Name="Textbox25">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Hoja Nº</Value>
-                      <Style>
-                        <Color>Gray</Color>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Globals!PageNumber</Value>
-                      <Style>
-                        <Color>Gray</Color>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value> de </Value>
-                      <Style>
-                        <Color>Gray</Color>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Globals!OverallTotalPages</Value>
-                      <Style>
-                        <Color>Gray</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox13</rd:DefaultName>
-              <Top>11.13896cm</Top>
-              <Left>0.51364cm</Left>
-              <Height>0.6cm</Height>
-              <Width>8.92285cm</Width>
-              <ZIndex>20</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="TotalLetras9">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Parameters!ParamNoGravado.Value</Value>
-                      <Style>
-                        <Format>'$'#,0.00</Format>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>TotalLetras</rd:DefaultName>
-              <Top>4.68451cm</Top>
-              <Left>17.67372cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
-              <ZIndex>21</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-                <rd:FormatSymbolCulture>es-AR</rd:FormatSymbolCulture>
-              </Style>
-            </Textbox>
-            <Textbox Name="Subtotal4">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Iva 10.5%</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>2.28451cm</Top>
-              <Left>14.65335cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>22</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Subtotal5">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Iva 21%</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>2.88451cm</Top>
-              <Left>14.65335cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>23</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Subtotal6">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Iva 27%</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>3.48451cm</Top>
-              <Left>14.65335cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>24</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Subtotal7">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Parameters!ParamTotalIva105.Value</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>2.28451cm</Top>
-              <Left>17.67372cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
-              <ZIndex>25</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Subtotal8">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Parameters!ParamTotalIva21.Value</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>2.88451cm</Top>
-              <Left>17.67372cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
-              <ZIndex>26</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Subtotal9">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Parameters!ParamTotalIva27.Value</Value>
-                      <Style />
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>3.48451cm</Top>
-              <Left>17.67372cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02433cm</Width>
-              <ZIndex>27</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="Textbox12">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -3019,32 +2612,28 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>C. no Gravados</Value>
-                      <Style>
-                        <Format>'$'#,0.00</Format>
-                      </Style>
+                      <Value />
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>4.68451cm</Top>
-              <Left>14.65335cm</Left>
-              <Height>0.6cm</Height>
-              <Width>3.02037cm</Width>
-              <ZIndex>28</ZIndex>
+              <rd:DefaultName>Textbox12</rd:DefaultName>
+              <Top>4.64679cm</Top>
+              <Left>0.79753cm</Left>
+              <Height>0.34654cm</Height>
+              <Width>12.95109cm</Width>
+              <ZIndex>22</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
+                <BackgroundColor>White</BackgroundColor>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
                 <PaddingBottom>2pt</PaddingBottom>
-                <rd:FormatSymbolCulture>es-AR</rd:FormatSymbolCulture>
               </Style>
             </Textbox>
           </ReportItems>
@@ -3058,8 +2647,8 @@
         <PageWidth>21.59cm</PageWidth>
         <LeftMargin>0cm</LeftMargin>
         <RightMargin>0cm</RightMargin>
-        <TopMargin>0cm</TopMargin>
-        <BottomMargin>0cm</BottomMargin>
+        <TopMargin>0.5cm</TopMargin>
+        <BottomMargin>0.5cm</BottomMargin>
         <ColumnSpacing>0.13cm</ColumnSpacing>
         <Style />
       </Page>
@@ -3233,6 +2822,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamTotalIva27">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FechaVen">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
@@ -4078,6 +3673,24 @@ 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
 AAAAAElFTkSuQmCC</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="LOGOOOOOOOOOOO">
+      <MIMEType>image/jpeg</MIMEType>
+      <ImageData>/9j/4AAQSkZJRgABAQEAYABgAAD/4RDgRXhpZgAATU0AKgAAAAgABAE7AAIAAAAHAAAISodpAAQAAAABAAAIUpydAAEAAAAOAAAQyuocAAcAAAgMAAAAPgAAAAAc6gAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEdpYW5uaQAAAAWQAwACAAAAFAAAEKCQBAACAAAAFAAAELSSkQACAAAAAzk3AACSkgACAAAAAzk3AADqHAAHAAAIDAAACJQAAAAAHOoAAAAIAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyMDE2OjEwOjI4IDExOjUxOjI4ADIwMTY6MTA6MjggMTE6NTE6MjgAAABHAGkAYQBuAG4AaQAAAP/hCxlodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvADw/eHBhY2tldCBiZWdpbj0n77u/JyBpZD0nVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkJz8+DQo8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIj48cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMu
+b3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSJ1dWlkOmZhZjViZGQ1LWJhM2QtMTFkYS1hZDMxLWQzM2Q3NTE4MmYxYiIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIi8+PHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9InV1aWQ6ZmFmNWJkZDUtYmEzZC0xMWRhLWFkMzEtZDMzZDc1MTgyZjFiIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iPjx4bXA6Q3JlYXRlRGF0ZT4yMDE2LTEwLTI4VDExOjUxOjI4Ljk3NDwveG1wOkNyZWF0ZURhdGU+PC9yZGY6RGVzY3JpcHRpb24+PHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9InV1aWQ6ZmFmNWJkZDUtYmEzZC0xMWRhLWFkMzEtZDMzZDc1MTgyZjFiIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iPjxkYzpjcmVhdG9yPjxyZGY6U2VxIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+PHJkZjpsaT5HaWFubmk8L3JkZjpsaT48L3JkZjpTZXE+DQoJCQk8L2RjOmNyZWF0b3I+PC9yZGY6RGVzY3JpcHRpb24+PC9yZGY6UkRGPjwveDp4bXBtZXRhPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8P3hwYWNrZXQgZW5kPSd3Jz8+/9sAQwAHBQUGBQQHBgUGCAcHCAoRCwoJCQoVDxAMERgVGhkYFRgXGx4nIRsdJR0XGCIuIiUoKSssKxogLzMvKjInKisq/9sAQwEHCAgKCQoUCwsUKhwYHCoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq/8AAEQgALgDpAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeY
+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</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>

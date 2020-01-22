@@ -942,6 +942,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
         private bool ExisteFilaAndTieneDatos(DataRow fila, string nombreCampo)
         {
             try
@@ -963,6 +964,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int idFactura = Convert.ToInt32(row["id"]);
                 string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
 
                 //fila
@@ -1027,6 +1029,19 @@ namespace Gestion_Web.Formularios.Facturas
                     row["subtotal"] = Convert.ToDecimal(row["subtotal"]) * -1;
                     row["total"] = Convert.ToDecimal(row["total"]) * -1;
                 }
+
+                TableCell calSumaIIBB_Provincias = new TableCell();
+                decimal porcentajeSumaIIBB = contFactEntity.ObtenerSumaIngresosBrutosDeLasProvinciasByFactura(idFactura);
+                decimal neto = Convert.ToDecimal(row["subtotal"]);
+                calSumaIIBB_Provincias.Text = "$ 0.00";
+                if (porcentajeSumaIIBB > 0)
+                {
+                    calSumaIIBB_Provincias.Text = "$ " + Math.Round(porcentajeSumaIIBB * neto / 100, 2).ToString();
+                }
+                calSumaIIBB_Provincias.VerticalAlign = VerticalAlign.Middle;
+                calSumaIIBB_Provincias.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(calSumaIIBB_Provincias);
+
                 TableCell celNeto = new TableCell();
                 celNeto.Text = "$" + row["subtotal"].ToString();
                 //celNeto.Text = "$" + f.netoNGrabado;
@@ -1218,7 +1233,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1358,7 +1373,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true && tr.Cells[1].Text.Contains("Presupuesto"))
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -1427,7 +1442,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
@@ -1479,10 +1494,15 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                    if (idtildado.Split(';').Count() > 1 && idtildado.Split(';')[1] != "")
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar solo una Factura"));
+                        return;
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
@@ -1507,7 +1527,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1650,7 +1670,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idsListaFacturasTildados += ch.ID.Split('_')[1] + ";";
@@ -1703,7 +1723,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
@@ -1764,7 +1784,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true && !tr.Cells[1].Text.Contains("Presupuesto") && !tr.Cells[1].Text.Contains("Nota de Credito PRP"))
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -1793,7 +1813,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.lblFechaFactura.Text = FC.fecha.ToString("dd/MM/yyyy hh:mm");
                         this.txtNuevaFecha.Text = FC.fecha.ToString("dd/MM/yyyy");
                     }
-                    
+
                     this.txtNuevoNetoFactura.Text = FC.subTotal.ToString();
                     this.txtNuevoIvaFactura.Text = FC.neto21.ToString();
                     this.txtNuevoTotalFactura.Text = FC.total.ToString();
@@ -1852,7 +1872,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1890,7 +1910,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idTildado = Convert.ToInt32(ch.ID.Split('_')[1]);
@@ -1962,7 +1982,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnExportarVentasVendedor_Click(object sender, EventArgs e)
         {
             this.ExportToExcel(9);
-        }     
+        }
         protected void btnImprimirVentasVendedor_Click(object sender, EventArgs e)
         {
             this.PrintToPDF(9);
@@ -2048,7 +2068,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
 
                     if (ch.Checked)
                     {
@@ -2198,7 +2218,10 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionFacturas.aspx?a=13&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue) + "&e=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                         }
-
+                        if (accion == 14)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue) + "&e=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        }
                     }
                     else
                     {
@@ -2285,6 +2308,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (accion == 12)
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=13&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        }
+                        if (accion == 14)
+                        {
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
                     }
                     else
@@ -3647,7 +3674,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string puntoVenta = this.txtNuevoPuntoVenta.Text;
 
                 DateTime horaFactura = new DateTime();
-                string horaFacturaFinal = "";                
+                string horaFacturaFinal = "";
 
                 if (modificoHora == "1")
                 {
@@ -3660,8 +3687,8 @@ namespace Gestion_Web.Formularios.Facturas
                     horaFactura = DateTime.ParseExact(lblFechaFactura.Text, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
                     horaFacturaFinal = horaFactura.ToString("hh:mm");
                 }
-                
-                string fecha = this.txtNuevaFecha.Text  + " " + horaFacturaFinal;
+
+                string fecha = this.txtNuevaFecha.Text + " " + horaFacturaFinal;
                 string numero = this.txtNuevoNumeroFactura.Text;
                 string neto = this.txtNuevoNetoFactura.Text;
                 string iva = this.txtNuevoIvaFactura.Text;
@@ -3825,7 +3852,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idTildado = ch.ID.Split('_')[1];
@@ -3972,7 +3999,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1];
@@ -3997,7 +4024,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[9].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         facturasTildadas.Add(Convert.ToInt32(ch.ID.Split('_')[1]));
@@ -4111,5 +4138,14 @@ namespace Gestion_Web.Formularios.Facturas
             return (Convert.ToInt32(compras.LastOrDefault().Numero) + 1).ToString("D8");
         }
 
+        protected void btnExportarVentasConSolicitudes_Click(object sender, EventArgs e)
+        {
+            this.ExportToExcel(14);
+        }
+
+        protected void btnImprimirVentasConSolicitudes_Click(object sender, EventArgs e)
+        {
+            this.PrintToPDF(14);
+        }
     }
 }
