@@ -1946,10 +1946,13 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 decimal ingresosBrutos = 0;
-                decimal percepcionBSAS = (decimal)this.contClienteEntity.obtenerIngresosBrutoCliente(idCliente).Percepcion;
-                ingresosBrutos = percepcionBSAS;
-                ingresosBrutos += ObtenerEl_IIBB_ProvinciasConModo_Siempre_(idCliente);
-                ingresosBrutos += ObtenerEl_IIBB_ProvinciasSegunDomicilioEntregaSeleccionado_Y_SuModoSea_SEGUN_PROVINCIA(idCliente);
+                var percepcionBSASCliente = contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
+                if(percepcionBSASCliente != null)
+                {
+                    ingresosBrutos = (decimal)percepcionBSASCliente.Percepcion;
+                    ingresosBrutos += ObtenerEl_IIBB_ProvinciasConModo_Siempre_(idCliente);
+                    ingresosBrutos += ObtenerEl_IIBB_ProvinciasSegunDomicilioEntregaSeleccionado_Y_SuModoSea_SEGUN_PROVINCIA(idCliente);
+                }                
 
                 this.txtPorcRetencion.Text = ingresosBrutos.ToString();
             }
