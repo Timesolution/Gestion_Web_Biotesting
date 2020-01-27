@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Repositorio API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -3268,6 +3268,7 @@
     <EmbeddedResource Include="Formularios\Articulos\MovStockSucursalR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\MovimientoStockR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\NominaArticulosR.rdlc" />
+    <EmbeddedResource Include="Formularios\Articulos\ReporteStockPendienteR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ReporteStockR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasChicas.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasGrandes.rdlc" />
@@ -3392,7 +3393,6 @@
     <EmbeddedResource Include="Formularios\Valores\ChequesR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ChequesR_2.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\ComprobanteCajaR.rdlc" />
-    <EmbeddedResource Include="Formularios\Valores\GastosR_ByEmpAndSucAndCuentaContable.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\GastosR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\InformeCierresR.rdlc" />
     <EmbeddedResource Include="Formularios\Valores\PagaresR.rdlc" />
