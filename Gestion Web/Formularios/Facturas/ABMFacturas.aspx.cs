@@ -2198,6 +2198,22 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.txtTotalArri.Text = "0";
                 }
+                ControladorArticulosEntity contArtEnt = new ControladorArticulosEntity();
+
+                Articulo artVerPromo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+
+                Gestion_Api.Entitys.Promocione p = contArtEnt.obtenerPromocionValidaArticulo(artVerPromo.id, Convert.ToInt32(this.ListEmpresa.SelectedValue), Convert.ToInt32(this.ListSucursal.SelectedValue), Convert.ToInt32(this.DropListFormaPago.SelectedValue), Convert.ToInt32(this.DropListLista.SelectedValue), Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")), Convert.ToDecimal(this.txtCantidad.Text));
+                if (p != null && p.FormaPago != 8)
+                {
+                    if (p.PrecioFijo > 0)
+                        this.txtPUnitario.Text = p.PrecioFijo.Value.ToString();
+                    else
+                        this.TxtDescuentoArri.Text = p.Descuento.ToString();
+
+                    this.verificarAlertaArticulo(artVerPromo);
+                    this.TxtDescuentoArri.Attributes.Remove("disabled");
+                    this.txtPUnitario.Attributes.Remove("disabled");
+                }
 
                 //recalculo total
                 this.totalItem();
