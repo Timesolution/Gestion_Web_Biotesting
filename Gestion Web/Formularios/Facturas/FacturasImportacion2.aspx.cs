@@ -40,7 +40,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.VerificarLogin();
-                this.fechaD = Convert.ToDateTime(Request.QueryString["Fechadesde"], new CultureInfo("es-AR"));
+                this.fechaD = Convert.ToDateTime(Request.QueryString["FechaDesde"], new CultureInfo("es-AR"));
                 this.fechaH = Convert.ToDateTime(Request.QueryString["FechaHasta"], new CultureInfo("es-AR"));
                 this.suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
                 this.estado = Convert.ToInt32(Request.QueryString["estado"]);
@@ -210,7 +210,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (fechaD != null && fechaH != null && suc != 0 && idCliente == 0)
+                if (fechaD != null && fechaH != null && idCliente == 0)
                 {
                     var lotes = this.contImp.FiltrarLotesImportacion(fechaD, fechaH.AddHours(23).AddMinutes(59), estado);
 
@@ -343,7 +343,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Response.Redirect("FacturasImportacion2.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text +  "&estado=" + DropListEstado.SelectedValue);
+                Response.Redirect("FacturasImportacion2.aspx?FechaDesde=" + txtFechaDesde.Text + "&FechaHasta=" + txtFechaHasta.Text +  "&estado=" + DropListEstado.SelectedValue);
             }
             catch (Exception ex)
             {
