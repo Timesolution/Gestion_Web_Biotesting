@@ -14,71 +14,99 @@
                     <!-- /widget-header -->
 
                     <div class="widget-content">
-                        <table style="width: 100%">
-                            <tr>
-                                <td style="width: 45%">
-                                    <label class="col-md-4">Nombre</label>
-                                    <div class="col-md-6">
-                                        <asp:TextBox ID="txtNombre" runat="server" class="form-control"></asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtNombre" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="DivisaGroup"></asp:RequiredFieldValidator>
-                                    </div>
-                                </td>
-                                <td style="width: 45%">
-                                    <label class="col-md-4">Direccion</label>
-                                    <div class="col-md-6">
-                                        <asp:TextBox ID="txtDireccion" runat="server" class="form-control"></asp:TextBox>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtDireccion" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="DivisaGroup"></asp:RequiredFieldValidator>
-                                    </div>
-                                </td>
-                                <td style="width: 10%">
-                                    <div class="col-md-1">
-                                        <div class="shortcuts">
-                                            <asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="DivisaGroup" />
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 45%">
-                                    <label class="col-md-4">Buscar cliente</label>
-                                    <div class="col-md-6">
-                                        <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
-                                        <label class="col-md-4"></label>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click"/>
-                                    </div>
-                                </td>
-                                <td style="width: 10%">
-                                    <label class="col-md-4">Privada</label>
-                                    <div class="col-md-6">
-                                        <asp:CheckBox ID="checkPrivada" runat="server" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 45%">
-                                    <label class="col-md-4">Cliente por Defecto</label>
-                                    <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
-                                    </div>
-                                </td>                                
-                            </tr>
-
-                        </table>
+                        <asp:UpdatePanel runat="server" ID="UpdatePanel12" UpdateMode="Always">
+                            <ContentTemplate>
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="width: 45%; border-right: 1px solid #CCC;">
+                                            <label class="col-md-4">Nombre</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtNombre" runat="server" class="form-control"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtNombre" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="DivisaGroup"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </td>
+                                        <td style="width: 10%">
+                                            <div class="col-md-6 pull-right">
+                                                <div class="shortcuts">
+                                                    <asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="DivisaGroup" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #CCC;">&nbsp
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 45%; border-right: 1px solid #CCC;">
+                                            <label class="col-md-4">Buscar cliente</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
+                                                <label class="col-md-4"></label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                            </div>
+                                        </td>
+                                        <td style="width: 10%">
+                                            <label class="col-md-4">Privada</label>
+                                            <div class="col-md-1">
+                                                <asp:CheckBox ID="checkPrivada" OnCheckedChanged="checkPrivada_CheckedChanged" AutoPostBack="true" runat="server" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #CCC;">&nbsp
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 45%; border-right: 1px solid #CCC;">
+                                            <label class="col-md-4">Cliente por Defecto</label>
+                                            <div class="col-md-6">
+                                                <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                        </td>
+                                        <td id="tdusers" runat="server" style="width: 45%; visibility: hidden">
+                                            <label class="col-md-4">Usuarios</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox runat="server" ID="txtUsuarios" CssClass="form-control"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" ID="lbtnBuscar" OnClick="lbtnBuscar_Click" class="btn btn-info" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-right: 1px solid #CCC;">&nbsp
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 45%; vertical-align: baseline; border-right: 1px solid #CCC;">
+                                            <label class="col-md-4">Direccion</label>
+                                            <div class="col-md-6">
+                                                <asp:TextBox ID="txtDireccion" runat="server" class="form-control"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtDireccion" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="DivisaGroup"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </td>
+                                        <td id="tdabmusers" runat="server" style="width: 45%; visibility: hidden">
+                                            <div class="col-md-12">
+                                                <asp:DropDownList runat="server" ID="dlUsuarios" CssClass="form-control" Style="max-width: 70%; display: initial"></asp:DropDownList>
+                                                <asp:LinkButton runat="server" ID="lbtnAgregarUsuarios" CssClass="btn btn-success pull-right" OnClick="lbtnAgregarUsuarios_Click">Agregar</asp:LinkButton>
+                                            </div>
+                                            &nbsp
+                                                    <div class="col-md-12">
+                                                        <asp:ListBox Rows="4" runat="server" ID="listUsuarios" CssClass="form-control" Style="max-width: 70%; display: initial"></asp:ListBox>
+                                                        <asp:LinkButton runat="server" ID="lbtnEliminar" CssClass="btn btn-danger pull-right" OnClick="lbtnEliminar_Click">Eliminar</asp:LinkButton>
+                                                    </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
                     </div>
                     <!-- /widget-content -->
 
@@ -388,33 +416,33 @@
             }
         </script>
 
-        <script src="../../Scripts/plugins/dataTables/jquery-2.0.0.js"></script>
-        <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
-        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-
+        <%--<script src="../../Scripts/plugins/dataTables/jquery-2.0.0.js"></script>--%>
+        <%--        <script src="../../Scripts/plugins/dataTables/jquery.dataTables.min.js"></script>
+        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>--%>
 
         <!-- Core Scripts - Include with every page -->
         <script src="../../Scripts/jquery-1.10.2.js"></script>
         <script src="../../Scripts/bootstrap.min.js"></script>
-        <script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
-
+        <link href="../../css/pages/reports.css" rel="stylesheet">
+        <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
+        
         <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
         <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
         <script src="../../Scripts/libs/bootstrap.min.js"></script>
 
         <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
-
         <script src="../../Scripts/Application.js"></script>
-
         <script src="../../Scripts/demo/gallery.js"></script>
 
         <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
         <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
         <script src="../../Scripts/demo/notifications.js"></script>
-
+        <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        
         <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
-        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        
 
         <%--    <script>
 
@@ -431,21 +459,22 @@
 
         <!-- Page-Level Plugin Scripts - Tables -->
         <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
         <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
         <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
 
         <script>
-            $(document).ready(function () {
-                $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
-            });
+            //$(document).ready(function () {
+            //    $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
+            //});
         </script>
 
         <script type="text/javascript">
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
-            function endReq(sender, args) {
-                $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
-            }
+            //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
+            //function endReq(sender, args) {
+            //    $('#dataTables-example').dataTable({ "bFilter": false, "bInfo": false, "bPaginate": false });
+            //}
         </script>
 
         <script>
@@ -464,8 +493,7 @@
                 if (key < 48 || key > 57) {
                     if (key == 46 || key == 8) // Detectar . (punto) y backspace (retroceso)
                     { return true; }
-                    else
-                    { return false; }
+                    else { return false; }
                 }
                 return true;
             }
