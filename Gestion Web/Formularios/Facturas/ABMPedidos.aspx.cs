@@ -151,6 +151,40 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+
+        private void CargarDropList_DireccionesDeEntregaDelCliente(int idCliente)
+        {
+            try
+            {
+                var direcciones = contCliente.obtenerDireccionesById(idCliente);
+
+                dropList_DomicilioEntrega.Items.Clear();
+
+                dropList_DomicilioEntrega.Items.Add(new ListItem("Seleccione", "Seleccione"));
+                foreach (DataRow item in direcciones.Rows)
+                {
+                    if (item.ItemArray[0].ToString() == "Entrega")
+                    {
+                        dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
+                    }
+                }
+                if (dropList_DomicilioEntrega.Items.Count > 0)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
         private void VerificarLogin()
         {
             try
@@ -1068,7 +1102,8 @@ namespace Gestion_Web.Formularios.Facturas
                     var dire = cliente.direcciones.Where(x => x.nombre == "Entrega").FirstOrDefault();
                     if (dire != null)
                     {
-                        this.txtDomicilioEntrega.Text = dire.direc + " " + dire.codPostal + "" + dire.localidad + " " + dire.provincia + " " + dire.pais;
+                        //this.txtDomicilioEntrega.Text = dire.direc + " " + dire.codPostal + "" + dire.localidad + " " + dire.provincia + " " + dire.pais;
+                        CargarDropList_DireccionesDeEntregaDelCliente(idCliente);
                     }
                     else
                     {
@@ -1076,11 +1111,13 @@ namespace Gestion_Web.Formularios.Facturas
                         if (legal != null)
                         {
 
-                            this.txtDomicilioEntrega.Text = legal.direc + " " + legal.codPostal + " " + legal.localidad + " " + legal.provincia + " " + legal.pais;
+                            //this.txtDomicilioEntrega.Text = legal.direc + " " + legal.codPostal + " " + legal.localidad + " " + legal.provincia + " " + legal.pais;
+                            CargarDropList_DireccionesDeEntregaDelCliente(idCliente);
                         }
                         else
                         {
-                            this.txtDomicilioEntrega.Text = "";
+                            //this.txtDomicilioEntrega.Text = "";
+                            this.dropList_DomicilioEntrega.Text = "";
                         }
                     }
 
@@ -1729,7 +1766,10 @@ namespace Gestion_Web.Formularios.Facturas
                         //datos entrega
                         p.entrega.Id = Convert.ToInt64(this.ListTipoEntrega.SelectedValue);
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
-                        p.domicilioEntrega = this.txtDomicilioEntrega.Text;
+                        //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
+                        //p.domicilioEntrega = this.dropList_DomicilioEntrega.Text;
+                        p.domicilioEntrega = this.dropList_DomicilioEntrega.SelectedItem.Text;
+                        //dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
                         p.senia = this.txtSenia.Text;
@@ -1844,7 +1884,8 @@ namespace Gestion_Web.Formularios.Facturas
                         //datos entrega
                         p.entrega.Id = Convert.ToInt64(this.ListTipoEntrega.SelectedValue);
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
-                        p.domicilioEntrega = this.txtDomicilioEntrega.Text;
+                        //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
+                        p.domicilioEntrega = this.dropList_DomicilioEntrega.SelectedItem.Text;
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
                         p.senia = this.txtSenia.Text;

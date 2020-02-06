@@ -312,13 +312,21 @@
                                                                             <asp:DropDownList ID="ListTipoEntrega" runat="server" class="form-control"></asp:DropDownList>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group">
+                                                                    <%--<div class="form-group">
                                                                         <label for="name" class="col-md-4">Domicilio Entrega</label>
 
                                                                         <div class="col-md-8">
                                                                             <asp:TextBox ID="txtDomicilioEntrega" runat="server" class="form-control"></asp:TextBox>
                                                                         </div>
+                                                                    </div>--%>
+
+                                                                    <div class="form-group" style="display: normal">
+                                                                        <label class="col-md-4">Domicilio Entrega:</label>
+                                                                        <div class="col-md-8">
+                                                                            <asp:DropDownList ID="dropList_DomicilioEntrega" runat="server" AutoPostBack="true" class="form-control"></asp:DropDownList>
+                                                                        </div>
                                                                     </div>
+
                                                                     <div class="form-group">
                                                                         <label for="name" class="col-md-4">Fecha Entrega</label>
 
