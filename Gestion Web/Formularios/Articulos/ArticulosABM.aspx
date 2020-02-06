@@ -2128,6 +2128,7 @@
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
+    link href="../../css/pages/reports.css" rel="stylesheet">
     <%--<script src="../../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
 
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
@@ -2145,6 +2146,7 @@
     <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
     <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
     <script src="../../Scripts/demo/notifications.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
     <script>
         function cerrarModalBusqueda() {

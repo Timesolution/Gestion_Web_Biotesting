@@ -172,9 +172,9 @@ namespace Gestion_Web.Formularios.Valores
                         {
                             //verifico si es super admin
                             string perfil = Session["Login_NombrePerfil"] as string;
+                            this.DropListSucursal.Attributes.Remove("disabled");
                             if (perfil == "SuperAdministrador")
                             {
-                                this.DropListSucursal.Attributes.Remove("disabled");
                                 this.ListSucursal2.Attributes.Remove("disabled");
                                 this.lbtnaEfectivo.Visible = true;
                                 this.lbtnaTarjeta.Visible = true;
@@ -287,6 +287,7 @@ namespace Gestion_Web.Formularios.Valores
                 //saco las privadas 
                 controladorSucursal contSucu = new controladorSucursal();
                 string perfil = Session["Login_NombrePerfil"] as string;
+                int idUser = Convert.ToInt32(Session["Login_IdUser"]);
 
                 DataTable dt = new DataTable();
 
@@ -296,7 +297,7 @@ namespace Gestion_Web.Formularios.Valores
                 }
                 else
                 {
-                    dt = contSucu.obtenerSucursalesSinPrivadas();
+                    dt = contSucu.obtenerSucursalesSinPrivadas(idUser);
                 }
 
                 //agrego todos
