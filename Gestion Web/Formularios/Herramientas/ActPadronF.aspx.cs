@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Windows.Forms;
 using System.Web.UI.WebControls;
+using System.Threading;
 
 namespace Gestion_Web.Formularios.Herramientas
 {
@@ -23,8 +25,8 @@ namespace Gestion_Web.Formularios.Herramientas
 
                 if (!IsPostBack)
                 {
-                    this.cargarUltimaFecha();
                 }
+                    this.cargarUltimaFecha();
             }
             catch(Exception ex)
             {
@@ -114,5 +116,30 @@ namespace Gestion_Web.Formularios.Herramientas
                
             }
         }
+
+        protected void lbtnCargarPadronCABA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var t = new Thread((ThreadStart)(() => {
+                    FolderBrowserDialog fbd = new FolderBrowserDialog();
+                    fbd.ShowNewFolderButton = true;
+                    if (fbd.ShowDialog() == DialogResult.Cancel)
+                        return;
+
+                    txtFechaActualizacionCABA.Text = fbd.SelectedPath;
+                }));
+
+                t.SetApartmentState(ApartmentState.STA);
+                t.Start();
+                t.Join();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

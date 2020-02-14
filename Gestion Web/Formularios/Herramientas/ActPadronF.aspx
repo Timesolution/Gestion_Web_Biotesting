@@ -22,16 +22,36 @@
                         <div class="form-horizontal col-md-12">
                             <fieldset>
                                 <div class="form-group">
-                                    <label for="validateSelect" class="col-md-4">Padron Actualizado al</label>
+                                    <label for="validateSelect" class="col-md-4">Padron Buenoas Aires actualizado al</label>
 
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtFechaActualizacion" Style="text-align: right;" class="form-control" runat="server" disabled></asp:TextBox>
                                     </div>
 
                                     <div class="col-md-2">
-                                        <asp:LinkButton ID="lbtnActualizar" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" OnClick="lbtnActualizar_Click" class="btn btn-success" />
+                                        <asp:LinkButton ID="lbtnActualizar" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" OnClick="lbtnActualizar_Click" data-toggle="tooltip" title data-original-title="Actualizar padron"  class="btn btn-success ui-tooltip" />
                                     </div>
                                 </div>
+                                
+                                <div class="form-group">
+                                    <label for="validateSelect" class="col-md-4">Padron CABA actualizado al</label>
+                                    <div class="col-md-4">
+                                        <asp:TextBox ID="txtFechaActualizacionCABA" Style="text-align: right;" class="form-control" runat="server" disabled></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="lbtnActualizarCABA" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="tooltip" title data-original-title="Actualizar padron CABA"  class="btn btn-success ui-tooltip" />
+                                        <asp:HiddenField ID="patharchivo" runat="server" />
+                                        <asp:LinkButton ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-down'></span>" data-toggle="tooltip" title data-original-title="Descargar archivo"  class="btn btn-info ui-tooltip" />
+                                    </div>
+                                </div>
+                                <%--<div class="form-group">
+                                    <label for="validateSelect" class="col-md-4">Cargar padron CABA</label>
+                                    <div class="col-md-4">
+                                    <input type="file" name="btnCargarpadron" text=""  runat="server" />
+                                    </div>
+
+                                </div>--%>
                             </fieldset>
                         </div>
                     </div>
