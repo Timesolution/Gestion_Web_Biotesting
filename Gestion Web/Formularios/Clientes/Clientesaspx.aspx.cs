@@ -17,6 +17,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Gestion_Api.Controladores.ControladoresEntity;
 
 namespace Gestion_Web.Formularios.Clientes
 {
@@ -1616,6 +1617,29 @@ namespace Gestion_Web.Formularios.Clientes
                     Estado = estadoDelMensaje
                 };
                 contSMS.SMS_HistorialRegistros_AddToTable(sms_Registros);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void lbtnImportarCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+
+                ControladorImportacionClientes cic = new ControladorImportacionClientes();
+
+                int i = cic.ImportarClienteGestion();
+
+                if (i > 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar clientes", ""));
+                }else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al importar clientes"));
+
             }
             catch (Exception ex)
             {

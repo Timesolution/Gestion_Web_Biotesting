@@ -37,6 +37,9 @@
                                                 <asp:LinkButton ID="lbtnExportarZona" runat="server" OnClick="lbtnExportarZona_Click">Exportar Clientes x Zona</asp:LinkButton>
                                             </li>
                                             <li>
+                                                <a href="#modalConfirmacionCliente" data-toggle="modal" style="width: 90%">Importar Clientes</a>
+                                            </li>
+                                            <li>
                                                 <a href="#modalEnviarSMS_A_Clientes" data-toggle="modal" style="width: 90%">Enviar SMS a los clientes</a>
                                             </li>
                                         </ul>
@@ -147,6 +150,41 @@
                     </div>
                     <div class="modal-footer">
                         <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <%-- Importacion de Clientes --%>
+
+        <div id="modalConfirmacionCliente" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de Importacion de clientes</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="Label1" Text="Esta seguro que desea importar los Clientes?" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="lbtnImportarCliente" Text="Aceptar" class="btn btn-danger" OnClick="lbtnImportarCliente_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
                     </div>
