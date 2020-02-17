@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Windows.Forms;
 using System.Web.UI.WebControls;
 using System.Threading;
+using System.IO;
 
 namespace Gestion_Web.Formularios.Herramientas
 {
@@ -121,23 +122,41 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
+                ControladorIngresosBrutos controladorIngresosBrutos = new ControladorIngresosBrutos();
+                string filename = "";
                 var t = new Thread((ThreadStart)(() => {
-                    FolderBrowserDialog fbd = new FolderBrowserDialog();
-                    fbd.ShowNewFolderButton = true;
-                    if (fbd.ShowDialog() == DialogResult.Cancel)
+                    OpenFileDialog openFileDialog = new OpenFileDialog();
+                    openFileDialog.RestoreDirectory = true;
+                    if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                         return;
 
-                    txtFechaActualizacionCABA.Text = fbd.SelectedPath;
+                    txtFechaActualizacionCABA.Text = openFileDialog.FileName;
+                    filename = openFileDialog.FileName;                   
                 }));
 
                 t.SetApartmentState(ApartmentState.STA);
                 t.Start();
                 t.Join();
+
+
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    string[] filelines = File.ReadAllLines(filename);
+                    if (controladorIngresosBrutos.LlenarTablaIngresosBrutosCABA(filelines) != -1)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", m.mensajeBoxInfo("Proceso Concluido con exito.", null));
+
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "error", m.mensajeBoxError("No se ha cargado ningun archivo."));
+                    }
+                }                
             }
             catch (Exception ex)
             {
 
-                throw;
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando ingresos brutos desde el archivo. " + ex.Message));
             }
         }
 

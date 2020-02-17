@@ -42,7 +42,7 @@
                                     <div class="col-md-2">
                                         <asp:LinkButton ID="lbtnActualizarCABA" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="tooltip" title data-original-title="Actualizar padron CABA"  class="btn btn-success ui-tooltip" />
                                         <asp:HiddenField ID="patharchivo" runat="server" />
-                                        <asp:LinkButton ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-down'></span>" data-toggle="tooltip" title data-original-title="Descargar archivo"  class="btn btn-info ui-tooltip" />
+                                        <asp:LinkButton ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-up'></span>" data-toggle="tooltip" title data-original-title="Cargar archivo"  class="btn btn-info ui-tooltip" />
                                     </div>
                                 </div>
                                 <%--<div class="form-group">
