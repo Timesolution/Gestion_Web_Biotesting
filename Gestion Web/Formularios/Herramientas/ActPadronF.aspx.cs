@@ -18,6 +18,8 @@ namespace Gestion_Web.Formularios.Herramientas
         Mensajes m = new Mensajes();
 
         ControladorConfiguracion contConf = new ControladorConfiguracion();
+        ControladorIngresosBrutos controladorIngresosBrutos = new ControladorIngresosBrutos();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -27,9 +29,10 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (!IsPostBack)
                 {
                 }
-                    this.cargarUltimaFecha();
+                this.cargarUltimaFecha();
+                this.cargarUltimaFechaCaba();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pagina. " + ex.Message));
             }
@@ -96,7 +99,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo obtener ultima fecha de actualizacion."));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo ultima fecha de actualizacion. " + ex.Message));
             }
@@ -109,12 +112,12 @@ namespace Gestion_Web.Formularios.Herramientas
                 controladorCliente contCli = new controladorCliente();
                 contCli.actualizarPadron();
                 this.cargarUltimaFecha();
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso Concluido con exito.",null));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso Concluido con exito.", null));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error actualizando ingresos brutos. " + ex.Message));
-               
+
             }
         }
 
@@ -123,42 +126,83 @@ namespace Gestion_Web.Formularios.Herramientas
             try
             {
                 ControladorIngresosBrutos controladorIngresosBrutos = new ControladorIngresosBrutos();
-                string filename = "";
-                var t = new Thread((ThreadStart)(() => {
+                var t = new Thread((ThreadStart)(() =>
+                {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
                     openFileDialog.RestoreDirectory = true;
                     if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                         return;
 
-                    txtFechaActualizacionCABA.Text = openFileDialog.FileName;
-                    filename = openFileDialog.FileName;                   
+                    txtPath.Text = openFileDialog.FileName;
+                    path.Value = openFileDialog.FileName;
                 }));
 
                 t.SetApartmentState(ApartmentState.STA);
                 t.Start();
                 t.Join();
-
-
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    string[] filelines = File.ReadAllLines(filename);
-                    if (controladorIngresosBrutos.LlenarTablaIngresosBrutosCABA(filelines) != -1)
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", m.mensajeBoxInfo("Proceso Concluido con exito.", null));
-
-                    }
-                    else
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "error", m.mensajeBoxError("No se ha cargado ningun archivo."));
-                    }
-                }                
             }
             catch (Exception ex)
             {
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando ingresos brutos desde el archivo. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("(CATCH) Error cargando ingresos brutos desde el archivo. " + ex.Message));
             }
         }
 
+        protected void lbtnActualizarCABA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(path.Value))
+                {
+                    string[] filelines = File.ReadAllLines(path.Value.ToString());
+                    if (controladorIngresosBrutos.LlenarTablaIngresosBrutosCABA(filelines) != -1)
+                    {
+                        this.cargarUltimaFechaCaba();
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "info", m.mensajeBoxInfo("Actualizacion concluida con EXITO.", null));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "error", m.mensajeBoxError("ERROR al actualizar archivo."));
+                    }
+                    txtPath.Text = string.Empty;
+                    path.Value = null;
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "error", m.mensajeBoxError("Debe seleccionar un archivo."));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("(CATCH) Error actualizando ingresos brutos desde el archivo. " + ex.Message));
+            }
+        }
+
+        private void cargarUltimaFechaCaba()
+        {
+            try
+            {
+                string fecha = this.contConf.ObtenerConfiguracionId(62);
+                if (fecha != null)
+                {
+                    this.txtFechaActualizacionCABA.Text = fecha;
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo obtener ultima fecha de actualizacion CABA."));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo ultima fecha de actualizacion CABA. " + ex.Message));
+            }
+        }
+
+        protected void btnNo_Click(object sender, EventArgs e)
+        {
+            txtPath.Text = "";
+            path.Value = null;
+        }
     }
 }

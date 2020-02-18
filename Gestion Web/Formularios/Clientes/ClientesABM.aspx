@@ -1224,6 +1224,7 @@
                                                     <asp:DropDownList ID="IngresosBrutos_DropList_Modo" runat="server" class="form-control">
                                                         <asp:ListItem Value="0" Text="Siempre"></asp:ListItem>
                                                         <asp:ListItem Value="1" Text="Segun domicilio de entrega"></asp:ListItem>
+                                                        <asp:ListItem Value="2" Text="Segun Padron"></asp:ListItem>
                                                     </asp:DropDownList>
                                                 </div>
                                             </div>
