@@ -34,17 +34,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="validateSelect" class="col-md-4">Padron CABA actualizado al</label>
-                                    <div class="col-md-4">
-                                        <asp:TextBox ID="txtFechaActualizacionCABA" Style="text-align: right;" class="form-control" runat="server" disabled></asp:TextBox>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <asp:LinkButton ID="lbtnActualizarCABA" href="#modalConfirmacion" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="modal" title data-original-title="Actualizar padron CABA" class="btn btn-success ui-tooltip"/>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
                                     <label for="validateSelect" class="col-md-4">Archivo seleccionado </label>
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtPath" Style="text-align: right;" class="form-control" runat="server" disabled></asp:TextBox>
@@ -55,13 +44,18 @@
                                         <asp:LinkButton ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-up'></span>" data-toggle="tooltip" title data-original-title="Cargar archivo" class="btn btn-info ui-tooltip" />
                                     </div>
                                 </div>
-                                <%--<div class="form-group">
-                                    <label for="validateSelect" class="col-md-4">Cargar padron CABA</label>
+
+                                <div class="form-group">
+                                    <label for="validateSelect" class="col-md-4">Padron CABA actualizado al</label>
                                     <div class="col-md-4">
-                                    <input type="file" name="btnCargarpadron" text=""  runat="server" />
+                                        <asp:TextBox ID="txtFechaActualizacionCABA" Style="text-align: right;" class="form-control" runat="server" disabled></asp:TextBox>
                                     </div>
 
-                                </div>--%>
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="lbtnActualizarCABA" href="#modalConfirmacion" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="modal" title data-original-title="Actualizar padron CABA" class="btn btn-success ui-tooltip"/>
+                                    </div>
+                                </div>
+                                
                             </fieldset>
                         </div>
                     </div>
@@ -95,7 +89,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <asp:Button runat="server" ID="btnSi" Text="Actualizar" class="btn btn-danger" OnClick="lbtnActualizarCABA_Click"/>
+                                        <asp:Button runat="server" ID="btnSi" Text="Actualizar" class="btn btn-success" OnClick="lbtnActualizarCABA_Click"/>
                                         <asp:Button runat="server" ID="btnNo" Text="Cancelar"  CssClass ="btn btn-default"   OnClick="btnNo_Click" />
                                     </div>
                                 </div>

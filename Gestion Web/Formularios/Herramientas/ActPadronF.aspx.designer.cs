@@ -31,24 +31,6 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnActualizar;
         
         /// <summary>
-        /// txtFechaActualizacionCABA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFechaActualizacionCABA;
-        
-        /// <summary>
-        /// lbtnActualizarCABA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarCABA;
-        
-        /// <summary>
         /// txtPath control.
         /// </summary>
         /// <remarks>
@@ -74,6 +56,24 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnCargarPadronCABA;
+        
+        /// <summary>
+        /// txtFechaActualizacionCABA control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaActualizacionCABA;
+        
+        /// <summary>
+        /// lbtnActualizarCABA control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarCABA;
         
         /// <summary>
         /// lblMensaje control.
