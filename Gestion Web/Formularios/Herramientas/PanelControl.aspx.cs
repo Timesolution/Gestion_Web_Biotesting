@@ -1279,7 +1279,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 configuracion.ModificarCantidadEnVentaEntreSucursales = this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue;
 
                 int resultado = configuracion.ActualizarModificarCantidadEnVentaEntreSucursales();
-                
+
                 if (resultado > 0)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: " + nombreConfiguracion + " modificada con exito!. \", {type: \"info\"});", true);
