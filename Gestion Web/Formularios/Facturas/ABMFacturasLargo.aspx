@@ -424,7 +424,7 @@
                                                                                     </div>
                                                                                     <div class="form-group" style="display: normal">
                                                                                         <label class="col-md-3">Domicilio Entrega:</label>
-                                                                                        <div class="col-md-4">
+                                                                                        <div class="col-md-8">
                                                                                             <asp:DropDownList ID="dropList_DomicilioEntrega" OnSelectedIndexChanged="DropList_DomicilioDeEntrega_SelectIndexChanged" runat="server" AutoPostBack="true" class="form-control"></asp:DropDownList>
                                                                                         </div>
                                                                                     </div>
@@ -449,7 +449,7 @@
                                                                                     </div>
                                                                                     <div class="form-group">
                                                                                         <label class="col-md-3">Mail Entrega: </label>
-                                                                                        <div class="col-md-4">
+                                                                                        <div class="col-md-6">
                                                                                             <div class="input-group">
                                                                                                 <span class="input-group-addon">@</span>
                                                                                                 <asp:TextBox ID="txtMailEntrega" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Puede enviar a varios destinatarios separando las casillas de correo por punto y coma (;). Ej.: Mail1@gmail.com;Mail2@yahoo.com;..." title="" data-original-title="Ayuda"></asp:TextBox>

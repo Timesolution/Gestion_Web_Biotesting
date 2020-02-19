@@ -294,7 +294,6 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
