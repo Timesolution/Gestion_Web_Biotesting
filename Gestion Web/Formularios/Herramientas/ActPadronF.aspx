@@ -89,7 +89,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <asp:Button runat="server" ID="btnSi" Text="Actualizar" class="btn btn-success" OnClick="lbtnActualizarCABA_Click"/>
+                                        <asp:Button runat="server" ID="btnSi" Text="Actualizar" class="btn btn-success" OnClick="lbtnActualizarCABA_Click" />
                                         <asp:Button runat="server" ID="btnNo" Text="Cancelar"  CssClass ="btn btn-default"   OnClick="btnNo_Click" />
                                     </div>
                                 </div>

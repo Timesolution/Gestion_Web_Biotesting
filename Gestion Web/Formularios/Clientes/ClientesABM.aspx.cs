@@ -3966,7 +3966,7 @@ namespace Gestion_Web.Formularios.Clientes
                     }
 
                     ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion);
+                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion, "");
                 }
                 resultadoJSON = respuesta.ToString();
 
@@ -4012,7 +4012,8 @@ namespace Gestion_Web.Formularios.Clientes
                         IdCliente = item.IdCliente.ToString(),
                         Provincia = item.Provincia.Provincia1,
                         Percepcion = item.Percepcion.ToString(),
-                        Retencion = item.Retencion.ToString()
+                        Retencion = item.Retencion.ToString(),
+                        Modo = item.Modo
                     });
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -4044,7 +4045,8 @@ namespace Gestion_Web.Formularios.Clientes
                         IdCliente = item.IdCliente.ToString(),
                         Provincia = item.Provincia.Provincia1,
                         Percepcion = item.Percepcion.ToString(),
-                        Retencion = item.Retencion.ToString()
+                        Retencion = item.Retencion.ToString(),
+                        Modo = item.Modo
                     });
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();

@@ -1260,7 +1260,6 @@
                                                                     <asp:Label ID="lbColumnaRetencionOPercepcion" runat="server"></asp:Label>
                                                                 </th>
                                                                 <th>Modo</th>
-                                                                <th style="width: 20%"></th>
                                                             </tr>
                                                         </thead>
                                                     </table>
@@ -1943,8 +1942,8 @@
                     "<tr>" +
                     "<td> " + obj[i].Provincia + "</td>" +
                     '<td style="text-align:right">' + percepcionORetencion + "</td>" +
-                    '<td style="text-align:right">' + Modo + "</td>" +
-                    '<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
+                    '<td style="text-align:right">' + obj[i].Modo + "</td>" +
+                    //'<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
                     "</tr> ");
             };
         }
