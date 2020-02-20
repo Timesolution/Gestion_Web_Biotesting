@@ -1633,7 +1633,9 @@ namespace Gestion_Web.Formularios.Clientes
 
                 ControladorImportacionClientes cic = new ControladorImportacionClientes();
 
-                int i = cic.ImportarClienteGestion();
+                int sucursal = (int)Session["Login_SucUser"];
+
+                int i = cic.ImportarClienteGestion(sucursal);
 
                 if (i > 0)
                 {
