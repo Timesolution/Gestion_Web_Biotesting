@@ -3935,7 +3935,7 @@ namespace Gestion_Web.Formularios.Clientes
 
         #region IngresosBrutos/Percepciones
         [WebMethod]
-        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string origenCliente, string percepcionORetencion)
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string origenCliente, string percepcionORetencion,string modo)
         {
             try
             {
@@ -3966,7 +3966,7 @@ namespace Gestion_Web.Formularios.Clientes
                     }
 
                     ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion, "");
+                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion, modo);
                 }
                 resultadoJSON = respuesta.ToString();
 
