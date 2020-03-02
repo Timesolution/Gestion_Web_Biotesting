@@ -1,8 +1,0 @@
-3)Para instalar el servicio ejecutar el siguiente comando desde el CMD(como administrador).
-
-Posicionarse en la carpeta en el CMD
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\
-
-Luego 
-
-InstallUtil.exe "[Directorio del servicio]\Services_Fiscal.exe"
