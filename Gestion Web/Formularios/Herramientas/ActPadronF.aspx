@@ -37,7 +37,7 @@
                                     <label for="validateSelect" class="col-md-4">Archivo seleccionado </label>
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtPath" Style="text-align: right;" class="form-control" runat="server" disabled></asp:TextBox>
-                                        <asp:HiddenField ID ="path" runat="server" />
+                                        <asp:HiddenField ID="path" runat="server" />
                                     </div>
 
                                     <div class="col-md-2">
@@ -52,10 +52,10 @@
                                     </div>
 
                                     <div class="col-md-2">
-                                        <asp:LinkButton ID="lbtnActualizarCABA" href="#modalConfirmacion" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="modal" title data-original-title="Actualizar padron CABA" class="btn btn-success ui-tooltip"/>
+                                        <asp:LinkButton ID="lbtnActualizarCABA" href="#modalConfirmacion" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="modal" title data-original-title="Actualizar padron CABA" class="btn btn-success ui-tooltip" />
                                     </div>
                                 </div>
-                                
+
                             </fieldset>
                         </div>
                     </div>
@@ -89,8 +89,8 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <asp:Button runat="server" ID="btnSi" Text="Actualizar" class="btn btn-success" OnClick="lbtnActualizarCABA_Click"/>
-                                        <asp:Button runat="server" ID="btnNo" Text="Cancelar"  CssClass ="btn btn-default"   OnClick="btnNo_Click" />
+                                        <asp:Button runat="server" ID="btnSi" Text="Actualizar" class="btn btn-success" OnClick="lbtnActualizarCABA_Click" OnClientClick="if (!Page_ClientValidate()){ return false; } this.disabled = true; this.value = 'Cargando...';" UseSubmitBehavior="false" /> 
+                                        <asp:Button runat="server" ID="btnNo" Text="Cancelar" CssClass="btn btn-default" OnClick="btnNo_Click" />
                                     </div>
                                 </div>
                             </div>
@@ -157,4 +157,17 @@
         }
     </script>
 
+    <script>
+        function disableButton(btnSi) {
+            var btn = document.getElementById(btnSi);
+            setTimeout("EnableCtrl('" + btnSi + "')", 10);
+            btn.disabled = true;
+            btn.value = "Cargando...";
+        }
+
+        function EnableCtrl(btnSi) {
+            var btn2 = document.getElementById(btnSi);
+            btn2.disable = false;
+        }
+    </script>
 </asp:Content>

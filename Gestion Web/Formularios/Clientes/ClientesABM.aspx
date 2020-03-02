@@ -1260,7 +1260,7 @@
                                                                     <asp:Label ID="lbColumnaRetencionOPercepcion" runat="server"></asp:Label>
                                                                 </th>
                                                                 <th>Modo</th>
-                                                                <th style="width: 20%"></th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                     </table>
@@ -1881,6 +1881,8 @@
             var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
             var controlProvincia = document.getElementById('<%= IngresosBrutos_DropList_Provincias.ClientID %>');
             var controlTxtPercepcionORetencion = document.getElementById('<%= IngresosBrutos_TxtPercepcionORetencion.ClientID %>');
+            var controlModo = document.getElementById('<%= IngresosBrutos_DropList_Modo.ClientID %>');
+            var modoText = controlModo.options[controlModo.selectedIndex].text;
 
             if (controlTxtPercepcionORetencion.value == "0") {
                 return false;
@@ -1890,7 +1892,7 @@
                 type: "POST",
                 url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",
                 data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", provincia: "' + controlProvincia.value +
-                    '", origenCliente: "' + hiddenOrigenCliente.value + '", percepcionORetencion: "' + Math.abs(controlTxtPercepcionORetencion.value) + '"}',
+                    '", origenCliente: "' + hiddenOrigenCliente.value + '", percepcionORetencion: "' + Math.abs(controlTxtPercepcionORetencion.value) + '", modo: "' + modoText + '"}',
                 contentType: "application/json",
                 dataType: 'json',
                 error: (error) => {
@@ -1943,7 +1945,7 @@
                     "<tr>" +
                     "<td> " + obj[i].Provincia + "</td>" +
                     '<td style="text-align:right">' + percepcionORetencion + "</td>" +
-                    '<td style="text-align:right">' + Modo + "</td>" +
+                    '<td style="text-align:right">' + obj[i].Modo + "</td>" +
                     '<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
                     "</tr> ");
             };
