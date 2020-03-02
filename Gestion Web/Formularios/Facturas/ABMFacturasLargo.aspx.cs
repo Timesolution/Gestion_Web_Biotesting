@@ -398,6 +398,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (usuario_cliente.IdCliente > 0)
                     cargarClienteDesdeModal();
+
+                this.obtenerNroFactura();
+
+                CargarDropList_DireccionesDeEntregaDelCliente((int)usuario_cliente.IdCliente);
             }
             catch (Exception ex)
             {
@@ -1947,12 +1951,20 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 decimal ingresosBrutos = 0;
                 var percepcionBSASCliente = contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
-                if(percepcionBSASCliente != null)
+                var percepcionCABACliente = contClienteEntity.obtenerPercepcionCABACliente(idCliente);
+                
+
+                if (percepcionCABACliente != null)
                 {
-                    ingresosBrutos = (decimal)percepcionBSASCliente.Percepcion;
+                    ingresosBrutos = (decimal)percepcionCABACliente.Percepcion;
+                }
+
+                if (percepcionBSASCliente != null)
+                {
+                    ingresosBrutos += (decimal)percepcionBSASCliente.Percepcion;
                     ingresosBrutos += ObtenerEl_IIBB_ProvinciasConModo_Siempre_(idCliente);
                     ingresosBrutos += ObtenerEl_IIBB_ProvinciasSegunDomicilioEntregaSeleccionado_Y_SuModoSea_SEGUN_PROVINCIA(idCliente);
-                }                
+                }
 
                 this.txtPorcRetencion.Text = ingresosBrutos.ToString();
             }

@@ -155,6 +155,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (!string.IsNullOrEmpty(path.Value))
                 {
                     string[] filelines = File.ReadAllLines(path.Value.ToString());
+                    
+
                     if (controladorIngresosBrutos.LlenarTablaIngresosBrutosCABA(filelines) != -1)
                     {
                         this.cargarUltimaFechaCaba();
