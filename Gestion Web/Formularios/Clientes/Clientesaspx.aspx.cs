@@ -17,6 +17,8 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Gestion_Api.Controladores.ControladoresEntity;
+using System.IO;
 
 namespace Gestion_Web.Formularios.Clientes
 {
@@ -86,6 +88,7 @@ namespace Gestion_Web.Formularios.Clientes
                 Page.Form.DefaultButton = this.lbBuscar.UniqueID;
                 this.verificarConfiguracionIva();
                 this.verificarPermisoCtaCte();
+
             }
             catch
             {
@@ -1499,7 +1502,7 @@ namespace Gestion_Web.Formularios.Clientes
                 if (!tildoAlgunCliente)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe tildar algun cliente"));
-                    return; 
+                    return;
                 }
                 string mensaje = ObtenerElMensajeDeLaCantidadDeMensajesEnviadosYConError(cantMensajesCorrectos, cantMensajesIncorrectos);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(mensaje, null));
@@ -1622,5 +1625,37 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
+
+        protected void lbtnImportarCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                ControladorImportacionClientes cic = new ControladorImportacionClientes();
+
+                int sucursal = (int)Session["Login_SucUser"];
+
+                int i = cic.ImportarClienteGestion(sucursal);
+
+                if (i > 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar clientes", ""));
+
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al importar clientes"));
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
     }
 }

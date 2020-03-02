@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -20,8 +21,11 @@ namespace Gestion_Web.Formularios.Sucursales
         Mensajes m = new Mensajes();
         private int valor;
         private int idSucursal;
+        
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             try
             {
                 valor = Convert.ToInt32(Request.QueryString["valor"]);
@@ -29,9 +33,12 @@ namespace Gestion_Web.Formularios.Sucursales
 
                 VerificarLogin();
                 cargarSucursal();
+
                 if (!IsPostBack)
                 {
+                    cargarUsuarios();
                     cargarClientes();
+
                     if (valor == 2)
                     {
                         CargarDatosSucursal();
@@ -99,6 +106,7 @@ namespace Gestion_Web.Formularios.Sucursales
             txtNombre.Text = s.nombre;
             txtDireccion.Text = s.direccion;
             DropListClientes.SelectedValue = s.clienteDefecto.ToString();
+
             if (DropListClientes.SelectedValue == "-1")
             {
                 var c = controladorCliente.obtenerClienteID(s.clienteDefecto);
@@ -111,7 +119,21 @@ namespace Gestion_Web.Formularios.Sucursales
             if (s.clienteDefecto == -2)
             {
                 checkPrivada.Checked = true;
+                checkPrivada_CheckedChanged(checkPrivada, EventArgs.Empty);
+                //tdabmusers.Style.Add("visibility", "initial");
+                //tdusers.Style.Add("visibility", "initial");
+                cargarUsuariosPorSucursal(idSucursal);
             }
+        }
+
+        public void cargarUsuariosPorSucursal(int id)
+        {
+            DataTable dt = controlador.obtenerUsuariosPorSucursalDT(id);
+            listUsuarios.DataSource = dt;
+            listUsuarios.DataValueField = "IdUsuario";
+            listUsuarios.DataTextField = "usuario";
+            listUsuarios.DataBind();
+            
         }
 
         public void cargarClientes()
@@ -152,13 +174,30 @@ namespace Gestion_Web.Formularios.Sucursales
                 foreach (Sucursal sucu in sucursales)
                 {
                     if (sucu.empresa.id == empresa)
-                    this.cargarSucursalesTable(sucu);
+                        this.cargarSucursalesTable(sucu);
                 }
 
             }
             catch
             {
- 
+
+            }
+        }
+
+        private void cargarUsuarios()
+        {
+            try
+            {
+                DataTable dt = contUser.obtenerUsuarios();
+
+                dlUsuarios.DataSource = dt;
+                dlUsuarios.DataValueField = "id";
+                dlUsuarios.DataTextField = "usuario";
+                dlUsuarios.DataBind();
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -166,7 +205,7 @@ namespace Gestion_Web.Formularios.Sucursales
         {
             try
             {
-               
+
                 TableRow tr = new TableRow();
                 if (sucu.clienteDefecto == -2)
                 {
@@ -199,7 +238,7 @@ namespace Gestion_Web.Formularios.Sucursales
                 btnPuntoVenta.Attributes.Add("data-toggle", "tooltip");
                 btnPuntoVenta.Attributes.Add("title data-original-title", "Punto de Venta");
                 btnPuntoVenta.Text = "<span class='shortcut-icon icon-plus'></span>" + " PV";
-                btnPuntoVenta.PostBackUrl = "../../Formularios/Sucursales/ABMPuntoVenta.aspx?codigo=" + sucu.id + "&empresa="+ sucu.empresa.id;
+                btnPuntoVenta.PostBackUrl = "../../Formularios/Sucursales/ABMPuntoVenta.aspx?codigo=" + sucu.id + "&empresa=" + sucu.empresa.id;
                 celPuntoVta.Controls.Add(btnPuntoVenta);
 
                 Literal l2 = new Literal();
@@ -242,19 +281,24 @@ namespace Gestion_Web.Formularios.Sucursales
 
                 phSucursales.Controls.Add(tr);
 
-                
+
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursal en la lista. " + ex.Message));
             }
         }
-        
+
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
-                if(valor == 2)
+                
+               
+                Gestion_Api.AccesoDatos.AccesoDB ac = new Gestion_Api.AccesoDatos.AccesoDB();
+                ac.Conectar();
+
+                if (valor == 2)
                 {
                     Sucursal suc = new Sucursal();
                     suc.id = this.idSucursal;
@@ -262,24 +306,50 @@ namespace Gestion_Web.Formularios.Sucursales
                     suc.direccion = this.txtDireccion.Text;
                     suc.empresa.id = (int)Session["Login_EmpUser"];
                     suc.estado = 1;
+
                     if (checkPrivada.Checked)
                     {
                         suc.clienteDefecto = -2;
+
                     }
                     else
                     {
                         suc.clienteDefecto = Convert.ToInt32(this.DropListClientes.SelectedValue);
                     }
                     int i = this.controlador.editarSucursal(suc);
+
                     if (i > 0)
                     {
-                        //agrego bien
+                        int p;
+                        //modifico bien\
+                        if (suc.clienteDefecto == -2)
+                        {
+                            controlador.eliminarUsuariosPorSucursal(suc.id);
+                            foreach (ListItem item in listUsuarios.Items)
+                            {
+                                UsuarioPorSucursal ups = new UsuarioPorSucursal();
+                                ups.IdSucursal = suc.id;
+                                ups.IdUsuario = Convert.ToInt32(item.Value);
+                                CommittableTransaction MASTER_TRANSACTION = new CommittableTransaction();
+                                p = ups.agregarDB(MASTER_TRANSACTION, ac);
+                                if (p > 0)
+                                {
+                                    MASTER_TRANSACTION.Commit();
+                                }
+                            }
+
+                        }
+
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico Sucursal: " + suc.nombre);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Sucursal modificada con exito", null));
-                        this.cargarSucursal();
+                        //, "$.msgbox(\"ID Impositivo Cliente Actualizado\", {type: \"info\"});", true
+                        //, m.mensajeBoxInfo("Sucursal modificada con exito", null), false
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel12, UpdatePanel12.GetType(), "alert", "$.msgbox(\"Sucursal modificada con exito\", {type: \"info\"}); window.location.href=\"ABMSucursales.aspx\";", true);
                         txtDireccion.Text = "";
                         txtNombre.Text = "";
-
+                        listUsuarios.Items.Clear();
+                        checkPrivada.Checked = false;
+                        checkPrivada_CheckedChanged(checkPrivada, EventArgs.Empty);
+                        this.cargarSucursal();
                     }
                     else
                     {
@@ -288,11 +358,13 @@ namespace Gestion_Web.Formularios.Sucursales
                 }
                 else
                 {
+
                     Sucursal suc = new Sucursal();
                     suc.nombre = this.txtNombre.Text;
                     //suc.direccion.id = Convert.ToInt32(this.txtDireccion.Text);
                     suc.direccion = this.txtDireccion.Text;
                     suc.empresa.id = (int)Session["Login_EmpUser"];
+
                     if (checkPrivada.Checked)
                     {
                         suc.clienteDefecto = -2;
@@ -301,31 +373,51 @@ namespace Gestion_Web.Formularios.Sucursales
                     {
                         suc.clienteDefecto = Convert.ToInt32(this.DropListClientes.SelectedValue);
                     }
-                    
+
+                    int i = this.controlador.agregarSucursal(suc);
                     //suc.puntoVenta = this.txtPuntoVenta.Text;
                     //suc.formaFacturar = this.ListFacturar.SelectedValue;
 
-                    int i = this.controlador.agregarSucursal(suc);
+
                     if (i > 0)
                     {
-                        //agrego bien
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Sucursal cargada con exito", null));
+                        int p;
+                        //agrego bien\
+                        if (suc.clienteDefecto == -2)
+                        {
+                            foreach (ListItem item in listUsuarios.Items)
+                            {
+                                UsuarioPorSucursal ups = new UsuarioPorSucursal();
+                                ups.IdSucursal = i;
+                                ups.IdUsuario = Convert.ToInt32(item.Value);
+                                CommittableTransaction MASTER_TRANSACTION = new CommittableTransaction();
+                                p=ups.agregarDB(MASTER_TRANSACTION, ac);
+                                if(p>0)
+                                {
+                                    MASTER_TRANSACTION.Commit();
+                                }
+                            }
+                        }
+
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Alta Sucursal: " + suc.nombre);
-                        this.cargarSucursal();
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel12, UpdatePanel12.GetType(), "alert", "$.msgbox(\"Sucursal cargada con exito\", {type: \"info\"}); window.location.href=\"ABMSucursales.aspx\";", true);
                         txtDireccion.Text = "";
                         txtNombre.Text = "";
-
+                        listUsuarios.Items.Clear();
+                        checkPrivada.Checked = false;
+                        checkPrivada_CheckedChanged(checkPrivada, EventArgs.Empty);
+                        this.cargarSucursal();
                     }
                     else
                     {
                         //agrego mal
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo agregar la sucursal . "));
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel12, UpdatePanel12.GetType(), "alert", "$.msgbox(\"No se pudo agregar la Sucursal\", {type: \"info\"}); window.location.href=\"ABMSucursales.aspx\";", true);
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando y/o modificando sucursal . " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel12, UpdatePanel12.GetType(), "alert", "$.msgbox(\"Error agregando y/o modificando sucursal\", {type: \"info\"}); window.location.href=\"ABMSucursales.aspx\";", true);
             }
         }
 
@@ -405,6 +497,86 @@ namespace Gestion_Web.Formularios.Sucursales
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+            }
+        }
+
+        protected void lbtnBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = contUser.obtenerUsuariosByNombre(txtUsuarios.Text);
+                //if (dtClientes == null)
+                //    return;
+
+                dlUsuarios.Items.Clear();
+                dlUsuarios.DataSource = dt;
+                dlUsuarios.DataValueField = "id";
+                dlUsuarios.DataTextField = "usuario";
+                dlUsuarios.SelectedValue = dt.Rows[0]["id"].ToString();
+                dlUsuarios.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Usuarios a la lista. " + ex.Message));
+            }
+        }
+
+        protected void lbtnAgregarUsuarios_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int suc = Convert.ToInt32(this.dlUsuarios.SelectedValue);
+                if (suc >= 0)
+                {
+                    ListItem item = new ListItem();
+                    item.Value = suc.ToString();
+                    item.Text = this.dlUsuarios.SelectedItem.Text;
+
+                    //si no esta , lo agrego
+                    if (this.listUsuarios.Items.FindByValue(item.Value) == null)
+                    {
+                        this.listUsuarios.Items.Add(item);
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        protected void lbtnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.listUsuarios.Items.Remove(this.listUsuarios.SelectedItem);
+            }
+            catch
+            {
+
+            }
+        }
+
+        public void checkPrivada_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (checkPrivada.Checked == true)
+                {
+                    tdabmusers.Style.Add("visibility", "initial");
+                    tdusers.Style.Add("visibility", "initial");
+                }
+                else
+                {
+                    tdabmusers.Style.Add("visibility", "hidden");
+                    tdusers.Style.Add("visibility", "hidden");
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
