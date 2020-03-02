@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FECompConsultaResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ResultGet xmlns="http://ar.gov.afip.dif.FEV1/">
+    <Concepto>1</Concepto>
+    <DocTipo>80</DocTipo>
+    <DocNro>27252376459</DocNro>
+    <CbteDesde>130</CbteDesde>
+    <CbteHasta>130</CbteHasta>
+    <CbteFch>20180301</CbteFch>
+    <ImpTotal>2065</ImpTotal>
+    <ImpTotConc>0</ImpTotConc>
+    <ImpNeto>2065</ImpNeto>
+    <ImpOpEx>0</ImpOpEx>
+    <ImpTrib>0</ImpTrib>
+    <ImpIVA>0</ImpIVA>
+    <FchServDesde />
+    <FchServHasta />
+    <FchVtoPago />
+    <MonId>PES</MonId>
+    <MonCotiz>1</MonCotiz>
+    <Iva>
+      <AlicIva>
+        <Id>3</Id>
+        <BaseImp>2065</BaseImp>
+        <Importe>0</Importe>
+      </AlicIva>
+    </Iva>
+    <Resultado>A</Resultado>
+    <CodAutorizacion>68095938112483</CodAutorizacion>
+    <EmisionTipo>CAE</EmisionTipo>
+    <FchVto>20180311</FchVto>
+    <FchProceso>20180301115513</FchProceso>
+    <PtoVta>7</PtoVta>
+    <CbteTipo>1</CbteTipo>
+  </ResultGet>
+</FECompConsultaResponse>

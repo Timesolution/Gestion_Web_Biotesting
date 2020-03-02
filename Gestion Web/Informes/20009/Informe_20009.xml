@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InformeXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items />
+  <Id>20009</Id>
+  <Empresa>6</Empresa>
+  <Sucursal>0</Sucursal>
+  <PuntoVenta>0</PuntoVenta>
+  <Cliente>0</Cliente>
+  <Tipo>0</Tipo>
+  <Documento>0</Documento>
+  <ListaPrecio>0</ListaPrecio>
+  <FormaPago>0</FormaPago>
+  <Vendedor>0</Vendedor>
+  <Anuladas>0</Anuladas>
+  <FechaDesde>01/06/2017</FechaDesde>
+  <FechaHasta>31/03/2018</FechaHasta>
+  <ListasDePrecios>1</ListasDePrecios>
+  <ArticulosInactivos>0</ArticulosInactivos>
+</InformeXML>

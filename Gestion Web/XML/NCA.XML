@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<lote_comprobantes xmlns="http://lote.schemas.cfe.ib.com.ar/">
+  <cabecera_lote>
+    <id_lote>00003207</id_lote>
+    <cuit_canal>30690783521</cuit_canal>
+    <cuit_vendedor>30516490140</cuit_vendedor>
+    <cantidad_reg>3</cantidad_reg>
+    <punto_de_venta>0011</punto_de_venta>
+  </cabecera_lote>
+  <comprobante>
+    <cabecera>
+      <informacion_comprobante>
+        <tipo_de_comprobante>03</tipo_de_comprobante>
+        <numero_comprobante>00002847</numero_comprobante>
+        <punto_de_venta>0011</punto_de_venta>
+        <fecha_emision>20171005</fecha_emision>
+        <fecha_vencimiento>20180104</fecha_vencimiento>
+        <condicion_de_pago>C/ENTREGA DE VALORES A 90 DIAS</condicion_de_pago>
+      </informacion_comprobante>
+      <informacion_vendedor>
+        <razon_social>Parker Hannifin Argentina SAIC</razon_social>
+        <cuit>30516490140</cuit>
+        <condicion_IVA>01</condicion_IVA>
+        <condicion_ingresos_brutos>2</condicion_ingresos_brutos>
+        <nro_ingresos_brutos>902-877505-1        </nro_ingresos_brutos>
+        <inicio_de_actividades>19700202</inicio_de_actividades>
+        <domicilio_calle>Stephenson 2711 - Tortuguitas </domicilio_calle>
+        <localidad>Buenos Aires                  </localidad>
+        <provincia>2</provincia>
+        <cp>B1667AKC  </cp>
+      </informacion_vendedor>
+      <informacion_comprador>
+        <codigo_doc_identificatorio>80</codigo_doc_identificatorio>
+        <nro_doc_identificatorio>30638318470</nro_doc_identificatorio>
+        <denominacion>DELTA COMPRESION S.R.L.(PV. 21</denominacion>
+        <condicion_IVA>01</condicion_IVA>
+        <domicilio_calle>PANAMERICANA C.ESTE KM 47.53 B</domicilio_calle>
+        <localidad>ESCOBAR                       </localidad>
+        <provincia>2</provincia>
+        <cp>1625      </cp>
+      </informacion_comprador>
+    </cabecera>
+    <detalle>
+      <linea numeroLinea="1">
+        <codigo_producto_vendedor>10658-8-8                </codigo_producto_vendedor>
+        <descripcion>TERMINAL H.G.JIC 37 GNC       %3Cbr%3END:9591DELTA    08/04/14 81006241%3Cbr%3EAD:Buenos OR:United</descripcion>
+        <cantidad>000000004.00</cantidad>
+        <unidad>7</unidad>
+        <precio_unitario>0000000000254.9743</precio_unitario>
+        <importe_total_articulo>000000001019.90</importe_total_articulo>
+        <importes_moneda_origen>
+          <precio_unitario>0000000000014.6900</precio_unitario>
+          <importe_total_articulo>000000000058.76</importe_total_articulo>
+        </importes_moneda_origen>
+      </linea>
+    </detalle>
+    <resumen>
+      <importe_total_neto_gravado>000000000000.00</importe_total_neto_gravado>
+      <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+      <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+      <impuesto_liq>000000000000.00</impuesto_liq>
+      <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+      <impuestos>
+        <codigo_impuesto>1</codigo_impuesto>
+        <descripcion>IVA Resp. Inscripto           </descripcion>
+        <porcentaje_impuesto>21.0000</porcentaje_impuesto>
+        <importe_impuesto>000000000000.00</importe_impuesto>
+        <importe_impuesto_moneda_origen>000000000012.34</importe_impuesto_moneda_origen>
+      </impuestos>
+      <importe_total_factura>000000000000.00</importe_total_factura>
+      <tipo_de_cambio>17.357000</tipo_de_cambio>
+      <codigo_moneda>DOL</codigo_moneda>
+      <importes_moneda_origen>
+        <importe_total_neto_gravado>000000000058.76</importe_total_neto_gravado>
+        <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+        <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+        <impuesto_liq>000000000012.34</impuesto_liq>
+        <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+        <importe_total_factura>000000000071.10</importe_total_factura>
+      </importes_moneda_origen>
+    </resumen>
+    <extensiones>
+      <extensiones_datos_comerciales>                                                                                                                                                                                                                                                                                                                               CONDICION DE VENTA:        Este comprobante solo podra ser cancelado pagando el                                                                                                                                                                                                                                                                               importe de DOLARES/EUROS establecidos para la conversion, o con pesos al tipo de                                                                                                                                                                                                                                                                               cambio vendedor para Dolares divisas del BNA cotizado al cierre del dia habil                                                                                                                                                                                                                                                                                inmediato anterior al de la efectiva acreditacion de los valores o transferencia                                                                                                                                                                                                                                                                               recibida para la cancelacion del documento. En caso de diferencias entre el                                                                                                                                                                                                                                                                                  importe facturado y el abonado, Parker Hannifin Argentina realizara la nota de                                                                                                                                                                                                                                                                                credito/debito que correspondiera.            Bajo ninguna circunstancia debera                                                                                                                                                                                                                                                                               entenderse que su obligacion ha quedado pesificada teniendo en cuenta lo pactado                                                                                                                                                                                                                                                                               habitualmente y las caracteristicas del producto adquirido.%3Cbr%3E                                                                                                                                                                                                                                                                                          %3Cb%3EMORA:           La mora sera automatica, aplicandose un interes punitorio                                                                                                                                                                                                                                                                               del 3% mensual hasta la efectiva acreditacion del pago en la cuenta de  Parker                                                                                                                                                                                                                                                                               Hannifin Argentina sobre el importe total que indica el comprobante.                                                                                                                                                                                                                                                                                            %3Cbr%3E %3Cu%3E %3Ci%3E                                                                                                                                                                                                                                                                                                                                    </extensiones_datos_comerciales>
+    </extensiones>
+  </comprobante>
+  <comprobante>
+    <cabecera>
+      <informacion_comprobante>
+        <tipo_de_comprobante>03</tipo_de_comprobante>
+        <numero_comprobante>00002848</numero_comprobante>
+        <punto_de_venta>0011</punto_de_venta>
+        <fecha_emision>20171005</fecha_emision>
+        <fecha_vencimiento>20180103</fecha_vencimiento>
+        <condicion_de_pago>CTA. CTE. A 90 DIAS F.F. *    </condicion_de_pago>
+      </informacion_comprobante>
+      <informacion_vendedor>
+        <razon_social>Parker Hannifin Argentina SAIC</razon_social>
+        <cuit>30516490140</cuit>
+        <condicion_IVA>01</condicion_IVA>
+        <condicion_ingresos_brutos>2</condicion_ingresos_brutos>
+        <nro_ingresos_brutos>902-877505-1        </nro_ingresos_brutos>
+        <inicio_de_actividades>19700202</inicio_de_actividades>
+        <domicilio_calle>Stephenson 2711 - Tortuguitas </domicilio_calle>
+        <localidad>Buenos Aires                  </localidad>
+        <provincia>2</provincia>
+        <cp>B1667AKC  </cp>
+      </informacion_vendedor>
+      <informacion_comprador>
+        <codigo_doc_identificatorio>80</codigo_doc_identificatorio>
+        <nro_doc_identificatorio>30653133878</nro_doc_identificatorio>
+        <denominacion>BERTEC S.A.                   </denominacion>
+        <condicion_IVA>01</condicion_IVA>
+        <domicilio_calle>SAN MARTIN 2056               </domicilio_calle>
+        <localidad>ROSARIO                       </localidad>
+        <provincia>21</provincia>
+        <cp>2000      </cp>
+      </informacion_comprador>
+    </cabecera>
+    <detalle>
+      <linea numeroLinea="1">
+        <codigo_producto_vendedor>722TC-12                 </codigo_producto_vendedor>
+        <codigo_producto_comprador>TOUGH COVER 3/4" ID </codigo_producto_comprador>
+        <descripcion>MANG. SAE 100R12 SERIE 722TC  %3Cbr%3END:102900406986 20/04/17 81006242%3Cbr%3EAD:Buenos OR:United</descripcion>
+        <cantidad>000000040.23</cantidad>
+        <unidad>2</unidad>
+        <precio_unitario>0000000000526.3971</precio_unitario>
+        <importe_total_articulo>000000021176.96</importe_total_articulo>
+        <importes_moneda_origen>
+          <precio_unitario>0000000000030.4100</precio_unitario>
+          <importe_total_articulo>000000001223.39</importe_total_articulo>
+        </importes_moneda_origen>
+      </linea>
+      <linea numeroLinea="2">
+        <codigo_producto_vendedor>801-12-BLU-RL            </codigo_producto_vendedor>
+        <codigo_producto_comprador>801-12-BLU-RL       </codigo_producto_comprador>
+        <descripcion>3/4"BLUE PUSHLOK HOSE         %3Cbr%3END:102900406986 20/04/17 81006242%3Cbr%3EAD:Buenos OR:United</descripcion>
+        <cantidad>000000060.96</cantidad>
+        <unidad>2</unidad>
+        <precio_unitario>0000000000216.7212</precio_unitario>
+        <importe_total_articulo>000000013211.32</importe_total_articulo>
+        <importes_moneda_origen>
+          <precio_unitario>0000000000012.5200</precio_unitario>
+          <importe_total_articulo>000000000763.22</importe_total_articulo>
+        </importes_moneda_origen>
+      </linea>
+    </detalle>
+    <resumen>
+      <importe_total_neto_gravado>000000000000.00</importe_total_neto_gravado>
+      <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+      <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+      <impuesto_liq>000000000000.00</impuesto_liq>
+      <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+      <impuestos>
+        <codigo_impuesto>1</codigo_impuesto>
+        <descripcion>IVA Resp. Inscripto           </descripcion>
+        <porcentaje_impuesto>21.0000</porcentaje_impuesto>
+        <importe_impuesto>000000000000.00</importe_impuesto>
+        <importe_impuesto_moneda_origen>000000000417.19</importe_impuesto_moneda_origen>
+      </impuestos>
+      <importe_total_factura>000000000000.00</importe_total_factura>
+      <tipo_de_cambio>17.310000</tipo_de_cambio>
+      <codigo_moneda>DOL</codigo_moneda>
+      <importes_moneda_origen>
+        <importe_total_neto_gravado>000000001986.61</importe_total_neto_gravado>
+        <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+        <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+        <impuesto_liq>000000000417.19</impuesto_liq>
+        <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+        <importe_total_factura>000000002403.80</importe_total_factura>
+      </importes_moneda_origen>
+    </resumen>
+    <extensiones>
+      <extensiones_datos_comerciales>                                                                                                                                                                                                                                                                                                                               CONDICION DE VENTA:        Este comprobante solo podra ser cancelado pagando el                                                                                                                                                                                                                                                                               importe de DOLARES/EUROS establecidos para la conversion, o con pesos al tipo de                                                                                                                                                                                                                                                                               cambio vendedor para Dolares divisas del BNA cotizado al cierre del dia habil                                                                                                                                                                                                                                                                                inmediato anterior al de la efectiva acreditacion de los valores o transferencia                                                                                                                                                                                                                                                                               recibida para la cancelacion del documento. En caso de diferencias entre el                                                                                                                                                                                                                                                                                  importe facturado y el abonado, Parker Hannifin Argentina realizara la nota de                                                                                                                                                                                                                                                                                credito/debito que correspondiera.            Bajo ninguna circunstancia debera                                                                                                                                                                                                                                                                               entenderse que su obligacion ha quedado pesificada teniendo en cuenta lo pactado                                                                                                                                                                                                                                                                               habitualmente y las caracteristicas del producto adquirido.%3Cbr%3E                                                                                                                                                                                                                                                                                          %3Cb%3EMORA:           La mora sera automatica, aplicandose un interes punitorio                                                                                                                                                                                                                                                                               del 3% mensual hasta la efectiva acreditacion del pago en la cuenta de  Parker                                                                                                                                                                                                                                                                               Hannifin Argentina sobre el importe total que indica el comprobante.                                                                                                                                                                                                                                                                                            %3Cbr%3E %3Cu%3E %3Ci%3E                                                                                                                                                                                                                                                                                                                                    </extensiones_datos_comerciales>
+    </extensiones>
+  </comprobante>
+  <comprobante>
+    <cabecera>
+      <informacion_comprobante>
+        <tipo_de_comprobante>03</tipo_de_comprobante>
+        <numero_comprobante>00002849</numero_comprobante>
+        <punto_de_venta>0011</punto_de_venta>
+        <fecha_emision>20171005</fecha_emision>
+        <fecha_vencimiento>20171204</fecha_vencimiento>
+        <condicion_de_pago>CTA. CTE. A 60 DIAS F.F. *    </condicion_de_pago>
+      </informacion_comprobante>
+      <informacion_vendedor>
+        <razon_social>Parker Hannifin Argentina SAIC</razon_social>
+        <cuit>30516490140</cuit>
+        <condicion_IVA>01</condicion_IVA>
+        <condicion_ingresos_brutos>2</condicion_ingresos_brutos>
+        <nro_ingresos_brutos>902-877505-1        </nro_ingresos_brutos>
+        <inicio_de_actividades>19700202</inicio_de_actividades>
+        <domicilio_calle>Stephenson 2711 - Tortuguitas </domicilio_calle>
+        <localidad>Buenos Aires                  </localidad>
+        <provincia>2</provincia>
+        <cp>B1667AKC  </cp>
+      </informacion_vendedor>
+      <informacion_comprador>
+        <codigo_doc_identificatorio>80</codigo_doc_identificatorio>
+        <nro_doc_identificatorio>30547242331</nro_doc_identificatorio>
+        <denominacion>MASTELLONE HNOS. S.A.         </denominacion>
+        <condicion_IVA>01</condicion_IVA>
+        <domicilio_calle>ALMIRANTE BROWN 957           </domicilio_calle>
+        <localidad>GENERAL RODRIGUEZ             </localidad>
+        <provincia>2</provincia>
+        <cp>1748      </cp>
+      </informacion_comprador>
+    </cabecera>
+    <detalle>
+      <linea numeroLinea="1">
+        <codigo_producto_vendedor>1860414-30-24            </codigo_producto_vendedor>
+        <codigo_producto_comprador>1860414-30-24       </codigo_producto_comprador>
+        <descripcion>COIL D1 24V 30W DIN           %3Cbr%3END:977604003686 14/05/15 81006244%3Cbr%3EAD:Buenos OR:United</descripcion>
+        <cantidad>000000005.00</cantidad>
+        <unidad>7</unidad>
+        <precio_unitario>0000000001575.6942</precio_unitario>
+        <importe_total_articulo>000000007878.47</importe_total_articulo>
+        <importes_moneda_origen>
+          <precio_unitario>0000000000103.6300</precio_unitario>
+          <importe_total_articulo>000000000518.15</importe_total_articulo>
+        </importes_moneda_origen>
+      </linea>
+    </detalle>
+    <resumen>
+      <importe_total_neto_gravado>000000000000.00</importe_total_neto_gravado>
+      <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+      <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+      <impuesto_liq>000000000000.00</impuesto_liq>
+      <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+      <impuestos>
+        <codigo_impuesto>1</codigo_impuesto>
+        <descripcion>IVA Resp. Inscripto           </descripcion>
+        <porcentaje_impuesto>21.0000</porcentaje_impuesto>
+        <importe_impuesto>000000000000.00</importe_impuesto>
+        <importe_impuesto_moneda_origen>000000000108.81</importe_impuesto_moneda_origen>
+      </impuestos>
+      <importe_total_factura>000000000000.00</importe_total_factura>
+      <tipo_de_cambio>15.205000</tipo_de_cambio>
+      <codigo_moneda>DOL</codigo_moneda>
+      <importes_moneda_origen>
+        <importe_total_neto_gravado>000000000518.15</importe_total_neto_gravado>
+        <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+        <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+        <impuesto_liq>000000000108.81</impuesto_liq>
+        <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+        <importe_total_factura>000000000626.96</importe_total_factura>
+      </importes_moneda_origen>
+    </resumen>
+    <extensiones>
+      <extensiones_datos_comerciales>                                                                                                                                                                                                                                                                                                                               CONDICION DE VENTA:        Este comprobante solo podra ser cancelado pagando el                                                                                                                                                                                                                                                                               importe de DOLARES/EUROS establecidos para la conversion, o con pesos al tipo de                                                                                                                                                                                                                                                                               cambio vendedor para Dolares divisas del BNA cotizado al cierre del dia habil                                                                                                                                                                                                                                                                                inmediato anterior al de la efectiva acreditacion de los valores o transferencia                                                                                                                                                                                                                                                                               recibida para la cancelacion del documento. En caso de diferencias entre el                                                                                                                                                                                                                                                                                  importe facturado y el abonado, Parker Hannifin Argentina realizara la nota de                                                                                                                                                                                                                                                                                credito/debito que correspondiera.            Bajo ninguna circunstancia debera                                                                                                                                                                                                                                                                               entenderse que su obligacion ha quedado pesificada teniendo en cuenta lo pactado                                                                                                                                                                                                                                                                               habitualmente y las caracteristicas del producto adquirido.%3Cbr%3E                                                                                                                                                                                                                                                                                          %3Cb%3EMORA:           La mora sera automatica, aplicandose un interes punitorio                                                                                                                                                                                                                                                                               del 3% mensual hasta la efectiva acreditacion del pago en la cuenta de  Parker                                                                                                                                                                                                                                                                               Hannifin Argentina sobre el importe total que indica el comprobante.                                                                                                                                                                                                                                                                                            %3Cbr%3E %3Cu%3E %3Ci%3E                                                                                                                                                                                                                                                                                                                                    </extensiones_datos_comerciales>
+    </extensiones>
+  </comprobante>
+</lote_comprobantes>

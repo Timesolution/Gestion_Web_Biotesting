@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lote_comprobantes xmlns="http://lote.schemas.cfe.ib.com.ar/">
+   <cabecera_lote>
+      <id_lote>00003214</id_lote>
+      <cuit_canal>30690783521</cuit_canal>
+      <cuit_vendedor>30516490140</cuit_vendedor>
+      <cantidad_reg>2</cantidad_reg>
+      <punto_de_venta>0011</punto_de_venta>
+   </cabecera_lote>
+   <comprobante>
+      <cabecera>
+         <informacion_comprobante>
+            <tipo_de_comprobante>01</tipo_de_comprobante>
+            <numero_comprobante>00016544</numero_comprobante>
+            <punto_de_venta>0011</punto_de_venta>
+            <fecha_emision>20171013</fecha_emision>
+            <fecha_vencimiento>20171212</fecha_vencimiento>
+            <condicion_de_pago>C/ENTREGA DE VALORES A 60 DIAS</condicion_de_pago>
+         </informacion_comprobante>
+         <informacion_vendedor>
+            <razon_social>Parker Hannifin Argentina SAIC</razon_social>
+            <cuit>30516490140</cuit>
+            <condicion_IVA>01</condicion_IVA>
+            <condicion_ingresos_brutos>2</condicion_ingresos_brutos>
+            <nro_ingresos_brutos>902-877505-1</nro_ingresos_brutos>
+            <inicio_de_actividades>19700202</inicio_de_actividades>
+            <domicilio_calle>Stephenson 2711 - Tortuguitas</domicilio_calle>
+            <localidad>Buenos Aires</localidad>
+            <provincia>2</provincia>
+            <cp>B1667AKC</cp>
+         </informacion_vendedor>
+         <informacion_comprador>
+            <codigo_doc_identificatorio>80</codigo_doc_identificatorio>
+            <nro_doc_identificatorio>30573070794</nro_doc_identificatorio>
+            <denominacion>PROGOM S.R.L.</denominacion>
+            <condicion_IVA>01</condicion_IVA>
+            <domicilio_calle>AV.CALCHAQUI 486 KM.24</domicilio_calle>
+            <localidad>BERAZATEGUI</localidad>
+            <provincia>2</provincia>
+            <cp>1884</cp>
+         </informacion_comprador>
+      </cabecera>
+      <detalle>
+         <linea numeroLinea="1">
+            <codigo_producto_vendedor>F5CNG0101040404-3200</codigo_producto_vendedor>
+            <codigo_producto_comprador>F5CNG0101040404-3200</codigo_producto_comprador>
+            <descripcion>Manguera GNC DI 1/4" X 3200MM %3Cbr%3END:OW           10/10/17 81091753%3Cbr%3EAD:BLANK  OR:Argent</descripcion>
+            <cantidad>000000001.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000001548.1843</precio_unitario>
+            <importe_total_articulo>000000001548.18</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000088.9250</precio_unitario>
+               <importe_total_articulo>000000000088.93</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+         <linea numeroLinea="2">
+            <codigo_producto_vendedor>F5CNG0106161616-1000</codigo_producto_vendedor>
+            <codigo_producto_comprador>F5CNG0106161616-1000</codigo_producto_comprador>
+            <descripcion>Manguera Armada GNC de 1"     %3Cbr%3END:OW           09/10/17 81091753%3Cbr%3EAD:BLANK  OR:Argent</descripcion>
+            <cantidad>000000002.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000006212.1492</precio_unitario>
+            <importe_total_articulo>000000012424.30</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000356.8150</precio_unitario>
+               <importe_total_articulo>000000000713.63</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+         <linea numeroLinea="3">
+            <codigo_producto_vendedor>PVN0-3001B</codigo_producto_vendedor>
+            <codigo_producto_comprador>PVN0-3001B</codigo_producto_comprador>
+            <descripcion>KIT PVN PLUS SOLENOIDE-RESORTE</descripcion>
+            <cantidad>000000003.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000001088.2643</precio_unitario>
+            <importe_total_articulo>000000003264.79</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000062.5080</precio_unitario>
+               <importe_total_articulo>000000000187.52</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+         <linea numeroLinea="4">
+            <codigo_producto_vendedor>PVN0-3000B</codigo_producto_vendedor>
+            <codigo_producto_comprador>PVN0-3000B</codigo_producto_comprador>
+            <descripcion>CUERPO PVN PLUS 5/2 G1/4      %3Cbr%3END:936304067781 28/04/14 81091753%3Cbr%3EAD:Buenos OR:Brazil</descripcion>
+            <cantidad>000000002.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000000821.3690</precio_unitario>
+            <importe_total_articulo>000000001642.74</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000047.1780</precio_unitario>
+               <importe_total_articulo>000000000094.36</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+         <linea numeroLinea="5">
+            <codigo_producto_vendedor>6602-4-4</codigo_producto_vendedor>
+            <codigo_producto_comprador>6602-4-4</codigo_producto_comprador>
+            <descripcion>NIPLE 1/4" NPTF               %3Cbr%3END:10414172338T 01/09/17 81091753%3Cbr%3EAD:Buenos OR:United</descripcion>
+            <cantidad>000000010.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000000276.5579</precio_unitario>
+            <importe_total_articulo>000000002765.58</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000015.8850</precio_unitario>
+               <importe_total_articulo>000000000158.85</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+         <linea numeroLinea="6">
+            <codigo_producto_vendedor>F5CNG0101080808-1000</codigo_producto_vendedor>
+            <codigo_producto_comprador>F5CNG0101080808-1000</codigo_producto_comprador>
+            <descripcion>Manguera GNC DI 1/2" X 1000MM %3Cbr%3END:OW           09/10/17 81091753%3Cbr%3EAD:BLANK  OR:Argent</descripcion>
+            <cantidad>000000002.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000001651.2515</precio_unitario>
+            <importe_total_articulo>000000003302.50</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000094.8450</precio_unitario>
+               <importe_total_articulo>000000000189.69</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+      </detalle>
+      <resumen>
+         <importe_total_neto_gravado>000000000000.00</importe_total_neto_gravado>
+         <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+         <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+         <impuesto_liq>000000000000.00</impuesto_liq>
+         <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+         <impuestos>
+            <codigo_impuesto>5</codigo_impuesto>
+            <descripcion>Percepcion IIBB Buenos Aires</descripcion>
+            <porcentaje_impuesto>03.5000</porcentaje_impuesto>
+            <importe_impuesto>000000000000.00</importe_impuesto>
+            <importe_impuesto_moneda_origen>000000000050.15</importe_impuesto_moneda_origen>
+         </impuestos>
+         <impuestos>
+            <codigo_impuesto>1</codigo_impuesto>
+            <descripcion>IVA Resp. Inscripto</descripcion>
+            <porcentaje_impuesto>21.0000</porcentaje_impuesto>
+            <importe_impuesto>000000000000.00</importe_impuesto>
+            <importe_impuesto_moneda_origen>000000000300.93</importe_impuesto_moneda_origen>
+         </impuestos>
+         <importe_total_factura>000000000000.00</importe_total_factura>
+         <tipo_de_cambio>17.410000</tipo_de_cambio>
+         <codigo_moneda>DOL</codigo_moneda>
+         <observaciones>Remito: 0001-00075198 O/Compra Cliente: 150917</observaciones>
+         <importes_moneda_origen>
+            <importe_total_neto_gravado>000000001432.98</importe_total_neto_gravado>
+            <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+            <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+            <impuesto_liq>000000000300.93</impuesto_liq>
+            <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+            <importe_total_factura>000000001784.06</importe_total_factura>
+         </importes_moneda_origen>
+      </resumen>
+      <extensiones>
+         <extensiones_datos_comerciales>CONDICION DE VENTA:        Este comprobante solo podra ser cancelado pagando el                                                                                                                                                                                                                                                                               importe de DOLARES/EUROS establecidos para la conversion, o con pesos al tipo de                                                                                                                                                                                                                                                                               cambio vendedor para Dolares divisas del BNA cotizado al cierre del dia habil                                                                                                                                                                                                                                                                                inmediato anterior al de la efectiva acreditacion de los valores o transferencia                                                                                                                                                                                                                                                                               recibida para la cancelacion del documento. En caso de diferencias entre el                                                                                                                                                                                                                                                                                  importe facturado y el abonado, Parker Hannifin Argentina realizara la nota de                                                                                                                                                                                                                                                                                credito/debito que correspondiera.            Bajo ninguna circunstancia debera                                                                                                                                                                                                                                                                               entenderse que su obligacion ha quedado pesificada teniendo en cuenta lo pactado                                                                                                                                                                                                                                                                               habitualmente y las caracteristicas del producto adquirido.%3Cbr%3E                                                                                                                                                                                                                                                                                          %3Cb%3EMORA:           La mora sera automatica, aplicandose un interes punitorio                                                                                                                                                                                                                                                                               del 3% mensual hasta la efectiva acreditacion del pago en la cuenta de  Parker                                                                                                                                                                                                                                                                               Hannifin Argentina sobre el importe total que indica el comprobante.                                                                                                                                                                                                                                                                                            %3Cbr%3E %3Cu%3E %3Ci%3E</extensiones_datos_comerciales>
+      </extensiones>
+   </comprobante>
+   <comprobante>
+      <cabecera>
+         <informacion_comprobante>
+            <tipo_de_comprobante>01</tipo_de_comprobante>
+            <numero_comprobante>00016545</numero_comprobante>
+            <punto_de_venta>0011</punto_de_venta>
+            <fecha_emision>20171017</fecha_emision>
+            <fecha_vencimiento>20180115</fecha_vencimiento>
+            <condicion_de_pago>CTA. CTE. A 90 DIAS F.F. *</condicion_de_pago>
+         </informacion_comprobante>
+         <informacion_vendedor>
+            <razon_social>Parker Hannifin Argentina SAIC</razon_social>
+            <cuit>30516490140</cuit>
+            <condicion_IVA>01</condicion_IVA>
+            <condicion_ingresos_brutos>2</condicion_ingresos_brutos>
+            <nro_ingresos_brutos>902-877505-1</nro_ingresos_brutos>
+            <inicio_de_actividades>19700202</inicio_de_actividades>
+            <domicilio_calle>Stephenson 2711 - Tortuguitas</domicilio_calle>
+            <localidad>Buenos Aires</localidad>
+            <provincia>2</provincia>
+            <cp>B1667AKC</cp>
+         </informacion_vendedor>
+         <informacion_comprador>
+            <codigo_doc_identificatorio>80</codigo_doc_identificatorio>
+            <nro_doc_identificatorio>30573070794</nro_doc_identificatorio>
+            <denominacion>FADAT S.A.I.C.</denominacion>
+            <condicion_IVA>01</condicion_IVA>
+            <domicilio_calle>AVDA.ALTE.BROWN 701</domicilio_calle>
+            <localidad>CAPITAL FEDERAL</localidad>
+            <provincia>1</provincia>
+            <cp>1155</cp>
+         </informacion_comprador>
+      </cabecera>
+      <detalle>
+         <linea numeroLinea="1">
+            <codigo_producto_vendedor>933837Q</codigo_producto_vendedor>
+            <codigo_producto_comprador>933837Q</codigo_producto_comprador>
+            <descripcion>ELEME.20 Micron-IL8/8310-2-20Q%3Cbr%3END:1035145362C  23/08/17 81090674%3Cbr%3EAD:Buenos OR:United</descripcion>
+            <cantidad>000000020.00</cantidad>
+            <unidad>7</unidad>
+            <precio_unitario>0000000003572.0400</precio_unitario>
+            <importe_total_articulo>000000071440.80</importe_total_articulo>
+            <importes_moneda_origen>
+               <precio_unitario>0000000000206.0000</precio_unitario>
+               <importe_total_articulo>000000004120.00</importe_total_articulo>
+            </importes_moneda_origen>
+         </linea>
+      </detalle>
+      <resumen>
+         <importe_total_neto_gravado>000000000000.00</importe_total_neto_gravado>
+         <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+         <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+         <impuesto_liq>000000000000.00</impuesto_liq>
+         <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+         <impuestos>
+            <codigo_impuesto>1</codigo_impuesto>
+            <descripcion>IVA Resp. Inscripto</descripcion>
+            <porcentaje_impuesto>21.0000</porcentaje_impuesto>
+            <importe_impuesto>000000000000.00</importe_impuesto>
+            <importe_impuesto_moneda_origen>000000000865.20</importe_impuesto_moneda_origen>
+         </impuestos>
+         <importe_total_factura>000000000000.00</importe_total_factura>
+         <tipo_de_cambio>17.340000</tipo_de_cambio>
+         <codigo_moneda>DOL</codigo_moneda>
+         <observaciones>Remito: 0001-00075199 O/Compra Cliente: 12597</observaciones>
+         <importes_moneda_origen>
+            <importe_total_neto_gravado>000000004120.00</importe_total_neto_gravado>
+            <importe_total_concepto_no_gravado>000000000000.00</importe_total_concepto_no_gravado>
+            <importe_operaciones_exentas>000000000000.00</importe_operaciones_exentas>
+            <impuesto_liq>000000000865.20</impuesto_liq>
+            <impuesto_liq_rni>000000000000.00</impuesto_liq_rni>
+            <importe_total_factura>000000004985.20</importe_total_factura>
+         </importes_moneda_origen>
+      </resumen>
+      <extensiones>
+         <extensiones_datos_comerciales>CONDICION DE VENTA: 
+         Este comprobante solo podra ser cancelado pagando el        
+         importe de DOLARES/EUROS establecidos para la conversion, o con pesos al tipo de          
+         cambio vendedor para Dolares divisas del BNA cotizado al cierre del dia habil      
+         inmediato anterior al de la efectiva acreditacion de los valores o transferencia   
+         recibida para la cancelacion del documento. En caso de diferencias entre el                                                                                                                                                                                                                                                                                  importe facturado y el abonado, Parker Hannifin Argentina realizara la nota de                                                                                                                                                                                                                                                                                credito/debito que correspondiera.            Bajo ninguna circunstancia debera                                                                                                                                                                                                                                                                               entenderse que su obligacion ha quedado pesificada teniendo en cuenta lo pactado                                                                                                                                                                                                                                                                               habitualmente y las caracteristicas del producto adquirido.%3Cbr%3E                                                                                                                                                                                                                                                                                          %3Cb%3EMORA:           La mora sera automatica, aplicandose un interes punitorio                                                                                                                                                                                                                                                                               del 3% mensual hasta la efectiva acreditacion del pago en la cuenta de  Parker                                                                                                                                                                                                                                                                               Hannifin Argentina sobre el importe total que indica el comprobante.                                                                                                                                                                                                                                                                                            %3Cbr%3E %3Cu%3E %3Ci%3E</extensiones_datos_comerciales>
+      </extensiones>
+   </comprobante>
+</lote_comprobantes>

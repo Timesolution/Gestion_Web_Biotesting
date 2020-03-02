@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <FacturaItemXML>
+      <Descripcion>STIHL 7003.871.0027 CAMPERA ABRIGO L</Descripcion>
+      <Cantidad>1.00</Cantidad>
+      <PrecioUnitario>1586.00</PrecioUnitario>
+      <AlicuotaIva>21.00</AlicuotaIva>
+      <ImpuestosInternos>0.00</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+    <FacturaItemXML>
+      <Descripcion>STIHL 7003.871.0051 GORRA DE GOLF</Descripcion>
+      <Cantidad>1.00</Cantidad>
+      <PrecioUnitario>268.00</PrecioUnitario>
+      <AlicuotaIva>21.00</AlicuotaIva>
+      <ImpuestosInternos>0.00</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+  </items>
+  <TipoFactura>Factura B</TipoFactura>
+  <Comprador>SANCHEZ JOSE</Comprador>
+  <Cuit>23286026249</Cuit>
+  <TipoIva>Consumidor Final</TipoIva>
+  <FormaPago>Tarjeta</FormaPago>
+  <Total>1854.00</Total>
+  <TotalPercepcion>0.00</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Direccion>MARIANO MORENO 200 - LA LEONESA   - Chaco</Direccion>
+  <Descuento>0.00</Descuento>
+</FacturaXML>

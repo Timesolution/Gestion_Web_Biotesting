@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PedidoM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <PedidoItemM>
+      <Articulo>28780</Articulo>
+      <Cantidad>1.00</Cantidad>
+    </PedidoItemM>
+    <PedidoItemM>
+      <Articulo>28781</Articulo>
+      <Cantidad>1.00</Cantidad>
+    </PedidoItemM>
+    <PedidoItemM>
+      <Articulo>28775</Articulo>
+      <Cantidad>1.00</Cantidad>
+    </PedidoItemM>
+  </items>
+  <Codigo>153</Codigo>
+  <Descripcion>Pedido 0005-00000015</Descripcion>
+  <Tipo>V</Tipo>
+  <Cliente>ABALOS JUSTINA</Cliente>
+</PedidoM>

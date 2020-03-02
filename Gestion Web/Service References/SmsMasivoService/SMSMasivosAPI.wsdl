@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://servicio.smsmasivos.com.ar/ws/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://servicio.smsmasivos.com.ar/ws/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://servicio.smsmasivos.com.ar/ws/">
+      <s:element name="EnviarSMS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="clave" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="numero" type="s:long" />
+            <s:element minOccurs="0" maxOccurs="1" name="texto" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="test" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnviarSMSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EnviarSMSResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecibirSMS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="clave" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="origen" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="solonoleidos" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="marcarcomoleidos" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecibirSMSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RecibirSMSResult" type="tns:ArrayOfClsRespuesta" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfClsRespuesta">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="clsRespuesta" nillable="true" type="tns:clsRespuesta" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="clsRespuesta">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="numero" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="texto" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="fecha" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="idsms" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="idinterno" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="ArrayOfClsRespuesta" nillable="true" type="tns:ArrayOfClsRespuesta" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="EnviarSMSSoapIn">
+    <wsdl:part name="parameters" element="tns:EnviarSMS" />
+  </wsdl:message>
+  <wsdl:message name="EnviarSMSSoapOut">
+    <wsdl:part name="parameters" element="tns:EnviarSMSResponse" />
+  </wsdl:message>
+  <wsdl:message name="RecibirSMSSoapIn">
+    <wsdl:part name="parameters" element="tns:RecibirSMS" />
+  </wsdl:message>
+  <wsdl:message name="RecibirSMSSoapOut">
+    <wsdl:part name="parameters" element="tns:RecibirSMSResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnviarSMSHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="clave" type="s:string" />
+    <wsdl:part name="numero" type="s:string" />
+    <wsdl:part name="texto" type="s:string" />
+    <wsdl:part name="test" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EnviarSMSHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RecibirSMSHttpGetIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="clave" type="s:string" />
+    <wsdl:part name="origen" type="s:string" />
+    <wsdl:part name="solonoleidos" type="s:string" />
+    <wsdl:part name="marcarcomoleidos" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RecibirSMSHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfClsRespuesta" />
+  </wsdl:message>
+  <wsdl:message name="EnviarSMSHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="clave" type="s:string" />
+    <wsdl:part name="numero" type="s:string" />
+    <wsdl:part name="texto" type="s:string" />
+    <wsdl:part name="test" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EnviarSMSHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="RecibirSMSHttpPostIn">
+    <wsdl:part name="usuario" type="s:string" />
+    <wsdl:part name="clave" type="s:string" />
+    <wsdl:part name="origen" type="s:string" />
+    <wsdl:part name="solonoleidos" type="s:string" />
+    <wsdl:part name="marcarcomoleidos" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RecibirSMSHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfClsRespuesta" />
+  </wsdl:message>
+  <wsdl:portType name="SMSMasivosAPISoap">
+    <wsdl:operation name="EnviarSMS">
+      <wsdl:input message="tns:EnviarSMSSoapIn" />
+      <wsdl:output message="tns:EnviarSMSSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <wsdl:input message="tns:RecibirSMSSoapIn" />
+      <wsdl:output message="tns:RecibirSMSSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SMSMasivosAPIHttpGet">
+    <wsdl:operation name="EnviarSMS">
+      <wsdl:input message="tns:EnviarSMSHttpGetIn" />
+      <wsdl:output message="tns:EnviarSMSHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <wsdl:input message="tns:RecibirSMSHttpGetIn" />
+      <wsdl:output message="tns:RecibirSMSHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SMSMasivosAPIHttpPost">
+    <wsdl:operation name="EnviarSMS">
+      <wsdl:input message="tns:EnviarSMSHttpPostIn" />
+      <wsdl:output message="tns:EnviarSMSHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <wsdl:input message="tns:RecibirSMSHttpPostIn" />
+      <wsdl:output message="tns:RecibirSMSHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SMSMasivosAPISoap" type="tns:SMSMasivosAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="EnviarSMS">
+      <soap:operation soapAction="http://servicio.smsmasivos.com.ar/ws/EnviarSMS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <soap:operation soapAction="http://servicio.smsmasivos.com.ar/ws/RecibirSMS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SMSMasivosAPISoap12" type="tns:SMSMasivosAPISoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="EnviarSMS">
+      <soap12:operation soapAction="http://servicio.smsmasivos.com.ar/ws/EnviarSMS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <soap12:operation soapAction="http://servicio.smsmasivos.com.ar/ws/RecibirSMS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SMSMasivosAPIHttpGet" type="tns:SMSMasivosAPIHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="EnviarSMS">
+      <http:operation location="/EnviarSMS" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <http:operation location="/RecibirSMS" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SMSMasivosAPIHttpPost" type="tns:SMSMasivosAPIHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="EnviarSMS">
+      <http:operation location="/EnviarSMS" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecibirSMS">
+      <http:operation location="/RecibirSMS" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SMSMasivosAPI">
+    <wsdl:port name="SMSMasivosAPISoap" binding="tns:SMSMasivosAPISoap">
+      <soap:address location="http://servicio.smsmasivos.com.ar/ws/SMSMasivosAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SMSMasivosAPISoap12" binding="tns:SMSMasivosAPISoap12">
+      <soap12:address location="http://servicio.smsmasivos.com.ar/ws/SMSMasivosAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SMSMasivosAPIHttpGet" binding="tns:SMSMasivosAPIHttpGet">
+      <http:address location="http://servicio.smsmasivos.com.ar/ws/SMSMasivosAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SMSMasivosAPIHttpPost" binding="tns:SMSMasivosAPIHttpPost">
+      <http:address location="http://servicio.smsmasivos.com.ar/ws/SMSMasivosAPI.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

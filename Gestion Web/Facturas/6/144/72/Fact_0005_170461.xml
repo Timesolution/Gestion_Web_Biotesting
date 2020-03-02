@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <FacturaItemXML>
+      <Descripcion>Articulo Prueba Codigo Barrass</Descripcion>
+      <Cantidad>2</Cantidad>
+      <PrecioUnitario>1000.00</PrecioUnitario>
+      <AlicuotaIva>21.00</AlicuotaIva>
+      <ImpuestosInternos>0.00</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+  </items>
+  <TipoFactura>Factura B</TipoFactura>
+  <Comprador>RAMIREZ SILVANA MARISOL</Comprador>
+  <Cuit>38194307</Cuit>
+  <TipoIva>Consumidor Final</TipoIva>
+  <FormaPago>Cuenta Corriente</FormaPago>
+  <Total>2000.00</Total>
+  <TotalPercepcion>0.00</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Direccion>EVA PERON - PAMPA DEL INFIERNO - Chaco</Direccion>
+  <Descuento>0.00</Descuento>
+</FacturaXML>

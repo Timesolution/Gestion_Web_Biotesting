@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <FacturaItemXML>
+      <Descripcion>MESA DE LIVING CRISPINA OVAL LAQUEDA C/ VIDRIO LA30</Descripcion>
+      <Cantidad>2.00</Cantidad>
+      <PrecioUnitario>6947.0000</PrecioUnitario>
+      <AlicuotaIva>10.50</AlicuotaIva>
+      <ImpuestosInternos>0.00</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+  </items>
+  <TipoFactura>Factura B</TipoFactura>
+  <Comprador>ALEGRE ABEL ALBERTO</Comprador>
+  <Cuit>20130990968</Cuit>
+  <TipoIva>Consumidor Final</TipoIva>
+  <FormaPago>Cuenta Corriente</FormaPago>
+  <Total>13894.00</Total>
+  <TotalPercepcion>0.00</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Direccion>MZ14 PC14 315VDAS - GRAL.JOSE DE SAN MARTIN   - Chaco</Direccion>
+  <Descuento>0.00</Descuento>
+</FacturaXML>

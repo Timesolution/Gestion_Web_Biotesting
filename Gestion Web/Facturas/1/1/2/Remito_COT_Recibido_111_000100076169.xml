@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='ISO-8859-1'?><TBCOMPROBANTE>
+  <cuitEmpresa>30516490140</cuitEmpresa>
+  <numeroComprobante>203052936</numeroComprobante>
+  <nombreArchivo>TB_30516490140_000000_20180228_000001.txt</nombreArchivo>
+  <codigoIntegridad>739aa302632463752263fa6398b4268b</codigoIntegridad>
+  <validacionesRemitos class="list">
+    <remito>
+      <numeroUnico>91 R000100076169</numeroUnico>
+      <procesado>NO</procesado>
+      <errores class="list">
+        <error>
+          <codigo>22</codigo>
+          <descripcion>El campo FECHA_SALIDA_TRANSPORTE es inv�lido o inexistente.</descripcion>
+        </error>
+      </errores>
+    </remito>
+  </validacionesRemitos>
+</TBCOMPROBANTE>

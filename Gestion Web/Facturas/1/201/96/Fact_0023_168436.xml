@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FacturaXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items>
+    <FacturaItemXML>
+      <Descripcion>BATIDORA LICUAD MIXER PHILIPS HR1363/06</Descripcion>
+      <Cantidad>1</Cantidad>
+      <PrecioUnitario>1.00</PrecioUnitario>
+      <AlicuotaIva>0.00</AlicuotaIva>
+      <ImpuestosInternos>0.00</ImpuestosInternos>
+      <Descuento>0</Descuento>
+    </FacturaItemXML>
+  </items>
+  <TipoFactura>Factura A</TipoFactura>
+  <Comprador>PERALTA SILVIA ESTHER</Comprador>
+  <Cuit>23272769664</Cuit>
+  <TipoIva>No Informa</TipoIva>
+  <FormaPago>Cuenta Corriente</FormaPago>
+  <Total>0</Total>
+  <TotalPercepcion>0</TotalPercepcion>
+  <PorcPercepcion>0</PorcPercepcion>
+  <Direccion>FORMOSA 680 - VA.ANGELA   - Chaco</Direccion>
+  <Descuento>0</Descuento>
+</FacturaXML>

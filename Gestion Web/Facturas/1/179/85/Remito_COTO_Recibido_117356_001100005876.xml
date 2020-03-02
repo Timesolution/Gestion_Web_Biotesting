@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='ISO-8859-1'?><TBCOMPROBANTE>
+  <cuitEmpresa>30516490140</cuitEmpresa>
+  <numeroComprobante>196695718</numeroComprobante>
+  <nombreArchivo>TB_30516490140_000000_20180103_000001.txt</nombreArchivo>
+  <codigoIntegridad>2a55832aa337aa4085c05e455447802c</codigoIntegridad>
+  <validacionesRemitos class="list">
+    <remito>
+      <numeroUnico>91 R001100005876</numeroUnico>
+      <procesado>NO</procesado>
+      <errores class="list">
+        <error>
+          <codigo>34</codigo>
+          <descripcion>El campo TRANSPORTISTA_CUIT es inv�lido o inexistente.</descripcion>
+        </error>
+      </errores>
+    </remito>
+  </validacionesRemitos>
+</TBCOMPROBANTE>

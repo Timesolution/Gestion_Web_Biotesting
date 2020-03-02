@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='ISO-8859-1'?><TBCOMPROBANTE>
+  <cuitEmpresa>30516490140</cuitEmpresa>
+  <numeroComprobante>196686110</numeroComprobante>
+  <nombreArchivo>TB_30516490140_000000_20180103_000001.txt</nombreArchivo>
+  <codigoIntegridad>e443180e26b05f4b8c59e62fa7854a7b</codigoIntegridad>
+  <validacionesRemitos class="list">
+    <remito>
+      <numeroUnico>91 R000500000802</numeroUnico>
+      <procesado>NO</procesado>
+      <errores class="list">
+        <error>
+          <codigo>26</codigo>
+          <descripcion>El campo DESTINO_DOMICILIO_NUMERO es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>32</codigo>
+          <descripcion>El campo ORIGEN_DOMICILIO_LOCALIDAD es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>67</codigo>
+          <descripcion>El campo ORIGEN_DOMICILIO_CODIGOPOSTAL es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>34</codigo>
+          <descripcion>El campo TRANSPORTISTA_CUIT es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>95</codigo>
+          <descripcion>El campo IMPORTE es inv�lido o inexistente.</descripcion>
+        </error>
+        <error>
+          <codigo>81</codigo>
+          <descripcion>Producto: 73-3 El campo PRODUCTO_UNICO es inv�lido o inexistente.</descripcion>
+        </error>
+      </errores>
+    </remito>
+  </validacionesRemitos>
+</TBCOMPROBANTE>
