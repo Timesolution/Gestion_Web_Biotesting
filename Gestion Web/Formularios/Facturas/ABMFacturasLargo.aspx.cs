@@ -2935,13 +2935,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string ingresosBrutosString = "";
                 ingresosBrutosString += "\n" + " Ingresos Brutos. \n\n";
                 ingresosBrutosString += "Provincia".PadRight(20, ' ') + " Porcentaje       Monto \n";
-                ingresosBrutosString += "Provincia Buenos Aires".PadRight(20, ' ') + " Porcentaje       Monto \n";
                 foreach (var item in iIBB_Provincias)
                 {
                     ingresosBrutosString += item.Provincia.Provincia1.ToLower().PadRight(20, ' ') + "  " + item.Percepcion.ToString().PadLeft(10, ' ') + (item.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
                 }
 
-                ingresosBrutosString += "CABA".PadRight(20, ' ') + "  " + iIBB_Provincias_BuenosAires.Percepcion.ToString().PadLeft(10, ' ') + (iIBB_Provincias_BuenosAires.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
+                ingresosBrutosString += "Provincia Buenos Aires".PadRight(20, ' ') + "  " + iIBB_Provincias_BuenosAires.Percepcion.ToString().PadLeft(10, ' ') + (iIBB_Provincias_BuenosAires.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
 
 
                 ingresosBrutosString += "\n";
