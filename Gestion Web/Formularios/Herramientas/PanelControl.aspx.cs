@@ -1,6 +1,7 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
+using Gestor_Solution.Controladores;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -32,6 +33,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.cargarConfiguracion();
                     this.cargarEstados();
                     this.CargarSucursalesParaGarantiaYServiceOficial();
+                    this.CargarProveedores();
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -127,6 +129,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListActualizarCompuestos.SelectedValue = configuracion.ActualizaCompuestos;
                 this.DropListFiltroArticulosSucursal.SelectedValue = configuracion.FiltroArticulosSucursal;
                 this.DropListSucGarantia.SelectedValue = configuracion.SucursalGarantia;
+                this.DropListProveedores.SelectedValue = configuracion.ProveedorPredeterminadoEstetica;
                 this.DropListSucServiceOficial.SelectedValue = configuracion.SucursalServiceOficial;
                 this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue = configuracion.ColumnaUnidadMedidaEnTrazabilidad;
                 this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
@@ -1041,6 +1044,27 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
+        public void CargarProveedores()
+        {
+            try
+            {
+                controladorCliente ContCliente = new controladorCliente();
+
+                DataTable dt = ContCliente.obtenerProveedoresDT();
+
+                this.DropListProveedores.DataSource = dt;
+                this.DropListProveedores.DataValueField = "id";
+                this.DropListProveedores.DataTextField = "razonSocial";
+
+                this.DropListProveedores.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al cargar proveedores" + ex.Message);
+            }
+        }
+
         protected void lbtnTiempoLineas_Click(object sender, EventArgs e)
         {
             try
@@ -1292,6 +1316,29 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion:  " + nombreConfiguracion + "!. \", {type: \"info\"});", true);
+            }
+        }
+
+        protected void lbtnProveedores_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.ProveedorPredeterminadoEstetica = this.DropListProveedores.SelectedValue;
+
+                int i = configuracion.ModificarProveedorPredeterminadoEstetica();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Proveedor predeterminado estetica.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Proveedor predeterminado estetica modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Configuracion: Proveedor predeterminado estetica!. \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al seleccionar Proveedor predeterminado estetica " + ex.Message);
             }
         }
     }
