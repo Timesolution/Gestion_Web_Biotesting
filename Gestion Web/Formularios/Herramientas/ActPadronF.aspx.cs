@@ -123,23 +123,53 @@ namespace Gestion_Web.Formularios.Herramientas
 
         protected void lbtnCargarPadronCABA_Click(object sender, EventArgs e)
         {
+            //int size = -1;
+            //var sdf = new OpenFileDialog();
+
+            //DialogResult result = sdf.ShowDialog(); // Show the dialog.
+            //if (result == DialogResult.OK) // Test result.
+            //{
+            //    string file = sdf.FileName;
+            //    try
+            //    {
+            //        string text = File.ReadAllText(file);
+            //        size = text.Length;
+            //    }
+            //    catch (Exception ex) { }
+            //}
+
+            //string selectedPath = "";
+
+            //Thread t = new Thread((ThreadStart)(() => {
+            //    OpenFileDialog saveFileDialog1 = new OpenFileDialog();
+
+            //    saveFileDialog1.Filter = "JSON Files (*.json)|*.json";
+            //    saveFileDialog1.FilterIndex = 2;
+            //    saveFileDialog1.RestoreDirectory = true;
+
+            //    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            //    {
+            //        selectedPath = saveFileDialog1.FileName;
+            //    }
+            //}));
+
             try
             {
                 ControladorIngresosBrutos controladorIngresosBrutos = new ControladorIngresosBrutos();
-                var t = new Thread((ThreadStart)(() =>
-                {
+                //var t = new Thread((ThreadStart)(() =>
+                //{
                     OpenFileDialog openFileDialog = new OpenFileDialog();
                     openFileDialog.RestoreDirectory = true;
                     if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                         return;
 
-                    txtPath.Text = openFileDialog.FileName;
+                    txtPath.Text = lbtnCargarPadronCABA.FileName;
                     path.Value = openFileDialog.FileName;
-                }));
+                //}));
 
-                t.SetApartmentState(ApartmentState.STA);
-                t.Start();
-                t.Join();
+                //t.SetApartmentState(ApartmentState.STA);
+                //t.Start();
+                //t.Join();
             }
             catch (Exception ex)
             {

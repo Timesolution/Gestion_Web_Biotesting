@@ -41,7 +41,8 @@
                                     </div>
 
                                     <div class="col-md-2">
-                                        <asp:LinkButton ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-up'></span>" data-toggle="tooltip" title data-original-title="Cargar archivo" class="btn btn-info ui-tooltip" />
+                                        <%--<asp:FileUpload ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-up'></span>" data-toggle="tooltip" title data-original-title="Cargar archivo" class="btn btn-info ui-tooltip" />--%>
+                                        <asp:FileUpload ID="lbtnCargarPadronCABA" runat="server" onchange="fillTxtPath(this)"/>
                                     </div>
                                 </div>
 
@@ -156,7 +157,13 @@
             return true;
         }
     </script>
+    <script>
+        function fillTxtPath(input) {
+            var file = document.getElementById('<%= lbtnCargarPadronCABA.ClientID %>').value;
 
+            document.getElementById('<%=txtPath.ClientID%>').value = file;
+        }
+    </script>
     <script>
         function disableButton(btnSi) {
             var btn = document.getElementById(btnSi);
