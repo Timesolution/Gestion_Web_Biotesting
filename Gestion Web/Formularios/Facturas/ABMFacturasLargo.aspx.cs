@@ -3090,7 +3090,8 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                        if (string.IsNullOrEmpty(txtPUnitario.Text))
+                            this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
                     this.verificarAlertaArticulo(art);
@@ -4492,7 +4493,8 @@ namespace Gestion_Web.Formularios.Facturas
                 item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
 
                 //cargo la descripcion del articulo que tengo en pantalla
-                item.articulo.descripcion = this.txtDescripcion.Text;
+                if(string.IsNullOrEmpty(item.articulo.descripcion))
+                    item.articulo.descripcion = this.txtDescripcion.Text;
 
                 //agrego//costos
                 item.Costo = item.articulo.costo;
