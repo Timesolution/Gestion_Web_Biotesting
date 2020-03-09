@@ -55,7 +55,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnCargarPadronCABA;
+        protected global::System.Web.UI.WebControls.FileUpload lbtnCargarPadronCABA;
         
         /// <summary>
         /// txtFechaActualizacionCABA control.
