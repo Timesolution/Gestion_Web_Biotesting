@@ -159,7 +159,9 @@ namespace Gestion_Web.Formularios.Herramientas
                 //var t = new Thread((ThreadStart)(() =>
                 //{
                     OpenFileDialog openFileDialog = new OpenFileDialog();
-                    openFileDialog.RestoreDirectory = true;
+                //openFileDialog.Filter = "JSON Files (*.json)|*.json";
+                //openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
                     if (openFileDialog.ShowDialog() == DialogResult.Cancel)
                         return;
 

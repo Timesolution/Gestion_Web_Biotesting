@@ -41,7 +41,7 @@
                                     </div>
 
                                     <div class="col-md-2">
-                                        <%--<asp:FileUpload ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-up'></span>" data-toggle="tooltip" title data-original-title="Cargar archivo" class="btn btn-info ui-tooltip" />--%>
+                                        <%--<asp: ID="lbtnCargarPadronCABA" runat="server" OnClick="lbtnCargarPadronCABA_Click" Text="<span class='fa fa-arrow-circle-up'></span>" data-toggle="tooltip" title data-original-title="Cargar archivo" class="btn btn-info ui-tooltip" ></asp:>--%>
                                         <asp:FileUpload ID="lbtnCargarPadronCABA" runat="server" onchange="fillTxtPath(this)"/>
                                     </div>
                                 </div>
