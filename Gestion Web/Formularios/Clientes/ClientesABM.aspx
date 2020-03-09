@@ -1891,7 +1891,7 @@
             $.ajax({
                 type: "POST",
                 url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",
-                data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", provincia: "' + controlProvincia.value +
+                data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", IdProvincia: "' + controlProvincia.value +
                     '", origenCliente: "' + hiddenOrigenCliente.value + '", percepcionORetencion: "' + Math.abs(controlTxtPercepcionORetencion.value) + '", modo: "' + modoText + '"}',
                 contentType: "application/json",
                 dataType: 'json',

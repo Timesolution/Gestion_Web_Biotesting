@@ -552,6 +552,18 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Proveedores</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="DropListProveedores" runat="server" class="form-control"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnProveedores" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnProveedores_Click"/>
+                                            </div>
+                                        </div>
+
 
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Personalizar tabla Articulos:</label>
