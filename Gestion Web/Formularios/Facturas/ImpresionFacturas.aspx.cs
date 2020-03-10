@@ -110,6 +110,10 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte13(fechaD, fechaH, suc, tipo, cliente);//Impresion busqueda actual
                     }
+                    if (accion == 13)
+                    {
+                        this.generarReporte14(fechaD, fechaH, suc, tipo, cliente);//Impresion busqueda actual
+                    }
                     if (accion == 14)
                     {
                         this.generarReporte15(fechaD, fechaH, suc, tipo, cliente);//Detalle ventas con solicitudes
@@ -1364,13 +1368,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.Response.End();
                 }
-
-
-
             }
-            catch
+            catch(Exception ex)
             {
-
+                throw ex;
             }
         }
 

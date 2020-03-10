@@ -398,6 +398,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (usuario_cliente.IdCliente > 0)
                     cargarClienteDesdeModal();
+
+                this.obtenerNroFactura();
+
+                CargarDropList_DireccionesDeEntregaDelCliente((int)usuario_cliente.IdCliente);
             }
             catch (Exception ex)
             {
@@ -1947,12 +1951,20 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 decimal ingresosBrutos = 0;
                 var percepcionBSASCliente = contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
-                if(percepcionBSASCliente != null)
+                var percepcionCABACliente = contClienteEntity.obtenerPercepcionCABACliente(idCliente);
+                
+
+                if (percepcionCABACliente != null)
                 {
-                    ingresosBrutos = (decimal)percepcionBSASCliente.Percepcion;
+                    ingresosBrutos = (decimal)percepcionCABACliente.Percepcion;
+                }
+
+                if (percepcionBSASCliente != null)
+                {
+                    ingresosBrutos += (decimal)percepcionBSASCliente.Percepcion;
                     ingresosBrutos += ObtenerEl_IIBB_ProvinciasConModo_Siempre_(idCliente);
                     ingresosBrutos += ObtenerEl_IIBB_ProvinciasSegunDomicilioEntregaSeleccionado_Y_SuModoSea_SEGUN_PROVINCIA(idCliente);
-                }                
+                }
 
                 this.txtPorcRetencion.Text = ingresosBrutos.ToString();
             }
@@ -2919,6 +2931,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 var iIBB_Provincias = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+                var iIBB_Provincias_BuenosAires = contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
                 string ingresosBrutosString = "";
                 ingresosBrutosString += "\n" + " Ingresos Brutos. \n\n";
                 ingresosBrutosString += "Provincia".PadRight(20, ' ') + " Porcentaje       Monto \n";
@@ -2926,6 +2939,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     ingresosBrutosString += item.Provincia.Provincia1.ToLower().PadRight(20, ' ') + "  " + item.Percepcion.ToString().PadLeft(10, ' ') + (item.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
                 }
+
+                ingresosBrutosString += "Provincia Buenos Aires".PadRight(20, ' ') + "  " + iIBB_Provincias_BuenosAires.Percepcion.ToString().PadLeft(10, ' ') + (iIBB_Provincias_BuenosAires.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
+
+
                 ingresosBrutosString += "\n";
                 return ingresosBrutosString;
             }
@@ -3073,7 +3090,8 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                        if (string.IsNullOrEmpty(txtPUnitario.Text))
+                            this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
                     this.verificarAlertaArticulo(art);
@@ -4475,7 +4493,8 @@ namespace Gestion_Web.Formularios.Facturas
                 item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
 
                 //cargo la descripcion del articulo que tengo en pantalla
-                item.articulo.descripcion = this.txtDescripcion.Text;
+                if(string.IsNullOrEmpty(item.articulo.descripcion))
+                    item.articulo.descripcion = this.txtDescripcion.Text;
 
                 //agrego//costos
                 item.Costo = item.articulo.costo;

@@ -723,11 +723,14 @@ namespace Gestion_Web.Formularios.Clientes
                 this.ListProvincia.DataBind();
                 this.ListProvincia.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
-                this.IngresosBrutos_DropList_Provincias.DataSource = controladorPais.obtenerPRovincias();
-                this.IngresosBrutos_DropList_Provincias.DataValueField = "Provincia";
-                this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia";
+
+                ControladorProvincias ContProvincia = new ControladorProvincias();
+                this.IngresosBrutos_DropList_Provincias.DataSource = ContProvincia.ObtenerProvinciaSinBuenosAires();
+                this.IngresosBrutos_DropList_Provincias.DataValueField = "Id";
+                this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia1";
                 this.IngresosBrutos_DropList_Provincias.DataBind();
-                this.IngresosBrutos_DropList_Provincias.Items.RemoveAt(0);
+                //this.IngresosBrutos_DropList_Provincias.Items.RemoveAt(0);
+
             }
             catch (Exception ex)
             {
@@ -3935,7 +3938,7 @@ namespace Gestion_Web.Formularios.Clientes
 
         #region IngresosBrutos/Percepciones
         [WebMethod]
-        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string origenCliente, string percepcionORetencion)
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion,string modo)
         {
             try
             {
@@ -3953,7 +3956,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 var cliente = controladorClienteEntity.ObtenerClienteId(Convert.ToInt32(idCliente));
-                var prov = controladorProvincias.ObtenerProvinciaByNombre(provincia);
+                var prov = controladorProvincias.ObtenerProvinciaById(Convert.ToInt32(IdProvincia));
                 if (prov != null)
                 {
                     if (Convert.ToInt32(origenCliente) == 1)
@@ -3966,7 +3969,7 @@ namespace Gestion_Web.Formularios.Clientes
                     }
 
                     ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion);
+                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion, modo);
                 }
                 resultadoJSON = respuesta.ToString();
 
@@ -4012,7 +4015,8 @@ namespace Gestion_Web.Formularios.Clientes
                         IdCliente = item.IdCliente.ToString(),
                         Provincia = item.Provincia.Provincia1,
                         Percepcion = item.Percepcion.ToString(),
-                        Retencion = item.Retencion.ToString()
+                        Retencion = item.Retencion.ToString(),
+                        Modo = item.Modo
                     });
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -4044,7 +4048,8 @@ namespace Gestion_Web.Formularios.Clientes
                         IdCliente = item.IdCliente.ToString(),
                         Provincia = item.Provincia.Provincia1,
                         Percepcion = item.Percepcion.ToString(),
-                        Retencion = item.Retencion.ToString()
+                        Retencion = item.Retencion.ToString(),
+                        Modo = item.Modo
                     });
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
