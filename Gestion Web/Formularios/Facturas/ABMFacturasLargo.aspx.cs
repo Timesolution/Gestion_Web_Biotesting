@@ -4237,6 +4237,18 @@ namespace Gestion_Web.Formularios.Facturas
                             this.agregarMovimientoMillas(fact);
                             this.EnviarSMSAviso(fact);
                         }
+
+                        int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
+
+                        //if(tieneSistemaEstetica == 1)
+                        //{
+                        //    Estetica_Api.Controladores.ControladorSesiones controladorSesiones = new Estetica_Api.Controladores.ControladorSesiones();
+                        //    foreach (var item in fact.items)
+                        //    {
+                        //  controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, item.precioUnitario);
+                        //    } 
+                        //}
+
                         #endregion
 
                         Session.Remove("Factura");
