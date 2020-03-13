@@ -52,7 +52,8 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Estetica Api">
+    <Reference Include="Estetica Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\EsteticaAPI\Estetica Api\bin\Debug\Estetica Api.dll</HintPath>
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

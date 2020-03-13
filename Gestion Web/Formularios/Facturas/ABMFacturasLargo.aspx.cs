@@ -4240,14 +4240,14 @@ namespace Gestion_Web.Formularios.Facturas
 
                         int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
 
-                        //if(tieneSistemaEstetica == 1)
-                        //{
-                        //    Estetica_Api.Controladores.ControladorSesiones controladorSesiones = new Estetica_Api.Controladores.ControladorSesiones();
-                        //    foreach (var item in fact.items)
-                        //    {
-                        //  controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, item.precioUnitario);
-                        //    } 
-                        //}
+                        if (tieneSistemaEstetica == 1)
+                        {
+                            Estetica_Api.Controladores.ControladorSesiones controladorSesiones = new Estetica_Api.Controladores.ControladorSesiones();
+                            foreach (var item in fact.items)
+                            {
+                                controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, item.precioUnitario, fact.id);
+                            }
+                        }
 
                         #endregion
 
