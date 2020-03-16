@@ -455,5 +455,25 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al eliminar Configuracion de lista de Precio. " + ex.Message));
             }
         }
+
+        protected void lbtnCalcular_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(!string.IsNullOrEmpty(txtPrecioCalcular.Text))
+                {
+                    decimal precio = decimal.Parse(txtPrecioCalcular.Text);
+                    txtPorcentaje.Text = Convert.ToString((precio*100)-100);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe colocar un precio para calcular el porcentaje. "));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
