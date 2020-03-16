@@ -1768,7 +1768,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
                         //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
                         //p.domicilioEntrega = this.dropList_DomicilioEntrega.Text;
-                        p.domicilioEntrega = this.dropList_DomicilioEntrega.SelectedItem.Text;
+                        p.domicilioEntrega = dropList_DomicilioEntrega.Items.Count > 0 ? dropList_DomicilioEntrega.SelectedItem.Text : "";
                         //dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
