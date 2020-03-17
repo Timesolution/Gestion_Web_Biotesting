@@ -11,6 +11,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Forms;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -460,9 +461,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(!string.IsNullOrEmpty(txtPrecioCalcular.Text))
+                if (!string.IsNullOrEmpty(txtPrecioCalcular.Text) || txtPrecioCalcular.Text == "0")
                 {
-                    decimal precio = decimal.Parse(txtPrecioCalcular.Text);
+                    double precio = double.Parse(txtPrecioCalcular.Text);
                     txtPorcentaje.Text = Convert.ToString((precio*100)-100);
                 }
                 else
@@ -475,5 +476,7 @@ namespace Gestion_Web.Formularios.Facturas
                 throw ex;
             }
         }
+
+      
     }
 }
