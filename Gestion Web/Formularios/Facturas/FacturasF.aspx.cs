@@ -1624,6 +1624,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             string destinatarios = this.txtEnvioMail.Text + ";" + this.txtEnvioMail2.Text;
                             String path = Server.MapPath("../../Facturas/" + factura.empresa.id + "/" + "/fc-" + factura.numero + "_" + factura.id + ".pdf");
+                            //string path = Server.MapPath("C:\\"+ "fc - 0001 - 00000946_3565.pdf");
 
                             int i = this.GenerarImpresionPDF(factura, path);
                             if (i > 0)

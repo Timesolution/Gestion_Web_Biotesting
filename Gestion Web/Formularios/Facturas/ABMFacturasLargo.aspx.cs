@@ -4506,7 +4506,16 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //cargo la descripcion del articulo que tengo en pantalla
                 if(string.IsNullOrEmpty(item.articulo.descripcion))
+                {
                     item.articulo.descripcion = this.txtDescripcion.Text;
+                }
+                else
+                {
+                    string descAux = item.articulo.descripcion;
+                    if(descAux != this.txtDescripcion.Text)
+                        item.articulo.descripcion = this.txtDescripcion.Text;
+                }
+                
 
                 //agrego//costos
                 item.Costo = item.articulo.costo;
