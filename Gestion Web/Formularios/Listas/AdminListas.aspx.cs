@@ -461,7 +461,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (!string.IsNullOrEmpty(txtPrecioCalcular.Text) || txtPrecioCalcular.Text == "0")
+                if (!string.IsNullOrEmpty(txtPrecioCalcular.Text) && txtPrecioCalcular.Text != "0")
                 {
                     double precio = double.Parse(txtPrecioCalcular.Text);
                     txtPorcentaje.Text = Convert.ToString((precio*100)-100);
