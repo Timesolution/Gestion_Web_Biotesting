@@ -2055,7 +2055,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (string.IsNullOrEmpty(noActu))
                 {
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Precios modificados con exito\", {type: \"info\"});", true);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito",null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
                 }
                 else
                 {
@@ -2273,19 +2273,20 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+
         protected void lbtnImportarArticulo_Click(object sender, EventArgs e)
         {
             try
             {
-                ControladorImportacionArticulos cia = new ControladorImportacionArticulos();
+                ControladorImportacionArticulos controladorImportacionArticulos = new ControladorImportacionArticulos();
 
                 int sucursal = (int)Session["Login_SucUser"];
 
-                int i = cia.ImportarArticulosGestion(sucursal);
+                int i = controladorImportacionArticulos.ImportarArticulosGestion(sucursal);
 
                 if (i > 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar clientes", ""));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar articulos", ""));
                 }
                 else
                 {
@@ -2294,7 +2295,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error CATCH al importar articulos")+ex);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error CATCH al importar articulos") + ex);
             }
         }
     }

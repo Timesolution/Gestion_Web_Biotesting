@@ -1284,7 +1284,7 @@
         </div>
     </div>
 
-    <%-- Importacion de Clientes --%>
+    <%-- Importacion de articulos --%>
 
     <div id="modalConfirmacionArticulo" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -1309,7 +1309,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="lbtnImportarArticulo" Text="Aceptar" class="btn btn-danger" Onclick="lbtnImportarArticulo_Click" />
+                        <asp:Button runat="server" ID="lbtnImportarArticulo" Text="Aceptar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
