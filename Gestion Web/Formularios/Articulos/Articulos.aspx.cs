@@ -2286,7 +2286,8 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (i > 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar articulos", ""));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar articulos", ""));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar articulos.", "../Articulos/Articulos.aspx"));
                 }
                 else
                 {
