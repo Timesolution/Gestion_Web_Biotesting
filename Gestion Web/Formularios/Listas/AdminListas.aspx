@@ -57,35 +57,38 @@
                             </div>   --%>
                             <div class="form-group">
                                 <label for="name" class="col-md-4">Porcentaje</label>
-
                                 <div class="input-group col-md-2">
+                                    <div class="input-group">
                                     <span class="input-group-addon">%</span>
                                     <asp:TextBox ID="txtPorcentaje" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Style="text-align: right" Text="0"> 
                                     </asp:TextBox>
+                                    <br />
+                                    </div>
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtPorcentaje" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato Incorrecto" ForeColor="Red" Font-Bold="true" ValidationGroup="AdminGroup" />
                                 </div>
-                                <div class="col-md-1">
-                                    <asp:LinkButton ID="lbtnCalcular" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="tooltip" title data-original-title="Calcular porcentaje" class="btn btn-success ui-tooltip" OnClick="lbtnCalcular_Click" />
-                                </div>
+                                <div class="col-md-2"></div>
                                 <div class="input-group col-md-2">
-                                    <span class="input-group-addon">$</span>
-                                    <asp:TextBox ID="txtPrecioCalcular" Style="text-align: right;" class="form-control" runat="server"></asp:TextBox>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <asp:TextBox ID="txtPrecioCalcular" Style="text-align: right;" class="form-control" runat="server"></asp:TextBox>
+                                        <br />
+                                    </div>
+                                    <label for="name">IVA Incluido</label>
                                 </div>
-                                <div class="col-md-1">
-                                    <label for="name" class="col-md-4">IVA Incluido</label>
-                                </div>
-                                <div class="col-md-2">
-                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1"
+                                <div class="input-group">
+                                    <asp:LinkButton ID="lbtnCalcular" runat="server" Text="<span class='shortcut-icon icon-refresh'></span>" data-toggle="tooltip" title data-original-title="Calcular porcentaje" class="btn btn-info ui-tooltip" OnClick="lbtnCalcular_Click" />
+                                <div>
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1"
                                     ControlToValidate="txtPrecioCalcular" runat="server"
                                     ErrorMessage="Solo numeros, utilize '.' para numeros decimales."
                                     ValidationExpression="((\d+)((\.\d{1,8})?))$">
                                 </asp:RegularExpressionValidator>
                                 </div>
-                                <div class="col-md-3">
+                                </div>
+                                <%--<div class="col-md-3">
                                     <asp:RequiredFieldValidator ControlToValidate="txtPorcentaje" ID="RequiredFieldValidator1" runat="server" ErrorMessage="El campo es obligatorio" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="AdminGroup"></asp:RequiredFieldValidator>
-                                </div>
-                                <div class="col-md-3">
-                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtPorcentaje" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato Incorrecto" ForeColor="Red" Font-Bold="true" ValidationGroup="AdminGroup" />
-                                </div>
+                                </div>--%>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="validateSelect" class="col-md-4">Aumento/Descuento</label>
