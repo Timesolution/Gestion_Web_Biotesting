@@ -553,7 +553,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="validateSelect" class="col-md-4">Proveedores</label>
+                                            <label for="validateSelect" class="col-md-4">Proveedor Predeterminado Importacion</label>
                                             <div class="col-md-4">
                                                 <asp:DropDownList ID="DropListProveedores" runat="server" class="form-control"></asp:DropDownList>
                                             </div>
