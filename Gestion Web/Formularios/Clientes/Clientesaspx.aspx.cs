@@ -1640,22 +1640,17 @@ namespace Gestion_Web.Formularios.Clientes
                 if (i > 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar clientes", ""));
-
                 }
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al importar clientes"));
                 }
 
-
-
             }
             catch (Exception ex)
             {
-
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al importar clientes.CATCH.Metodo:lbtnImportarCliente_Click"));
             }
-
         }
-
     }
 }
