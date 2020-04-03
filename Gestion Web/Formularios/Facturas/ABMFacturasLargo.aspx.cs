@@ -2854,7 +2854,6 @@ namespace Gestion_Web.Formularios.Facturas
                             int iec = this.validarItemsEnCero();
                             if (iec == 1)
                             {
-                                Log.EscribirSQL(99, "ELECTRONICA", "Entro en 'this.generarFactura(0);' 2752");
                                 this.generarFactura(0);
                             }
                             else
@@ -2881,9 +2880,9 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
-
+                Log.EscribirSQL(1, "Error", "Error en el metodo btnAgregar_Click() " + ex.Message);
             }
         }
 
@@ -3864,7 +3863,6 @@ namespace Gestion_Web.Formularios.Facturas
                 fact.items = this.agregarInfoTrazaFactura(fact);
 
                 //valido que si esta facturando con lista de precio al 100% dto
-
                 Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
                 if (!respuesta.Item2)
                 {
