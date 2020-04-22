@@ -65,6 +65,23 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+
+                //txtFechaEvento.Text = DateTime.Now.ToString("dd/MM/yy");
+                //txtFechaVencimiento.Text = DateTime.Now.ToString("dd/MM/yy");
+
+                if (rdSiNo.SelectedValue == "1")
+                {
+                    divVencimientoTarea.Visible = true;
+                    divTarea.Visible = true;
+                    divSituacion.Visible = true;
+                }
+                else
+                {
+                    divVencimientoTarea.Visible = false;
+                    divTarea.Visible = false;
+                    divSituacion.Visible = false;
+                }
+
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
@@ -3260,6 +3277,21 @@ namespace Gestion_Web.Formularios.Clientes
                 celDetalle.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celDetalle);
 
+                TableCell cellTarea = new TableCell();
+                cellTarea.Text = e.Tarea;
+                cellTarea.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(cellTarea);
+
+                TableCell celVencimiento = new TableCell();
+                celVencimiento.Text = e.Vencimiento.Value.ToString("dd/MM/yyyy");
+                celVencimiento.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celVencimiento);
+
+                TableCell Estado = new TableCell();
+                Estado.Text = e.Situacion;
+                Estado.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(Estado);
+
                 TableCell celAccion = new TableCell();
                 LinkButton btnEditar = new LinkButton();
                 btnEditar.ID = "btnEditarEvento_" + e.Id;
@@ -3313,18 +3345,34 @@ namespace Gestion_Web.Formularios.Clientes
         private void agregarEventoCliente()
         {
             try
-            {
+            {                
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 eventos.Cliente = this.idCliente;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
 
+                if(rdSiNo.SelectedValue == "1")
+                {
+                    eventos.Tarea = this.txtTarea.Text;
+                    eventos.Situacion = txtSituacion.Text;
+                    eventos.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
+                }
+                else
+                {
+                    eventos.Tarea = "";
+                    eventos.Situacion = "";
+                    eventos.Vencimiento = null;
+                }
+
+                
+
                 int ok = this.contClienteEntity.agregarEventoCliente(eventos);
                 if (ok > 0)
                 {
                     this.txtDetalleEvento.Text = "";
-                    this.txtFechaEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
+                    this.txtTarea.Text = "";
+                    this.txtSituacion.Text = "";
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
@@ -3342,16 +3390,31 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                string fecha = this.txtFechaEvento.Text;
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
                 ev.Descripcion = this.txtDetalleEvento.Text;
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
+
+                if(rdSiNo.SelectedValue == "1")
+                {
+                    ev.Tarea = this.txtTarea.Text;
+                    ev.Situacion = txtSituacion.Text;
+                    ev.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
+                }
+                else
+                {
+                    ev.Tarea = "";
+                    ev.Situacion = "";
+                    ev.Vencimiento = null;
+                }
 
                 int ok = this.contClienteEntity.modificarEventoCliente(ev);
                 if (ok > 0)
                 {
                     this.txtDetalleEvento.Text = "";
-                    this.txtFechaEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
+                    this.txtTarea.Text = "";
+                    this.txtSituacion.Text = "";
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
@@ -3378,6 +3441,18 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtFechaEvento.Text = ev.Fecha.Value.ToString("dd/MM/yyyy");
                     this.txtDetalleEvento.Text = ev.Descripcion;
                     this.lblIdEventoCliente.Text = ev.Id.ToString();
+
+                    if(ev.Tarea != null)
+                    {
+                        divVencimientoTarea.Visible = true;
+                        divTarea.Visible = true;
+                        divSituacion.Visible = true;
+                        rdSiNo.SelectedValue = "1";
+                    }
+
+                    this.txtFechaVencimiento.Text = ev.Vencimiento.Value.ToString("dd/MM/yyyy");
+                    this.txtSituacion.Text = ev.Situacion;
+                    this.txtTarea.Text = ev.Tarea;
                 }
             }
             catch (Exception ex)
@@ -3938,7 +4013,7 @@ namespace Gestion_Web.Formularios.Clientes
 
         #region IngresosBrutos/Percepciones
         [WebMethod]
-        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion,string modo)
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion, string modo)
         {
             try
             {
@@ -4064,5 +4139,15 @@ namespace Gestion_Web.Formularios.Clientes
         }
 
         #endregion
+
+        protected void rdSiNo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (rdSiNo.SelectedValue == "1")
+            {
+                divTarea.Visible = true;
+                divVencimientoTarea.Visible = true;
+                divSituacion.Visible = true;
+            }
+        }
     }
 }

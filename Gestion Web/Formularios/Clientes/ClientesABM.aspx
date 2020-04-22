@@ -27,7 +27,7 @@
                                 <li><a href="#Entregas" id="linkEntregas" runat="server" visible="false" data-toggle="tab">Entregas</a></li>
                                 <li><a href="#Exportacion" id="linkExportacion" runat="server" visible="false" data-toggle="tab">Exportacion</a></li>
                                 <li><a href="#Millas" id="linkMillas" runat="server" data-toggle="tab" visible="false">Millas</a></li>
-                                <li><a href="#Eventos" id="linkEventos" runat="server" data-toggle="tab" visible="false">Eventos</a></li>
+                                <li><a href="#Eventos" id="linkEventos" runat="server" data-toggle="tab" visible="false">CRM</a></li>
                                 <li><a href="#Empleado" id="linkEmpleado" runat="server" visible="false" data-toggle="tab">Cliente Empleado</a></li>
                                 <li><a href="#Familia" id="linkFamilia" runat="server" data-toggle="tab" visible="false">Familia</a></li>
                                 <li><a href="#Ganancias" id="linkGanancias" runat="server" data-toggle="tab" visible="false">Ganancias</a></li>
@@ -928,6 +928,40 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group" id="divDisparaTarea">
+                                                    <label for="name" class="col-md-1">Dispara tarea</label>
+                                                    <div class="col-md-4">
+                                                        <asp:RadioButtonList ID="rdSiNo" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdSiNo_SelectedIndexChanged" AutoPostBack="true" runat="server">
+                                                            <asp:ListItem Text="Si" Value="1" />
+                                                            <asp:ListItem Text="No" Value="0"/>
+                                                        </asp:RadioButtonList>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" id="divTarea" runat="server">
+                                                    <label for="name" class="col-md-1">Tarea</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtTarea" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" id="divSituacion" runat="server">
+                                                    <label for="name" class="col-md-1">Situacion</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtSituacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" id="divVencimientoTarea" runat="server">
+                                                    <label for="name" class="col-md-1">Vencimiento</label>
+                                                    <div class="col-md-2">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
+                                                            <asp:TextBox ID="txtFechaVencimiento" runat="server" class="form-control"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="col-md-12">
 
@@ -945,6 +979,9 @@
                                                                 <tr>
                                                                     <th>Fecha</th>
                                                                     <th>Detalle</th>
+                                                                    <th>Tarea</th>
+                                                                    <th>Vencimiento</th>
+                                                                    <th>Estado</th>
                                                                     <th style="width: 10%"></th>
                                                                 </tr>
                                                             </thead>
@@ -1758,6 +1795,12 @@
             $("#<%= txtFechaNacimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaNacimientoSMS.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaEvento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaVencimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(document).ready(function () {
+            $("#txtFechaVencimiento").datepicker().datepicker("setDate", new Date());
+
         });
 
         $(function () {
@@ -1772,6 +1815,8 @@
     <script>
         function pageLoad() {
             $("#<%= txtFechaEvento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaVencimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#txtFechaVencimiento").datepicker().datepicker("setDate", new Date());
 
             ObtenerRegistrosYLLenarTablaIIBB();
 
