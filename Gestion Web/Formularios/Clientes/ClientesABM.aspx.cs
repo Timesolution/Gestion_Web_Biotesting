@@ -408,6 +408,34 @@ namespace Gestion_Web.Formularios.Clientes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando formas pago. " + ex.Message));
             }
         }
+
+        public void cargarEstadosFiltro()
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                var estados = controladorClienteEntity.ObtenerEstadosEventoCliente();
+
+                estados.Insert(0, new Gestion_Api.Entitys.OrdenesCompra_Estados
+                {
+                    Id = 0,
+                    TipoEstado = "seleccione"
+                });
+
+                //agrego todos
+
+                this.drpCRMSituacion.DataSource = estados;
+                this.drpCRMSituacion.DataValueField = "Id";
+                this.drpCRMSituacion.DataTextField = "descripcion";
+                this.drpCRMSituacion.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando estados filtros. " + ex.Message));
+            }
+        }
+
         public void cargarFormasVenta()
         {
             try
@@ -3252,9 +3280,14 @@ namespace Gestion_Web.Formularios.Clientes
                 this.phEventos.Controls.Clear();
 
                 List<Clientes_Eventos> eventos = this.contClienteEntity.obtenerEventosClienteByCliente(this.idCliente);
+
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
                 foreach (var e in eventos)
                 {
-                    this.cargarEventosClientePH(e);
+                    string estado = controladorClienteEntity.OtenerDescripcionEventoClienteById(e.Situacion);
+
+                    this.cargarEventosClientePH(e, estado);
                 }
             }
             catch (Exception ex)
@@ -3262,7 +3295,7 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
-        private void cargarEventosClientePH(Clientes_Eventos e)
+        private void cargarEventosClientePH(Clientes_Eventos e, string estado)
         {
             try
             {
@@ -3288,7 +3321,7 @@ namespace Gestion_Web.Formularios.Clientes
                 tr.Cells.Add(celVencimiento);
 
                 TableCell Estado = new TableCell();
-                Estado.Text = e.Situacion;
+                Estado.Text = estado;
                 Estado.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(Estado);
 
@@ -3345,8 +3378,9 @@ namespace Gestion_Web.Formularios.Clientes
         private void agregarEventoCliente()
         {
             try
-            {                
+            {          
                 Clientes_Eventos eventos = new Clientes_Eventos();
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 eventos.Cliente = this.idCliente;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
@@ -3354,7 +3388,7 @@ namespace Gestion_Web.Formularios.Clientes
                 if(rdSiNo.SelectedValue == "1")
                 {
                     eventos.Tarea = this.txtTarea.Text;
-                    eventos.Situacion = txtSituacion.Text;
+                    eventos.Situacion = drpCRMSituacion.SelectedIndex;
                     eventos.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
                 }
                 else
@@ -3364,7 +3398,6 @@ namespace Gestion_Web.Formularios.Clientes
                     eventos.Vencimiento = null;
                 }
 
-                
 
                 int ok = this.contClienteEntity.agregarEventoCliente(eventos);
                 if (ok > 0)
@@ -3372,7 +3405,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtDetalleEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
-                    this.txtSituacion.Text = "";
+                    drpCRMSituacion.SelectedIndex = 0;
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
@@ -3391,6 +3424,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 string fecha = this.txtFechaEvento.Text;
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
                 ev.Descripcion = this.txtDetalleEvento.Text;
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
@@ -3398,7 +3432,7 @@ namespace Gestion_Web.Formularios.Clientes
                 if(rdSiNo.SelectedValue == "1")
                 {
                     ev.Tarea = this.txtTarea.Text;
-                    ev.Situacion = txtSituacion.Text;
+                    ev.Situacion = drpCRMSituacion.SelectedIndex;
                     ev.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
                 }
                 else
@@ -3414,7 +3448,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtDetalleEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
-                    this.txtSituacion.Text = "";
+                    drpCRMSituacion.SelectedIndex = 0;
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
@@ -3448,11 +3482,13 @@ namespace Gestion_Web.Formularios.Clientes
                         divTarea.Visible = true;
                         divSituacion.Visible = true;
                         rdSiNo.SelectedValue = "1";
+                        drpCRMSituacion.SelectedIndex = 0;
                     }
 
                     this.txtFechaVencimiento.Text = ev.Vencimiento.Value.ToString("dd/MM/yyyy");
-                    this.txtSituacion.Text = ev.Situacion;
                     this.txtTarea.Text = ev.Tarea;
+                    drpCRMSituacion.SelectedIndex = ev.Situacion;
+
                 }
             }
             catch (Exception ex)
@@ -3460,6 +3496,22 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
+
+        public int ObtenerIdEstadoByDescripcion(string descripcion)
+        {
+            try
+            {
+               var evento = Estados_Clientes_Eventos.where(x => x.descripcion == descripcion).FirstOrDefault();
+
+               return evento.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+
         protected void btnSiEventoCliente_Click(object sender, EventArgs e)
         {
             try

@@ -365,6 +365,7 @@
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
+    <Content Include="Formularios\Facturas\CRM.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Facturas\RetencionesF.aspx" />
     <Content Include="Formularios\Herramientas\HistorialSMS.aspx" />
@@ -1471,6 +1472,13 @@
     </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.designer.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CRM.aspx.cs">
+      <DependentUpon>CRM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CRM.aspx.designer.cs">
+      <DependentUpon>CRM.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>

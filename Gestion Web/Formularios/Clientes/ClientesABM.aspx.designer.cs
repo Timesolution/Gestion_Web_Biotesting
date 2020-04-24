@@ -1248,13 +1248,13 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSituacion;
 
         /// <summary>
-        /// txtSituacion control.
+        /// drpCRMSituacion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSituacion;
+        protected global::System.Web.UI.WebControls.DropDownList drpCRMSituacion;
 
         /// <summary>
         /// divVencimientoTarea control.

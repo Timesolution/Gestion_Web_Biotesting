@@ -945,10 +945,18 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group" id="divSituacion" runat="server">
+                                                <%--<div class="form-group" id="divSituacion" runat="server">
                                                     <label for="name" class="col-md-1">Situacion</label>
                                                     <div class="col-md-4">
                                                         <asp:TextBox ID="txtSituacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                    </div>
+                                                </div>--%>
+
+                                                <div class="form-group" id="divSituacion" runat="server">
+                                                    <label for="name" class="col-md-4">Situacion</label>
+                                                    <div class="col-md-4">
+                                                        <asp:DropDownList ID="drpCRMSituacion" runat="server" class="form-control">
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
 
