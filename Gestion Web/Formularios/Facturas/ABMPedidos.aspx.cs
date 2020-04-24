@@ -81,6 +81,7 @@ namespace Gestion_Web.Formularios.Facturas
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
                     idPtoVentaUser = (int)Session["Login_PtoUser"];
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
 
                     Pedido Pedido = new Pedido();
                     Session.Add("Pedido", Pedido);
@@ -119,6 +120,38 @@ namespace Gestion_Web.Formularios.Facturas
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                }
+
+                 //si viene de la pantalla de articulos, modal
+                if (Session["PedidosABM_ArticuloModalMultiple"] != null)
+                {
+                    string CodArt = Session["PedidosABM_ArticuloModalMultiple"] as string;
+                    txtCodigo.Text = CodArt;
+                    cargarProducto(txtCodigo.Text);
+                    actualizarTotales();
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                }
+
+                if (Session["PedidosABM_ArticuloModalMultiple"] != null)
+                {
+                    List<string> CodigosArticulos = Session["PedidosABM_ArticuloModalMultiple"] as List<string>;
+                    Configuracion config = new Configuracion();
+                    foreach (var codigoArticulo in CodigosArticulos)
+                    {
+                        Session["PedidosABM_ArticuloModalMultiple"] = codigoArticulo;
+                        txtCodigo.Text = codigoArticulo;
+                        txtCantidad.Text = "1";
+                        cargarProducto(txtCodigo.Text);
+                        if (config.commitante != "1")
+                            cargarProductoAPedido();
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    }
+                    txtCodigo.Text = "";
+                    actualizarTotales();
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
                 }
 
                 //Si es perfil vendedor bloqueo los droplist, dejo que solo pueda elegir el cliente

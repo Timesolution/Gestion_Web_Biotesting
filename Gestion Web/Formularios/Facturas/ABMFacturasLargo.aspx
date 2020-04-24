@@ -1907,7 +1907,7 @@
                 </div>
             </div>
         </div>
-
+        <%--MODAL APLICAR DESCUENTO--%> 
         <div id="modalCalcularDescuentoConUnMonto" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -1945,7 +1945,7 @@
                 </div>
             </div>
         </div>
-
+        <%--MODAL BUSCAR ARTICULOS --%>
         <div id="modalBuscarArticuloDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
             <asp:Panel ID="Panel2" runat="server">
                 <div class="modal-dialog" style="width: 60%;">
@@ -2002,7 +2002,7 @@
                 </div>
             </asp:Panel>
         </div>
-
+<%--        MODAL BUSCAR CLIENTE--%>
         <div id="modalBuscarClienteDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
             <asp:Panel ID="Panel1" runat="server">
                 <div class="modal-dialog" style="width: 60%;">
