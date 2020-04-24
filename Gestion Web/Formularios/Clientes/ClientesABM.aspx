@@ -921,9 +921,6 @@
                                                         <asp:TextBox ID="txtDetalleEvento" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
-                                                    </div>
-                                                    <div class="col-md-1">
                                                         <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
                                                     </div>
                                                 </div>
@@ -933,7 +930,7 @@
                                                     <div class="col-md-4">
                                                         <asp:RadioButtonList ID="rdSiNo" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdSiNo_SelectedIndexChanged" AutoPostBack="true" runat="server">
                                                             <asp:ListItem Text="Si" Value="1" />
-                                                            <asp:ListItem Text="No" Value="0"/>
+                                                            <asp:ListItem Text="No" Value="0" />
                                                         </asp:RadioButtonList>
                                                     </div>
                                                 </div>
@@ -953,7 +950,7 @@
                                                 </div>--%>
 
                                                 <div class="form-group" id="divSituacion" runat="server">
-                                                    <label for="name" class="col-md-4">Situacion</label>
+                                                    <label for="name" class="col-md-1">Estado</label>
                                                     <div class="col-md-4">
                                                         <asp:DropDownList ID="drpCRMSituacion" runat="server" class="form-control">
                                                         </asp:DropDownList>
@@ -969,6 +966,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-4">
+                                                            <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
+                                                    </div>
+                                                </div>
+
 
                                             </div>
                                             <div class="col-md-12">
@@ -990,6 +994,7 @@
                                                                     <th>Tarea</th>
                                                                     <th>Vencimiento</th>
                                                                     <th>Estado</th>
+                                                                    <th>Usuario</th>
                                                                     <th style="width: 10%"></th>
                                                                 </tr>
                                                             </thead>
@@ -1282,7 +1287,7 @@
                                                 </div>
                                                 <div class="input-group col-xs-2">
                                                     <span class="input-group-addon">%</span>
-                                                    <asp:TextBox ID="IngresosBrutos_TxtPercepcionORetencion" Text="0" runat="server" Style="max-width: 100%; text-align:right" class="form-control" TextMode="Number"></asp:TextBox>
+                                                    <asp:TextBox ID="IngresosBrutos_TxtPercepcionORetencion" Text="0" runat="server" Style="max-width: 100%; text-align: right" class="form-control" TextMode="Number"></asp:TextBox>
                                                 </div>
                                                 <div class="col-ms-2">
                                                     <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:return AgregarALaTablaLaPercepcion()" />
@@ -1294,7 +1299,7 @@
                                             <div class="widget stacked widget-table">
                                                 <div class="widget-header">
                                                     <span class="icon-external-link"></span>
-                                                    <h3 ID="lbPercepcionORetencionTituloTabla" Font-Bold="true" runat="server"></h3>
+                                                    <h3 id="lbPercepcionORetencionTituloTabla" font-bold="true" runat="server"></h3>
                                                 </div>
                                                 <div class="widget-content">
                                                     <table class="table table-bordered table-striped" id="tabla_IngresosBrutos">
@@ -1940,7 +1945,7 @@
             if (controlTxtPercepcionORetencion.value == "0") {
                 return false;
             }
-           
+
             $.ajax({
                 type: "POST",
                 url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",

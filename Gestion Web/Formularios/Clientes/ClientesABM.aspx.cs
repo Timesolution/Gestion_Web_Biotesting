@@ -65,10 +65,6 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-
-                //txtFechaEvento.Text = DateTime.Now.ToString("dd/MM/yy");
-                //txtFechaVencimiento.Text = DateTime.Now.ToString("dd/MM/yy");
-
                 if (rdSiNo.SelectedValue == "1")
                 {
                     divVencimientoTarea.Visible = true;
@@ -94,6 +90,10 @@ namespace Gestion_Web.Formularios.Clientes
 
                 if (!IsPostBack)
                 {
+                    drpCRMSituacion.SelectedValue = "1";
+                    txtFechaEvento.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
                     cl = contClienteEntity.ObtenerClienteId(idCliente);
                     if (cl != null)
                     {
@@ -150,6 +150,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarZonas();
                     this.cargarClientesReferir();
                     this.cargarBTB();
+                    this.cargarEstadosFiltro();
                     //this.cargarTipoContacto();
 
                     this.asignarNombreLabel(accion);
@@ -416,18 +417,18 @@ namespace Gestion_Web.Formularios.Clientes
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 var estados = controladorClienteEntity.ObtenerEstadosEventoCliente();
 
-                estados.Insert(0, new Gestion_Api.Entitys.OrdenesCompra_Estados
-                {
-                    Id = 0,
-                    TipoEstado = "seleccione"
-                });
-
+                //estados.Insert(0, new Gestion_Api.Entitys.Estados_Clientes_Eventos
+                //{
+                //    Id = 0,
+                //    descripcion = "seleccione"
+                //});
                 //agrego todos
-
                 this.drpCRMSituacion.DataSource = estados;
                 this.drpCRMSituacion.DataValueField = "Id";
                 this.drpCRMSituacion.DataTextField = "descripcion";
                 this.drpCRMSituacion.DataBind();
+
+                //drpCRMSituacion.SelectedIndex = 0;
 
             }
             catch (Exception ex)
@@ -3285,7 +3286,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 foreach (var e in eventos)
                 {
-                    string estado = controladorClienteEntity.OtenerDescripcionEventoClienteById(e.Situacion);
+                    string estado = controladorClienteEntity.OtenerDescripcionEventoClienteById((int)e.Estado);
 
                     this.cargarEventosClientePH(e, estado);
                 }
@@ -3299,6 +3300,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                controladorUsuario controladorUsuario = new controladorUsuario();
                 TableRow tr = new TableRow();
 
                 TableCell celFecha = new TableCell();
@@ -3324,6 +3326,11 @@ namespace Gestion_Web.Formularios.Clientes
                 Estado.Text = estado;
                 Estado.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(Estado);
+
+                TableCell Usuario = new TableCell();
+                Usuario.Text = controladorUsuario.obtenerUsuariosID((int)e.Usuario).usuario;
+                Usuario.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(Usuario);
 
                 TableCell celAccion = new TableCell();
                 LinkButton btnEditar = new LinkButton();
@@ -3384,17 +3391,18 @@ namespace Gestion_Web.Formularios.Clientes
                 eventos.Cliente = this.idCliente;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
+                eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
 
                 if(rdSiNo.SelectedValue == "1")
                 {
                     eventos.Tarea = this.txtTarea.Text;
-                    eventos.Situacion = drpCRMSituacion.SelectedIndex;
+                    eventos.Estado = drpCRMSituacion.SelectedIndex;
                     eventos.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
                 }
                 else
                 {
                     eventos.Tarea = "";
-                    eventos.Situacion = "";
+                    eventos.Estado = 0;
                     eventos.Vencimiento = null;
                 }
 
@@ -3428,17 +3436,18 @@ namespace Gestion_Web.Formularios.Clientes
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
                 ev.Descripcion = this.txtDetalleEvento.Text;
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
+                ev.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
 
-                if(rdSiNo.SelectedValue == "1")
+                if (rdSiNo.SelectedValue == "1")
                 {
                     ev.Tarea = this.txtTarea.Text;
-                    ev.Situacion = drpCRMSituacion.SelectedIndex;
+                    ev.Estado = drpCRMSituacion.SelectedIndex;
                     ev.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
                 }
                 else
                 {
                     ev.Tarea = "";
-                    ev.Situacion = "";
+                    ev.Estado = 0;
                     ev.Vencimiento = null;
                 }
 
@@ -3487,7 +3496,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                     this.txtFechaVencimiento.Text = ev.Vencimiento.Value.ToString("dd/MM/yyyy");
                     this.txtTarea.Text = ev.Tarea;
-                    drpCRMSituacion.SelectedIndex = ev.Situacion;
+                    drpCRMSituacion.SelectedIndex = (int)ev.Estado;
 
                 }
             }
@@ -3497,19 +3506,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        public int ObtenerIdEstadoByDescripcion(string descripcion)
-        {
-            try
-            {
-               var evento = Estados_Clientes_Eventos.where(x => x.descripcion == descripcion).FirstOrDefault();
 
-               return evento.Id;
-            }
-            catch (Exception)
-            {
-                return -1;
-            }
-        }
 
 
         protected void btnSiEventoCliente_Click(object sender, EventArgs e)

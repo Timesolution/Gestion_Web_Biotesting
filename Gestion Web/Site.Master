@@ -343,7 +343,7 @@
                                             <li><a href="/../../Formularios/Facturas/PedidosModula.aspx">Pedidos Modula</a></li>
                                             <li><a href="/../../Formularios/Facturas/RemitosR.aspx">Remitos</a></li>
                                             <li><a href="/../../Formularios/Facturas/DespachosF.aspx">Guias despacho</a></li>
-                                            <%--<li><a href="/../../Formularios/Facturas/CRM.aspx">CRM</a></li>--%>
+                                            <li><a href="/../../Formularios/Facturas/CRM.aspx">CRM</a></li>
 
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Ventas</a>
