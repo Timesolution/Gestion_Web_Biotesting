@@ -316,6 +316,19 @@ namespace Gestion_Web.Formularios.Facturas
                 celUsuario.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celUsuario);
 
+                TableCell celAccion = new TableCell();
+                LinkButton btnConfirmacion = new LinkButton();
+                btnConfirmacion.CssClass = "btn btn-info";
+                btnConfirmacion.Attributes.Add("data-toggle", "modal");
+                btnConfirmacion.Attributes.Add("href", "#modalConfirmarFinalizado");
+                btnConfirmacion.ID = "btnSelec_" + clientes_Eventos.Id.ToString();
+                btnConfirmacion.Text = "<span class='shortcut-icon icon-ok'></span>";
+                btnConfirmacion.ToolTip = "Marcar como finalizado";
+                btnConfirmacion.OnClientClick = "abrirdialog(" + clientes_Eventos.Id + ");";
+                btnConfirmacion.Font.Size = 12;
+                celAccion.Controls.Add(btnConfirmacion);
+                tr.Cells.Add(celAccion);
+
                 if (estado == "Atrasado")
                 {
                     tr.ForeColor = System.Drawing.Color.Red;
@@ -376,5 +389,24 @@ namespace Gestion_Web.Formularios.Facturas
 
         #endregion
 
+        protected void lbtnConfirmarEventoFinalizado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
+                int idEvento = Convert.ToInt32(this.txtMovimiento.Text);
+
+                controladorClienteEntity.FinalizarEvento(idEvento);
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Tarea finalizada", null));
+
+                Page.Response.Redirect(Page.Request.Url.ToString(), true);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }

@@ -137,6 +137,7 @@
                                             <th style="text-align: right;">Vencimiento</th>
                                             <th style="text-align: right;">Estado</th>
                                             <th style="text-align: right;">Usuario</th>
+                                            <th class="td-actions" style="width: 1%"></th>
                                         </tr>
 
                                     </thead>
@@ -258,6 +259,29 @@
             </div>
         </div>
 
+    <div id="modalConfirmarFinalizado" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="btnCerrarModalConfirmacion2" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Finalizar</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <label style="font-size: large">Desea finalizar la tarea?</label>
+                    </div>
+                    <div class="col-md-3">
+                           <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <asp:LinkButton ID="lbtnConfirmarEventoFinalizado" OnClick="lbtnConfirmarEventoFinalizado_Click" runat="server" Text="Confirmar" class="btn btn-success" />
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="../../Scripts/JSFunciones1.js"></script>
 
@@ -268,11 +292,21 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+
+        function abrirdialog(valor) {
+            document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
+        }
+    </script>
+
     <script type="text/javascript">
         function openModalMail() {
             $('#modalEnvioMail').modal('show');
         }
     </script>
+
+
     <script type="text/javascript">
         function openModal() {
             $('#modalFacturar').modal('show');
