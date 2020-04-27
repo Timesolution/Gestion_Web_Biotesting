@@ -27,7 +27,7 @@
                                 <li><a href="#Entregas" id="linkEntregas" runat="server" visible="false" data-toggle="tab">Entregas</a></li>
                                 <li><a href="#Exportacion" id="linkExportacion" runat="server" visible="false" data-toggle="tab">Exportacion</a></li>
                                 <li><a href="#Millas" id="linkMillas" runat="server" data-toggle="tab" visible="false">Millas</a></li>
-                                <li><a href="#Eventos" id="linkEventos" runat="server" data-toggle="tab" visible="false">Eventos</a></li>
+                                <li><a href="#Eventos" id="linkEventos" runat="server" data-toggle="tab" visible="false">CRM</a></li>
                                 <li><a href="#Empleado" id="linkEmpleado" runat="server" visible="false" data-toggle="tab">Cliente Empleado</a></li>
                                 <li><a href="#Familia" id="linkFamilia" runat="server" data-toggle="tab" visible="false">Familia</a></li>
                                 <li><a href="#Ganancias" id="linkGanancias" runat="server" data-toggle="tab" visible="false">Ganancias</a></li>
@@ -921,12 +921,58 @@
                                                         <asp:TextBox ID="txtDetalleEvento" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
-                                                    </div>
-                                                    <div class="col-md-1">
                                                         <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group" id="divDisparaTarea">
+                                                    <label for="name" class="col-md-1">Dispara tarea</label>
+                                                    <div class="col-md-4">
+                                                        <asp:RadioButtonList ID="rdSiNo" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdSiNo_SelectedIndexChanged" AutoPostBack="true" runat="server">
+                                                            <asp:ListItem Text="Si" Value="1" />
+                                                            <asp:ListItem Text="No" Value="0" />
+                                                        </asp:RadioButtonList>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" id="divTarea" runat="server">
+                                                    <label for="name" class="col-md-1">Tarea</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtTarea" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                                <%--<div class="form-group" id="divSituacion" runat="server">
+                                                    <label for="name" class="col-md-1">Situacion</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtSituacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                    </div>
+                                                </div>--%>
+
+                                                <div class="form-group" id="divSituacion" runat="server">
+                                                    <label for="name" class="col-md-1">Estado</label>
+                                                    <div class="col-md-4">
+                                                        <asp:DropDownList ID="drpCRMSituacion" runat="server" class="form-control">
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group" id="divVencimientoTarea" runat="server">
+                                                    <label for="name" class="col-md-1">Vencimiento</label>
+                                                    <div class="col-md-2">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
+                                                            <asp:TextBox ID="txtFechaVencimiento" runat="server" class="form-control"></asp:TextBox>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-4">
+                                                            <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
+                                                    </div>
+                                                </div>
+
 
                                             </div>
                                             <div class="col-md-12">
@@ -945,6 +991,10 @@
                                                                 <tr>
                                                                     <th>Fecha</th>
                                                                     <th>Detalle</th>
+                                                                    <th>Tarea</th>
+                                                                    <th>Vencimiento</th>
+                                                                    <th>Estado</th>
+                                                                    <th>Usuario</th>
                                                                     <th style="width: 10%"></th>
                                                                 </tr>
                                                             </thead>
@@ -1237,7 +1287,7 @@
                                                 </div>
                                                 <div class="input-group col-xs-2">
                                                     <span class="input-group-addon">%</span>
-                                                    <asp:TextBox ID="IngresosBrutos_TxtPercepcionORetencion" Text="0" runat="server" Style="max-width: 100%; text-align:right" class="form-control" TextMode="Number"></asp:TextBox>
+                                                    <asp:TextBox ID="IngresosBrutos_TxtPercepcionORetencion" Text="0" runat="server" Style="max-width: 100%; text-align: right" class="form-control" TextMode="Number"></asp:TextBox>
                                                 </div>
                                                 <div class="col-ms-2">
                                                     <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:return AgregarALaTablaLaPercepcion()" />
@@ -1249,7 +1299,7 @@
                                             <div class="widget stacked widget-table">
                                                 <div class="widget-header">
                                                     <span class="icon-external-link"></span>
-                                                    <h3 ID="lbPercepcionORetencionTituloTabla" Font-Bold="true" runat="server"></h3>
+                                                    <h3 id="lbPercepcionORetencionTituloTabla" font-bold="true" runat="server"></h3>
                                                 </div>
                                                 <div class="widget-content">
                                                     <table class="table table-bordered table-striped" id="tabla_IngresosBrutos">
@@ -1758,6 +1808,12 @@
             $("#<%= txtFechaNacimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaNacimientoSMS.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaEvento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaVencimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(document).ready(function () {
+            $("#txtFechaVencimiento").datepicker().datepicker("setDate", new Date());
+
         });
 
         $(function () {
@@ -1772,6 +1828,8 @@
     <script>
         function pageLoad() {
             $("#<%= txtFechaEvento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaVencimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#txtFechaVencimiento").datepicker().datepicker("setDate", new Date());
 
             ObtenerRegistrosYLLenarTablaIIBB();
 
@@ -1887,7 +1945,7 @@
             if (controlTxtPercepcionORetencion.value == "0") {
                 return false;
             }
-           
+
             $.ajax({
                 type: "POST",
                 url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",

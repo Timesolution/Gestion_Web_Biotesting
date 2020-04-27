@@ -292,6 +292,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = p.ptoV.id.ToString();
+
+                this.ListTipoEntrega.SelectedValue = p.tipoEntrega.ToString();
+                this.txtHorarioEntrega.Text = p.horaEntrega;
+                this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
+                this.txtComentarios.Text = p.comentario;
                 this.cargarItems();
                 this.actualizarTotales();
                 this.labelNroPedido.Text = "Pedido N° " + p.numero;
