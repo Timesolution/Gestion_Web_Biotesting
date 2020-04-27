@@ -3396,7 +3396,7 @@ namespace Gestion_Web.Formularios.Clientes
                 if(rdSiNo.SelectedValue == "1")
                 {
                     eventos.Tarea = this.txtTarea.Text;
-                    eventos.Estado = drpCRMSituacion.SelectedIndex;
+                    eventos.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
                     eventos.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
                 }
                 else
@@ -3441,7 +3441,7 @@ namespace Gestion_Web.Formularios.Clientes
                 if (rdSiNo.SelectedValue == "1")
                 {
                     ev.Tarea = this.txtTarea.Text;
-                    ev.Estado = drpCRMSituacion.SelectedIndex;
+                    ev.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
                     ev.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
                 }
                 else
@@ -3491,12 +3491,12 @@ namespace Gestion_Web.Formularios.Clientes
                         divTarea.Visible = true;
                         divSituacion.Visible = true;
                         rdSiNo.SelectedValue = "1";
-                        drpCRMSituacion.SelectedIndex = 0;
+                        drpCRMSituacion.SelectedIndex = (int)ev.Estado;
                     }
 
                     this.txtFechaVencimiento.Text = ev.Vencimiento.Value.ToString("dd/MM/yyyy");
                     this.txtTarea.Text = ev.Tarea;
-                    drpCRMSituacion.SelectedIndex = (int)ev.Estado;
+                    drpCRMSituacion.SelectedValue = ev.Estado.ToString();
 
                 }
             }
