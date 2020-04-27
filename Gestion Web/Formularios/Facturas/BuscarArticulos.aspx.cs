@@ -39,6 +39,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (accion == 1)
                     lbtnAgregarArticulosMultiples.Visible = true;
+                if (accion == 4)
+                    lbtnAgregarArticulosMultiples.Visible = true;
             }
             catch (Exception ex)
             {
@@ -125,7 +127,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //celAction.Width = Unit.Percentage(10);
                     celAction.VerticalAlign = VerticalAlign.Middle;
 
-                    if(accion == 1 && pantalla != "0")
+                    if((accion == 1 && pantalla != "0") || (accion == 4 && pantalla != "0"))
                     {
                         Literal l1 = new Literal();
                         l1.Text = "&nbsp";
@@ -294,6 +296,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (accion == 1)
                 {
                     Session.Add("FacturasABM_ArticuloModalMultiple", idMultiple);
+                    Modal.Close(this, "OK");
+                }
+
+                if (accion == 4)
+                {
+                    Session.Add("PedidosABM_ArticuloModalMultiple", idMultiple);
                     Modal.Close(this, "OK");
                 }
             }

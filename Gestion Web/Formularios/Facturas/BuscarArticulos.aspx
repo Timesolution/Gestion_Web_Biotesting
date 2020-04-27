@@ -185,6 +185,11 @@
                 btnBuscarArticulo.click();
                 return false;
             }
+            if (key == 14) {
+                var btnBuscarArticulo2 = document.getElementById("lbBuscarArticulos");
+                btnBuscarArticulo2.click();
+                return false;
+            }
             return true;
         }
     </script>
