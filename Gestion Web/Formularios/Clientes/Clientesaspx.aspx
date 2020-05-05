@@ -183,10 +183,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <asp:Button runat="server" ID="lbtnImportarCliente" Text="Aceptar" class="btn btn-danger" OnClick="lbtnImportarCliente_Click" />
-                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="lbtnImportarCliente" Text="Aceptar" class="btn btn-success" OnClick="lbtnImportarCliente_Click" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
 

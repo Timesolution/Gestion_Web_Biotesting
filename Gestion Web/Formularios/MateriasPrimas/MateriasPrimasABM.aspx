@@ -70,13 +70,16 @@
                                                     <div class="form-group">
                                                         <label for="validateSelect" class="col-md-4">Unidad de Medida</label>
                                                         <div class="col-md-4">
-                                                            <asp:DropDownList ID="ddlUnidadDeMedida" AutoPostBack="true" runat="server" class="form-control">
+                                                            <%--<asp:DropDownList ID="ddlUnidadDeMedida" AutoPostBack="true" runat="server" class="form-control">
                                                                 <asp:ListItem Value="Centimetros cubicos">Centimetros cubicos</asp:ListItem>
                                                                 <asp:ListItem Value="Gramos">Gramos</asp:ListItem>
                                                                 <asp:ListItem Value="Kilos">Kilos</asp:ListItem>
                                                                 <asp:ListItem Value="Litros">Litros</asp:ListItem>
                                                                 <asp:ListItem Value="Metros">Metros</asp:ListItem>
                                                                 <asp:ListItem Value="Mililitros">Mililitros</asp:ListItem>
+                                                            </asp:DropDownList>--%>
+
+                                                            <asp:DropDownList ID="ddlUnidadDeMedida" AutoPostBack="true" runat="server" class="form-control">
                                                             </asp:DropDownList>
                                                         </div>
                                                         <div class="col-md-4">

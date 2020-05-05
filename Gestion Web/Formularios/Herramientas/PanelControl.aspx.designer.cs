@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Herramientas {
-    
-    
-    public partial class PanelControl {
-        
+namespace Gestion_Web.Formularios.Herramientas
+{
+
+
+    public partial class PanelControl
+    {
+
         /// <summary>
         /// UpdatePanel1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
+
         /// <summary>
         /// DropListPorcentajeIVA control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListPorcentajeIVA;
-        
+
         /// <summary>
         /// RequiredFieldValidator11 control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
-        
+
         /// <summary>
         /// lbtnActualizar control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnActualizar;
-        
+
         /// <summary>
         /// DropListPrecioArticulo control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListPrecioArticulo;
-        
+
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// lbtnActualizarPrecio control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarPrecio;
-        
+
         /// <summary>
         /// DropListEditarDescripcion control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListEditarDescripcion;
-        
+
         /// <summary>
         /// RequiredFieldValidator2 control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
+
         /// <summary>
         /// lbtnEditarDescripcion control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEditarDescripcion;
-        
+
         /// <summary>
         /// panelPrecio control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelPrecio;
-        
+
         /// <summary>
         /// DropListEdicionPrecio control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListEdicionPrecio;
-        
+
         /// <summary>
         /// RequiredFieldValidator5 control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
-        
+
         /// <summary>
         /// lbtnEdicionPrecio control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEdicionPrecio;
-        
+
         /// <summary>
         /// DropListConsumidorFinalCC control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListConsumidorFinalCC;
-        
+
         /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-        
+
         /// <summary>
         /// lbtnConsumidorFinalCC control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnConsumidorFinalCC;
-        
+
         /// <summary>
         /// DropListNumeracionPagos control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListNumeracionPagos;
-        
+
         /// <summary>
         /// RequiredFieldValidator4 control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
-        
+
         /// <summary>
         /// lbtnNumeracionPagos control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnNumeracionPagos;
-        
+
         /// <summary>
         /// DropListNumeracionCobros control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListNumeracionCobros;
-        
+
         /// <summary>
         /// RequiredFieldValidator6 control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
-        
+
         /// <summary>
         /// lbtnNumeracionCobros control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnNumeracionCobros;
-        
+
         /// <summary>
         /// DropListSeparador control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSeparador;
-        
+
         /// <summary>
         /// lbtnSeparador control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnSeparador;
-        
+
         /// <summary>
         /// DropListEgresoStock control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListEgresoStock;
-        
+
         /// <summary>
         /// lbtnEgresoStock control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEgresoStock;
-        
+
         /// <summary>
         /// txtMaxDtoArticulo control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMaxDtoArticulo;
-        
+
         /// <summary>
         /// lbtnMaxDtoArticulo control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnMaxDtoArticulo;
-        
+
         /// <summary>
         /// txtMaxDtoFc control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMaxDtoFc;
-        
+
         /// <summary>
         /// lbtnMaxDtoFc control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnMaxDtoFc;
-        
+
         /// <summary>
         /// DropListNumeracionArt control.
         /// </summary>
@@ -299,7 +301,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListNumeracionArt;
-        
+
         /// <summary>
         /// lbtnNumArt control.
         /// </summary>
@@ -308,7 +310,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnNumArt;
-        
+
         /// <summary>
         /// txtMaxDiasSinAceptarMercaderia control.
         /// </summary>
@@ -317,7 +319,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMaxDiasSinAceptarMercaderia;
-        
+
         /// <summary>
         /// lbtnMaxApertura control.
         /// </summary>
@@ -326,7 +328,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnMaxApertura;
-        
+
         /// <summary>
         /// txtLimiteDif control.
         /// </summary>
@@ -335,7 +337,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLimiteDif;
-        
+
         /// <summary>
         /// lbtnLimiteDif control.
         /// </summary>
@@ -344,7 +346,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnLimiteDif;
-        
+
         /// <summary>
         /// DropListItemsEnCero control.
         /// </summary>
@@ -353,7 +355,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListItemsEnCero;
-        
+
         /// <summary>
         /// lbtnItemsEnCero control.
         /// </summary>
@@ -362,7 +364,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnItemsEnCero;
-        
+
         /// <summary>
         /// txtDiasArticulosSinActualizar control.
         /// </summary>
@@ -371,7 +373,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDiasArticulosSinActualizar;
-        
+
         /// <summary>
         /// ltbnAlertaPreciosArticulosSinActualizar control.
         /// </summary>
@@ -380,7 +382,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton ltbnAlertaPreciosArticulosSinActualizar;
-        
+
         /// <summary>
         /// txtFechaCuentaCorrienteCompras control.
         /// </summary>
@@ -389,7 +391,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaCuentaCorrienteCompras;
-        
+
         /// <summary>
         /// txtFechaCuentaCorrienteVentas control.
         /// </summary>
@@ -398,7 +400,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaCuentaCorrienteVentas;
-        
+
         /// <summary>
         /// lbtnFiltroFechaCuentaCorriente control.
         /// </summary>
@@ -407,7 +409,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnFiltroFechaCuentaCorriente;
-        
+
         /// <summary>
         /// txtTopeMinimoRetenciones control.
         /// </summary>
@@ -416,7 +418,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtTopeMinimoRetenciones;
-        
+
         /// <summary>
         /// lbtnTopeMinimoRetenciones control.
         /// </summary>
@@ -425,7 +427,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnTopeMinimoRetenciones;
-        
+
         /// <summary>
         /// DropListRedondearPrecioVenta control.
         /// </summary>
@@ -434,7 +436,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListRedondearPrecioVenta;
-        
+
         /// <summary>
         /// lbtnRedondearPrecioVenta control.
         /// </summary>
@@ -443,7 +445,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnRedondearPrecioVenta;
-        
+
         /// <summary>
         /// DropListFacturarPRP control.
         /// </summary>
@@ -452,7 +454,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListFacturarPRP;
-        
+
         /// <summary>
         /// lbtnRefacturarPRP control.
         /// </summary>
@@ -461,7 +463,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnRefacturarPRP;
-        
+
         /// <summary>
         /// DropListSucGarantia control.
         /// </summary>
@@ -470,7 +472,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSucGarantia;
-        
+
         /// <summary>
         /// lbtnSucGarantia control.
         /// </summary>
@@ -479,7 +481,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnSucGarantia;
-        
+
         /// <summary>
         /// DropListSucServiceOficial control.
         /// </summary>
@@ -488,7 +490,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSucServiceOficial;
-        
+
         /// <summary>
         /// lbtnSucServiceOficial control.
         /// </summary>
@@ -497,7 +499,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnSucServiceOficial;
-        
+
         /// <summary>
         /// DropListEstadoPedidos control.
         /// </summary>
@@ -506,7 +508,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListEstadoPedidos;
-        
+
         /// <summary>
         /// lbtnEstadoIniPedidos control.
         /// </summary>
@@ -515,7 +517,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEstadoIniPedidos;
-        
+
         /// <summary>
         /// DropListEstadoPendienteRefacturar control.
         /// </summary>
@@ -524,7 +526,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListEstadoPendienteRefacturar;
-        
+
         /// <summary>
         /// lbtnEstadoPendienteRefacturar control.
         /// </summary>
@@ -533,7 +535,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEstadoPendienteRefacturar;
-        
+
         /// <summary>
         /// txtMinutosLineas control.
         /// </summary>
@@ -542,7 +544,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMinutosLineas;
-        
+
         /// <summary>
         /// txtSegundosLineas control.
         /// </summary>
@@ -551,7 +553,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtSegundosLineas;
-        
+
         /// <summary>
         /// lbtnTiempoLineas control.
         /// </summary>
@@ -560,7 +562,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnTiempoLineas;
-        
+
         /// <summary>
         /// DropListVerSaldoClienteObservacionesPRP control.
         /// </summary>
@@ -569,7 +571,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListVerSaldoClienteObservacionesPRP;
-        
+
         /// <summary>
         /// lbtnVerSaldoClienteObservacionesPRP control.
         /// </summary>
@@ -578,7 +580,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnVerSaldoClienteObservacionesPRP;
-        
+
         /// <summary>
         /// DropListIncidenciaObligatoria control.
         /// </summary>
@@ -587,7 +589,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListIncidenciaObligatoria;
-        
+
         /// <summary>
         /// lbtnIncidenciaObligatoria control.
         /// </summary>
@@ -596,7 +598,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnIncidenciaObligatoria;
-        
+
         /// <summary>
         /// DropListMargenObligatorio control.
         /// </summary>
@@ -605,7 +607,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListMargenObligatorio;
-        
+
         /// <summary>
         /// lbtnMargenObligatorio control.
         /// </summary>
@@ -614,7 +616,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnMargenObligatorio;
-        
+
         /// <summary>
         /// DropListActualizarCompuestos control.
         /// </summary>
@@ -623,7 +625,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListActualizarCompuestos;
-        
+
         /// <summary>
         /// lbtnActualizarCompuestos control.
         /// </summary>
@@ -632,7 +634,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnActualizarCompuestos;
-        
+
         /// <summary>
         /// DropListFiltroArticulosSucursal control.
         /// </summary>
@@ -641,7 +643,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListFiltroArticulosSucursal;
-        
+
         /// <summary>
         /// lbtnFiltroArticulosSucursal control.
         /// </summary>
@@ -650,7 +652,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnFiltroArticulosSucursal;
-        
+
         /// <summary>
         /// DropListColumnaUnidadMedidaEnTrazabilidad control.
         /// </summary>
@@ -659,7 +661,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListColumnaUnidadMedidaEnTrazabilidad;
-        
+
         /// <summary>
         /// lbtnColumnaUnidadMedidaEnTrazabilidad control.
         /// </summary>
@@ -668,7 +670,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnColumnaUnidadMedidaEnTrazabilidad;
-        
+
         /// <summary>
         /// DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas control.
         /// </summary>
@@ -677,7 +679,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
-        
+
         /// <summary>
         /// lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas control.
         /// </summary>
@@ -686,7 +688,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnMostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
-        
+
         /// <summary>
         /// DropListModificarCantidadEnVentaEntreSucursales control.
         /// </summary>
@@ -695,7 +697,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListModificarCantidadEnVentaEntreSucursales;
-        
+
         /// <summary>
         /// lbtnModificarCantidadEnVentaEntreSucursales control.
         /// </summary>
@@ -704,7 +706,25 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnModificarCantidadEnVentaEntreSucursales;
-        
+
+        /// <summary>
+        /// DropListProveedores control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListProveedores;
+
+        /// <summary>
+        /// lbtnProveedores control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnProveedores;
+
         /// <summary>
         /// lbtnPersonalizar control.
         /// </summary>
@@ -713,7 +733,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizar;
-        
+
         /// <summary>
         /// lbtnPersonalizarCheques control.
         /// </summary>
@@ -722,7 +742,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizarCheques;
-        
+
         /// <summary>
         /// lbtnPersonalizarStock control.
         /// </summary>
@@ -731,7 +751,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnPersonalizarStock;
-        
+
         /// <summary>
         /// lbtnModoSeguro control.
         /// </summary>
@@ -740,7 +760,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnModoSeguro;
-        
+
         /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
@@ -749,7 +769,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
-        
+
         /// <summary>
         /// CheckBoxProv control.
         /// </summary>
@@ -758,7 +778,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxProv;
-        
+
         /// <summary>
         /// CheckBoxGrupo control.
         /// </summary>
@@ -767,7 +787,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxGrupo;
-        
+
         /// <summary>
         /// CheckBoxSubGrupo control.
         /// </summary>
@@ -776,7 +796,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxSubGrupo;
-        
+
         /// <summary>
         /// CheckBoxMoneda control.
         /// </summary>
@@ -785,7 +805,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxMoneda;
-        
+
         /// <summary>
         /// CheckBoxAct control.
         /// </summary>
@@ -794,7 +814,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxAct;
-        
+
         /// <summary>
         /// CheckBoxPresen control.
         /// </summary>
@@ -803,7 +823,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxPresen;
-        
+
         /// <summary>
         /// CheckBoxStock control.
         /// </summary>
@@ -812,7 +832,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxStock;
-        
+
         /// <summary>
         /// CheckBoxMarca control.
         /// </summary>
@@ -821,7 +841,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxMarca;
-        
+
         /// <summary>
         /// CheckBoxPrecioVentaMonedaOriginal control.
         /// </summary>
@@ -830,7 +850,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxPrecioVentaMonedaOriginal;
-        
+
         /// <summary>
         /// btnGuardarPersonalizar control.
         /// </summary>
@@ -839,7 +859,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnGuardarPersonalizar;
-        
+
         /// <summary>
         /// UpdatePanelVisualizacionCheques control.
         /// </summary>
@@ -848,7 +868,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelVisualizacionCheques;
-        
+
         /// <summary>
         /// CheckBoxChReciboCobro control.
         /// </summary>
@@ -857,7 +877,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxChReciboCobro;
-        
+
         /// <summary>
         /// CheckBoxChReciboPago control.
         /// </summary>
@@ -866,7 +886,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxChReciboPago;
-        
+
         /// <summary>
         /// CheckBoxChSucCobro control.
         /// </summary>
@@ -875,7 +895,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxChSucCobro;
-        
+
         /// <summary>
         /// CheckBoxChSucPago control.
         /// </summary>
@@ -884,7 +904,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxChSucPago;
-        
+
         /// <summary>
         /// CheckBoxChObservacion control.
         /// </summary>
@@ -893,7 +913,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxChObservacion;
-        
+
         /// <summary>
         /// lbtnGuardarPersonalizarCheques control.
         /// </summary>
@@ -902,7 +922,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGuardarPersonalizarCheques;
-        
+
         /// <summary>
         /// UpdatePanelVisualizacionStock control.
         /// </summary>
@@ -911,7 +931,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelVisualizacionStock;
-        
+
         /// <summary>
         /// CheckBoxStockRemitosP control.
         /// </summary>
@@ -920,7 +940,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockRemitosP;
-        
+
         /// <summary>
         /// CheckBoxStockImportacionesP control.
         /// </summary>
@@ -929,7 +949,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockImportacionesP;
-        
+
         /// <summary>
         /// CheckBoxStockReal control.
         /// </summary>
@@ -938,7 +958,7 @@ namespace Gestion_Web.Formularios.Herramientas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CheckBoxStockReal;
-        
+
         /// <summary>
         /// lbtnGuardarPersonalizarStock control.
         /// </summary>

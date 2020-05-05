@@ -16,6 +16,16 @@
             <div class="widget-content">
                 <table style="width: 100%">
                     <tr>
+                        <td style="width: 15%">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#modalConfirmacionArticulo" data-toggle="modal" style="width: 90%">Importar Articulos</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
                         <td style="width: 30%">
                             <div class="col-md-12">
                                 <div class="input-group">
@@ -1274,6 +1284,39 @@
         </div>
     </div>
 
+    <%-- Importacion de articulos --%>
+
+    <div id="modalConfirmacionArticulo" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de Importacion de Articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="Label3" Text="Esta seguro que desea importar los articulos?" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Importar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click"/> 
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function abrirdialog(valor) {
             document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
@@ -1481,6 +1524,7 @@
             return true;
         }
     </script>
+
 
 
 </asp:Content>

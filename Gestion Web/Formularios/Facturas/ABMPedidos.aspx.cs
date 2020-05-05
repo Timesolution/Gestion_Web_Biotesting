@@ -24,6 +24,7 @@ namespace Gestion_Web.Formularios.Facturas
     {
         Mensajes m = new Mensajes();
         ControladorPedido controlador = new ControladorPedido();
+        ControladorPedidoEntity ControladorPedidoEntity = new ControladorPedidoEntity();
         controladorUsuario contUser = new controladorUsuario();
         controladorArticulo contArticulo = new controladorArticulo();
         ControladorArticulosEntity contArticulosEntity = new ControladorArticulosEntity();
@@ -81,6 +82,12 @@ namespace Gestion_Web.Formularios.Facturas
                     idEmpresa = (int)Session["Login_EmpUser"];
                     idSucursal = (int)Session["Login_SucUser"];
                     idPtoVentaUser = (int)Session["Login_PtoUser"];
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModal"] = null;
+                    //ControladorPedidoEntity.LimpiarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]));
+                    //_idCliente = 0;
+                    phArticulos.Controls.Clear();
+                    this.verificarModoBlanco();
 
                     Pedido Pedido = new Pedido();
                     Session.Add("Pedido", Pedido);
@@ -119,6 +126,38 @@ namespace Gestion_Web.Formularios.Facturas
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                }
+
+                //si viene de la pantalla de articulos, modal
+                if (Session["PedidosABM_ArticuloModal"] != null)
+                {
+                    string CodArt = Session["PedidosABM_ArticuloModal"] as string;
+                    txtCodigo.Text = CodArt;
+                    cargarProducto(txtCodigo.Text);
+                    actualizarTotales();
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModal"] = null;
+                }
+
+                if (Session["PedidosABM_ArticuloModalMultiple"] != null)
+                {
+                    List<string> CodigosArticulos = Session["PedidosABM_ArticuloModalMultiple"] as List<string>;
+                    Configuracion config = new Configuracion();
+                    foreach (var codigoArticulo in CodigosArticulos)
+                    {
+                        Session["PedidosABM_ArticuloModalMultiple"] = codigoArticulo;
+                        txtCodigo.Text = codigoArticulo;
+                        txtCantidad.Text = "1";
+                        cargarProducto(txtCodigo.Text);
+                        if (config.commitante != "1")
+                            cargarProductoAPedido();
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    }
+                    txtCodigo.Text = "";
+                    actualizarTotales();
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModal"] = null;
                 }
 
                 //Si es perfil vendedor bloqueo los droplist, dejo que solo pueda elegir el cliente
@@ -253,6 +292,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = p.ptoV.id.ToString();
+
+                this.ListTipoEntrega.SelectedValue = p.tipoEntrega.ToString();
+                this.txtHorarioEntrega.Text = p.horaEntrega;
+                this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
+                this.txtComentarios.Text = p.comentario;
                 this.cargarItems();
                 this.actualizarTotales();
                 this.labelNroPedido.Text = "Pedido N° " + p.numero;
@@ -1371,6 +1415,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.nroRenglon = c.items.Count() + 1;
 
                 c.items.Add(item);
+                c.items = c.items.Distinct().ToList(); //AGREGA LOS ITEMS AL PEDIDO Y CHEQUEA QUE NO HAYA ID REPTIDOS DE LOS ITEMS 
                 Session.Add("Pedido", c);
 
                 //lo dibujo en pantalla
@@ -1488,7 +1533,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
-                celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
+                if (item.nroRenglon > 0)
+                    celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
+                else
+                    celCodigo.Text = (pos + 1) + " - " + item.articulo.codigo;
+                //celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
                 celCodigo.Width = Unit.Percentage(15);
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
@@ -1503,7 +1552,11 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCant.TextChanged += new EventHandler(ActualizarTotalPH);
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
-                celCantidad.Width = Unit.Percentage(5);
+                celCantidad.Width = Unit.Percentage(10);
+                //if (ListSucursalCliente.SelectedIndex > 0)
+                //    txtCant.Enabled = PuedeModificarCantidadDeItemSegunConfiguracion();
+                //else
+                //    txtCant.Enabled = true;
                 tr.Cells.Add(celCantidad);
 
                 TableCell celDescripcion = new TableCell();
@@ -1768,7 +1821,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
                         //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
                         //p.domicilioEntrega = this.dropList_DomicilioEntrega.Text;
-                        p.domicilioEntrega = this.dropList_DomicilioEntrega.SelectedItem.Text;
+                        p.domicilioEntrega = dropList_DomicilioEntrega.Items.Count > 0 ? dropList_DomicilioEntrega.SelectedItem.Text : "";
                         //dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
@@ -2092,7 +2145,6 @@ namespace Gestion_Web.Formularios.Facturas
                     decimal desc = Convert.ToDecimal(this.TxtDescuentoArri.Text);
 
                     decimal total = (cantidad * precio);
-                    //total = total * (desc / 100);
                     total = total - (total * (desc / 100));
 
 
@@ -2518,6 +2570,27 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
             catch (Exception Ex)
+            {
+
+            }
+        }
+
+        public void verificarModoBlanco()
+        {
+            try
+            {
+                Configuracion config = new Configuracion();
+                if (config.modoBlanco == "1")
+                {
+                    //this.lbtnPRP.Visible = false;
+                    //this.lbNC.Visible = false;
+                    //this.lbND.Visible = false;
+                    //this.lbtnPRP.Attributes.Add("style", "display:none");
+                    //this.lbNC.Attributes.Add("style", "display:none");
+                    //this.lbND.Attributes.Add("style", "display:none");
+                }
+            }
+            catch
             {
 
             }

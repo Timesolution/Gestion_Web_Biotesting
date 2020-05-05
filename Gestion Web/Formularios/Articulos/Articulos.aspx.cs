@@ -1,6 +1,7 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
+using Gestion_Api.Controladores.ControladoresEntity;
 using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
@@ -2054,7 +2055,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (string.IsNullOrEmpty(noActu))
                 {
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Precios modificados con exito\", {type: \"info\"});", true);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito",null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Precios modificados con exito", null));
                 }
                 else
                 {
@@ -2269,6 +2270,32 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error actualizando precios de venta por porcentaje. " + ex.Message));
+            }
+        }
+
+
+        protected void lbtnImportarArticulo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorImportacionArticulos controladorImportacionArticulos = new ControladorImportacionArticulos();
+
+                int sucursal = (int)Session["Login_SucUser"];
+
+                int i = controladorImportacionArticulos.ImportarArticulosGestion(sucursal);
+
+                if (i > 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar articulos.", "../Articulos/Articulos.aspx"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar articulos"));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error CATCH al importar articulos") + ex);
             }
         }
     }

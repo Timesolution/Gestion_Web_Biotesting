@@ -2854,7 +2854,6 @@ namespace Gestion_Web.Formularios.Facturas
                             int iec = this.validarItemsEnCero();
                             if (iec == 1)
                             {
-                                Log.EscribirSQL(99, "ELECTRONICA", "Entro en 'this.generarFactura(0);' 2752");
                                 this.generarFactura(0);
                             }
                             else
@@ -2881,9 +2880,9 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
-
+                Log.EscribirSQL(1, "Error", "Error en el metodo btnAgregar_Click() " + ex.Message);
             }
         }
 
@@ -2931,6 +2930,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 var iIBB_Provincias = contClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
+                var iIBB_Provincias_BuenosAires = contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
                 string ingresosBrutosString = "";
                 ingresosBrutosString += "\n" + " Ingresos Brutos. \n\n";
                 ingresosBrutosString += "Provincia".PadRight(20, ' ') + " Porcentaje       Monto \n";
@@ -2938,6 +2938,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     ingresosBrutosString += item.Provincia.Provincia1.ToLower().PadRight(20, ' ') + "  " + item.Percepcion.ToString().PadLeft(10, ' ') + (item.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
                 }
+
+                ingresosBrutosString += "Provincia Buenos Aires".PadRight(20, ' ') + "  " + iIBB_Provincias_BuenosAires.Percepcion.ToString().PadLeft(10, ' ') + (iIBB_Provincias_BuenosAires.Percepcion * netoDeLaFactura / 100).ToString().PadLeft(20, ' ') + "\n";
+
+
                 ingresosBrutosString += "\n";
                 return ingresosBrutosString;
             }
@@ -3085,7 +3089,8 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                        if (string.IsNullOrEmpty(txtPUnitario.Text))
+                            this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
                     this.verificarAlertaArticulo(art);
@@ -3858,7 +3863,6 @@ namespace Gestion_Web.Formularios.Facturas
                 fact.items = this.agregarInfoTrazaFactura(fact);
 
                 //valido que si esta facturando con lista de precio al 100% dto
-
                 Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
                 if (!respuesta.Item2)
                 {
@@ -4231,6 +4235,18 @@ namespace Gestion_Web.Formularios.Facturas
                             this.agregarMovimientoMillas(fact);
                             this.EnviarSMSAviso(fact);
                         }
+
+                        int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
+
+                        if (tieneSistemaEstetica == 1)
+                        {
+                            Estetica_Api.Controladores.ControladorSesiones controladorSesiones = new Estetica_Api.Controladores.ControladorSesiones();
+                            foreach (var item in fact.items)
+                            {
+                                controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, item.precioUnitario, fact.id);
+                            }
+                        }
+
                         #endregion
 
                         Session.Remove("Factura");
@@ -4487,7 +4503,17 @@ namespace Gestion_Web.Formularios.Facturas
                 item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
 
                 //cargo la descripcion del articulo que tengo en pantalla
-                item.articulo.descripcion = this.txtDescripcion.Text;
+                if(string.IsNullOrEmpty(item.articulo.descripcion))
+                {
+                    item.articulo.descripcion = this.txtDescripcion.Text;
+                }
+                else
+                {
+                    string descAux = item.articulo.descripcion;
+                    if(descAux != this.txtDescripcion.Text)
+                        item.articulo.descripcion = this.txtDescripcion.Text;
+                }
+                
 
                 //agrego//costos
                 item.Costo = item.articulo.costo;

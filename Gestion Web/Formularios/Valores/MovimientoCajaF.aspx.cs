@@ -129,9 +129,14 @@ namespace Gestion_Web.Formularios.Valores
                 List<Cuentas_Contables> cuentas = this.contPlanCuentas.obtenerCuentasContables();
                 if (cuentas.Count > 0)
                 {
+                    lbtnAgregar1.Visible = false;
                     this.PanelCtaContable.Visible = true;
                     //this.lbtnAgregar.Visible = false;
                     this.phColumna.Visible = true;
+                }
+                else
+                {
+                    lbtnAgregar1.Visible = true;
                 }
             }
             catch
@@ -312,58 +317,58 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
 
-        //void btnAgregarOModificarMovimiento_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        //this.valor = Convert.ToInt32(Request.QueryString["valor"]);
-        //        if (valor == 2)
-        //        {
-        //            //MovimientoCaja mov = this.controlador.obtenerMovimientoCajaID(this.idMovimiento);
-        //            //mov.descripcion = this.txtMov.Text;
-        //            //mov.tipo = Convert.ToInt32(this.ListTipos.SelectedValue);
-        //            mov.estado = 1;
-        //            int i = this.controlador.modificarMovimientoCaja(mov);
-        //            if (i > 0)
-        //            {
-        //                //agrego bien  
-        //                this.modificarCtaContableTipoMov(mov);
-        //                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico  Movimiento de Caja: " + mov.descripcion);
-        //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento de Caja modificado con exito", "MovimientoCajaF.aspx"));
-        //                this.borrarCampos();
-        //            }
-        //            else
-        //            {
-        //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando Movimiento de Caja"));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            MovimientoCaja mov = new MovimientoCaja();
-        //            mov.descripcion = this.txtMov.Text;
-        //            mov.tipo = Convert.ToInt32(this.ListTipos.SelectedValue);
-        //            mov.estado = 1;
-        //            int i = this.controlador.agregarMovimientoCaja(mov);
-        //            if (i > 0)
-        //            {
-        //                //agrego bien
-        //                this.agregarCtaContableTipoMov(mov);
-        //                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Movimiento de Caja: " + this.txtMovimiento.Text);
-        //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento de Caja cargado con exito", "MovimientoCajaF.aspx"));
+        protected void lbtnAgregar1OModificarMovimiento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.valor = Convert.ToInt32(Request.QueryString["valor"]);
+                if (valor == 2)
+                {
+                    MovimientoCaja mov = this.controlador.obtenerMovimientoCajaID(this.idMovimiento);
+                    mov.descripcion = this.txtMov.Text;
+                    mov.tipo = Convert.ToInt32(this.dropListTipo_Debe_Haber.SelectedValue);
+                    mov.estado = 1;
+                    int i = this.controlador.modificarMovimientoCaja(mov);
+                    if (i > 0)
+                    {
+                        //agrego bien  
+                        //this.modificarCtaContableTipoMov(mov);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico  Movimiento de Caja: " + mov.descripcion);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento de Caja modificado con exito", "MovimientoCajaF.aspx"));
+                        //this.borrarCampos();
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error modificando Movimiento de Caja"));
+                    }
+                }
+                else
+                {
+                    MovimientoCaja mov = new MovimientoCaja();
+                    mov.descripcion = this.txtMov.Text;
+                    mov.tipo = Convert.ToInt32(this.dropListTipo_Debe_Haber.SelectedValue);
+                    mov.estado = 1;
+                    int i = this.controlador.agregarMovimientoCaja(mov);
+                    if (i > 0)
+                    {
+                        //agrego bien
+                        //this.agregarCtaContableTipoMov(mov);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Movimiento de Caja: " + this.txtMovimiento.Text);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Movimiento de Caja cargado con exito", "MovimientoCajaF.aspx"));
 
-        //            }
-        //            else
-        //            {
-        //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento de Caja"));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento de Caja"));
 
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento de Caja. " + ex.Message));
-        //    }
-        //}
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Movimiento de Caja. " + ex.Message));
+            }
+        }
 
         private void editarGrupos(object sender, EventArgs e)
         {
@@ -594,22 +599,31 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 DropDownList[] ddls = { ListCtaContables1, ListCtaContables2, ListCtaContables3, ListCtaContables4, ListCtaContables5 };
-                List<Cuentas_Contables> lista = new List<Cuentas_Contables>();
+
+                List<Cuentas_Contables> lista = null;
 
                 for (int i = 0; i < ddls.Length; i++)
                 {
+
                     if (i == 0)
                     {
                         lista = contPlanCuentas.obtenerCuentasContablesByNivel(1, 0);
+
                     }
-                    if (lista != null)
+                    if (lista.Count > 0)
                     {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "entre al segundo if");
                         ddls[i].DataSource = lista;
                         ddls[i].DataTextField = "Descripcion";
                         ddls[i].DataValueField = "Id";
                         ddls[i].DataBind();
+
+                        int numero = i + 2;
+                        int aux = Convert.ToInt32(ddls[i].SelectedValue);
+
+                        lista = contPlanCuentas.obtenerCuentasContablesByNivel(numero, aux);
                     }
-                    lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
+                    
                 }
             }
             catch (Exception ex)

@@ -65,6 +65,19 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                if (rdSiNo.SelectedValue == "1")
+                {
+                    divVencimientoTarea.Visible = true;
+                    divTarea.Visible = true;
+                    divSituacion.Visible = true;
+                }
+                else
+                {
+                    divVencimientoTarea.Visible = false;
+                    divTarea.Visible = false;
+                    divSituacion.Visible = false;
+                }
+
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
@@ -77,6 +90,10 @@ namespace Gestion_Web.Formularios.Clientes
 
                 if (!IsPostBack)
                 {
+                    drpCRMSituacion.SelectedValue = "1";
+                    txtFechaEvento.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
                     cl = contClienteEntity.ObtenerClienteId(idCliente);
                     if (cl != null)
                     {
@@ -133,6 +150,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarZonas();
                     this.cargarClientesReferir();
                     this.cargarBTB();
+                    this.cargarEstadosFiltro();
                     //this.cargarTipoContacto();
 
                     this.asignarNombreLabel(accion);
@@ -391,6 +409,34 @@ namespace Gestion_Web.Formularios.Clientes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando formas pago. " + ex.Message));
             }
         }
+
+        public void cargarEstadosFiltro()
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                var estados = controladorClienteEntity.ObtenerEstadosEventoCliente();
+
+                //estados.Insert(0, new Gestion_Api.Entitys.Estados_Clientes_Eventos
+                //{
+                //    Id = 0,
+                //    descripcion = "seleccione"
+                //});
+                //agrego todos
+                this.drpCRMSituacion.DataSource = estados;
+                this.drpCRMSituacion.DataValueField = "Id";
+                this.drpCRMSituacion.DataTextField = "descripcion";
+                this.drpCRMSituacion.DataBind();
+
+                //drpCRMSituacion.SelectedIndex = 0;
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando estados filtros. " + ex.Message));
+            }
+        }
+
         public void cargarFormasVenta()
         {
             try
@@ -723,11 +769,14 @@ namespace Gestion_Web.Formularios.Clientes
                 this.ListProvincia.DataBind();
                 this.ListProvincia.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
-                this.IngresosBrutos_DropList_Provincias.DataSource = controladorPais.obtenerPRovincias();
-                this.IngresosBrutos_DropList_Provincias.DataValueField = "Provincia";
-                this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia";
+
+                ControladorProvincias ContProvincia = new ControladorProvincias();
+                this.IngresosBrutos_DropList_Provincias.DataSource = ContProvincia.ObtenerProvinciaSinBuenosAires();
+                this.IngresosBrutos_DropList_Provincias.DataValueField = "Id";
+                this.IngresosBrutos_DropList_Provincias.DataTextField = "Provincia1";
                 this.IngresosBrutos_DropList_Provincias.DataBind();
-                this.IngresosBrutos_DropList_Provincias.Items.RemoveAt(0);
+                //this.IngresosBrutos_DropList_Provincias.Items.RemoveAt(0);
+
             }
             catch (Exception ex)
             {
@@ -3232,9 +3281,14 @@ namespace Gestion_Web.Formularios.Clientes
                 this.phEventos.Controls.Clear();
 
                 List<Clientes_Eventos> eventos = this.contClienteEntity.obtenerEventosClienteByCliente(this.idCliente);
+
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
                 foreach (var e in eventos)
                 {
-                    this.cargarEventosClientePH(e);
+                    string estado = controladorClienteEntity.OtenerDescripcionEventoClienteById((int)e.Estado);
+
+                    this.cargarEventosClientePH(e, estado);
                 }
             }
             catch (Exception ex)
@@ -3242,10 +3296,11 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
-        private void cargarEventosClientePH(Clientes_Eventos e)
+        private void cargarEventosClientePH(Clientes_Eventos e, string estado)
         {
             try
             {
+                controladorUsuario controladorUsuario = new controladorUsuario();
                 TableRow tr = new TableRow();
 
                 TableCell celFecha = new TableCell();
@@ -3256,6 +3311,36 @@ namespace Gestion_Web.Formularios.Clientes
                 celDetalle.Text = e.Descripcion;
                 celDetalle.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celDetalle);
+
+                TableCell cellTarea = new TableCell();
+                cellTarea.Text = e.Tarea;
+                cellTarea.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(cellTarea);
+
+                if(e.Vencimiento != null)
+                {
+                    TableCell celVencimiento = new TableCell();
+                    celVencimiento.Text = e.Vencimiento.Value.ToString("dd/MM/yyyy");
+                    celVencimiento.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celVencimiento);
+                }
+                else
+                {
+                    TableCell celVencimiento = new TableCell();
+                    celVencimiento.Text = "";
+                    celVencimiento.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celVencimiento);
+                }
+
+                TableCell Estado = new TableCell();
+                Estado.Text = estado;
+                Estado.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(Estado);
+
+                TableCell Usuario = new TableCell();
+                Usuario.Text = controladorUsuario.obtenerUsuariosID((int)e.Usuario).usuario;
+                Usuario.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(Usuario);
 
                 TableCell celAccion = new TableCell();
                 LinkButton btnEditar = new LinkButton();
@@ -3310,18 +3395,35 @@ namespace Gestion_Web.Formularios.Clientes
         private void agregarEventoCliente()
         {
             try
-            {
+            {          
                 Clientes_Eventos eventos = new Clientes_Eventos();
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 eventos.Cliente = this.idCliente;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
+                eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+
+                if(rdSiNo.SelectedValue == "1")
+                {
+                    eventos.Tarea = this.txtTarea.Text;
+                    eventos.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
+                    eventos.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
+                }
+                else
+                {
+                    eventos.Tarea = "";
+                    eventos.Estado = 0;
+                    eventos.Vencimiento = null;
+                }
+
 
                 int ok = this.contClienteEntity.agregarEventoCliente(eventos);
                 if (ok > 0)
                 {
                     this.txtDetalleEvento.Text = "";
-                    this.txtFechaEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
+                    this.txtTarea.Text = "";
+                    drpCRMSituacion.SelectedIndex = 0;
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
@@ -3339,16 +3441,33 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                string fecha = this.txtFechaEvento.Text;
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
                 ev.Descripcion = this.txtDetalleEvento.Text;
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
+                ev.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+
+                if (rdSiNo.SelectedValue == "1")
+                {
+                    ev.Tarea = this.txtTarea.Text;
+                    ev.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
+                    ev.Vencimiento = Convert.ToDateTime(this.txtFechaVencimiento.Text, new CultureInfo("es-AR"));
+                }
+                else
+                {
+                    ev.Tarea = "";
+                    ev.Estado = 0;
+                    ev.Vencimiento = null;
+                }
 
                 int ok = this.contClienteEntity.modificarEventoCliente(ev);
                 if (ok > 0)
                 {
                     this.txtDetalleEvento.Text = "";
-                    this.txtFechaEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
+                    this.txtTarea.Text = "";
+                    drpCRMSituacion.SelectedIndex = 0;
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
@@ -3375,6 +3494,20 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtFechaEvento.Text = ev.Fecha.Value.ToString("dd/MM/yyyy");
                     this.txtDetalleEvento.Text = ev.Descripcion;
                     this.lblIdEventoCliente.Text = ev.Id.ToString();
+
+                    if(ev.Tarea != null)
+                    {
+                        divVencimientoTarea.Visible = true;
+                        divTarea.Visible = true;
+                        divSituacion.Visible = true;
+                        rdSiNo.SelectedValue = "1";
+                        drpCRMSituacion.SelectedIndex = (int)ev.Estado;
+                    }
+
+                    this.txtFechaVencimiento.Text = ev.Vencimiento.Value.ToString("dd/MM/yyyy");
+                    this.txtTarea.Text = ev.Tarea;
+                    drpCRMSituacion.SelectedValue = ev.Estado.ToString();
+
                 }
             }
             catch (Exception ex)
@@ -3382,6 +3515,10 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
+
+
+
+
         protected void btnSiEventoCliente_Click(object sender, EventArgs e)
         {
             try
@@ -3935,7 +4072,7 @@ namespace Gestion_Web.Formularios.Clientes
 
         #region IngresosBrutos/Percepciones
         [WebMethod]
-        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string provincia, string origenCliente, string percepcionORetencion,string modo)
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion, string modo)
         {
             try
             {
@@ -3953,7 +4090,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 var cliente = controladorClienteEntity.ObtenerClienteId(Convert.ToInt32(idCliente));
-                var prov = controladorProvincias.ObtenerProvinciaByNombre(provincia);
+                var prov = controladorProvincias.ObtenerProvinciaById(Convert.ToInt32(IdProvincia));
                 if (prov != null)
                 {
                     if (Convert.ToInt32(origenCliente) == 1)
@@ -4061,5 +4198,15 @@ namespace Gestion_Web.Formularios.Clientes
         }
 
         #endregion
+
+        protected void rdSiNo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (rdSiNo.SelectedValue == "1")
+            {
+                divTarea.Visible = true;
+                divVencimientoTarea.Visible = true;
+                divSituacion.Visible = true;
+            }
+        }
     }
 }

@@ -48,7 +48,7 @@
                                 <td style="width: 10%">
                                     <div class="col-md-1">
                                         <div class="shortcuts">
-                                            <%--<asp:LinkButton ID="lbtnAgregar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarOModificarMovimiento_Click" ValidationGroup="SubGrupoGroup" />--%>
+                                            <asp:LinkButton ID="lbtnAgregar1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregar1OModificarMovimiento_Click" ValidationGroup="SubGrupoGroup" />
                                         </div>
                                     </div>
                                 </td>

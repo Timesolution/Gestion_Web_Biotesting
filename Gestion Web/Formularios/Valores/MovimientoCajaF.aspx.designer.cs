@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Valores {
-    
-    
-    public partial class MovimientoCajaF {
-        
+namespace Gestion_Web.Formularios.Valores
+{
+
+
+    public partial class MovimientoCajaF
+    {
+
         /// <summary>
         /// txtMov control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMov;
-        
+
         /// <summary>
         /// RequiredFieldValidator15 control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator15;
-        
+
         /// <summary>
         /// dropListTipo_Debe_Haber control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList dropListTipo_Debe_Haber;
-        
+
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// PanelCtaContable control.
         /// </summary>
@@ -56,7 +58,16 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel PanelCtaContable;
-        
+
+        /// <summary>
+        /// lbtnAgregar1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregar1;
+
         /// <summary>
         /// UpdatePanel1 control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
+
         /// <summary>
         /// phColumna control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phColumna;
-        
+
         /// <summary>
         /// phMovimientosCaja control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phMovimientosCaja;
-        
+
         /// <summary>
         /// lblMensaje control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMensaje;
-        
+
         /// <summary>
         /// txtMovimiento control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMovimiento;
-        
+
         /// <summary>
         /// btnSi control.
         /// </summary>
@@ -110,7 +121,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSi;
-        
+
         /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
@@ -119,7 +130,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
-        
+
         /// <summary>
         /// ListCtaContables1 control.
         /// </summary>
@@ -128,7 +139,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListCtaContables1;
-        
+
         /// <summary>
         /// ListCtaContables2 control.
         /// </summary>
@@ -137,7 +148,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListCtaContables2;
-        
+
         /// <summary>
         /// ListCtaContables3 control.
         /// </summary>
@@ -146,7 +157,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListCtaContables3;
-        
+
         /// <summary>
         /// ListCtaContables4 control.
         /// </summary>
@@ -155,7 +166,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListCtaContables4;
-        
+
         /// <summary>
         /// ListCtaContables5 control.
         /// </summary>
@@ -164,7 +175,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListCtaContables5;
-        
+
         /// <summary>
         /// lbtnAgregarMovCtaCbe control.
         /// </summary>
