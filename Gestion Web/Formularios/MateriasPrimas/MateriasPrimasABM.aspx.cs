@@ -85,20 +85,37 @@ namespace Gestion_Web.Formularios.MateriasPrimas
         private void cargarDDLs()
         {
             cargarMonedasVenta();
+            cargarUnidadesDeMedida();
         }
         /// <summary>
         /// lleno los campos porque se va a editar la materia prima
         /// </summary>
         private void llenarCampos()
         {
+            controladorMateriaPrima controladorMateriaPrima = new controladorMateriaPrima();
+            Unidades_De_Medidas unidad = new Unidades_De_Medidas();
             materiaPrima = contMateriaPrima.obtenerMateriaPrima(id);
+
+            unidad = controladorMateriaPrima.VerificarExistenciaUnidadDeMedida(materiaPrima.UnidadMedida);
+
+            if (unidad.Id > 0)
+            {
+                ddlUnidadDeMedida.SelectedValue = unidad.Id.ToString();
+            }
+            else
+            {
+                ddlUnidadDeMedida.SelectedValue = "1";
+            }
+
             txtCodMateriaPrima.Text = materiaPrima.Codigo;
             txtDescripcion.Text = materiaPrima.Descripcion;
             txtImporte.Text = materiaPrima.Importe.ToString();
             txtStockMinimo.Text = materiaPrima.StockMinimo.ToString();
             ddlEstado.SelectedValue = materiaPrima.Estado.ToString();
             ddlMonedaVenta.SelectedIndex = (int)materiaPrima.Moneda;
-            ddlUnidadDeMedida.SelectedValue = materiaPrima.UnidadMedida;
+
+            
+
         }
         #endregion
 
@@ -126,6 +143,26 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando monedas de venta a la lista. " + ex.Message));
             }
         }
+
+        private void cargarUnidadesDeMedida()
+        {
+            try
+            {
+                controladorMateriaPrima controladorMateriaPrima = new controladorMateriaPrima();
+
+                var UnidadesDeMedidas = controladorMateriaPrima.GetAllUnidades();
+
+                this.ddlUnidadDeMedida.DataSource = UnidadesDeMedidas;
+                this.ddlUnidadDeMedida.DataValueField = "Id";
+                this.ddlUnidadDeMedida.DataTextField = "Descripcion";
+
+                this.ddlUnidadDeMedida.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando monedas de venta a la lista. " + ex.Message));
+            }
+        }
         #endregion
 
         #region Acciones Botones
@@ -139,7 +176,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 this.materiaPrima.Estado = Convert.ToInt32(ddlEstado.SelectedValue);
                 this.materiaPrima.Importe = Convert.ToDecimal(txtImporte.Text);
                 this.materiaPrima.Moneda = ddlMonedaVenta.SelectedIndex;
-                this.materiaPrima.UnidadMedida = ddlUnidadDeMedida.SelectedValue;
+                this.materiaPrima.UnidadMedida = ddlUnidadDeMedida.SelectedItem.Text;
                 this.materiaPrima.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
                 
                 if (accion == 1)//crea
@@ -163,7 +200,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                     mp.Estado = Convert.ToInt32(ddlEstado.SelectedValue);
                     mp.Importe = Convert.ToDecimal(txtImporte.Text);
                     mp.Moneda = ddlMonedaVenta.SelectedIndex;
-                    mp.UnidadMedida = ddlUnidadDeMedida.SelectedValue;
+                    mp.UnidadMedida = ddlUnidadDeMedida.SelectedItem.Text;
                     mp.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
 
                     int i = contMateriaPrima.modificarMateriaPrima(mp);

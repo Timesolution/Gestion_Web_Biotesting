@@ -461,6 +461,7 @@
     <Content Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx" />
     <Content Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx" />
     <Content Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx" />
+    <Content Include="Formularios\MateriasPrimas\UnidadMedida.aspx" />
     <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionF.aspx" />
@@ -1921,6 +1922,13 @@
     </Compile>
     <Compile Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx.designer.cs">
       <DependentUpon>MateriasPrimas_Composicion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\UnidadMedida.aspx.cs">
+      <DependentUpon>UnidadMedida.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\MateriasPrimas\UnidadMedida.aspx.designer.cs">
+      <DependentUpon>UnidadMedida.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\OrdenReparacion\dsOrdenReparacion.Designer.cs">
       <AutoGen>True</AutoGen>

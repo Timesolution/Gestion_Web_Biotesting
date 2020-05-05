@@ -3317,10 +3317,20 @@ namespace Gestion_Web.Formularios.Clientes
                 cellTarea.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(cellTarea);
 
-                TableCell celVencimiento = new TableCell();
-                celVencimiento.Text = e.Vencimiento.Value.ToString("dd/MM/yyyy");
-                celVencimiento.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celVencimiento);
+                if(e.Vencimiento != null)
+                {
+                    TableCell celVencimiento = new TableCell();
+                    celVencimiento.Text = e.Vencimiento.Value.ToString("dd/MM/yyyy");
+                    celVencimiento.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celVencimiento);
+                }
+                else
+                {
+                    TableCell celVencimiento = new TableCell();
+                    celVencimiento.Text = "";
+                    celVencimiento.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celVencimiento);
+                }
 
                 TableCell Estado = new TableCell();
                 Estado.Text = estado;

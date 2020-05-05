@@ -225,7 +225,17 @@
                                             <li>
                                                 <asp:Literal Text="" ID="litMillas" runat="server" />
                                             </li>
-                                            <li><a tabindex="-1" href="/../../Formularios/MateriasPrimas/MateriasPrimasF.aspx">Materias Primas</a></li>
+
+                                            <%--// hola debo seguir aca--%> 
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Materias Primas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/MateriasPrimas/MateriasPrimasF.aspx">Materias Primas</a></li>
+                                                    <li><a href="/../../Formularios/MateriasPrimas/UnidadMedida.aspx">Unidad de medidas</a></li>
+                                                </ul>
+                                            </li>
+
+
                                             <li><a href="/../../Formularios/Valores/MovimientoCajaF.aspx">Movimientos de caja</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Mutuales</a>
