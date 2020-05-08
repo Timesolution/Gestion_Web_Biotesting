@@ -115,6 +115,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 materiaPrima_Composiciones.Id_Articulo = Convert.ToInt32(idArt);
                 materiaPrima_Composiciones.Id_MateriaPrima = Convert.ToInt32(ListMPBusqueda.SelectedValue);
                 materiaPrima_Composiciones.Cantidad = Convert.ToDecimal(txtCantidadMP.Text);
+                materiaPrima_Composiciones.Cantidad_real = materiaPrima_Composiciones.Cantidad;
 
                 int i = contMateriaPrima.agregarComposicion(materiaPrima_Composiciones);
                 if (i > 0)
