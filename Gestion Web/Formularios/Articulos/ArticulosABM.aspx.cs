@@ -737,6 +737,9 @@ namespace Gestion_Web.Formularios.Articulos
 
                     this.cargarDatosBeneficios(this.id);
 
+                    //CARGO ARANCEL DE IMPORTACION Y SIM
+                    this.cargarDatosArancelImportacion_SIM(this.id);
+
                     //Cargo datos del Catalogo
                     this.cargarCatalogoArticulo();
 
@@ -828,6 +831,33 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando campos de la marca . " + ex.Message));
             }
         }
+
+        private void cargarDatosArancelImportacion_SIM(int idArticulo)
+        {
+            try
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Inicio a cargar datos del arancel Improtacion del articulo " + idArticulo);
+                var articulo = this.contArtEnt.obtenerArticuloArancelSimEntity(idArticulo);
+
+                //cargo arancel Importacion y sim si tiene
+                if (articulo != null)
+                {
+                    this.txtArancelImportacion.Text = Convert.ToString(articulo.Arancel);
+                    this.txtSim.Text = articulo.SIM;
+                }
+                else
+                {
+                    this.txtArancelImportacion.Text = "";
+                    this.txtSim.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando campos de la marca . " + ex.Message));
+            }
+        }
+
+       
 
         #endregion
 
@@ -4211,6 +4241,61 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+        protected void lbtnArancelImportacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(this.txtArancelImportacion.Text))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", m.mensajeBoxError("Debe ingresar algún valor para el campo Arancel Importacion."), true);
+                    return;
+                }
 
+                Articulos_Arancel_SIM articulos_Arancel_SIM = new Articulos_Arancel_SIM();
+                articulos_Arancel_SIM.idArticulo = this.id;
+                articulos_Arancel_SIM.Arancel = Convert.ToDecimal(txtArancelImportacion.Text);
+                int i = contArtEnt.agregarArticulos_Arancel_Sim(articulos_Arancel_SIM);
+
+                if (i >= 0)
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", "$.msgbox(\"Los datos del Arancel Importacion se cargaron con éxito.\", {type: \"info\"});", true);
+                else
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando los datos del Arancel Importacion del Artículo."), true);
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Ocurrió un error agregando Arancel Importacion al Articulo. Excepción: " + Ex.Message);
+            }
+        }
+
+        //protected void LinkButton1_Click(object sender, EventArgs e)
+        //{
+
+        //}
+
+        protected void lbtnSim_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(this.txtArancelImportacion.Text))
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", m.mensajeBoxError("Debe ingresar algún valor para el campo Arancel Importacion."), true);
+                    return;
+                }
+
+                Articulos_Arancel_SIM articulos_Arancel_SIM = new Articulos_Arancel_SIM();
+                articulos_Arancel_SIM.idArticulo = this.id;
+                articulos_Arancel_SIM.SIM = this.txtSim.Text.Trim();
+                int i = contArtEnt.agregarArticulos_Sim(articulos_Arancel_SIM);
+
+                if (i >= 0)
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", "$.msgbox(\"Los datos del SIM se cargaron con éxito.\", {type: \"info\"});", true);
+                else
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando los datos del SIM  del Artículo."), true);
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Ocurrió un error agregando SIM al Articulo. Excepción: " + Ex.Message);
+            }
+        }
     }
 }

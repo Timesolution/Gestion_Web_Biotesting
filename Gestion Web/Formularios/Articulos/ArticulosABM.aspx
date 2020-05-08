@@ -1896,6 +1896,38 @@
                                                                         <asp:LinkButton ID="lbtnApareceLista" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnApareceLista_Click" Style="width: 100%" ValidationGroup="ApareceListaGroup" />
                                                                     </div>
                                                                 </td>
+                                                            </tr> 
+                                                            <tr>
+                                                                <td style="width: 90%">
+                                                                    <label class="col-md-3">Arancel Importacion</label>
+                                                                    <div class="col-md-7">
+                                                                        <asp:TextBox ID="txtArancelImportacion" runat="server" class="form-control" MaxLength="15"></asp:TextBox>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator54" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtArancelImportacion" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="ArancelGroup"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </td>
+                                                                <td style="width: 5%">
+                                                                    <div class="shortcuts" style="height: 100%">
+                                                                        <asp:LinkButton ID="lbtnArancelImportacion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnArancelImportacion_Click" Style="width: 100%" ValidationGroup="ArancelGroup" />
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                             <tr>
+                                                                <td style="width: 90%">
+                                                                    <label class="col-md-3">SIM</label>
+                                                                    <div class="col-md-7">
+                                                                        <asp:TextBox ID="txtSim" runat="server" class="form-control" MaxLength="20"></asp:TextBox>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator55" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtSim" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="SimGroup"></asp:RequiredFieldValidator>
+                                                                    </div>
+                                                                </td>
+                                                                <td style="width: 5%">
+                                                                    <div class="shortcuts" style="height: 100%">
+                                                                        <asp:LinkButton ID="lbtnSim" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnSim_Click" Style="width: 100%" ValidationGroup="SimGroup" />
+                                                                    </div>
+                                                                </td>
                                                             </tr>
                                                         </table>
                                                     </div>

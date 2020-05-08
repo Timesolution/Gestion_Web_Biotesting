@@ -2297,6 +2297,10 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error CATCH al importar articulos") + ex);
             }
+            finally
+            {
+                btnImportarArticulo.Enabled = true;
+            }
         }
     }
 }

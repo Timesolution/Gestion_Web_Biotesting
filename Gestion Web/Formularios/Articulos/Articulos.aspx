@@ -1309,7 +1309,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Importar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click"/> 
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Importar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false"/> 
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
@@ -1524,7 +1524,19 @@
             return true;
         }
     </script>
+    <%--<script>
+        function disableButton(btnImportarArticulo) {
+            var btn = document.getElementById(btnImportarArticulo);
+            setTimeout("EnableCtrl('" + btnImportarArticulo + "')", 10);
+            btn.disabled = true;
+            btn.value = "Importando...";
+        }
 
+        function EnableCtrl(btnImportarArticulo) {
+            var btn2 = document.getElementById(btnImportarArticulo);
+            btn2.disable = false;
+        }
+    </script>--%>
 
 
 </asp:Content>
