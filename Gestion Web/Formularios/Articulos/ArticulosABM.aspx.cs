@@ -853,7 +853,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando campos de la marca . " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando campos del arancel y SIM . " + ex.Message));
             }
         }
 

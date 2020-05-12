@@ -229,6 +229,13 @@ namespace Gestion_Web.Formularios.Compras
                 celSIM.VerticalAlign = VerticalAlign.Middle;
                 tr.Controls.Add(celSIM);
 
+                TableCell celArancel= new TableCell();
+                
+                celArancel.Text = item.Arancel.ToString();
+                celArancel.HorizontalAlign = HorizontalAlign.Right;
+                celArancel.VerticalAlign = VerticalAlign.Middle;
+                tr.Controls.Add(celArancel);
+
                 TableCell celFOB = new TableCell();
                 celFOB.Text = item.FOB.Value.ToString("C");
                 celFOB.HorizontalAlign = HorizontalAlign.Right;
@@ -260,11 +267,11 @@ namespace Gestion_Web.Formularios.Compras
                 tr.Controls.Add(celTotalCompra);
 
                 TableCell celPrecioArgentina = new TableCell();
-                decimal totalGastos = item.Importacione.Importaciones_Gastos.Sum(x => x.ImportePesos.Value);
+                decimal totalGastos = item.Importaciones.Importaciones_Gastos.Sum(x => x.ImportePesos.Value);
                 totalGastos = decimal.Round(totalGastos, 2);
                 decimal porcentualGastos = ((item.FOB.Value * item.Cantidad.Value) / this.totalFob) * totalGastos;
                 porcentualGastos = decimal.Round(porcentualGastos, 2);
-                decimal totalLocal = ((porcentualGastos / item.Cantidad.Value) + (item.FOB.Value * item.Importacione.DolarDespacho.Value));
+                decimal totalLocal = ((porcentualGastos / item.Cantidad.Value) + (item.FOB.Value * item.Importaciones.DolarDespacho.Value));
                 totalLocal = decimal.Round(totalLocal, 2);
                 celPrecioArgentina.Text = totalLocal.ToString("C");
                 celPrecioArgentina.HorizontalAlign = HorizontalAlign.Right;
@@ -349,7 +356,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                if(accion == 2)
+                if (accion == 2)
                 {
                     EditarDetalleArticulos();
                 }
@@ -377,6 +384,32 @@ namespace Gestion_Web.Formularios.Compras
 
             }
         }
+
+        private void cargarDatosArancelImportacion_SIM(int idArticulo)
+        {
+            try
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Inicio a cargar datos del arancel del articulo " + idArticulo);
+                var articulo = this.contArtEnt.obtenerArticuloArancelSimEntity(idArticulo);
+
+                //cargo arancel Importacion y sim si tiene
+                if (articulo != null)
+                {
+                    this.txtSIM.Text = articulo.SIM;
+                    this.txtArancel.Text = Convert.ToString(articulo.Arancel);
+                }
+                else
+                {
+                    this.txtSIM.Text = "";
+                    this.txtArancel.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando campos del aranccel y SIM . " + ex.Message));
+            }
+        }
+
         protected void ListArticulosBusqueda_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -399,6 +432,7 @@ namespace Gestion_Web.Formularios.Compras
                         if (s != null)
                         {
                             this.txtStockActual.Text = s.stock1.Value.ToString();
+                            this.cargarDatosArancelImportacion_SIM(a.id);
                         }
                     }
                 }
@@ -437,13 +471,13 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     articulo art = this.contArtEnt.obtenerArticuloEntity(item.Articulo.Value);
 
-                    decimal totalGastos = item.Importacione.Importaciones_Gastos.Sum(x => x.ImportePesos.Value);
+                    decimal totalGastos = item.Importaciones.Importaciones_Gastos.Sum(x => x.ImportePesos.Value);
                     totalGastos = decimal.Round(totalGastos, 2);
 
                     decimal porcentualGastos = ((item.FOB.Value * item.Cantidad.Value) / this.totalFob) * totalGastos;
                     porcentualGastos = decimal.Round(porcentualGastos, 2);
 
-                    decimal totalLocal = ((porcentualGastos / item.Cantidad.Value) + (item.FOB.Value * item.Importacione.DolarDespacho.Value));
+                    decimal totalLocal = ((porcentualGastos / item.Cantidad.Value) + (item.FOB.Value * item.Importaciones.DolarDespacho.Value));
                     totalLocal = decimal.Round(totalLocal, 2);
 
                     Moneda moneda = this.contMoneda.obtenerMonedaID(art.monedaVenta.Value);
@@ -484,7 +518,7 @@ namespace Gestion_Web.Formularios.Compras
                 Articulo art = this.contArticulos.obtenerArticuloByID(Convert.ToInt32(this.txtIdArticulo.Text));
                 art.costo = Convert.ToDecimal(this.txtCostoNuevo.Text);
                 art = this.contArticulos.obtenerPrecioVentaDesdeCosto(art);
-                int ok = this.contArticulos.modificarArticulo(art, art.codigo,1);
+                int ok = this.contArticulos.modificarArticulo(art, art.codigo, 1);
                 if (ok > 0)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Actualizado con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
@@ -508,7 +542,7 @@ namespace Gestion_Web.Formularios.Compras
                 art.margen = Convert.ToDecimal(this.txtMargenNuevo.Text);
                 art = this.contArticulos.obtenerPrecioVentaDesdeCosto(art);
                 art = this.contArticulos.obtenerPrecioVentaDesdeVenta(art, Convert.ToDecimal(this.txtPrecioVentaActual.Text));
-                int ok = this.contArticulos.modificarArticulo(art, art.codigo,1);
+                int ok = this.contArticulos.modificarArticulo(art, art.codigo, 1);
                 if (ok > 0)
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Actualizado con Exito\", {type: \"info\"});location.href = '" + Request.Url.ToString() + "';", true);
@@ -566,7 +600,7 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrio un error al editar el detalle del articulo. " + ex.Message + ".\";", true);
-                
+
             }
         }
         Importaciones_Detalle traerDatosDePantalla(Importaciones_Detalle obj)//trae los datos de los textbox y asigna a un objeto y lo devuelve
@@ -577,6 +611,7 @@ namespace Gestion_Web.Formularios.Compras
                 obj.IdImportacion = this.idImportacion;
                 obj.FOB = Convert.ToDecimal(this.txtFOB.Text);
                 obj.SIM = this.txtSIM.Text;
+                obj.Arancel = Convert.ToDecimal(this.txtArancel.Text);
                 obj.Cantidad = Convert.ToDecimal(this.txtCantidad.Text);
                 obj.StockActual = Convert.ToDecimal(this.txtStockActual.Text);
                 obj.PrecioCompra = Convert.ToDecimal(this.txtPrecioCompra.Text.Replace("$", ""));
