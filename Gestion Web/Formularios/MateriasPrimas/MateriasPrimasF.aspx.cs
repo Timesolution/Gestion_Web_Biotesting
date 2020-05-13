@@ -133,6 +133,15 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                         btnEditar.PostBackUrl = "MateriasPrimasABM.aspx?a=2&id=" + item.Id;
                         celAction.Controls.Add(btnEditar);
 
+                        LinkButton btnStock = new LinkButton();
+                        btnStock.ID = "btnStock_" + item.Id;
+                        btnStock.CssClass = "btn btn-info ui-tooltip";
+                        btnStock.Attributes.Add("data-toggle", "tooltip");
+                        btnStock.Attributes.Add("title data-original-title", "Stock");
+                        btnStock.Text = "<span class='shortcut-icon icon-list-alt'></span>";
+                        btnStock.PostBackUrl = "StockFMP.aspx?mp=" + item.Id;
+                        celAction.Controls.Add(btnStock);
+
                         Literal l2 = new Literal();
                         l2.Text = "&nbsp";
                         celAction.Controls.Add(l2);
