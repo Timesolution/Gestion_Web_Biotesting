@@ -133,6 +133,10 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                         btnEditar.PostBackUrl = "MateriasPrimasABM.aspx?a=2&id=" + item.Id;
                         celAction.Controls.Add(btnEditar);
 
+                        Literal l1 = new Literal();
+                        l1.Text = "&nbsp";
+                        celAction.Controls.Add(l1);
+
                         LinkButton btnStock = new LinkButton();
                         btnStock.ID = "btnStock_" + item.Id;
                         btnStock.CssClass = "btn btn-info ui-tooltip";
