@@ -438,13 +438,13 @@
                                                             <div class="form-group">
                                                                 <label for="validateSelect" class="col-md-4">Localidad</label>
                                                                 <div class="col-md-4">
-                                                                    <asp:DropDownList ID="ListLocalidad" class="form-control" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
-                                                                    <%--<asp:TextBox ID="txtLocalidad" runat="server" class="form-control"></asp:TextBox>--%>
+                                                                    <%--<asp:DropDownList ID="ListLocalidad" class="form-control" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>--%>
+                                                                    <asp:TextBox ID="txtLocalidad" runat="server" class="form-control"></asp:TextBox>
                                                                     <%--<input type="text" class="form-control" name="name" id="name">--%>
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                                 </div>
                                                             </div>
 

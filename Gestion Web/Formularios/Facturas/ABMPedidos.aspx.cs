@@ -200,7 +200,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 dropList_DomicilioEntrega.Items.Clear();
 
-                dropList_DomicilioEntrega.Items.Add(new ListItem("Seleccione", "Seleccione"));
+                dropList_DomicilioEntrega.Items.Add(new ListItem("Seleccione...", "-1"));
                 foreach (DataRow item in direcciones.Rows)
                 {
                     if (item.ItemArray[0].ToString() == "Entrega")
@@ -208,9 +208,9 @@ namespace Gestion_Web.Formularios.Facturas
                         dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                     }
                 }
-                if (dropList_DomicilioEntrega.Items.Count > 0)
+                if (dropList_DomicilioEntrega.Items.Count == 2)
                 {
-
+                    dropList_DomicilioEntrega.SelectedIndex = 1;
                 }
                 else
                 {
@@ -1161,7 +1161,8 @@ namespace Gestion_Web.Formularios.Facturas
                         else
                         {
                             //this.txtDomicilioEntrega.Text = "";
-                            this.dropList_DomicilioEntrega.Text = "";
+                            CargarDropList_DireccionesDeEntregaDelCliente(idCliente);
+                            //this.dropList_DomicilioEntrega.Text = "";
                         }
                     }
 
@@ -1618,6 +1619,104 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
             }
         }
+        /// <summary>
+        /// Carga el item en la tabla items
+        /// </summary>
+        private void agregarItemPedidoRenglon(ItemPedido item, int pos, int numero)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+                tr.ID = item.articulo.codigo.ToString() + pos;
+
+                //Celdas
+                TableCell celCodigo = new TableCell();
+                if (item.nroRenglon > 0)
+                    celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
+                else
+                    celCodigo.Text = (pos + 1) + " - " + item.articulo.codigo;
+                //celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
+                celCodigo.Width = Unit.Percentage(15);
+                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCodigo);
+
+                TableCell celCantidad = new TableCell();
+                TextBox txtCant = new TextBox();
+                txtCant.ViewStateMode = System.Web.UI.ViewStateMode.Enabled;
+                txtCant.ID = "Text_" + pos.ToString() + "_" + item.cantidad;
+                txtCant.CssClass = "form-control";
+                txtCant.Style.Add("text-align", "Right");
+                txtCant.Text = item.cantidad.ToString();
+                txtCant.TextChanged += new EventHandler(ActualizarTotalPH);
+                txtCant.AutoPostBack = true;
+                celCantidad.Controls.Add(txtCant);
+                celCantidad.Width = Unit.Percentage(10);
+                //if (ListSucursalCliente.SelectedIndex > 0)
+                //    txtCant.Enabled = PuedeModificarCantidadDeItemSegunConfiguracion();
+                //else
+                //    txtCant.Enabled = true;
+                tr.Cells.Add(celCantidad);
+
+                TableCell celDescripcion = new TableCell();
+                celDescripcion.Text = item.descripcion;
+                celDescripcion.Width = Unit.Percentage(35);
+                celDescripcion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celDescripcion);
+
+                TableCell celPrecio = new TableCell();
+                celPrecio.Text = "$" + item.precioUnitario.ToString();
+                celPrecio.Width = Unit.Percentage(8);
+                celPrecio.VerticalAlign = VerticalAlign.Middle;
+                celPrecio.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celPrecio);
+
+                TableCell celDescuento = new TableCell();
+                celDescuento.Text = "$" + item.descuento.ToString();
+                celDescuento.Width = Unit.Percentage(8);
+                celDescuento.VerticalAlign = VerticalAlign.Middle;
+                celDescuento.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celDescuento);
+
+                TableCell celTotal = new TableCell();
+                celTotal.Text = "$" + item.total.ToString();
+                celTotal.Width = Unit.Percentage(8);
+                celTotal.VerticalAlign = VerticalAlign.Middle;
+                celTotal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celTotal);
+                //arego fila a tabla
+
+                TableCell celAccion = new TableCell();
+
+                LinkButton btnEliminar = new LinkButton();
+                btnEliminar.CssClass = "btn btn-info";
+                btnEliminar.ID = "btnEliminar_" + item.articulo.codigo + "_" + pos;
+                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                btnEliminar.Click += new EventHandler(this.QuitarItem);
+
+                celAccion.Controls.Add(btnEliminar);
+                celAccion.Width = Unit.Percentage(21);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+
+                celAccion.Controls.Add(l1);
+
+                if (item.stockCompleto != null)
+                {
+                    AgregarLabelsDeStockToCelda(celAccion, item);
+                }
+
+                tr.Cells.Add(celAccion);
+
+                phArticulos.Controls.Add(tr);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+            }
+        }
 
         public void AgregarLabelsDeStockToCelda(TableCell celda, ItemPedido item)
         {
@@ -1821,7 +1920,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
                         //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
                         //p.domicilioEntrega = this.dropList_DomicilioEntrega.Text;
-                        p.domicilioEntrega = dropList_DomicilioEntrega.Items.Count > 0 ? dropList_DomicilioEntrega.SelectedItem.Text : "";
+                        p.domicilioEntrega = dropList_DomicilioEntrega.Items.Count > 0 ? dropList_DomicilioEntrega.SelectedItem.Text : "-";
                         //dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
@@ -1938,7 +2037,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.entrega.Id = Convert.ToInt64(this.ListTipoEntrega.SelectedValue);
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
                         //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
-                        p.domicilioEntrega = this.dropList_DomicilioEntrega.SelectedItem.Text;
+                        p.domicilioEntrega = dropList_DomicilioEntrega.Items.Count > 1 ? dropList_DomicilioEntrega.SelectedItem.Text : "-";
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
                         p.senia = this.txtSenia.Text;
@@ -2989,6 +3088,63 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error en AsignarStockCompletoAlItem. Ex: " + ex.Message));
             }
         }
+
+        /// <summary>
+        /// Este metodo agregar items al pedido teniendo en cuenta al renglon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// 
+        private int AgregarItemImportadoAPedidoConRenglon(string codigo, int renglon, decimal cantidad, string descripcion, decimal precio,decimal descuento)
+        {
+            try
+            {
+                Pedido p = Session["Pedido"] as Pedido;
+                Articulo articulo = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
+                if (articulo != null)
+                {
+                    if (precio > 0)
+                        articulo.precioVenta = precio;
+
+                    ItemPedido item = new ItemPedido();
+                    item.nroRenglon = renglon;
+                    item.articulo = articulo;
+                    item.cantidad = cantidad;
+                    item.descuento = descuento;
+                    item.porcentajeDescuento = decimal.Round((descuento * 100) / precio,2);
+                    item.precioUnitario = decimal.Round(articulo.precioVenta, 2);
+
+                    try
+                    {
+                        item.descripcion = descripcion;
+                        //item.nroRenglon = p.items.Count() + 1;
+                    }
+                    catch { }
+
+                    decimal total = (articulo.precioVenta * cantidad);
+                    total = total - (total * (item.porcentajeDescuento / 100));
+                    item.total = decimal.Round(total, 2);
+
+                    //AsignarStockCompletoAlItem(item);
+
+                    p.items.Add(item);
+
+                    Session.Add("Pedido", p);
+
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error importando items pedido con renglon."));
+                return -1;
+            }
+        }
+        
         protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)
         {
             try
@@ -3003,5 +3159,120 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
+        protected void btnImportarRenglon_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Boolean fileOK = false;
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension =
+                        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    StreamReader sr = new StreamReader(FileUpload1.FileContent);
+                    Configuracion config = new Configuracion();
+                    string linea;
+                    int comienzoArticulos = 0;
+                    int contador = 0;
+
+                    while ((linea = sr.ReadLine()) != null)
+                    {
+                        if (comienzoArticulos > 0)
+                        {
+                            string[] datos = linea.Split(',');//obtengo datos del registro
+                            if (config.separadorListas == "0")// punto y coma
+                            {
+                                datos = linea.Split(',');
+                            }
+
+                            if (datos.Count() > 3)
+                            {
+                                if (!String.IsNullOrEmpty(datos[4]))
+                                {
+                                    decimal d;//para verificar que sea decimal
+                                    if (Decimal.TryParse(datos[4], out d))
+                                    {
+                                        if (Convert.ToDecimal(datos[4]) > 0)
+                                        {
+                                            int i = this.AgregarItemImportadoAPedidoConRenglon(datos[0], Convert.ToInt16(datos[1]),Convert.ToDecimal(datos[2]),datos[3], Convert.ToDecimal(datos[4]), Convert.ToDecimal(datos[5]));
+                                            if (i < 0)
+                                            {
+                                                contador++;
+                                                //Session.Add("Pedido", null);
+                                                this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
+                                                this.phDatosEntrega.Visible = true;
+                                                this.CheckBox1.Checked = true;
+                                                //return;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            contador++;
+                                            //Session.Add("Pedido", null);
+                                            this.txtComentarios.Text += "\n Codigo: " + datos[0] + " con cantidad negativa o cero.";
+                                            this.phDatosEntrega.Visible = true;
+                                            this.CheckBox1.Checked = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        contador++;
+                                        //Session.Add("Pedido", null);
+                                        this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
+                                        this.phDatosEntrega.Visible = true;
+                                        this.CheckBox1.Checked = true;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string[] datos = linea.Split(',');//obtengo datos del registro
+                            foreach (string col in datos)
+                            {
+                                if (col.Contains("*BOF*"))//si encuentro la marca de inicio
+                                {
+                                    comienzoArticulos = 1;//en la linea que sigue empiezan los articulos
+                                }
+                            }
+                        }
+                    }
+
+                    this.cargarItems();
+                    this.actualizarTotales();
+
+                    if (contador > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron importar " + contador + " codigo(s). Revise las observaciones del pedido."));
+                        this.txtComentarios.Focus();
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito.", ""));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .csv"));
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

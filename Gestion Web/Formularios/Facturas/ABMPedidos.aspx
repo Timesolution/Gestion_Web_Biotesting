@@ -504,6 +504,9 @@
                                     </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
+                            <div>
+                              <asp:Button runat="server" ID="btnImportarRenglon" OnClick="btnImportarRenglon_Click"  Text="Importar con Renglon" ValidationGroup="ImportarGroup" class="btn btn-info dropdown-toggle ui-tooltip" title data-original-title="Seleccione un archivo de tipo .csv" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false" />
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
