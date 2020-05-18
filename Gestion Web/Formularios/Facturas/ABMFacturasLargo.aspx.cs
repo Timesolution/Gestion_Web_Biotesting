@@ -2697,9 +2697,9 @@ namespace Gestion_Web.Formularios.Facturas
                         dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                     }
                 }
-                if (dropList_DomicilioEntrega.Items.Count > 0)
+                if (dropList_DomicilioEntrega.Items.Count == 2)
                 {
-
+                    dropList_DomicilioEntrega.SelectedIndex = 1;
                 }
                 else
                 {

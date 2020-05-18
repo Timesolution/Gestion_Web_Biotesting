@@ -784,24 +784,24 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        private void cargarLocalidades(string provincia)
-        {
-            try
-            {
-                controladorPais controladorPais = new controladorPais();
-                this.ListLocalidad.DataSource = controladorPais.obtenerLocalidadProvincia(provincia);
-                this.ListLocalidad.DataValueField = "Localidad";
-                this.ListLocalidad.DataTextField = "Localidad";
+        //private void cargarLocalidades(string provincia)
+        //{
+        //    try
+        //    {
+        //        controladorPais controladorPais = new controladorPais();
+        //        this.ListLocalidad.DataSource = controladorPais.obtenerLocalidadProvincia(provincia);
+        //        this.ListLocalidad.DataValueField = "Localidad";
+        //        this.ListLocalidad.DataTextField = "Localidad";
 
-                this.ListLocalidad.DataBind();
-                //cargo el codigo postal
-                this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de  localidades. " + ex.Message));
-            }
-        }
+        //        this.ListLocalidad.DataBind();
+        //        //cargo el codigo postal
+        //        this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de  localidades. " + ex.Message));
+        //    }
+        //}
 
         private void cargarCodigoPostal(string provincia, string localidad)
         {
@@ -1163,7 +1163,8 @@ namespace Gestion_Web.Formularios.Clientes
                 dir.nombre = this.ListTipoDireccion.SelectedValue;
                 dir.direc = this.txtDirecDireccion.Text;
                 dir.provincia = this.ListProvincia.SelectedValue;
-                dir.localidad = this.ListLocalidad.SelectedValue;
+                //dir.localidad = this.ListLocalidad.SelectedValue;
+                dir.localidad = this.txtLocalidad.Text;
                 dir.codPostal = this.txtCodigoPostal.Text;
                 if (Session["ClientesABM_Cliente"] == null)
                 {
@@ -1198,7 +1199,8 @@ namespace Gestion_Web.Formularios.Clientes
                     dir.nombre = this.ListTipoDireccion.SelectedValue;
                     dir.direc = this.txtDirecDireccion.Text;
                     dir.provincia = this.ListProvincia.SelectedValue;
-                    dir.localidad = this.ListLocalidad.SelectedValue;
+                    //dir.localidad = this.ListLocalidad.SelectedValue;
+                    dir.localidad = this.txtLocalidad.Text;
                     dir.codPostal = this.txtCodigoPostal.Text;
                     dir.id = controlador.agregarDireccionMod(dir, c.id);
                     if (dir.id > 0)
@@ -1221,7 +1223,8 @@ namespace Gestion_Web.Formularios.Clientes
                     dir.nombre = this.ListTipoDireccion.SelectedValue;
                     dir.direc = this.txtDirecDireccion.Text;
                     dir.provincia = this.ListProvincia.SelectedValue;
-                    dir.localidad = this.ListLocalidad.SelectedValue;
+                    //dir.localidad = this.ListLocalidad.SelectedValue;
+                    dir.localidad = this.txtLocalidad.Text;
                     dir.codPostal = this.txtCodigoPostal.Text;
                     int i = controlador.ModificarDireccionMod(dir, c.id);
                     if (i > 0)
@@ -2152,8 +2155,9 @@ namespace Gestion_Web.Formularios.Clientes
                 this.ListTipoDireccion.SelectedIndex = 0;
                 this.txtDirecDireccion.Text = "";
                 this.ListProvincia.SelectedIndex = 0;
-                this.ListLocalidad.SelectedIndex = 0;
-                this.ListLocalidad.SelectedIndex = 0;
+                //this.ListLocalidad.SelectedIndex = 0;
+                this.txtLocalidad.Text = "";
+                this.txtCodigoPostal.Text = "";
             }
             catch
             {
@@ -2495,7 +2499,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                this.cargarLocalidades(this.ListProvincia.SelectedValue);
+                //this.cargarLocalidades(this.ListProvincia.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -2506,7 +2510,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
+                //this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -2765,8 +2769,8 @@ namespace Gestion_Web.Formularios.Clientes
                 //this.txtTipo.Text = d.nombre;
                 this.ListTipoDireccion.SelectedValue = d.nombre;
                 this.txtDirecDireccion.Text = d.direc;
-                //this.txtLocalidad.Text = d.localidad;
-                this.ListLocalidad.SelectedValue = d.localidad;
+                this.txtLocalidad.Text = d.localidad;
+                //this.ListLocalidad.SelectedValue = d.localidad;
                 this.ListProvincia.SelectedValue = d.provincia;
                 this.txtCodigoPostal.Text = d.codPostal;
                 Session.Add("ClientesABM_Direccion", d);
