@@ -390,22 +390,25 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                                 <div class="form-group" style="text-align: left">
                                                                     <label class="col-md-3">Descuento %: </label>
-                                                                    <div class="col-md-4">
-
+                                                                    <div class="col-md-9">
                                                                         <asp:TextBox ID="txtPorcDescuento" Style="text-align: right" runat="server" class="form-control" Text="0" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" TextMode="Number"></asp:TextBox>
-
-
-                                                                    </div>
-                                                                    <div class="col-md-5">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">$</span>
-                                                                            <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                                <asp:PlaceHolder ID="phDescuentoSobreElTotal" runat="server" Visible="true">
+                                                                    <div class="form-group" style="text-align: left">
+                                                                        <label class="col-md-3">Descuento $</label>
+                                                                        <div class="col-md-9">
+                                                                            <div class="input-group">
+                                                                                <a class="btn btn-info ui-tooltip input-group-addon" title data-original-title="Descuento" data-toggle="modal" href="#modalCalcularDescuentoConUnMonto" runat="server" id="A1" visible="true">
+                                                                                    <i class="shortcut-icon icon-money"></i>
+                                                                                </a>
+                                                                                <asp:TextBox ID="txtDescuento" Style="text-align: right" runat="server" class="form-control" Text="0.00" AutoPostBack="True" OnTextChanged="txtDescuento_TextChanged" disabled></asp:TextBox>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </asp:PlaceHolder>
                                                                 <div class="form-group" style="text-align: left">
                                                                     <label class="col-md-3">SubTotal: </label>
                                                                     <div class="col-md-9">
@@ -452,14 +455,11 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-
-
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                             <div class="row">
@@ -467,19 +467,52 @@
                                     <div class="col-md-12">
                                         <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="PedidosGroup" />
                                         <asp:Button ID="btnNuevo" runat="server" Text="Nuevo" class="btn btn-success" OnClick="btnNuevo_Click" />
-
                                         <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="~/Formularios/Facturas/ABMPedidos.aspx" />
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
+        <%--MODAL APLICAR DESCUENTO--%>
+        <div id="modalCalcularDescuentoConUnMonto" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="btnCerrarModalDescuentoMonto" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
+                        <h4 class="modal-title">Aplicar descuento</h4>
+                    </div>
+                    <div class="modal-body" style="padding-bottom: 0px;">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label for="validateSelect" class="col-md-3">Monto de descuento</label>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <asp:TextBox ID="txtMontoParaAplicarDescuentoAlTotal" runat="server" class="form-control" TextMode="Number" Text="100" ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">$</span>
+                                    </div>
+                                </div>
+                                <%--<div class="col-md-1">
+                                    <asp:RequiredFieldValidator ErrorMessage="*" Font-Bold="true" ForeColor="Red" ControlToValidate="txtPorcentajeCantFacturar" runat="server" />
+                                </div>--%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:UpdatePanel ID="updatePanelAgregarMontoParaCalcularPorcentajeDescuento" runat="server">
+                            <ContentTemplate>
+                                <asp:Label ID="Label16" runat="server" Style="display: none;"></asp:Label>
+                                <asp:LinkButton ID="lbtnAgregarMontoParaCalcularPorcentajeDescuento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar descuento" ValidationGroup="MontoDescuentoGroup" OnClick="lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click" />
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%--FIN MODAL APLICAR DESCUENTO--%> 
+
         <div id="modalImportar" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -505,7 +538,7 @@
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                             <div>
-                              <asp:Button runat="server" ID="btnImportarRenglon" OnClick="btnImportarRenglon_Click"  Text="Importar con Renglon" ValidationGroup="ImportarGroup" class="btn btn-info dropdown-toggle ui-tooltip" title data-original-title="Seleccione un archivo de tipo .csv" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false" />
+                                <asp:Button runat="server" ID="btnImportarRenglon" OnClick="btnImportarRenglon_Click" Text="Importar con Renglon" ValidationGroup="ImportarGroup" class="btn btn-info dropdown-toggle ui-tooltip" title data-original-title="Seleccione un archivo de tipo .csv" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false" />
                             </div>
                         </div>
                     </div>
@@ -688,6 +721,10 @@
             if (c.value > 0) {
                 $('#modalImportar').modal('show');
             }
+        }
+
+        function cerrarModalDescuentoMonto() {
+            document.getElementById('btnCerrarModalDescuentoMonto').click();
         }
     </script>
 

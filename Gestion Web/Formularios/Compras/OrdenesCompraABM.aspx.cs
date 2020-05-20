@@ -370,7 +370,7 @@ namespace Gestion_Web.Formularios.Compras
                 }
 
                 oc.Total = tempTotal;
-
+                oc.Tipo = Convert.ToInt32(ListTipo.SelectedValue);
                 oc.Estado = 1;
                 oc.EstadoGeneral = 11;
 
@@ -443,6 +443,7 @@ namespace Gestion_Web.Formularios.Compras
         public void ResetearCampos()
         {
             ListProveedor.SelectedValue = "-1";
+            ListTipo.SelectedValue = "1";
             txtObservaciones.Text = "";
             txtFormaDePago.Text = "";
             _articulosOrdenCompra.Clear();
@@ -460,7 +461,7 @@ namespace Gestion_Web.Formularios.Compras
                 CargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
 
                 this.ListPtoVenta.SelectedValue = oc.IdPtoVenta.ToString();
-
+                this.ListTipo.SelectedValue = oc.Tipo.ToString();
                 this.txtObservaciones.Text = oc.Observaciones;
                 this.txtPVenta.Text = oc.Numero.Substring(0, 4);
                 this.txtNumero.Text = oc.Numero.Substring(5, 8);

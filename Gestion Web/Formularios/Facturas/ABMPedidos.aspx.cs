@@ -68,6 +68,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.idCotizacion = Request.QueryString["cot"];
                 this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
 
+
                 if (Session["Pedido"] != null)
                 {
                     this.cargarItems();
@@ -118,6 +119,10 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         cargarPedidoEditar(this.idPedido);
                     }
+                    else
+                    {
+                       this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    }
                     // se genera pedido desde la cotizacion
                     if (this.accion == 4)
                     {
@@ -125,7 +130,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
-                    this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    
                 }
 
                 //si viene de la pantalla de articulos, modal
@@ -162,7 +167,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Si es perfil vendedor bloqueo los droplist, dejo que solo pueda elegir el cliente
                 this.verificarVendedor();
-                this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy"); //Juan
+                if(txtFecha.Text == "")
+                    this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy"); //Juan
 
                 //si viene de la pantalla de busqueda cliente
                 if (Session["PedidosABM_ClienteModal"] != null)
@@ -292,7 +298,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = p.ptoV.id.ToString();
-
+                this.txtFecha.Text = p.fecha.ToString("dd/MM/yyyy");
                 this.ListTipoEntrega.SelectedValue = p.tipoEntrega.ToString();
                 this.txtHorarioEntrega.Text = p.horaEntrega;
                 this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
@@ -2012,7 +2018,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Pedido p = Session["Pedido"] as Pedido;
                 Cliente cl = this.contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
-
+                string fechaAux = ControladorPedidoEntity.obtenerFechaPedido(p.id);
                 //Verifico que el tipo de moneda de todos los items sea el mismo
                 if (!this.verificarMonedaItems())
                 {
@@ -2027,7 +2033,10 @@ namespace Gestion_Web.Formularios.Facturas
                         p.empresa.id = Convert.ToInt32(this.ListEmpresa.SelectedValue);
                         p.sucursal.id = Convert.ToInt32(this.ListSucursal.SelectedValue);
                         p.ptoV = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
-                        p.fecha = DateTime.Now;
+                        if (!string.IsNullOrEmpty(fechaAux))
+                            p.fecha = Convert.ToDateTime(fechaAux, new CultureInfo("es-AR"));
+                        else
+                            p.fecha = DateTime.Now;
                         p.vendedor.id = Convert.ToInt32(this.DropListVendedor.SelectedValue);
                         p.formaPAgo.id = cl.formaPago.id;
                         p.listaP.id = cl.lisPrecio.id;
@@ -3272,6 +3281,27 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+        protected void lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtPorcDescuento.Text = "0";
+                actualizarTotales();
+                if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
+                {
+                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
+                    actualizarTotales();
+                }
+                //Para recalcular el label del modal de metodo de pago de tarjeta
+                //this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "cerrarModalDescuentoMonto();", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "Error en fun: lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click. Ex: " + ex.Message, true);
             }
         }
     }
