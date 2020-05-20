@@ -8789,7 +8789,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 ControladorPlenario contPlena = new ControladorPlenario();
-                List<SolicitudPlenario> solicitudes = contPlena.obtenerSolicitudesPlenarioFiltradas(this.txtDniCredito.Text);
+                int sucursalUsuario = Convert.ToInt32(Session["Login_SucUser"]);
+                List<SolicitudPlenario> solicitudes = contPlena.obtenerSolicitudesPlenarioFiltradas(this.txtDniCredito.Text, sucursalUsuario);
 
                 int pos = 0;
                 this.phSolicitud.Controls.Clear();
