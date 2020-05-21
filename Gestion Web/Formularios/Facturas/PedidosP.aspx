@@ -61,6 +61,9 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnVistaAvanzada" runat="server" OnClick="lbtnVistaAvanzada_Click">Vista Avanzada</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </asp:PlaceHolder>
@@ -177,9 +180,9 @@
                                         <th>Razon</th>
                                         <th>Total</th>
                                         <th>Estado</th>
-                                        <th>Lineas</th>
-                                        <th>Bultos</th>
-                                        <th>Tiempo</th>
+                                        <th id="lineasTabla" runat="server">Lineas</th>
+                                        <th id="bultosTabla" runat="server">Bultos</th>
+                                        <th id="tiempoTabla" runat="server">Tiempo</th>                                        
                                         <th>
                                             <table>
                                                 <tr>
