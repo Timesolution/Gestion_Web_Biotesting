@@ -177,9 +177,9 @@
                                         <th>Razon</th>
                                         <th>Total</th>
                                         <th>Estado</th>
-                                        <th>Lineas</th>
+<%--                                        <th>Lineas</th>
                                         <th>Bultos</th>
-                                        <th>Tiempo</th>
+                                        <th>Tiempo</th>--%>
                                         <th>
                                             <table>
                                                 <tr>
