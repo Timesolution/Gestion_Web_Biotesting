@@ -22,11 +22,11 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion<span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnEliminar" runat="server" Enabled="false" Visible="false" data-toggle="modal" href="#modalConfirmacion">Eliminar</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnEliminar" runat="server" data-toggle="modal" Visible="false" href="#modalConfirmacion">Eliminar</asp:LinkButton>
                                             </li>
                                             <asp:PlaceHolder runat="server" ID="phCambiarEstadoOC" Visible="false">
                                                 <li>
-                                                    <asp:LinkButton runat="server" data-toggle="modal" href="#modalAutorizar">Autorizar</asp:LinkButton>
+                                                    <asp:LinkButton runat="server" data-toggle="modal" href="#modalAutorizar" ID="lbtnAutorizar" Visible="false">Autorizar</asp:LinkButton>
                                                 </li>
                                             </asp:PlaceHolder>
                                             <asp:PlaceHolder runat="server" ID="lbtnEntregasPH" Visible="false">
@@ -43,13 +43,17 @@
                                                 </li>
                                             </asp:PlaceHolder>
                                             <li>
-                                                <asp:LinkButton ID="lbtnExportarExcel" runat="server" Visible="false" OnClick="lbtnExportarExcel_Click">Exportar a Excel</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnImportarOc" runat="server" data-toggle="modal" href="#modalConfirmacionImportacionOC">Importar OC</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnGenerarFacturaCompra" runat="server" OnClick="lbtnGenerarFacturaCompra_Click">Agregar FC de Compra</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnExportarExcel" runat="server" OnClick="lbtnExportarExcel_Click" Visible="false">Exportar a Excel</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <a data-toggle="modal" href="#modalOrdenesCompraConsolidado">Consolidados</a>
+                                                <asp:LinkButton ID="lbtnGenerarFacturaCompra" runat="server" OnClick="lbtnGenerarFacturaCompra_Click" Visible="false" >Agregar FC de Compra</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnConsolidados" data-toggle="modal" runat="server" href="#modalOrdenesCompraConsolidado" Visible="false">Consolidados</asp:LinkButton>
+                                                <%--<a data-toggle="modal" href="#modalOrdenesCompraConsolidado" id="lbtnConsolidados" name="lbtnConsolidados">Consolidados</a>--%>
                                             </li>
                                         </ul>
                                     </div>
@@ -121,6 +125,39 @@
             </div>
         </div>
     </div>
+
+    <%-- MODAL CONFIRMACION DE IMPORTACION DE OC --%>
+    <div id="modalConfirmacionImportacionOC" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de Importacion Ordenes de Compras</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="Label3" Text="Esta seguro que desea importar las Ordenes de Compra?" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button runat="server" ID="btnImportarOC" Text="Importar" class="btn btn-success" OnClick="btnImportarOC_Click" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false"/> 
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <%-- FIN DE MODAL CONFIRMACION DE IMPORTACION DE OC --%>
 
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">

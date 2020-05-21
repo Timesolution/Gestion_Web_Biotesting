@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Controladores.ControladoresEntity;
 using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
@@ -7,6 +8,7 @@ using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -51,8 +53,11 @@ namespace Gestion_Web.Formularios.Compras
             estadoGeneral = Convert.ToInt32(Request.QueryString["eg"]);
             filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
             filtroPorFechaEntrega = Convert.ToInt32(Request.QueryString["fpfe"]);
+            int tipo = 0;
+            int idMoneda = 0;
 
             Page.Form.DefaultButton = btnBuscarCodigoProveedor.UniqueID;
+            HabilitarItemsAccion(1);
 
             if (!IsPostBack)
             {
@@ -69,17 +74,22 @@ namespace Gestion_Web.Formularios.Compras
                     txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaEntregaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaEntregaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                    this.btnAccion.Visible = false;
+                    HabilitarItemsAccion(1);
+                    //this.btnAccion.Visible = false;
                     estado = 0;
                     estadoGeneral = 0;
                     filtroPorFecha = 1;
                     filtroPorFechaEntrega = 0;
+                    tipo = 0;
+                    idMoneda = 0;
+
                     fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                     fechaH = DateTime.Now.ToString("dd/MM/yyyy");
                 }
                 else
                 {
-                    this.btnAccion.Visible = true;
+                    //this.btnAccion.Visible = true;
+                    HabilitarItemsAccion(2);
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                     txtFechaEntregaDesde.Text = fechaEntregaD;
@@ -108,6 +118,35 @@ namespace Gestion_Web.Formularios.Compras
             }
             
         }
+
+        private void HabilitarItemsAccion(int estado)
+        {
+            try
+            {
+                if(estado == 1)
+                {
+                    this.lbtnEliminar.Visible = false;
+                    this.lbtnAutorizar.Visible = false;
+                    this.lbtnExportarExcel.Visible = false;
+                    this.lbtnGenerarFacturaCompra.Visible = false;
+                    this.lbtnConsolidados.Visible = false;
+                }
+                else
+                {
+                    this.lbtnEliminar.Visible = true;
+                    this.lbtnAutorizar.Visible = true;
+                    this.lbtnExportarExcel.Visible = true;
+                    this.lbtnGenerarFacturaCompra.Visible = true;
+                    this.lbtnConsolidados.Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         private void VerificarLogin()
         {
             try
@@ -303,7 +342,7 @@ namespace Gestion_Web.Formularios.Compras
                 DateTime entregaD = Convert.ToDateTime(fEntregaD, new CultureInfo("es-AR"));
                 DateTime entregaH = Convert.ToDateTime(fEntregaH, new CultureInfo("es-AR"));
 
-                lbtnExportarExcel.Visible = true;
+                //lbtnExportarExcel.Visible = true;
                 //int estado = Convert.ToInt32(DropListEstado.SelectedValue);
 
                 List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, hasta, proveedor, idSucursal, estado, entregaD, entregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral);
@@ -320,12 +359,18 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                int cont = 0;
                 //borro todo
                 this.phOrdenes.Controls.Clear();
                 foreach (var oc in ordenes)
                 {
+                    cont = 1;
                     this.cargarEnPh(oc);
                 }
+                if (cont == 1)
+                    HabilitarItemsAccion(2);
+                else
+                    HabilitarItemsAccion(1);
             }
             catch (Exception ex)
             {
@@ -1100,6 +1145,35 @@ namespace Gestion_Web.Formularios.Compras
             catch (Exception ex)
             {
                 Log.EscribirSQL(1,"Error","Error al exportar orden de compra a excel " + ex.Message);
+            }
+        }
+
+        protected void btnImportarOC_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorImportacionOC controladorImportacionOC = new ControladorImportacionOC();
+
+                int sucursal = (int)Session["Login_SucUser"];
+
+                int i = controladorImportacionOC.ImportarOC(sucursal);
+
+                if (i > 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar ordenes de compras.", "../Compras/OrdenesCompraABM.aspx"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar ordenes de compras"));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error CATCH al importar Ordenes de compra") + ex);
+            }
+            finally
+            {
+                btnImportarOC.Enabled = true;
             }
         }
     }
