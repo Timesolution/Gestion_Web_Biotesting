@@ -123,6 +123,9 @@ namespace Gestion_Web.Formularios.Facturas
                 //por defecto
                 if (accion == 0)
                 {
+                    bultosTabla.Visible = false;
+                    lineasTabla.Visible = false;
+                    tiempoTabla.Visible = false;
                     if (perfil == "Vendedor")
                     {
                         //deshabilito el list de vendedor
@@ -180,6 +183,12 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.buscarPorObservacion();
                     this.lbtnFacturar.Visible = true;
+                }
+
+                if(accion == 5)
+                {
+                    
+                    cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
                 }
 
                 if (idCliente > 0)
@@ -882,12 +891,9 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //fila
                 TableRow tr = new TableRow();
-                tr.ID = p["id"].ToString();
-
-                //var pedido = this.controlador.obtenerPedidoIdSinItems(Convert.ToInt32(p["id"]));
+                tr.ID = p["id"].ToString();             
 
                 //Celdas
-
                 TableCell celFecha = new TableCell();
                 celFecha.Text = Convert.ToDateTime(p["fecha"]).ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
@@ -930,33 +936,37 @@ namespace Gestion_Web.Formularios.Facturas
                 celTipo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celTipo);
 
-                //TableCell celLineas = new TableCell();
-                //celLineas.Text = pedido.items.Count.ToString();
-                //celLineas.HorizontalAlign = HorizontalAlign.Left;
-                //celLineas.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celLineas);
+                if (accion == 5)
+                {
+                    var pedido = this.controlador.obtenerPedidoId(Convert.ToInt32(p["id"]));
 
-                //TableCell celBultos = new TableCell();
-                //celBultos.Text = pedido.items.Sum(x => x.cantidad).ToString();
-                //celBultos.HorizontalAlign = HorizontalAlign.Left;
-                //celBultos.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celBultos);
+                    TableCell celLineas = new TableCell();
+                    celLineas.Text = pedido.items.Count.ToString();
+                    celLineas.HorizontalAlign = HorizontalAlign.Left;
+                    celLineas.VerticalAlign = VerticalAlign.Middle;
+                    tr.Cells.Add(celLineas);
 
-                //TableCell celTiempo = new TableCell();
-                //var tiempo = configuracion.TiempoLineasPedido.Split(';');
-                //try
-                //{
-                //    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
-                //    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * pedido.items.Count);
-                //    celTiempo.Text = tiempoPorLinea.ToString(@"hh\:mm\:ss");
-                //}
-                //catch { }
-                //celTiempo.HorizontalAlign = HorizontalAlign.Left;
-                //celTiempo.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celTiempo);
+                    TableCell celBultos = new TableCell();
+                    celBultos.Text = pedido.items.Sum(x => x.cantidad).ToString();
+                    celBultos.HorizontalAlign = HorizontalAlign.Left;
+                    celBultos.VerticalAlign = VerticalAlign.Middle;
+                    tr.Cells.Add(celBultos);
+
+                    TableCell celTiempo = new TableCell();
+                    var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                    try
+                    {
+                        TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                        tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * pedido.items.Count);
+                        celTiempo.Text = tiempoPorLinea.ToString(@"hh\:mm\:ss");
+                    }
+                    catch { }
+                    celTiempo.HorizontalAlign = HorizontalAlign.Left;
+                    celTiempo.VerticalAlign = VerticalAlign.Middle;
+                    tr.Cells.Add(celTiempo);
+                }
 
                 //arego fila a tabla
-
                 TableCell celAccion = new TableCell();
 
                 LinkButton btnImprimir = new LinkButton();
@@ -1966,8 +1976,32 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+
         #endregion
 
+        protected void lbtnVistaAvanzada_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.RadioFechaPedido.Checked)
+                {
+                    Response.Redirect("PedidosP.aspx?a=5&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal="
+                        + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
+                        + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&art=");
+                }
+                else
+                {
+                    Response.Redirect("PedidosP.aspx?a=5&fechadesde=" + this.txtFechaEntregaDesde.Text + "&fechaHasta=" + this.txtFechaEntregaHasta.Text + "&Sucursal="
+                        + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
+                        + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&art=");
+                }
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+            
+        }
     }
 }
