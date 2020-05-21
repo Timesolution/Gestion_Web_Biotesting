@@ -27,7 +27,7 @@ namespace Gestion_Web.Formularios.Compras
         controladorCliente contCliente = new controladorCliente();
 
         Mensajes m = new Mensajes();
-        
+
         private string fechaD;
         private string fechaH;
         private string fechaEntregaD;
@@ -99,7 +99,7 @@ namespace Gestion_Web.Formularios.Compras
                     DropListEstadoGeneralFiltro.SelectedValue = estadoGeneral.ToString();
                 }
 
-                if(proveedor > 0)
+                if (proveedor > 0)
                     lbtnEntregasPH.Visible = true;
 
                 this.cargarEstadosFiltro();
@@ -114,16 +114,16 @@ namespace Gestion_Web.Formularios.Compras
 
             if (fechaD != null && fechaH != null)
             {
-                this.buscar(fechaD, fechaH, proveedor, sucursal,estado,fechaEntregaD,fechaEntregaH,filtroPorFecha,filtroPorFechaEntrega,estadoGeneral);
+                this.buscar(fechaD, fechaH, proveedor, sucursal, estado, fechaEntregaD, fechaEntregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral);
             }
-            
+
         }
 
         private void HabilitarItemsAccion(int estado)
         {
             try
             {
-                if(estado == 1)
+                if (estado == 1)
                 {
                     this.lbtnEliminar.Visible = false;
                     this.lbtnAutorizar.Visible = false;
@@ -333,7 +333,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado, string fEntregaD,string fEntregaH,int filtroPorFecha, int filtroPorFechaEntrega, int estadoGeneral)
+        private void buscar(string fDesde, string fHasta, int proveedor, int idSucursal, int estado, string fEntregaD, string fEntregaH, int filtroPorFecha, int filtroPorFechaEntrega, int estadoGeneral)
         {
             try
             {
@@ -392,9 +392,9 @@ namespace Gestion_Web.Formularios.Compras
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = oc.Id.ToString();
-                if (oc.Estado == 9)                
+                if (oc.Estado == 9)
                     tr.ForeColor = System.Drawing.Color.Green;
-                else if(oc.Estado == 4)
+                else if (oc.Estado == 4)
                     tr.ForeColor = System.Drawing.Color.Gold;
                 else if (oc.Estado == 5)
                     tr.ForeColor = System.Drawing.Color.Red;
@@ -461,7 +461,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 Literal l2 = new Literal();
                 l2.Text = "&nbsp";
-                celAccion.Controls.Add(l2);                
+                celAccion.Controls.Add(l2);
 
                 CheckBox cbSeleccion = new CheckBox();
                 //cbSeleccion.Text = "&nbsp;Imputar";
@@ -472,7 +472,7 @@ namespace Gestion_Web.Formularios.Compras
                 celAccion.Controls.Add(cbSeleccion);
                 //celAccion.Controls.Add(btnEliminar);
 
-                if(oc.Estado == 1 && oc.EstadoGeneral != 12)
+                if (oc.Estado == 1 && oc.EstadoGeneral != 12)
                 {
                     Literal l3 = new Literal();
                     l3.Text = "&nbsp";
@@ -487,7 +487,7 @@ namespace Gestion_Web.Formularios.Compras
                     btnEditar.Font.Size = 12;
                     btnEditar.PostBackUrl = "OrdenesCompraABM.aspx?a=2&oc=" + oc.Id;
                     celAccion.Controls.Add(btnEditar);
-                }                
+                }
 
                 celAccion.Width = Unit.Percentage(10);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
@@ -511,8 +511,8 @@ namespace Gestion_Web.Formularios.Compras
                 string[] atributos = idBoton.Split('_');
                 string idOrden = atributos[1];
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=3&oc="+ idOrden +"', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=3&oc=" + idOrden + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
             }
             catch (Exception ex)
             {
@@ -530,7 +530,7 @@ namespace Gestion_Web.Formularios.Compras
                     if (DropListProveedor.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" +this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&eg=" + this.DropListEstadoGeneralFiltro.SelectedValue);
+                        Response.Redirect("OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&eg=" + this.DropListEstadoGeneralFiltro.SelectedValue);
                     }
                     else
                     {
@@ -570,7 +570,7 @@ namespace Gestion_Web.Formularios.Compras
                         if (!String.IsNullOrEmpty(idOrden))
                         {
                             int i = this.contCompraEntity.anularOrden(Convert.ToInt64(idOrden));
-                            if (i < 1)                            
+                            if (i < 1)
                             {
                                 j++;
                                 if (i == -1)
@@ -740,7 +740,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private void enviarMail(OrdenesCompra oc) 
+        private int enviarMaildesdeImportador(OrdenesCompra oc)
         {
             try
             {
@@ -749,7 +749,65 @@ namespace Gestion_Web.Formularios.Compras
                 //string destinatarios = this.lblMailOC.Text;
 
                 var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
-                
+
+                if (!String.IsNullOrEmpty(prov.Mail))
+                {
+                    String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
+                    string pathDirectorio = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/");
+
+                    //Si el directorio no existe, lo creo
+                    if (!Directory.Exists(pathDirectorio))
+                    {
+                        Directory.CreateDirectory(pathDirectorio);
+                    }
+
+                    int i = this.generarOrdenCompraPDF(oc, pathArchivoGenerar);
+                    if (i > 0)
+                    {
+                        Attachment adjunto = new Attachment(pathArchivoGenerar);
+
+                        int ok = contFunciones.enviarMailOrdenesCompra(adjunto, oc, prov.Mail);
+                        if (ok > 0)
+                        {
+                            adjunto.Dispose();
+                            File.Delete(pathArchivoGenerar);
+                            Directory.Delete(pathDirectorio);
+                            Log.EscribirSQL(1, "INFO", "Orden de Compra: "+ oc.Numero +" enviada correctamente! ");
+                            return 1;
+                        }
+                        else
+                        {
+                            Log.EscribirSQL(1, "ERROR", "No se pudo enviar la Orden de Compra: " + oc.Numero + " por mail ");
+                            return 0;
+                        }
+                    }
+                    else
+                    {
+                        Log.EscribirSQL(1, "ERROR", "No se pudo generar impresion Orden de Compra: " + oc.Numero + " a enviar. ");
+                        return 0;
+                    }
+                }
+
+                return 0;
+
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error enviando mail.Orden de compra: " + oc.Numero + " Excepción: " + Ex.Message);
+                return 0;
+            }
+        }
+
+        private void enviarMail(OrdenesCompra oc)
+        {
+            try
+            {
+                controladorFunciones contFunciones = new controladorFunciones();
+                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+                //string destinatarios = this.lblMailOC.Text;
+
+                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
+
                 if (!String.IsNullOrEmpty(prov.Mail))
                 {
                     String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
@@ -795,7 +853,7 @@ namespace Gestion_Web.Formularios.Compras
         private int generarOrdenCompraPDF(OrdenesCompra ordenCompra, string pathGenerar)
         {
             try
-            { 
+            {
                 controladorCliente cont = new controladorCliente();
                 controladorSucursal contSuc = new controladorSucursal();
                 ControladorEmpresa controlEmpresa = new ControladorEmpresa();
@@ -989,11 +1047,11 @@ namespace Gestion_Web.Formularios.Compras
                 {
                     var oc = contCompraEntity.obtenerOrden(Convert.ToInt64(idtildado));
 
-                    if(oc.Estado == 1)
+                    if (oc.Estado == 1)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra no se encuentra autorizada!"));
                     else if (oc.Estado == 5)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue rechazada!"));
-                    else if(oc.Estado == 9)
+                    else if (oc.Estado == 9)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra ya fue aceptada!"));
                     else
                     {
@@ -1042,9 +1100,9 @@ namespace Gestion_Web.Formularios.Compras
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de compra se encuentra cerrada!"));
                         else
                             temp = contCompraEntity.RechazarOrdenCompra(oc);
-                    }                       
+                    }
 
-                    if(temp > 0)
+                    if (temp > 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("La orden de compra fue rechazada correctamente!", "OrdenesCompraF.aspx?fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&p=" + DropListProveedor.SelectedValue + "&suc=" + this.DropListSucursal.SelectedValue + "&e=" + this.DropListEstadoFiltro.SelectedValue + "&fed=" + txtFechaEntregaDesde.Text + "&feh=" + txtFechaEntregaHasta.Text + "&fpf=" + Convert.ToInt32(RadioFechaOrdenCompra.Checked) + "&fpfe=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&eg=" + this.DropListEstadoGeneralFiltro.SelectedValue));
                 }
             }
@@ -1073,13 +1131,13 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    if(ordenesTildadas > 1)
+                    if (ordenesTildadas > 1)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar solo un documento!"));
                     else
                         Response.Redirect("ComprasABM.aspx?a=4&oc=" + idtildado);
                 }
                 else
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar algún documento!"));                
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar algún documento!"));
             }
             catch (Exception ex)
             {
@@ -1101,7 +1159,7 @@ namespace Gestion_Web.Formularios.Compras
                     dr2["alias"] = "Todos";
                     dr2["id"] = 0;
                     dtClientes.Rows.InsertAt(dr2, 0);
-                }                
+                }
 
                 //cargo la lista
                 this.DropListProveedor.DataSource = dtClientes;
@@ -1134,9 +1192,9 @@ namespace Gestion_Web.Formularios.Compras
                 }
                 if (!String.IsNullOrEmpty(idOrden))
                 {
-                    if(contador == 1)
+                    if (contador == 1)
                         Response.Redirect("ImpresionCompras.aspx?a=3&ex=1&oc=" + idOrden);
-                    else if(contador == 0)
+                    else if (contador == 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una orden de compra"));
                     else
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una sola orden de compra"));
@@ -1144,27 +1202,55 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al exportar orden de compra a excel " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al exportar orden de compra a excel " + ex.Message);
             }
         }
+
+
 
         protected void btnImportarOC_Click(object sender, EventArgs e)
         {
             try
             {
+                int contadorOrdenesGeneradas = 0;
+                int contadorMailsEnviados = 0;
                 ControladorImportacionOC controladorImportacionOC = new ControladorImportacionOC();
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
                 int sucursal = (int)Session["Login_SucUser"];
+                List<OrdenesCompra> ordenesCompras = controladorImportacionOC.ImportarOC(sucursal);
 
-                int i = controladorImportacionOC.ImportarOC(sucursal);
-
-                if (i > 0)
+                if (ordenesCompras != null)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar ordenes de compras.", "../Compras/OrdenesCompraABM.aspx"));
+                    foreach (var ordenC in ordenesCompras)
+                    {
+                        var proveedor = controladorClienteEntity.obtenerProveedor_OC_PorProveedor((int)ordenC.IdProveedor);
+
+                        if (proveedor != null)
+                        {
+                            contadorOrdenesGeneradas++;
+
+                            if (proveedor.RequiereAutorizacion < 1)
+                            {
+                                contadorMailsEnviados += this.enviarMaildesdeImportador(ordenC);
+                            }
+                            else
+                            {
+                                if (proveedor.MontoAutorizacion > 0 && proveedor.MontoAutorizacion > ordenC.Total)
+                                    contadorMailsEnviados += this.enviarMaildesdeImportador(ordenC);
+                            }
+                        }
+                    }
+
+                    if (contadorOrdenesGeneradas > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se han importado "+ contadorOrdenesGeneradas +". Se enviaron: " + contadorMailsEnviados +".", "../Compras/OrdenesCompraF.aspx"));
+                    }
+
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar ordenes de compras"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar las ordenes de compras"));
                 }
             }
             catch (Exception ex)
