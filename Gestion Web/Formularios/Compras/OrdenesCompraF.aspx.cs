@@ -114,7 +114,7 @@ namespace Gestion_Web.Formularios.Compras
 
             if (fechaD != null && fechaH != null)
             {
-                this.buscar(fechaD, fechaH, proveedor, sucursal,estado,fechaEntregaD,fechaEntregaH,filtroPorFecha,filtroPorFechaEntrega,estadoGeneral,tipo,idMoneda);
+                this.buscar(fechaD, fechaH, proveedor, sucursal,estado,fechaEntregaD,fechaEntregaH,filtroPorFecha,filtroPorFechaEntrega,estadoGeneral);
             }
             
         }
@@ -333,7 +333,7 @@ namespace Gestion_Web.Formularios.Compras
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
-        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado, string fEntregaD,string fEntregaH,int filtroPorFecha, int filtroPorFechaEntrega, int estadoGeneral,int tipo,int idMoneda)
+        private void buscar(string fDesde, string fHasta, int proveedor,int idSucursal,int estado, string fEntregaD,string fEntregaH,int filtroPorFecha, int filtroPorFechaEntrega, int estadoGeneral)
         {
             try
             {
@@ -345,7 +345,7 @@ namespace Gestion_Web.Formularios.Compras
                 //lbtnExportarExcel.Visible = true;
                 //int estado = Convert.ToInt32(DropListEstado.SelectedValue);
 
-                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, hasta, proveedor, idSucursal, estado, entregaD, entregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral,tipo,idMoneda);
+                List<Gestion_Api.Entitys.OrdenesCompra> ordenes = this.contCompraEntity.buscarOrden(desde, hasta, proveedor, idSucursal, estado, entregaD, entregaH, filtroPorFecha, filtroPorFechaEntrega, estadoGeneral);
 
                 this.cargarOrdenes(ordenes);
             }
