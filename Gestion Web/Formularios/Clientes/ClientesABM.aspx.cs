@@ -784,24 +784,24 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        //private void cargarLocalidades(string provincia)
-        //{
-        //    try
-        //    {
-        //        controladorPais controladorPais = new controladorPais();
-        //        this.ListLocalidad.DataSource = controladorPais.obtenerLocalidadProvincia(provincia);
-        //        this.ListLocalidad.DataValueField = "Localidad";
-        //        this.ListLocalidad.DataTextField = "Localidad";
+        private void cargarLocalidades(string provincia)
+        {
+            try
+            {
+                controladorPais controladorPais = new controladorPais();
+                this.ListLocalidad.DataSource = controladorPais.obtenerLocalidadProvincia(provincia);
+                this.ListLocalidad.DataValueField = "Localidad";
+                this.ListLocalidad.DataTextField = "Localidad";
 
-        //        this.ListLocalidad.DataBind();
-        //        //cargo el codigo postal
-        //        this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de  localidades. " + ex.Message));
-        //    }
-        //}
+                this.ListLocalidad.DataBind();
+                //cargo el codigo postal
+                this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de  localidades. " + ex.Message));
+            }
+        }
 
         private void cargarCodigoPostal(string provincia, string localidad)
         {
@@ -812,6 +812,7 @@ namespace Gestion_Web.Formularios.Clientes
                 foreach (DataRow dr in dt.Rows)
                 {
                     this.txtCodigoPostal.Text = dr[0].ToString();
+                    this.txtLocalidad.Text = localidad;
                 }
                 //this.ListCodPostal.DataValueField = "Postal";
                 //this.ListCodPostal.DataTextField = "Postal";
@@ -2499,7 +2500,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                //this.cargarLocalidades(this.ListProvincia.SelectedValue);
+                this.cargarLocalidades(this.ListProvincia.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -2510,7 +2511,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                //this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
+                this.cargarCodigoPostal(this.ListProvincia.SelectedValue, this.ListLocalidad.SelectedValue);
             }
             catch (Exception ex)
             {

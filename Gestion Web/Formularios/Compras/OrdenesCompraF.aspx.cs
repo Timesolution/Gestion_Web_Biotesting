@@ -1228,14 +1228,16 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (proveedor != null)
                         {
-                            contadorOrdenesGeneradas++;
+                            
 
                             if (proveedor.RequiereAutorizacion < 1)
                             {
+                                contadorOrdenesGeneradas++;
                                 contadorMailsEnviados += this.enviarMaildesdeImportador(ordenC);
                             }
                             else
                             {
+                                contadorOrdenesGeneradas++;
                                 if (proveedor.MontoAutorizacion > 0 && proveedor.MontoAutorizacion > ordenC.Total)
                                     contadorMailsEnviados += this.enviarMaildesdeImportador(ordenC);
                             }
@@ -1244,7 +1246,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     if (contadorOrdenesGeneradas > 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se han importado "+ contadorOrdenesGeneradas +". Se enviaron: " + contadorMailsEnviados +" mails.", "../Compras/OrdenesCompraF.aspx"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se han importado "+ contadorOrdenesGeneradas +" Ordenes de Compras. Se enviaron: " + contadorMailsEnviados +" mails.", "../Compras/OrdenesCompraF.aspx"));
                     }
 
                 }

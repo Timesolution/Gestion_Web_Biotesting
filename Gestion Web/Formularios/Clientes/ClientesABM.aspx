@@ -438,10 +438,19 @@
                                                             <div class="form-group">
                                                                 <label for="validateSelect" class="col-md-4">Localidad</label>
                                                                 <div class="col-md-4">
-                                                                    <%--<asp:DropDownList ID="ListLocalidad" class="form-control" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>--%>
                                                                     <asp:TextBox ID="txtLocalidad" runat="server" class="form-control"></asp:TextBox>
-                                                                    <%--<input type="text" class="form-control" name="name" id="name">--%>
                                                                 </div>
+                                                                <div class="col-md-4">
+                                                                    <span class="btn-group open ui-tooltip" title data-original-title="Seleccione una provincia">
+                                                                        <a class="btn btn-info">
+                                                                            <i class="shortcut-icon icon-search"></i>
+                                                                        </a>
+                                                                    </span>
+                                                                         <asp:DropDownList ID="ListLocalidad" class="btn btn-default ui-tooltip dropdown-toggle" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
+                                                                </div>
+                                                                     <%--<asp:LinkButton ID="lbtnAccion" runat="server" class="btn btn-info dropdown-toggle" data-toggle="dropdown" Text="FC <span class='caret'></span>" />--%>
+                                                                        <%--<asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />--%>
+                                                                    <%--<input type="text" class="form-control" name="name" id="name">--%>
 
                                                                 <div class="col-md-4">
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
