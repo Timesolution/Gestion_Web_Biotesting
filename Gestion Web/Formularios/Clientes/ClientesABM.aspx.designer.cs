@@ -724,6 +724,15 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.TextBox txtLocalidad;
         
         /// <summary>
+        /// ListLocalidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListLocalidad;
+        
+        /// <summary>
         /// RequiredFieldValidator17 control.
         /// </summary>
         /// <remarks>

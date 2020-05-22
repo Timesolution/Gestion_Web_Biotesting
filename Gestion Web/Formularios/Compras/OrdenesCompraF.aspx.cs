@@ -740,117 +740,7 @@ namespace Gestion_Web.Formularios.Compras
             }
         }
 
-        private int enviarMaildesdeImportador(OrdenesCompra oc)
-        {
-            try
-            {
-                controladorFunciones contFunciones = new controladorFunciones();
-                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                //string destinatarios = this.lblMailOC.Text;
-
-                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
-
-                if (!String.IsNullOrEmpty(prov.Mail))
-                {
-                    String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
-                    string pathDirectorio = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/");
-
-                    //Si el directorio no existe, lo creo
-                    if (!Directory.Exists(pathDirectorio))
-                    {
-                        Directory.CreateDirectory(pathDirectorio);
-                    }
-
-                    int i = this.generarOrdenCompraPDF(oc, pathArchivoGenerar);
-                    if (i > 0)
-                    {
-                        Attachment adjunto = new Attachment(pathArchivoGenerar);
-
-                        int ok = contFunciones.enviarMailOrdenesCompra(adjunto, oc, prov.Mail);
-                        if (ok > 0)
-                        {
-                            adjunto.Dispose();
-                            File.Delete(pathArchivoGenerar);
-                            Directory.Delete(pathDirectorio);
-                            Log.EscribirSQL(1, "INFO", "Orden de Compra: "+ oc.Numero +" enviada correctamente! ");
-                            return 1;
-                        }
-                        else
-                        {
-                            Log.EscribirSQL(1, "ERROR", "No se pudo enviar la Orden de Compra: " + oc.Numero + " por mail ");
-                            return 0;
-                        }
-                    }
-                    else
-                    {
-                        Log.EscribirSQL(1, "ERROR", "No se pudo generar impresion Orden de Compra: " + oc.Numero + " a enviar. ");
-                        return 0;
-                    }
-                }
-
-                return 0;
-
-            }
-            catch (Exception Ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "Error enviando mail.Orden de compra: " + oc.Numero + " Excepción: " + Ex.Message);
-                return 0;
-            }
-        }
-
-        private void enviarMail(OrdenesCompra oc)
-        {
-            try
-            {
-                controladorFunciones contFunciones = new controladorFunciones();
-                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                //string destinatarios = this.lblMailOC.Text;
-
-                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
-
-                if (!String.IsNullOrEmpty(prov.Mail))
-                {
-                    String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
-                    string pathDirectorio = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/");
-
-                    //Si el directorio no existe, lo creo
-                    if (!Directory.Exists(pathDirectorio))
-                    {
-                        Directory.CreateDirectory(pathDirectorio);
-                    }
-
-                    int i = this.generarOrdenCompraPDF(oc, pathArchivoGenerar);
-                    if (i > 0)
-                    {
-                        Attachment adjunto = new Attachment(pathArchivoGenerar);
-
-                        int ok = contFunciones.enviarMailOrdenesCompra(adjunto, oc, prov.Mail);
-                        if (ok > 0)
-                        {
-                            adjunto.Dispose();
-                            File.Delete(pathArchivoGenerar);
-                            Directory.Delete(pathDirectorio);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de Compra enviada correctamente!", ""));
-                        }
-                        else
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar la Orden de Compra por mail. "));
-                        }
-                    }
-                    else
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar impresion Orden de Compra a enviar. "));
-                    }
-                }
-
-            }
-            catch (Exception Ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando mail. Excepción: " + Ex.Message));
-            }
-        }
-
-        private int generarOrdenCompraPDF(OrdenesCompra ordenCompra, string pathGenerar)
+        private int generarOrdenCompraPDF(OrdenesCompra ordenCompra, string pathGenerar, int idProveedor)
         {
             try
             {
@@ -901,9 +791,9 @@ namespace Gestion_Web.Formularios.Compras
 
                 foreach (DataRow row in dtItems.Rows)
                 {
-                    ProveedorArticulo codProv = this.contArticulos.obtenerProveedorArticuloByArticulo(Convert.ToInt32(row["Codigo"]));
+                    Articulo art = this.contArticulos.obtenerArticuloCodigoAparece(Convert.ToString(row["Codigo"]));
 
-                    Articulo art = this.contArticulos.obtenerArticuloByID(Convert.ToInt32(Convert.ToInt32(row["Codigo"])));
+                    ProveedorArticulo codProv = this.contArticulos.obtenerProveedorArticuloByArticulo(art.id);
 
                     if (art != null)
                     {
@@ -969,6 +859,116 @@ namespace Gestion_Web.Formularios.Compras
                 return -1;
             }
         }
+
+        private int enviarMaildesdeImportador(OrdenesCompra oc)
+        {
+            try
+            {
+                controladorFunciones contFunciones = new controladorFunciones();
+                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+                //string destinatarios = this.lblMailOC.Text;
+
+                var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
+
+                if (!String.IsNullOrEmpty(prov.Mail))
+                {
+                    String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
+                    string pathDirectorio = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/");
+
+                    //Si el directorio no existe, lo creo
+                    if (!Directory.Exists(pathDirectorio))
+                    {
+                        Directory.CreateDirectory(pathDirectorio);
+                    }
+
+                    int i = this.generarOrdenCompraPDF(oc, pathArchivoGenerar,oc.IdProveedor.GetValueOrDefault());
+                    if (i > 0)
+                    {
+                        Attachment adjunto = new Attachment(pathArchivoGenerar);
+
+                        int ok = contFunciones.enviarMailOrdenesCompra(adjunto, oc, prov.Mail);
+                        if (ok > 0)
+                        {
+                            adjunto.Dispose();
+                            File.Delete(pathArchivoGenerar);
+                            Directory.Delete(pathDirectorio);
+                            Log.EscribirSQL(1, "INFO", "Orden de Compra: "+ oc.Numero +" enviada correctamente! ");
+                            return 1;
+                        }
+                        else
+                        {
+                            Log.EscribirSQL(1, "ERROR", "No se pudo enviar la Orden de Compra: " + oc.Numero + " por mail ");
+                            return 0;
+                        }
+                    }
+                    else
+                    {
+                        Log.EscribirSQL(1, "ERROR", "No se pudo generar impresion Orden de Compra: " + oc.Numero + " a enviar. ");
+                        return 0;
+                    }
+                }
+
+                return 0;
+
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error enviando mail.Orden de compra: " + oc.Numero + " Excepción: " + Ex.Message);
+                return 0;
+            }
+        }
+
+        //private void enviarMail(OrdenesCompra oc)
+        //{
+        //    try
+        //    {
+        //        controladorFunciones contFunciones = new controladorFunciones();
+        //        ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+        //        //string destinatarios = this.lblMailOC.Text;
+
+        //        var prov = contClienteEntity.obtenerProveedor_OC_PorProveedor((int)oc.IdProveedor);
+
+        //        if (!String.IsNullOrEmpty(prov.Mail))
+        //        {
+        //            String pathArchivoGenerar = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/" + "/oc-" + oc.Numero + "_" + oc.Id + ".pdf");
+        //            string pathDirectorio = Server.MapPath("../../OrdenesCompra/" + oc.Id + "/");
+
+        //            //Si el directorio no existe, lo creo
+        //            if (!Directory.Exists(pathDirectorio))
+        //            {
+        //                Directory.CreateDirectory(pathDirectorio);
+        //            }
+
+        //            int i = this.generarOrdenCompraPDF(oc, pathArchivoGenerar);
+        //            if (i > 0)
+        //            {
+        //                Attachment adjunto = new Attachment(pathArchivoGenerar);
+
+        //                int ok = contFunciones.enviarMailOrdenesCompra(adjunto, oc, prov.Mail);
+        //                if (ok > 0)
+        //                {
+        //                    adjunto.Dispose();
+        //                    File.Delete(pathArchivoGenerar);
+        //                    Directory.Delete(pathDirectorio);
+        //                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de Compra enviada correctamente!", ""));
+        //                }
+        //                else
+        //                {
+        //                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar la Orden de Compra por mail. "));
+        //                }
+        //            }
+        //            else
+        //            {
+        //                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar impresion Orden de Compra a enviar. "));
+        //            }
+        //        }
+
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando mail. Excepción: " + Ex.Message));
+        //    }
+        //}
 
         public static DataTable ListToDataTable<T>(List<T> list)
         {
@@ -1228,14 +1228,16 @@ namespace Gestion_Web.Formularios.Compras
 
                         if (proveedor != null)
                         {
-                            contadorOrdenesGeneradas++;
+                            
 
                             if (proveedor.RequiereAutorizacion < 1)
                             {
+                                contadorOrdenesGeneradas++;
                                 contadorMailsEnviados += this.enviarMaildesdeImportador(ordenC);
                             }
                             else
                             {
+                                contadorOrdenesGeneradas++;
                                 if (proveedor.MontoAutorizacion > 0 && proveedor.MontoAutorizacion > ordenC.Total)
                                     contadorMailsEnviados += this.enviarMaildesdeImportador(ordenC);
                             }
@@ -1244,7 +1246,7 @@ namespace Gestion_Web.Formularios.Compras
 
                     if (contadorOrdenesGeneradas > 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se han importado "+ contadorOrdenesGeneradas +". Se enviaron: " + contadorMailsEnviados +".", "../Compras/OrdenesCompraF.aspx"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se han importado "+ contadorOrdenesGeneradas +" Ordenes de Compras. Se enviaron: " + contadorMailsEnviados +" mails.", "../Compras/OrdenesCompraF.aspx"));
                     }
 
                 }
