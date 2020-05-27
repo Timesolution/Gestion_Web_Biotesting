@@ -203,24 +203,40 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 var direcciones = contCliente.obtenerDireccionesById(idCliente);
-
+                int contadorTipoEntrega = 0;
+                int contadorTipoLegal = 0;
                 dropList_DomicilioEntrega.Items.Clear();
-
                 dropList_DomicilioEntrega.Items.Add(new ListItem("Seleccione...", "-1"));
                 foreach (DataRow item in direcciones.Rows)
                 {
                     if (item.ItemArray[0].ToString() == "Entrega")
                     {
+                        contadorTipoEntrega++;
                         dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                     }
+                    else if (item.ItemArray[0].ToString() == "Legal")
+                    { contadorTipoLegal++; }
                 }
-                if (dropList_DomicilioEntrega.Items.Count == 2)
+                if (dropList_DomicilioEntrega.Items.Count == 2 && contadorTipoEntrega > 0)
                 {
                     dropList_DomicilioEntrega.SelectedIndex = 1;
                 }
                 else
                 {
-
+                    if (dropList_DomicilioEntrega.Items.Count > 0 && contadorTipoLegal > 0)
+                    {
+                        foreach (DataRow item in direcciones.Rows)
+                        {
+                            if(item.ItemArray[0].ToString() == "Legal")
+                            {
+                                dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
+                            }
+                        }
+                        if(dropList_DomicilioEntrega.Items.Count == 2)
+                        {
+                            dropList_DomicilioEntrega.SelectedIndex = 1;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -1339,15 +1355,15 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["PedidosABM_ArticuloModal"] = null;
                     this.txtCantidad.Focus();
                     this.totalItem();
-                    this.obtenerDatosReferenciaArticulo();
-                    this.obtenerDescuentosCantidadArticulo();
+                    //this.obtenerDatosReferenciaArticulo();
+                    //this.obtenerDescuentosCantidadArticulo();
 
 
                     Pedido c = Session["Pedido"] as Pedido;
                     this.txtRenglon.Text = (c.items.Count + 1).ToString();
 
                     //verifico si el articulo esta pendiete en otro articulo pedido
-                    this.obtenerPendientesCliente(art.id, c.cliente.id);
+                    //this.obtenerPendientesCliente(art.id, c.cliente.id);
                 }
                 else
                 {
@@ -2543,134 +2559,134 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        private void obtenerDatosReferenciaArticulo()
-        {
-            try
-            {
-                ControladorArticulosEntity contArticulosEntitys = new ControladorArticulosEntity();
-                controladorFactEntity contFactEntity = new controladorFactEntity();
-                controladorFacturacion contFacturas = new controladorFacturacion();
+        //private void obtenerDatosReferenciaArticulo()
+        //{
+        //    try
+        //    {
+        //        ControladorArticulosEntity contArticulosEntitys = new ControladorArticulosEntity();
+        //        controladorFactEntity contFactEntity = new controladorFactEntity();
+        //        controladorFacturacion contFacturas = new controladorFacturacion();
 
-                articulo a = contArticulosEntitys.obtenerArticuloEntityByCod(this.txtCodigo.Text);
-                string datos = "";
+        //        articulo a = contArticulosEntitys.obtenerArticuloEntityByCod(this.txtCodigo.Text);
+        //        string datos = "";
 
-                if (a != null)
-                {
-                    Factura ultima = contFacturas.obtenerUltimaFacturaClienteArticulo(Convert.ToInt32(this.DropListClientes.SelectedValue), a.id);
-                    if (ultima != null)
-                    {
-                        if (ultima.id > 0)
-                        {
-                            itemsFactura ultimoFacturado = contFactEntity.obtenerDetalleUltimaFacturaByArticulo(ultima.id, a.id);
+        //        if (a != null)
+        //        {
+        //            Factura ultima = contFacturas.obtenerUltimaFacturaClienteArticulo(Convert.ToInt32(this.DropListClientes.SelectedValue), a.id);
+        //            if (ultima != null)
+        //            {
+        //                if (ultima.id > 0)
+        //                {
+        //                    itemsFactura ultimoFacturado = contFactEntity.obtenerDetalleUltimaFacturaByArticulo(ultima.id, a.id);
 
-                            datos += "Ultimo precio facturado: " + ultimoFacturado.precioUnitario.Value.ToString("C") + " - " + ultima.fecha.ToString("dd/MM/yyyy") + " / ";
-                        }
-                    }
+        //                    datos += "Ultimo precio facturado: " + ultimoFacturado.precioUnitario.Value.ToString("C") + " - " + ultima.fecha.ToString("dd/MM/yyyy") + " / ";
+        //                }
+        //            }
 
-                    stock s = contArticulosEntitys.obtenerStockArticuloLocal(a.id, Convert.ToInt32(this.ListSucursal.SelectedValue));
-                    if (s != null)
-                    {
-                        datos += "Stock: " + s.stock1 + " - ";
+        //            stock s = contArticulosEntitys.obtenerStockArticuloLocal(a.id, Convert.ToInt32(this.ListSucursal.SelectedValue));
+        //            if (s != null)
+        //            {
+        //                datos += "Stock: " + s.stock1 + " - ";
 
-                        decimal comprometido = this.controlador.obtenerStockComprometidoPedidos(a.id, Convert.ToInt32(this.ListSucursal.SelectedValue));
+        //                decimal comprometido = this.controlador.obtenerStockComprometidoPedidos(a.id, Convert.ToInt32(this.ListSucursal.SelectedValue));
 
-                        datos += "Comprometido suc.: " + comprometido + " - ";
+        //                datos += "Comprometido suc.: " + comprometido + " - ";
 
-                        datos += "Disponible: " + (s.stock1 - comprometido) + " / ";
-                    }
+        //                datos += "Disponible: " + (s.stock1 - comprometido) + " / ";
+        //            }
 
-                    if (a.Articulos_Presentaciones.Count() > 0)
-                    {
-                        datos += "Presentacion Min: " + a.Articulos_Presentaciones.FirstOrDefault().Minima + " / ";
-                        datos += "Med: " + a.Articulos_Presentaciones.FirstOrDefault().Media + " / ";
-                        datos += "Max: " + a.Articulos_Presentaciones.FirstOrDefault().Maxima + " / ";
-                    }
+        //            if (a.Articulos_Presentaciones.Count() > 0)
+        //            {
+        //                datos += "Presentacion Min: " + a.Articulos_Presentaciones.FirstOrDefault().Minima + " / ";
+        //                datos += "Med: " + a.Articulos_Presentaciones.FirstOrDefault().Media + " / ";
+        //                datos += "Max: " + a.Articulos_Presentaciones.FirstOrDefault().Maxima + " / ";
+        //            }
 
-                    this.lblDatosReferenciaArt.Visible = true;
-                    this.lblDatosReferenciaArt.Text = datos;
-                }
-                else
-                {
-                    this.lblDatosReferenciaArt.Text = "";
-                    this.lblDatosReferenciaArt.Visible = false;
-                }
+        //            this.lblDatosReferenciaArt.Visible = true;
+        //            this.lblDatosReferenciaArt.Text = datos;
+        //        }
+        //        else
+        //        {
+        //            this.lblDatosReferenciaArt.Text = "";
+        //            this.lblDatosReferenciaArt.Visible = false;
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                this.lblDatosReferenciaArt.Text = "";
-                this.lblDatosReferenciaArt.Visible = false;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this.lblDatosReferenciaArt.Text = "";
+        //        this.lblDatosReferenciaArt.Visible = false;
+        //    }
+        //}
 
-        private void obtenerDescuentosCantidadArticulo()
-        {
-            try
-            {
-                ControladorArticulosEntity contArticulosEntitys = new ControladorArticulosEntity();
+        //private void obtenerDescuentosCantidadArticulo()
+        //{
+        //    try
+        //    {
+        //        ControladorArticulosEntity contArticulosEntitys = new ControladorArticulosEntity();
 
-                Pedido p = Session["Pedido"] as Pedido;
-                articulo a = contArticulosEntitys.obtenerArticuloEntityByCod(this.txtCodigo.Text);
-                string datos = "";
+        //        Pedido p = Session["Pedido"] as Pedido;
+        //        articulo a = contArticulosEntitys.obtenerArticuloEntityByCod(this.txtCodigo.Text);
+        //        string datos = "";
 
-                if (a != null)
-                {
-                    var clienteDatos = this.contClienteEntity.obtenerClienteDatosByCliente(p.cliente.id);
+        //        if (a != null)
+        //        {
+        //            var clienteDatos = this.contClienteEntity.obtenerClienteDatosByCliente(p.cliente.id);
 
-                    if (clienteDatos.Count > 0)
-                    {
-                        if (clienteDatos[0].AplicaDescuentoCantidad == 1)
-                        {
-                            ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
-                            Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCod(this.txtCodigo.Text);
-                            if (artEnt != null)
-                            {
-                                var desc = artEnt.Articulos_Descuentos;
-                                int contador = 1;
-                                foreach (var item in desc)
-                                {
-                                    datos += "Descuento " + contador + " Desde " + item.Desde + " - " + item.Hasta + " = " + item.Descuento.ToString() + "% / ";
-                                    contador++;
-                                }
+        //            if (clienteDatos.Count > 0)
+        //            {
+        //                if (clienteDatos[0].AplicaDescuentoCantidad == 1)
+        //                {
+        //                    ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+        //                    Gestion_Api.Entitys.articulo artEnt = contArtEntity.obtenerArticuloEntityByCod(this.txtCodigo.Text);
+        //                    if (artEnt != null)
+        //                    {
+        //                        var desc = artEnt.Articulos_Descuentos;
+        //                        int contador = 1;
+        //                        foreach (var item in desc)
+        //                        {
+        //                            datos += "Descuento " + contador + " Desde " + item.Desde + " - " + item.Hasta + " = " + item.Descuento.ToString() + "% / ";
+        //                            contador++;
+        //                        }
 
-                                this.lblDescuentoCantidad.Visible = true;
-                                this.lblDescuentoCantidad.Text = datos;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    this.lblDescuentoCantidad.Text = "";
-                    this.lblDescuentoCantidad.Visible = false;
-                }
+        //                        this.lblDescuentoCantidad.Visible = true;
+        //                        this.lblDescuentoCantidad.Text = datos;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            this.lblDescuentoCantidad.Text = "";
+        //            this.lblDescuentoCantidad.Visible = false;
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                this.lblDescuentoCantidad.Text = "";
-                this.lblDescuentoCantidad.Visible = false;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this.lblDescuentoCantidad.Text = "";
+        //        this.lblDescuentoCantidad.Visible = false;
+        //    }
+        //}
 
-        private void obtenerPendientesCliente(int idArticulo, int idCliente)
-        {
-            try
-            {
-                var resp = this.controlador.obtenerPedidosPendientesClientes(idCliente, idArticulo);
-                if (resp > 0)
-                {
-                    //Genero un string con el link para imprimir los pedidos pendientes por cliente
-                    string link = "ImpresionPedido.aspx?a=7&fd=" + DateTime.Now.AddYears(-2).ToString("dd/MM/yyyy") + "&fh=" + DateTime.Now.ToString("dd/MM/yyyy") + "&suc=-1&c=" + idCliente + "&g=0&art=-1";
-                    this.LabelPendientes.Visible = true;
-                    this.LabelPendientes.Text = "El cliente posee el articulo en pedidos pendientes. Cantidad pendiente: " + resp + ".  " + "<a href=\"#\" onclick=\"imprimirCantidadPendientesCliente('" + link + "')\">Ver</a>";
-                }
-            }
-            catch (Exception ex)
-            {
+        //private void obtenerPendientesCliente(int idArticulo, int idCliente)
+        //{
+        //    try
+        //    {
+        //        var resp = this.controlador.obtenerPedidosPendientesClientes(idCliente, idArticulo);
+        //        if (resp > 0)
+        //        {
+        //            //Genero un string con el link para imprimir los pedidos pendientes por cliente
+        //            string link = "ImpresionPedido.aspx?a=7&fd=" + DateTime.Now.AddYears(-2).ToString("dd/MM/yyyy") + "&fh=" + DateTime.Now.ToString("dd/MM/yyyy") + "&suc=-1&c=" + idCliente + "&g=0&art=-1";
+        //            this.LabelPendientes.Visible = true;
+        //            this.LabelPendientes.Text = "El cliente posee el articulo en pedidos pendientes. Cantidad pendiente: " + resp + ".  " + "<a href=\"#\" onclick=\"imprimirCantidadPendientesCliente('" + link + "')\">Ver</a>";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
         private void cantidadPendienteCliente(object sender, EventArgs e)
         {
             try

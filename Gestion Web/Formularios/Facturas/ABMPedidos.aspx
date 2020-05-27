@@ -200,11 +200,11 @@
                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                 <ContentTemplate>
 
-                                    <div class="col-md-12">
+                                    <%--<div class="col-md-12">
                                         <asp:Label ID="lblDatosReferenciaArt" runat="server" class="alert alert-info alert-dismissable" ForeColor="Black" Width="100%" Style="text-align: center;" Height="75%" Visible="false" />
                                         <asp:Label ID="lblDescuentoCantidad" runat="server" class="alert alert-info alert-dismissable" ForeColor="Black" Width="100%" Style="text-align: center;" Height="75%" Visible="false" />
                                         <asp:Label ID="LabelPendientes" runat="server" class="alert alert-danger alert-dismissable" ForeColor="Black" Width="100%" Style="text-align: center;" Height="75%" Visible="false" />
-                                    </div>
+                                    </div>--%>
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
