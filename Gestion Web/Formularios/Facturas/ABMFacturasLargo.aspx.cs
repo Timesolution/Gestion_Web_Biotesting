@@ -2135,7 +2135,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (accion != 6 && accion != 7)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
-                    if (cliente[1].Contains("Responsable Inscripto"))
+                    if (cliente[1].Contains("Responsable Inscripto") && c.monotributo != "1")
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                         PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
