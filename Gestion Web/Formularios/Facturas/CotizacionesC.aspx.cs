@@ -13,7 +13,7 @@ using System.Web.UI.WebControls;
 namespace Gestion_Web.Formularios.Facturas
 {
     public partial class CotizacionesC : System.Web.UI.Page
-     {
+    {
         ControladorPedido controlador = new ControladorPedido();
         controladorUsuario contUser = new controladorUsuario();
         ControladorPedidoEntity contPedEntity = new ControladorPedidoEntity();
@@ -51,7 +51,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarClientes();
                     this.cargarVendedor();
                     this.cargarEstados();
-                    
+
 
                     if (fechaD == null && fechaH == null && suc == 0)
                     {
@@ -72,16 +72,16 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListClientes.SelectedValue = idCliente.ToString();
                 }
 
-                if(accion == 0)
+                if (accion == 0)
                 {
                     this.cargarCotizacionesRango(fechaD, fechaH, suc);
                 }
-                else if(accion == 1)
+                else if (accion == 1)
                 {
                     buscarPorObservacion();
                 }
 
-                if(idCliente <= 0)
+                if (idCliente <= 0)
                     lbtnGenPedido.Visible = false;
 
             }
@@ -237,7 +237,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dr2["alias"] = "Todos";
                     dr2["id"] = 0;
                     dt.Rows.InsertAt(dr2, 1);
-                }                
+                }
 
                 this.DropListClientes.DataSource = dt;
                 this.DropListClientes.DataValueField = "id";
@@ -313,7 +313,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListEstado.DataBind();
 
-                
+
 
             }
             catch (Exception ex)
@@ -327,7 +327,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 // if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
-                if (fechaD != null && fechaD != null )
+                if (fechaD != null && fechaD != null)
                 {
                     DataTable dt = this.controlador.obtenerCotizacionesRangoDT(fechaD, fechaH, idSuc, idCliente, idEstado, vendedor);
                     this.cargarCotizacion(dt);
@@ -616,7 +616,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!String.IsNullOrEmpty(txtFechaDesde.Text) && (!String.IsNullOrEmpty(txtFechaHasta.Text)))
                 {
                     if (DropListSucursal.SelectedValue != "-1")
-                    {   
+                    {
                         Response.Redirect("CotizacionesC.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue
                             + "&estado=" + DropListEstado.SelectedValue + "&v=" + ListVendedor.SelectedValue);
                     }
@@ -658,7 +658,7 @@ namespace Gestion_Web.Formularios.Facturas
             //
             this.labelIva.Text = "testc escribo desde el update panel amigo!!";
 
-            
+
         }
 
         protected void Button1_Click(object sender, EventArgs e)
@@ -697,7 +697,7 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -796,6 +796,47 @@ namespace Gestion_Web.Formularios.Facturas
             if (!string.IsNullOrEmpty(this.txtObservacion.Text))
             {
                 Response.Redirect("CotizacionesC.aspx?a=1&o=" + this.txtObservacion.Text);
+            }
+        }
+
+        protected void btnSi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                foreach (Control C in phCotizaciones.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    int i = this.controlador.anularPedidos(idtildado);
+                    if (i > 0)
+                    {
+                        Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ANULACION Pedido id: " + idtildado);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cotizaciones anuladas con exito. ", "PedidosP.aspx"));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error anulando Cotizaciones. "));
+
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una cotizacion"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando cotizaciones para facturar. " + ex.Message));
             }
         }
     }
