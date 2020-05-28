@@ -126,11 +126,18 @@ namespace Gestion_Web.Formularios.Facturas
                     // se genera pedido desde la cotizacion
                     if (this.accion == 4)
                     {
-                        GenerarPedidoCotizacion();
+                        cargarCliente(Convert.ToInt32(cliente));
+                        //GenerarPedidoCotizacion();
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
                     
+                }
+
+                if (cliente != null && cotizacion == 1 && accion == 0)
+                {
+                    this.cargarCliente(idCliente);
+                    //GenerarPedidoCotizacion();
                 }
 
                 //si viene de la pantalla de articulos, modal
@@ -775,12 +782,42 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListClientes.DataBind();
 
+                if(idCliente > 0)
+                {
+                    CargarPacienteEspecifico(Convert.ToInt32(idCliente));
+                }
+
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
+
+        private void CargarPacienteEspecifico(int idCliente)
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
+                var cliente = controladorClienteEntity.ObtenerClienteId(idCliente);
+
+                if (cliente == null)
+                    return;
+
+                if (DropListClientes.SelectedValue == cliente.id.ToString())
+                    return;
+
+                ListItem item = new ListItem(cliente.razonSocial, cliente.id.ToString());
+                this.DropListClientes.Items.Add(item);
+                DropListClientes.SelectedValue = cliente.id.ToString();
+            }
+            catch
+            {
+
+            }
+        }
+
         public void cargarFormasVenta()
         {
             try

@@ -144,6 +144,9 @@ namespace Gestion_Web.Account
                         Response.Redirect("../Formularios/Facturas/CuentaCorrienteF.aspx?a=2&Cliente=" + this.cliente + "&Sucursal=" + usuario.sucursal.id + "&Tipo=-1&fd=01/01/2000&fh=" + DateTime.Now.ToString("dd/MM/yyyy"));
                     if (this.mascotasFc == 4)
                         Response.Redirect("../Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&fechaVencimientoDesde=01/01/2000&fechaVencimientoHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&cl=" + this.cliente + "&estado=0&fpf=1&fpfv=0&us=-1");
+                    if (this.mascotasFc == 5)
+                        Response.Redirect("../Formularios/Facturas/ABMPedidos.aspx?c=1" + "&cliente=" + this.cliente);
+
                 }
             }
             catch
