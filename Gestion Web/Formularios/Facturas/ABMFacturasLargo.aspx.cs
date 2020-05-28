@@ -2135,7 +2135,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (accion != 6 && accion != 7)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
-                    if (cliente[1].Contains("Responsable Inscripto"))
+                    if (cliente[1].Contains("Responsable Inscripto") && c.monotributo != "1")
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                         PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
@@ -8789,7 +8789,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 ControladorPlenario contPlena = new ControladorPlenario();
-                List<SolicitudPlenario> solicitudes = contPlena.obtenerSolicitudesPlenarioFiltradas(this.txtDniCredito.Text);
+                int sucursalUsuario = Convert.ToInt32(Session["Login_SucUser"]);
+                List<SolicitudPlenario> solicitudes = contPlena.obtenerSolicitudesPlenarioFiltradas(this.txtDniCredito.Text, sucursalUsuario);
 
                 int pos = 0;
                 this.phSolicitud.Controls.Clear();

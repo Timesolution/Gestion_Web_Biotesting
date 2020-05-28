@@ -81,6 +81,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="name" class="col-md-2">Tipo</label>
+                                    <div class="col-md-4">
+                                        <asp:DropDownList ID="ListTipo" class="form-control" runat="server">
+                                            <asp:ListItem Value="1"> Nacional </asp:ListItem>
+                                            <asp:ListItem Value="2"> Importacion </asp:ListItem>
+                                            <asp:ListItem Value="3"> Proyectos </asp:ListItem>
+                                            </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="name" class="col-md-2">Observaciones</label>
                                     <div class="col-md-6">
                                         <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
@@ -162,6 +172,7 @@
                                     <th style="width: 20%">Codigo</th>
                                     <th style="width: 20%">Descripcion</th>
                                     <th style="width: 10%; text-align: right">Costo sin IVA</th>
+                                    <th style="width: 10%; text-align: right">Moneda</th>
                                     <th style="width: 10%; text-align: right">Cantidad</th>
                                     <th style="width: 10%; text-align: right">Stock Sucursal</th>
                                     <th style="width: 10%; text-align: right">Stock Total</th>
@@ -618,6 +629,7 @@
                     "<td> " + obj[i].codigo + "</td>" +
                     "<td> " + obj[i].descripcion + "</td>" +
                     "<td><input name='txtPrecio_" + obj[i].codigo + "'type=\"string\" value=" + obj[i].costo.toFixed(2) + " style=\"text-align: right;\"></td>" +
+                    "<td style=\"text-align: right;\"> " + obj[i].Moneda + "</td>" +
                     "<td><input name='txtCantidad_" + obj[i].codigo + "'type=\"number\" value=\"0.00\" style=\"text-align: right;\"></td>" +
                     "<td style=\"text-align: right;\"> " + obj[i].StockSucursal.toFixed(2) + "</td>" +
                     "<td style=\"text-align: right;\"> " + obj[i].StockTotal.toFixed(2) + "</td>" +

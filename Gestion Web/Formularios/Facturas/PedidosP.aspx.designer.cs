@@ -105,6 +105,15 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.LinkButton lbtnConsolidadosPDF;
 
         /// <summary>
+        /// lbtnVistaAvanzada control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnVistaAvanzada;
+
+        /// <summary>
         /// lblParametros control.
         /// </summary>
         /// <remarks>
@@ -166,6 +175,33 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSaldo;
+
+        /// <summary>
+        /// lineasTabla control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell lineasTabla;
+
+        /// <summary>
+        /// bultosTabla control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell bultosTabla;
+
+        /// <summary>
+        /// tiempoTabla control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tiempoTabla;
 
         /// <summary>
         /// UpdatePanel7 control.
