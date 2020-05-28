@@ -27,6 +27,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnGenPedido" runat="server" OnClick="lbtnGenPedido_Click" Visible="false">Generar Pedido</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </asp:PlaceHolder>
@@ -44,7 +47,7 @@
                                         <i class="shortcut-icon icon-print"></i>
                                     </a>
                                 </div>
-                            </td>                            
+                            </td>
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
                                     <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
@@ -488,6 +491,46 @@
         </div>
     </div>
 
+    <%-- MODAL CONFIRMACION DE ANULACION DE COTIZACION --%>
+    <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="lblMensaje" Text="Esta seguro que desea eliminar las Cotizaciones Seleccionadas?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <%-- FIN MODAL CONFIRMACION ANULACION DE COTIZACION --%>
+
     <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -518,7 +561,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click"/>
+                    <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
                 </div>
             </div>
         </div>
