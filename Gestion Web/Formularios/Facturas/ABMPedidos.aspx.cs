@@ -132,13 +132,14 @@ namespace Gestion_Web.Formularios.Facturas
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
                     
-                }
-
                 if (cliente != null && cotizacion == 1 && accion == 0)
                 {
-                    this.cargarCliente(idCliente);
+                        if(idCliente != 0)
+                            this.cargarCliente(idCliente);
                     //GenerarPedidoCotizacion();
                 }
+                }
+
 
                 //si viene de la pantalla de articulos, modal
                 if (Session["PedidosABM_ArticuloModal"] != null)
@@ -1235,7 +1236,8 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra cliente "));
+                    
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra cliente "));
                 }
             }
             catch (Exception ex)
