@@ -465,6 +465,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (estado.id != 3)
                 {
                     tr.Cells.Add(celAccion);
+                    phCotizaciones.Controls.Add(tr);
                 }
                 else
                 {
@@ -476,7 +477,7 @@ namespace Gestion_Web.Formularios.Facturas
                         tr.ForeColor = System.Drawing.Color.Red;
                 }
 
-                phCotizaciones.Controls.Add(tr);
+                
             }
             catch (Exception ex)
             {

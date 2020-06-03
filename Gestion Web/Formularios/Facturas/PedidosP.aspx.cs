@@ -1302,12 +1302,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
+                CheckBox ch = null;
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if(accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
+
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1332,12 +1336,15 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1373,11 +1380,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                CheckBox ch = null;
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
+
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1502,8 +1514,12 @@ namespace Gestion_Web.Formularios.Facturas
                 int contador = 0;
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1642,8 +1658,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado = ch.ID.Split('_')[1];
@@ -1714,8 +1734,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1790,8 +1814,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1820,8 +1848,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1919,8 +1951,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
@@ -1954,8 +1990,12 @@ namespace Gestion_Web.Formularios.Facturas
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
+                    CheckBox ch = null;
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[8].Controls[2] as CheckBox;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";

@@ -17,6 +17,7 @@ using System.Web.UI.WebControls;
 using System.Web.Configuration;
 using System.Data.OleDb;
 using Gestion_Api.Auxiliares;
+using System.Xml;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -126,18 +127,21 @@ namespace Gestion_Web.Formularios.Facturas
                     // se genera pedido desde la cotizacion
                     if (this.accion == 4)
                     {
-                        cargarCliente(Convert.ToInt32(cliente));
-                        //GenerarPedidoCotizacion();
+                        //cargarCliente(Convert.ToInt32(cliente));
+                        GenerarPedidoCotizacion();
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
                     
-                if (cliente != null && cotizacion == 1 && accion == 0)
-                {
+                    if (cliente != null && cotizacion == 1 && accion == 0)
+                    {
                         if(idCliente != 0)
+                        {
                             this.cargarCliente(idCliente);
-                    //GenerarPedidoCotizacion();
-                }
+                            GenerarPedidoCotizacion();
+                        }
+                            
+                    }
                 }
 
 
@@ -3357,6 +3361,135 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "Error en fun: lbtnAgregarMontoParaCalcularPorcentajeDescuento_Click. Ex: " + ex.Message, true);
+            }
+        }
+
+        protected void btnImportarXML_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Boolean fileOK = false;
+
+                //if (FileUpload1.HasFile)
+                //{
+                //    String fileExtension =
+                //        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                //    String[] allowedExtensions = { ".xml" };
+
+                //    for (int i = 0; i < allowedExtensions.Length; i++)
+                //    {
+                //        if (fileExtension == allowedExtensions[i])
+                //        {
+                //            fileOK = true;
+                //        }
+                //    }
+                //}
+                //if (fileOK)
+                //{
+                //    XmlTextReader sr = new XmlTextReader(FileUpload1.FileContent);
+                //    Configuracion config = new Configuracion();
+                //    string ultimaEtiqueta = "";
+                //    int comienzoArticulos = 0;
+                //    int contador = 0;
+                //    string codigoXLS = "";
+                //    decimal cantidadXLS;
+                //    decimal precioXLS;
+
+                //    while (sr.Read())
+                //    {
+                //        if(sr.NodeType == XmlNodeType.Element)
+                //        {
+                //            sr.
+                //            this.AgregarItemImportadoAPedido();
+                //        }
+                //    }
+
+                //    this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad), item.Precio);
+                //    //while (sr.Read() != null)
+                //    //{
+                //    //    if (comienzoArticulos > 0)
+                //    //    {
+                //    //        string[] datos = linea.Split(',');//obtengo datos del registro
+                //    //        if (config.separadorListas == "0")// punto y coma
+                //    //        {
+                //    //            datos = linea.Split(',');
+                //    //        }
+
+                //    //        if (datos.Count() > 3)
+                //    //        {
+                //    //            if (!String.IsNullOrEmpty(datos[4]))
+                //    //            {
+                //    //                decimal d;//para verificar que sea decimal
+                //    //                if (Decimal.TryParse(datos[4], out d))
+                //    //                {
+                //    //                    if (Convert.ToDecimal(datos[4]) > 0)
+                //    //                    {
+                //    //                        int i = this.AgregarItemImportadoAPedidoConRenglon(datos[0], Convert.ToInt16(datos[1]), Convert.ToDecimal(datos[2]), datos[3], Convert.ToDecimal(datos[4]), Convert.ToDecimal(datos[5]));
+                //    //                        if (i < 0)
+                //    //                        {
+                //    //                            contador++;
+                //    //                            //Session.Add("Pedido", null);
+                //    //                            this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
+                //    //                            this.phDatosEntrega.Visible = true;
+                //    //                            this.CheckBox1.Checked = true;
+                //    //                            //return;
+                //    //                        }
+                //    //                    }
+                //    //                    else
+                //    //                    {
+                //    //                        contador++;
+                //    //                        //Session.Add("Pedido", null);
+                //    //                        this.txtComentarios.Text += "\n Codigo: " + datos[0] + " con cantidad negativa o cero.";
+                //    //                        this.phDatosEntrega.Visible = true;
+                //    //                        this.CheckBox1.Checked = true;
+                //    //                    }
+                //    //                }
+                //    //                else
+                //    //                {
+                //    //                    contador++;
+                //    //                    //Session.Add("Pedido", null);
+                //    //                    this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
+                //    //                    this.phDatosEntrega.Visible = true;
+                //    //                    this.CheckBox1.Checked = true;
+                //    //                }
+                //    //            }
+                //    //        }
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        string[] datos = linea.Split(',');//obtengo datos del registro
+                //    //        foreach (string col in datos)
+                //    //        {
+                //    //            if (col.Contains("*BOF*"))//si encuentro la marca de inicio
+                //    //            {
+                //    //                comienzoArticulos = 1;//en la linea que sigue empiezan los articulos
+                //    //            }
+                //    //        }
+                //    //    }
+                //    //}
+
+                //    this.cargarItems();
+                //    this.actualizarTotales();
+
+                //    if (contador > 0)
+                //    {
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron importar " + contador + " codigo(s). Revise las observaciones del pedido."));
+                //        this.txtComentarios.Focus();
+                //    }
+                //    else
+                //    {
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito.", ""));
+                //    }
+                //}
+                //else
+                //{
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .csv"));
+                //}
+            }
+            catch
+            {
+
             }
         }
     }
