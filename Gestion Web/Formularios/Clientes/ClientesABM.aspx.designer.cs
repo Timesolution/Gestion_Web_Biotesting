@@ -1210,6 +1210,24 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.Label lblIdEventoCliente;
         
         /// <summary>
+        /// chbEnviarMailCRM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chbEnviarMailCRM;
+        
+        /// <summary>
+        /// txtEnviarMailCRM control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtEnviarMailCRM;
+        
+        /// <summary>
         /// rdSiNo control.
         /// </summary>
         /// <remarks>

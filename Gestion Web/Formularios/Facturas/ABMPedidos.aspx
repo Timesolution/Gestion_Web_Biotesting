@@ -543,6 +543,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <asp:Button ID="btnImportarXML" runat="server" Text="Importar .xml" Visible="false" ToolTip="Importar con otro modelo de excel" class="btn btn-info" OnClick="btnImportarXML_Click" ValidationGroup="ImportarGroup" />
                         <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
                         <asp:Button ID="btnImportarPedidoExcel" runat="server" Text="Importar Excel" class="btn btn-success" OnClick="btnImportarPedidoExcel_Click" ValidationGroup="ImportarGroup" />
                     </div>

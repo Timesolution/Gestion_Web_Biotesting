@@ -446,11 +446,11 @@
                                                                             <i class="shortcut-icon icon-search"></i>
                                                                         </a>
                                                                     </span>
-                                                                         <asp:DropDownList ID="ListLocalidad" class="btn btn-default ui-tooltip dropdown-toggle" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
+                                                                    <asp:DropDownList ID="ListLocalidad" class="btn btn-default ui-tooltip dropdown-toggle" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
                                                                 </div>
-                                                                     <%--<asp:LinkButton ID="lbtnAccion" runat="server" class="btn btn-info dropdown-toggle" data-toggle="dropdown" Text="FC <span class='caret'></span>" />--%>
-                                                                        <%--<asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />--%>
-                                                                    <%--<input type="text" class="form-control" name="name" id="name">--%>
+                                                                <%--<asp:LinkButton ID="lbtnAccion" runat="server" class="btn btn-info dropdown-toggle" data-toggle="dropdown" Text="FC <span class='caret'></span>" />--%>
+                                                                <%--<asp:Button runat="server" Style="display: none" OnClick="btnBuscarProducto_Click" OnClientClick="foco();" class="btn btn-info" title="Search" />--%>
+                                                                <%--<input type="text" class="form-control" name="name" id="name">--%>
 
                                                                 <div class="col-md-4">
                                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -927,17 +927,33 @@
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-1">Detalle</label>
                                                     <div class="col-md-4">
-                                                        <asp:TextBox ID="txtDetalleEvento" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                                        <asp:TextBox ID="txtDetalleEvento" Style="height: 150px; width: 700px" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                     </div>
                                                     <div class="col-md-1">
                                                         <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group">
+                                                    <label class="col-md-1">
+                                                        Enviar Mail
+                                                    </label>
+                                                    <div class="col-md-4">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <input type="checkbox" id="chbEnviarMailCRM" runat="server">
+                                                            </span>
+                                                            <input type="text" class="form-control" id="txtEnviarMailCRM" runat="server" maxlength="39">
+                                                        </div>
+                                                        <a id='resultado'></a>
+                                                        <!-- /input-group -->
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group" id="divDisparaTarea">
                                                     <label for="name" class="col-md-1">Dispara tarea</label>
                                                     <div class="col-md-4">
-                                                        <asp:RadioButtonList ID="rdSiNo" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdSiNo_SelectedIndexChanged" AutoPostBack="true" runat="server">
+                                                        <asp:RadioButtonList ID="rdSiNo" CellPadding="20" Style="margin-top: -10px;" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdSiNo_SelectedIndexChanged" AutoPostBack="true" runat="server">
                                                             <asp:ListItem Text="Si" Value="1" />
                                                             <asp:ListItem Text="No" Value="0" />
                                                         </asp:RadioButtonList>
@@ -978,7 +994,7 @@
 
                                                 <div class="form-group">
                                                     <div class="col-md-4">
-                                                            <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
+                                                        <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
                                                     </div>
                                                 </div>
 
@@ -1864,7 +1880,6 @@
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
     <%--<script src="../Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>--%>
-
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
     <script src="../../Scripts/libs/bootstrap.min.js"></script>
@@ -1882,6 +1897,7 @@
 
 
     <script>
+
         //valida los campos solo numeros
         function validarNro(e) {
             var key;
