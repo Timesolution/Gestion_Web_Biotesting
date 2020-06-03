@@ -25,7 +25,7 @@
                                         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <asp:LinkButton ID="lbtnGenPedido" runat="server" OnClick="lbtnGenPedido_Click" Visible="false">Generar Pedido</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnGenPedido" runat="server" OnClick="lbtnGenPedido_Click" Visible="true">Generar Pedido</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>

@@ -465,7 +465,6 @@ namespace Gestion_Web.Formularios.Facturas
                 if (estado.id != 3)
                 {
                     tr.Cells.Add(celAccion);
-                    phCotizaciones.Controls.Add(tr);
                 }
                 else
                 {
@@ -476,8 +475,8 @@ namespace Gestion_Web.Formularios.Facturas
                         tr.Cells.Add(celEstado);
                         tr.ForeColor = System.Drawing.Color.Red;
                 }
+                phCotizaciones.Controls.Add(tr);
 
-                
             }
             catch (Exception ex)
             {
@@ -833,7 +832,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (i > 0)
                     {
                         Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ANULACION Pedido id: " + idtildado);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cotizaciones anuladas con exito. ", "PedidosP.aspx"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cotizaciones anuladas con exito. ", "CotizacionesC.aspx"));
                     }
                     else
                     {
