@@ -37,6 +37,8 @@ namespace Gestion_Web.Formularios.Clientes
         private ControladorExpreso contExpreso = new ControladorExpreso();
         private controladorZona contZona = new controladorZona();
         ControladorPlanCuentas contPlanCta = new ControladorPlanCuentas();
+        controladorFunciones controladorFunciones = new controladorFunciones();
+        controladorUsuario controladorUsuario = new controladorUsuario();
 
         //para saber si es alta(1) o modificacion(2)
         private int accion;
@@ -1422,6 +1424,8 @@ namespace Gestion_Web.Formularios.Clientes
                 if (mail != null && mail.Count > 0)
                 {
                     this.txtMailEntrega.Text = mail.FirstOrDefault().Mail;
+                    this.txtEnviarMailCRM.Value = mail.FirstOrDefault().Mail.ToString();
+
                     if (!String.IsNullOrEmpty(mail.FirstOrDefault().Celular))
                     {
                         this.txtCodArea.Text = mail.FirstOrDefault().Celular.Split('-')[0];
@@ -3391,6 +3395,7 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     this.modificarEventoCliente();
                 }
+
             }
             catch (Exception ex)
             {
@@ -3403,6 +3408,7 @@ namespace Gestion_Web.Formularios.Clientes
             {          
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                
                 eventos.Cliente = this.idCliente;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
@@ -3425,11 +3431,29 @@ namespace Gestion_Web.Formularios.Clientes
                 int ok = this.contClienteEntity.agregarEventoCliente(eventos);
                 if (ok > 0)
                 {
+                    string mensajeEnvioMail = "";
+                    Usuario usuario = new Usuario();
+                    usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
+                    if(this.chbEnviarMailCRM.Checked == true)
+                    {
+                        if(txtEnviarMailCRM.Value.ToString() != "")
+                        {
+                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text) > 0)
+                                mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
+                            else
+                                mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
+                        }
+                        else
+                        {
+                            mensajeEnvioMail = "No se pudo enviar email. Texto vacio. Destilde la casilla si no desea enviar CRM por email.";
+                        }
+                        
+                    }
                     this.txtDetalleEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado. "+ mensajeEnvioMail +"\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
                 else
@@ -3469,11 +3493,28 @@ namespace Gestion_Web.Formularios.Clientes
                 int ok = this.contClienteEntity.modificarEventoCliente(ev);
                 if (ok > 0)
                 {
+                    string mensajeEnvioMail = "";
+                    Usuario usuario = new Usuario();
+                    usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
+                    if (this.chbEnviarMailCRM.Checked == true)
+                    {
+                        if (txtEnviarMailCRM.Value.ToString() != "")
+                        {
+                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text) > 0)
+                                mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
+                            else
+                                mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
+                        }
+                        else
+                        {
+                            mensajeEnvioMail = "No se pudo enviar email. Texto vacio. Destilde la casilla si no desea enviar CRM por email.";
+                        }
+                    }
                     this.txtDetalleEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado.\", {type: \"info\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento modificado." + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
                 else
@@ -4206,12 +4247,21 @@ namespace Gestion_Web.Formularios.Clientes
 
         protected void rdSiNo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (rdSiNo.SelectedValue == "1")
+            Log.EscribirSQL(1, "ERROR", "Tilde una opcion en el CRM");
+            try
             {
-                divTarea.Visible = true;
-                divVencimientoTarea.Visible = true;
-                divSituacion.Visible = true;
+                if (rdSiNo.SelectedValue == "1")
+                {
+                    divTarea.Visible = true;
+                    divVencimientoTarea.Visible = true;
+                    divSituacion.Visible = true;
+                }
             }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1,"ERROR", "ERROR CATCH rdSiNo_SelectedIndexChanged");
+            }
+           
         }
     }
 }

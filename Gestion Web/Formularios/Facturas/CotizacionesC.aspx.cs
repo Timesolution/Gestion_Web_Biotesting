@@ -462,9 +462,22 @@ namespace Gestion_Web.Formularios.Facturas
                 //    celAccion.Controls.Add(lDetail);
                 //}
 
-                tr.Cells.Add(celAccion);
+                if (estado.id != 3)
+                {
+                    tr.Cells.Add(celAccion);
+                    phCotizaciones.Controls.Add(tr);
+                }
+                else
+                {
+                        TableCell celEstado = new TableCell();
+                        celEstado.Text = "*Anulada*";
+                        celEstado.VerticalAlign = VerticalAlign.Middle;
+                        celEstado.HorizontalAlign = HorizontalAlign.Center;
+                        tr.Cells.Add(celEstado);
+                        tr.ForeColor = System.Drawing.Color.Red;
+                }
 
-                phCotizaciones.Controls.Add(tr);
+                
             }
             catch (Exception ex)
             {
