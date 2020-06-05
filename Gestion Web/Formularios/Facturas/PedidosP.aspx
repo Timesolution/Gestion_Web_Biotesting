@@ -34,7 +34,7 @@
                                                 <asp:LinkButton ID="btnAutorizar" runat="server" OnClick="btnAutorizar_Click">Autorizar</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnFacturar" runat="server" OnClick="btnFacturar_Click" Visible="false">Facturar</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnFacturar" runat="server" OnClick="btnFacturar_Click">Facturar</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnFacturarFamilia" runat="server" OnClick="lbtnFacturarFamilia_Click" Visible="false">Facturar por Grupo</asp:LinkButton>

@@ -206,6 +206,31 @@
                         </div>
                         <!-- /widget -->
 
+
+                        <div class="widget stacked">
+                                <div class="widget-header" style="background: #c1f4de">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 92%">
+                                                <i class="icon-time"></i>
+                                                <h3>Prox. vencimientos CRM</h3>
+                                            </td>
+                                            <td style="width: 8%">
+                                                <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx" Style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas" >
+                                                    <i class='fa fa-arrow-right'></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <div class="widget-content" style="padding-top: 1%;">
+                                    <ul class="news-items">
+                                        <asp:PlaceHolder ID="phSeguimiento" runat="server"></asp:PlaceHolder>
+                                    </ul>
+                                </div>
+                            </div>
+
                     </div>
                     <!-- /span6 -->
                 </asp:PlaceHolder>
