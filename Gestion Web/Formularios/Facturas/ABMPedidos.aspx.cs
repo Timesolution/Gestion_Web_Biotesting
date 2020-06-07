@@ -18,6 +18,8 @@ using System.Web.Configuration;
 using System.Data.OleDb;
 using Gestion_Api.Auxiliares;
 using System.Xml;
+using System.Xml.Linq;
+using System.Text;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -122,7 +124,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                       this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     }
                     // se genera pedido desde la cotizacion
                     if (this.accion == 4)
@@ -132,18 +134,22 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     //Me fijo si hay que cargar un cliente por defecto
                     this.verificarClienteDefecto();
-                    
+
                     if (cliente != null && cotizacion == 1 && accion == 0)
                     {
-                        if(idCliente != 0)
+                        if (idCliente != 0)
                         {
                             this.cargarCliente(idCliente);
-                            GenerarPedidoCotizacion();
+                            //GenerarPedidoCotizacion();
                         }
-                            
                     }
+
+                    //HABILITO O NO EL BOTON btnImportarXML si es el cliente LEVAL SA
+
+                    cambiarHabilitacionBotonbtnImportarXML();
                 }
 
+                
 
                 //si viene de la pantalla de articulos, modal
                 if (Session["PedidosABM_ArticuloModal"] != null)
@@ -179,7 +185,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Si es perfil vendedor bloqueo los droplist, dejo que solo pueda elegir el cliente
                 this.verificarVendedor();
-                if(txtFecha.Text == "")
+                if (txtFecha.Text == "")
                     this.txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy"); //Juan
 
                 //si viene de la pantalla de busqueda cliente
@@ -202,6 +208,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Dejo editable el campo de descripcion del articulo o no
                 this.verficarConfiguracionEditar();
+
             }
             catch (Exception ex)
             {
@@ -239,12 +246,12 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         foreach (DataRow item in direcciones.Rows)
                         {
-                            if(item.ItemArray[0].ToString() == "Legal")
+                            if (item.ItemArray[0].ToString() == "Legal")
                             {
                                 dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                             }
                         }
-                        if(dropList_DomicilioEntrega.Items.Count == 2)
+                        if (dropList_DomicilioEntrega.Items.Count == 2)
                         {
                             dropList_DomicilioEntrega.SelectedIndex = 1;
                         }
@@ -386,7 +393,7 @@ namespace Gestion_Web.Formularios.Facturas
         public Pedido CargarPedidoDesdeCotizacion(ref string numerosCotizaciones)
         {
             try
-            {                
+            {
                 Pedido cotizacion = new Pedido();
                 bool descuentosDiferentes = false;
                 Cliente cliente = contCliente.obtenerClienteID(idCliente);
@@ -412,7 +419,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     cotizacion = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[i]));
 
-                    if(i != idsCotizaciones.Count - 1)
+                    if (i != idsCotizaciones.Count - 1)
                         numerosCotizaciones += cotizacion.numero + ", ";
                     else
                         numerosCotizaciones += cotizacion.numero;
@@ -433,7 +440,7 @@ namespace Gestion_Web.Formularios.Facturas
                         descuentosDiferentes = true;
                 }
 
-                if(!descuentosDiferentes)
+                if (!descuentosDiferentes)
                     p.neto10 = descuentoTemp;
                 else
                 {
@@ -787,7 +794,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListClientes.DataBind();
 
-                if(idCliente > 0)
+                if (idCliente > 0)
                 {
                     CargarPacienteEspecifico(Convert.ToInt32(idCliente));
                 }
@@ -1173,6 +1180,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (this.cliente != null)
                 {
+                    CargarPacienteEspecifico(Convert.ToInt32(idCliente));
+
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
                     try
@@ -1240,8 +1249,8 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra cliente "));
+
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra cliente "));
                 }
             }
             catch (Exception ex)
@@ -2385,9 +2394,28 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        /// <summary>
+        /// Metodo para habilitar o no el boton btnImportarXML segun la empresa que sea
+        /// </summary>
+        public void cambiarHabilitacionBotonbtnImportarXML()
+        {
+            if (ListEmpresa.SelectedItem.Text.ToLower() != "leval sa")
+            {
+                //btnImportarXML.Enabled = false;
+                this.btnImportarXML.Attributes.Add("disabled", "true");
+                // btnImportarXML.CssClass = "form-control";
+            }
+            else
+            {
+                this.btnImportarXML.Attributes.Remove("disabled");
+                //this.btnImportarXML.Visible = true;
+            }
+        }
+
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));
+            cambiarHabilitacionBotonbtnImportarXML();
         }
 
 
@@ -3140,6 +3168,66 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
+
+        /// <summary>
+        /// Este metodo me sirve para importar el archivo .xml para tener en cuenta el campo descricpion del articulo
+        /// </summary>
+        /// <param name="codigo"></param>
+        /// <param name="cantidad"></param>
+        /// <param name="precio"></param>
+        /// <returns></returns>
+        private int AgregarItemImportadoAPedidoXML(string codigo, decimal cantidad, decimal precio, string descripcionAgregar)
+        {
+            try
+            {
+                Pedido p = Session["Pedido"] as Pedido;
+                Articulo articulo = contArticulo.obtenerArticuloFacturar(codigo, Convert.ToInt32(this.DropListLista.SelectedValue));
+                if (articulo != null)
+                {
+                    if (precio > 0)
+                        articulo.precioVenta = precio;
+                    if (!string.IsNullOrEmpty(descripcionAgregar))
+                        articulo.descripcion += " - COLOR: " + descripcionAgregar + "";
+
+                    ItemPedido item = new ItemPedido();
+
+                    item.articulo = articulo;
+                    item.cantidad = cantidad;
+                    item.descuento = 0;
+                    item.porcentajeDescuento = 0;
+                    item.precioUnitario = decimal.Round(articulo.precioVenta, 2);
+
+                    try
+                    {
+                        item.descripcion = articulo.descripcion;
+                        item.nroRenglon = p.items.Count() + 1;
+                    }
+                    catch { }
+
+                    decimal total = (articulo.precioVenta * cantidad);
+                    total = total - (total * (item.porcentajeDescuento / 100));
+                    item.total = decimal.Round(total, 2);
+
+                    AsignarStockCompletoAlItem(item);
+
+                    p.items.Add(item);
+
+                    Session.Add("Pedido", p);
+
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrio un error importando items pedido."));
+                return -1;
+            }
+        }
+
         public void AsignarStockCompletoAlItem(ItemPedido item)
         {
             try
@@ -3163,7 +3251,7 @@ namespace Gestion_Web.Formularios.Facturas
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// 
-        private int AgregarItemImportadoAPedidoConRenglon(string codigo, int renglon, decimal cantidad, string descripcion, decimal precio,decimal descuento)
+        private int AgregarItemImportadoAPedidoConRenglon(string codigo, int renglon, decimal cantidad, string descripcion, decimal precio, decimal descuento)
         {
             try
             {
@@ -3179,7 +3267,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.articulo = articulo;
                     item.cantidad = cantidad;
                     item.descuento = descuento;
-                    item.porcentajeDescuento = decimal.Round((descuento * 100) / precio,2);
+                    item.porcentajeDescuento = decimal.Round((descuento * 100) / precio, 2);
                     item.precioUnitario = decimal.Round(articulo.precioVenta, 2);
 
                     try
@@ -3212,7 +3300,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        
+
         protected void btnImportarPedidoExcel_Click(object sender, EventArgs e)
         {
             try
@@ -3275,7 +3363,7 @@ namespace Gestion_Web.Formularios.Facturas
                                     {
                                         if (Convert.ToDecimal(datos[4]) > 0)
                                         {
-                                            int i = this.AgregarItemImportadoAPedidoConRenglon(datos[0], Convert.ToInt16(datos[1]),Convert.ToDecimal(datos[2]),datos[3], Convert.ToDecimal(datos[4]), Convert.ToDecimal(datos[5]));
+                                            int i = this.AgregarItemImportadoAPedidoConRenglon(datos[0], Convert.ToInt16(datos[1]), Convert.ToDecimal(datos[2]), datos[3], Convert.ToDecimal(datos[4]), Convert.ToDecimal(datos[5]));
                                             if (i < 0)
                                             {
                                                 contador++;
@@ -3366,130 +3454,148 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnImportarXML_Click(object sender, EventArgs e)
         {
+            string rutaCompleta = "";
+
             try
             {
-                //Boolean fileOK = false;
+                Boolean fileOK = false;
+                String path = Server.MapPath("../../ImportarPedidosXML/");
 
-                //if (FileUpload1.HasFile)
-                //{
-                //    String fileExtension =
-                //        System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+                if (FileUpload1.HasFile)
+                {
+                    //LEO Y VERFICO SI SE ELIGIO UN ARCHIVO Y SI ES DEL TIPO REQUERIDO
+                    String fileExtension = System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
 
-                //    String[] allowedExtensions = { ".xml" };
+                    String[] allowedExtensions = { ".txt" };
 
-                //    for (int i = 0; i < allowedExtensions.Length; i++)
-                //    {
-                //        if (fileExtension == allowedExtensions[i])
-                //        {
-                //            fileOK = true;
-                //        }
-                //    }
-                //}
-                //if (fileOK)
-                //{
-                //    XmlTextReader sr = new XmlTextReader(FileUpload1.FileContent);
-                //    Configuracion config = new Configuracion();
-                //    string ultimaEtiqueta = "";
-                //    int comienzoArticulos = 0;
-                //    int contador = 0;
-                //    string codigoXLS = "";
-                //    decimal cantidadXLS;
-                //    decimal precioXLS;
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+                if (fileOK)
+                {
+                    //VARIABLES
+                    int importoBien = 0;
+                    int contador = 0;
+                    DateTime fechaEntregaXML;
+                    string codigo = null;
+                    decimal cantidad = 0;
+                    decimal precio = 0; //POR AHORA NO LO USO, HASTA QUE LO PIDAN, SOLO USO EL PRECIO GUARDADO EN EL SISTEMA NUESTRO
+                    string numeroPedidoClienteXML;
+                    string idEspecificadorXML = "";
+                    string nombreProfesionalXML = "";
+                    string color = "";
 
-                //    while (sr.Read())
-                //    {
-                //        if(sr.NodeType == XmlNodeType.Element)
-                //        {
-                //            sr.
-                //            this.AgregarItemImportadoAPedido();
-                //        }
-                //    }
+                    //CHEQUEO SI EXISTE EL DIRECTORIO O NO
+                    if (!Directory.Exists(path))
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "No existe directorio. " + path + ". Lo creo");
 
-                //    this.AgregarItemImportadoAPedido(item.Codigo, Convert.ToDecimal(item.Cantidad), item.Precio);
-                //    //while (sr.Read() != null)
-                //    //{
-                //    //    if (comienzoArticulos > 0)
-                //    //    {
-                //    //        string[] datos = linea.Split(',');//obtengo datos del registro
-                //    //        if (config.separadorListas == "0")// punto y coma
-                //    //        {
-                //    //            datos = linea.Split(',');
-                //    //        }
+                        Directory.CreateDirectory(path);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "Info", "Directorio creado");
+                    }
 
-                //    //        if (datos.Count() > 3)
-                //    //        {
-                //    //            if (!String.IsNullOrEmpty(datos[4]))
-                //    //            {
-                //    //                decimal d;//para verificar que sea decimal
-                //    //                if (Decimal.TryParse(datos[4], out d))
-                //    //                {
-                //    //                    if (Convert.ToDecimal(datos[4]) > 0)
-                //    //                    {
-                //    //                        int i = this.AgregarItemImportadoAPedidoConRenglon(datos[0], Convert.ToInt16(datos[1]), Convert.ToDecimal(datos[2]), datos[3], Convert.ToDecimal(datos[4]), Convert.ToDecimal(datos[5]));
-                //    //                        if (i < 0)
-                //    //                        {
-                //    //                            contador++;
-                //    //                            //Session.Add("Pedido", null);
-                //    //                            this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
-                //    //                            this.phDatosEntrega.Visible = true;
-                //    //                            this.CheckBox1.Checked = true;
-                //    //                            //return;
-                //    //                        }
-                //    //                    }
-                //    //                    else
-                //    //                    {
-                //    //                        contador++;
-                //    //                        //Session.Add("Pedido", null);
-                //    //                        this.txtComentarios.Text += "\n Codigo: " + datos[0] + " con cantidad negativa o cero.";
-                //    //                        this.phDatosEntrega.Visible = true;
-                //    //                        this.CheckBox1.Checked = true;
-                //    //                    }
-                //    //                }
-                //    //                else
-                //    //                {
-                //    //                    contador++;
-                //    //                    //Session.Add("Pedido", null);
-                //    //                    this.txtComentarios.Text += "\n Codigo: " + datos[0] + " no encontrado.";
-                //    //                    this.phDatosEntrega.Visible = true;
-                //    //                    this.CheckBox1.Checked = true;
-                //    //                }
-                //    //            }
-                //    //        }
-                //    //    }
-                //    //    else
-                //    //    {
-                //    //        string[] datos = linea.Split(',');//obtengo datos del registro
-                //    //        foreach (string col in datos)
-                //    //        {
-                //    //            if (col.Contains("*BOF*"))//si encuentro la marca de inicio
-                //    //            {
-                //    //                comienzoArticulos = 1;//en la linea que sigue empiezan los articulos
-                //    //            }
-                //    //        }
-                //    //    }
-                //    //}
+                    //GUARDO EL ARCHIVO COMO .xml
+                    string rutaTXT = FileUpload1.FileName.Replace(".txt", ".xml");
 
-                //    this.cargarItems();
-                //    this.actualizarTotales();
+                    //SUBO EL ARCHIVO
+                    rutaCompleta = path + rutaTXT;
+                    FileUpload1.PostedFile.SaveAs(rutaCompleta);
 
-                //    if (contador > 0)
-                //    {
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudieron importar " + contador + " codigo(s). Revise las observaciones del pedido."));
-                //        this.txtComentarios.Focus();
-                //    }
-                //    else
-                //    {
-                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito.", ""));
-                //    }
-                //}
-                //else
-                //{
-                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo .csv"));
-                //}
+                    //SETEO EL encoding a UTF-8 porque sino no puedo cargarlo, ya que lo cargan como UTF-16
+                    Encoding utf8 = new UTF8Encoding(false);
+                    Encoding ansi = Encoding.GetEncoding(1252);
+
+                    string xml = File.ReadAllText(rutaCompleta, ansi);
+
+                    XDocument xmlGuardar = XDocument.Parse(xml);
+
+                    //SOBREESCRIBO EL ARCHIVO CON UTF-8
+                    File.WriteAllText(
+                        rutaCompleta,
+                        @"<?xml version=""1.0"" encoding=""utf-8""?>" + xmlGuardar.ToString(),
+                       utf8
+                    );
+
+                    //LO BUSCO DE VUELTA PERO AHORA ESTA COMO .xml CON EL ENCODING QUE NECESITO
+                    var xmlDoc = XDocument.Load(@rutaCompleta);
+
+                    //COMIENZO A LEER ATRIBUTOS PARA CARGAR LOS ITEMS
+
+                    var fecha = from fec in xmlDoc.Descendants("SALESORDER") select fec;
+
+                    foreach (XElement u in fecha.Elements("SALESTABLE"))
+                    {
+                        //FECHA DE ENTREGA DEL ARCHIVO
+                        if ((fechaEntregaXML = Convert.ToDateTime((u.Element("DELIVERYDATE").Value), new CultureInfo("es-AR"))) == null)
+                            txtFechaEntrega.Text = DateTime.Today.ToString("dd/MM/yyyy");
+
+                        //NUMERO DE PEDIDO DEL CLIENTE EXTRAIDO DEL ARCHIVO
+
+                        numeroPedidoClienteXML = u.Element("CUSTPROJREF").Value;
+                        idEspecificadorXML = u.Element("IDESPECIFICADOR").Value;       //ID EXTRAIDO DEL ARCHIVO
+                        nombreProfesionalXML = u.Element("NOMBREPROFESIONAL").Value;  //NOMBRE EXTRAIDO DEL ARCHIVO
+
+                        //CARGO LOS DETALLES EN EL OBSERVACIONES (TXTCOMENTARIOS)
+                        txtComentarios.Text = "PEDIDO HUNTER DOUGLAS:  " + numeroPedidoClienteXML + " \n" +
+                            "DNI ARQUITECTO : " + idEspecificadorXML + " \n" +
+                            "NOMBRE ARQUITECTO: " + nombreProfesionalXML + " \n";
+                    }
+
+                    var numeroPedido = from num in xmlDoc.Descendants("SALESORDER") select num;
+
+                    foreach (XElement u in numeroPedido.Elements("ITEMS"))
+                    {
+                        foreach (XElement x in u.Elements("ITEM"))
+                        {
+                            
+                            codigo = x.Element("INVENTID").Value.ToString();
+                            cantidad = Convert.ToDecimal(x.Element("QTY").Value);
+                            color = x.Element("COLOR").Value.ToString();
+                            importoBien = AgregarItemImportadoAPedidoXML(codigo, cantidad, 0, color);
+                            if (importoBien < 0)
+                            {
+                                this.txtComentarios.Text += "\n Codigo: " + codigo + " no encontrado.";
+                            }
+                            else
+                            {
+                                contador++;
+                            }
+                        }
+                    }
+
+                    //CARGO LOS ITEMS A LA PANTALLA
+                    this.cargarItems();
+                    this.actualizarTotales();
+
+                    //MANDO MENSAJE DE ESTADO DE LA IMPORTACION
+                    if (contador > 0)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron " + contador + " items. Revise la casilla Observaciones.", ""));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado. Se importaron " + contador + " items. Revise la casilla Observaciones.", ""));
+                    }
+
+                    //BORRO EL ARCHIVO QUE GUARDE
+                    File.Delete(rutaCompleta);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar un archivo de tipo '.txt'. "));
+                }
             }
-            catch
+            catch (Exception ex)
             {
-
+                //BORRO EL ARCHIVO QUE GUARDE PORQUE HUBO UN ERROR
+                File.Delete(rutaCompleta);
+                Log.EscribirSQL(1, "ERROR", "Error importando pedidos desde archivo. Ubicacion: ABMPedidos.aspx / Metodo: btnImportarXML_Click " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("CATH: Error importando pedidos desde archivo."));
             }
         }
     }

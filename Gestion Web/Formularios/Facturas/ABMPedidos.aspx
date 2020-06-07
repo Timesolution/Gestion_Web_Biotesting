@@ -513,12 +513,14 @@
         </div>
         <%--FIN MODAL APLICAR DESCUENTO--%> 
 
+        <%-- MODAL IMPORTACION --%>
         <div id="modalImportar" class="modal fade" tabindex="-1" role="dialog">
+            <%--<asp:UpdatePanel ID="updatePanel6" runat="server">
+                            <ContentTemplate>--%>
             <div class="modal-dialog">
                 <div class="modal-content">
-
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
                         <h4 class="modal-title">Importar Pedido</h4>
                     </div>
                     <div class="modal-body">
@@ -530,6 +532,7 @@
                                         <div class="col-md-6">
                                             <asp:FileUpload ID="FileUpload1" runat="server" />
                                         </div>
+                                        
                                         <%--<div class="col-md-2">
                                             <asp:RegularExpressionValidator ID="uplValidator" runat="server" ControlToValidate="FileUpload1" ValidationGroup="ImportarGroup" ForeColor="Red" ErrorMessage="* .csv" 
                                             ValidationExpression="(.+\.([Cc][Ss][Vv]))" ></asp:RegularExpressionValidator>
@@ -543,15 +546,19 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button ID="btnImportarXML" runat="server" Text="Importar .xml" Visible="false" ToolTip="Importar con otro modelo de excel" class="btn btn-info" OnClick="btnImportarXML_Click" ValidationGroup="ImportarGroup" />
-                        <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
-                        <asp:Button ID="btnImportarPedidoExcel" runat="server" Text="Importar Excel" class="btn btn-success" OnClick="btnImportarPedidoExcel_Click" ValidationGroup="ImportarGroup" />
+                        
+                                            <asp:Button ID="btnImportarXML" runat="server" Text="Importar .xml" ToolTip="Importar con otro modelo de excel" class="btn btn-info" OnClick="btnImportarXML_Click" ValidationGroup="ImportarGroup" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false"  />
+                                        
+                                <asp:Button ID="btnImportarPedido" runat="server" Text="Importar .csv" class="btn btn-success" OnClick="btnImportarPedido_Click" ValidationGroup="ImportarGroup" />
+                                <asp:Button ID="btnImportarPedidoExcel" runat="server" Text="Importar Excel" class="btn btn-success" OnClick="btnImportarPedidoExcel_Click" ValidationGroup="ImportarGroup" />
                     </div>
-
                 </div>
             </div>
+                            <%--</ContentTemplate>
+                        </asp:UpdatePanel>--%>
         </div>
         <%--Fin modalImportar--%>
+
         <div id="modalVendedor" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
