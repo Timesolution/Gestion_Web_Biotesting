@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
@@ -36,8 +37,10 @@ namespace Gestion_Web
                     this.cargarSucursal();
                     this.cargarMemo();
                     this.obtenerAlertaPedidos();
+                    this.cargarVencimientos();
+                    this.cargarVencidos();
 
-                    string mascotas =System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Mascotas");
+                    string mascotas = System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Mascotas");
                     if (mascotas == "1")
                     {
                         this.panelMascotas.Visible = true;
@@ -48,7 +51,7 @@ namespace Gestion_Web
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeDenegado());
                 }
-                
+
             }
             catch
             {
@@ -133,6 +136,161 @@ namespace Gestion_Web
         //    }
         //}
 
+
+
+        //private void cargarVencidosPH(Clientes_Eventos crm, string nombreCliente, int tipo)
+        //{
+        //    try
+        //    {
+
+
+        //        TableRow tr = new TableRow();
+
+        //        TableCell celVencimiento = new TableCell();
+        //        celVencimiento.BorderStyle = BorderStyle.Dotted;
+
+        //        Label vencimiento = new Label();
+        //        vencimiento.Text += @"<li style='border-bottom: 1px dotted #CCC;width:100%;'>";
+        //        vencimiento.Text += @"<div class='news-item-detail'>";
+        //        vencimiento.Text += @"<a href='Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&fechaVencimientoDesde=01/01/2000&fechaVencimientoHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&cl=" + crm.Cliente + "&estado=" + crm.Estado + "&fpf=1&fpfv=0&us=" + crm.Usuario + "' class='news-item-title'>" + nombreCliente + "</a>";
+
+        //        vencimiento.Text += @"<p class='news-item-preview'>" + this.generarDetalle(crm) + "</p>";
+        //        vencimiento.Text += @"</div>";
+        //        vencimiento.Text += @"<div class='news-item-date'>";
+        //        vencimiento.Text += @"<span class='news-item-day'>" + crm.Fecha.Value.Day + "</span>";
+        //        vencimiento.Text += @"<span class='news-item-month'>" + crm.Fecha.Value.ToString("MMMM yyyy", new CultureInfo("es-AR")) + "</span>";
+        //        vencimiento.Text += @"</div>";
+        //        vencimiento.Text += @"</li>";
+        //        celVencimiento.Controls.Add(vencimiento);
+
+        //        tr.Controls.Add(celVencimiento);
+        //        this.phSeguimientoVencidos.Controls.Add(tr);
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
+
+        private void cargarVencidos()
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                int idUsuario = Convert.ToInt32(Session["Login_IdUser"]);
+
+                List<Clientes_Eventos> listSeguimiento = controladorClienteEntity.obtenerVencidosTOP(idUsuario);
+                if (listSeguimiento != null)
+                {
+                    this.phSeguimientoVencidos.Controls.Clear();
+                    foreach (var list in listSeguimiento)
+                    {
+                        var cliente = controladorClienteEntity.ObtenerClienteId((int)list.Cliente);
+                        this.cargarVencimientosPH(list, cliente.razonSocial, 1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void cargarVencimientos()
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                int idUsuario = Convert.ToInt32(Session["Login_IdUser"]);
+
+                List<Clientes_Eventos> listSeguimiento = controladorClienteEntity.obtenerVencimientosProximosTOP(idUsuario);
+                if (listSeguimiento != null)
+                {
+                    this.phSeguimiento.Controls.Clear();
+                    foreach (var list in listSeguimiento)
+                    {
+                        var cliente = controladorClienteEntity.ObtenerClienteId((int)list.Cliente);
+                        this.cargarVencimientosPH(list, cliente.razonSocial, 2);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void cargarVencimientosPH(Clientes_Eventos crm, string nombreCliente, int tipo)
+        {
+            try
+            {
+
+
+                TableRow tr = new TableRow();
+
+                TableCell celVencimiento = new TableCell();
+                celVencimiento.BorderStyle = BorderStyle.Dotted;
+
+                Label vencimiento = new Label();
+                vencimiento.Text += @"<li style='border-bottom: 1px dotted #CCC;width:100%;'>";
+                vencimiento.Text += @"<div class='news-item-detail'>";
+                vencimiento.Text += @"<a href='Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&fechaVencimientoDesde=01/01/2000&fechaVencimientoHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&cl=" + crm.Cliente + "&estado=" + crm.Estado + "&fpf=1&fpfv=0&us=" + crm.Usuario + "' class='news-item-title'>" + nombreCliente + "</a>";
+
+                vencimiento.Text += @"<p class='news-item-preview'>" + this.generarDetalle(crm) + "</p>";
+                vencimiento.Text += @"</div>";
+                vencimiento.Text += @"<div class='news-item-date'>";
+                vencimiento.Text += @"<span class='news-item-day'>" + crm.Fecha.Value.Day + "</span>";
+                vencimiento.Text += @"<span class='news-item-month'>" + crm.Fecha.Value.ToString("MMMM yyyy", new CultureInfo("es-AR")) + "</span>";
+                vencimiento.Text += @"</div>";
+                vencimiento.Text += @"</li>";
+                celVencimiento.Controls.Add(vencimiento);
+
+                tr.Controls.Add(celVencimiento);
+
+                if (tipo == 1)
+                {
+                    this.phSeguimientoVencidos.Controls.Add(tr);
+                }
+
+                if (tipo == 2)
+                {
+                    this.phSeguimiento.Controls.Add(tr);
+
+                }
+                
+
+            }
+            catch
+            {
+
+            }
+        }
+
+        private string generarDetalle(Clientes_Eventos crm)
+        {
+            try
+            {
+                string detalle = "";
+                TimeSpan ts = crm.Vencimiento.Value - DateTime.Today;
+                {
+                    if (ts.Days >= 0)
+                    {
+                        detalle = "Quedan " + ts.Days + " dias de " + crm.Tarea;
+                    }
+                    else
+                    {
+                        detalle = "*Pendiente* " + crm.Tarea + " hace " + Math.Abs(ts.Days) + " dias.";
+                    }
+
+                    return detalle;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private void cargarSucursal()
         {
             try
@@ -186,7 +344,7 @@ namespace Gestion_Web
 
                 celPuntoVta.VerticalAlign = VerticalAlign.Middle;
                 celPuntoVta.Controls.Add(btnPuntoVenta);
-                tr.Cells.Add(celPuntoVta);                
+                tr.Cells.Add(celPuntoVta);
 
                 phSucursales.Controls.Add(tr);
 
@@ -217,7 +375,7 @@ namespace Gestion_Web
             }
         }
 
-       
+
         //private void editarMemo(object sender, EventArgs e)
         //{
         //    try
@@ -282,7 +440,7 @@ namespace Gestion_Web
             }
             catch
             {
- 
+
             }
         }
 
@@ -339,7 +497,7 @@ namespace Gestion_Web
         {
             try
             {
-                Response.Redirect("/Formularios/Facturas/PedidosP.aspx?&Fechadesde=" + DateTime.Today.AddDays(-7).ToString("dd/MM/yyyy") + "&FechaHasta=" + DateTime.Today.ToString("dd/MM/yyyy")+"&estado=5&tf=1");
+                Response.Redirect("/Formularios/Facturas/PedidosP.aspx?&Fechadesde=" + DateTime.Today.AddDays(-7).ToString("dd/MM/yyyy") + "&FechaHasta=" + DateTime.Today.ToString("dd/MM/yyyy") + "&estado=5&tf=1");
             }
             catch
             {
@@ -363,7 +521,7 @@ namespace Gestion_Web
         }
         protected void lbtnMascotasLink_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 this.redirigirMascotas(1);
             }
@@ -409,6 +567,6 @@ namespace Gestion_Web
             }
         }
 
-        
+
     }
 }

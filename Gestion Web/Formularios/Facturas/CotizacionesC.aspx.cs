@@ -81,8 +81,8 @@ namespace Gestion_Web.Formularios.Facturas
                     buscarPorObservacion();
                 }
 
-                if (idCliente <= 0)
-                    lbtnGenPedido.Visible = false;
+                //if (idCliente <= 0)
+                //    lbtnGenPedido.Visible = false;
 
             }
             catch (Exception ex)
