@@ -134,6 +134,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue = configuracion.ColumnaUnidadMedidaEnTrazabilidad;
                 this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
                 this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue = configuracion.ModificarCantidadEnVentaEntreSucursales;
+                this.txtObeservacionesFC.Text = configuracion.ObservacionesFC;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1339,6 +1340,29 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al seleccionar Proveedor predeterminado estetica " + ex.Message);
+            }
+        }
+
+        protected void lbtnObeservacionesFC_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.ObservacionesFC = this.txtObeservacionesFC.Text;
+
+                int i = configuracion.ActualizarObservacionesFC();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de obervaciones predeterminado en FC.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Observacion Predeterminada en FC guardada. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la observacion FC predeterminada \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: ObservacionesFC " + ex.Message);
             }
         }
     }
