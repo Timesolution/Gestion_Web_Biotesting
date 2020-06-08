@@ -1428,8 +1428,18 @@ namespace Gestion_Web.Formularios.Clientes
 
                     if (!String.IsNullOrEmpty(mail.FirstOrDefault().Celular))
                     {
-                        this.txtCodArea.Text = mail.FirstOrDefault().Celular.Split('-')[0];
-                        this.txtCelularSMS.Text = mail.FirstOrDefault().Celular.Split('-')[1];
+                        if(mail.FirstOrDefault().Celular.Contains("-"))
+                        {
+                            this.txtCodArea.Text = mail.FirstOrDefault().Celular.Split('-')[0];
+                            this.txtCelularSMS.Text = mail.FirstOrDefault().Celular.Split('-')[1];
+                        }
+                        else
+                        {
+                            
+                            this.txtCodArea.Text = mail.FirstOrDefault().Celular.Substring(0, 2);
+                            this.txtCelularSMS.Text = mail.FirstOrDefault().Celular.Remove(0, 2);
+                        }
+
                     }
                     if (mail.FirstOrDefault().FechaNacimiento != null)
                         this.txtFechaNacimientoSMS.Text = mail.FirstOrDefault().FechaNacimiento.Value.ToString("dd/MM/yyyy");
