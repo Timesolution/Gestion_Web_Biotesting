@@ -1183,9 +1183,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.cliente != null)
                 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> develop
+=======
+>>>>>>> 7694a4bff486ec9a430e47211f1109fd56ca7d0f
                     CargarPacienteEspecifico(Convert.ToInt32(idCliente));
 
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
