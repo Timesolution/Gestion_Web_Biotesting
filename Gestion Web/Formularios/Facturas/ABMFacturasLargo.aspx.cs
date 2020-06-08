@@ -322,6 +322,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.verificarPermisoVentaCtaCte();
                 //verifico si hace vta de combustible para mostrar o no el panel(tab)
                 this.verificarVtaCombustible();
+                //Verifico si tiene una obsevacion en FC predeterminada para cargar en los comentarios
+                this.verificarObservacionesFC();
 
                 //verifico si es postback y tengo que llenar la tabla de las trazas para poder obtener el estado de los chkbox
                 if (this.lblMovTraza.Text != "")
@@ -956,6 +958,26 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Error verificando configuracion editar descripcion.  " + ex.Message + "\", {type: \"error\"});", true);
             }
         }
+
+        /// <summary>
+        /// Meotodo que verifica si tiene observaciones en FC de la tabla configuracion
+        /// </summary>
+        public void verificarObservacionesFC()
+        {
+            try
+            {
+                Configuracion c = new Configuracion();
+                if (!string.IsNullOrEmpty(c.ObservacionesFC))
+                {
+                    this.txtComentarios.Text = c.ObservacionesFC;
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Error verificando configuracion observaciones FC.  " + ex.Message + "\", {type: \"error\"});", true);
+            }
+        }
+
         public void verficarConfiguracionEgresoStock()
         {
             try

@@ -553,6 +553,18 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Observaciones en FC</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtObeservacionesFC" Style="height: 100px; width: 500px" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnObeservacionesFC" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnObeservacionesFC_Click"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Proveedor Predeterminado Importacion</label>
                                             <div class="col-md-4">
                                                 <asp:DropDownList ID="DropListProveedores" runat="server" class="form-control"></asp:DropDownList>
