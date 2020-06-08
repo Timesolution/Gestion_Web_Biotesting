@@ -114,6 +114,15 @@ namespace Gestion_Web
         protected global::System.Web.UI.WebControls.PlaceHolder phSeguimiento;
 
         /// <summary>
+        /// phSeguimientoVencidos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phSeguimientoVencidos;
+
+        /// <summary>
         /// phClientes control.
         /// </summary>
         /// <remarks>

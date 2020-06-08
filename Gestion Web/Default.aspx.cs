@@ -38,6 +38,7 @@ namespace Gestion_Web
                     this.cargarMemo();
                     this.obtenerAlertaPedidos();
                     this.cargarVencimientos();
+                    this.cargarVencidos();
 
                     string mascotas = System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Mascotas");
                     if (mascotas == "1")
@@ -135,6 +136,66 @@ namespace Gestion_Web
         //    }
         //}
 
+
+
+        //private void cargarVencidosPH(Clientes_Eventos crm, string nombreCliente, int tipo)
+        //{
+        //    try
+        //    {
+
+
+        //        TableRow tr = new TableRow();
+
+        //        TableCell celVencimiento = new TableCell();
+        //        celVencimiento.BorderStyle = BorderStyle.Dotted;
+
+        //        Label vencimiento = new Label();
+        //        vencimiento.Text += @"<li style='border-bottom: 1px dotted #CCC;width:100%;'>";
+        //        vencimiento.Text += @"<div class='news-item-detail'>";
+        //        vencimiento.Text += @"<a href='Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&fechaVencimientoDesde=01/01/2000&fechaVencimientoHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&cl=" + crm.Cliente + "&estado=" + crm.Estado + "&fpf=1&fpfv=0&us=" + crm.Usuario + "' class='news-item-title'>" + nombreCliente + "</a>";
+
+        //        vencimiento.Text += @"<p class='news-item-preview'>" + this.generarDetalle(crm) + "</p>";
+        //        vencimiento.Text += @"</div>";
+        //        vencimiento.Text += @"<div class='news-item-date'>";
+        //        vencimiento.Text += @"<span class='news-item-day'>" + crm.Fecha.Value.Day + "</span>";
+        //        vencimiento.Text += @"<span class='news-item-month'>" + crm.Fecha.Value.ToString("MMMM yyyy", new CultureInfo("es-AR")) + "</span>";
+        //        vencimiento.Text += @"</div>";
+        //        vencimiento.Text += @"</li>";
+        //        celVencimiento.Controls.Add(vencimiento);
+
+        //        tr.Controls.Add(celVencimiento);
+        //        this.phSeguimientoVencidos.Controls.Add(tr);
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
+
+        private void cargarVencidos()
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                int idUsuario = Convert.ToInt32(Session["Login_IdUser"]);
+
+                List<Clientes_Eventos> listSeguimiento = controladorClienteEntity.obtenerVencidosTOP(idUsuario);
+                if (listSeguimiento != null)
+                {
+                    this.phSeguimientoVencidos.Controls.Clear();
+                    foreach (var list in listSeguimiento)
+                    {
+                        var cliente = controladorClienteEntity.ObtenerClienteId((int)list.Cliente);
+                        this.cargarVencimientosPH(list, cliente.razonSocial, 1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private void cargarVencimientos()
         {
             try
@@ -149,7 +210,7 @@ namespace Gestion_Web
                     foreach (var list in listSeguimiento)
                     {
                         var cliente = controladorClienteEntity.ObtenerClienteId((int)list.Cliente);
-                        this.cargarVencimientosPH(list, cliente.razonSocial);
+                        this.cargarVencimientosPH(list, cliente.razonSocial, 2);
                     }
                 }
             }
@@ -159,7 +220,7 @@ namespace Gestion_Web
             }
         }
 
-        private void cargarVencimientosPH(Clientes_Eventos crm, string nombreCliente)
+        private void cargarVencimientosPH(Clientes_Eventos crm, string nombreCliente, int tipo)
         {
             try
             {
@@ -185,7 +246,19 @@ namespace Gestion_Web
                 celVencimiento.Controls.Add(vencimiento);
 
                 tr.Controls.Add(celVencimiento);
-                this.phSeguimiento.Controls.Add(tr);
+
+                if (tipo == 1)
+                {
+                    this.phSeguimientoVencidos.Controls.Add(tr);
+                }
+
+                if (tipo == 2)
+                {
+                    this.phSeguimiento.Controls.Add(tr);
+
+                }
+                
+
             }
             catch
             {
@@ -198,7 +271,7 @@ namespace Gestion_Web
             try
             {
                 string detalle = "";
-                TimeSpan ts = crm.Fecha.Value - DateTime.Today;
+                TimeSpan ts = crm.Vencimiento.Value - DateTime.Today;
                 {
                     if (ts.Days >= 0)
                     {
@@ -206,7 +279,7 @@ namespace Gestion_Web
                     }
                     else
                     {
-                        detalle = "*FINALIZO* " + crm.Tarea + " hace " + Math.Abs(ts.Days) + " dias.";
+                        detalle = "*Pendiente* " + crm.Tarea + " hace " + Math.Abs(ts.Days) + " dias.";
                     }
 
                     return detalle;
