@@ -798,7 +798,6 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     CargarPacienteEspecifico(Convert.ToInt32(idCliente));
                 }
-
             }
             catch (Exception ex)
             {

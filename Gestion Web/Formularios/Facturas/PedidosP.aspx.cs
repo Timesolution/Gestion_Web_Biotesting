@@ -151,10 +151,10 @@ namespace Gestion_Web.Formularios.Facturas
                         this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
                     }                    
 
-                    if (idCliente > 0)
-                    {
-                        this.lbtnFacturar.Visible = true;
-                    }
+                    //if (idCliente > 0)
+                    //{
+                    //    this.lbtnFacturar.Visible = true;
+                    //}
                 }
                 //busca por pedido
                 if (accion == 1)
