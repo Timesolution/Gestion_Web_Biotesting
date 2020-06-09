@@ -340,7 +340,15 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtComentarios.Text = p.comentario;
                 this.cargarItems();
                 this.actualizarTotales();
-                this.labelNroPedido.Text = "Pedido N° " + p.numero;
+                if(p.tipo.tipo == "Cotizacion") //cotizacion
+                {
+                    this.labelNroPedido.Text = "Cotizacion N° " + p.numero;
+                }
+                else if(p.tipo.tipo == "Pedido")
+                {
+                    this.labelNroPedido.Text = "Pedido N° " + p.numero;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -2119,8 +2127,18 @@ namespace Gestion_Web.Formularios.Facturas
                         p.senia = this.txtSenia.Text;
                         p.estado.id = 1;//por defecto lo pongo en estado pendiente.
 
-                        tp = controlador.obtenerTipoDoc("Pedido");
-                        p.tipo = tp;
+                        if(this.labelNroPedido.Text.ToLower().Contains("cotizacion"))
+                        {
+                            tp = controlador.obtenerTipoDoc("Cotizacion");
+                            p.tipo = tp;
+                            this.cotizacion = 1;
+                        }
+                        else
+                        {
+                            tp = controlador.obtenerTipoDoc("Pedido");
+                            p.tipo = tp;
+                        }
+                        
 
                         string perfil = Session["Login_NombrePerfil"] as string;
                         if (perfil == "Vendedor")
@@ -2158,9 +2176,17 @@ namespace Gestion_Web.Formularios.Facturas
                             this.btnAgregar.Visible = false;
                             this.btnNuevo.Visible = true;
 
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico pedido  " + this.labelNroPedido.Text);
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
-                            //Response.Redirect("ABMPedidos.aspx");
+                            if(this.cotizacion == 1)
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico pedido  " + this.labelNroPedido.Text);
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&co=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
+                            }
+                            else
+                            {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico pedido  " + this.labelNroPedido.Text);
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
+                                //Response.Redirect("ABMPedidos.aspx");
+                            }
                         }
                         else
                         {
