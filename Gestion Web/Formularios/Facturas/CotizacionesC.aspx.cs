@@ -459,7 +459,7 @@ namespace Gestion_Web.Formularios.Facturas
                 lDetail.Text += "</a>";
                 //if (this.verificarPermisoEditar() > 0)
                 //{
-                //    celAccion.Controls.Add(lDetail);
+                    celAccion.Controls.Add(lDetail);
                 //}
 
                 if (estado.id != 3)
@@ -574,7 +574,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //if (this.verificarPermisoEditar() > 0)
                 //{
-                //    celAccion.Controls.Add(lDetail);
+                    celAccion.Controls.Add(lDetail);
                 //}
                 tr.Cells.Add(celAccion);
 
