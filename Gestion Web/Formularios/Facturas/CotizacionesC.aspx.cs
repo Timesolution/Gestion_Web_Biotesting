@@ -17,6 +17,8 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorPedido controlador = new ControladorPedido();
         controladorUsuario contUser = new controladorUsuario();
         ControladorPedidoEntity contPedEntity = new ControladorPedidoEntity();
+        ControladorPedido controladorPedido = new ControladorPedido();
+
         Mensajes m = new Mensajes();
         private int suc;
         private string fechaD;
@@ -459,7 +461,7 @@ namespace Gestion_Web.Formularios.Facturas
                 lDetail.Text += "</a>";
                 //if (this.verificarPermisoEditar() > 0)
                 //{
-                    celAccion.Controls.Add(lDetail);
+                celAccion.Controls.Add(lDetail);
                 //}
 
                 if (estado.id != 3)
@@ -468,12 +470,12 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                        TableCell celEstado = new TableCell();
-                        celEstado.Text = "*Anulada*";
-                        celEstado.VerticalAlign = VerticalAlign.Middle;
-                        celEstado.HorizontalAlign = HorizontalAlign.Center;
-                        tr.Cells.Add(celEstado);
-                        tr.ForeColor = System.Drawing.Color.Red;
+                    TableCell celEstado = new TableCell();
+                    celEstado.Text = "*Anulada*";
+                    celEstado.VerticalAlign = VerticalAlign.Middle;
+                    celEstado.HorizontalAlign = HorizontalAlign.Center;
+                    tr.Cells.Add(celEstado);
+                    tr.ForeColor = System.Drawing.Color.Red;
                 }
                 phCotizaciones.Controls.Add(tr);
 
@@ -574,7 +576,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //if (this.verificarPermisoEditar() > 0)
                 //{
-                    celAccion.Controls.Add(lDetail);
+                celAccion.Controls.Add(lDetail);
                 //}
                 tr.Cells.Add(celAccion);
 
@@ -680,29 +682,82 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void lbtnGenPedido_Click(object sender, EventArgs e)
         {
+            int x = 0;
             try
             {
                 try
                 {
+                    int idC = 0;
                     string idtildado = "";
                     foreach (Control C in phCotizaciones.Controls)
                     {
                         TableRow tr = C as TableRow;
                         CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+
                         if (ch.Checked == true)
                         {
+                            x++;
                             idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
                         }
+
                     }
-                    if (!String.IsNullOrEmpty(idtildado))
+                    if (x != 0)
                     {
-                        Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado + "&cliente=" + idCliente);
+                        if (!String.IsNullOrEmpty(idtildado))
+                        {
+                            //if(x > 1)
+                            //{
+                                int aux = 0;
+                                int contadorRepetido = 0;
+
+                                string[] j = idtildado.Split(';');
+
+                                for (int i = 0; i < x; i++)
+                                {
+                                    
+                                    var cotizacion2 = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));
+
+                                    if(i == 0)
+                                    {
+                                        idC = cotizacion2.cliente.id; //FIJO
+                                    }
+                                    aux = cotizacion2.cliente.id; //CAMBIA
+
+                                    if (idC != aux && i != 0)
+                                    {
+                                        contadorRepetido++;
+                                    }
+
+                                }
+
+                                if(contadorRepetido == 0)
+                                {
+                                    Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado + "&cliente=" + aux, false);
+                                }
+                                else
+                                {
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar cotizaciones que sean del mismo cliente."));
+                                    //var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j.Replace(";","").Trim()));
+                                    //var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[0]));
+                                    //idC = cotizacion.cliente.id;
+                                }
+                                
+                            //}
+                            //else
+                            //{
+
+                            //}
+                            
+                        }
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un cotizacion"));
+                        }
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo debe seleccionar un cotizacion"));
                     }
-
                 }
                 catch (Exception ex)
                 {
