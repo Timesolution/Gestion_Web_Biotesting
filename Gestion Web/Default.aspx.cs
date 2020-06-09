@@ -39,6 +39,7 @@ namespace Gestion_Web
                     this.obtenerAlertaPedidos();
                     this.cargarVencimientos();
                     this.cargarVencidos();
+                    this.PopUpCRMPendiente();
 
                     string mascotas = System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Mascotas");
                     if (mascotas == "1")
@@ -172,6 +173,28 @@ namespace Gestion_Web
         //    }
         //}
 
+        public void PopUpCRMPendiente()
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                int idUsuario = Convert.ToInt32(Session["Login_IdUser"]);
+
+                List<Clientes_Eventos> listSeguimiento = controladorClienteEntity.obtenerVencimientosProximosTOP(idUsuario);
+                if (listSeguimiento != null && listSeguimiento.Count > 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "modalCRM();", true);
+
+                }
+
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private void cargarVencidos()
         {
             try
@@ -239,8 +262,8 @@ namespace Gestion_Web
                 vencimiento.Text += @"<p class='news-item-preview'>" + this.generarDetalle(crm) + "</p>";
                 vencimiento.Text += @"</div>";
                 vencimiento.Text += @"<div class='news-item-date'>";
-                vencimiento.Text += @"<span class='news-item-day'>" + crm.Fecha.Value.Day + "</span>";
-                vencimiento.Text += @"<span class='news-item-month'>" + crm.Fecha.Value.ToString("MMMM yyyy", new CultureInfo("es-AR")) + "</span>";
+                vencimiento.Text += @"<span class='news-item-day'>" + crm.Vencimiento.Value.Day + "</span>";
+                vencimiento.Text += @"<span class='news-item-month'>" + crm.Vencimiento.Value.ToString("MMMM yyyy", new CultureInfo("es-AR")) + "</span>";
                 vencimiento.Text += @"</div>";
                 vencimiento.Text += @"</li>";
                 celVencimiento.Controls.Add(vencimiento);
@@ -257,7 +280,7 @@ namespace Gestion_Web
                     this.phSeguimiento.Controls.Add(tr);
 
                 }
-                
+
 
             }
             catch

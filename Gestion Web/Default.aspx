@@ -208,52 +208,53 @@
 
 
                         <div class="widget stacked">
-                                <div class="widget-header" style="background: #c1f4de">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 92%">
-                                                <i class="icon-time"></i>
-                                                <h3>Prox. vencimientos CRM</h3>
-                                            </td>
-                                            <td style="width: 8%">
-                                                <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx" Style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas" >
-                                                    <i class='fa fa-arrow-right'></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
+                            <div class="widget-header" style="background: #c1f4de">
+                                <table>
+                                    <tr>
+                                        <td style="width: 92%">
+                                            <i class="icon-time"></i>
+                                            <h3>Prox. vencimientos CRM</h3>
+                                        </td>
+                                        <td style="width: 8%">
+                                            <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=01/01/2000&fechaVencimientoDesde=<%=DateTime.Now.ToString("dd/MM/yyyy") %>&fechaVencimientoHasta=<%=DateTime.Now.AddDays(7).ToString("dd/MM/yyyy") %>&cl=-1&estado=1&fpf=0&fpfv=1&us=-1" target="_blank" style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas">
+                                                <i class='fa fa-arrow-right'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
 
-                                </div>
-                                <div class="widget-content" style="padding-top: 1%;">
-                                    <ul class="news-items">
-                                        <asp:PlaceHolder ID="phSeguimiento" runat="server"></asp:PlaceHolder>
-                                    </ul>
-                                </div>
                             </div>
+                            <div class="widget-content" style="padding-top: 1%;">
+                                <ul class="news-items">
+                                    <asp:PlaceHolder ID="phSeguimiento" runat="server"></asp:PlaceHolder>
+                                </ul>
+                            </div>
+                        </div>
 
                         <div class="widget stacked">
-                                <div class="widget-header" style="background: #eb0062">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 92%">
-                                                <i class="icon-time"></i>
-                                                <h3>CRM vencidos</h3>
-                                            </td>
-                                            <td style="width: 8%">
-                                                <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx" Style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas" >
-                                                    <i class='fa fa-arrow-right'></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
+                            <div class="widget-header" style="background: #f2dede">
+                                <table>
+                                    <tr>
+                                        <td style="width: 92%">
+                                            <i class="icon-time"></i>
+                                            <h3>CRM vencidos</h3>
+                                        </td>
+                                        <td style="width: 8%">
+                                            
+                                            <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=<%=DateTime.Now.ToString("dd/MM/yyyy") %>&fechaVencimientoDesde=01/01/2000&fechaVencimientoHasta=<%=DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy") %>&cl=-1&estado=1&fpf=0&fpfv=1&us=-1" target="_blank" style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas">
+                                                <i class='fa fa-arrow-right'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
 
-                                </div>
-                                <div class="widget-content" style="padding-top: 1%;">
-                                    <ul class="news-items">
-                                        <asp:PlaceHolder ID="phSeguimientoVencidos" runat="server"></asp:PlaceHolder>
-                                    </ul>
-                                </div>
                             </div>
+                            <div class="widget-content" style="padding-top: 1%;">
+                                <ul class="news-items">
+                                    <asp:PlaceHolder ID="phSeguimientoVencidos" runat="server"></asp:PlaceHolder>
+                                </ul>
+                            </div>
+                        </div>
 
                     </div>
                     <!-- /span6 -->
@@ -368,8 +369,37 @@
 
         </div>
 
+        <div id="modalCRM" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">CRM</h4>
+                    </div>
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="lblMensaje" Text="TIENE TAREAS PENDIENTES EN EL CRM" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
 
+                            </div>
 
+                    </div>
+                    <div class="modal-footer" style="background: #f7f7f7">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Aceptar</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <div id="modalDenegado" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -428,6 +458,8 @@
 
         </script>
 
+
+
         <!-- Core Scripts - Include with every page -->
         <script src="../../Scripts/jquery-1.10.2.js"></script>
         <script src="../../Scripts/bootstrap.min.js"></script>
@@ -447,6 +479,12 @@
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
 
         <script src="../../Scripts/demo/notifications.js"></script>
+
+        <script type="text/javascript">
+            function modalCRM() {
+                $('#modalCRM').modal('show');
+            }
+        </script>
 
     </div>
 </asp:Content>
