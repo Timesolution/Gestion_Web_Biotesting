@@ -436,6 +436,7 @@
                                                 <a tabindex="" href="#">Ventas</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Reportes/ReportesArticulos.aspx">Articulos</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/PedidoDetallesF.aspx">Cotizaciones detalles</a></li>
                                                     <li><a href="/../../Formularios/Reportes/ReportesVentas.aspx">Ventas</a></li>
                                                     <li><a href="/../../Formularios/Reportes/VentasUnidadesF.aspx">Unidades</a></li>
                                                 </ul>

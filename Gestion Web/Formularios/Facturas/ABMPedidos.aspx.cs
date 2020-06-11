@@ -807,6 +807,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     CargarPacienteEspecifico(Convert.ToInt32(idCliente));
                 }
+
             }
             catch (Exception ex)
             {
@@ -1188,6 +1189,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (this.cliente != null)
                 {
+
                     CargarPacienteEspecifico(Convert.ToInt32(idCliente));
 
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
