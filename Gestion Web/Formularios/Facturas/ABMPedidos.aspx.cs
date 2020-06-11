@@ -339,6 +339,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = p.horaEntrega;
                 this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
                 this.txtComentarios.Text = p.comentario;
+                this.txtDescuento.Text = p.descuento.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 if(p.tipo.tipo == "Cotizacion") //cotizacion
@@ -1882,7 +1883,11 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     decimal iva = decimal.Round(this.Pedido.obtenerTotalIva(), 2);
-                    decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
+                    decimal descuento = 0;
+                    if (this.txtDescuento.Text != "")
+                        descuento = Convert.ToDecimal(this.txtDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                    else
+                        descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
                     this.Pedido.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                     this.Pedido.neto21 = iva - decimal.Round(descuento, 2);
                 }
@@ -1908,6 +1913,9 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtRetencion.Text = decimal.Round(this.Pedido.retencion, 2).ToString();
 
                 this.txtTotal.Text = decimal.Round(this.Pedido.total, 2).ToString();
+
+                if (!string.IsNullOrEmpty(this.txtDescuento.Text))
+                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
 
                 Pedido p = this.Pedido;
 
