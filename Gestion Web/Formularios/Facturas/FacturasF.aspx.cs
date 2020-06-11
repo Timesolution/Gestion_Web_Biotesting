@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
         ControladorFormasPago contFormPago = new ControladorFormasPago();
         controladorCompraEntity controladorCompraEntity = new controladorCompraEntity();
+        ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
         Mensajes m = new Mensajes();
         private int suc;
@@ -1656,6 +1657,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando factura por mail. " + ex.Message));
             }
         }
+
         protected void lbtnEnviar_Click(object sender, EventArgs e)
         {
             asignarMailsDeClienteAlTextBoxEnvioMail();
@@ -4147,6 +4149,115 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnImprimirVentasConSolicitudes_Click(object sender, EventArgs e)
         {
             this.PrintToPDF(14);
+        }
+
+        protected void btnSiEnviarMailPorCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int user = (int)Session["Login_IdUser"];
+
+                string idtildado = "";
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    int mailsEnviados = 0;
+                    int mailsNoEnviados = 0;
+                    string emailsNoEncontrados = "";
+                    string[] IDs = idtildado.Split(';');
+
+                    for (int i = 0; i < (IDs.Length - 1); i++)
+                    {
+                        Factura factura = this.controlador.obtenerFacturaId(Convert.ToInt32(IDs[i]));
+                        String path = Server.MapPath("../../Facturas/" + factura.empresa.id + "/" + "/fc-" + factura.numero + "_" + factura.id + ".pdf");
+
+                        if (factura != null)
+                        {
+                            var mail = this.controladorClienteEntity.obtenerClienteDatosByCliente(factura.cliente.id);
+
+                            if (mail != null && mail.Count > 0)
+                            {
+                                string destinatarios = mail.FirstOrDefault().Mail;
+                                if(!string.IsNullOrEmpty(destinatarios))
+                                {
+                                    int j = this.GenerarImpresionPDF(factura, path);
+                                    if (j > 0)
+                                    {
+                                        Attachment adjunto = new Attachment(path);
+
+                                        int ok = this.contFunciones.enviarMailFactura(adjunto, factura, destinatarios);
+                                        if (ok > 0)
+                                        {
+                                            mailsEnviados++;
+                                            adjunto.Dispose();
+                                            File.Delete(path);
+                                        }
+                                        else
+                                        {
+                                            mailsNoEnviados++;
+                                            Log.EscribirSQL(1, "ERROR", "Ubicacion: FacturasF.aspx. Metodo: btnSiEnviarMailPorCliente_Click. No se pudo enviar el mail, revisar funcion this.contFunciones.enviarMailFactura(adjunto, factura, destinatarios). Cliente ID: " + factura.cliente.id.ToString());
+                                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar factura por mail. "));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mailsNoEnviados++;
+                                        Log.EscribirSQL(1, "ERROR", "Ubicacion: FacturasF.aspx. Metodo: btnSiEnviarMailPorCliente_Click. No se pudo generar impresion factura a enviar.Cliente ID: " + factura.cliente.id.ToString());
+                                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar impresion factura a enviar. "));
+                                    }
+                                }
+                                else
+                                {
+                                    mailsNoEnviados++;
+                                    emailsNoEncontrados += factura.cliente.razonSocial + " | ";
+                                    Log.EscribirSQL(1, "ERROR", "Ubicacion: FacturasF.aspx. Metodo: btnSiEnviarMailPorCliente_Click. Email viene vacio. Cliente ID: " + factura.cliente.id.ToString());
+                                }
+                            }
+                            else
+                            {
+                                mailsNoEnviados++;
+                                emailsNoEncontrados += factura.cliente.razonSocial + " | ";
+                                Log.EscribirSQL(1, "ERROR", "Ubicacion: FacturasF.aspx. Metodo: btnSiEnviarMailPorCliente_Click. No se encontro email.Cliente ID: " + factura.cliente.id.ToString());
+                                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encontro e-mail de los clientes de una o varias de estas facturas"));
+                            }
+                        }
+                    }
+
+                    if( mailsEnviados > 0 )
+                    {
+                        if(!string.IsNullOrEmpty(emailsNoEncontrados))
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Factura/s enviada correctamente! </br> Enviados: "+ mailsEnviados.ToString(), ""));
+                        else
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Factura/s enviada correctamente! </br> Enviados:  " + mailsEnviados.ToString() + " </br> No enviados:  " + mailsNoEnviados.ToString() + " </br> No se encontro e-mail de los siguientes clientes: </br> " + emailsNoEncontrados + "", ""));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar ninguna factura.</br> No enviados: " + mailsNoEnviados.ToString() + " </br> No se encontro e-mail de los siguientes clientes: </br> " + emailsNoEncontrados ));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una factura."));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "CATCH: FacturasF.aspx. Metodo:btnSiEnviarMailPorCliente_Click.Error " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando factura por mail. " + ex.Message));
+            }
+        }
+
+        protected void lbtnEnviarFacturaMailPorCliente_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalMailPorCliente", "openModalMailPorCliente();", true);
         }
     }
 }
