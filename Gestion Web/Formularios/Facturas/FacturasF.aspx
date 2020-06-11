@@ -50,6 +50,9 @@
                                             <asp:LinkButton ID="lbtnEnviar" runat="server" OnClick="lbtnEnviar_Click">Enviar FC Por Mail</asp:LinkButton>
                                         </li>
                                         <li>
+                                            <asp:LinkButton ID="lbtnEnviarFacturaMailPorCliente" runat="server" Visible="true" OnClick="lbtnEnviarFacturaMailPorCliente_Click" ToolTip="Envia cada factura al cliente correspondiente" >Enviar FC Mail por Cliente</asp:LinkButton>
+                                        </li>
+                                        <li>
                                             <asp:LinkButton ID="lbtnOrdenReparacion" runat="server" Visible="false" OnClick="lbtnOrdenReparacion_Click">Orden de Reparacion</asp:LinkButton>
                                         </li>
                                         <li>
@@ -604,6 +607,38 @@
                             <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="modalConfirmacionEnvioMailPorCliente" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Envio de E-Mails</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label1" Text="Esta seguro que desea enviar los mails a cada cliente ?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnSiEnviarMailPorCliente" Text="Enviar" class="btn btn-success" onClick="btnSiEnviarMailPorCliente_Click" OnClientClick="this.disabled = true; this.value = 'Enviando...';" UseSubmitBehavior="false"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -1344,6 +1379,11 @@
     <script type="text/javascript">
         function openModalMail() {
             $('#modalEnvioMail').modal('show');
+        }
+    </script> 
+    <script type="text/javascript">
+        function openModalMailPorCliente() {
+            $('#modalConfirmacionEnvioMailPorCliente').modal('show');
         }
     </script>
     <script type="text/javascript">

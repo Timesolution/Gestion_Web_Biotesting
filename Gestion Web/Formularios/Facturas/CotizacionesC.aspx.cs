@@ -692,62 +692,70 @@ namespace Gestion_Web.Formularios.Facturas
                     foreach (Control C in phCotizaciones.Controls)
                     {
                         TableRow tr = C as TableRow;
-                        CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
-
-                        if (ch.Checked == true)
+                        if (!tr.Cells[5].Text.Contains("Anulada"))
                         {
-                            x++;
-                            idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
+                            CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+
+                            if (ch.Checked == true)
+                            {
+                                x++;
+                                idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
+                            }
                         }
+
 
                     }
                     if (x != 0)
                     {
                         if (!String.IsNullOrEmpty(idtildado))
                         {
-                            //if(x > 1)
-                            //{
-                                int aux = 0;
-                                int contadorRepetido = 0;
+                            int aux = 0;
+                            int contadorRepetido = 0;
 
-                                string[] j = idtildado.Split(';');
+                            string errores = null;
+                            string[] j = idtildado.Split(';');
 
-                                for (int i = 0; i < x; i++)
+                            for (int i = 0; i < x; i++)
+                            {
+
+                                var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));
+
+                                if(cotizacion != null)
                                 {
-                                    
-                                    var cotizacion2 = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));
-
-                                    if(i == 0)
+                                    if (i == 0)
                                     {
-                                        idC = cotizacion2.cliente.id; //FIJO
+                                        idC = cotizacion.cliente.id; //FIJO
                                     }
-                                    aux = cotizacion2.cliente.id; //CAMBIA
+                                    aux = cotizacion.cliente.id; //CAMBIA
 
                                     if (idC != aux && i != 0)
                                     {
                                         contadorRepetido++;
                                     }
-
+                                }
+                                else
+                                {
+                                    errores += Convert.ToString(j[i]) + " | ";
                                 }
 
-                                if(contadorRepetido == 0)
+                            }
+
+                            if(errores == null)
+                            {
+                                if (contadorRepetido == 0)
                                 {
                                     Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado + "&cliente=" + aux, false);
                                 }
                                 else
                                 {
                                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar cotizaciones que sean del mismo cliente."));
-                                    //var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j.Replace(";","").Trim()));
-                                    //var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[0]));
-                                    //idC = cotizacion.cliente.id;
                                 }
-                                
-                            //}
-                            //else
-                            //{
-
-                            //}
-                            
+                            }
+                            else
+                            {
+                                Log.EscribirSQL(1, "ERROR", "Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click. Una de las cotizaciones arrojo null al buscarla en la BD. Codigo: var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));");
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Esta cotizaciones no se puedieron procesar,</br> ID Cotizacion: " + errores + ""));
+                            }
                         }
                         else
                         {
@@ -761,12 +769,14 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 catch (Exception ex)
                 {
+                    Log.EscribirSQL(1, "ERROR", "CATH.Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click.");
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
                 }
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL(1, "ERROR", "CATH.Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click.");
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
             }
         }
 
@@ -874,11 +884,14 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phCotizaciones.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
-                    if (ch.Checked == true)
+                    if (!tr.Cells[5].Text.Contains("Anulada"))
                     {
-                        //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
-                        idtildado += ch.ID.Split('_')[1] + ";";
+                        CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                        if (ch.Checked == true)
+                        {
+                            //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                            idtildado += ch.ID.Split('_')[1] + ";";
+                        }
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildado))
