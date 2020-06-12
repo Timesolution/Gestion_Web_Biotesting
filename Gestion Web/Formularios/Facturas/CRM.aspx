@@ -112,7 +112,7 @@
             <div class="widget widget-table">
                 <div class="widget-header">
                     <i class="icon-th-list" style="width: 2%"></i>
-                    <h3 style="width: 75%">Facturas
+                    <h3 style="width: 75%">CRM
                     </h3>
                     <h3>
                         <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
