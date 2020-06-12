@@ -339,6 +339,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = p.horaEntrega;
                 this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
                 this.txtComentarios.Text = p.comentario;
+                this.txtDescuento.Text = p.descuento.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 if(p.tipo.tipo == "Cotizacion") //cotizacion
@@ -388,7 +389,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
                 this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones;
-                this.txtPorcDescuento.Text = p.neto10.ToString();
+                //this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroPedido();
@@ -1884,7 +1885,11 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     decimal iva = decimal.Round(this.Pedido.obtenerTotalIva(), 2);
-                    decimal descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
+                    decimal descuento = 0;
+                    if (this.txtDescuento.Text != "0")
+                        descuento = Convert.ToDecimal(this.txtDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                    else
+                        descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
                     this.Pedido.descuento += decimal.Round(descuento, 2, MidpointRounding.AwayFromZero);
                     this.Pedido.neto21 = iva - decimal.Round(descuento, 2);
                 }
@@ -1900,8 +1905,8 @@ namespace Gestion_Web.Formularios.Facturas
                 //cargo en pantalla
                 string neto = decimal.Round(this.Pedido.neto, 2).ToString();
                 this.txtNeto.Text = neto;
-
-                this.txtDescuento.Text = decimal.Round(this.Pedido.descuento, 2).ToString();
+                //if (this.txtDescuento.Text == "0")
+                    this.txtDescuento.Text = decimal.Round(this.Pedido.descuento, 2).ToString();
 
                 this.txtsubTotal.Text = decimal.Round(this.Pedido.subTotal, 2).ToString();
 
@@ -1910,6 +1915,9 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtRetencion.Text = decimal.Round(this.Pedido.retencion, 2).ToString();
 
                 this.txtTotal.Text = decimal.Round(this.Pedido.total, 2).ToString();
+
+                if (this.txtDescuento.Text != "0")
+                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtDescuento.Text) / Convert.ToDecimal(this.Pedido.totalSinDescuento)) * 100).ToString();
 
                 Pedido p = this.Pedido;
 
@@ -2067,8 +2075,6 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
                             }
-
-                            //Response.Redirect("ABMPedidos.aspx");
                         }
                         else
                         {
@@ -2174,7 +2180,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                             contPedEnt.modificarNumeroPedidoEnt(p.id, p.numero);
                             string original = this.idPedido + ";";
-                            controlador.anularPedidos(original);
+                            controlador.anularPedidosModificados(original);
                             Session.Remove("Pedido");
                             this.btnAgregar.Visible = false;
                             this.btnNuevo.Visible = true;
@@ -2182,13 +2188,12 @@ namespace Gestion_Web.Formularios.Facturas
                             if(this.cotizacion == 1)
                             {
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico pedido  " + this.labelNroPedido.Text);
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&co=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&co=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx?c=1';", true);
                             }
                             else
                             {
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico pedido  " + this.labelNroPedido.Text);
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx';", true);
-                                //Response.Redirect("ABMPedidos.aspx");
                             }
                         }
                         else
@@ -3464,11 +3469,13 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 txtPorcDescuento.Text = "0";
-                actualizarTotales();
+                txtDescuento.Text = "0";
+                //actualizarTotales();
                 if (!String.IsNullOrWhiteSpace(txtMontoParaAplicarDescuentoAlTotal.Text))
                 {
-                    txtPorcDescuento.Text = ((Convert.ToDecimal(txtMontoParaAplicarDescuentoAlTotal.Text) / Convert.ToDecimal(txtTotal.Text)) * 100).ToString();
+                    txtDescuento.Text = txtMontoParaAplicarDescuentoAlTotal.Text;
                     actualizarTotales();
+                    
                 }
                 //Para recalcular el label del modal de metodo de pago de tarjeta
                 //this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
