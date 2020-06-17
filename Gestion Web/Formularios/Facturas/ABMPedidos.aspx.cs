@@ -1886,7 +1886,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     decimal iva = decimal.Round(this.Pedido.obtenerTotalIva(), 2);
                     decimal descuento = 0;
-                    if (this.txtDescuento.Text != "0")
+                    if (Convert.ToDecimal(this.txtDescuento.Text) > 0 && Convert.ToDecimal(this.txtPorcDescuento.Text) == 0)
                         descuento = Convert.ToDecimal(this.txtDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
                     else
                         descuento = iva * (Convert.ToDecimal(this.txtPorcDescuento.Text.Replace(',', '.'), CultureInfo.InvariantCulture) / 100);
@@ -1916,7 +1916,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.txtTotal.Text = decimal.Round(this.Pedido.total, 2).ToString();
 
-                if (this.txtDescuento.Text != "0")
+                if (Convert.ToDecimal(this.txtDescuento.Text) > 0 && Convert.ToDecimal(this.txtPorcDescuento.Text) == 0 && this.Pedido.totalSinDescuento > 0)
                     txtPorcDescuento.Text = ((Convert.ToDecimal(txtDescuento.Text) / Convert.ToDecimal(this.Pedido.totalSinDescuento)) * 100).ToString();
 
                 Pedido p = this.Pedido;
