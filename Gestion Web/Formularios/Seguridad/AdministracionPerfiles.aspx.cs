@@ -124,7 +124,7 @@ namespace Gestion_Web.Formularios.Seguridad
             }
         }
 
-        private void cargarTablaMenus(int idPerfil)
+        private void cargarTablaMenus1(int idPerfil)
         {
             try
             {
@@ -147,6 +147,66 @@ namespace Gestion_Web.Formularios.Seguridad
                     if (mascotas == "1")
                     {
                         perfiles = perfilesAux;
+                    }
+                }
+
+                phMenus.Controls.Clear();
+                foreach (PerfilMenu p in perfiles)
+                {
+                    this.cargarPerfilesEnPh(p);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando Tabla de Menus por Permiso. " + ex.Message));
+
+            }
+        }
+
+        private void cargarTablaMenus(int idPerfil)
+        {
+            try
+            {
+                //Obtengo la Key de Mascotas para verificar si tengo que mostrar o no los permisos del sistema de Mascotas
+                string mascotas = System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Mascotas");
+
+                string estetica = System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Estetica");
+
+                List<PerfilMenu> perfiles = controlador.obtenerMenusPorPerfil(idPerfil);
+                perfiles = perfiles.OrderBy(x => x.menu.nombre).ToList();
+
+                //Creo una lista auxiliar por si la key de mascotas esté en 1, entonces tengo la lista original guardada
+                //List<PerfilMenu> perfilesAux = perfiles;
+
+                //Filtro la lista de menus, y dejo los menus que no contengan la palabra mascota
+                //perfiles = perfiles.Where(x => !x.menu.nombre.ToLower().Contains("mascotas")).ToList();
+                //perfiles = perfiles.Where(x => !x.menu.nombre.ToLower().Contains("estetica")).ToList();
+
+                //Verifico, si tiene la key de mascotas, consulto si está en 1 
+                if (!string.IsNullOrEmpty(mascotas))
+                {
+                    //Si contiene la key de mascotas en 1,  seteo la lista auxiliar de menus a la lista de menus
+                    if (mascotas == "1")
+                    {
+                        perfiles = perfiles.Where(x => !x.menu.nombre.ToLower().Contains("estetica")).ToList();
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(estetica))
+                {
+                    //Si contiene la key de estetica en 1,  seteo la lista auxiliar de menus a la lista de menus
+                    if (estetica == "1")
+                    {
+                        perfiles = perfiles.Where(x => !x.menu.nombre.ToLower().Contains("mascotas")).ToList();
+                    }
+                }
+
+                if (string.IsNullOrEmpty(mascotas) && string.IsNullOrEmpty(estetica))
+                {
+                    if( estetica != "1" && mascotas != "1")
+                    {
+                        perfiles = perfiles.Where(x => !x.menu.nombre.ToLower().Contains("mascotas") && !x.menu.nombre.ToLower().Contains("estetica")).ToList();
                     }
                 }
 
