@@ -2282,20 +2282,21 @@ namespace Gestion_Web.Formularios.Articulos
 
                 int sucursal = (int)Session["Login_SucUser"];
 
-                int i = controladorImportacionArticulos.ImportarArticulosGestion(sucursal);
+                string mensaje = controladorImportacionArticulos.ImportarArticulosGestion();
 
-                if (i > 0)
+                if (!string.IsNullOrEmpty(mensaje))
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito al importar articulos.", "../Articulos/Articulos.aspx"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(mensaje, "../Articulos/Articulos.aspx"));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar articulos"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar ningun articulo."));
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error CATCH al importar articulos") + ex);
+                Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error (CATCH) al importar articulos"));
             }
             finally
             {
