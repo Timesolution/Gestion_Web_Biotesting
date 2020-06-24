@@ -1,14 +1,10 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ExportarTapiceF.aspx.cs" Inherits="Gestion_Web.Formularios.Herramientas.ExportarTapiceF" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
      <div class="container">
-
         <div class="row">
-
             <div class="col-md-12">
-
                 <div class="widget stacked">
-
                     <div class="stat">
                         <h5><i class="icon-map-marker"></i>Herramientas > Sistema Tapice</h5>
                     </div>
@@ -23,7 +19,7 @@
                             <fieldset>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        <asp:Button ID="lbtnGenerar" Text="Generar" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" ValidationGroup="RegimenGroup" />
+                                        <asp:Button ID="lbtnGenerar" Text="Generar" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" OnClientClick="this.disabled = true; this.value = 'Generando...';" UseSubmitBehavior="false" />
                                     </div>
                                 </div>
                             </fieldset>
