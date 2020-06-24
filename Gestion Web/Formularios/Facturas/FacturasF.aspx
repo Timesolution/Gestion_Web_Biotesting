@@ -61,6 +61,9 @@
                                         <li>
                                             <asp:LinkButton ID="lbtnPatentamiento" runat="server" Visible="false" data-toggle="modal" href="#modalPatentamiento">Patentamiento</asp:LinkButton>
                                         </li>
+                                        <li>
+                                            <asp:LinkButton ID="lbtnPagosProgramados" runat="server" OnClick="lbtnPagosProgramados_Click">Pagos Programables</asp:LinkButton>
+                                        </li>
                                         <asp:PlaceHolder runat="server" ID="phEditarFC" Visible="false">
                                             <li>
                                                 <asp:LinkButton ID="btnEditarFC" runat="server" OnClick="btnEditarDatosFC_Click">Editar FC</asp:LinkButton>
@@ -574,6 +577,137 @@
                 </div>
             </div>
         </div>
+
+                <div id="modalPagosProgramados" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Pagos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel6" runat="server">
+                                <ContentTemplate>
+
+                                    <div class="form-group">
+                                        
+                                        <label class="col-md-4">Total</label>
+                                        <div class="col-md-4">
+
+                                            <asp:TextBox ID="txtTotalPago" runat="server" class="form-control" disabled ></asp:TextBox>
+
+                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Restan</label>
+                                        <div class="col-md-4">
+
+                                            <asp:TextBox ID="txtRestaPago" runat="server" class="form-control"  disabled></asp:TextBox>
+
+                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Fecha</label>
+                                        <div class="col-md-4">
+
+                                            <asp:TextBox ID="txtFechaPago" runat="server" class="form-control"></asp:TextBox>
+
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaPago" ValidationGroup="BusquedaGroup1" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Importe</label>
+                                        <div class="col-md-4">
+
+                                            <asp:TextBox ID="txtImportePago" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImportePago" ValidationGroup="BusquedaGroup1" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <asp:LinkButton ID="lbtnAgregarImporte" class="btn btn-info" ValidationGroup="BusquedaGroup1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarImporte_Click" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Observacion</label>
+                                        <div class="col-md-4" style="height: inherit">
+                                            <asp:TextBox ID="txtObservacionPago" runat="server" EnableViewState="false" TextMode="MultiLine" Rows="5" BackColor="LightYellow" class="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <asp:Label runat="server" Text="" Visible="false" ID="lblAvisoImporte" ForeColor="Red" Font-Bold="true"></asp:Label>
+                                    </div>
+                                    <%--<div class="form-group">
+                                        <label class="col-md-4">Formas Pago</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropDownList8" runat="server" class="form-control">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>--%>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                            <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Importe</th>
+                                                    <th>Observacion</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <asp:PlaceHolder ID="phPagosProgramables" runat="server"></asp:PlaceHolder>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <%--<div class="form-group">
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lbtnConfirmarPago" class="btn btn-success" runat="server" Visible="false" Text="Confirmar pagos" OnClick="lbtnConfirmarPago_Click" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lbtnCancelarPago" class="btn btn-default" runat="server" Visible="false" Text="Limpiar pagos" OnClick="lbtnCancelarPago_Click" />
+                                        </div>
+                                    </div>--%>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <asp:HiddenField id="idFactura" runat="server" />
+                        <asp:HiddenField id="hiddenTotalPago" runat="server" />
+                        <asp:HiddenField id="hiddenEditarPago" runat="server" />
+                        <asp:LinkButton ID="btnAgregarPago" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarPago_Click"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -1437,14 +1571,22 @@
                 $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaDesdeDto.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaHastaDto.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= txtFechaPago.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
     </script>
+
+        <script>
+            function showModalPagos() {
+                $("#modalPagosProgramados").modal('show');
+            }
+        </script>
 
     <script>
 
 
         $(function () {
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaPago.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
         $(function () {

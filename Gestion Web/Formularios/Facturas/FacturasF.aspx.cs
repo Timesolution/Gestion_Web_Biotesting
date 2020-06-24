@@ -19,6 +19,8 @@ using Gestion_Api.Entitys;
 using System.Globalization;
 using System.Web.Configuration;
 using Gestion_Api.Modelo.Enums;
+using System.Diagnostics;
+using Task_Api.Entitys;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -50,8 +52,12 @@ namespace Gestion_Web.Formularios.Facturas
         private int empresa;
         private int vendedor;
         private int formaPago;
+        private int editarPago;
+        DataTable lstPagosTemp;
+
         protected void Page_Load(object sender, EventArgs e)
         {
+
             try
             {
                 this.VerificarLogin();
@@ -97,6 +103,10 @@ namespace Gestion_Web.Formularios.Facturas
                         this.cargarSucursal();
                         DropListSucursal.SelectedValue = suc.ToString();
                         DropListTipo.SelectedValue = tipo.ToString();
+
+                        lstPagosTemp = new DataTable();
+                        InicializarListaPagos();
+
                     }
                     this.cargarEmpresas();
                     this.cargarSucursalByEmpresa(empresa);
@@ -127,6 +137,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnCalcularDiferenciaCambio.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCalcularDiferenciaCambio, null) + ";");
                 btnGenerarNotaDebitoCreditoDiferenciaCambio.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGenerarNotaDebitoCreditoDiferenciaCambio, null) + ";");
 
+                this.cargarTablaPAgos();
                 //verifico si el perfil tiene permiso para anular
                 this.verficarPermisoAnular();
                 //verifico si el perfil tiene permiso para editar FC y agregar FC
@@ -4186,7 +4197,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (mail != null && mail.Count > 0)
                             {
                                 string destinatarios = mail.FirstOrDefault().Mail;
-                                if(!string.IsNullOrEmpty(destinatarios))
+                                if (!string.IsNullOrEmpty(destinatarios))
                                 {
                                     int j = this.GenerarImpresionPDF(factura, path);
                                     if (j > 0)
@@ -4231,16 +4242,16 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
 
-                    if( mailsEnviados > 0 )
+                    if (mailsEnviados > 0)
                     {
-                        if(!string.IsNullOrEmpty(emailsNoEncontrados))
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Factura/s enviada correctamente! </br> Enviados: "+ mailsEnviados.ToString(), ""));
+                        if (!string.IsNullOrEmpty(emailsNoEncontrados))
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Factura/s enviada correctamente! </br> Enviados: " + mailsEnviados.ToString(), ""));
                         else
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Factura/s enviada correctamente! </br> Enviados:  " + mailsEnviados.ToString() + " </br> No enviados:  " + mailsNoEnviados.ToString() + " </br> No se encontro e-mail de los siguientes clientes: </br> " + emailsNoEncontrados + "", ""));
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar ninguna factura.</br> No enviados: " + mailsNoEnviados.ToString() + " </br> No se encontro e-mail de los siguientes clientes: </br> " + emailsNoEncontrados ));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar ninguna factura.</br> No enviados: " + mailsNoEnviados.ToString() + " </br> No se encontro e-mail de los siguientes clientes: </br> " + emailsNoEncontrados));
                     }
                 }
                 else
@@ -4258,6 +4269,431 @@ namespace Gestion_Web.Formularios.Facturas
         protected void lbtnEnviarFacturaMailPorCliente_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalMailPorCliente", "openModalMailPorCliente();", true);
+        }
+
+
+        protected DataTable lstPago
+        {
+
+            get
+            {
+                if (Session["ListaPagos2"] != null)
+                {
+                    return (DataTable)Session["ListaPagos2"];
+                }
+                else
+                {
+                    return lstPagosTemp;
+                }
+            }
+            set
+            {
+                Session["ListaPagos2"] = value;
+            }
+        }
+
+        private void InicializarListaPagos()
+        {
+            try
+            {
+                lstPagosTemp.Columns.Add("Importe");
+                lstPagosTemp.Columns.Add("Resta");
+                lstPagosTemp.Columns.Add("Fecha");
+                lstPagosTemp.Columns.Add("Observacion");
+                lstPagosTemp.Columns.Add("IdFactura");
+                lstPago = lstPagosTemp;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Se produjo un error generado Listas " + ex.Message));
+
+            }
+
+        }
+
+        protected void btnAgregarPago_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                if(CorroborarTotalPagos() == 1)
+                {
+
+                    controladorFacturacion controladorFacturacion = new controladorFacturacion();
+                    PagosProgramados pagosProgramados = new PagosProgramados();
+
+                    var factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(idFactura.Value));
+
+                    DataTable dt = this.lstPago;
+
+                    if(hiddenEditarPago.Value == "1")
+                    {
+                        controladorFacturacion.BorrarPagos(factura.id);
+                    }
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string fecha = dr["Fecha"].ToString();
+                        pagosProgramados.IdDocumento = Convert.ToInt32(dr["IdFactura"]);
+
+                        if (hiddenEditarPago.Value == "1")
+                        {
+                            pagosProgramados.Importe = Convert.ToDecimal(dr["Importe"]);
+
+                        }
+                        else
+                        {
+                            pagosProgramados.Importe = Convert.ToInt32(dr["Importe"]);
+
+                        }
+
+                        pagosProgramados.Fecha = Convert.ToDateTime(fecha, new CultureInfo("es-AR"));
+
+                        pagosProgramados.Observacion = dr["Observacion"].ToString();
+                        pagosProgramados.IdCliente = factura.cliente.id;
+
+
+                        controladorFacturacion.AgregarPago(pagosProgramados);
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Pagos no realizados ya que no coincide los importe con el total. ", "FacturasF.aspx"));
+                }
+
+
+                lstPago.Clear();
+                idFactura.Value = null;
+                hiddenTotalPago.Value = null;
+                this.lblAvisoImporte.Visible = false;
+                hiddenEditarPago.Value = "0";
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Pagos programados agregado con exito. ", "FacturasF.aspx"));
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        private int CorroborarTotalPagos()
+        {
+            try
+            {
+
+                decimal total = 0;
+                decimal totalFC = Convert.ToDecimal(this.hiddenTotalPago.Value);
+                DataTable dt = this.lstPago;
+                foreach (DataRow row in dt.Rows)
+                {
+                    total += Convert.ToDecimal(row["Importe"].ToString());
+                }
+
+                if (total == totalFC)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error calculando monto igresado con tarjeta." + ex.Message));
+                return -1;
+            }
+        }
+
+        protected void lbtnAgregarImporte_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Factura f = Session["Factura"] as Factura;
+                //if (f.items.Count > 0)
+                //{
+                decimal montoIngresado = Convert.ToDecimal(this.txtImportePago.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                decimal totalFactura = Convert.ToDecimal(this.txtTotalPago.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                controladorMoneda contMoneda = new controladorMoneda();
+
+                //System.Diagnostics.Debug.WriteLine(ViewState["ListaPagos"].ToString());
+
+                DataTable dt = this.lstPago;
+
+                decimal sumaDeMontosPagos = 0;
+
+                if (dt != null)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        sumaDeMontosPagos += Convert.ToDecimal(dr["Importe"]);
+                    }
+                }
+
+                sumaDeMontosPagos += montoIngresado;
+
+                if (totalFactura >= sumaDeMontosPagos && montoIngresado > 0)
+                {
+                    DataRow dr = dt.NewRow();
+
+                    dr["Importe"] = montoIngresado;
+                    dr["Resta"] = montoIngresado;
+                    dr["Observacion"] = txtObservacionPago.Text;
+                    dr["Fecha"] = txtFechaPago.Text;
+                    dr["IdFactura"] = idFactura.Value;
+
+                    dt.Rows.Add(dr);
+
+                    lstPago = dt;
+
+                    this.cargarTablaPAgos();
+                    this.txtImportePago.Text = "";
+                    this.txtObservacionPago.Text = "";
+
+                    this.lblAvisoImporte.Visible = false;
+                }
+                else
+                {
+                    this.lblAvisoImporte.Text = "El Monto Ingresado supera al total de la factura. ";
+                    this.lblAvisoImporte.Visible = true;
+                    this.txtImportePago.Focus();
+                    this.txtImportePago.Text = "0";
+                }
+                //}
+                //else
+                //{
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe agregar articulos a la factura "));
+                //}
+                MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void cargarTablaPAgos()
+        {
+            try
+            {
+
+                if (!string.IsNullOrEmpty(txtTotalPago.Text))
+                {
+                    decimal totalFactura = Convert.ToDecimal(this.txtTotalPago.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+
+                    DataTable dt = this.lstPago;
+
+                    this.phPagosProgramables.Controls.Clear();
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        int pos = dt.Rows.IndexOf(dr);
+                        this.cargarPHPagosProgramables(dr, pos);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista Pagos " + ex.Message));
+            }
+        }
+        protected void cargarPHPagosProgramables(DataRow dr, int pos)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+
+                //Celdas
+
+                //TableCell celCodigo = new TableCell();
+                //celCodigo.Text = dr["DetallePago"].ToString();
+                //celCodigo.VerticalAlign = VerticalAlign.Middle;
+                //tr.Cells.Add(celCodigo);
+
+                TableCell celCantidad = new TableCell();
+                celCantidad.Text = dr["Fecha"].ToString();
+                celCantidad.HorizontalAlign = HorizontalAlign.Center;
+                celCantidad.VerticalAlign = VerticalAlign.Middle;
+                celCantidad.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celCantidad);
+
+                TableCell celNeto = new TableCell();
+                celNeto.Text = dr["Importe"].ToString();
+                celNeto.HorizontalAlign = HorizontalAlign.Center;
+                celNeto.VerticalAlign = VerticalAlign.Middle;
+                celNeto.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celNeto);
+
+                TableCell celObservacion = new TableCell();
+                celObservacion.Text = dr["Observacion"].ToString();
+                celObservacion.HorizontalAlign = HorizontalAlign.Center;
+                celObservacion.VerticalAlign = VerticalAlign.Middle;
+                celObservacion.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celObservacion);
+
+
+                TableCell celAccion = new TableCell();
+                LinkButton btnEliminar = new LinkButton();
+                btnEliminar.CssClass = "btn btn-info";
+                btnEliminar.ID = "btnEliminar_" + pos.ToString();
+                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                btnEliminar.Click += new EventHandler(this.QuitarPago);
+                celAccion.Controls.Add(btnEliminar);
+                celAccion.Width = Unit.Percentage(5);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celAccion);
+
+                phPagosProgramables.Controls.Add(tr);
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void QuitarPago(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] codigo = (sender as LinkButton).ID.Split(new Char[] { '_' });
+                //obtengo el pedido del session
+                DataTable dt = lstPago;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dt.Rows.IndexOf(dr).ToString() == codigo[1])
+                    {
+                        //lo quito
+                        dt.Rows.RemoveAt(Convert.ToInt32(codigo[1]));
+                        this.lblAvisoImporte.Visible = false;
+                        break;
+                    }
+                }
+                //cargo el nuevo pedido a la sesion
+                lstPago = dt;
+
+                //vuelvo a cargar los items
+                this.cargarTablaPAgos();
+
+                this.MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando pago. " + ex.Message));
+            }
+        }
+
+        private void MostrarElEfectivoRestanteAlTxtEfectivoDePagosConTarjeta()
+        {
+            try
+            {
+                DataTable dt = lstPago;
+                decimal resta = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    resta += Convert.ToDecimal(row["Resta"]);
+                }
+
+                this.txtRestaPago.Text = (Convert.ToDecimal(txtTotalPago.Text) - resta).ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void lbtnPagosProgramados_Click(object sender, EventArgs e)
+        {
+
+            controladorFacturacion controladorFacturacion = new controladorFacturacion();
+            this.editarPago = 0;
+
+            string idtildado = "";
+            foreach (Control C in phFacturas.Controls)
+            {
+                TableRow tr = C as TableRow;
+                CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+
+                //!tr.Cells[1].Text.Contains("Presupuesto") && !tr.Cells[1].Text.Contains("Nota de Credito PRP")
+
+                if (ch.Checked == true && (tr.Cells[1].Text.Contains("Presupuesto") || tr.Cells[1].Text.Contains("Factura A") || tr.Cells[1].Text.Contains("Factura B") || tr.Cells[1].Text.Contains("Factura C")))
+                {
+                    idtildado = ch.ID.Split('_')[1];
+                }
+            }
+            if (!String.IsNullOrEmpty(idtildado))
+            {
+                var factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(idtildado));
+
+                txtTotalPago.Text = Convert.ToDecimal(factura.total).ToString();
+                txtRestaPago.Text = Convert.ToDecimal(factura.total).ToString();
+                idFactura.Value = factura.id.ToString();
+
+                hiddenTotalPago.Value = txtTotalPago.Text;
+
+                if(BuscarPagosProgramadosByFactura(factura.id) == 1)
+                {
+                    this.cargarTablaPAgos();
+                    this.txtImportePago.Text = "";
+                    this.txtObservacionPago.Text = "";
+                    hiddenEditarPago.Value = "1";
+                    txtRestaPago.Text = "0";
+                }
+                else
+                {
+                    lstPago.Clear();
+                    hiddenEditarPago.Value = "0";
+                }
+
+                this.lblAvisoImporte.Visible = false;
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalPagos();", true);
+
+            }
+            else
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar una Factura o Presupuesto"));
+            }
+        }
+
+        public int BuscarPagosProgramadosByFactura(int idFactura)
+        {
+            controladorFacturacion controladorFacturacion = new controladorFacturacion();
+
+
+            var tareas = controladorFacturacion.BuscarTareasProgramadosByIdFactura(idFactura);
+            lstPago.Clear();
+
+            if (tareas !=null && tareas.Count > 0)
+            {
+                DataTable dt = this.lstPago;
+
+
+                foreach (var tarea in tareas)
+                {
+                    DataRow dr = dt.NewRow();
+
+                    dr["Importe"] = tarea.Importe;
+                    dr["Resta"] = "0";
+                    dr["Observacion"] = tarea.Observacion;
+                    dr["Fecha"] = tarea.Fecha;
+                    dr["IdFactura"] = tarea.IdDocumento;
+
+                    dt.Rows.Add(dr);
+
+                    lstPago = dt;
+                }
+
+                return 1;
+            }
+
+
+            return -1;
+
         }
     }
 }
