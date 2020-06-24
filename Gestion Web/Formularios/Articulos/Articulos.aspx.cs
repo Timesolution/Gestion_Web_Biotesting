@@ -2296,7 +2296,7 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error (CATCH) al importar articulos"));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar articulos. Contacte a soporte."));
             }
             finally
             {
