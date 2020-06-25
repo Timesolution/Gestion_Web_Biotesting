@@ -80,6 +80,10 @@ namespace Gestion_Web.Formularios.Facturas
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
                     this.verificarModoBlanco();
 
+                    txtTotalPago.Style["text-align"] = "right";
+                    txtRestaPago.Style["text-align"] = "right";
+                    txtImportePago.Style["text-align"] = "right";
+                    btnAgregarPago.Attributes.Add("disabled", "true");                    
                     //Verifico si tiene habilitado el boton Facturar PRP según la configuracion
                     this.verificarFacturarPRP();
 
@@ -4373,7 +4377,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL(1, "Error", "Error al generar pagos programables btnAgregarPago_Click, FacturaF, GestionWEB, error: " + ex.Message);
             }
 
         }
@@ -4599,6 +4603,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 this.txtRestaPago.Text = (Convert.ToDecimal(txtTotalPago.Text) - resta).ToString();
+
+                if (txtRestaPago.Text == "0" || txtRestaPago.Text == "0.00")
+                {
+                    //btnAgregarPago1.Attributes.Remove("disabled");
+                    //btnAgregarPago1.Attributes.Add("disabled", "false");
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "asd", "Showbutton();", true);
+                }
             }
             catch (Exception ex)
             {
@@ -4695,5 +4706,6 @@ namespace Gestion_Web.Formularios.Facturas
             return -1;
 
         }
+
     }
 }

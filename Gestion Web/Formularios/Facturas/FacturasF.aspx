@@ -62,7 +62,7 @@
                                             <asp:LinkButton ID="lbtnPatentamiento" runat="server" Visible="false" data-toggle="modal" href="#modalPatentamiento">Patentamiento</asp:LinkButton>
                                         </li>
                                         <li>
-                                            <asp:LinkButton ID="lbtnPagosProgramados" runat="server" OnClick="lbtnPagosProgramados_Click">Pagos Programables</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtnPagosProgramados" runat="server" OnClick="lbtnPagosProgramados_Click">Cronograma de Pagos</asp:LinkButton>
                                         </li>
                                         <asp:PlaceHolder runat="server" ID="phEditarFC" Visible="false">
                                             <li>
@@ -595,8 +595,10 @@
                                         
                                         <label class="col-md-4">Total</label>
                                         <div class="col-md-4">
-
-                                            <asp:TextBox ID="txtTotalPago" runat="server" class="form-control" disabled ></asp:TextBox>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <asp:TextBox ID="txtTotalPago" runat="server" class="form-control" disabled ></asp:TextBox>
+                                            </div> 
 
                                             <!-- /input-group -->
                                         </div>
@@ -605,9 +607,10 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Restan</label>
                                         <div class="col-md-4">
-
-                                            <asp:TextBox ID="txtRestaPago" runat="server" class="form-control"  disabled></asp:TextBox>
-
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <asp:TextBox ID="txtRestaPago" runat="server" class="form-control"  disabled></asp:TextBox>
+                                             </div>  
                                             <!-- /input-group -->
                                         </div>
                                     </div>
@@ -615,9 +618,10 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Fecha</label>
                                         <div class="col-md-4">
-
-                                            <asp:TextBox ID="txtFechaPago" runat="server" class="form-control"></asp:TextBox>
-
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span> 
+                                                <asp:TextBox ID="txtFechaPago" runat="server" class="form-control"></asp:TextBox>
+                                            </div>
                                             <!-- /input-group -->
                                         </div>
                                         <div class="col-md-4">
@@ -628,24 +632,25 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Importe</label>
                                         <div class="col-md-4">
-
-                                            <asp:TextBox ID="txtImportePago" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
-
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span> 
+                                                <asp:TextBox ID="txtImportePago" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                            </div>
                                             <!-- /input-group -->
                                         </div>
-                                        <div class="col-md-4">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImportePago" ValidationGroup="BusquedaGroup1" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                        </div>
-
                                         <div class="col-md-1">
                                             <asp:LinkButton ID="lbtnAgregarImporte" class="btn btn-info" ValidationGroup="BusquedaGroup1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" Visible="true" OnClick="lbtnAgregarImporte_Click" />
                                         </div>
+                                        <div class="col-md-1">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtImportePago" ValidationGroup="BusquedaGroup1" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                        
                                     </div>
 
                                     <div class="form-group">
                                         <label class="col-md-4">Observacion</label>
-                                        <div class="col-md-4" style="height: inherit">
-                                            <asp:TextBox ID="txtObservacionPago" runat="server" EnableViewState="false" TextMode="MultiLine" Rows="5" BackColor="LightYellow" class="form-control"></asp:TextBox>
+                                        <div class="col-md-8" style="height: inherit">
+                                            <asp:TextBox ID="txtObservacionPago" runat="server" EnableViewState="false" TextMode="MultiLine" Rows="10" BackColor="LightYellow" class="form-control"></asp:TextBox>
                                         </div>
                                     </div>
 
@@ -702,7 +707,7 @@
                         <asp:HiddenField id="idFactura" runat="server" />
                         <asp:HiddenField id="hiddenTotalPago" runat="server" />
                         <asp:HiddenField id="hiddenEditarPago" runat="server" />
-                        <asp:LinkButton ID="btnAgregarPago" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarPago_Click"/>
+                        <asp:LinkButton ID="btnAgregarPago" runat="server" Text="Generar" class="btn btn-success" OnClick="btnAgregarPago_Click"/>
                     </div>
                 </div>
             </div>
@@ -1578,6 +1583,12 @@
         <script>
             function showModalPagos() {
                 $("#modalPagosProgramados").modal('show');
+            }
+        </script>
+
+        <script>
+            function Showbutton() {
+                document.getElementById('<%= btnAgregarPago.ClientID %>').removeAttribute('Disabled');
             }
         </script>
 
