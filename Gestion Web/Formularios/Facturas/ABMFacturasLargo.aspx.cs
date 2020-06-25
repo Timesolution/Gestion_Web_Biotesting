@@ -622,7 +622,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!String.IsNullOrEmpty(f.comentario))
                 {
                     this.checkDatos.Checked = true;
-                    this.txtComentarios.Text = f.comentario;
+                    this.txtComentarios.Text += "\n" + f.comentario;
                 }
                 if (f.formaPAgo.forma == "Tarjeta")
                 {

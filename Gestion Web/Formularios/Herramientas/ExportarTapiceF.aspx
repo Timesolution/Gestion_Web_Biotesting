@@ -19,7 +19,7 @@
                             <fieldset>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        <asp:Button ID="lbtnGenerar" Text="Generar" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" OnClientClick="this.disabled = true; this.value = 'Generando...';" UseSubmitBehavior="false" />
+                                        <asp:Button ID="lbtnGenerar" Text="Generar" runat="server" class="btn btn-success" OnClick="lbtnGenerar_Click" />
                                     </div>
                                 </div>
                             </fieldset>

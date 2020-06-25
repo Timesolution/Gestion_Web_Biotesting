@@ -48,40 +48,13 @@ namespace Gestion_Web.Formularios.Herramientas
                 //this.Response.AddHeader("content-length", comprobante.Length.ToString());
                 this.Response.AddHeader("Content-disposition", "attachment; filename= " + archivos);
                 this.Response.BinaryWrite(btFile);
-                //this.Response.Flush();
-                //this.Response.SuppressContent = true;
-                this.Response.Close();
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito", "../Herramientas/ExportarTapiceF.aspx"));
-                //this.Response.End();
-                //HttpContext.Current.ApplicationInstance.CompleteRequest();
-                //this.Response.Headers.Clear();
-                //this.Response.Redirect("../Herramientas/ExportarTapiceF.aspx", false);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito", "../Herramientas/ExportarTapiceF.aspx"));
-                //HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
-                //HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
-                //HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
+                this.Response.End();
             }
             catch(Exception ex)
             {
-                lbtnGenerar.Enabled = true;
-                Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: ExportarTapiceF. Metodo: lbtnGenerar_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo generar el archivo. Contacte a soporte."));
+                Log.EscribirSQL(1, "ERROR", "CATCH: Error al generar archivo .txt.Ubicacion: ExportarTapiceF. Metodo: lbtnGenerar_Click. Mensaje: " + ex.Message);
             }
-            finally
-            {
-                lbtnGenerar.Enabled = true;
-                this.Response.Redirect("../Herramientas/ExportarTapiceF.aspx", false);
-                //Page.ClientScript.RegisterClientScriptBlock(typeof(Page), "ClosePopup", "window.close();", true);
 
-            }
-        }
-
-        protected void descargarArchivo(byte[] btFile, string archivos)
-        {
-            
-            //this.Response.Write(btFile.ToString());
-            //this.Response.End();
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Exito", "../Herramientas/ExportarTapiceF.aspx"));
         }
     }
 }
