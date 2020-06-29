@@ -363,10 +363,12 @@
     <Content Include="Formularios\Articulos\ArticulosNew.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Clientes\ABMEstadosCRM.aspx" />
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
+    <Content Include="Formularios\Facturas\CronogramaPagosF.aspx" />
     <Content Include="Formularios\Facturas\RetencionesF.aspx" />
     <Content Include="Formularios\Herramientas\HistorialSMS.aspx" />
     <Content Include="Formularios\Herramientas\ImportacionPedidosAPP.aspx" />
@@ -1462,6 +1464,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Clientes\ABMEstadosCRM.aspx.cs">
+      <DependentUpon>ABMEstadosCRM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ABMEstadosCRM.aspx.designer.cs">
+      <DependentUpon>ABMEstadosCRM.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Clientes\ActividadClientes.aspx.cs">
       <DependentUpon>ActividadClientes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1489,6 +1498,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.designer.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CronogramaPagosF.aspx.cs">
+      <DependentUpon>CronogramaPagosF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\CronogramaPagosF.aspx.designer.cs">
+      <DependentUpon>CronogramaPagosF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\RetencionesF.aspx.cs">
       <DependentUpon>RetencionesF.aspx</DependentUpon>

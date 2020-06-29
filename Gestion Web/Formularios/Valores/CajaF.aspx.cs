@@ -846,7 +846,7 @@ namespace Gestion_Web.Formularios.Valores
                 if (c.tipoMovimiento == 1)
                 {
                     TableCell celRecibo = new TableCell();
-                    celRecibo.Text = c.cobro.tipoDocumento.tipo + " " + c.cobro.numero;
+                    celRecibo.Text = c.cobro.tipoDocumento.tipo + " " + c.cobro.numero + " - " + c.cobro.cliente.razonSocial;
                     celRecibo.VerticalAlign = VerticalAlign.Middle;
                     celRecibo.HorizontalAlign = HorizontalAlign.Left;
                     tr.Cells.Add(celRecibo);
@@ -863,7 +863,7 @@ namespace Gestion_Web.Formularios.Valores
                 if (c.tipoMovimiento == 3)
                 {
                     TableCell celRecibo = new TableCell();
-                    celRecibo.Text = "Recibo de Pago - " + c.pCompra.Numero;
+                    celRecibo.Text = "Recibo de Pago - " + c.pCompra.Numero + " - " + c.pCompra.cliente.razonSocial;
                     celRecibo.VerticalAlign = VerticalAlign.Middle;
                     celRecibo.HorizontalAlign = HorizontalAlign.Left;
                     tr.Cells.Add(celRecibo);

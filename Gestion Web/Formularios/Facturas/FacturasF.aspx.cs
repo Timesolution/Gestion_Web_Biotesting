@@ -4340,18 +4340,31 @@ namespace Gestion_Web.Formularios.Facturas
                         string fecha = dr["Fecha"].ToString();
                         pagosProgramados.IdDocumento = Convert.ToInt32(dr["IdFactura"]);
 
-                        if (hiddenEditarPago.Value == "1")
-                        {
-                            pagosProgramados.Importe = Convert.ToDecimal(dr["Importe"]);
+                        pagosProgramados.Importe = Convert.ToDecimal(dr["Importe"]);
+                        //if (hiddenEditarPago.Value == "1")
+                        //{
+                        //    pagosProgramados.Importe = Convert.ToDecimal(dr["Importe"]);
 
-                        }
-                        else
-                        {
-                            pagosProgramados.Importe = Convert.ToInt32(dr["Importe"]);
+                        //}
+                        //else
+                        //{
+                        //    pagosProgramados.Importe = Convert.ToInt32(dr["Importe"]);
 
-                        }
+                        //}
 
-                        pagosProgramados.Fecha = Convert.ToDateTime(fecha, new CultureInfo("es-AR"));
+                        pagosProgramados.Fecha = Convert.ToDateTime(fecha);
+
+                        //if (hiddenEditarPago.Value == "1")
+                        //{
+                        //    //pagosProgramados.Fecha = Convert.ToDateTime(fecha);
+                        //    pagosProgramados.Fecha = DateTime.ParseExact(fecha, "dd/MM/yyyy", new CultureInfo("es-AR"));
+
+                        //}
+                        //else
+                        //{
+                        //    pagosProgramados.Fecha = Convert.ToDateTime(fecha);
+
+                        //}
 
                         pagosProgramados.Observacion = dr["Observacion"].ToString();
                         pagosProgramados.IdCliente = factura.cliente.id;
@@ -4446,7 +4459,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dr["Importe"] = montoIngresado;
                     dr["Resta"] = montoIngresado;
                     dr["Observacion"] = txtObservacionPago.Text;
-                    dr["Fecha"] = txtFechaPago.Text;
+                    dr["Fecha"] =  Convert.ToDateTime(txtFechaPago.Text, new CultureInfo("es-AR")).ToString();
                     dr["IdFactura"] = idFactura.Value;
 
                     dt.Rows.Add(dr);
@@ -4599,7 +4612,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal resta = 0;
                 foreach (DataRow row in dt.Rows)
                 {
-                    resta += Convert.ToDecimal(row["Resta"]);
+                    resta += Convert.ToDecimal(row["Importe"]);
                 }
 
                 this.txtRestaPago.Text = (Convert.ToDecimal(txtTotalPago.Text) - resta).ToString();
@@ -4609,6 +4622,10 @@ namespace Gestion_Web.Formularios.Facturas
                     //btnAgregarPago1.Attributes.Remove("disabled");
                     //btnAgregarPago1.Attributes.Add("disabled", "false");
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "asd", "Showbutton();", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "asd", "Hidebutton();", true);
                 }
             }
             catch (Exception ex)

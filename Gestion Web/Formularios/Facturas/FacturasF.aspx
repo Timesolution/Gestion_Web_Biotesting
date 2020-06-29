@@ -1587,6 +1587,12 @@
         </script>
 
         <script>
+            function Hidebutton() {
+                document.getElementById('<%= btnAgregarPago.ClientID %>').setAttribute('Disabled', 'Disabled');
+            }
+        </script>
+
+        <script>
             function Showbutton() {
                 document.getElementById('<%= btnAgregarPago.ClientID %>').removeAttribute('Disabled');
             }
