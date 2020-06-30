@@ -2049,6 +2049,8 @@ namespace Gestion_Web.Formularios.Facturas
                         if (i > 0)
                         {
                             ControladorPedidoEntity contPedEnt = new ControladorPedidoEntity();
+                            ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                            ControladorPedido Contpedido1 = new ControladorPedido();
                             if (accion == 4)//agrego el dato de la cotizacion y el pedido generado
                             {
                                 int t = contPedEnt.agregarPedidoCotizacion(i, idCotizacion);
@@ -2060,6 +2062,29 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 int j = contPedEnt.agregarPedidoReferido(i, p.cliente.id);
                             }
+
+                            Pedido pedido1 = Contpedido1.obtenerPedidoId(i);
+
+                            Clientes_Eventos eventos = new Clientes_Eventos();
+
+                            eventos.Cliente = p.cliente.id;
+
+                            if (cotizacion == 1)
+                            {
+                                eventos.Descripcion = "Emisión de Cotización # " + pedido1.numero;
+                            }
+                            else
+                            {
+                                eventos.Descripcion = "Emisión de Pedido # " + pedido1.numero;
+                            }
+                            
+                            eventos.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
+                            eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+                            eventos.Tarea = "";
+                            eventos.Estado = controladorClienteEntity.ObtenerIdEstadoByDescripcion("Finalizado");
+                            eventos.Vencimiento = null;
+
+                            this.contClienteEntity.agregarEventoCliente(eventos);
 
                             //guardo los articulos a pedir
                             this.guardarArticulosPedir();

@@ -4285,6 +4285,9 @@ namespace Gestion_Web.Formularios.Facturas
                         this.btnNueva.Visible = true;
                         this.btnAgregar.Visible = false;
                         this.btnAgregarRemitir.Visible = false;
+
+                        AgregarEventoCliente(fact.cliente.id, fact.numero);
+
                     }
                     else
                     {
@@ -4312,6 +4315,23 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error guardando facturas." + ex.Message + " \", {type: \"error\"});", true);
             }
+        }
+
+        public void AgregarEventoCliente(int idCliente, string FactNumero)
+        {
+            Gestion_Api.Entitys.Clientes_Eventos eventos = new Gestion_Api.Entitys.Clientes_Eventos();
+            ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
+            eventos.Cliente = idCliente;
+            eventos.Descripcion = "Emisión de Factura/PRP # " + FactNumero;
+
+            eventos.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
+            eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+            eventos.Tarea = "";
+            eventos.Estado = controladorClienteEntity.ObtenerIdEstadoByDescripcion("Finalizado");
+            eventos.Vencimiento = null;
+
+            this.contClienteEntity.agregarEventoCliente(eventos);
         }
 
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
