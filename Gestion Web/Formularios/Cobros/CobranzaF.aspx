@@ -143,6 +143,9 @@
                 <asp:Button ID="btnGenerarDto" runat="server" Text="Generar Dto" class="btn btn-info" data-toggle="modal" href="#modalDescuento" />                
             </div>
             <div class="col-lg-2" style="width:10%;">
+                <asp:Button ID="btnGenerarNCND" runat="server" Text="Generar NC/ND" class="btn btn-info" data-toggle="modal" href="#modalNCND" />                
+            </div>
+            <div class="col-lg-2" style="width:10%;">
                 <asp:Button ID="btnImputar" runat="server" Text="Imputar" class="btn btn-info" OnClick="btnImputar_Click"   />
             </div>
         </div>
@@ -331,6 +334,64 @@
             </div>
         </div>
     </div>   
+
+
+        <div id="modalNCND" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Generar</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel7" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Importe:</label>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <asp:TextBox ID="txtImporte" class="form-control" runat="server" Text="0.00" Style="text-align: right;"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="Debe ser mayor a cero." ControlToValidate="txtImporte" InitialValue="0.00" ValidationGroup="NCNDGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Tipo:</label>
+                                    <div class="col-md-4">
+                                        <asp:DropDownList ID="drpNCND" runat="server" class="form-control">
+                                            <asp:ListItem Text="NC" Value="1" />
+                                            <asp:ListItem Text="ND" Value="2" />
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name" class="col-md-4">Detalle</label>
+                                    <div class="col-md-4" style="height: inherit">
+                                        <asp:TextBox ID="txtDescripcionArt" runat="server" EnableViewState="false" TextMode="MultiLine" Rows="2" BackColor="LightYellow" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="*" ControlToValidate="txtDescripcionArt" InitialValue="0.00" ValidationGroup="NCNDGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnGenerarNCND" runat="server" Text="Generar" class="btn btn-success" ValidationGroup="NCNDGroup" OnClick="lbtnGenerarNCND_Click" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>  
+
     <div id="modalComentarios" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">

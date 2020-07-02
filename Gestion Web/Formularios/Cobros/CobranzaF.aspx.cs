@@ -985,6 +985,67 @@ namespace Gestion_Web.Formularios.Facturas
                 return string.Empty;
             }
         }
+
+        protected void lbtnGenerarNCND_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //verifico cierre caja
+                int cierreOK = this.verificarCierreCaja();
+                if (cierreOK < 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
+                    return;
+                }
+
+                string facturas = "";
+
+                foreach (Control C in phCobranzas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    string tipoDoc = tr.Cells[1].Text;
+                    CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto")))
+                    {
+                        facturas += tipoDoc + ";";
+                    }
+                }
+                if (String.IsNullOrEmpty(facturas))
+                {
+                    ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un documento!."), true);
+                    return;
+                }
+
+                decimal importe = Convert.ToDecimal(this.txtImporte.Text);
+                if (importe > 0)
+                {
+
+                    string tipoNCND = drpNCND.SelectedValue;
+                    string descripcionArt = txtDescripcionArt.Text;
+
+                    int i = this.contCobranza.GenerarNotaCreditoDebito(this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, importe, facturas, tipoNCND, descripcionArt);
+
+                    if (i > 0)
+                    {
+                        ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxInfo("Proceso finalizado con exito!.", ""), true);
+                        Response.Redirect("CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + idTipo);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxAtencion("No se pudo generar la nota de credito."), true);
+                    }
+
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxAtencion("El monto debe ser mayor a cero!."), true);
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxError("Error generando nota de credito. " + ex.Message), true);
+            }
+        }
     }
 
         

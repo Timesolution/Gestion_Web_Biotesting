@@ -43,6 +43,7 @@ namespace Gestion_Web.Formularios.Facturas
         private string fechaVencimientoD;
         private string fechaVencimientoH;
         private string estado;
+        private string descripcion;
         private int cliente;
         private int filtroPorFecha;
         private int filtroPorFechaVencimiento;
@@ -58,6 +59,7 @@ namespace Gestion_Web.Formularios.Facturas
                 fechaH = Request.QueryString["FechaHasta"];
                 fechaVencimientoD = Request.QueryString["fechaVencimientoDesde"];
                 fechaVencimientoH = Request.QueryString["fechaVencimientoHasta"];
+                descripcion = Request.QueryString["des"];
                 estado = Request.QueryString["estado"];
                 cliente = Convert.ToInt32(Request.QueryString["cl"]);
                 filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
@@ -81,6 +83,7 @@ namespace Gestion_Web.Formularios.Facturas
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtVencimientoDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtVencimientoHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        descripcion = "";
 
                     }
 
@@ -95,10 +98,11 @@ namespace Gestion_Web.Formularios.Facturas
                     txtVencimientoHasta.Text = fechaH;
                     DropListClientes.SelectedValue = cliente.ToString();
                     DropListEstado.SelectedIndex = Convert.ToInt32(estado);
+                    txtDescripcion.Text = descripcion;
 
                 }
 
-                cargarEventoRango(fechaD, fechaH, fechaVencimientoD, fechaVencimientoH, cliente, Convert.ToInt32(estado), filtroPorFecha, filtroPorFechaVencimiento, idUsuario);
+                cargarEventoRango(fechaD, fechaH, fechaVencimientoD, fechaVencimientoH, cliente, Convert.ToInt32(estado), filtroPorFecha, filtroPorFechaVencimiento, idUsuario, descripcion);
                 this.Form.DefaultButton = this.btnBuscarCod.UniqueID;
             }
             catch (Exception ex)
@@ -158,7 +162,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         // seguir con esto
-        private void cargarEventoRango(string fechaD, string fechaH, string fechaVencimientoD, string fechaVencimientoH, int idCliente, int estado, int filtroPorFecha, int filtroPorFechaVencimiento, int idUsuario)
+        private void cargarEventoRango(string fechaD, string fechaH, string fechaVencimientoD, string fechaVencimientoH, int idCliente, int estado, int filtroPorFecha, int filtroPorFechaVencimiento, int idUsuario, string descripcion)
         {
             try
             {
@@ -166,7 +170,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal saldo = 0;
                 string estados;
 
-                var clientesEventos = controladorClienteEntity.GetEventosClientesFilter(fechaD, fechaH, fechaVencimientoD, fechaVencimientoH, idCliente, estado, filtroPorFecha, filtroPorFechaVencimiento, idUsuario);
+                var clientesEventos = controladorClienteEntity.GetEventosClientesFilter(fechaD, fechaH, fechaVencimientoD, fechaVencimientoH, idCliente, estado, filtroPorFecha, filtroPorFechaVencimiento, idUsuario, descripcion);
 
                 foreach (var row in clientesEventos)
                 {
@@ -373,7 +377,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (!String.IsNullOrEmpty(txtFechaDesde.Text) && (!String.IsNullOrEmpty(txtFechaHasta.Text)))
                 {
-                    Response.Redirect("CRM.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&fechaVencimientoDesde=" + txtVencimientoDesde.Text + "&fechaVencimientoHasta=" + txtVencimientoHasta.Text + "&cl=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue + "&fpf=" + Convert.ToInt32(RdFecha.Checked) + "&fpfv=" + Convert.ToInt32(RdFechaVencimiento.Checked) + "&us=" + DropListUsuarios.SelectedValue);
+                    Response.Redirect("CRM.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&fechaVencimientoDesde=" + txtVencimientoDesde.Text + "&fechaVencimientoHasta=" + txtVencimientoHasta.Text + "&cl=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue + "&fpf=" + Convert.ToInt32(RdFecha.Checked) + "&fpfv=" + Convert.ToInt32(RdFechaVencimiento.Checked) + "&us=" + DropListUsuarios.SelectedValue + "&des=" + txtDescripcion.Text);
                 }
                 else
                 {

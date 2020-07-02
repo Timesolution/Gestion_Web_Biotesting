@@ -246,6 +246,14 @@
                                             </asp:DropDownList>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Descripcion</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtDescripcion" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+                                    </div>
+
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                         </div>
