@@ -266,7 +266,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = p["Importe"].ToString();
-                celNumero.HorizontalAlign = HorizontalAlign.Left;
+                celNumero.HorizontalAlign = HorizontalAlign.Right;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumero);
 

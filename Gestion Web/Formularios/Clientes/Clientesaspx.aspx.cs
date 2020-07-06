@@ -36,6 +36,8 @@ namespace Gestion_Web.Formularios.Clientes
 
         public int accion;
         public string busqueda;
+        public string fechaD;
+        public string fechaH;
         public int tipoCliente;
         public string provincia;
         public int idVendedor;
@@ -49,6 +51,8 @@ namespace Gestion_Web.Formularios.Clientes
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.busqueda = Request.QueryString["b"];
+                this.fechaD = Request.QueryString["fd"];
+                this.fechaH = Request.QueryString["fh"];
 
                 this.tipoCliente = Convert.ToInt32(Request.QueryString["tc"]);
                 this.provincia = Request.QueryString["pr"];
@@ -1261,7 +1265,9 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                Response.Redirect("Clientesaspx.aspx?accion=2&tc=" + this.DropListTipoCliente.SelectedValue + "&pr=" + this.ListProvincias_ModalBusqueda.SelectedItem.Text + "&v=" + this.ListVendedores_ModalBusqueda.SelectedValue + "&gc=" + this.ListGruposClientes_ModalBusqueda.SelectedValue + "&ec=" + this.ListEstadoCliente_ModalBusqueda.SelectedValue);
+                Response.Redirect("Clientesaspx.aspx?accion=2&tc=" + this.DropListTipoCliente.SelectedValue + "&pr=" + this.ListProvincias_ModalBusqueda.SelectedItem.Text + "&v=" + this.ListVendedores_ModalBusqueda.SelectedValue + "&gc=" + this.ListGruposClientes_ModalBusqueda.SelectedValue + "&ec=" + this.ListEstadoCliente_ModalBusqueda.SelectedValue + "&fd=" + txtFechaAltaD.Text + "&fh=" + txtFechaAltaH.Text);
+
+                //Response.Redirect("Clientesaspx.aspx?accion=2&tc=" + this.DropListTipoCliente.SelectedValue + "&pr=" + this.ListProvincias_ModalBusqueda.SelectedItem.Text + "&v=" + this.ListVendedores_ModalBusqueda.SelectedValue + "&gc=" + this.ListGruposClientes_ModalBusqueda.SelectedValue + "&ec=" + this.ListEstadoCliente_ModalBusqueda.SelectedValue);
             }
             catch (Exception ex)
             {
@@ -1289,7 +1295,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                DataTable clientes = contCliente.FiltrarClientesEnClientesAspx(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
+                DataTable clientes = contCliente.FiltrarClientesEnClientesAspx(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente, fechaD, fechaH);
+                //DataTable clientes = contCliente.FiltrarClientesEnClientesAspx(tipoCliente, provincia, idVendedor, idGrupoCliente, idEstadoCliente);
 
                 List<Cliente> listaClientes = clientes.AsEnumerable().Select(m => new Cliente()
                 {

@@ -161,7 +161,7 @@
 
     <%-- Importacion de Clientes --%>
 
-        <div id="modalConfirmacionCliente" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalConfirmacionCliente" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -493,6 +493,20 @@
                             <ContentTemplate>
 
                                 <div class="form-group">
+                                    <label class="col-md-4">Fecha alta desde</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtFechaAltaD" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-4">Fecha alta hasta</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtFechaAltaH" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label class="col-md-4">Tipo Cliente</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListTipoCliente" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
@@ -629,9 +643,13 @@
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
 
+
+
     <script>
         function pageLoad() {
             $("#<%= txtFechaNacMillas.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaAltaD.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaAltaH.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= lbtnEnviarCodigoMillas.ClientID %>").tooltip();
             $("#<%= lbtnValidarLuegoMillas.ClientID %>").tooltip();
         }
@@ -668,13 +686,13 @@
             var txtCuerpoMensaje = document.getElementById('<%= txtCuerpoMensaje.ClientID %>');
             var lbCantidadCaracteresRestantesSMS = document.getElementById('<%= lbCantidadCaracteresRestantesSMS.ClientID %>');
             var cantidadCaracteres;
-            if (txtCuerpoMensaje.value.length == 0 && key!=0) {
+            if (txtCuerpoMensaje.value.length == 0 && key != 0) {
                 cantidadCaracteres = 1;
             }
             else {
-                cantidadCaracteres = txtCuerpoMensaje.value.length+1;
+                cantidadCaracteres = txtCuerpoMensaje.value.length + 1;
             }
-            
+
             lbCantidadCaracteresRestantesSMS.textContent = "Caracteres restantes: " + (160 - cantidadCaracteres);
 
             if (cantidadCaracteres == 160) {
@@ -685,6 +703,15 @@
             }
         }
     </script>
+
+        <script>
+            $(function () {
+             $("#<%= txtFechaAltaD.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+             $("#<%= txtFechaAltaH.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+    </script>
+
     <script>
         $(function () {
             $("#<%= txtFechaNacMillas.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
