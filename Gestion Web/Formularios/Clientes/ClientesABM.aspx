@@ -620,6 +620,7 @@
 
                                 <%--Sucursales--%>
                                 <div class="tab-pane fade" id="Expreso">
+
                                     <asp:UpdatePanel ID="UpdatePanelSucursales" UpdateMode="Always" runat="server">
                                         <ContentTemplate>
                                             <div role="form" class="form-horizontal col-md-12">
@@ -908,7 +909,7 @@
 
                                 <%-- Eventos --%>
                                 <div class="tab-pane fade" id="Eventos">
-                                    <asp:UpdatePanel ID="UpdatePanel11" UpdateMode="Always" runat="server">
+                                    <asp:UpdatePanel ID="UpdatePanel11" UpdateMode="Conditional" runat="server">
                                         <ContentTemplate>
                                             <div role="form" class="form-horizontal col-md-12">
                                                 <div class="form-group">
@@ -923,7 +924,6 @@
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtFechaEvento" ValidationGroup="EventosGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-1">Detalle</label>
                                                     <div class="col-md-4">
@@ -933,7 +933,6 @@
                                                         <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group">
                                                     <label class="col-md-1">
                                                         Enviar Mail
@@ -949,7 +948,12 @@
                                                         <!-- /input-group -->
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <label class="col-md-1">Archivo Email</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileUpload1" runat="server" ToolTip="Adjuntar archivo para e-mail" />
+                                                    </div>
+                                                </div>
                                                 <div class="form-group" id="divDisparaTarea">
                                                     <label for="name" class="col-md-1">Dispara tarea</label>
                                                     <div class="col-md-4">
@@ -959,21 +963,18 @@
                                                         </asp:RadioButtonList>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group" id="divTarea" runat="server">
                                                     <label for="name" class="col-md-1">Tarea</label>
                                                     <div class="col-md-4">
                                                         <asp:TextBox ID="txtTarea" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                     </div>
                                                 </div>
-
                                                 <%--<div class="form-group" id="divSituacion" runat="server">
                                                     <label for="name" class="col-md-1">Situacion</label>
                                                     <div class="col-md-4">
                                                         <asp:TextBox ID="txtSituacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                     </div>
                                                 </div>--%>
-
                                                 <div class="form-group" id="divSituacion" runat="server">
                                                     <label for="name" class="col-md-1">Estado</label>
                                                     <div class="col-md-4">
@@ -981,7 +982,6 @@
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group" id="divVencimientoTarea" runat="server">
                                                     <label for="name" class="col-md-1">Vencimiento</label>
                                                     <div class="col-md-2">
@@ -991,25 +991,19 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group">
                                                     <div class="col-md-4">
                                                         <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                             <div class="col-md-12">
-
                                                 <div class="widget stacked widget-table">
-
                                                     <div class="widget-header">
                                                         <span class="icon-external-link"></span>
                                                         <h3>Eventos</h3>
                                                     </div>
                                                     <!-- .widget-header -->
-
                                                     <div class="widget-content">
                                                         <table class="table table-bordered table-striped">
                                                             <thead>
@@ -1032,6 +1026,9 @@
                                                 </div>
                                             </div>
                                         </ContentTemplate>
+                                        <Triggers>
+                                            <asp:PostBackTrigger ControlID="lbtnAgregarEventoCliente" />
+                                        </Triggers>
                                     </asp:UpdatePanel>
                                 </div>
                                 <%-- Fin Eventos --%>
@@ -1671,12 +1668,10 @@
     <div id="modalDescuentos" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Descuentos</h4>
                 </div>
-
                 <div class="modal-body">
                     <asp:UpdatePanel ID="UpdatePanel6" runat="server">
                         <ContentTemplate>
@@ -1688,7 +1683,6 @@
                                     <div class="col-md-1">
                                         <asp:RequiredFieldValidator ForeColor="Red" ValidationGroup="descuentos" ControlToValidate="txtDescripcionDescuento" ID="RequiredFieldValidator34" runat="server" ErrorMessage="*"></asp:RequiredFieldValidator>
                                     </div>
-
                                     <div class="col-md-4">
                                         <div class="input-group">
                                             <span class="input-group-addon">%</span>
@@ -1701,10 +1695,7 @@
                                         <asp:LinkButton ID="btnAgregarDescuento" runat="server" ValidationGroup="descuentos" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarDescuento_Click" />
                                     </div>
                                 </div>
-
                                 <div class="form-group">
-
-
                                     <div class="col-md-10">
                                         <asp:ListBox ID="ListBoxDescuentos" runat="server" class="form-control"></asp:ListBox>
                                     </div>
@@ -1712,17 +1703,13 @@
                                         <asp:LinkButton ID="btnEliminar" runat="server" Text="<span class='shortcut-icon icon-trash'></span>" class="btn btn-danger" OnClick="btnEliminar_Click" />
                                     </div>
                                 </div>
-
                             </div>
-
                         </ContentTemplate>
                     </asp:UpdatePanel>
                 </div>
                 <div class="modal-footer">
                     <asp:LinkButton ID="btnDescuento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnDescuento_Click" />
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -1896,8 +1883,7 @@
     <script src="../../Scripts/demo/notifications.js"></script>
 
 
-    <script>
-
+    <script type="text/javascript">
         //valida los campos solo numeros
         function validarNro(e) {
             var key;
@@ -2050,6 +2036,4 @@
             });
         }
     </script>
-
-
 </asp:Content>

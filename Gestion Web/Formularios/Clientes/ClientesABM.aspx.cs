@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Script.Serialization;
@@ -3441,14 +3442,27 @@ namespace Gestion_Web.Formularios.Clientes
                 int ok = this.contClienteEntity.agregarEventoCliente(eventos);
                 if (ok > 0)
                 {
+                    Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
+                    if(FileUpload1.HasFile)
+                    {
+                        //HttpFileCollection fc = Request.Files;
+                        //for (int i = 0; i < fc.Count; i++)
+                        //{
+                        //HttpPostedFile pf = fc[i];
+                        HttpPostedFile file = FileUpload1.PostedFile;
+                        adjunto = new Attachment(file.InputStream,FileUpload1.FileName);
+                        //}
+                    }
+                    //string path = FileUpload1.FileName;
+                    //Attachment adjunto = new Attachment(path);
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if(this.chbEnviarMailCRM.Checked == true)
                     {
                         if(txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text) > 0)
+                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text,adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3505,12 +3519,14 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
+                    string path = FileUpload1.FileName;
+                    Attachment adjunto = new Attachment(path);
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if (this.chbEnviarMailCRM.Checked == true)
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text) > 0)
+                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text,adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
