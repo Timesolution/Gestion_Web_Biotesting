@@ -68,7 +68,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                if (rdSiNo.SelectedValue == "1")
+                if (chbDisparaTarea.Checked == true)
                 {
                     divVencimientoTarea.Visible = true;
                     divTarea.Visible = true;
@@ -192,6 +192,7 @@ namespace Gestion_Web.Formularios.Clientes
                     if (this.accion == 1 || this.accion == 3)
                     {
                         this.generarCodigo();
+                        this.txtFechaAlta.Text = DateTime.Today.ToString("dd/MM/yyyy");
                     }
                     this.verificarPermisoCtaCte();
                 }
@@ -894,7 +895,8 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                Cliente cl = this.controlador.obtenerClienteID(idCliente);
+                DateTime fechaAlta = new DateTime();
+                Cliente cl = this.controlador.obtenerClienteIDConFecha(idCliente, ref fechaAlta);
                 var clDatos = this.contClienteEntity.obtenerClienteDatosByCliente(idCliente);
                 string perfil = Session["Login_NombrePerfil"] as string;
                 if (cl != null)
@@ -905,6 +907,10 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtRazonSocial.Text = cl.razonSocial;
                     this.txtClienteExportacion.Text = cl.razonSocial;
                     this.DropListGrupo.SelectedValue = cl.grupo.id.ToString();
+                    if (fechaAlta != null)
+                        this.txtFechaAlta.Text = fechaAlta.ToString("dd/MM/yyyy");
+                    else
+                        this.txtFechaAlta.Text = string.Empty;
                     //como elimine categoria por defectno no pongo nada
                     //this.DropListCategoria.SelectedValue = 1;
                     if (this.DropListTipo.SelectedItem.Text.Contains("DNI"))
@@ -1429,14 +1435,14 @@ namespace Gestion_Web.Formularios.Clientes
 
                     if (!String.IsNullOrEmpty(mail.FirstOrDefault().Celular))
                     {
-                        if(mail.FirstOrDefault().Celular.Contains("-"))
+                        if (mail.FirstOrDefault().Celular.Contains("-"))
                         {
                             this.txtCodArea.Text = mail.FirstOrDefault().Celular.Split('-')[0];
                             this.txtCelularSMS.Text = mail.FirstOrDefault().Celular.Split('-')[1];
                         }
                         else
                         {
-                            
+
                             this.txtCodArea.Text = mail.FirstOrDefault().Celular.Substring(0, 2);
                             this.txtCelularSMS.Text = mail.FirstOrDefault().Celular.Remove(0, 2);
                         }
@@ -2174,6 +2180,20 @@ namespace Gestion_Web.Formularios.Clientes
                 //this.ListLocalidad.SelectedIndex = 0;
                 this.txtLocalidad.Text = "";
                 this.txtCodigoPostal.Text = "";
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void limpiarCamposCRM()
+        {
+            try
+            {
+                this.txtDetalleEvento.Text = "";
+                this.txtTarea.Text = "";
+                this.drpCRMSituacion.SelectedIndex = 0;
             }
             catch
             {
@@ -3337,7 +3357,7 @@ namespace Gestion_Web.Formularios.Clientes
                 cellTarea.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(cellTarea);
 
-                if(e.Vencimiento != null)
+                if (e.Vencimiento != null)
                 {
                     TableCell celVencimiento = new TableCell();
                     celVencimiento.Text = e.Vencimiento.Value.ToString("dd/MM/yyyy");
@@ -3376,13 +3396,12 @@ namespace Gestion_Web.Formularios.Clientes
 
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.ID = "btnEliminar_" + e.Id;
-                btnEliminar.CssClass = "btn btn-info";
-                btnEliminar.Attributes.Add("data-toggle", "modal");
-                btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                btnEliminar.CssClass = "btn btn-danger";
+                //btnEliminar.Attributes.Add("data-toggle", "modal");
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                btnEliminar.OnClientClick = "abrirdialog(" + e.Id + ");";
+                btnEliminar.Click += new EventHandler(EliminarEvento);
+                //btnEliminar.OnClientClick = "abrirdialog(" + e.Id + ");";
                 celAccion.Controls.Add(btnEliminar);
-
 
                 tr.Cells.Add(celAccion);
 
@@ -3410,22 +3429,22 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
         private void agregarEventoCliente()
         {
             try
-            {          
+            {
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
-                
+
                 eventos.Cliente = this.idCliente;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
                 eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
 
-                if(rdSiNo.SelectedValue == "1")
+                if (chbDisparaTarea.Checked == true)
                 {
                     eventos.Tarea = this.txtTarea.Text;
                     eventos.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
@@ -3445,24 +3464,27 @@ namespace Gestion_Web.Formularios.Clientes
                     Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
-                    if(FileUpload1.HasFile)
+                    if (FileUpload1.HasFile)
                     {
                         //HttpFileCollection fc = Request.Files;
                         //for (int i = 0; i < fc.Count; i++)
                         //{
                         //HttpPostedFile pf = fc[i];
+                        Log.EscribirSQL(1, "INFO", "Se adjunto un archivo al CRM");
                         HttpPostedFile file = FileUpload1.PostedFile;
-                        adjunto = new Attachment(file.InputStream,FileUpload1.FileName);
+                        adjunto = new Attachment(file.InputStream, FileUpload1.FileName);
                         //}
                     }
+                    else
+                        Log.EscribirSQL(1, "INFO", "No se adjunto ningun archivo al CRM");
                     //string path = FileUpload1.FileName;
                     //Attachment adjunto = new Attachment(path);
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
-                    if(this.chbEnviarMailCRM.Checked == true)
+                    if (this.chbEnviarMailCRM.Checked == true)
                     {
-                        if(txtEnviarMailCRM.Value.ToString() != "")
+                        if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text,adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3471,29 +3493,30 @@ namespace Gestion_Web.Formularios.Clientes
                         {
                             mensajeEnvioMail = "No se pudo enviar email. Texto vacio. Destilde la casilla si no desea enviar CRM por email.";
                         }
-                        
+
                     }
                     this.txtDetalleEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento guardado. "+ mensajeEnvioMail +"\", {type: \"info\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
         private void modificarEventoCliente()
         {
             try
             {
+
                 string fecha = this.txtFechaEvento.Text;
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
@@ -3501,7 +3524,7 @@ namespace Gestion_Web.Formularios.Clientes
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
                 ev.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
 
-                if (rdSiNo.SelectedValue == "1")
+                if (chbDisparaTarea.Checked == true)
                 {
                     ev.Tarea = this.txtTarea.Text;
                     ev.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
@@ -3517,16 +3540,25 @@ namespace Gestion_Web.Formularios.Clientes
                 int ok = this.contClienteEntity.modificarEventoCliente(ev);
                 if (ok > 0)
                 {
+                    Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
-                    string path = FileUpload1.FileName;
-                    Attachment adjunto = new Attachment(path);
+
+                    if (FileUpload1.HasFile)
+                    {
+                        Log.EscribirSQL(1, "INFO", "Se adjunto un archivo al CRM");
+                        HttpPostedFile file = FileUpload1.PostedFile;
+                        adjunto = new Attachment(file.InputStream, FileUpload1.FileName);
+                    }
+                    else
+                        Log.EscribirSQL(1, "INFO", "No se adjunto ningun archivo al CRM");
+
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if (this.chbEnviarMailCRM.Checked == true)
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text,adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3540,17 +3572,17 @@ namespace Gestion_Web.Formularios.Clientes
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Evento modificado." + mensajeEnvioMail + "\", {type: \"info\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento modificado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo modificar evento.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
         private void EditarEvento(object sender, EventArgs e)
@@ -3567,12 +3599,13 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtDetalleEvento.Text = ev.Descripcion;
                     this.lblIdEventoCliente.Text = ev.Id.ToString();
 
-                    if(ev.Tarea != null)
+                    if (ev.Tarea != null)
                     {
                         divVencimientoTarea.Visible = true;
                         divTarea.Visible = true;
                         divSituacion.Visible = true;
-                        rdSiNo.SelectedValue = "1";
+                        chbDisparaTarea.Checked = true;
+                        //RadButtonSi.Checked = true;
                         drpCRMSituacion.SelectedIndex = (int)ev.Estado;
                     }
 
@@ -3588,10 +3621,13 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        protected void btnSiEventoClienteHidden_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "myconfirmbox", "myconfirmbox();", true);
 
+        }
 
-
-        protected void btnSiEventoCliente_Click(object sender, EventArgs e)
+        public void btnSiEventoCliente_Click(object obj, EventArgs eventArgs)
         {
             try
             {
@@ -3601,22 +3637,77 @@ namespace Gestion_Web.Formularios.Clientes
                 if (i > 0)
                 {
                     //agrego bien
+                    limpiarCamposCRM();
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja evento cliente id: " + ev.Cliente);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado con exito.", null));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado.", "../ClientesABM.aspx?accion=2&id=" + ev.Cliente));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento eliminado.\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo eliminar.\", {type: \"error\"});", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar."));
 
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+            }
+            finally
+            {
+                //var tabId = "Eventos";
+                //var js = "$('a[href=" + tabId + "]').tab('show')";
+                //Response.Write("<script type='text/javascript'>" + js + "</script>");
+                //        ScriptManager.RegisterStartupScript(DialogUpdatePanel, DialogUpdatePanel.GetType(),
+                //Guid.NewGuid().ToString(), "CloseDialog();", true);
+                //btnSiEventoCliente.Attributes.Add("OnClientClick", "javascript: CloseDialog()");
+                //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalConfirmacion", "$('#modalConfirmacion').modal('dispose');", true);
             }
         }
-        #endregion       
+
+        public void EliminarEvento(object sender, EventArgs e)
+        {
+            try
+            {
+                string id = (sender as LinkButton).ID;
+                int idEvento = Convert.ToInt32(id.Split('_')[1]);
+                Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
+                int i = this.contClienteEntity.eliminarEventoCliente(ev);
+                if (i > 0)
+                {
+                    //agrego bien
+                    limpiarCamposCRM();
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja evento cliente id: " + ev.Cliente);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado.", "../ClientesABM.aspx?accion=2&id=" + ev.Cliente));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento eliminado.\", {type: \"info\"});", true);
+                    this.cargarEventosCliente();
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo eliminar.\", {type: \"error\"});", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar."));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+            }
+            finally
+            {
+                //var tabId = "Eventos";
+                //var js = "$('a[href=" + tabId + "]').tab('show')";
+                //Response.Write("<script type='text/javascript'>" + js + "</script>");
+                //        ScriptManager.RegisterStartupScript(DialogUpdatePanel, DialogUpdatePanel.GetType(),
+                //Guid.NewGuid().ToString(), "CloseDialog();", true);
+                //btnSiEventoCliente.Attributes.Add("OnClientClick", "javascript: CloseDialog()");
+                //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalConfirmacion", "$('#modalConfirmacion').modal('dispose');", true);
+            }
+        }
+        #endregion
 
         #region plan cuentas
 
@@ -4269,25 +4360,101 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        
+
         #endregion
 
-        protected void rdSiNo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Log.EscribirSQL(1, "ERROR", "Tilde una opcion en el CRM");
-            try
-            {
-                if (rdSiNo.SelectedValue == "1")
-                {
-                    divTarea.Visible = true;
-                    divVencimientoTarea.Visible = true;
-                    divSituacion.Visible = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1,"ERROR", "ERROR CATCH rdSiNo_SelectedIndexChanged");
-            }
-           
-        }
+        //protected void rdSiNo_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    Log.EscribirSQL(1, "ERROR", "Tilde una opcion en el CRM");
+        //    try
+        //    {
+        //        string file = null;
+
+        //        if (FileUpload1.HasFile)
+        //        {
+        //            file = FileUpload1.FileName.ToString();
+        //        }
+
+        //        if (RadButtonNo.Checked == true)
+        //        {
+        //            divTarea.Visible = true;
+        //            divVencimientoTarea.Visible = true;
+        //            divSituacion.Visible = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "ERROR CATCH rdSiNo_SelectedIndexChanged");
+        //    }
+
+        //}
+
+        //protected void RadButton1_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string file = null;
+
+        //        if (FileUpload1.HasFile)
+        //        {
+        //            file = FileUpload1.FileName.ToString();
+        //        }
+        //        RadButtonNo.Checked = false;
+        //        RadButtonSi.Attributes.Add("onClick", "javascript: validateRadButtons()");
+
+        //        //divTarea.Visible = true;
+        //        //divVencimientoTarea.Visible = true;
+        //        //divSituacion.Visible = true;
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "ERROR CATCH rdSiNo_SelectedIndexChanged. Mensaje: " + ex.Message);
+        //    }
+        //}
+
+        //protected void RadButton2_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        RadButtonSi.Checked = false;
+        //        string file = null;
+
+        //        if (FileUpload1.HasFile)
+        //        {
+        //            file = FileUpload1.FileName.ToString();
+        //        }
+        //        RadButtonNo.Attributes.Add("onClick", "javascript: validateRadButtons()");
+        //        //divTarea.Visible = false;
+        //        //divVencimientoTarea.Visible = false;
+        //        //divSituacion.Visible = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "ERROR CATCH rdSiNo_SelectedIndexChanged. Mensaje:" + ex.Message);
+        //    }
+        //}
+
+        //protected void chbDisparaTarea_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string file = null;
+
+        //        if (FileUpload1.HasFile)
+        //        {
+        //            file = FileUpload1.FileName.ToString();
+        //        }
+        //        RadButtonNo.Attributes.Add("onClick", "javascript: validateRadButtons()");
+        //        //divTarea.Visible = false;
+        //        //divVencimientoTarea.Visible = false;
+        //        //divSituacion.Visible = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.EscribirSQL(1, "ERROR", "ERROR CATCH rdSiNo_SelectedIndexChanged. Mensaje:" + ex.Message);
+        //    }
+        //}
     }
 }

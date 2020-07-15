@@ -102,7 +102,7 @@
                                                     <th style="width: 10%">Codigo</th>
                                                     <th style="width: 20%">Razon Social</th>
                                                     <th style="width: 20%">Alias</th>
-                                                    <th style="width: 10%">Mail</th>
+                                                    <th style="width: 12%">Mail</th>
                                                     <th style="width: 10%">Telefono</th>
                                                     <th style="width: 10%">CUIT</th>
                                                     <th class="td-actions" style="width: 20%"></th>

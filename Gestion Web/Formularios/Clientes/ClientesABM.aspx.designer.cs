@@ -580,6 +580,15 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.TextBox txtFechaNacimientoSMS;
         
         /// <summary>
+        /// txtFechaAlta control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFechaAlta;
+        
+        /// <summary>
         /// DropListEstado control.
         /// </summary>
         /// <remarks>
@@ -1237,13 +1246,22 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
         
         /// <summary>
-        /// rdSiNo control.
+        /// UpdatePanelTareas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rdSiNo;
+        protected global::System.Web.UI.UpdatePanel UpdatePanelTareas;
+        
+        /// <summary>
+        /// chbDisparaTarea control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbDisparaTarea;
         
         /// <summary>
         /// divTarea control.
@@ -2153,6 +2171,15 @@ namespace Gestion_Web.Formularios.Clientes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSiEventoCliente;
+        
+        /// <summary>
+        /// btnSiEventoClienteHidden control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSiEventoClienteHidden;
         
         /// <summary>
         /// UpdatePanel12 control.

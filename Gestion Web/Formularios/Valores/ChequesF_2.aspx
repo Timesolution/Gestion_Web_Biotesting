@@ -468,7 +468,7 @@
                                         <span class="input-group-addon">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
                                         </span>
-                                        <asp:TextBox ID="txtFechaAgregar" runat="server" class="form-control" Style="text-align: right;"></asp:TextBox>
+                                        <asp:TextBox ID="txtFechaAgregar" runat="server" class="form-control" Style="text-align: right;" ReadOnly="true"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -629,7 +629,7 @@
 
             $("#<%= txtDesdeI.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
-            $("#<%= txtFechaAgregar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+           
 
             $("#<%= txtFechaCAgregar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
@@ -672,9 +672,9 @@
                 $("#<%= txtFechaDebitar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
 
-            $(function () {
+            <%--$(function () {
                 $("#<%= txtFechaAgregar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+            });--%>
             $(function () {
                 $("#<%= txtFechaCAgregar.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             });
@@ -743,6 +743,4 @@
             return true;
         }
     </script>
-
-
 </asp:Content>
