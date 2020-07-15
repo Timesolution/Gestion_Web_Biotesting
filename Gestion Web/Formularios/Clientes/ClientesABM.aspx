@@ -315,6 +315,13 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Fecha Alta</label>
+                                                            <div class="col-md-6">
+                                                                <asp:TextBox ID="txtFechaAlta" runat="server" class="form-control" ReadOnly="true"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+
                                                     </asp:Panel>
                                                     <div class="form-group">
                                                         <label for="validateSelect" class="col-md-4">Estado</label>
@@ -620,7 +627,6 @@
 
                                 <%--Sucursales--%>
                                 <div class="tab-pane fade" id="Expreso">
-
                                     <asp:UpdatePanel ID="UpdatePanelSucursales" UpdateMode="Always" runat="server">
                                         <ContentTemplate>
                                             <div role="form" class="form-horizontal col-md-12">
@@ -652,7 +658,6 @@
                                         <Triggers>
                                         </Triggers>
                                     </asp:UpdatePanel>
-
                                 </div>
                                 <%-- Sucursales --%>
 
@@ -813,8 +818,6 @@
                                                             <asp:Button ID="btnAgregarAlerta" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarAlerta_Click" ValidationGroup="AlertaGroup" />
                                                         </div>
                                                     </div>
-
-
                                                 </fieldset>
 
                                             </div>
@@ -854,7 +857,6 @@
                                         <Triggers>
                                         </Triggers>
                                     </asp:UpdatePanel>
-
                                 </div>
                                 <%--Fin alerta--%>
 
@@ -911,7 +913,9 @@
                                 <div class="tab-pane fade" id="Eventos">
                                     <asp:UpdatePanel ID="UpdatePanel11" UpdateMode="Conditional" runat="server">
                                         <ContentTemplate>
+
                                             <div role="form" class="form-horizontal col-md-12">
+
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-1">Fecha</label>
                                                     <div class="col-md-2">
@@ -924,6 +928,7 @@
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtFechaEvento" ValidationGroup="EventosGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-1">Detalle</label>
                                                     <div class="col-md-4">
@@ -933,6 +938,7 @@
                                                         <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label class="col-md-1">
                                                         Enviar Mail
@@ -945,36 +951,60 @@
                                                             <input type="text" class="form-control" id="txtEnviarMailCRM" runat="server" maxlength="39">
                                                         </div>
                                                         <a id='resultado'></a>
-                                                        <!-- /input-group -->
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label class="col-md-1">Archivo Email</label>
                                                     <div class="col-md-4">
-                                                        <asp:FileUpload ID="FileUpload1" runat="server" ToolTip="Adjuntar archivo para e-mail" />
+                                                        <div class="input-group">
+                                                            <asp:FileUpload ID="FileUpload1" runat="server" ToolTip="Adjuntar archivo para e-mail" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group" id="divDisparaTarea">
-                                                    <label for="name" class="col-md-1">Dispara tarea</label>
+                                            </div>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="btnSiEventoCliente" />
+                                            <%--<asp:AsyncPostBackTrigger ControlID="chbDisparaTarea"  />--%>
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+
+                                    <%--<div id="divUpdateProgress">
+                                        <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanelTareas" DisplayAfter="0">
+                                            <ProgressTemplate>
+                                                <div class="modal">
+                                                    <div class="center">
+                                                        <div style="position: fixed; text-align: center; height: 100%; width: 100%; top: 0; right: 0; left: 0; z-index: 9999999; background-color: #000000; opacity: 0.7;">
+                                                            <span style="border-width: 0px; position: fixed; padding: 50px; background-color: #FFFFFF; font-size: 36px; left: 40%; top: 40%;">Loading ...</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ProgressTemplate>
+                                        </asp:UpdateProgress>
+                                    </div>--%>
+
+                                    <asp:UpdatePanel ID="UpdatePanelTareas" UpdateMode="Conditional" runat="server">
+                                        <ContentTemplate>
+
+                                            <div role="form" class="form-horizontal col-md-12">
+
+                                                <div class="form-group">
+                                                    <label class="col-md-1">Dispara tarea</label>
                                                     <div class="col-md-4">
-                                                        <asp:RadioButtonList ID="rdSiNo" CellPadding="20" Style="margin-top: -10px;" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdSiNo_SelectedIndexChanged" AutoPostBack="true" runat="server">
-                                                            <asp:ListItem Text="Si" Value="1" />
-                                                            <asp:ListItem Text="No" Value="0" />
-                                                        </asp:RadioButtonList>
+                                                        <div class="input-group">
+                                                            <asp:CheckBox ID="chbDisparaTarea" runat="server" AutoPostBack="true" OnCheckedChanged="Check_Clicked" />
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group" id="divTarea" runat="server">
                                                     <label for="name" class="col-md-1">Tarea</label>
                                                     <div class="col-md-4">
                                                         <asp:TextBox ID="txtTarea" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                     </div>
                                                 </div>
-                                                <%--<div class="form-group" id="divSituacion" runat="server">
-                                                    <label for="name" class="col-md-1">Situacion</label>
-                                                    <div class="col-md-4">
-                                                        <asp:TextBox ID="txtSituacion" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
-                                                    </div>
-                                                </div>--%>
+
                                                 <div class="form-group" id="divSituacion" runat="server">
                                                     <label for="name" class="col-md-1">Estado</label>
                                                     <div class="col-md-4">
@@ -982,6 +1012,7 @@
                                                         </asp:DropDownList>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group" id="divVencimientoTarea" runat="server">
                                                     <label for="name" class="col-md-1">Vencimiento</label>
                                                     <div class="col-md-2">
@@ -991,43 +1022,48 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
+                                                    <label for="name" class="col-md-1"></label>
                                                     <div class="col-md-4">
-                                                        <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" />
+                                                        <asp:LinkButton ID="lbtnAgregarEventoCliente" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" ToolTip="Agregar CRM" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="widget stacked widget-table">
+                                                        <div class="widget-header">
+                                                            <span class="icon-external-link"></span>
+                                                            <h3>Eventos</h3>
+                                                        </div>
+                                                        <!-- .widget-header -->
+                                                        <div class="widget-content">
+                                                            <table class="table table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Fecha</th>
+                                                                        <th>Detalle</th>
+                                                                        <th>Tarea</th>
+                                                                        <th>Vencimiento</th>
+                                                                        <th>Estado</th>
+                                                                        <th>Usuario</th>
+                                                                        <th style="width: 10%"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <asp:PlaceHolder ID="phEventos" runat="server"></asp:PlaceHolder>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <!-- .widget-content -->
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="widget stacked widget-table">
-                                                    <div class="widget-header">
-                                                        <span class="icon-external-link"></span>
-                                                        <h3>Eventos</h3>
-                                                    </div>
-                                                    <!-- .widget-header -->
-                                                    <div class="widget-content">
-                                                        <table class="table table-bordered table-striped">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Fecha</th>
-                                                                    <th>Detalle</th>
-                                                                    <th>Tarea</th>
-                                                                    <th>Vencimiento</th>
-                                                                    <th>Estado</th>
-                                                                    <th>Usuario</th>
-                                                                    <th style="width: 10%"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <asp:PlaceHolder ID="phEventos" runat="server"></asp:PlaceHolder>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <!-- .widget-content -->
-                                                </div>
-                                            </div>
+
                                         </ContentTemplate>
                                         <Triggers>
-                                            <asp:PostBackTrigger ControlID="lbtnAgregarEventoCliente" />
+                                            <asp:AsyncPostBackTrigger ControlID="chbDisparaTarea" />
+                                            <asp:AsyncPostBackTrigger ControlID="btnSiEventoCliente" />
                                         </Triggers>
                                     </asp:UpdatePanel>
                                 </div>
@@ -1072,7 +1108,6 @@
                                                         <asp:LinkButton ID="btnAgregarEmpleado" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnAgregarEmpleado_Click" />
                                                     </div>
                                                 </div>
-
                                             </div>
 
                                         </ContentTemplate>
@@ -1348,6 +1383,7 @@
             </div>
         </div>
     </div>
+
 
     <div id="modalTipoCliente" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -1718,6 +1754,7 @@
     <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Confirmacion de Eliminacion</h4>
@@ -1742,14 +1779,16 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnSiEventoCliente" Text="Eliminar" class="btn btn-danger" OnClick="btnSiEventoCliente_Click" />
+                        <asp:Button runat="server" ID="btnSiEventoCliente" Style="display:none" Text="Eliminar" class="btn btn-danger" OnClick="btnSiEventoCliente_Click" />
+                        <asp:Button runat="server" ID="btnSiEventoClienteHidden"  Text="Eliminar2" class="btn btn-danger" OnClick="btnSiEventoClienteHidden_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
+
     <%--Fin modalGrupo--%>
     <div id="modalCuentas" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -1812,7 +1851,24 @@
 
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script runat="server">
 
+        void Check_Clicked(Object sender, EventArgs e)
+        {
+            if (chbDisparaTarea.Checked == true)
+            {
+                divTarea.Visible = true;
+                divVencimientoTarea.Visible = true;
+                divSituacion.Visible = true;
+            }
+            else
+            {
+                divTarea.Visible = false;
+                divVencimientoTarea.Visible = false;
+                divSituacion.Visible = false;
+            }
+        }
+    </script>
     <script>
         var hiddenOrigenCliente;
 
@@ -1832,7 +1888,21 @@
             $("#<%= txtFechaIngreso.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
     </script>
+
+        <script type="text/javascript">
+             function myconfirmbox() {
+                 if (confirm("message")) {
+                     //trigger the button click
+                     $('#' + '<%= btnSiEventoCliente.ClientID %>').click();
+                     return true;
+                 }
+                 else {
+                     return false;
+                 }
+             }
+        </script>
     <script>
+
         function abrirdialog(valor) {
             document.getElementById('<%= txtMovimientoEventoCliente.ClientID %>').value = valor;
         }
@@ -2036,4 +2106,7 @@
             });
         }
     </script>
+
+
+
 </asp:Content>

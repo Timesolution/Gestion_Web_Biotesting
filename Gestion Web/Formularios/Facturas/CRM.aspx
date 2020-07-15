@@ -125,21 +125,19 @@
                             <div class="table-responsive">
                                 <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-
                                     <thead>
-                                        <tr>
-
                                          <tr>
+                                            <th>Codigo</th>
                                             <th>Cliente</th>
+                                            <th>E-Mail</th>
                                             <th>Fecha</th>
                                             <th>Detalle</th>
                                             <th>Tarea</th>
                                             <th style="text-align: right;">Vencimiento</th>
                                             <th style="text-align: right;">Estado</th>
                                             <th style="text-align: right;">Usuario</th>
-                                            <th class="td-actions" style="width: 1%"></th>
+                                            <th class="td-actions" style="width: 10%"></th>
                                         </tr>
-
                                     </thead>
                                     <tbody>
                                         <asp:PlaceHolder ID="phFacturas" runat="server"></asp:PlaceHolder>

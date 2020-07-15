@@ -1319,6 +1319,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                controladorContacto controladorContacto = new controladorContacto();
                 if (clientes == null)
                 {
                     return;
@@ -1341,14 +1342,26 @@ namespace Gestion_Web.Formularios.Clientes
                     celAlias.VerticalAlign = VerticalAlign.Middle;
 
                     List<contacto> contactos = this.contCliente.obtenerContactos(cl.id);
+                    Cliente_Datos cliente_Datos = contClienteEntity.obtenerClienteDatosByIdCliente(cl.id);
                     string mail = "";
                     string tel = "";
                     var contac = contactos.FirstOrDefault();
                     if (contac != null)
                     {
-                        mail = contac.mail;
+                        if (cliente_Datos != null)
+                        {
+                            mail = contac.mail + "; " + cliente_Datos.Mail;
+                        }
+                        else
+                            mail = contac.mail;
+
                         tel = contac.numero;
                     }
+                    else if(cliente_Datos != null)
+                    {
+                        mail = cliente_Datos.Mail;
+                    }
+
                     TableCell celMail = new TableCell();
                     celMail.Text = "<a href='mailto:" + mail + "' target='_top'>" + mail + "</a>";
                     //celMail.Width = Unit.Percentage(7.5);

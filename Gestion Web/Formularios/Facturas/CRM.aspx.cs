@@ -65,6 +65,7 @@ namespace Gestion_Web.Formularios.Facturas
                 filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
                 filtroPorFechaVencimiento = Convert.ToInt32(Request.QueryString["fpfv"]);
                 idUsuario = Convert.ToInt32(Request.QueryString["us"]);
+                
 
                 if (!IsPostBack)
                 {
@@ -253,22 +254,39 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                controladorContacto controladorContacto = new controladorContacto();
                 controladorUsuario controladorUsuario = new controladorUsuario();
+                controladorCliente controladorCliente = new controladorCliente();
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
                 string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
                 string restaHoras;
 
                 if (Convert.ToInt32(modificoHora) == 1)
                     restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
 
+                string mail = string.Empty;
+                List<contacto> contactos = this.contCliente.obtenerContactos((int)clientes_Eventos.Cliente);
+                var primerMailContacto = contactos.FirstOrDefault();
+                Cliente_Datos clienteDatos = controladorClienteEntity.obtenerClienteDatosByIdCliente((int)clientes_Eventos.Cliente);
 
-                controladorCliente controladorCliente = new controladorCliente();
+                if(contactos.Count != 0)
+                {
+                    if (clienteDatos != null)
+                        mail = primerMailContacto.mail + "; " + clienteDatos.Mail;
+                    else
+                        mail = primerMailContacto.mail;
+                }
+                else if (clienteDatos != null)
+                    mail = clienteDatos.Mail;
+
+                var cliente = controladorCliente.obtenerClienteID((int)clientes_Eventos.Cliente);
 
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = clientes_Eventos.Id.ToString();
 
-                var cliente = controladorCliente.obtenerClienteID((int)clientes_Eventos.Cliente);
-
+                //var email = controladorCliente.obtenerContactoCliente()
                 //int estaRefact = this.contFactEntity.verificarRefacturado(f.id);
                 //if (estaRefact > 0)
                 //{
@@ -277,12 +295,28 @@ namespace Gestion_Web.Formularios.Facturas
                 //}
 
                 //Celdas
+
+                TableCell celCodigo = new TableCell();
+                celCodigo.Text = cliente.codigo;
+                celCodigo.Width = Unit.Percentage(5);
+                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                celCodigo.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celCodigo);
+
                 TableCell celCliente = new TableCell();
                 celCliente.Text = cliente.razonSocial;
                 celCliente.HorizontalAlign = HorizontalAlign.Center;
                 celCliente.VerticalAlign = VerticalAlign.Middle;
                 celCliente.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celCliente);
+
+                TableCell celEmail = new TableCell();
+                celEmail.Text = mail;
+                celEmail.HorizontalAlign = HorizontalAlign.Center;
+                celEmail.VerticalAlign = VerticalAlign.Middle;
+                celEmail.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celEmail);
 
                 TableCell celFecha = new TableCell();
                 celFecha.Text = clientes_Eventos.Fecha?.ToString("dd/MM/yyyy");
@@ -337,6 +371,20 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     tr.ForeColor = System.Drawing.Color.Red;
                 }
+
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
+
+                LinkButton btnRedireccionarCRM = new LinkButton();
+                btnRedireccionarCRM.ID = "btnRedireccionar_" + clientes_Eventos.Id;
+                btnRedireccionarCRM.CssClass = "btn btn-info ui-tooltip";
+                btnRedireccionarCRM.Attributes.Add("data-toggle", "tooltip");
+                btnRedireccionarCRM.PostBackUrl = "../Clientes/ClientesABM.aspx?accion=2&id=" + clientes_Eventos.Cliente.ToString();
+                btnRedireccionarCRM.Text = "<span class='shortcut-icon icon-user'></span>";
+                btnRedireccionarCRM.Attributes.Add("title data-original-title", "Ir a CRM");
+                celAccion.Controls.Add(btnRedireccionarCRM);
+                tr.Cells.Add(celAccion);
 
                 phFacturas.Controls.Add(tr);
             }
