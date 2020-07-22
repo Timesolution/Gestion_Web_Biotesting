@@ -4288,6 +4288,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         AgregarEventoCliente(fact.cliente.id, fact.numero);
 
+                        PasarEstadoPacienteOK(fact.cliente.id);
                     }
                     else
                     {
@@ -4315,6 +4316,13 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error guardando facturas." + ex.Message + " \", {type: \"error\"});", true);
             }
+        }
+
+        public void PasarEstadoPacienteOK(int idCliente)
+        {
+            Estetica_Api.Controladores.ControladorPropietarios controladorPropietarios = new Estetica_Api.Controladores.ControladorPropietarios();
+
+            controladorPropietarios.PasarPacienteOK(idCliente);
         }
 
         public void AgregarEventoCliente(int idCliente, string FactNumero)
