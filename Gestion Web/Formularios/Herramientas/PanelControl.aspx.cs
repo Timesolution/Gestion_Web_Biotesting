@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -134,7 +135,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListColumnaUnidadMedidaEnTrazabilidad.SelectedValue = configuracion.ColumnaUnidadMedidaEnTrazabilidad;
                 this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
                 this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue = configuracion.ModificarCantidadEnVentaEntreSucursales;
-                this.txtObeservacionesFC.Text = configuracion.ObservacionesFC;
+                this.txtObservacionesFC.Text = configuracion.ObservacionesFC;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1343,11 +1344,30 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
+        public string FormatearObservacionParaServicioFiscal(string observacion)
+        {
+            if (observacion.Length > 22)
+            {
+                var builder = new StringBuilder();
+                int count = 0;
+                foreach (var obs in observacion)
+                {
+                    builder.Append(obs);
+                    if ((++count % 21) == 0)
+                    {
+                        builder.Append('|');
+                    }
+                }
+                observacion = builder.ToString();
+            }
+            return observacion;
+        }
+
         protected void lbtnObeservacionesFC_Click(object sender, EventArgs e)
         {
             try
             {
-                configuracion.ObservacionesFC = this.txtObeservacionesFC.Text;
+                configuracion.ObservacionesFC = this.txtObservacionesFC.Text;
 
                 int i = configuracion.ActualizarObservacionesFC();
                 if (i > 0)

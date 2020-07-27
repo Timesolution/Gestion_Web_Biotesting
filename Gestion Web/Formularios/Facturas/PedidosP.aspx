@@ -182,7 +182,7 @@
                                         <th>Estado</th>
                                         <th id="lineasTabla" runat="server">Lineas</th>
                                         <th id="bultosTabla" runat="server">Bultos</th>
-                                        <th id="tiempoTabla" runat="server">Tiempo</th>                                        
+                                        <th id="tiempoTabla" runat="server">Tiempo</th>
                                         <th>
                                             <table>
                                                 <tr>
@@ -750,47 +750,47 @@
     </script>
 
     <script>
-            function CheckNone() {
-                var total = 0;
-                for (var i = 1; i < document.getElementById('dataTablesP-example').rows.length; i++) {
-                    document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = false;
-                }
+        function CheckNone() {
+            var total = 0;
+            for (var i = 1; i < document.getElementById('dataTablesP-example').rows.length; i++) {
+                document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = false;
             }
+        }
     </script>
 
     <script>
 
 
-            $(function () {
-                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaDesdeCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaDesdeCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaHastaCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaHastaCantidad.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaEntregaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaEntregaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaDesdeFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaDesdeFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
-            $(function () {
-                $("#<%= txtFechaHastaFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        $(function () {
+            $("#<%= txtFechaHastaFamilia.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
     </script>

@@ -706,13 +706,13 @@ namespace Gestion_Web.Formularios.Herramientas {
         protected global::System.Web.UI.WebControls.LinkButton lbtnModificarCantidadEnVentaEntreSucursales;
         
         /// <summary>
-        /// txtObeservacionesFC control.
+        /// txtObservacionesFC control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtObeservacionesFC;
+        protected global::System.Web.UI.WebControls.TextBox txtObservacionesFC;
         
         /// <summary>
         /// lbtnObeservacionesFC control.

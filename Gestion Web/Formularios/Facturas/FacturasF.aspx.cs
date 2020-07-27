@@ -40,6 +40,10 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
         Mensajes m = new Mensajes();
+        private int accion;
+        private string numeroFactura = string.Empty;
+        private string razonSocialCliente = string.Empty;
+        private string observacion = string.Empty;
         private int suc;
         private string fechaD;
         private string fechaH;
@@ -62,6 +66,10 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.VerificarLogin();
                 //datos de filtro
+                accion = Convert.ToInt32(Request.QueryString["a"]);
+                numeroFactura = Request.QueryString["n"];
+                razonSocialCliente = Request.QueryString["rz"];
+                observacion = Request.QueryString["o"];
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
                 suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
@@ -75,6 +83,7 @@ namespace Gestion_Web.Formularios.Facturas
                 vendedor = Convert.ToInt32(Request.QueryString["vend"]);
                 formaPago = Convert.ToInt32(Request.QueryString["fp"]);
 
+
                 if (!IsPostBack)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
@@ -83,7 +92,7 @@ namespace Gestion_Web.Formularios.Facturas
                     txtTotalPago.Style["text-align"] = "right";
                     txtRestaPago.Style["text-align"] = "right";
                     txtImportePago.Style["text-align"] = "right";
-                    btnAgregarPago.Attributes.Add("disabled", "true");                    
+                    btnAgregarPago.Attributes.Add("disabled", "true");
                     //Verifico si tiene habilitado el boton Facturar PRP según la configuracion
                     this.verificarFacturarPRP();
 
@@ -137,6 +146,23 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListFormasPago.SelectedValue = formaPago.ToString();
                     this.chkAnuladas.Checked = Convert.ToBoolean(this.anuladas);
                 }
+
+                //ACCION 1: Busca por numero de factura
+                if (accion == 1)
+                {
+                    this.BuscarPorNumeroFactura();
+                }
+                //ACCION 2: Busca por razon social
+                if (accion == 2)
+                {
+                    this.BuscarPorRazonSocial();
+                }
+                //ACCION 3: Busca por observacion/comentario.
+                if (accion == 3)
+                {
+                    this.BuscarPorObservacion();
+                }
+
                 btnAgregarFC.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarFC, null) + ";");
                 btnCalcularDiferenciaCambio.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnCalcularDiferenciaCambio, null) + ";");
                 btnGenerarNotaDebitoCreditoDiferenciaCambio.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnGenerarNotaDebitoCreditoDiferenciaCambio, null) + ";");
@@ -3855,6 +3881,97 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
+        #region Busqueda de Facturas
+
+        /// <summary>
+        /// Este metodo busca por el numero de factura introducido la caja de texto del modal
+        /// </summary>
+        private void BuscarPorNumeroFactura()
+        {
+            try
+            {
+                List<Factura> listaFacturas = this.controlador.obtenerFacturaByNumero(this.numeroFactura);
+                int cantidadFacturasEncontradas = listaFacturas.Count();
+                if (cantidadFacturasEncontradas != 0)
+                {
+                    this.phFacturas.Controls.Clear();
+                    foreach (var factura in listaFacturas)
+                    {
+                        this.cargarEnPh(factura);
+                    }
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con esta numeracion: " + this.numeroFactura));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por numero. CATCH:" + ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Este metodo busca por la observacion/comentario de la factura.
+        /// </summary>
+        private void BuscarPorRazonSocial()
+        {
+            try
+            {
+                List<Factura> listaFacturas = this.controlador.obtenerFacturaByRazonSocial(this.razonSocialCliente);
+                int cantidadFacturasEncontradas = listaFacturas.Count();
+                if (cantidadFacturasEncontradas != 0)
+                {
+                    this.phFacturas.Controls.Clear();
+                    foreach (var factura in listaFacturas)
+                    {
+                        this.cargarEnPh(factura);
+                    }
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con estos caracteres: " + this.razonSocialCliente));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Factura por Cliente. CATCH:  " + ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Este metodo busca por la observacion/comentario de la factura.
+        /// </summary>
+        private void BuscarPorObservacion()
+        {
+            try
+            {
+                List<Factura> listaFacturas = this.controlador.obtenerFacturaPorObservacion(this.observacion);
+                int cantidadFacturasEncontradas = listaFacturas.Count();
+                if (cantidadFacturasEncontradas != 0)
+                {
+                    this.phFacturas.Controls.Clear();
+                    foreach (var factura in listaFacturas)
+                    {
+                        this.cargarEnPh(factura);
+                    }
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con esta observacion: " + this.observacion));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("WEB: Error buscando Factura por observacion.CATCH:  " + ex.Message));
+            }
+        }
+
+        #endregion
+
         #region Nota Debito/Credito por Diferencia de Cambio
 
         protected void lbtnDebitoCreditoDiferenciaCambio_Click(object sender, EventArgs e)
@@ -4275,7 +4392,6 @@ namespace Gestion_Web.Formularios.Facturas
             ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalMailPorCliente", "openModalMailPorCliente();", true);
         }
 
-
         protected DataTable lstPago
         {
 
@@ -4320,7 +4436,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
 
-                if(CorroborarTotalPagos() == 1)
+                if (CorroborarTotalPagos() == 1)
                 {
 
                     controladorFacturacion controladorFacturacion = new controladorFacturacion();
@@ -4330,7 +4446,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     DataTable dt = this.lstPago;
 
-                    if(hiddenEditarPago.Value == "1")
+                    if (hiddenEditarPago.Value == "1")
                     {
                         controladorFacturacion.BorrarPagos(factura.id);
                     }
@@ -4459,7 +4575,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dr["Importe"] = montoIngresado;
                     dr["Resta"] = montoIngresado;
                     dr["Observacion"] = txtObservacionPago.Text;
-                    dr["Fecha"] =  Convert.ToDateTime(txtFechaPago.Text, new CultureInfo("es-AR")).ToString();
+                    dr["Fecha"] = Convert.ToDateTime(txtFechaPago.Text, new CultureInfo("es-AR")).ToString();
                     dr["IdFactura"] = idFactura.Value;
 
                     dt.Rows.Add(dr);
@@ -4663,7 +4779,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 hiddenTotalPago.Value = txtTotalPago.Text;
 
-                if(BuscarPagosProgramadosByFactura(factura.id) == 1)
+                if (BuscarPagosProgramadosByFactura(factura.id) == 1)
                 {
                     this.cargarTablaPAgos();
                     this.txtImportePago.Text = "";
@@ -4696,7 +4812,7 @@ namespace Gestion_Web.Formularios.Facturas
             var tareas = controladorFacturacion.BuscarTareasProgramadosByIdFactura(idFactura);
             lstPago.Clear();
 
-            if (tareas !=null && tareas.Count > 0)
+            if (tareas != null && tareas.Count > 0)
             {
                 DataTable dt = this.lstPago;
 
@@ -4724,5 +4840,36 @@ namespace Gestion_Web.Formularios.Facturas
 
         }
 
+        /// <summary>
+        /// Metodo utilizado para buscar las facturas por numero o razon social del cliente.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnBuscarNumerosFacturas_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.txtNumeroFactura.Text))
+            {
+                if (string.IsNullOrEmpty(this.txtRazonSocial.Text) && string.IsNullOrEmpty(this.txtObservacion.Text))
+                    Response.Redirect("FacturasF.aspx?a=1&n=" + this.txtNumeroFactura.Text);
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en una sola caja de texto. "));
+            }
+            if (!string.IsNullOrEmpty(this.txtRazonSocial.Text))
+            {
+                if (string.IsNullOrEmpty(this.txtObservacion.Text) && string.IsNullOrEmpty(this.txtNumeroFactura.Text))
+                    Response.Redirect("FacturasF.aspx?a=2&rz=" + this.txtRazonSocial.Text);
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en una sola caja de texto. "));
+            }
+            if (!string.IsNullOrEmpty(this.txtObservacion.Text))
+            {
+                if (string.IsNullOrEmpty(this.txtNumeroFactura.Text) && string.IsNullOrEmpty(this.txtRazonSocial.Text))
+                    Response.Redirect("FacturasF.aspx?a=3&o=" + this.txtObservacion.Text);
+                else
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en una sola caja de texto. "));
+            }
+            if(string.IsNullOrEmpty(this.txtNumeroFactura.Text) && string.IsNullOrEmpty(this.txtRazonSocial.Text) && string.IsNullOrEmpty(this.txtObservacion.Text))
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en al menos una caja de texto. "));
+        }
     }
 }
