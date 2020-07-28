@@ -371,8 +371,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="name" class="col-md-4">Detalle</label>
-                                    <div class="col-md-4" style="height: inherit">
-                                        <asp:TextBox ID="txtDescripcionArt" runat="server" EnableViewState="false" TextMode="MultiLine" Rows="2" BackColor="LightYellow" class="form-control"></asp:TextBox>
+                                    <div class="col-md-7" style="height: inherit">
+                                        <asp:TextBox ID="txtDescripcionArt" runat="server" EnableViewState="false" TextMode="MultiLine" Rows="4" BackColor="LightYellow" class="form-control"></asp:TextBox>
                                     </div>
                                     <div class="col-md-4">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="*" ControlToValidate="txtDescripcionArt" InitialValue="0.00" ValidationGroup="NCNDGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>

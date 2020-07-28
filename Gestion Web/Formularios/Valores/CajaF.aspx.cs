@@ -255,6 +255,11 @@ namespace Gestion_Web.Formularios.Valores
                     this.DropListSucursal.Attributes.Remove("disabled");
                     this.ListSucursal2.Attributes.Remove("disabled");
                 }
+                else
+                {
+                    this.DropListSucursal.Attributes.Add("disabled","disabled");
+                    this.ListSucursal2.Attributes.Add("disabled","disabled");
+                }
 
             }
             catch
