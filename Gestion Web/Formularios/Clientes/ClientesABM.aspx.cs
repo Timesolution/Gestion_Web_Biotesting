@@ -3438,8 +3438,8 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
-
-                eventos.Cliente = this.idCliente;
+                cliente cliente = controladorClienteEntity.ObtenerClienteId(this.idCliente);
+                eventos.Cliente = cliente.id;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
                 eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
@@ -3484,7 +3484,7 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial,usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3520,6 +3520,7 @@ namespace Gestion_Web.Formularios.Clientes
                 string fecha = this.txtFechaEvento.Text;
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
+                cliente cliente = controladorClienteEntity.ObtenerClienteId(this.idCliente);
                 ev.Descripcion = this.txtDetalleEvento.Text;
                 ev.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
                 ev.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
@@ -3558,7 +3559,7 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial,usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
