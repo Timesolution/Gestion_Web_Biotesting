@@ -1174,13 +1174,13 @@ namespace Gestion_Web.Formularios.Clientes {
         protected global::System.Web.UI.WebControls.TextBox txtNroTarjetaMillas;
         
         /// <summary>
-        /// UpdatePanel11 control.
+        /// UpdatePanelTareas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel11;
+        protected global::System.Web.UI.UpdatePanel UpdatePanelTareas;
         
         /// <summary>
         /// txtFechaEvento control.
@@ -1244,15 +1244,6 @@ namespace Gestion_Web.Formularios.Clientes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
-        
-        /// <summary>
-        /// UpdatePanelTareas control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanelTareas;
         
         /// <summary>
         /// chbDisparaTarea control.
@@ -1324,7 +1315,7 @@ namespace Gestion_Web.Formularios.Clientes {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarEventoCliente;
+        protected global::System.Web.UI.WebControls.Button lbtnAgregarEventoCliente;
         
         /// <summary>
         /// phEventos control.
@@ -1334,6 +1325,15 @@ namespace Gestion_Web.Formularios.Clientes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phEventos;
+        
+        /// <summary>
+        /// TabName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField TabName;
         
         /// <summary>
         /// UpdatePanel13 control.
@@ -2162,24 +2162,6 @@ namespace Gestion_Web.Formularios.Clientes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMovimientoEventoCliente;
-        
-        /// <summary>
-        /// btnSiEventoCliente control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSiEventoCliente;
-        
-        /// <summary>
-        /// btnSiEventoClienteHidden control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSiEventoClienteHidden;
         
         /// <summary>
         /// UpdatePanel12 control.
