@@ -53,6 +53,7 @@ namespace Gestion_Web.Formularios.Clientes
         private int EditarCon;
         private int PosDir;
         private int PosCon;
+        private int crm;
 
         public class IIBBTemporal
         {
@@ -84,6 +85,7 @@ namespace Gestion_Web.Formularios.Clientes
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
+                this.crm = Convert.ToInt32(Request.QueryString["crm"]);
                 hiddenIdCliente.Value = idCliente.ToString();
                 string perfil = Session["Login_NombrePerfil"] as string;
 
@@ -93,6 +95,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 if (!IsPostBack)
                 {
+
                     drpCRMSituacion.SelectedValue = "1";
                     txtFechaEvento.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -213,6 +216,15 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     this.cargarTablaDireccion();
                     this.cargarTablaContacto();
+                }
+                TabName.Value = Request.Form[TabName.UniqueID];
+                if (crm == 1)
+                {
+                    //liEvento.Add("class","active");
+                }
+                else
+                {
+                    //liEvento.Attributes.Add("class", "active");
                 }
 
             }
@@ -3312,12 +3324,16 @@ namespace Gestion_Web.Formularios.Clientes
         }
         #endregion
 
-        #region eventos cliente
+        #region Eventos Cliente CRM
 
+        /// <summary>
+        /// Este metodo carga los eventos CRM del cliente.
+        /// </summary>
         private void cargarEventosCliente()
         {
             try
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se va a cagar el CRM del cliente");
                 this.phEventos.Controls.Clear();
 
                 List<Clientes_Eventos> eventos = this.contClienteEntity.obtenerEventosClienteByCliente(this.idCliente);
@@ -3333,9 +3349,15 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Error al cargar CRM del cliente. Ubicacion: ClientesABM.cargarEventosCliente. Excepcion: " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Este metodo carga los eventos en la tabla PH para mostrar
+        /// </summary>
+        /// <param name="e">objeto de tipo Clientes_Eventos</param>
+        /// <param name="estado">estado del evento</param>
         private void cargarEventosClientePH(Clientes_Eventos e, string estado)
         {
             try
@@ -3398,9 +3420,9 @@ namespace Gestion_Web.Formularios.Clientes
                 btnEliminar.ID = "btnEliminar_" + e.Id;
                 btnEliminar.CssClass = "btn btn-danger";
                 //btnEliminar.Attributes.Add("data-toggle", "modal");
+                this.btnEliminar.Attributes.Add("onClienClick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
                 btnEliminar.Click += new EventHandler(EliminarEvento);
-                //btnEliminar.OnClientClick = "abrirdialog(" + e.Id + ");";
                 celAccion.Controls.Add(btnEliminar);
 
                 tr.Cells.Add(celAccion);
@@ -3409,9 +3431,15 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Error al cargar CRM del cliente en la tabla PH. Ubicacion: ClientesABM.cargarEventosClientePH. Excepcion: " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Este metodo se llama al hacer click sobre el boton guardar evento. Y diferencia entre modificar o agregar.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void lbtnAgregarEventoCliente_Click(object sender, EventArgs e)
         {
             try
@@ -3429,15 +3457,22 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch (Exception ex)
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Error al cargar CRM del cliente en la tabla PH. Ubicacion: ClientesABM.lbtnAgregarEventoCliente_Click. Excepcion: " + ex.Message);
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
+
+        /// <summary>
+        /// Este metodo procesa la informacion para guardar el evento del cliente y enviarlo por mail si se lo indica.
+        /// </summary>
         private void agregarEventoCliente()
         {
             try
             {
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Busca al cliente a la BD para obtener la razonSocial e enviarla por mail. Ubicacion: ClientesABM.agregarEventoCliente.");
                 cliente cliente = controladorClienteEntity.ObtenerClienteId(this.idCliente);
                 eventos.Cliente = cliente.id;
                 eventos.Descripcion = this.txtDetalleEvento.Text;
@@ -3457,34 +3492,29 @@ namespace Gestion_Web.Formularios.Clientes
                     eventos.Vencimiento = null;
                 }
 
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Voy a agregar el evento a la BD. Ubicacion: ClientesABM.agregarEventoCliente.");
                 int ok = this.contClienteEntity.agregarEventoCliente(eventos);
+
                 if (ok > 0)
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "El evento se agrego a la BD.Voy a mandar el email. Ubicacion: ClientesABM.agregarEventoCliente.");
                     Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
                     if (FileUpload1.HasFile)
                     {
-                        //HttpFileCollection fc = Request.Files;
-                        //for (int i = 0; i < fc.Count; i++)
-                        //{
-                        //HttpPostedFile pf = fc[i];
-                        Log.EscribirSQL(1, "INFO", "Se adjunto un archivo al CRM");
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se adjunto un archivo al CRM");
                         HttpPostedFile file = FileUpload1.PostedFile;
                         adjunto = new Attachment(file.InputStream, FileUpload1.FileName);
-                        //}
                     }
                     else
-                        Log.EscribirSQL(1, "INFO", "No se adjunto ningun archivo al CRM");
-                    //string path = FileUpload1.FileName;
-                    //Attachment adjunto = new Attachment(path);
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No se adjunto ningun archivo al CRM");
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if (this.chbEnviarMailCRM.Checked == true)
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial,usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3495,28 +3525,39 @@ namespace Gestion_Web.Formularios.Clientes
                         }
 
                     }
+
                     this.txtDetalleEvento.Text = "";
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
+
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento guardado con exito", null));
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
+                    limpiarCamposCRM();
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo guardar el evento"));
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al guardar evento. Avisar a Soporte (Revisar Log)"));
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
+
+        /// <summary>
+        /// Este metodo procesa la informacion para editar un evento del cliente y enviarlo por mail si se lo indica.
+        /// </summary>
         private void modificarEventoCliente()
         {
             try
             {
-
                 string fecha = this.txtFechaEvento.Text;
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(Convert.ToInt32(this.lblIdEventoCliente.Text));
@@ -3538,28 +3579,31 @@ namespace Gestion_Web.Formularios.Clientes
                     ev.Vencimiento = null;
                 }
 
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Voy a agregar el evento a la BD. Ubicacion: ClientesABM.modificarEventoCliente.");
                 int ok = this.contClienteEntity.modificarEventoCliente(ev);
+
                 if (ok > 0)
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Evento agregado a la BD. Voy a mandar el email. Ubicacion: ClientesABM.modificarEventoCliente.");
                     Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
 
                     if (FileUpload1.HasFile)
                     {
-                        Log.EscribirSQL(1, "INFO", "Se adjunto un archivo al CRM");
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se adjunto un archivo al CRM");
                         HttpPostedFile file = FileUpload1.PostedFile;
                         adjunto = new Attachment(file.InputStream, FileUpload1.FileName);
                     }
                     else
-                        Log.EscribirSQL(1, "INFO", "No se adjunto ningun archivo al CRM");
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No se adjunto ningun archivo al CRM");
 
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if (this.chbEnviarMailCRM.Checked == true)
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial,usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3573,29 +3617,44 @@ namespace Gestion_Web.Formularios.Clientes
                     this.lblIdEventoCliente.Text = "0";
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento modificado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
+
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento modificado con exito", null));
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento modificado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
+                    limpiarCamposCRM();
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo modificar evento.\");", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo modificar el evento"));
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo modificar evento.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al modificar evento. Avisar a Soporte (Revisar Log)"));
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditarEvento(object sender, EventArgs e)
         {
             try
             {
                 string id = (sender as LinkButton).ID;
                 int idEvento = Convert.ToInt32(id.Split('_')[1]);
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Voy a cargar el evento "+ idEvento.ToString() +" a editar. Ubicacion: ClientesABM.modificarEventoCliente.");
 
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
                 if (ev != null)
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Evento N# " + idEvento.ToString() + ",datos encontrados. Ubicacion: ClientesABM.modificarEventoCliente.");
                     this.txtFechaEvento.Text = ev.Fecha.Value.ToString("dd/MM/yyyy");
                     this.txtDetalleEvento.Text = ev.Descripcion;
                     this.lblIdEventoCliente.Text = ev.Id.ToString();
@@ -3606,7 +3665,6 @@ namespace Gestion_Web.Formularios.Clientes
                         divTarea.Visible = true;
                         divSituacion.Visible = true;
                         chbDisparaTarea.Checked = true;
-                        //RadButtonSi.Checked = true;
                         drpCRMSituacion.SelectedIndex = (int)ev.Estado;
                     }
 
@@ -3618,96 +3676,80 @@ namespace Gestion_Web.Formularios.Clientes
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Error al editar evento. Ubicacion: ClientesABM.modificarEventoCliente. Excepcion: " + ex.Message);
             }
         }
 
-        protected void btnSiEventoClienteHidden_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "myconfirmbox", "myconfirmbox();", true);
+        //public void btnSiEventoCliente_Click(object obj, EventArgs eventArgs)
+        //{
+        //    try
+        //    {
+        //        int idEvento = Convert.ToInt32(this.txtMovimientoEventoCliente.Text);
+        //        Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
+        //        int i = this.contClienteEntity.eliminarEventoCliente(ev);
+        //        if (i > 0)
+        //        {
+        //            //agrego bien
+        //            limpiarCamposCRM();
+        //            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja evento cliente id: " + ev.Cliente);
+        //            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado.", "../ClientesABM.aspx?accion=2&id=" + ev.Cliente));
+        //            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento eliminado.\", {type: \"info\"});", true);
+        //            this.cargarEventosCliente();
+        //        }
+        //        else
+        //        {
+        //            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo eliminar.\", {type: \"error\"});", true);
+        //            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar."));
 
-        }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+        //        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+        //    }
+        //}
 
-        public void btnSiEventoCliente_Click(object obj, EventArgs eventArgs)
-        {
-            try
-            {
-                int idEvento = Convert.ToInt32(this.txtMovimientoEventoCliente.Text);
-                Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
-                int i = this.contClienteEntity.eliminarEventoCliente(ev);
-                if (i > 0)
-                {
-                    //agrego bien
-                    limpiarCamposCRM();
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja evento cliente id: " + ev.Cliente);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado.", "../ClientesABM.aspx?accion=2&id=" + ev.Cliente));
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento eliminado.\", {type: \"info\"});", true);
-                    this.cargarEventosCliente();
-                }
-                else
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo eliminar.\", {type: \"error\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar."));
-
-                }
-            }
-            catch (Exception ex)
-            {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
-            }
-            finally
-            {
-                //var tabId = "Eventos";
-                //var js = "$('a[href=" + tabId + "]').tab('show')";
-                //Response.Write("<script type='text/javascript'>" + js + "</script>");
-                //        ScriptManager.RegisterStartupScript(DialogUpdatePanel, DialogUpdatePanel.GetType(),
-                //Guid.NewGuid().ToString(), "CloseDialog();", true);
-                //btnSiEventoCliente.Attributes.Add("OnClientClick", "javascript: CloseDialog()");
-                //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalConfirmacion", "$('#modalConfirmacion').modal('dispose');", true);
-            }
-        }
-
+        /// <summary>
+        /// Este metodo elimina el evento de la BD.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void EliminarEvento(object sender, EventArgs e)
         {
             try
             {
+                this.btnEliminar.Attributes.Add("disabled", "disabled");
                 string id = (sender as LinkButton).ID;
                 int idEvento = Convert.ToInt32(id.Split('_')[1]);
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
+
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a eliminar evento N# "+ idEvento.ToString());
                 int i = this.contClienteEntity.eliminarEventoCliente(ev);
                 if (i > 0)
                 {
-                    //agrego bien
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Evento N# " + idEvento.ToString() + " eliminado con exito.");
+
                     limpiarCamposCRM();
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja evento cliente id: " + ev.Cliente);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado.", "../ClientesABM.aspx?accion=2&id=" + ev.Cliente));
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento eliminado.\", {type: \"info\"});", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento eliminado\", {type: \"info\"});", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento eliminado con exito!", null));
                     this.cargarEventosCliente();
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo eliminar.\", {type: \"error\"});", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar."));
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ELSE. No pudo eliminar el evento. Ubicacion: ClientesABM.EliminarEvento");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo eliminar el CRM."));
 
                 }
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH. No pudo eliminar el evento. Ubicacion: ClientesABM.EliminarEvento. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
-            finally
-            {
-                //var tabId = "Eventos";
-                //var js = "$('a[href=" + tabId + "]').tab('show')";
-                //Response.Write("<script type='text/javascript'>" + js + "</script>");
-                //        ScriptManager.RegisterStartupScript(DialogUpdatePanel, DialogUpdatePanel.GetType(),
-                //Guid.NewGuid().ToString(), "CloseDialog();", true);
-                //btnSiEventoCliente.Attributes.Add("OnClientClick", "javascript: CloseDialog()");
-                //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalConfirmacion", "$('#modalConfirmacion').modal('dispose');", true);
-            }
+
         }
+
         #endregion
 
         #region plan cuentas
@@ -4361,7 +4403,7 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
-        
+
 
         #endregion
 
