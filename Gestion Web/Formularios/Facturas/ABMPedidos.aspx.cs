@@ -20,6 +20,9 @@ using Gestion_Api.Auxiliares;
 using System.Xml;
 using System.Xml.Linq;
 using System.Text;
+using Microsoft.Reporting.WebForms;
+using iTextSharp.text.pdf;
+using System.Net.Mail;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -2051,6 +2054,22 @@ namespace Gestion_Web.Formularios.Facturas
                             ControladorPedidoEntity contPedEnt = new ControladorPedidoEntity();
                             ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                             ControladorPedido Contpedido1 = new ControladorPedido();
+
+                            Log.EscribirSQL(1, "INFO", "verificando check a enviar mail" + chkEnviarMail.Checked + txtMailEntrega.Text);
+                            if (this.chkEnviarMail.Checked == true && !String.IsNullOrEmpty(this.txtMailEntrega.Text))
+                            {
+
+                                Log.EscribirSQL(1, "INFO", "entrando a enviar mail idpedido: " + i);
+
+                                this.Enviarmail(i);
+                            }
+                            else
+                            {
+                                Log.EscribirSQL(1, "INFO", "no ingreso al enviar mail");
+
+                            }
+
+
                             if (accion == 4)//agrego el dato de la cotizacion y el pedido generado
                             {
                                 int t = contPedEnt.agregarPedidoCotizacion(i, idCotizacion);
@@ -2121,6 +2140,258 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error guardando Pedido. " + ex.Message));
             }
         }
+
+        public void Enviarmail(int idPedido)
+        {
+            try
+            {
+                GenerarImpresionPDF(idPedido);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        private void GenerarImpresionPDF(int idPedido)
+        {
+            try
+            {
+                Log.EscribirSQL(1, "INFO", "ingreso a GenerarImpresionPDF()");
+                string fecha = string.Empty;
+                string hora = string.Empty;
+                string domicilio = string.Empty;
+                string zona = string.Empty;
+                string telefono = string.Empty;
+                ControladorClienteEntity controlCli = new ControladorClienteEntity();
+                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+                controladorArticulo contArt = new controladorArticulo();
+                controladorZona controlZona = new controladorZona();
+                controladorCliente controlCliente = new controladorCliente();
+                ControladorEmpresa controlEmpresa = new ControladorEmpresa();
+                Configuracion configuracion = new Configuracion();
+                controladorFunciones contFunciones = new controladorFunciones();
+                ControladorPedido controladorPedido = new ControladorPedido();
+
+                DataTable dtDatos = controlador.obtenerDatosPedido(idPedido);
+                DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
+                DataTable dtTotal = controlador.obtenerTotalPedido(idPedido);
+                Pedido pedidoaux = controladorPedido.obtenerPedidoId(idPedido);
+
+                dtDatos.Columns.Add("codigoBarra");
+                Articulo a = new Articulo();
+                foreach (DataRow rowDatos in dtDatos.Rows)
+                {
+                    a = contArt.obtenerArticuloByID(Convert.ToInt32(rowDatos["Id"]));
+                    if (a != null)
+                    {
+                        rowDatos["codigoBarra"] = a.codigoBarra;
+                    }
+                    else
+                    {
+                        rowDatos["codigoBarra"] = "";
+                    }
+                }
+
+                var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                dtDetalle.Columns.Add("TiempoLineasPedido");
+                try
+                {
+                    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * dtDatos.Rows.Count);
+                    dtDetalle.Rows[0]["TiempoLineasPedido"] = tiempoPorLinea.ToString(@"hh\:mm\:ss");
+                }
+                catch { }
+
+
+
+                int suc = Convert.ToInt32(dtDetalle.Rows[0]["Id_suc"]);
+
+                //levanto los datos de la factura
+                var drDatosFactura = dtDetalle.Rows[0];
+                //si es cotizacion reemplazo Pedido por cotizacion
+                if (this.cotizacion == 1)
+                {
+                    dtDetalle.Rows[0]["Numero"] = dtDetalle.Rows[0]["Numero"].ToString().Replace("Pedido", "Cotización");
+                }
+
+
+                //datos empresa emisora
+                DataTable dtEmpresa = controlEmpresa.obtenerEmpresaById((int)drDatosFactura["Empresa"]);
+
+                String razonSoc = String.Empty;
+                String direComer = String.Empty;
+                String condIVA = String.Empty;
+                String ingBrutos = String.Empty;
+                String fechaInicio = String.Empty;
+                String cuitEmpresa = String.Empty;
+                String idEmpresa = String.Empty;
+
+                foreach (DataRow rowEmp in dtEmpresa.Rows)
+                {
+                    idEmpresa = rowEmp.ItemArray[0].ToString();
+                    cuitEmpresa = rowEmp.ItemArray[1].ToString();
+                    razonSoc = rowEmp.ItemArray[2].ToString();
+                    ingBrutos = rowEmp.ItemArray[3].ToString();
+                    fechaInicio = Convert.ToDateTime(rowEmp["Fecha Inicio"]).ToString("dd/MM/yyyy");
+                    condIVA = rowEmp.ItemArray[5].ToString();
+                    direComer = rowEmp.ItemArray[6].ToString();
+                }
+                //verifico si tiene un contacto
+                int idCliente = 0;
+                foreach (DataRow dr in dtDetalle.Rows)
+                {
+                    //obtengo el id del cliente
+                    idCliente = Convert.ToInt32(dr["idCliente"]);
+                }
+                //obtengo el telefono del cliente para agregarlo al pedido
+                List<contacto> contactosClientes = controlCliente.obtenerContactos(idCliente);
+                if (contactosClientes.Count > 0 & contactosClientes != null)
+                {
+                    telefono = contactosClientes[0].numero;
+                }
+                if (String.IsNullOrEmpty(telefono))
+                {
+                    telefono = "-";
+                }
+
+                //obtengo los datos de Zona entregaentrega
+                Clientes_Entregas cl = controlCli.obtenerEntregaCliente(idCliente);
+
+                if (cl != null)
+                {
+                    if (!string.IsNullOrEmpty(cl.Zona.nombre))
+                    {
+                        zona = cl.Zona.nombre;
+                    }
+                }
+                if (string.IsNullOrEmpty(zona))
+                {
+                    zona = "-";
+                }
+
+                dtDatos = contArtEntity.obtenerPresentacionesArtDT(dtDatos);
+                dtDatos = contArtEntity.obtenerStockArtDT(dtDatos, suc);
+
+                //subtotal, retencion, descuento
+                DataRow row = dtTotal.Rows[0];
+                decimal subtotal = Convert.ToDecimal(row["subtotal"]);
+                decimal descuento = Convert.ToDecimal(row["descuento"]);
+                decimal retencion = Convert.ToDecimal(row["retenciones"]);
+
+                //this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+
+                ReportParameter paramZona = new ReportParameter("ParamZona", zona);
+                ReportParameter paramTel = new ReportParameter("ParamTel", telefono);
+
+                ReportParameter param1 = new ReportParameter("ParamSubtotal", subtotal.ToString("C"));
+                ReportParameter param2 = new ReportParameter("ParamRetencion", retencion.ToString("C"));
+                ReportParameter param3 = new ReportParameter("ParamDescuento", descuento.ToString("C"));
+                //parametros Datos empresa
+                ReportParameter param4 = new ReportParameter("ParamRazonSoc", razonSoc);
+                ReportParameter param5 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
+                ReportParameter param6 = new ReportParameter("ParamFechaIni", fechaInicio);
+                ReportParameter param7 = new ReportParameter("ParamDomComer", direComer);
+                ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
+                ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
+
+
+                string imagen = this.generarCodigo(idPedido);
+                ReportParameter param10 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
+
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                //ReportDataSource rds = new ReportDataSource("DetallePedido", dtDetalle);
+                ReportDataSource rds = new ReportDataSource("DatosDetalle", dtDetalle);
+                ReportDataSource rds2 = new ReportDataSource("DatosPedido", dtDatos);
+                ReportDataSource rds3 = new ReportDataSource("TotalPedido", dtTotal);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.SetParameters(paramZona);
+                this.ReportViewer1.LocalReport.SetParameters(paramTel);
+                this.ReportViewer1.LocalReport.SetParameters(param1);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+                this.ReportViewer1.LocalReport.SetParameters(param6);
+                this.ReportViewer1.LocalReport.SetParameters(param7);
+                this.ReportViewer1.LocalReport.SetParameters(param8);
+                this.ReportViewer1.LocalReport.SetParameters(param9);
+                this.ReportViewer1.LocalReport.SetParameters(param10);
+
+                //this.ReportViewer1.LocalReport.SetParameters(rpHora);
+                //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get pdf content
+
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                String path = Server.MapPath("../../Facturas/" + pedidoaux.empresa.id + "/" + "/Pedido-" + pedidoaux.numero + "_" + pedidoaux.id + ".pdf");
+                FileStream stream = File.Create(path, pdfContent.Length);
+                stream.Write(pdfContent, 0, pdfContent.Length);
+                stream.Close();
+
+                string destinatarios = this.txtMailEntrega.Text;
+
+                Attachment adjunto = new Attachment(path);
+
+                Log.EscribirSQL(1, "INFO", "llego al final GenerarImpresionPDF()");
+                int i = contFunciones.enviarMailPedido(adjunto, destinatarios, razonSoc, Convert.ToInt32(idEmpresa));
+                if (i > 0)
+                {
+                    adjunto.Dispose();
+                    File.Delete(path);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.EscribirSQL(1, "ERROR", "salto catch de GenerarImpresionPDF error: " + e.Message);
+            }
+        }
+        public string generarCodigo(int idPedido)
+        {
+            try
+            {
+                Barcode128 code128 = new Barcode128();
+                code128.CodeType = Barcode.CODE128;
+                code128.ChecksumText = true;
+                code128.GenerateChecksum = true;
+                code128.StartStopText = false;
+
+                code128.Code = idPedido.ToString();
+
+                System.Drawing.Bitmap bm = new System.Drawing.Bitmap(code128.CreateDrawingImage(System.Drawing.Color.Black, System.Drawing.Color.White));
+                String path = HttpContext.Current.Server.MapPath("/Pedidos/" + idPedido + "/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                string archivo = path + "Codigo_" + idPedido + ".bmp";
+                bm.Save(archivo, System.Drawing.Imaging.ImageFormat.Bmp);
+                return archivo;
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Error generando codigo de barra para pedido. " + ex.Message);
+                return null;
+            }
+        }
+
         private void modificarPedido()
         {
             try

@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ABMPedidos.aspx.cs" Inherits="Gestion_Web.Formularios.Facturas.ABMPedidos" %>
 
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
 
@@ -346,6 +348,20 @@
                                                                             <asp:DropDownList ID="DropListZonaEntrega" runat="server" class="form-control"></asp:DropDownList>
                                                                         </div>
                                                                     </div>
+                                                                    <!-- Envio Mail -->
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3">Mail Entrega: </label>
+                                                                        <div class="col-md-6">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-addon">@</span>
+                                                                                <asp:TextBox ID="txtMailEntrega" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Puede enviar a varios destinatarios separando las casillas de correo por punto y coma (;). Ej.: Mail1@gmail.com;Mail2@yahoo.com;..." title="" data-original-title="Ayuda"></asp:TextBox>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <asp:CheckBox ID="chkEnviarMail" runat="server" Text="Enviar mail" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Envio Mail -->
                                                                     <div class="form-group">
                                                                         <label for="name" class="col-md-4">Seña</label>
                                                                         <div class="col-md-4">
@@ -471,6 +487,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
+                            </rsweb:ReportViewer>
                         </div>
                     </div>
                 </div>
