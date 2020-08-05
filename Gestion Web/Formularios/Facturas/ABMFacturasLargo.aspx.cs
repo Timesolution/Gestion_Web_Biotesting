@@ -60,10 +60,10 @@ namespace Gestion_Web.Formularios.Facturas
         int idSucursal;
         int idPtoVentaUser;
         int idClientePadre;
+        string mensajeActualizacionArticuloFecha = string.Empty;
 
         //flag si cambio la fecha de la factura
         int flag_cambioFecha = 0;
-
         int flag_clienteModal = 0;
 
         DataTable lstPagosTemp;
@@ -106,6 +106,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Ingreso a facturacion.");
 
+                    Session["ArticuloUltimaFechaActualizacion"] = null;
                     Session["CobroAnticipo"] = null;
                     Session["PagoCuentaAnticipo"] = null;
                     Session["PagoCuentaAnticipoMutual"] = null;
@@ -261,28 +262,66 @@ namespace Gestion_Web.Formularios.Facturas
                 if (Session["FacturasABM_ArticuloModal"] != null)
                 {
                     string CodArt = Session["FacturasABM_ArticuloModal"] as string;
+
+                    if(!string.IsNullOrEmpty(CodArt))
+                    {
+                        Articulo art = contArticulo.obtenerArticuloFacturar(CodArt, Convert.ToInt32(this.DropListLista.SelectedValue));
+                        if (art != null)
+                        {
+                            if (!VerificarArticulosSinActualizarAntesDeFacturar(art))
+                            {
+                                Session["ArticuloUltimaFechaActualizacion"] = 1;
+                                mensajeActualizacionArticuloFecha = "El precio del articulo "+ art.codigo +" no se actualiza hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias.";
+                            }
+                        }
+                        else
+                            Log.EscribirSQL(Convert.ToInt32(Session["Login_IdUser"]), "ERROR", "ELSE: No encontro el articulo para verificar la ultima fecha de actualizacion. Ubicacion: ABMFacturasLargo.Page_Load. Codigo Articulo: " + CodArt);
+                    }
+
                     txtCodigo.Text = CodArt;
                     cargarProducto(txtCodigo.Text);
                     ActualizarTotales();
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
                 }
 
                 if (Session["FacturasABM_ArticuloModalMultiple"] != null)
                 {
+                    //bandera que me indica que si ya uno de los articulos tiene una fecha de actualizacion fuera de fecha
+                    int yaEntro = 0;
+
                     List<string> CodigosArticulos = Session["FacturasABM_ArticuloModalMultiple"] as List<string>;
                     Configuracion config = new Configuracion();
                     foreach (var codigoArticulo in CodigosArticulos)
                     {
+                        if(yaEntro == 0)
+                        {
+                            Articulo art = contArticulo.obtenerArticuloFacturar(codigoArticulo, Convert.ToInt32(this.DropListLista.SelectedValue));
+                            if (art != null)
+                            {
+                                if ((!VerificarArticulosSinActualizarAntesDeFacturar(art)) && yaEntro == 0)
+                                {
+                                    yaEntro = 1;
+                                    Session["ArticuloUltimaFechaActualizacion"] = 1;
+                                    mensajeActualizacionArticuloFecha = "Hay articulos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias.";
+                                }
+                            }
+                            else
+                                Log.EscribirSQL(Convert.ToInt32(Session["Login_IdUser"]), "ERROR", "ELSE: No se encontro el articulo para verificar la ultima fecha de actualizacion. Ubicacion: ABMFacturasLargo.Page_Load. Codigo Articulo: " + codigoArticulo);
+                            
+                        }
+
                         Session["FacturasABM_ArticuloModal"] = codigoArticulo;
                         txtCodigo.Text = codigoArticulo;
                         txtCantidad.Text = "1";
                         cargarProducto(txtCodigo.Text);
                         if (config.commitante != "1")
                             CargarProductoAFactura();
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     }
+
                     txtCodigo.Text = "";
                     ActualizarTotales();
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
@@ -367,6 +406,13 @@ namespace Gestion_Web.Formularios.Facturas
                         this.DropListClientes.Attributes.Add("disabled", "disabled");
                     }
                     catch { }
+                }
+
+                if (Session["ArticuloUltimaFechaActualizacion"] != null)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion(mensajeActualizacionArticuloFecha));
+                    Session["ArticuloUltimaFechaActualizacion"] = null;
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                 }
             }
             catch (Exception ex)
@@ -2767,11 +2813,11 @@ namespace Gestion_Web.Formularios.Facturas
                         return;
 
                     //Verifico si tiene la alerta de precios de articulos sin actualizar
-                    if (!VerificarArticulosSinActualizar())
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
-                        return;
-                    }
+                    //if (!VerificarArticulosSinActualizar())
+                    //{
+                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
+                    //    //return;
+                    //}
 
                     //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
                     if (!ValidarSaldoMutual())
@@ -3038,6 +3084,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (art != null)
                 {
+                    
                     Cliente prov = this.contCliente.obtenerProveedoresRazonSocial(art.proveedor.razonSocial);
                     if (prov != null)
                     {
@@ -3145,6 +3192,12 @@ namespace Gestion_Web.Formularios.Facturas
                             ActualizarTotales();
                             txtCodigo.Text = "";
                         }
+                    }
+
+                    //Verifico si tiene la alerta de precios de articulos sin actualizar
+                    if ((!VerificarArticulosSinActualizarAntesDeFacturar(art)) && Session["ArticuloUltimaFechaActualizacion"] == null)
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El precio de este articulo no se actualiza hace mas de" + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
                     }
                 }
                 else
@@ -4465,6 +4518,28 @@ namespace Gestion_Web.Formularios.Facturas
                         if ((DateTime.Now - item.articulo.ultActualizacion).TotalDays > Convert.ToInt32(this.configuracion.AlertaArticulosSinActualizar))
                             return false;
                     }
+                }
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrió un error verificando los articulos con precios sin actualizar. Excepción: " + Ex.Message));
+                return true;
+            }
+        }
+
+        private bool VerificarArticulosSinActualizarAntesDeFacturar(Articulo articulo)
+        {
+            try
+            {
+                if (Convert.ToInt32(this.configuracion.AlertaArticulosSinActualizar) > 0)
+                {
+                    //Factura f = Session["Factura"] as Factura;
+                    //foreach (ItemFactura item in f.items)
+                    //{
+                    if ((DateTime.Now - articulo.ultActualizacion).TotalDays > Convert.ToInt32(this.configuracion.AlertaArticulosSinActualizar))
+                        return false;
+                    //}
                 }
                 return true;
             }

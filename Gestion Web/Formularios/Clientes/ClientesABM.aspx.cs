@@ -3531,7 +3531,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
 
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento guardado con exito", null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento guardado con exito! " + mensajeEnvioMail, null));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                     limpiarCamposCRM();
