@@ -851,7 +851,15 @@ namespace Gestion_Web.Formularios.Valores
                 if (c.tipoMovimiento == 1)
                 {
                     TableCell celRecibo = new TableCell();
-                    celRecibo.Text = c.cobro.tipoDocumento.tipo + " " + c.cobro.numero + " - " + c.cobro.cliente.razonSocial;
+                    //celRecibo.Text = c.cobro.tipoDocumento.tipo + " " + c.cobro.numero + " - " + c.cobro.cliente.razonSocial;
+                    if (c.cobro.cliente != null)
+                    {
+                        celRecibo.Text = c.cobro.tipoDocumento.tipo + " " + c.cobro.numero + " - " + c.cobro.cliente.razonSocial;
+                    }
+                    else
+                    {
+                        celRecibo.Text = c.cobro.tipoDocumento.tipo + " " + c.cobro.numero + " -  -";
+                    }
                     celRecibo.VerticalAlign = VerticalAlign.Middle;
                     celRecibo.HorizontalAlign = HorizontalAlign.Left;
                     tr.Cells.Add(celRecibo);
