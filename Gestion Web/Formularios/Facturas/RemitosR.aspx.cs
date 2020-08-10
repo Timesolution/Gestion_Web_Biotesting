@@ -11,6 +11,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -34,6 +35,9 @@ namespace Gestion_Web.Formularios.Facturas
         private int original;
         private int cliente;
         private int sinFactura;
+        private int anuladas;
+        private int accion;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -42,9 +46,11 @@ namespace Gestion_Web.Formularios.Facturas
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
                 suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
+                anuladas = Convert.ToInt32(Request.QueryString["An"]);
                 this.original = Convert.ToInt32(Request.QueryString["o"]);
                 this.cliente = Convert.ToInt32(Request.QueryString["cliente"]);
                 this.sinFactura = Convert.ToInt32(Request.QueryString["sF"]);
+                this.accion = Convert.ToInt32(Request.QueryString["a"]);
 
                 if (!IsPostBack)
                 {
@@ -75,10 +81,10 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         chkRemSinFacturas.Checked = false;
                     }
-                    
+
                 }
 
-                this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura);
+                this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura, anuladas);
             }
             catch (Exception ex)
             {
@@ -170,21 +176,27 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc, int cliente, int sinFactura)
+        private void cargarRemitosRango(string fechaD, string fechaH, int idSuc, int cliente, int sinFactura, int anuladas)
         {
             try
             {
-                if (fechaD != null && fechaH != null && suc != -1)
+                decimal saldo = 0;
+
+                DataTable dtRemitos = controlador.obtenerRemitosRangoTipoDTLista(fechaD, fechaH, idSuc, cliente, sinFactura, anuladas);
+                foreach (DataRow row in dtRemitos.Rows)
                 {
-                    List<Remito> remitos = controlador.obtenerRemitosRango(fechaD, fechaH, idSuc,cliente,sinFactura);
-                    decimal saldo = 0;
-                    foreach (Remito r in remitos)
+                    this.cargarEnPhDR(row);
+
+                    if (row["estado"].ToString() == "1")
                     {
-                        saldo += r.total;
-                        this.cargarEnPh(r);
+                        saldo += Convert.ToDecimal(row["total"].ToString());
                     }
+                }
+
+                if (saldo == 0)
+                    lblSaldo.Text = "$0.00";
+                else
                     lblSaldo.Text = saldo.ToString("C");
-                }
             }
             catch (Exception ex)
             {
@@ -192,23 +204,28 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarRemitos()
-        {
-            try
-            {
+        //private void cargarRemitos()
+        //{
+        //    try
+        //    {
+        //        //DataTable dtRemitos = controlador.obtenerRemitosRangoTipoDTLista(fechaD, fechaH, idSuc, cliente, sinFactura);
+        //        List<Remito> Remito = controlador.obtenerRemitos();
 
-                List<Remito> Remito = controlador.obtenerRemitos();
+        //        foreach (Remito r in Remito)
+        //        {
+        //            //this.cargarEnPh();
+        //        }
 
-                foreach (Remito r in Remito)
-                {
-                    this.cargarEnPh(r);
-                }
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
-            }
-        }
+        //        //foreach (Remito r in Remito)
+        //        //{
+        //        //    this.cargarEnPh(r);
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+        //    }
+        //}
 
         private void cargarEnPh(Remito r)
         {
@@ -225,22 +242,20 @@ namespace Gestion_Web.Formularios.Facturas
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
 
-                //TableCell celTipo = new TableCell();
-                //celTipo.Text = r.tipo.tipo;
-                //celTipo.HorizontalAlign = HorizontalAlign.Center;
-                //celTipo.VerticalAlign = VerticalAlign.Middle;
-                //tr.Cells.Add(celTipo);
+                TableCell celTipo = new TableCell();
+                celTipo.Text = r.tipo.tipo;
+                celTipo.HorizontalAlign = HorizontalAlign.Center;
+                celTipo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celTipo);
 
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = r.numero.ToString().PadLeft(8, '0');
-
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumero);
 
                 TableCell celRazon = new TableCell();
                 celRazon.Text = r.cliente.razonSocial;
-
                 celRazon.VerticalAlign = VerticalAlign.Middle;
                 celRazon.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celRazon);
@@ -317,6 +332,112 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando articulos. " + ex.Message));
+            }
+
+        }
+
+        private void cargarEnPhDR(DataRow row)
+        {
+            try
+            {
+                int idRemito = Convert.ToInt32(row["id"]);
+
+                string modificoHora = WebConfigurationManager.AppSettings.Get("ModificoHora");
+
+                //fila
+                TableRow tr = new TableRow();
+                tr.ID = Convert.ToInt32(row["id"]).ToString();
+
+                if (this.contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(row["id"])))
+                {
+                    tr.ForeColor = System.Drawing.Color.DarkGreen;
+                    tr.Font.Bold = true;
+                    tr.ToolTip = "Remito Facturado";
+                }
+
+                //Celdas
+                TableCell celFecha = new TableCell();
+                celFecha.Text = Convert.ToDateTime(row["fecha"].ToString()).ToString("dd/MM/yyyy hh:mm");
+                if (modificoHora == "1")
+                {
+                    string restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+                    var fechaAux = Convert.ToDateTime(row["fecha"].ToString());
+                    celFecha.Text = fechaAux.AddHours(Convert.ToInt32(restaHoras)).ToString("dd/MM/yyyy hh:mm");
+                }
+                celFecha.VerticalAlign = VerticalAlign.Middle;
+                celFecha.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celFecha);
+
+                TableCell celNumero = new TableCell();
+                celNumero.Text = row["numero"].ToString().PadLeft(8, '0');
+                celNumero.VerticalAlign = VerticalAlign.Middle;
+                celNumero.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celNumero);
+
+                TableCell celRazon = new TableCell();
+                celRazon.Text = row["razonSocial"].ToString();
+                celRazon.VerticalAlign = VerticalAlign.Middle;
+                celRazon.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celRazon);
+
+                TableCell celNeto = new TableCell();
+                celNeto.Text = row["cuit"].ToString();
+                celNeto.VerticalAlign = VerticalAlign.Middle;
+                celNeto.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celNeto);
+
+                TableCell celTotal = new TableCell();
+                celTotal.Text = "$" + row["total"].ToString();
+                celTotal.VerticalAlign = VerticalAlign.Middle;
+                celTotal.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celTotal);
+
+                //agrego fila a tabla
+                TableCell celAccion = new TableCell();
+                LinkButton btnDetalles = new LinkButton();
+                btnDetalles.CssClass = "btn btn-info ui-tooltip";
+                btnDetalles.Attributes.Add("data-toggle", "tooltip");
+                btnDetalles.Attributes.Add("title data-original-title", "Detalles");
+                btnDetalles.ID = "btnSelec_" + row["id"].ToString();
+                btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
+                btnDetalles.Font.Size = 12;
+                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                btnDetalles.Click += new EventHandler(this.detalleRemito);
+                celAccion.Controls.Add(btnDetalles);
+
+                Literal l2 = new Literal();
+                l2.Text = "&nbsp";
+                celAccion.Controls.Add(l2);
+
+                CheckBox cbSeleccion = new CheckBox();
+                cbSeleccion.ID = "cbSeleccion_" + row["id"].ToString();
+                cbSeleccion.CssClass = "btn btn-info";
+                cbSeleccion.Font.Size = 12;
+                celAccion.Controls.Add(cbSeleccion);
+
+                celAccion.Width = Unit.Percentage(10);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+
+                if (row["estado"].ToString() == "1")
+                {
+                    tr.Cells.Add(celAccion);
+                }
+                else
+                {
+                    TableCell celEstado = new TableCell();
+                    celEstado.Text = "*Anulada*";
+                    celEstado.VerticalAlign = VerticalAlign.Middle;
+                    celEstado.HorizontalAlign = HorizontalAlign.Center;
+                    tr.Cells.Add(celEstado);
+
+                    tr.ForeColor = System.Drawing.Color.Red;
+                }
+
+                phRemitos.Controls.Add(tr);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando facturas. " + ex.Message));
             }
 
         }
@@ -510,16 +631,18 @@ namespace Gestion_Web.Formularios.Facturas
                     if (DropListSucursal.SelectedValue != "-1")
                     {
                         sinFactura = 0;
+                        anuladas = 0;
 
                         if (chkRemSinFacturas.Checked)
-                        {
                             sinFactura = 1;
-                        }
-                        
+
+                        if (chkRemitosAnulados.Checked)
+                            anuladas = 1;
+
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("RemitosR.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + 
+                        Response.Redirect("RemitosR.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" +
                             txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue +
-                            "&cliente=" + DropListClientes.SelectedValue + "&sF=" + sinFactura);
+                            "&cliente=" + DropListClientes.SelectedValue + "&sF=" + sinFactura + "&An=" + anuladas);
                     }
                     else
                     {
@@ -538,7 +661,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        
+
         protected void Button1_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog()", true);
@@ -553,7 +676,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phRemitos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[4].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -575,7 +698,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error anulando Remitos. "));
                             }
-                        }                    
+                        }
                     }
                 }
                 else
@@ -594,34 +717,78 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Entro en evento lbtnFacturar_Click. Va a recorrer la tabla para chequear casillas tildadas");
+                int x = 0;
                 string idtildado = "";
-                foreach (Control C in phRemitos.Controls)
+
+                if (cliente >= 0)
                 {
-                    TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[4].Controls[2] as CheckBox;
-                    if (ch.Checked == true)
+                    foreach (Control C in phRemitos.Controls)
                     {
-                        idtildado = ch.ID.Split('_')[1];
+                        TableRow tr = C as TableRow;
+                        if (!tr.Cells[5].Text.Contains("Anulada"))
+                        {
+                            CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                            if (ch.Checked == true)
+                            {
+                                idtildado += ch.ID.Split('_')[1] + ";";
+                                x++;
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Entro en el 'foreach' y encontro la casilla tildada con el id: " + idtildado);
+                            }
+                        }
                     }
-                }
-                if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(idtildado)))
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Este remito ya fue facturado"));
-                    return;
-                }
-                if (!String.IsNullOrEmpty(idtildado))
-                {
-                    Response.Redirect("ABMFacturas.aspx?accion=4&id_rem=" + idtildado);
+
+                    if (x > 0)
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se reconocieron las casillas seleccionadas. Recorro los remitos para chequear si fueron facturadas.");
+
+                        string errores = null;
+                        string[] j = idtildado.Split(';');
+
+                        for (int i = 0; i < x; i++)
+                        {
+                            if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(j[i])))
+                                errores += Convert.ToString(j[i]) + " | ";
+                        }
+
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Termina de recorrer los remitos, ahora chequea si no errores para redirigir a pagina de facturacion.");
+                        if (string.IsNullOrEmpty(errores))
+                        {
+                            Response.Redirect("ABMFacturas.aspx?accion=4&id_rem=" + idtildado, false);
+                        }
+                        else
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: Ubicacion: RemitosR.aspx. Metodo: lbtnFacturar_Click. Una de los remitos arrojo null al buscarla en la BD. Codigo: var remito = controlador.obtenerRemito");
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Estos remitos ya fueron facturados,</br> ID Remito: " + errores + ""));
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un remito."));
+                    }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un Remito"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe filtrar por algun cliente."));
                 }
 
+                //if (!String.IsNullOrEmpty(idtildado))
+                //{
+                //    if (cliente >= 0)
+                //    {
+                //        if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(idtildado)))
+                //        {
+                //            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Este remito ya fue facturado"));
+                //            return;
+                //        }
+                //        Response.Redirect("ABMFacturas.aspx?accion=4&id_rem=" + idtildado, false);
+                //    }
+                //}
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando remitos para facturar. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en evento RemitosR.lbtnFacturar_Click. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ocurrio un error enviando remitos para facturar. Contacte con el area de soporte."));
             }
         }
         protected void lbtnImprimirTodo_Click(object sender, EventArgs e)
@@ -674,7 +841,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
                 else
                 {
-                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue),0,sinFactura);
+                    List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), 0, sinFactura);
 
                     foreach (var remito in listRemitos)
                     {
@@ -1075,6 +1242,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
     }
 
-    
+
 }
 

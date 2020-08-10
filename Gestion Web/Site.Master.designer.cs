@@ -7,13 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web
-{
-
-
-    public partial class SiteMaster
-    {
-
+namespace Gestion_Web {
+    
+    
+    public partial class SiteMaster {
+        
         /// <summary>
         /// LabelInicio control.
         /// </summary>
@@ -22,7 +20,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label LabelInicio;
-
+        
         /// <summary>
         /// Label3 control.
         /// </summary>
@@ -31,7 +29,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label3;
-
+        
         /// <summary>
         /// Label2 control.
         /// </summary>
@@ -40,7 +38,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label2;
-
+        
         /// <summary>
         /// Label1 control.
         /// </summary>
@@ -49,7 +47,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label1;
-
+        
         /// <summary>
         /// btnCerrarSesion control.
         /// </summary>
@@ -58,7 +56,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesion;
-
+        
         /// <summary>
         /// phMenuCompleto control.
         /// </summary>
@@ -67,7 +65,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phMenuCompleto;
-
+        
         /// <summary>
         /// phMenu control.
         /// </summary>
@@ -76,7 +74,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phMenu;
-
+        
         /// <summary>
         /// phImportarListaDePrecio control.
         /// </summary>
@@ -85,7 +83,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phImportarListaDePrecio;
-
+        
         /// <summary>
         /// litMillas control.
         /// </summary>
@@ -94,7 +92,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litMillas;
-
+        
         /// <summary>
         /// phServicioTecnico control.
         /// </summary>
@@ -103,7 +101,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phServicioTecnico;
-
+        
         /// <summary>
         /// phAceptarMercaderia control.
         /// </summary>
@@ -112,7 +110,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phAceptarMercaderia;
-
+        
         /// <summary>
         /// phOrdenReparacion control.
         /// </summary>
@@ -121,7 +119,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phOrdenReparacion;
-
+        
         /// <summary>
         /// phCombustible control.
         /// </summary>
@@ -130,7 +128,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phCombustible;
-
+        
         /// <summary>
         /// phImagenes control.
         /// </summary>
@@ -139,7 +137,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phImagenes;
-
+        
         /// <summary>
         /// phTapice control.
         /// </summary>
@@ -148,7 +146,7 @@ namespace Gestion_Web
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phTapice;
-
+        
         /// <summary>
         /// MainContent control.
         /// </summary>

@@ -51,14 +51,12 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
+    
 </head>
 <body>
     <form runat="server">
-
-        <asp:ScriptManager runat="server" AsyncPostBackTimeout="56000">
+        <asp:ScriptManager runat="server" AsyncPostBackTimeout="56000" EnablePageMethods = "true">
             <Scripts>
-
                 <%--<asp:ScriptReference Name="MsAjaxBundle" />--%>
                 <asp:ScriptReference Name="jquery" />
                 <asp:ScriptReference Name="bootstrap" />
@@ -72,7 +70,6 @@
                 <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
                 <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
                 <asp:ScriptReference Name="WebFormsBundle" />
-
             </Scripts>
         </asp:ScriptManager>
 
@@ -136,21 +133,16 @@
                 </div>
             </div>
         </div>
+
         <!-- Collect the nav links, forms, and other content for toggling -->
-
-
         <div class="subnavbar hidden-print">
             <asp:PlaceHolder ID="phMenuCompleto" runat="server">
                 <div class="subnavbar-inner">
-
                     <div class="container">
                         <a href="javascript:;" class="subnav-toggle" data-toggle="collapse" data-target=".subnav-collapse">
                             <span class="sr-only">Toggle navigation</span>
                             <i class="icon-reorder"></i>
                         </a>
-
-
-
                         <div class="collapse subnav-collapse">
                             <ul class="mainnav">
 
@@ -209,7 +201,6 @@
                                                             <li><a href="/../../Formularios/Clientes/ABMEstadosCRM.aspx">Estados CRM</a></li>
                                                         </ul>
                                                     </li>
-                                                    
                                                     <li><a href="/../../Formularios/Clientes/ImportarClientes.aspx">Importar Clientes</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ActividadClientes.aspx">Actividad</a></li>
                                                 </ul>
@@ -232,8 +223,7 @@
                                             <li>
                                                 <asp:Literal Text="" ID="litMillas" runat="server" />
                                             </li>
-
-                                            <%--// hola debo seguir aca--%> 
+                                            <%--// hola debo seguir aca--%>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Materias Primas</a>
                                                 <ul class="dropdown-menu">
@@ -380,8 +370,8 @@
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Cuentas Corrientes</a>
                                                 <ul class="dropdown-menu">
-                                                     <li><a href="/../../Formularios/Facturas/CuentaCorrienteF.aspx">Cuentas Corrientes</a></li>
-                                                     <li><a href="/../../Formularios/Facturas/CronogramaPagosF.aspx">Cronograma de Pagos</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/CuentaCorrienteF.aspx">Cuentas Corrientes</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/CronogramaPagosF.aspx">Cronograma de Pagos</a></li>
                                                 </ul>
                                             </li>
 
@@ -445,7 +435,7 @@
                                             <span>Reportes</span>
                                             <b class="caret"></b>
                                         </a>
-                                        
+
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Ventas</a>
@@ -481,7 +471,7 @@
                                                     <li><a href="/../../Formularios/Reportes/ReporteSaldosProveedores.aspx">Proveedores</a></li>
                                                 </ul>
                                             </li>
-<%--                                            <li class="dropdown-submenu">
+                                            <%--                                            <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Articulos</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Reportes/ReporteListaDePreciosF.aspx">Lista De Precios</a></li>
@@ -495,7 +485,7 @@
                                             </li>
                                             <li><a href="/../../Formularios/Reportes/AlertasAPP/AlertasAPP.aspx">Alertas</a></li>
                                             <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
-                                            <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>                                            
+                                            <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <li><a href="/../../Formularios/Reportes/ReportesTrazabilidad.aspx">Trazabilidad</a></li>
                                             <li><a href="/../../Formularios/Reportes/InformesF.aspx">Informes Solicitados</a></li>
                                         </ul>
@@ -567,18 +557,30 @@
             </asp:PlaceHolder>
         </div>
         <!-- /subnavbar -->
-
-
         <%--<div class="container body-content">--%>
+
+        <!-- /footer -->
         <div class="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
-            <hr />
-            <div class="footer">
+            
+            <%--<div class="footer">
                 <p>&copy; <%: DateTime.Now.Year %> - <a href="http://www.timesolution.com.ar/" target="_blank">Time Solution Software. All Rights Reserved</a></p>
-            </div>
+            </div>--%>
         </div>
     </form>
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div id="footer-copyright" class="col-md-6">
+                   <p> &copy; <%: DateTime.Now.Year %> - <a href="http://www.timesolution.com.ar/" target="_blank">Time Solution Software.</a> All Rights Reserved.</p>
+                </div>
+                <div id="footer-terms" class="col-md-6">
+                   <p> Theme by <a href="http://www.timesolution.com.ar/" target="_blank">Time Solution Software</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 
