@@ -176,7 +176,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //vengo desde el remito y voy a facturar
                     if (this.accion == 4)
                     {
-                        int idRemito = Convert.ToInt32(Request.QueryString["id_rem"]);
+                        string idRemito = Request.QueryString["id_rem"].ToString();
                         GenerarFacturaRemito(idRemito);
                     }
 
@@ -523,19 +523,32 @@ namespace Gestion_Web.Formularios.Facturas
         /// Genera el remito con los datos recibidos del pedido
         /// </summary>
         /// 
-        public void GenerarFacturaRemito(int id_rem)
+        public void GenerarFacturaRemito(string id_rem)
         {
             try
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
-                Remito r = new Remito();
-                r = cr.obtenerRemitoId(id_rem);
+                List<Remito> r = new List<Remito>();
 
-                //Obtengo los comentarios ingresados en el remito.
-                DataTable dtComentariosRemito = cr.obtenerComentarioRemito(r.id);
-                r.comentario = dtComentariosRemito.Rows[0]["observaciones"].ToString();
+                var idsRemitos = id_rem.Split(';').ToList();
+                idsRemitos.Remove(idsRemitos.Last());
 
-                Factura f = controlador.AsignarRemito(r);
+                for (int i = 0; i < idsRemitos.Count; i++)
+                {
+                    if (string.IsNullOrEmpty(idsRemitos[i]))
+                        continue;
+
+                    Remito remitoAguardar = new Remito();
+                    remitoAguardar = cr.obtenerRemitoId(Convert.ToInt32(idsRemitos[i]));
+
+                    //Obtengo los comentarios ingresados en el remito.
+                    DataTable dtComentariosRemito = cr.obtenerComentarioRemito(remitoAguardar.id);
+                    remitoAguardar.comentario = dtComentariosRemito.Rows[0]["observaciones"].ToString();
+
+                    r.Add(remitoAguardar);
+                }
+                
+                Factura f = controlador.AsignarVariosRemito(r);
                 Session.Add("Factura", f);
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
                 this.cargarSucursal(f.empresa.id);
@@ -1015,7 +1028,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Configuracion c = new Configuracion();
                 if (!string.IsNullOrEmpty(c.ObservacionesFC))
                 {
-                    this.txtComentarios.Text = c.ObservacionesFC;
+                    this.txtComentarios.Text += " - " + c.ObservacionesFC;
                 }
             }
             catch (Exception ex)
@@ -3158,8 +3171,8 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                        if (string.IsNullOrEmpty(txtPUnitario.Text))
-                            this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                        //if (string.IsNullOrEmpty(txtPUnitario.Text))
+                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
                     this.verificarAlertaArticulo(art);
@@ -3796,11 +3809,11 @@ namespace Gestion_Web.Formularios.Facturas
                     return;
                 }
                 //Verifico si tiene la alerta de precios de articulos sin actualizar
-                if (!this.VerificarArticulosSinActualizar())
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
-                    return;
-                }
+                //if (!this.VerificarArticulosSinActualizar())
+                //{
+                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
+                //    return;
+                //}
 
                 //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
                 if (!this.ValidarSaldoMutual())

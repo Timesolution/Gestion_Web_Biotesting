@@ -759,12 +759,12 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         else
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un cotizacion"));
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una cotizacion"));
                         }
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo debe seleccionar un cotizacion"));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo debe seleccionar una cotizacion"));
                     }
                 }
                 catch (Exception ex)
