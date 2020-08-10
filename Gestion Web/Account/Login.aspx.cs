@@ -7,6 +7,7 @@ using Disipar.Models;
 using Microsoft.Web.Administration;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
+using System.Web.Services;
 
 namespace Gestion_Web.Account
 {
@@ -193,25 +194,44 @@ namespace Gestion_Web.Account
             }
         }
 
-        protected void btnReporteClientes_Click(object sender, EventArgs e)
+        [WebMethod]
+        public static int ReporteClientes_Click(string email)
         {
             try
             {
-                int i = this.controlador.recuperarPass(this.txtMail.Text.Trim());
+                controladorUsuario controladorUsuario = new controladorUsuario();
+                int i = controladorUsuario.recuperarPass(email);
                 if (i > 0)
-                {
-                    this.txtMail.Text = "";
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha enviado la contraseña al mail " + this.txtMail.Text + ". Verifique la casilla en unos instantes.",null)); 
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar correo de recupero. Por favor verifique que el usuario sea el correcto."));
-                }
+                    return 1;
+                return 0;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                
+                Log.EscribirSQL(1, "ERROR", "CATCH: Ocurrio un error al recuperar la contrasena mediante un mail. Ubicacion: Login.aspx.ReporteClientes_Click. Excepcion: " + ex.Message);
+                return -1;
             }
+
         }
+
+        //protected void btnReporteClientes_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        int i = this.controlador.recuperarPass(this.txtMail.Text.Trim());
+        //        if (i > 0)
+        //        {
+        //            this.txtMail.Text = "";
+        //            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha enviado la contraseña al mail " + this.txtMail.Text + ". Verifique la casilla en unos instantes.",null)); 
+        //        }
+        //        else
+        //        {
+        //            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo enviar correo de recupero. Por favor verifique que el usuario sea el correcto."));
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+                
+        //    }
+        //}
     }
 }

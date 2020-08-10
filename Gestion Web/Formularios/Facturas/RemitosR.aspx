@@ -3,6 +3,7 @@
 <%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
     <div class="main">
 
         <div>
@@ -31,7 +32,7 @@
 
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnFacturar" runat="server" OnClick="lbtnFacturar_Click">Facturar</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnFacturar" runat="server" OnClientClick="verficarFiltroHecho()" OnClick="lbtnFacturar_Click">Facturar Remito</asp:LinkButton>
                                             </li>
 
                                         </ul>
@@ -146,12 +147,35 @@
                     <div class="widget-content">
                         <asp:PlaceHolder ID="phSaldo" runat="server" Visible="true">
                             <div id="big_stats" class="cf">
-                                <div class="stat">
-                                    <h4>Saldo</h4>
+                                <div class="stat" style="width: 1%; text-align: left">
+                                    <h3>Referencias</h3>
+                                    <table style="position: center; top: 10px; right: 1px; font-size: smaller; color: #545454">
+                                        <tbody>
+                                            <tr>
+                                                <td class="legendColorBox">
+                                                    <div style="border: 1px solid #888; padding: 1px">
+                                                        <div style="width: 4px; height: 0; border: 5px solid rgb(0,100,0); overflow: hidden"></div>
+                                                    </div>
+                                                </td>
+                                                <td class="legendLabel">Facturadas</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="legendColorBox">
+                                                    <div style="border: 1px solid #888; padding: 1px">
+                                                        <div style="width: 4px; height: 0; border: 5px solid rgb(238,48,7); overflow: hidden"></div>
+                                                    </div>
+                                                </td>
+                                                <td class="legendLabel">Anuladas</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="stat" style="padding-right: 15%">
+                                    <h3>Saldo</h3>
                                     <asp:Label ID="lblSaldo" runat="server" Text="" class="value" Visible="false"></asp:Label>
                                 </div>
-                                <!-- .stat -->
                             </div>
+                            <!-- .stat -->
                         </asp:PlaceHolder>
                     </div>
                     <!-- /widget-content -->
@@ -187,6 +211,7 @@
                                             <%--<th>Neto</th>
                                                     <th>IVA</th>
                                                     <th>Perp</th>--%>
+                                            <th>CUIT</th>
                                             <th>Total</th>
                                             <th></th>
                                         </tr>
@@ -489,15 +514,19 @@
                                             <asp:CheckBox ID="chkRemSinFacturas" runat="server" />
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Mostrar remitos anulados</label>
+                                        <div class="col-md-6">
+                                            <asp:CheckBox ID="chkRemitosAnulados" runat="server" class="ui-popover" data-container="" data-toggle="popover" data-trigger="hover" data-placement="right"
+                                                data-content="Estos remitos no se tendran en cuenta para la suma del saldo total." title="" data-original-title="Atención !" />
+                                        </div>
+                                    </div>
                                 </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
-
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />
                     </div>
@@ -511,7 +540,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirmacion de Eliminacion</h4>
+                        <h4 class="modal-title">Anular Remito</h4>
                     </div>
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">
@@ -536,9 +565,8 @@
                                 </div>--%>
                         </div>
 
-
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnSi" Text="Eliminar" class="btn btn-danger" OnClick="btnSi_Click" />
+                            <asp:Button runat="server" ID="btnSi" Text="Anular" class="btn btn-danger" OnClick="btnSi_Click" OnClientClick="this.disabled = true; this.value = 'Anulando...';" UseSubmitBehavior="false" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
 
                             <%--                        <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />--%>
@@ -551,12 +579,33 @@
 
         <link href="../../css/pages/reports.css" rel="stylesheet">
 
-        <script>
+        <script type="text/javascript">
 
             function abrirdialog() {
                 document.getElementById('abreDialog').click();
             }
 
+        </script>
+
+        <script type="text/javascript">
+            <%--<% string filtroHecho = "";%>
+
+            function setearVariableFiltroHecho() {
+                <% filtroHecho = "ok"; %>
+            }
+
+            function verficarFiltroHecho() {
+                $(function () {
+
+                    if (filtroHecho == "") {
+                        $.msgGrowl({
+                            type: 'warning'
+                            , title: 'Header'
+                            , text: 'Disculpe, debe filtrar primero por algun cliente.'
+                        });
+                    }
+                });
+            }--%>
         </script>
 
         <!-- Core Scripts - Include with every page -->
@@ -585,13 +634,13 @@
         <script>
 
 
-            $(function () {
-                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+                $(function () {
+                    $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                });
 
-            $(function () {
-                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
-            });
+                $(function () {
+                    $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                });
 
         </script>
 
@@ -600,6 +649,9 @@
         <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
         <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
         <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+
+
+
 
         <%--    <script>
         $(document).ready(function () {

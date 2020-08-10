@@ -354,7 +354,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.factura = Session["Factura"] as Factura;
                 Remito r = new Remito();
                 r = cr.obtenerRemitoId(id_rem);
-                Factura f = controlador.AsignarRemito(r);
+                //Factura f = controlador.AsignarRemito(r);
+                Factura f = new Factura();
 
                 Session.Add("Factura", f);
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();

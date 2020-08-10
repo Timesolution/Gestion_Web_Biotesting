@@ -187,7 +187,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if(accion == 5)
                 {
-                    
                     cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
                 }
 
