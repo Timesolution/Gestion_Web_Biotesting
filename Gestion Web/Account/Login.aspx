@@ -15,19 +15,6 @@
             overflow: hidden;
         }
 
-        .btn-iniciar {
-            position: relative;
-            font-size: 15px;
-            overflow: hidden;
-            border: none;
-        }
-
-            .btn-iniciar:hover {
-                box-shadow: inset 0 0 10px #D7A938;
-                outline-color: #F9C33F;
-                outline-offset: 80px;
-                text-shadow: 1px 1px 6px #FFFFFF;
-            }
     </style>
 
     <script type="text/javascript">
@@ -108,7 +95,7 @@
                         <input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
                     </span>--%>
 
-                    <asp:Button runat="server" OnClick="LogIn" Text="Iniciar sesión" CssClass="login-action btn btn-primary btn-iniciar" OnClientClick="this.disabled = true; this.value = 'Iniciando...';" UseSubmitBehavior="false" />
+                    <asp:Button runat="server" OnClick="LogIn" Text="Iniciar sesión" CssClass="login-action btn btn-primary"/>
                     <div id="status">
                         <!--<img src="../images/animated-overlay.gif"-->
                     </div>
