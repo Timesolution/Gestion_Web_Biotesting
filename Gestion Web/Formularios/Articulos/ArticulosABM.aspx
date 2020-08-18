@@ -1934,6 +1934,77 @@
                                                     <!-- /widget-content -->
                                                 </div>
                                                 <!-- /widget -->
+
+
+                                                <!-- E-Commerce -->
+                                                <div class="widget stacked">
+
+                                                    <div class="widget-header">
+                                                        <i class="icon-wrench"></i>
+                                                        <h3>E-Commerce</h3>
+                                                    </div>
+                                                    <!-- /widget-header -->
+
+                                                    <div class="widget-content">
+                                                        <div role="form" class="form-horizontal col-md-12">
+                                                            <fieldset>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Atributo</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtAtributo" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Tipo producto</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtTipoProducto" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Categoria</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtCategoria" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Peso</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtPeso" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Producto Online</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtProductoOnline" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Visibilidad</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtVisibilidad" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Color</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtColor" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-2">Talle</label>
+                                                                    <div class="col-md-4">
+                                                                        <asp:TextBox ID="txtTalle" runat="server" class="form-control"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <asp:Button ID="btnGuardarEcommerce" ValidationGroup="store" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnGuardarEcommerce_Click" />
+                                                                </div>
+                                                          </fieldset>
+                                                       </div>
+                                                    </div>
+                                                    <!-- /widget-content -->
+                                                </div>
+
                                             </div>
                                         </ContentTemplate>
                                         <Triggers>

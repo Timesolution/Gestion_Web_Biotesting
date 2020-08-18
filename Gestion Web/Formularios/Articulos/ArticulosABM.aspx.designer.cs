@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Articulos {
-    
-    
-    public partial class ArticulosABM {
-        
+namespace Gestion_Web.Formularios.Articulos
+{
+
+
+    public partial class ArticulosABM
+    {
+
         /// <summary>
         /// lblFiltroAnterior control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblFiltroAnterior;
-        
+
         /// <summary>
         /// linkProv control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkProv;
-        
+
         /// <summary>
         /// linkImg control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkImg;
-        
+
         /// <summary>
         /// linkCompo control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkCompo;
-        
+
         /// <summary>
         /// linkDesc control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkDesc;
-        
+
         /// <summary>
         /// linkStore control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkStore;
-        
+
         /// <summary>
         /// linkCombustible control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkCombustible;
-        
+
         /// <summary>
         /// linkExtras control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkExtras;
-        
+
         /// <summary>
         /// linkCostos control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkCostos;
-        
+
         /// <summary>
         /// linkMedidas control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkMedidas;
-        
+
         /// <summary>
         /// linkBeneficios control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkBeneficios;
-        
+
         /// <summary>
         /// linkArticulosSucursales control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkArticulosSucursales;
-        
+
         /// <summary>
         /// linkStockMinimoSucursales control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkStockMinimoSucursales;
-        
+
         /// <summary>
         /// linkCatalogo control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkCatalogo;
-        
+
         /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
-        
+
         /// <summary>
         /// txtCodArticulo control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodArticulo;
-        
+
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// txtCodigoBarra control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodigoBarra;
-        
+
         /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-        
+
         /// <summary>
         /// txtDescripcion control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcion;
-        
+
         /// <summary>
         /// RequiredFieldValidator4 control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
-        
+
         /// <summary>
         /// DropListProveedor control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListProveedor;
-        
+
         /// <summary>
         /// RequiredFieldValidator5 control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
-        
+
         /// <summary>
         /// DropListMarca control.
         /// </summary>
@@ -227,7 +229,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListMarca;
-        
+
         /// <summary>
         /// RequiredFieldValidator33 control.
         /// </summary>
@@ -236,7 +238,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator33;
-        
+
         /// <summary>
         /// DropListGrupo control.
         /// </summary>
@@ -245,7 +247,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListGrupo;
-        
+
         /// <summary>
         /// RequiredFieldValidator15 control.
         /// </summary>
@@ -254,7 +256,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator15;
-        
+
         /// <summary>
         /// DropDownSubGrupo control.
         /// </summary>
@@ -263,7 +265,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownSubGrupo;
-        
+
         /// <summary>
         /// RequiredFieldValidator14 control.
         /// </summary>
@@ -272,7 +274,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator14;
-        
+
         /// <summary>
         /// ListTipoDistribucion control.
         /// </summary>
@@ -281,7 +283,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListTipoDistribucion;
-        
+
         /// <summary>
         /// RequiredFieldValidator50 control.
         /// </summary>
@@ -290,7 +292,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator50;
-        
+
         /// <summary>
         /// DropDownMonedaVent control.
         /// </summary>
@@ -299,7 +301,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownMonedaVent;
-        
+
         /// <summary>
         /// RequiredFieldValidator24 control.
         /// </summary>
@@ -308,7 +310,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator24;
-        
+
         /// <summary>
         /// DropListPorcentajeIVA control.
         /// </summary>
@@ -317,7 +319,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListPorcentajeIVA;
-        
+
         /// <summary>
         /// RequiredFieldValidator22 control.
         /// </summary>
@@ -326,7 +328,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator22;
-        
+
         /// <summary>
         /// panelCosto control.
         /// </summary>
@@ -335,7 +337,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelCosto;
-        
+
         /// <summary>
         /// txtCosto control.
         /// </summary>
@@ -344,7 +346,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCosto;
-        
+
         /// <summary>
         /// RequiredFieldValidator7 control.
         /// </summary>
@@ -353,7 +355,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator7;
-        
+
         /// <summary>
         /// RegularExpressionValidator2 control.
         /// </summary>
@@ -362,7 +364,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
-        
+
         /// <summary>
         /// txtIncidencia control.
         /// </summary>
@@ -371,7 +373,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtIncidencia;
-        
+
         /// <summary>
         /// RequiredFieldValidator13 control.
         /// </summary>
@@ -380,7 +382,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator13;
-        
+
         /// <summary>
         /// RegularExpressionValidator6 control.
         /// </summary>
@@ -389,7 +391,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator6;
-        
+
         /// <summary>
         /// panelCosto2 control.
         /// </summary>
@@ -398,7 +400,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelCosto2;
-        
+
         /// <summary>
         /// tCostoImponible control.
         /// </summary>
@@ -407,7 +409,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText tCostoImponible;
-        
+
         /// <summary>
         /// Literal2 control.
         /// </summary>
@@ -416,7 +418,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal Literal2;
-        
+
         /// <summary>
         /// LitCotizacionCosto control.
         /// </summary>
@@ -425,7 +427,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal LitCotizacionCosto;
-        
+
         /// <summary>
         /// RequiredFieldValidator8 control.
         /// </summary>
@@ -434,7 +436,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator8;
-        
+
         /// <summary>
         /// RegularExpressionValidator7 control.
         /// </summary>
@@ -443,7 +445,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator7;
-        
+
         /// <summary>
         /// txtCostoIva control.
         /// </summary>
@@ -452,7 +454,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtCostoIva;
-        
+
         /// <summary>
         /// txtImpInternos control.
         /// </summary>
@@ -461,7 +463,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtImpInternos;
-        
+
         /// <summary>
         /// RequiredFieldValidator9 control.
         /// </summary>
@@ -470,7 +472,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator9;
-        
+
         /// <summary>
         /// RegularExpressionValidator3 control.
         /// </summary>
@@ -479,7 +481,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
-        
+
         /// <summary>
         /// txtIngBrutos control.
         /// </summary>
@@ -488,7 +490,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtIngBrutos;
-        
+
         /// <summary>
         /// RequiredFieldValidator10 control.
         /// </summary>
@@ -497,7 +499,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator10;
-        
+
         /// <summary>
         /// RegularExpressionValidator4 control.
         /// </summary>
@@ -506,7 +508,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator4;
-        
+
         /// <summary>
         /// tCostoReal control.
         /// </summary>
@@ -515,7 +517,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText tCostoReal;
-        
+
         /// <summary>
         /// btnCalcCostos control.
         /// </summary>
@@ -524,7 +526,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnCalcCostos;
-        
+
         /// <summary>
         /// RequiredFieldValidator11 control.
         /// </summary>
@@ -533,7 +535,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
-        
+
         /// <summary>
         /// RegularExpressionValidator8 control.
         /// </summary>
@@ -542,7 +544,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator8;
-        
+
         /// <summary>
         /// panelCostoRealMonedaOriginal control.
         /// </summary>
@@ -551,7 +553,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelCostoRealMonedaOriginal;
-        
+
         /// <summary>
         /// tCostoRealMonedaOriginal control.
         /// </summary>
@@ -560,7 +562,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText tCostoRealMonedaOriginal;
-        
+
         /// <summary>
         /// txtMargen control.
         /// </summary>
@@ -569,7 +571,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMargen;
-        
+
         /// <summary>
         /// RequiredFieldValidator20 control.
         /// </summary>
@@ -578,7 +580,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator20;
-        
+
         /// <summary>
         /// RegularExpressionValidator5 control.
         /// </summary>
@@ -587,7 +589,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator5;
-        
+
         /// <summary>
         /// tPrecioSinIva control.
         /// </summary>
@@ -596,7 +598,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText tPrecioSinIva;
-        
+
         /// <summary>
         /// RequiredFieldValidator21 control.
         /// </summary>
@@ -605,7 +607,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator21;
-        
+
         /// <summary>
         /// RegularExpressionValidator9 control.
         /// </summary>
@@ -614,7 +616,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator9;
-        
+
         /// <summary>
         /// tPrecioVenta control.
         /// </summary>
@@ -623,7 +625,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText tPrecioVenta;
-        
+
         /// <summary>
         /// lbGenerarPrecioVenta control.
         /// </summary>
@@ -632,7 +634,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbGenerarPrecioVenta;
-        
+
         /// <summary>
         /// RequiredFieldValidator23 control.
         /// </summary>
@@ -641,7 +643,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator23;
-        
+
         /// <summary>
         /// RegularExpressionValidator10 control.
         /// </summary>
@@ -650,7 +652,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator10;
-        
+
         /// <summary>
         /// panelMonedaOriginal control.
         /// </summary>
@@ -659,7 +661,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelMonedaOriginal;
-        
+
         /// <summary>
         /// litSimboloPesos control.
         /// </summary>
@@ -668,7 +670,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litSimboloPesos;
-        
+
         /// <summary>
         /// tPrecioVentaMonedaOriginal control.
         /// </summary>
@@ -677,7 +679,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText tPrecioVentaMonedaOriginal;
-        
+
         /// <summary>
         /// txtStock control.
         /// </summary>
@@ -686,7 +688,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtStock;
-        
+
         /// <summary>
         /// RequiredFieldValidator25 control.
         /// </summary>
@@ -695,7 +697,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator25;
-        
+
         /// <summary>
         /// DropListAparece control.
         /// </summary>
@@ -704,7 +706,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListAparece;
-        
+
         /// <summary>
         /// txtUbicacion control.
         /// </summary>
@@ -713,7 +715,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUbicacion;
-        
+
         /// <summary>
         /// ListPresentaciones control.
         /// </summary>
@@ -722,7 +724,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListPresentaciones;
-        
+
         /// <summary>
         /// panelPresentaciones control.
         /// </summary>
@@ -731,7 +733,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelPresentaciones;
-        
+
         /// <summary>
         /// txtPresentacionMin control.
         /// </summary>
@@ -740,7 +742,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPresentacionMin;
-        
+
         /// <summary>
         /// txtPresentacionMed control.
         /// </summary>
@@ -749,7 +751,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPresentacionMed;
-        
+
         /// <summary>
         /// txtPresentacionMax control.
         /// </summary>
@@ -758,7 +760,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPresentacionMax;
-        
+
         /// <summary>
         /// panelFecha control.
         /// </summary>
@@ -767,7 +769,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelFecha;
-        
+
         /// <summary>
         /// txtFechaAlta control.
         /// </summary>
@@ -776,7 +778,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaAlta;
-        
+
         /// <summary>
         /// txtUltModificacion control.
         /// </summary>
@@ -785,7 +787,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUltModificacion;
-        
+
         /// <summary>
         /// txtModificado control.
         /// </summary>
@@ -794,7 +796,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtModificado;
-        
+
         /// <summary>
         /// DropListPais control.
         /// </summary>
@@ -803,7 +805,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListPais;
-        
+
         /// <summary>
         /// RequiredFieldValidator27 control.
         /// </summary>
@@ -812,7 +814,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator27;
-        
+
         /// <summary>
         /// panelDespacho control.
         /// </summary>
@@ -821,7 +823,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelDespacho;
-        
+
         /// <summary>
         /// txtFechaDespacho control.
         /// </summary>
@@ -830,7 +832,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaDespacho;
-        
+
         /// <summary>
         /// txtNumeroDespacho control.
         /// </summary>
@@ -839,7 +841,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNumeroDespacho;
-        
+
         /// <summary>
         /// txtLote control.
         /// </summary>
@@ -848,7 +850,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLote;
-        
+
         /// <summary>
         /// txtVencimiento control.
         /// </summary>
@@ -857,7 +859,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtVencimiento;
-        
+
         /// <summary>
         /// DropListSubLista control.
         /// </summary>
@@ -866,7 +868,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListSubLista;
-        
+
         /// <summary>
         /// RequiredFieldValidator28 control.
         /// </summary>
@@ -875,7 +877,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator28;
-        
+
         /// <summary>
         /// txtObservacion control.
         /// </summary>
@@ -884,7 +886,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtObservacion;
-        
+
         /// <summary>
         /// txtAlerta control.
         /// </summary>
@@ -893,7 +895,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtAlerta;
-        
+
         /// <summary>
         /// btnAgregar control.
         /// </summary>
@@ -902,7 +904,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregar;
-        
+
         /// <summary>
         /// btnAgregarSig control.
         /// </summary>
@@ -911,7 +913,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregarSig;
-        
+
         /// <summary>
         /// btnDuplicar control.
         /// </summary>
@@ -920,7 +922,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnDuplicar;
-        
+
         /// <summary>
         /// btnCancelar control.
         /// </summary>
@@ -929,7 +931,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCancelar;
-        
+
         /// <summary>
         /// UpdatePanel3 control.
         /// </summary>
@@ -938,7 +940,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel3;
-        
+
         /// <summary>
         /// lblNombreArticulo control.
         /// </summary>
@@ -947,7 +949,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblNombreArticulo;
-        
+
         /// <summary>
         /// phProveedorArticulo control.
         /// </summary>
@@ -956,7 +958,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phProveedorArticulo;
-        
+
         /// <summary>
         /// btnSetearProv control.
         /// </summary>
@@ -965,7 +967,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSetearProv;
-        
+
         /// <summary>
         /// DropListProveedores2 control.
         /// </summary>
@@ -974,7 +976,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListProveedores2;
-        
+
         /// <summary>
         /// RequiredFieldValidator16 control.
         /// </summary>
@@ -983,7 +985,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator16;
-        
+
         /// <summary>
         /// txtCodigoProveedor control.
         /// </summary>
@@ -992,7 +994,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodigoProveedor;
-        
+
         /// <summary>
         /// RequiredFieldValidator12 control.
         /// </summary>
@@ -1001,7 +1003,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator12;
-        
+
         /// <summary>
         /// DropListMoneda2 control.
         /// </summary>
@@ -1010,7 +1012,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListMoneda2;
-        
+
         /// <summary>
         /// Literal1 control.
         /// </summary>
@@ -1019,7 +1021,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal Literal1;
-        
+
         /// <summary>
         /// ltCotizacion control.
         /// </summary>
@@ -1028,7 +1030,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltCotizacion;
-        
+
         /// <summary>
         /// RequiredFieldValidator2 control.
         /// </summary>
@@ -1037,7 +1039,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
+
         /// <summary>
         /// txtPrecio control.
         /// </summary>
@@ -1046,7 +1048,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPrecio;
-        
+
         /// <summary>
         /// RequiredFieldValidator18 control.
         /// </summary>
@@ -1055,7 +1057,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator18;
-        
+
         /// <summary>
         /// txtDescuento control.
         /// </summary>
@@ -1064,7 +1066,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescuento;
-        
+
         /// <summary>
         /// RequiredFieldValidator26 control.
         /// </summary>
@@ -1073,7 +1075,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator26;
-        
+
         /// <summary>
         /// txtDescripcionDesc control.
         /// </summary>
@@ -1082,7 +1084,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcionDesc;
-        
+
         /// <summary>
         /// txtDescuento2 control.
         /// </summary>
@@ -1091,7 +1093,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescuento2;
-        
+
         /// <summary>
         /// RequiredFieldValidator29 control.
         /// </summary>
@@ -1100,7 +1102,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator29;
-        
+
         /// <summary>
         /// txtDescripcionDesc2 control.
         /// </summary>
@@ -1109,7 +1111,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcionDesc2;
-        
+
         /// <summary>
         /// txtDescuento3 control.
         /// </summary>
@@ -1118,7 +1120,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescuento3;
-        
+
         /// <summary>
         /// RequiredFieldValidator30 control.
         /// </summary>
@@ -1127,7 +1129,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator30;
-        
+
         /// <summary>
         /// txtDescripcionDesc3 control.
         /// </summary>
@@ -1136,7 +1138,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcionDesc3;
-        
+
         /// <summary>
         /// txtDescuentoFinal control.
         /// </summary>
@@ -1145,7 +1147,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescuentoFinal;
-        
+
         /// <summary>
         /// btnCalcularDesc control.
         /// </summary>
@@ -1154,7 +1156,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnCalcularDesc;
-        
+
         /// <summary>
         /// txtPrecioFinal control.
         /// </summary>
@@ -1163,7 +1165,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPrecioFinal;
-        
+
         /// <summary>
         /// RequiredFieldValidator6 control.
         /// </summary>
@@ -1172,7 +1174,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
-        
+
         /// <summary>
         /// txtPrecioPesos control.
         /// </summary>
@@ -1181,7 +1183,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPrecioPesos;
-        
+
         /// <summary>
         /// RequiredFieldValidator32 control.
         /// </summary>
@@ -1190,7 +1192,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator32;
-        
+
         /// <summary>
         /// txtFechaAct control.
         /// </summary>
@@ -1199,7 +1201,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaAct;
-        
+
         /// <summary>
         /// RequiredFieldValidator34 control.
         /// </summary>
@@ -1208,7 +1210,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator34;
-        
+
         /// <summary>
         /// DropListIva control.
         /// </summary>
@@ -1217,7 +1219,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListIva;
-        
+
         /// <summary>
         /// RequiredFieldValidator35 control.
         /// </summary>
@@ -1226,7 +1228,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator35;
-        
+
         /// <summary>
         /// btnAgregarProvArt control.
         /// </summary>
@@ -1235,7 +1237,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregarProvArt;
-        
+
         /// <summary>
         /// UpdatePanelMedidas control.
         /// </summary>
@@ -1244,7 +1246,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelMedidas;
-        
+
         /// <summary>
         /// lbtnAgregar control.
         /// </summary>
@@ -1253,7 +1255,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregar;
-        
+
         /// <summary>
         /// phImagenesArticulos control.
         /// </summary>
@@ -1262,7 +1264,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phImagenesArticulos;
-        
+
         /// <summary>
         /// UpdatePanel4 control.
         /// </summary>
@@ -1271,7 +1273,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel4;
-        
+
         /// <summary>
         /// txtBusqueda control.
         /// </summary>
@@ -1280,7 +1282,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
-        
+
         /// <summary>
         /// lbBuscar control.
         /// </summary>
@@ -1289,7 +1291,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbBuscar;
-        
+
         /// <summary>
         /// RequiredFieldValidator17 control.
         /// </summary>
@@ -1298,7 +1300,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator17;
-        
+
         /// <summary>
         /// DropListArticulosComp control.
         /// </summary>
@@ -1307,7 +1309,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListArticulosComp;
-        
+
         /// <summary>
         /// RequiredFieldValidator31 control.
         /// </summary>
@@ -1316,7 +1318,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator31;
-        
+
         /// <summary>
         /// txtDescripcionArticulo control.
         /// </summary>
@@ -1325,7 +1327,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescripcionArticulo;
-        
+
         /// <summary>
         /// txtCantidadArticulo control.
         /// </summary>
@@ -1334,7 +1336,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCantidadArticulo;
-        
+
         /// <summary>
         /// lbAgregarArticuloComp control.
         /// </summary>
@@ -1343,7 +1345,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbAgregarArticuloComp;
-        
+
         /// <summary>
         /// RequiredFieldValidator19 control.
         /// </summary>
@@ -1352,7 +1354,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator19;
-        
+
         /// <summary>
         /// txtArticuloCompuesto control.
         /// </summary>
@@ -1361,7 +1363,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtArticuloCompuesto;
-        
+
         /// <summary>
         /// lbAvisoCompuesto control.
         /// </summary>
@@ -1370,7 +1372,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbAvisoCompuesto;
-        
+
         /// <summary>
         /// phArticulosCompuestos control.
         /// </summary>
@@ -1379,7 +1381,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phArticulosCompuestos;
-        
+
         /// <summary>
         /// txtCostoTotalComposicion control.
         /// </summary>
@@ -1388,7 +1390,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCostoTotalComposicion;
-        
+
         /// <summary>
         /// lbtnCostocompuesto control.
         /// </summary>
@@ -1397,7 +1399,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnCostocompuesto;
-        
+
         /// <summary>
         /// UpdatePanel5 control.
         /// </summary>
@@ -1406,7 +1408,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel5;
-        
+
         /// <summary>
         /// txtCantDesde control.
         /// </summary>
@@ -1415,7 +1417,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCantDesde;
-        
+
         /// <summary>
         /// RequiredFieldValidator37 control.
         /// </summary>
@@ -1424,7 +1426,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator37;
-        
+
         /// <summary>
         /// txtCantHasta control.
         /// </summary>
@@ -1433,7 +1435,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCantHasta;
-        
+
         /// <summary>
         /// RequiredFieldValidator38 control.
         /// </summary>
@@ -1442,7 +1444,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator38;
-        
+
         /// <summary>
         /// txtDescuentoCantidad control.
         /// </summary>
@@ -1451,7 +1453,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescuentoCantidad;
-        
+
         /// <summary>
         /// RequiredFieldValidator36 control.
         /// </summary>
@@ -1460,7 +1462,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator36;
-        
+
         /// <summary>
         /// lbtnAgregarDto control.
         /// </summary>
@@ -1469,7 +1471,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarDto;
-        
+
         /// <summary>
         /// phDescuentos control.
         /// </summary>
@@ -1478,7 +1480,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phDescuentos;
-        
+
         /// <summary>
         /// UpdatePanelStore control.
         /// </summary>
@@ -1487,7 +1489,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelStore;
-        
+
         /// <summary>
         /// ListApareceStore control.
         /// </summary>
@@ -1496,7 +1498,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListApareceStore;
-        
+
         /// <summary>
         /// UpdatePanelStoresArticulos control.
         /// </summary>
@@ -1505,7 +1507,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelStoresArticulos;
-        
+
         /// <summary>
         /// ListStores control.
         /// </summary>
@@ -1514,7 +1516,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListStores;
-        
+
         /// <summary>
         /// btnAgregarStores control.
         /// </summary>
@@ -1523,7 +1525,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnAgregarStores;
-        
+
         /// <summary>
         /// ListBoxStores control.
         /// </summary>
@@ -1532,7 +1534,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox ListBoxStores;
-        
+
         /// <summary>
         /// btnQuitarStore control.
         /// </summary>
@@ -1541,7 +1543,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnQuitarStore;
-        
+
         /// <summary>
         /// ListOferta control.
         /// </summary>
@@ -1550,7 +1552,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListOferta;
-        
+
         /// <summary>
         /// txtPrecioOferta control.
         /// </summary>
@@ -1559,7 +1561,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPrecioOferta;
-        
+
         /// <summary>
         /// txtDesde control.
         /// </summary>
@@ -1568,7 +1570,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDesde;
-        
+
         /// <summary>
         /// txtDesdeHora control.
         /// </summary>
@@ -1577,7 +1579,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDesdeHora;
-        
+
         /// <summary>
         /// txtHasta control.
         /// </summary>
@@ -1586,7 +1588,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtHasta;
-        
+
         /// <summary>
         /// txtHastaHora control.
         /// </summary>
@@ -1595,7 +1597,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtHastaHora;
-        
+
         /// <summary>
         /// ListDestacado control.
         /// </summary>
@@ -1604,7 +1606,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListDestacado;
-        
+
         /// <summary>
         /// ListNovedades control.
         /// </summary>
@@ -1613,7 +1615,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListNovedades;
-        
+
         /// <summary>
         /// txtEspecificacionStore control.
         /// </summary>
@@ -1622,7 +1624,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtEspecificacionStore;
-        
+
         /// <summary>
         /// btnAgregarStore control.
         /// </summary>
@@ -1631,7 +1633,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregarStore;
-        
+
         /// <summary>
         /// UpdatePanel6 control.
         /// </summary>
@@ -1640,7 +1642,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel6;
-        
+
         /// <summary>
         /// phDatosCombustible control.
         /// </summary>
@@ -1649,7 +1651,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phDatosCombustible;
-        
+
         /// <summary>
         /// ListProveedorCombustible control.
         /// </summary>
@@ -1658,7 +1660,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListProveedorCombustible;
-        
+
         /// <summary>
         /// RequiredFieldValidator39 control.
         /// </summary>
@@ -1667,7 +1669,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator39;
-        
+
         /// <summary>
         /// txtCombustibleITC control.
         /// </summary>
@@ -1676,7 +1678,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCombustibleITC;
-        
+
         /// <summary>
         /// RequiredFieldValidator40 control.
         /// </summary>
@@ -1685,7 +1687,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator40;
-        
+
         /// <summary>
         /// txtCombustibleTasaHidrica control.
         /// </summary>
@@ -1694,7 +1696,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCombustibleTasaHidrica;
-        
+
         /// <summary>
         /// RequiredFieldValidator41 control.
         /// </summary>
@@ -1703,7 +1705,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator41;
-        
+
         /// <summary>
         /// txtCombustibleTasaVial control.
         /// </summary>
@@ -1712,7 +1714,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCombustibleTasaVial;
-        
+
         /// <summary>
         /// RequiredFieldValidator42 control.
         /// </summary>
@@ -1721,7 +1723,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator42;
-        
+
         /// <summary>
         /// txtCombustibleTasaMunicipal control.
         /// </summary>
@@ -1730,7 +1732,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCombustibleTasaMunicipal;
-        
+
         /// <summary>
         /// RequiredFieldValidator43 control.
         /// </summary>
@@ -1739,7 +1741,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator43;
-        
+
         /// <summary>
         /// btnAgregarDatosCombustible control.
         /// </summary>
@@ -1748,7 +1750,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregarDatosCombustible;
-        
+
         /// <summary>
         /// UpdatePanel7 control.
         /// </summary>
@@ -1757,7 +1759,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel7;
-        
+
         /// <summary>
         /// phCostos control.
         /// </summary>
@@ -1766,7 +1768,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phCostos;
-        
+
         /// <summary>
         /// UpdatePanelExtras control.
         /// </summary>
@@ -1775,7 +1777,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelExtras;
-        
+
         /// <summary>
         /// ListSiDatosExtra control.
         /// </summary>
@@ -1784,7 +1786,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSiDatosExtra;
-        
+
         /// <summary>
         /// btnAgregarSiDatosExtra control.
         /// </summary>
@@ -1793,7 +1795,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnAgregarSiDatosExtra;
-        
+
         /// <summary>
         /// PanelDatosExtra control.
         /// </summary>
@@ -1802,7 +1804,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel PanelDatosExtra;
-        
+
         /// <summary>
         /// phDatosExtras control.
         /// </summary>
@@ -1811,7 +1813,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phDatosExtras;
-        
+
         /// <summary>
         /// UpdatePanel9 control.
         /// </summary>
@@ -1820,7 +1822,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel9;
-        
+
         /// <summary>
         /// lbIDMedidaOculto control.
         /// </summary>
@@ -1829,7 +1831,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbIDMedidaOculto;
-        
+
         /// <summary>
         /// txtMedidaNombre control.
         /// </summary>
@@ -1838,7 +1840,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMedidaNombre;
-        
+
         /// <summary>
         /// RequiredFieldValidator45 control.
         /// </summary>
@@ -1847,7 +1849,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator45;
-        
+
         /// <summary>
         /// txtCodigoBarraMedida control.
         /// </summary>
@@ -1856,7 +1858,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodigoBarraMedida;
-        
+
         /// <summary>
         /// RequiredFieldValidator51 control.
         /// </summary>
@@ -1865,7 +1867,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator51;
-        
+
         /// <summary>
         /// txtMedidaCantidad control.
         /// </summary>
@@ -1874,7 +1876,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMedidaCantidad;
-        
+
         /// <summary>
         /// RequiredFieldValidator46 control.
         /// </summary>
@@ -1883,7 +1885,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator46;
-        
+
         /// <summary>
         /// lbtnAgregarOEditarMedida control.
         /// </summary>
@@ -1892,7 +1894,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarOEditarMedida;
-        
+
         /// <summary>
         /// phMedidas control.
         /// </summary>
@@ -1901,7 +1903,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phMedidas;
-        
+
         /// <summary>
         /// UpdatePanelBeneficios control.
         /// </summary>
@@ -1910,7 +1912,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelBeneficios;
-        
+
         /// <summary>
         /// ListSiBeneficios control.
         /// </summary>
@@ -1919,7 +1921,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSiBeneficios;
-        
+
         /// <summary>
         /// RequiredFieldValidator47 control.
         /// </summary>
@@ -1928,7 +1930,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator47;
-        
+
         /// <summary>
         /// ListSiDestacadoBeneficios control.
         /// </summary>
@@ -1937,7 +1939,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSiDestacadoBeneficios;
-        
+
         /// <summary>
         /// RequiredFieldValidator49 control.
         /// </summary>
@@ -1946,7 +1948,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator49;
-        
+
         /// <summary>
         /// ListSiOfertaBeneficios control.
         /// </summary>
@@ -1955,7 +1957,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSiOfertaBeneficios;
-        
+
         /// <summary>
         /// RequiredFieldValidator48 control.
         /// </summary>
@@ -1964,7 +1966,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator48;
-        
+
         /// <summary>
         /// txtBeneficiosDesde control.
         /// </summary>
@@ -1973,7 +1975,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBeneficiosDesde;
-        
+
         /// <summary>
         /// txtBeneficiosHasta control.
         /// </summary>
@@ -1982,7 +1984,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBeneficiosHasta;
-        
+
         /// <summary>
         /// txtBeneficiosPuntos control.
         /// </summary>
@@ -1991,7 +1993,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBeneficiosPuntos;
-        
+
         /// <summary>
         /// txtBeneficiosEspecificaciones control.
         /// </summary>
@@ -2000,7 +2002,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBeneficiosEspecificaciones;
-        
+
         /// <summary>
         /// lbtnAgregarBeneficios control.
         /// </summary>
@@ -2009,7 +2011,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarBeneficios;
-        
+
         /// <summary>
         /// UpdatePanelArticulos_Sucursales control.
         /// </summary>
@@ -2018,7 +2020,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelArticulos_Sucursales;
-        
+
         /// <summary>
         /// ListSucursales control.
         /// </summary>
@@ -2027,7 +2029,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSucursales;
-        
+
         /// <summary>
         /// btnAgregarSucursal control.
         /// </summary>
@@ -2036,7 +2038,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnAgregarSucursal;
-        
+
         /// <summary>
         /// ListBoxSucursales control.
         /// </summary>
@@ -2045,7 +2047,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox ListBoxSucursales;
-        
+
         /// <summary>
         /// btnQuitarSucursal control.
         /// </summary>
@@ -2054,7 +2056,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnQuitarSucursal;
-        
+
         /// <summary>
         /// UpdatePanelStockMinimoSucursales control.
         /// </summary>
@@ -2063,7 +2065,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelStockMinimoSucursales;
-        
+
         /// <summary>
         /// ListSucursalesStockMinimo control.
         /// </summary>
@@ -2072,7 +2074,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSucursalesStockMinimo;
-        
+
         /// <summary>
         /// txtStockMinimoSucursal control.
         /// </summary>
@@ -2081,7 +2083,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtStockMinimoSucursal;
-        
+
         /// <summary>
         /// lbtnAgregarStockMinimoSuc control.
         /// </summary>
@@ -2090,7 +2092,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarStockMinimoSuc;
-        
+
         /// <summary>
         /// RequiredFieldValidator56 control.
         /// </summary>
@@ -2099,7 +2101,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator56;
-        
+
         /// <summary>
         /// phStockMinimoSucursal control.
         /// </summary>
@@ -2108,7 +2110,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phStockMinimoSucursal;
-        
+
         /// <summary>
         /// UpdatePanelCatalogo control.
         /// </summary>
@@ -2117,7 +2119,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanelCatalogo;
-        
+
         /// <summary>
         /// txtCatalogo control.
         /// </summary>
@@ -2126,7 +2128,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCatalogo;
-        
+
         /// <summary>
         /// RequiredFieldValidator52 control.
         /// </summary>
@@ -2135,7 +2137,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator52;
-        
+
         /// <summary>
         /// lbtnAgregarCatalogo control.
         /// </summary>
@@ -2144,7 +2146,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarCatalogo;
-        
+
         /// <summary>
         /// lbtnEliminarCatalogo control.
         /// </summary>
@@ -2153,7 +2155,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnEliminarCatalogo;
-        
+
         /// <summary>
         /// txtCodCot control.
         /// </summary>
@@ -2162,7 +2164,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodCot;
-        
+
         /// <summary>
         /// RequiredFieldValidator53 control.
         /// </summary>
@@ -2171,7 +2173,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator53;
-        
+
         /// <summary>
         /// btnAgregarCodCot control.
         /// </summary>
@@ -2180,7 +2182,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnAgregarCodCot;
-        
+
         /// <summary>
         /// chkApareceLista control.
         /// </summary>
@@ -2189,7 +2191,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkApareceLista;
-        
+
         /// <summary>
         /// lbtnApareceLista control.
         /// </summary>
@@ -2198,7 +2200,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnApareceLista;
-        
+
         /// <summary>
         /// txtArancelImportacion control.
         /// </summary>
@@ -2207,7 +2209,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtArancelImportacion;
-        
+
         /// <summary>
         /// RequiredFieldValidator54 control.
         /// </summary>
@@ -2216,7 +2218,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator54;
-        
+
         /// <summary>
         /// lbtnArancelImportacion control.
         /// </summary>
@@ -2225,7 +2227,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnArancelImportacion;
-        
+
         /// <summary>
         /// txtSim control.
         /// </summary>
@@ -2234,7 +2236,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtSim;
-        
+
         /// <summary>
         /// RequiredFieldValidator55 control.
         /// </summary>
@@ -2243,7 +2245,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator55;
-        
+
         /// <summary>
         /// lbtnSim control.
         /// </summary>
@@ -2252,7 +2254,88 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnSim;
-        
+
+        /// <summary>
+        /// txtAtributo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAtributo;
+
+        /// <summary>
+        /// txtTipoProducto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTipoProducto;
+
+        /// <summary>
+        /// txtCategoria control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCategoria;
+
+        /// <summary>
+        /// txtPeso control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPeso;
+
+        /// <summary>
+        /// txtProductoOnline control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProductoOnline;
+
+        /// <summary>
+        /// txtVisibilidad control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtVisibilidad;
+
+        /// <summary>
+        /// txtColor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtColor;
+
+        /// <summary>
+        /// txtTalle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTalle;
+
+        /// <summary>
+        /// btnGuardarEcommerce control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarEcommerce;
+
         /// <summary>
         /// txtGrupo control.
         /// </summary>
@@ -2261,7 +2344,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtGrupo;
-        
+
         /// <summary>
         /// lbtnAgregarGrupo control.
         /// </summary>
@@ -2270,7 +2353,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarGrupo;
-        
+
         /// <summary>
         /// txtPais control.
         /// </summary>
@@ -2279,7 +2362,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPais;
-        
+
         /// <summary>
         /// lbtnAgregarPais control.
         /// </summary>
@@ -2288,7 +2371,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarPais;
-        
+
         /// <summary>
         /// DropListGrupo2 control.
         /// </summary>
@@ -2297,7 +2380,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListGrupo2;
-        
+
         /// <summary>
         /// TxtSubGrupo control.
         /// </summary>
@@ -2306,7 +2389,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TxtSubGrupo;
-        
+
         /// <summary>
         /// lbtnAgregarSubGrupo control.
         /// </summary>
@@ -2315,7 +2398,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarSubGrupo;
-        
+
         /// <summary>
         /// txtMarcaNueva control.
         /// </summary>
@@ -2324,7 +2407,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMarcaNueva;
-        
+
         /// <summary>
         /// lbtnAgregarMarca control.
         /// </summary>
@@ -2333,7 +2416,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarMarca;
-        
+
         /// <summary>
         /// FileUpload1 control.
         /// </summary>
@@ -2342,7 +2425,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
-        
+
         /// <summary>
         /// lbtnAgregarImagen control.
         /// </summary>
@@ -2351,7 +2434,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarImagen;
-        
+
         /// <summary>
         /// UpdatePanel8 control.
         /// </summary>
@@ -2360,7 +2443,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel8;
-        
+
         /// <summary>
         /// txtFechaDesdeExtra control.
         /// </summary>
@@ -2369,7 +2452,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaDesdeExtra;
-        
+
         /// <summary>
         /// txtFechaHastaExtra control.
         /// </summary>
@@ -2378,7 +2461,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaHastaExtra;
-        
+
         /// <summary>
         /// ListSucursalesExtra control.
         /// </summary>
@@ -2387,7 +2470,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSucursalesExtra;
-        
+
         /// <summary>
         /// RequiredFieldValidator44 control.
         /// </summary>
@@ -2396,7 +2479,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator44;
-        
+
         /// <summary>
         /// btnFiltrar control.
         /// </summary>
