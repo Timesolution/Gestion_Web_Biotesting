@@ -746,6 +746,9 @@ namespace Gestion_Web.Formularios.Articulos
                     //Cargo datos sobre el articulo si aparece en lista de precios
                     this.cargarApareceListaArticulo();
 
+                    //Cargo los datos del Articulo E-Commerce
+                    cargarArticuloEcommerce();
+
                     grupo g = this.controlador.obtenerGrupoID(this.articulo.grupo.id);
                     if (g.descripcion.Contains("COMBUSTIBLES"))
                     {
@@ -4141,6 +4144,34 @@ namespace Gestion_Web.Formularios.Articulos
 
         #endregion
 
+        #region ECommerce
+
+        private void cargarArticuloEcommerce()
+        {
+            try
+            {
+                var articuloEcommerce = this.contArtEnt.ObtenerArticuloEcommerceByidArticulo(this.id);
+                if (articuloEcommerce != null)
+                {
+                    txtAtributo.Text = articuloEcommerce.Atributo;
+                    txtTipoProducto.Text = articuloEcommerce.Tipoproducto;
+                    txtCategoria.Text = articuloEcommerce.Categoria;
+                    txtPeso.Text = articuloEcommerce.Peso;
+                    txtProductoOnline.Text = articuloEcommerce.ProductoOnline;
+                    txtVisibilidad.Text = articuloEcommerce.Visibilidad;
+                    txtColor.Text = articuloEcommerce.Color;
+                    txtTalle.Text = articuloEcommerce.Talle;
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Ocurrió un error en cargarArticuloEcommerce, ArticulosABM. Excepción: " + Ex.Message);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         /// <summary>
@@ -4295,6 +4326,37 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception Ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Ocurrió un error agregando SIM al Articulo. Excepción: " + Ex.Message);
+            }
+        }
+
+        protected void btnGuardarEcommerce_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ArticulosEcommerce articulosEcommerce = new ArticulosEcommerce
+                {
+                    IdArticulo = this.id,
+                    Atributo = txtAtributo.Text,
+                    Tipoproducto = txtTipoProducto.Text,
+                    Categoria = txtCategoria.Text,
+                    Peso = txtPeso.Text,
+                    ProductoOnline = txtProductoOnline.Text,
+                    Visibilidad = txtVisibilidad.Text,
+                    Color = txtColor.Text,
+                    Talle = txtTalle.Text
+                };
+
+                var articuloEcommerce = contArtEnt.AgregarArticuloEcommerce(articulosEcommerce);
+
+                if (articuloEcommerce != null)
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", "$.msgbox(\"Los datos del Articulo E-Commerce se cargaron con éxito.\", {type: \"info\"});", true);
+                else
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelCatalogo, UpdatePanelCatalogo.GetType(), "alert", m.mensajeBoxError("Ocurrió un error cargando los datos del Articulo E-Commerce."), true);
+
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
