@@ -166,6 +166,22 @@
                             <br />
                         </div>
 
+                        <div class="row">
+                          <div id="validation-form4" role="form" class="form-horizontal col-md-2">
+                            <fieldset>
+                                <div>
+                                    <div class="form-group alert alert-success">
+                                        <label class="col-md-5">Total:</label>
+                                        <div class="col-md-3">
+                                            <asp:Label ID="lblTotal1" Text="" runat="server" />
+                                            <label id="lblTotal"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        </div>
+
                         <table class="table table-striped table-bordered" id="articulosTablaProveedor">
                             <thead>
                                 <tr>
@@ -390,22 +406,40 @@
             for (var i = 0; i < data.length; i++) {
                 var codigo = data[i];
                 var row = document.getElementById("articulo_" + codigo[0]);
-                row.style.display = 'none';
+
+                if (row != null) {
+                    row.style.display = 'none';
+
+                }
+
             }
+
+            var total = 0;
 
             for (var i = 0; i < data.length; i++) {
                 var codigo = data[i];
 
-                var txtCantidad = document.getElementsByName("txtCantidad_" + codigo[0]);
+                var txtCantidad = document.getElementsByName("txtCantidad_" + codigo[0])[0].value;
+                var txtPrecio = document.getElementsByName("txtPrecio_" + codigo[0])[0].value;
                 var row = document.getElementById("articulo_" + codigo[0]);
 
-                if (parseInt(txtCantidad[0].value) > 0) {
-                    row.style.display = '';
+                if (row != null) {
+                    if (parseInt(txtCantidad) > 0) {
+                        row.style.display = '';
+                        //var aux = parseFloat(txtCantidad.value);
+                        //var aux2 = parseFloat(txtPrecio.value);
+                        total += parseFloat(txtCantidad) * parseFloat(txtPrecio);
+                    }
+                    else {
+                        row.style.display = 'none';
+                    }
                 }
-                else {
-                    row.style.display = 'none';
-                }
+
+                console.log(total);
             }
+
+            var hooa = document.getElementById('<%=lblTotal1.ClientID %>').innerHTML = total;
+            hooa.value = total;
         };
 
         function FiltrarStockMinimo() {
@@ -637,6 +671,31 @@
                     "<td> " + CrearAlerta(obj[i].stockMinimo, obj[i].StockTotal) + "</td>" +
                     "</tr> ");
             };
+        }
+
+        const handleChange = () => {
+
+            let total = 0;
+
+            var table = $('#articulosTablaProveedor').DataTable();
+
+            var data = table.rows().data();
+            data.each(function (value) {
+                console.log(value[2]);
+            });
+
+            //for (let i = 0; i < types.length; i++) {
+            //    let node = document.getElementById(`${types[i].label}Tix`);
+            //    let quantity = node.value;
+            //    let cost = quantity * types[i].cost;
+            //    let subtotal = document.getElementById(`${types[i].label}Cost`);
+            //    subtotal.textContent = `${types[i].subText} Subtotal: $${cost}`;
+
+            //    total += cost;
+            //}
+
+            console.log(total);
+            //document.getElementById('totalCost').textContent = `Total Cost: $${total}`
         }
 
         function CrearAlerta(stockMinimo, stockTotal) {

@@ -99,6 +99,7 @@
               <xs:element name="contrareembolso" msprop:Generator_ColumnVarNameInTable="columncontrareembolso" msprop:Generator_ColumnPropNameInRow="contrareembolso" msprop:Generator_ColumnPropNameInTable="contrareembolsoColumn" msprop:Generator_UserColumnName="contrareembolso" type="xs:string" minOccurs="0" />
               <xs:element name="codigoCliente" msprop:Generator_ColumnVarNameInTable="columncodigoCliente" msprop:Generator_ColumnPropNameInRow="codigoCliente" msprop:Generator_ColumnPropNameInTable="codigoClienteColumn" msprop:Generator_UserColumnName="codigoCliente" type="xs:string" minOccurs="0" />
               <xs:element name="Direccion" msprop:Generator_ColumnVarNameInTable="columnDireccion" msprop:Generator_ColumnPropNameInRow="Direccion" msprop:Generator_ColumnPropNameInTable="DireccionColumn" msprop:Generator_UserColumnName="Direccion" type="xs:string" minOccurs="0" />
+              <xs:element name="GuiaDespacho" msprop:Generator_ColumnVarNameInTable="columnGuiaDespacho" msprop:Generator_ColumnPropNameInRow="GuiaDespacho" msprop:Generator_ColumnPropNameInTable="GuiaDespachoColumn" msprop:Generator_UserColumnName="GuiaDespacho" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

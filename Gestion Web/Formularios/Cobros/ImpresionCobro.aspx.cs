@@ -810,6 +810,11 @@ namespace Gestion_Web.Formularios.Cobros
                         DataTable dtTelefono = contCliente.obtenerContactoCliente(Convert.ToInt32(row["cliente"]), 1);
                         var dtDireccion = contCliente.obtenerDireccionCliente(Convert.ToInt32(row["cliente"]), 1);
 
+                        if( string.IsNullOrEmpty(row["GuiaDespacho"].ToString()))
+                        {
+                            row["GuiaDespacho"] = "";
+                        }
+
                         if (dtTelefono.Rows.Count > 0)
                             row["Telefono"] = dtTelefono.Rows[0].ItemArray[1].ToString();
 

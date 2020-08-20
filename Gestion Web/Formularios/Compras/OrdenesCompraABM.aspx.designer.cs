@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Compras {
-    
-    
-    public partial class OrdenesCompraABM {
-        
+namespace Gestion_Web.Formularios.Compras
+{
+
+
+    public partial class OrdenesCompraABM
+    {
+
         /// <summary>
         /// ListSucursal control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSucursal;
-        
+
         /// <summary>
         /// ListSucursalHV control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField ListSucursalHV;
-        
+
         /// <summary>
         /// ListPtoVenta control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListPtoVenta;
-        
+
         /// <summary>
         /// txtCodProveedor control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCodProveedor;
-        
+
         /// <summary>
         /// btnBuscarCodigoProveedor control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnBuscarCodigoProveedor;
-        
+
         /// <summary>
         /// ListProveedor control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListProveedor;
-        
+
         /// <summary>
         /// txtPVenta control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPVenta;
-        
+
         /// <summary>
         /// txtNumero control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNumero;
-        
+
         /// <summary>
         /// txtFecha control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFecha;
-        
+
         /// <summary>
         /// RequiredFieldValidator42 control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator42;
-        
+
         /// <summary>
         /// txtFechaEntrega control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaEntrega;
-        
+
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// ListTipo control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListTipo;
-        
+
         /// <summary>
         /// txtObservaciones control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
-        
+
         /// <summary>
         /// lblMailOC control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMailOC;
-        
+
         /// <summary>
         /// hfLabelMailOC control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hfLabelMailOC;
-        
+
         /// <summary>
         /// lblRequiereAutorizacionOC control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRequiereAutorizacionOC;
-        
+
         /// <summary>
         /// lblMontoAutorizacionOC control.
         /// </summary>
@@ -173,7 +175,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMontoAutorizacionOC;
-        
+
         /// <summary>
         /// lblRequiereAnticipoOC control.
         /// </summary>
@@ -182,7 +184,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRequiereAnticipoOC;
-        
+
         /// <summary>
         /// lblObservacion control.
         /// </summary>
@@ -191,7 +193,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblObservacion;
-        
+
         /// <summary>
         /// txtFormaDePago control.
         /// </summary>
@@ -200,7 +202,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFormaDePago;
-        
+
         /// <summary>
         /// lbtnVerStockMinimo control.
         /// </summary>
@@ -209,7 +211,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnVerStockMinimo;
-        
+
         /// <summary>
         /// lbtnVerOC control.
         /// </summary>
@@ -218,7 +220,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnVerOC;
-        
+
         /// <summary>
         /// lbtnVerTodos control.
         /// </summary>
@@ -227,7 +229,16 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnVerTodos;
-        
+
+        /// <summary>
+        /// lblTotal1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotal1;
+
         /// <summary>
         /// phProductos control.
         /// </summary>
@@ -236,7 +247,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phProductos;
-        
+
         /// <summary>
         /// panelProductos control.
         /// </summary>
@@ -245,7 +256,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panelProductos;
-        
+
         /// <summary>
         /// btnAgregar control.
         /// </summary>
@@ -254,7 +265,7 @@ namespace Gestion_Web.Formularios.Compras {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregar;
-        
+
         /// <summary>
         /// ReportViewer1 control.
         /// </summary>
