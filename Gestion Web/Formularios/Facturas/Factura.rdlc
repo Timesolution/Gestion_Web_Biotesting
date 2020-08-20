@@ -137,14 +137,30 @@
           <DataField>TotalTasaVial</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ptoVenta">
+          <DataField>ptoVenta</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="TotalTasaMunicipal">
           <DataField>TotalTasaMunicipal</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CostoSinIva">
+          <DataField>CostoSinIva</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Categoria">
+          <DataField>Categoria</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="neto10">
+          <DataField>neto10</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsFacturas</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\Lucas\Documents\SVN\Gestion Web\Gestion Web\Formularios\Facturas\dsFacturas.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Respos\GestionWEB\Gestion Web\Formularios\Facturas\dsFacturas.xsd</rd:SchemaPath>
         <rd:TableName>DetalleFacturas</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -757,14 +773,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalNeto105">
+                        <Textbox Name="neto10">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalNeto105.Value</Value>
+                                  <Value>=Fields!neto10.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -775,7 +791,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalNeto105</rd:DefaultName>
+                          <rd:DefaultName>neto10</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1102,7 +1118,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!TotalNeto105.Value)</Value>
+                                  <Value>=Sum(Fields!neto10.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
