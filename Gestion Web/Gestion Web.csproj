@@ -58,7 +58,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\GestionAPI\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -350,6 +350,7 @@
     <Content Include="Error404.aspx" />
     <Content Include="font\fontawesome-webfont.svg" />
     <Content Include="font\glyphicons-halflings-regular.svg" />
+    <Content Include="Formularios\Articulos\ComparativaProveedorF.aspx" />
     <Content Include="Formularios\Articulos\ABMGruposArticulos.aspx" />
     <Content Include="Formularios\Articulos\ABMGruposComisiones.aspx" />
     <Content Include="Formularios\Articulos\ABMMarcas.aspx" />
@@ -1411,6 +1412,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsDetalleDespacho.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ComparativaProveedorF.aspx.cs">
+      <DependentUpon>ComparativaProveedorF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ComparativaProveedorF.aspx.designer.cs">
+      <DependentUpon>ComparativaProveedorF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Articulos\ABMGruposComisiones.aspx.cs">
       <DependentUpon>ABMGruposComisiones.aspx</DependentUpon>
