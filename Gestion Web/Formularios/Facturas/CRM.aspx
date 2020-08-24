@@ -36,16 +36,16 @@
                                 </h5>
                             </td>
                             <td style="width: 5%">
-                                <div class="shortcuts" style="height: 100%">
+                     <%--           <div class="shortcuts" style="height: 100%">
 
                                     <div class="shortcuts" style="height: 100%">
                                         <asp:LinkButton ID="lbImpresion" class="btn btn-primary" runat="server" Text="<span class='shortcut-icon icon-print'></span>" Visible="false" Style="width: 100%" />
                                     </div>
-                                </div>
+                                </div>--%>
                             </td>
                             <td style="width: 2%">
 
-                                <div class="btn-group pull-right" style="width: 100%">
+                              <%--  <div class="btn-group pull-right" style="width: 100%">
                                     <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
                                         <i class="shortcut-icon icon-print"></i>&nbsp
                                        
@@ -53,10 +53,19 @@
                                         <span class="caret"></span>
                                     </button>
 
-                                </div>
+                                </div>--%>
 
                             </td>
 
+                            
+                            <td style="width: 5%">
+                               <%-- <div class="shortcuts" style="height: 100%">
+
+                                    <a class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
+                                        <i class="shortcut-icon icon-plus"></i>
+                                    </a>
+                                </div>--%>
+                            </td>
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
 
@@ -64,14 +73,6 @@
 
                                     <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 100%">
                                         <i class="shortcut-icon icon-filter"></i>
-                                    </a>
-                                </div>
-                            </td>
-                            <td style="width: 5%">
-                                <div class="shortcuts" style="height: 100%">
-
-                                    <a class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
-                                        <i class="shortcut-icon icon-plus"></i>
                                     </a>
                                 </div>
                             </td>
