@@ -194,6 +194,7 @@
                                                     <li><a tabindex="-1" href="/../../Formularios/Clientes/Clientesaspx.aspx">Clientes</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMGruposClientes.aspx">Grupos</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMCategoriasClientes.aspx">Categorias</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ProspectosF">Prospectos</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
                                                     <li class="dropdown-submenu">
                                                         <a tabindex="-1" href="#">Estados</a>
