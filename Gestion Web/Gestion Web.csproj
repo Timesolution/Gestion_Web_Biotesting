@@ -366,6 +366,8 @@
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Clientes\ABMEstadosCRM.aspx" />
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
+    <Content Include="Formularios\Clientes\ProspectosF.aspx" />
+    <Content Include="Formularios\Clientes\ProspectosABM.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
@@ -1485,6 +1487,20 @@
     </Compile>
     <Compile Include="Formularios\Clientes\ActividadClientes.aspx.designer.cs">
       <DependentUpon>ActividadClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ProspectosF.aspx.cs">
+      <DependentUpon>ProspectosF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ProspectosF.aspx.designer.cs">
+      <DependentUpon>ProspectosF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ProspectosABM.aspx.cs">
+      <DependentUpon>ProspectosABM.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ProspectosABM.aspx.designer.cs">
+      <DependentUpon>ProspectosABM.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
