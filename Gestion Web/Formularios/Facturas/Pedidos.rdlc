@@ -901,7 +901,7 @@
       <Width>8.03038in</Width>
       <Page>
         <PageHeader>
-          <Height>8.59014cm</Height>
+          <Height>10.76912cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1095,7 +1095,7 @@
               </Style>
             </Textbox>
             <Line Name="Line3">
-              <Top>8.40493cm</Top>
+              <Top>9.58702cm</Top>
               <Left>0.50112cm</Left>
               <Height>0cm</Height>
               <Width>19.645cm</Width>
@@ -1173,7 +1173,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>CUIT</rd:DefaultName>
-              <Top>5.14202cm</Top>
+              <Top>6.32411cm</Top>
               <Left>0.50112cm</Left>
               <Height>1.00571cm</Height>
               <Width>19.23984cm</Width>
@@ -1207,7 +1207,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>CUIT</rd:DefaultName>
-              <Top>6.32411cm</Top>
+              <Top>7.5062cm</Top>
               <Left>0.50112cm</Left>
               <Height>0.58237cm</Height>
               <Width>19.23984cm</Width>
@@ -1281,8 +1281,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>CUIT</rd:DefaultName>
-              <Top>7.01231cm</Top>
-              <Left>0.50112cm</Left>
+              <Top>8.1944cm</Top>
+              <Left>0.47404cm</Left>
               <Height>0.54709cm</Height>
               <Width>19.23984cm</Width>
               <ZIndex>11</ZIndex>
@@ -1315,7 +1315,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>CUIT</rd:DefaultName>
-              <Top>7.68145cm</Top>
+              <Top>8.86354cm</Top>
               <Left>0.50112cm</Left>
               <Height>0.58237cm</Height>
               <Width>19.23984cm</Width>
@@ -1345,6 +1345,39 @@
                 </Border>
               </Style>
             </Image>
+            <Textbox Name="formaPago">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Foma de Pago: </Value>
+                      <Style />
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Parameters!ParamFormaPago.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>5.17729cm</Top>
+              <Left>0.47404cm</Left>
+              <Height>1.00571cm</Height>
+              <Width>19.23984cm</Width>
+              <ZIndex>14</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1694,6 +1727,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamCodBarra">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamFormaPago">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
