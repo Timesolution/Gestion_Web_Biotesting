@@ -1190,7 +1190,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente contCliente = new controladorCliente();
                 ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
                 this.cliente = contCliente.obtenerClienteID(idCliente);
-
+                var clienteDatos = contClienteEnt.obtenerClienteDatosByID(idCliente);
                 if (this.cliente != null)
                 {
 
@@ -1198,6 +1198,16 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
+                    if (clienteDatos != null)
+                    {
+                        if (!String.IsNullOrEmpty(clienteDatos.Mail))
+                        {
+                            txtMailEntrega.Text = clienteDatos.Mail;
+                            chkEnviarMail.Checked = true;
+                        }
+                        
+                    }
+                    
                     try
                     {
                         this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
