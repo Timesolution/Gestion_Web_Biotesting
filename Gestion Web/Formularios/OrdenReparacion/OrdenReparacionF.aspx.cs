@@ -1482,7 +1482,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                         //contOrdenReparacion.EliminarStockSucursalReparacion((int)Session["Login_IdUser"], or, comentario);
 
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(13).Id;
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(14).Id;
                         or.SucursalOR = or.SucursalOrigen;
                         var temp = contOrdenReparacion.ModificarOrdenReparacion();
 
@@ -1527,7 +1527,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                     if(temp > 0)
                     {
-                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(14).Id;
+                        or.Estado = contOrdenReparacion.ObtenerEstadoOrdenReparacionPorID(13).Id;
                         or.FechaFinalizacion = DateTime.Now;
                         or.LapsoFinalizacion = CalcularProgressBar((DateTime)or.Fecha, (int)or.PlazoLimiteReparacion);
                         or.SucursalOR = contSucursal.obtenerSucursalID(Convert.ToInt32(contConfig.ObtenerConfiguracionId(51))).id;

@@ -268,6 +268,20 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        protected void DropListFormaPago_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //me guardo el id de la lista seleccionada para mantenerlo al recargar la lista
+                int listaAnt = Convert.ToInt32(this.DropListLista.SelectedValue);
+                this.cargarListaPrecio();
+                this.DropListLista.SelectedValue = listaAnt.ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error seleccionando tipo de Pago. " + ex.Message));
+            }
+        }
 
         private void VerificarLogin()
         {
@@ -627,7 +641,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 DataTable dt = this.controlador.obtenerFormasPago();
 
                 //agrego todos
@@ -926,8 +939,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 try
                 {
-                    this.DropListLista.SelectedValue = cl.lisPrecio.id.ToString();
-                    this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
+                    //this.DropListLista.SelectedValue = cl.lisPrecio.id.ToString();
+                    //this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
                 }
                 catch
                 {

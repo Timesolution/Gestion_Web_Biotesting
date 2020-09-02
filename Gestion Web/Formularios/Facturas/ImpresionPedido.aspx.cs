@@ -207,6 +207,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string domicilio = string.Empty;
                 string zona = string.Empty;
                 string telefono = string.Empty;
+                string formaPago = string.Empty;
                 ControladorClienteEntity controlCli = new ControladorClienteEntity();
                 ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
                 controladorZona controlZona = new controladorZona();
@@ -281,6 +282,8 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     //obtengo el id del cliente
                     idCliente = Convert.ToInt32(dr["idCliente"]);
+                    //obtengo la forma de pago
+                    formaPago = dr["formaPago"].ToString();
                 }
                 //obtengo el telefono del cliente para agregarlo al pedido
                 List<contacto> contactosClientes = controlCliente.obtenerContactos(idCliente);
@@ -319,6 +322,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ReportParameter paramZona = new ReportParameter("ParamZona",zona);
                 ReportParameter paramTel = new ReportParameter("ParamTel", telefono);
+                ReportParameter paramFormaPago = new ReportParameter("ParamFormaPago", formaPago);
 
                 ReportParameter param1 = new ReportParameter("ParamSubtotal", subtotal.ToString("C"));
                 ReportParameter param2 = new ReportParameter("ParamRetencion", retencion.ToString("C"));
@@ -350,6 +354,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
                 this.ReportViewer1.LocalReport.SetParameters(paramZona);
                 this.ReportViewer1.LocalReport.SetParameters(paramTel);
+                this.ReportViewer1.LocalReport.SetParameters(paramFormaPago);
                 this.ReportViewer1.LocalReport.SetParameters(param1);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
@@ -384,7 +389,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.Response.End();
             }
-            catch
+            catch(Exception ex)
             {
 
             }
