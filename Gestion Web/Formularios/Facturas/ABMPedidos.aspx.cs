@@ -338,7 +338,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.Pedido = Session["Pedido"] as Pedido;
-
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Pedido p = controlador.obtenerPedidoId(idpedido);
 
                 Session.Add("Pedido", p);
@@ -346,6 +346,15 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarSucursal(p.empresa.id);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
+
+                if(DropListClientes.SelectedValue == "-1")
+                {
+                    var c = contCliente.obtenerClienteID(p.cliente.id);
+                    this.DropListClientes.Items.Add(new ListItem { Value = p.cliente.id.ToString(), Text = c.alias });
+                    this.DropListClientes.SelectedValue = p.cliente.id.ToString();
+
+                }
+
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 this.DropListFormaPago.SelectedValue = p.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
@@ -1203,7 +1212,8 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente contCliente = new controladorCliente();
                 ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
                 this.cliente = contCliente.obtenerClienteID(idCliente);
-                var clienteDatos = contClienteEnt.obtenerClienteDatosByID(idCliente);
+                var clienteDatos = contClienteEnt.obtenerClienteDatosByIdCliente(idCliente);
+
                 if (this.cliente != null)
                 {
 
