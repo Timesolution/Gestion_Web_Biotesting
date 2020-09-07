@@ -64,7 +64,7 @@
 
                                     <div class="plan-features">
                                         <ul>
-                                            <li>Tel: +54 11 3782-0435</li>
+                                            <li>WhatsApp: +54 11 3782-0435</li>
                                             <li>Email:<a href="#"> soporte@timesolution.com.ar</a></li>
                                         </ul>
                                     </div>
