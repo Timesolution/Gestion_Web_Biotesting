@@ -30,6 +30,24 @@
                             <div class="plan-container">
                                 <div class="plan stacked">
                                     <div class="plan-header">
+                                        <div class="plan-title">
+                                            Soporte        		
+                                        </div>
+                                        <div class="plan-price">
+                                            <span class="note"></span><i class="fas fa-life-ring"></i>
+                                        </div>
+                                    </div>
+                                    <div class="plan-features">
+                                        <ul>
+                                            <li><strong>Si necesita ayuda ingrese </strong><a href="http://timesolution.freshdesk.com/" target="_blank">aqui</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="plan-container">
+                                <div class="plan stacked">
+                                    <div class="plan-header">
 
                                         <div class="plan-title">
                                             Contacto	        		
@@ -46,7 +64,7 @@
 
                                     <div class="plan-features">
                                         <ul>
-                                            <li>Phone: + 54 11 4871-5287</li>
+                                            <li>Tel: +54 11 3782-0435</li>
                                             <li>Email:<a href="#"> soporte@timesolution.com.ar</a></li>
                                         </ul>
                                     </div>
@@ -58,68 +76,67 @@
                             </div>
                             <!-- /plan-container -->
 
-                            <div class="plan-container">
+                            <!-- <div class="plan-container">
                                 <div class="plan stacked">
                                     <div class="plan-header">
 
                                         <div class="plan-title">
                                             Dirección	        		
-                                        </div>
+                                        </div> -->
                                         <!-- /plan-title -->
 
-                                        <div class="plan-price">
+                                        <!-- <div class="plan-price">
                                             <span class="note"></span><i class="icon-map-marker"></i>
-                                        </div>
+                                        </div> -->
                                         <!-- /plan-price -->
 
-                                    </div>
+                                    <!-- </div> -->
                                     <!-- /plan-header -->
 
-                                    <div class="plan-features">
+                                    <!-- <div class="plan-features">
                                         <ul>
-                                            <li>Calle del Caminante 80</li>
-                                            <li>Edificio Vientos del Delta II</li>
-                                            <li>Piso 1 - Oficina 108</li>
+                                            <li>Avenida del Puerto 215</li>
+                                            <li>Piso 3 - Oficina 314</li>
                                             <li>Código Postal 1670</li>
-                                            <li>Rincon de Milberg - Tigre - Buenos Aires</li>
+                                            <li>Rincon de Milberg - Tigre  Buenos Aires</li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                     <!-- /plan-features -->
 
 
-                                </div>
+                                <!-- </div> -->
                                 <!-- /plan -->
-                            </div>
+                            <!-- </div> -->
                             <!-- /plan-container -->
 
-                            <div class="plan-container">
+                            <!-- <div class="plan-container">
                                 <div class="plan stacked">
                                     <div class="plan-header">
 
                                         <div class="plan-title">
                                             WhatsApp	        		
-                                        </div>
+                                        </div> -->
                                         <!-- /plan-title -->
 
-                                        <div class="plan-price">
+                                        <!-- <div class="plan-price">
                                             <span class="note"></span><i class="fab fa-whatsapp"></i>
-                                        </div>
+                                        </div> -->
                                         <!-- /plan-price -->
 
-                                    </div>
+                                    <!-- </div> -->
                                     <!-- /plan-header -->
 
-                                    <div class="plan-features">
+                                    <!-- <div class="plan-features">
                                         <ul>
-                                            <li>Phone: +54 11 3782-0435</li>
+                                            <li>Tel: +54 11 3782-0435</li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                     <!-- /plan-features -->
 
 
-                                </div>
+                                <!-- </div> -->
                                 <!-- /plan -->
-                            </div>
+                            <!-- </div> -->
                             <!-- /plan-container -->
 
                             <div class="plan-container">
@@ -141,8 +158,7 @@
 
                                     <div class="plan-features">
                                         <ul>
-                                            <li>Versión 11.0.90968</li>
-                                            <li><strong>Descarga: </strong><a href="https://get.teamviewer.com/t7q7ums" target="_blank">Aquí</a></li>
+                                            <li><strong>Descargar: </strong><a href="https://get.teamviewer.com/t7q7ums" target="_blank">Aquí</a></li>
                                         </ul>
                                     </div>
                                     <!-- /plan-features -->
@@ -165,11 +181,12 @@
                                     </div>
                                     <div class="plan-features">
                                         <ul>
-                                            <li><strong>Ingresar: </strong><a href="https://anydesk.com/es" target="_blank">Aquí</a></li>
+                                            <li><strong>Descargar: </strong><a href="https://anydesk.com/es" target="_blank">Aquí</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
