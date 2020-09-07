@@ -4438,7 +4438,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (CorroborarTotalPagos() == 1)
                 {
-
+                    Clientes_Eventos eventoCliente = new Clientes_Eventos();
+                    ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                     controladorFacturacion controladorFacturacion = new controladorFacturacion();
                     PagosProgramados pagosProgramados = new PagosProgramados();
 
@@ -4453,6 +4454,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     foreach (DataRow dr in dt.Rows)
                     {
+
                         string fecha = dr["Fecha"].ToString();
                         pagosProgramados.IdDocumento = Convert.ToInt32(dr["IdFactura"]);
 
@@ -4486,7 +4488,25 @@ namespace Gestion_Web.Formularios.Facturas
                         pagosProgramados.IdCliente = factura.cliente.id;
 
 
-                        controladorFacturacion.AgregarPago(pagosProgramados);
+                        var cronogramaPago = controladorFacturacion.AgregarPago(pagosProgramados);
+
+                        if(cronogramaPago != null)
+                        {
+                            eventoCliente.Cliente = factura.cliente.id;
+                            eventoCliente.Fecha = DateTime.Now;
+                            eventoCliente.Descripcion = "Cronograma de pago: " + Convert.ToDecimal(dr["Importe"]);
+                            eventoCliente.Tarea = "";
+                            eventoCliente.Vencimiento = Convert.ToDateTime(fecha);
+                            eventoCliente.Estado = 1;
+                            if (Session["Login_IdUser"] != null)
+                            {
+                                eventoCliente.Usuario = (int)Session["Login_IdUser"];
+                            }
+                            controladorClienteEntity.agregarEventoCliente(eventoCliente);
+
+                        }
+
+
                     }
                 }
                 else

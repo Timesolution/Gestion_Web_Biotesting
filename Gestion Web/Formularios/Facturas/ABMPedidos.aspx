@@ -147,7 +147,7 @@
                                                     </th>
                                                     <th style="width: 30%">
                                                         <div class="col-md-8">
-                                                            <asp:DropDownList ID="DropListFormaPago" runat="server" class="form-control"></asp:DropDownList>
+                                                            <asp:DropDownList ID="DropListFormaPago" runat="server" class="form-control" ></asp:DropDownList>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListFormaPago" InitialValue="-1" ValidationGroup="PedidosGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>

@@ -795,84 +795,112 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a buscar la ruta de la carpeta pdfs para guardar el pdf a generar");
                 string path = Server.MapPath("pdfs/");
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Encontro la ruta: "+ path);
                 //limpio la carpeta donde van los pdfs asi no muestra pdfs viejos
+
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a limpiar la carpeta donde estan los pdfs asi no muestra los viejos");
                 BorrarPDFS(path);
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Borro los archivos de la carpeta");
 
                 string idtildado = "";
                 int contadorOk = 0;
                 int contadorTotal = 0;
 
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a chequear si hay registros tildados");
                 //chequeo lo que este tildado y lo imprimo
                 foreach (Control C in phRemitos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[4].Controls[2] as CheckBox;
+                    CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
 
                     if (ch.Checked)
                     {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Encontro registro tildado");
                         idtildado += ch.ID.Split('_')[1] + ";";
                         contadorTotal++;
                     }
                 }
 
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a verificar si existe directorio");
                 if (!Directory.Exists(path))
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a crear el directorio");
                     Directory.CreateDirectory(path);
                 }
 
                 if (!String.IsNullOrEmpty(idtildado))
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Hay registro tildado, entonces va a generar un pdf de esos");
                     foreach (string id in idtildado.Split(';'))
                     {
                         if (!String.IsNullOrEmpty(id))
                         {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a buscar el remito con id: "+ id);
                             Remito r = this.controlador.obtenerRemitoId(Convert.ToInt32(id));
                             string fileName = "rem-" + r.numero + "_" + r.id + ".pdf";
+
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a generar el pdf");
                             int i = this.GenerarImpresionPDF(r.id, path + fileName);
                             if (i > 0)
                             {
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se genero el pdf con exito");
                                 contadorOk++;
                             }
+                            else
+                                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ELSE: No se genero el PDF");
                         }
                     }
                 }
                 //si no tengo tildada ninguna factura ejecuto la busqueda en la base y genero un pdf de todas
                 else
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No hay registros tildados, entonces va a imprimir a todos lo de la pantalla");
                     List<Remito> listRemitos = controlador.obtenerRemitosRango(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), 0, sinFactura);
 
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Encontro registros, va a recorrer a cada uno");
                     foreach (var remito in listRemitos)
                     {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a procesar el remito");
                         var idRemito = remito.id;
                         idRemito = Convert.ToInt32(idRemito);
                         Remito r = this.controlador.obtenerRemitoId(Convert.ToInt32(idRemito));
                         string fileName = "rem-" + r.numero + "_" + r.id + ".pdf";
+
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a generar el pdf");
                         int i = this.GenerarImpresionPDF(r.id, path + fileName);
                         if (i > 0)
                         {
                             contadorOk++;
                         }
+                        else
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ELSE: No se genero el PDF");
                     }
                 }
 
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Ahora va a buscar si hay archivos generados en la carpeta pdfs");
                 string[] pdfs = Directory.GetFiles(path);
                 string nombre = path + "rem-" + DateTime.Now.ToString("dd-MM-yyyy_hhmmss") + ".pdf";
+
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a combinar los pdf");
                 int ok = this.contFunciones.CombineMultiplePDFs(pdfs, nombre);
                 if (ok > 0)
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a descargar el pdf");
                     this.descargar(nombre);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Realizados con exito:" + contadorOk + "de " + contadorTotal, ""));
                 }
                 else
                 {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No pudo imprimir el pdf en la funcion combineMultiplePDFs");
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo imprimir"));
                 }
 
             }
             catch (Exception ex)
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en RemitosR.lbtnImprimirTodo_Click. Excepcion: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
             }
         }
@@ -889,6 +917,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Entro a la funcion descargar el pdf");
                 System.IO.FileInfo toDownload =
                      new System.IO.FileInfo(path);
 

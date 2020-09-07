@@ -115,45 +115,65 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 or.Estado = 1;
 
-                SetearValoresEnOrdenReparacion(or);
+                int producto = Convert.ToInt32(ListProductos.SelectedValue);
 
-                var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
-
-                string sucursalOR = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
-
-                contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8") + ". Sucursal OR: " + sucursalOR);
-
-                if (temp > 0)
+                int ok = contOrdenReparacion.ObtenerOrdenReparacionPorNumeroPRP(Convert.ToInt32(or.NumeroPRP), producto);
+                if (ok == 1)
                 {
-                    temp = contOrdenReparacion.AgregarStockSucursal((int)Session["Login_IdUser"], or,51);
+                    SetearValoresEnOrdenReparacion(or);
 
-                    if(temp < 1)
-                        Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+                    var temp = contOrdenReparacion.AgregarOrdenReparacion(or);
 
-                    if (or.CambiaProducto == "Si")
+                    string sucursalOR = contSucursal.obtenerSucursalID((int)or.SucursalOR).nombre;
+
+                    contOrdenReparacion.AgregarObservacionOrdenReparacion(or.Id, (int)Session["Login_IdUser"], "Se genera orden de reparacion numero " + or.NumeroOrdenReparacion.Value.ToString("D8") + ". Sucursal OR: " + sucursalOR);
+
+                    if (temp > 0)
                     {
-                        string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
-                        temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
+                        temp = contOrdenReparacion.AgregarStockSucursal((int)Session["Login_IdUser"], or, 51);
 
                         if (temp < 1)
-                            Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
+                            Log.EscribirSQL(1, "ERROR", "Error al agregar stock en la sucursal de reparacion");
+
+                        if (or.CambiaProducto == "Si")
+                        {
+                            string comentario = "Elimino stock por cambio de producto fallido al cliente. OR: " + or.NumeroOrdenReparacion.Value.ToString("D8");
+                            temp = contOrdenReparacion.EliminarStockSucursalOrigen((int)Session["Login_IdUser"], or, comentario);
+
+                            if (temp < 1)
+                                Log.EscribirSQL(1, "ERROR", "Error al eliminar stock en la sucursal de origen");
+                        }
+
+                        Log.EscribirSQL(1, "Info", "Orden de reparacion agregada con exito");
+                        string script = "window.open('ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
+                        script += " $.msgbox(\"Orden de reparación agregada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación agregada con exito!.", "OrdenReparacionF.aspx"));
                     }
+                    else if (temp == -1)
+                    {
+                        string script = " $.msgbox(\"Error agregando Orden de Reparación.\", {type: \"error\"});";
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
 
-                    Log.EscribirSQL(1, "Info", "Orden de reparacion agregada con exito");
-                    string script = "window.open('ImpresionOrdenReparacion.aspx?a=1&or=" + or.Id.ToString() + "&prp=" + or.NumeroPRP.ToString() + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');";
-                    script += " $.msgbox(\"Orden de reparación agregada con exito! \", {type: \"info\"}); location.href = 'OrdenReparacionF.aspx'";
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Orden de reparación agregada con exito!.", "OrdenReparacionF.aspx"));
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando Orden de Reparación."));
+                    }
                 }
-                else if(temp == -1)
+                else if (ok == 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando Orden de Reparación."));
-                }                   
-
+                    string script = " $.msgbox(\"El producto seleccionado ya posee una orden de reparacion.\", {type: \"alert\"});";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
+                }
+                else
+                {
+                    string script = " $.msgbox(\"Disculpe, ocurrio un error al obtener orden de reparacion para verificar. Por favor, contacte con soporte.\", {type: \"error\"});";
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
+                }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error al agregar orden de reparacion " + ex.Message);
+                string script = " $.msgbox(\"Disculpe, ocurrio un error para procesar la solicitud de orden de reparacion. Por favor, contacte con soporte.\", {type: \"error\"});";
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", script, true);
             }
         }
 

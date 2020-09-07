@@ -268,6 +268,20 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        protected void DropListFormaPago_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //me guardo el id de la lista seleccionada para mantenerlo al recargar la lista
+                int listaAnt = Convert.ToInt32(this.DropListLista.SelectedValue);
+                this.cargarListaPrecio();
+                this.DropListLista.SelectedValue = listaAnt.ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error seleccionando tipo de Pago. " + ex.Message));
+            }
+        }
 
         private void VerificarLogin()
         {
@@ -324,7 +338,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.Pedido = Session["Pedido"] as Pedido;
-
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 Pedido p = controlador.obtenerPedidoId(idpedido);
 
                 Session.Add("Pedido", p);
@@ -332,6 +346,15 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarSucursal(p.empresa.id);
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
+
+                if(DropListClientes.SelectedValue == "-1")
+                {
+                    var c = contCliente.obtenerClienteID(p.cliente.id);
+                    this.DropListClientes.Items.Add(new ListItem { Value = p.cliente.id.ToString(), Text = c.alias });
+                    this.DropListClientes.SelectedValue = p.cliente.id.ToString();
+
+                }
+
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 this.DropListFormaPago.SelectedValue = p.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
@@ -627,7 +650,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 DataTable dt = this.controlador.obtenerFormasPago();
 
                 //agrego todos
@@ -926,8 +948,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 try
                 {
-                    this.DropListLista.SelectedValue = cl.lisPrecio.id.ToString();
-                    this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
+                    //this.DropListLista.SelectedValue = cl.lisPrecio.id.ToString();
+                    //this.DropListFormaPago.SelectedValue = cl.formaPago.id.ToString();
                 }
                 catch
                 {
@@ -1190,6 +1212,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente contCliente = new controladorCliente();
                 ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
                 this.cliente = contCliente.obtenerClienteID(idCliente);
+                var clienteDatos = contClienteEnt.obtenerClienteDatosByIdCliente(idCliente);
 
                 if (this.cliente != null)
                 {
@@ -1198,6 +1221,16 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
+                    if (clienteDatos != null)
+                    {
+                        if (!String.IsNullOrEmpty(clienteDatos.Mail))
+                        {
+                            txtMailEntrega.Text = clienteDatos.Mail;
+                            chkEnviarMail.Checked = true;
+                        }
+                        
+                    }
+                    
                     try
                     {
                         this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
