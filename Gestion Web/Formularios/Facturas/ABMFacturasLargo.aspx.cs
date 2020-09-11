@@ -148,6 +148,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
                     this.cargarMonedasModalTarjetas();
+                    this.cargarDivisas();
 
                     if (accion != 6 && accion != 7 && accion != 9)
                     {
@@ -363,6 +364,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.verificarVtaCombustible();
                 //Verifico si tiene una obsevacion en FC predeterminada para cargar en los comentarios
                 this.verificarObservacionesFC();
+                //Cargo las divisas
 
                 //verifico si es postback y tengo que llenar la tabla de las trazas para poder obtener el estado de los chkbox
                 if (this.lblMovTraza.Text != "")
@@ -2737,6 +2739,23 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private void cargarDivisas()
+        {
+            controladorCobranza controladorCobranza = new controladorCobranza();
+
+            DataTable dt = controladorCobranza.obtenerMonedasDT();
+
+            DataRow dr = dt.NewRow();
+            dr["moneda"] = "Seleccione...";
+            dr["id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
+
+            this.DropListDivisa.DataSource = dt;
+            this.DropListDivisa.DataValueField = "id";
+            this.DropListDivisa.DataTextField = "moneda";
+            this.DropListDivisa.DataBind();
+        }
+
         private void cargarMonedasModalTarjetas()
         {
             try
@@ -4560,6 +4579,20 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrió un error verificando los articulos con precios sin actualizar. Excepción: " + Ex.Message));
                 return true;
+            }
+        }
+
+        protected void DropListDivisa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCobranza controladorCobranza = new controladorCobranza();
+                txtValorDivisa.Text = controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)).ToString().Replace(',', '.');
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en ABMFactirasLargo.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
             }
         }
 

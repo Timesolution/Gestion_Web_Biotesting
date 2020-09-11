@@ -25,6 +25,7 @@ namespace Gestion_Web.Formularios.Facturas
         private int idPresupuesto;
         private int accion;
         private int original;
+        private decimal imprimirOtraDivisa;
         controladorFacturacion controlador = new controladorFacturacion();
         controladorCliente controlCliente = new controladorCliente();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
@@ -33,6 +34,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCobranza contCobranza = new controladorCobranza();
         ControladorPedido contPedidos = new ControladorPedido();
         controladorFactEntity controladorFactEntity = new controladorFactEntity();
+        controladorMoneda controladorMoneda = new controladorMoneda();
 
         Configuracion configuracion = new Configuracion();
         protected void Page_Load(object sender, EventArgs e)
@@ -44,6 +46,13 @@ namespace Gestion_Web.Formularios.Facturas
                     idPresupuesto = Convert.ToInt32(Request.QueryString["Presupuesto"]);
                     this.accion = Convert.ToInt32(Request.QueryString["a"]);
                     this.original = Convert.ToInt32(Request.QueryString["o"]);
+
+                    if (Request.QueryString["div"] != null)
+                    {
+                        Moneda moneda = controladorMoneda.obtenerMonedaID(Convert.ToInt32(Request.QueryString["div"]));
+                        imprimirOtraDivisa = moneda.cambio;
+                    }
+
                     //presupuesto
                     if (accion == 0)
                     {
@@ -494,6 +503,24 @@ namespace Gestion_Web.Formularios.Facturas
                 //string totalS = Numalet.ToCardinal("18.25");
                 //cant unidades
                 decimal cant = 2;
+
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow row in dtDatos.Rows)
+                    {
+                         row[""] = Decimal.Round(Convert.ToDecimal(row[""])/imprimirOtraDivisa);
+                    }
+
+                    subtotal = subtotal / imprimirOtraDivisa;
+                    descuento = descuento / imprimirOtraDivisa;
+                    subtotal2 = subtotal2 / imprimirOtraDivisa;
+                    iva = iva / imprimirOtraDivisa;
+                    retencion = retencion / imprimirOtraDivisa;
+                    conceptos = conceptos / imprimirOtraDivisa;
+                    total = total / imprimirOtraDivisa;
+                    decimal totalS_Aux = Convert.ToDecimal(totalS);
+                    totalS = Convert.ToString(totalS_Aux / imprimirOtraDivisa);
+                }
                 //decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
                 //decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
                 //decimal totalIva27 = Convert.ToDecimal(dr["TotalIva27"]);
