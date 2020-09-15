@@ -26,6 +26,9 @@
                                 <li><a href="#DatosPatrimoniales" data-toggle="tab">Datos Patrimoniales</a></li>
                                 <li><a href="#DatosDistribucion" data-toggle="tab">Datos Distribucion</a></li>
                                 <li><a href="#RecepcionMercaderia" data-toggle="tab">Recepcion Mercaderia</a></li>
+                                <li><a href="#Garante" data-toggle="tab">Garante</a></li>
+                                <li><a href="#Documentacion" data-toggle="tab">Documentacion</a></li>
+
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade active in" id="home">
@@ -145,10 +148,10 @@
                                                 <div class="form-group">
                                                     <label for="validateSelect" class="col-md-4">Tipo</label>
                                                     <div class="col-md-4">
-                                                        <asp:DropDownList ID="ListTipo" class="form-control" runat="server">
+                                                        <asp:DropDownList ID="ListTipo" class="form-control" disabled="disabled" runat="server">
                                                             <asp:ListItem Text="Personal" Value="1"></asp:ListItem>
-                                                            <asp:ListItem Text="Patrimonial" Value="2"></asp:ListItem>
-                                                            <asp:ListItem Text="Recepcion" Value="3"></asp:ListItem>
+                                                            <%-- <asp:ListItem Text="Patrimonial" Value="2"></asp:ListItem>
+                                                            <asp:ListItem Text="Recepcion" Value="3"></asp:ListItem>--%>
                                                         </asp:DropDownList>
                                                     </div>
 
@@ -173,7 +176,7 @@
 
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="form-group">
                                                     <label for="validateSelect" class="col-md-4">Provincia</label>
                                                     <div class="col-md-4">
@@ -191,7 +194,7 @@
                                                         <asp:DropDownList ID="ListLocalidad" class="btn btn-default ui-tooltip dropdown-toggle" runat="server" OnSelectedIndexChanged="ListLocalidad_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
                                                         <asp:TextBox ID="txtLocalidad" runat="server" class="form-control"></asp:TextBox>
                                                     </div>
-<%--                                                    <div class="col-md-4">
+                                                    <%--                                                    <div class="col-md-4">
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
 
                                                     </div>--%>
@@ -201,7 +204,7 @@
 
                                                     <div class="col-md-4">
 
-                                                        <asp:TextBox ID="txtCodigoPostal" runat="server" class="form-control" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
+                                                        <asp:TextBox ID="txtCodigoPostal" runat="server" class="form-control" ReadOnly="true" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtCodigoPostal" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -273,7 +276,7 @@
                                                 </div>
 
                                             </div>
-                                         
+
                                         </ContentTemplate>
 
                                     </asp:UpdatePanel>
@@ -388,9 +391,9 @@
                                                     <div class="col-md-4">
                                                         <asp:TextBox ID="txtAñoRodado" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                                     </div>
-                                                    <div class="col-md-1">
+                                                    <%--  <div class="col-md-1">
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="*" ControlToValidate="txtAñoRodado" ValidationGroup="PatrimonioGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                    </div>
+                                                    </div>--%>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-4">Modelo</label>
@@ -399,10 +402,57 @@
                                                         <asp:TextBox ID="txtModeloRodado" runat="server" class="form-control"></asp:TextBox>
                                                     </div>
 
-                                                    <div class="col-md-1">
+                                                    <%--<div class="col-md-1">
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ControlToValidate="txtModeloRodado" ValidationGroup="PatrimonioGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>--%>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="validateSelect" class="col-md-4">Posee vivienda</label>
+                                                    <div class="col-md-4">
+                                                        <asp:DropDownList ID="ListPoseeVivienda" class="form-control" runat="server">
+                                                            <asp:ListItem Text="Si" Value="1" />
+                                                            <asp:ListItem Text="No" Value="2" />
+                                                        </asp:DropDownList>
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="validateSelect" class="col-md-4">Provincia</label>
+                                                    <div class="col-md-4">
+                                                        <asp:DropDownList ID="ListProvinciaPatrimonial" class="form-control" runat="server" OnSelectedIndexChanged="ListProvinciaPatrimonial_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" InitialValue="-1" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListProvinciaPatrimonial" ValidationGroup="PatrimonioGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="validateSelect" class="col-md-4">Localidad</label>
+                                                    <div class="col-md-4">
+                                                        <asp:DropDownList ID="ListLocalidadPatrimonial" class="btn btn-default ui-tooltip dropdown-toggle" runat="server"></asp:DropDownList>
+                                                        <%--<asp:TextBox ID="TextBox1" runat="server" class="form-control"></asp:TextBox>--%>
+                                                    </div>
+                                                    <%--                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                                    </div>--%>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Direccion</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtDireccionPatrimonial" runat="server" class="form-control"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-4">Observaciones</label>
+                                                    <div class="col-md-4">
+                                                        <asp:TextBox ID="txtObservacionesPatrimoniales" runat="server" TextMode="MultiLine" Rows="10" class="form-control"></asp:TextBox>
+                                                    </div>
+                                                    <%--<div class="col-md-1">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="*" ControlToValidate="txtDireccionPatrimonial" ValidationGroup="PatrimonioGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>--%>
+                                                </div>
+
                                                 <div class="form-group">
                                                     <div class="col-md-4">
                                                         <asp:Button ID="btnAgregarDatosPatrimoniales" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarDatosPatrimoniales_Click" ValidationGroup="PatrimonioGroup" />
@@ -474,20 +524,34 @@
                                                 <div class="form-group">
                                                     <label for="name" class="col-md-4">Nombre del grupo</label>
 
-                                                    <div class="col-md-4">
-                                                        <asp:TextBox ID="txtNombreGrupo" runat="server" class="form-control"></asp:TextBox>
+                                                    <div class="col-md-6">
+                                                        <asp:TextBox ID="txtNombreGrupo" runat="server" class="form-control ui-popover" data-container="" data-toggle="popover" data-trigger="hover" data-placement="right"
+                                                            data-content="Nombre de fantasía con el que quiere denominar a su grupo." data-original-title="Atención !"></asp:TextBox>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="name" class="col-md-4">Distribuidor Madre/Padre(en caso de que lo tenga)</label>
 
+                                                    <label for="name" class="col-md-4">Codigo Distribuidor Madre</label>
                                                     <div class="col-md-4">
-                                                        <asp:TextBox ID="txtDistribuidorSuperior" runat="server" class="form-control"></asp:TextBox>
+                                                        <asp:TextBox ID="txtCodDistribuidor" class="form-control" runat="server"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <asp:LinkButton ID="btnBuscarCodigoDistribuidor" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodigoDistribuidor_Click" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="validateSelect" class="col-md-4">Proveedor</label>
                                                     <div class="col-md-4">
-                                                        <asp:Button ID="btnAgregarDatoDistribucion" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarDatoDistribucion_Click" />
+                                                        <asp:DropDownList ID="ListDistribuidor" runat="server" class="form-control"></asp:DropDownList>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="*" ControlToValidate="ListDistribuidor" ValidationGroup="DistribuicionGroup" SetFocusOnError="true" Font-Bold="true" InitialValue="-1" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-4">
+                                                        <asp:Button ID="btnAgregarDatoDistribucion" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarDatoDistribucion_Click" ValidationGroup="DistribuicionGroup" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -496,9 +560,562 @@
                                         </Triggers>
                                     </asp:UpdatePanel>
                                 </div>
+
+                                <%-- Garante --%>
+
+                                <div class="tab-pane fade" id="Garante">
+                                    <ul id="myTab2" class="nav nav-tabs">
+                                        <li class="active"><a href="#datosgarante" data-toggle="tab">Datos Personales</a></li>
+                                        <li><a href="#contactogarante" data-toggle="tab">Datos de Contacto</a></li>
+                                        <li><a href="#patrimoniogarante" data-toggle="tab">Datos Patrimoniales</a></li>
+
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade active in" id="datosgarante">
+
+                                            <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
+                                                <ContentTemplate>
+
+
+                                                    <div role="form" class="form-horizontal col-md-10">
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Nombre</label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtNombreGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtNombreGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Apellido</label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtApellidoGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtApellidoGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-4">Fecha de Nacimiento: </label>
+                                                            <div class="col-md-4">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
+                                                                    <asp:TextBox ID="txtFechaNacimientoGarante" runat="server" class="form-control"></asp:TextBox>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtFechaNacimientoGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Nacionalidad</label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtNacionalidadGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtNacionalidadGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Documento</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListTiposDocumentosGarante" runat="server" class="form-control"></asp:DropDownList>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtDocumentoGarante" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDocumentoGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Estado civil</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListEstadoCivilGarante" runat="server" class="form-control"></asp:DropDownList>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Domicilio Personal del Garante: Calle </label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtDomicilioGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtDomicilioGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">N° </label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtNumeroDireccionGarante" TextMode="Number" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtNumeroDireccionGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Provincia</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListProvinciaGarantes" class="form-control" runat="server" OnSelectedIndexChanged="ListProvinciaGarantes_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator13" InitialValue="-1" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListProvinciaPatrimonial" ValidationGroup="PatrimonioGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Localidad</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListLocalidadGarantes" OnSelectedIndexChanged="ListLocalidadGarantes_SelectedIndexChanged" AutoPostBack="True" class="btn btn-default ui-tooltip dropdown-toggle" runat="server"></asp:DropDownList>
+                                                                <%--<asp:TextBox ID="TextBox1" runat="server" class="form-control"></asp:TextBox>--%>
+                                                            </div>
+                                                            <%--                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                                    </div>--%>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">CP </label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtCodigoPostalGarante" runat="server" ReadOnly="true" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtCodigoPostalGarante" ValidationGroup="GaranteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Profesion</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtProfesionGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Trabaja actualmente en relacion dependencia?</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListRelacionDependenciaGarante" runat="server" class="form-control">
+                                                                    <asp:ListItem Text="Si" Value="1"></asp:ListItem>
+                                                                    <asp:ListItem Text="No" Value="0"></asp:ListItem>
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Antiguedad</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtAntiguedadGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Cargo</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtCargoGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Razon Social</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtRazonSocialEmpleadorGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Domicilio</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtDomicilioEmpleadorGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">CUIT</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtCUITEmpleadorGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-4">Nombre del conyuge</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtNombreConyugeGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-4">Apellido del conyuge</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtApellidoConyugeGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Dni Conyuge</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtDNIConyugeGarante" runat="server" class="form-control"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="form-group">
+                                                            <div class="col-md-4">
+                                                                <asp:Button ID="btnAgregarDatosGarante" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarDatosGarante_Click" ValidationGroup="GaranteGroup" />
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </div>
+
+
+
+                                        <%-- Contacto Garante --%>
+
+                                        <div class="tab-pane fade" id="contactogarante">
+                                            <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Always" runat="server">
+                                                <ContentTemplate>
+                                                    <div role="form" class="form-horizontal col-md-10">
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Telefono Fijo</label>
+
+                                                            <div class="col-md-4">
+                                                                <%--<asp:TextBox ID="txtNumeroContacto" runat="server" class="form-control" onkeypress="javascript:return validarNroGuion(event)"></asp:TextBox>--%>
+                                                                <asp:TextBox ID="txtTelefonoFijoGarante" TextMode="Number" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Telefono Celular</label>
+
+                                                            <div class="col-md-4">
+                                                                <%--<asp:TextBox ID="txtNumeroContacto" runat="server" class="form-control" onkeypress="javascript:return validarNroGuion(event)"></asp:TextBox>--%>
+                                                                <asp:TextBox ID="txtTelefonoCelularGarante" TextMode="Number" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Correo Electronico</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtCorreoElectronicoGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ErrorMessage="Debe tener un formato mail Ej: ejemplo@mail.com" ControlToValidate="txtCorreoElectronicoGarante" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" ValidationGroup="GarantePatrimonioGroup"></asp:RegularExpressionValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Facebook</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtFacebookGarante" runat="server" ValidationGroup="GarantePatrimonioGroup" class="form-control"></asp:TextBox>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-4">
+                                                                <asp:Button ID="btnAgregarContactoGarante" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarContactoGarante_Click" />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </div>
+
+
+                                        <%-- Fin Contacto Garante --%>
+
+                                        <%-- Patrimonio Garante --%>
+
+                                        <div class="tab-pane fade" id="patrimoniogarante">
+                                            <asp:UpdatePanel ID="UpdatePanel10" UpdateMode="Always" runat="server">
+                                                <ContentTemplate>
+                                                    <div role="form" class="form-horizontal col-md-10">
+
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Posee Vivienda Propia?</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListPoseeViviendaGarantePatrimonial" runat="server" class="form-control">
+                                                                    <asp:ListItem Text="Si" Value="1"></asp:ListItem>
+                                                                    <asp:ListItem Text="No" Value="0"></asp:ListItem>
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Domicilio: Calle </label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtCallePatrimonialGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">N°</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtDomicilioPatrimonialGarante" TextMode="Number" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Provincia</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListProvinciaGarantePatrimoniales" class="form-control" runat="server" OnSelectedIndexChanged="ListProvinciaGarantePatrimoniales_SelectedIndexChanged" AutoPostBack="True"></asp:DropDownList>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator20" InitialValue="-1" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListProvinciaPatrimonial" ValidationGroup="PatrimonioGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Localidad</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListLocalidadGarantePatrimoniales" OnSelectedIndexChanged="ListLocalidadGarantePatrimoniales_SelectedIndexChanged" AutoPostBack="True" class="btn btn-default ui-tooltip dropdown-toggle" runat="server"></asp:DropDownList>
+                                                                <%--<asp:TextBox ID="TextBox1" runat="server" class="form-control"></asp:TextBox>--%>
+                                                            </div>
+                                                            <%--                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="ListLocalidad" ValidationGroup="DireccionGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                                    </div>--%>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">CP </label>
+
+                                                            <div class="col-md-4">
+
+                                                                <asp:TextBox ID="txtCodigoPostalGarantePatrimonial" ReadOnly="true" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Señale que tipo de vivienda</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListTiposViviendasGarante" class="form-control" runat="server"></asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Metros Aproximados</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtMetrosViviendaGarante" TextMode="Number" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Posee Algun Rodado Propio?</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="ListPoseeRodadoGarantePatrimonial" runat="server" class="form-control">
+                                                                    <asp:ListItem Text="Si" Value="1"></asp:ListItem>
+                                                                    <asp:ListItem Text="No" Value="0"></asp:ListItem>
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Modelo</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtModeloRodadoGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Marca </label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtMarcaRodadoGarante" runat="server" class="form-control"></asp:TextBox>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Año</label>
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtAñoRodadoGarante" TextMode="Number" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="col-md-4">
+                                                                <asp:Button ID="btnAgregarPatrimonioGarante" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregarPatrimonioGarante_Click" />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <%-- Fin Patrimonio Garante --%>
+
+                                <%-- Fin Garante --%>
+                                <%-- Documentacion --%>
+                                <div class="tab-pane fade" id="Documentacion">
+                                    <asp:UpdatePanel ID="UpdatePanel11" UpdateMode="Always" runat="server">
+                                        <ContentTemplate>
+                                            <div role="form" class="form-horizontal col-md-12">
+                                                
+                                                   
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Fianza</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileFianza" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoFianza" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoFianza" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Pagare</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FilePagare" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoPagare" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoPagare" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Contrato Comercial</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileContratoComercial" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoContratoComercial" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoContratoComercial" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Copia del DNI/LC/LE del DISTRIBUIDOR</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileDNIDistribuidor" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoDNIDistribuidor" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoDNIDistribuidor" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Copia del DNI/LC/LE del GARANTE</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileDNIGarante" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoDNIGarante" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoDNIGarante" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Copia de un servicio a nombre del DISTRIBUIDOR</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileServicioDistribuidor" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoServicioDistribuidor" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoServicioDistribuidor" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <<label for="name" class="col-md-2">Adjuntar Copia de un servicio a nombre del GARANTE</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileServicioGarante" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoServicioGarante" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoServicioGarante" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Constancia de Inscripción en AFIP</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileConstanciaAFIP" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoConstanciaAFIP" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoConstanciaAFIP" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-2">Adjuntar Copia del recibo de sueldo del garante</label>
+                                                    <div class="col-md-4">
+                                                        <asp:FileUpload ID="FileReciboSueldoGarante" runat="server" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:LinkButton ID="btnAgregarArchivoReciboSueldoGarante" runat="server" Text="<span class='shortcut-icon icon-upload'></span>" class="btn btn-info" OnClick="verificarBoton" />
+                                                        <asp:LinkButton ID="btnDescargarArchivoReciboSueldoGarante" Visible="false" runat="server" Text="<span class='shortcut-icon icon-download'></span>" class="btn btn-success" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="shortcuts" style="height: 100%">
+                                                        <label for="name" class="col-md-4">Adjuntar Descargar “Código de ética” y aceptar “Código de ética”</label>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoFianza" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoPagare" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoContratoComercial" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoDNIDistribuidor" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoDNIGarante" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoServicioDistribuidor" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoServicioGarante" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoConstanciaAFIP" />
+                                            <asp:PostBackTrigger ControlID="btnAgregarArchivoReciboSueldoGarante" />
+
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <%-- Fin Documentacion --%>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -565,10 +1182,11 @@
         function abrirdialog2(valor) {
             document.getElementById('<%= hiddenIdProspecto.ClientID %>').value = valor;
         }--%>
-    </script>
+</script>
     <script>
         function pageLoad() {
             $("#<%= txtFechaNacimiento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaNacimientoGarante.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
         };
     </script>
@@ -734,6 +1352,10 @@
             $.msgbox("Debe rellenar los datos personales primero.");
         }
 
+        function mensajeAlert(mensaje) {
+            $.msgbox(mensaje, { type: "alert" });
+        }
+
         function mensajeAgregado() {
             $.msgGrowl({
                 type: 'success'
@@ -752,7 +1374,7 @@
 
         function mensajeErrorCatch(mensaje) {
             $.msgGrowl({
-                type: 'success'
+                type: 'error'
                 , title: 'Editado'
                 , text: mensaje
             });
@@ -766,7 +1388,7 @@
             });
         }
 
-        
+
 
     </script>
 
