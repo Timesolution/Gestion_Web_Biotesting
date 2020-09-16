@@ -99,7 +99,7 @@
                                     <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                 </h5>
                             </td>
-                            
+
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
                                     <asp:LinkButton ID="lbImpresion" class="btn btn-primary" runat="server" Text="<span class='shortcut-icon icon-print'></span>" Visible="false" Style="width: 100%" OnClick="lbImpresion_Click" />
@@ -1368,7 +1368,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button ID="btnBuscarNumerosFacturas" runat="server" Text="Buscar" class="btn btn-success" OnClick="btnBuscarNumerosFacturas_Click" OnClientClick="this.disabled = true; this.value = 'Buscando...';" UseSubmitBehavior="false"/>
+                        <asp:Button ID="btnBuscarNumerosFacturas" runat="server" Text="Buscar" class="btn btn-success" OnClick="btnBuscarNumerosFacturas_Click" OnClientClick="this.disabled = true; this.value = 'Buscando...';" UseSubmitBehavior="false" />
                     </div>
                 </div>
             </div>
@@ -1383,30 +1383,53 @@
                         <h4 class="modal-title">Imprimir FC en Otra Divisa</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-md-4">Numero FC</label>
-                            <div class="col-md-6">
-                                <asp:Label ID="lblNumeroFC" runat="server"></asp:Label>
-                            </div>
-                        </div> <br /><br />
+
                         <asp:UpdatePanel ID="UpdatePanel8" UpdateMode="Always" runat="server">
                             <ContentTemplate>
                                 <div role="form" class="form-horizontal col-md-12">
-                                    <div class="form-group">
-                                        <label class="col-md-4">Divisa</label>
-                                        <div class="col-md-6">
-                                            <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label class="col-md-4">Numero del Doc.</label>
+                                                <div class="col-md-8">
+                                                    <asp:Label ID="lblNumeroFC" runat="server"></asp:Label>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group">
+                                                <label class="col-md-4">Divisa</label>
+                                                <div class="col-md-8">
+                                                    <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                                </div>
+                                                <%--<div class="col-md-2">
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Seleccione un tipo de Moneda" ControlToValidate="DropListTipo" InitialValue="Seleccione..." ValidationGroup="MonedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                </div>--%>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4">Cotizacion</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <asp:TextBox ID="txtCotizacion" runat="server" class="form-control" disabled Style="text-align: right"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Seleccione un tipo de Moneda" ControlToValidate="DropListTipo" InitialValue="Seleccione..." ValidationGroup="MonedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4">Cotizacion</label>
-                                        <div class="col-md-6">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">$</span>
-                                                <asp:TextBox ID="txtCotizacion" runat="server" class="form-control" disabled Style="text-align: right"></asp:TextBox>
+                                        <div class="col-md-5">
+                                            <div class="col-md-12">
+                                                <div class="widget stacked widget-box">
+                                                    <div class="widget-header">
+                                                        <h3>Información</h3>
+                                                    </div>
+                                                    <!-- /widget-header -->
+                                                    <div class="widget-content">
+                                                        <p>La divisa elegida en la lista, traera el valor de la divisa al momento en que se realizo la FC o NT/ND.</p>
+                                                        <p>Si no se guardo con ninguna divisa, el valor a tomar sera el valor actual de la divisa seleccionada.</p>
+                                                        <strong>Divisa guardada</strong><br />
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaGuardada" ForeColor="DarkGreen"></asp:Label></p>
+                                                    </div>
+                                                    <!-- /widget-content -->
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

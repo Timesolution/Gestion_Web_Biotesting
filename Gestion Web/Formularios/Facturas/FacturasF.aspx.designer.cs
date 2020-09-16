@@ -1579,15 +1579,6 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.Button btnBuscarNumerosFacturas;
         
         /// <summary>
-        /// lblNumeroFC control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNumeroFC;
-        
-        /// <summary>
         /// UpdatePanel8 control.
         /// </summary>
         /// <remarks>
@@ -1595,6 +1586,15 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel8;
+        
+        /// <summary>
+        /// lblNumeroFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNumeroFC;
         
         /// <summary>
         /// DropListDivisa control.
@@ -1606,15 +1606,6 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.DropDownList DropListDivisa;
         
         /// <summary>
-        /// RequiredFieldValidator25 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator25;
-        
-        /// <summary>
         /// txtCotizacion control.
         /// </summary>
         /// <remarks>
@@ -1622,6 +1613,15 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCotizacion;
+        
+        /// <summary>
+        /// lblFacturaMonedaGuardada control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblFacturaMonedaGuardada;
         
         /// <summary>
         /// btnImprimirFCDivisa control.

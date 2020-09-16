@@ -21,6 +21,7 @@ using System.Web.Configuration;
 using Gestion_Api.Modelo.Enums;
 using System.Diagnostics;
 using Task_Api.Entitys;
+using Gestion_Api.Controladores.ControladoresEntity;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -4490,7 +4491,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         var cronogramaPago = controladorFacturacion.AgregarPago(pagosProgramados);
 
-                        if(cronogramaPago != null)
+                        if (cronogramaPago != null)
                         {
                             eventoCliente.Cliente = factura.cliente.id;
                             eventoCliente.Fecha = DateTime.Now;
@@ -4888,7 +4889,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en una sola caja de texto. "));
             }
-            if(string.IsNullOrEmpty(this.txtNumeroFactura.Text) && string.IsNullOrEmpty(this.txtRazonSocial.Text) && string.IsNullOrEmpty(this.txtObservacion.Text))
+            if (string.IsNullOrEmpty(this.txtNumeroFactura.Text) && string.IsNullOrEmpty(this.txtRazonSocial.Text) && string.IsNullOrEmpty(this.txtObservacion.Text))
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en al menos una caja de texto. "));
         }
 
@@ -4917,8 +4918,11 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idsListaFacturasTildados) && contadorFacturasTildadas == 1)
                 {
+                    DropListDivisa.ClearSelection();
+
                     controladorCobranza controladorCobranza = new controladorCobranza();
                     controladorFacturacion controladorFacturacion = new controladorFacturacion();
+                    ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
 
                     Factura factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(idsListaFacturasTildados));
                     lblNumeroFC.Text = factura.numero;
@@ -4934,6 +4938,23 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListDivisa.DataValueField = "id";
                     this.DropListDivisa.DataTextField = "moneda";
                     this.DropListDivisa.DataBind();
+
+                    //Verificar si tiene alguna divisa por defecto guardada en la tabla Factuas_Moneda
+                    Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(factura.id);
+                    if (facturas_Moneda != null)
+                    {
+                        DropListDivisa.SelectedValue = Convert.ToString(facturas_Moneda.idMoneda);
+                        txtCotizacion.Text = Convert.ToString(facturas_Moneda.ValorMoneda);
+                        string monedaGuardada = DropListDivisa.Text;
+                        lblFacturaMonedaGuardada.Text = monedaGuardada + ": " + facturas_Moneda.ValorMoneda.ToString();
+                    }
+                    else
+                    {
+                        DropListDivisa.SelectedValue = DropListDivisa.Items.FindByText("Pesos").Value;
+                        txtCotizacion.Text = "1.00";
+                        lblFacturaMonedaGuardada.Text = "-";
+                        //ListTipoDocumento.Items.FindByText(pro.TipoDocumento).Selected = true;
+                    }
 
                     ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalImprimirFC_EnOtraDivisa", "openModalImprimirFC_EnOtraDivisa();", true);
                 }
@@ -4958,7 +4979,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 controladorCobranza controladorCobranza = new controladorCobranza();
-                txtCotizacion.Text = controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)).ToString().Replace(',', '.');
+                txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)),2).ToString().Replace(',', '.');
             }
             catch (Exception ex)
             {

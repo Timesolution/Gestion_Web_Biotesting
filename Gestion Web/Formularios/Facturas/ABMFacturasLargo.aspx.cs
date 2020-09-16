@@ -3964,6 +3964,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //Obtengo items
                 //List<ItemFactura> items = this.obtenerItems();
                 Factura fact = Session["Factura"] as Factura;
+
+                //VARIABLE PARA GUARDAR SI ELIGIO UNA DIVISA
+                int divisaElegida = 0;
+                
                 //List<ItemFactura> items = fact.items;
 
                 //agrego info traza a los items
@@ -4169,8 +4173,17 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
                     }
-                    //facturo
-                    int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
+
+                    int i = 0;
+                    //Chequeo si eligio alguna divisa para guardar el tipo de cambio y facturo
+                    if (DropListDivisa.SelectedValue != "-1")
+                    {
+                        divisaElegida = Convert.ToInt32(DropListDivisa.SelectedValue);
+                        i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito,divisaElegida);
+                    }
+                    else
+                        i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
+
                     if (i > 0)
                     {
                         #region func post generarl

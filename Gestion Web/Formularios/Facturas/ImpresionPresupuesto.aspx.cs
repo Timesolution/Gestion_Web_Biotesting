@@ -518,8 +518,7 @@ namespace Gestion_Web.Formularios.Facturas
                     retencion = retencion / imprimirOtraDivisa;
                     conceptos = conceptos / imprimirOtraDivisa;
                     total = total / imprimirOtraDivisa;
-                    decimal totalS_Aux = Convert.ToDecimal(totalS);
-                    totalS = Convert.ToString(totalS_Aux / imprimirOtraDivisa);
+                    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
                 }
                 //decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
                 //decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
@@ -1038,6 +1037,24 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
+                }
+
+                //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow row in dtDatos.Rows)
+                    {
+                         //row[""] = Decimal.Round(Convert.ToDecimal(row[""])/imprimirOtraDivisa);
+                    }
+
+                    subtotal = Decimal.Round(subtotal / imprimirOtraDivisa,2);
+                    descuento = Decimal.Round(descuento / imprimirOtraDivisa,2);
+                    subtotal2 = Decimal.Round(subtotal2 / imprimirOtraDivisa,2);
+                    iva = iva / Decimal.Round(imprimirOtraDivisa,2);
+                    retencion = Decimal.Round(retencion / imprimirOtraDivisa,2);
+                    conceptos = Decimal.Round(conceptos / imprimirOtraDivisa,2);
+                    total = Decimal.Round(total / imprimirOtraDivisa,2);
+                    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
                 }
 
                 //Condición de Pago
