@@ -291,8 +291,17 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                int prospecto = 0;
+                if (this.accion == 1)
+                {
+                    prospecto = (int)ViewState["idprospecto"];
+                }
+                else
+                {
+                    prospecto = IdProspecto;
+                }
                 //Busco si tiene un archivo cargado
-                DirectoryInfo di = new DirectoryInfo(Server.MapPath("../../DocumentacionProspecto/" + IdProspecto + "/"));
+                DirectoryInfo di = new DirectoryInfo(Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/"));
                 var folders = di.GetDirectories();
                 foreach (DirectoryInfo folder in folders)
                 {
@@ -304,55 +313,55 @@ namespace Gestion_Web.Formularios.Clientes
                             case "ConstanciaAFIP":
                                 btnDescargarArchivoConstanciaAFIP.Visible = true;
                                 btnDescargarArchivoConstanciaAFIP.ToolTip = files[0].Name;
-                                btnDescargarArchivoConstanciaAFIP.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString()+"/ConstanciaAFIP/"+ files[0].Name;
+                                btnDescargarArchivoConstanciaAFIP.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString()+"/ConstanciaAFIP/"+ files[0].Name;
                                 btnDescargarArchivoConstanciaAFIP.Attributes["download"] = files[0].Name;
                                 break;
                             case "ContratoComercial":
                                 btnDescargarArchivoContratoComercial.Visible = true;
                                 btnDescargarArchivoContratoComercial.ToolTip = files[0].Name;
-                                btnDescargarArchivoContratoComercial.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/ContratoComercial/" + files[0].Name;
+                                btnDescargarArchivoContratoComercial.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/ContratoComercial/" + files[0].Name;
                                 btnDescargarArchivoContratoComercial.Attributes["download"] = files[0].Name;
                                 break;
                             case "DNIDistribuidor":
                                 btnDescargarArchivoDNIDistribuidor.Visible = true;
                                 btnDescargarArchivoDNIDistribuidor.ToolTip = files[0].Name;
-                                btnDescargarArchivoDNIDistribuidor.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/DNIDistribuidor/" + files[0].Name;
+                                btnDescargarArchivoDNIDistribuidor.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/DNIDistribuidor/" + files[0].Name;
                                 btnDescargarArchivoDNIDistribuidor.Attributes["download"] = files[0].Name;
                                 break;
                             case "DNIGarante":
                                 btnDescargarArchivoDNIGarante.Visible = true;
                                 btnDescargarArchivoDNIGarante.ToolTip = files[0].Name;
-                                btnDescargarArchivoDNIGarante.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/DNIGarante/" + files[0].Name;
+                                btnDescargarArchivoDNIGarante.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/DNIGarante/" + files[0].Name;
                                 btnDescargarArchivoDNIGarante.Attributes["download"] = files[0].Name;
                                 break;
                             case "Fianza":
                                 btnDescargarArchivoFianza.Visible = true;
                                 btnDescargarArchivoFianza.ToolTip = files[0].Name;
-                                btnDescargarArchivoFianza.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/Fianza/" + files[0].Name;
+                                btnDescargarArchivoFianza.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/Fianza/" + files[0].Name;
                                 btnDescargarArchivoFianza.Attributes["download"] = files[0].Name;
                                 break;
                             case "Pagare":
                                 btnDescargarArchivoPagare.Visible = true;
                                 btnDescargarArchivoPagare.ToolTip = files[0].Name;
-                                btnDescargarArchivoPagare.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/Pagare/" + files[0].Name;
+                                btnDescargarArchivoPagare.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/Pagare/" + files[0].Name;
                                 btnDescargarArchivoPagare.Attributes["download"] = files[0].Name;
                                 break;
                             case "ReciboSueldoGarante":
                                 btnDescargarArchivoReciboSueldoGarante.Visible = true;
                                 btnDescargarArchivoReciboSueldoGarante.ToolTip = files[0].Name;
-                                btnDescargarArchivoReciboSueldoGarante.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/ReciboSueldoGarante/" + files[0].Name;
+                                btnDescargarArchivoReciboSueldoGarante.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/ReciboSueldoGarante/" + files[0].Name;
                                 btnDescargarArchivoReciboSueldoGarante.Attributes["download"] = files[0].Name;
                                 break;
                             case "ServicioDistribuidor":
                                 btnDescargarArchivoServicioDistribuidor.Visible = true;
                                 btnDescargarArchivoServicioDistribuidor.ToolTip = files[0].Name;
-                                btnDescargarArchivoServicioDistribuidor.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/ServicioDistribuidor/" + files[0].Name;
+                                btnDescargarArchivoServicioDistribuidor.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/ServicioDistribuidor/" + files[0].Name;
                                 btnDescargarArchivoServicioDistribuidor.Attributes["download"] = files[0].Name;
                                 break;
                             case "ServicioGarante":
                                 btnDescargarArchivoServicioGarante.Visible = true;
                                 btnDescargarArchivoServicioGarante.ToolTip = files[0].Name;
-                                btnDescargarArchivoServicioGarante.Attributes["href"] = "/DocumentacionProspecto/" + IdProspecto.ToString() + "/ServicioGarante/" + files[0].Name;
+                                btnDescargarArchivoServicioGarante.Attributes["href"] = "/DocumentacionProspecto/" + prospecto.ToString() + "/ServicioGarante/" + files[0].Name;
                                 btnDescargarArchivoServicioGarante.Attributes["download"] = files[0].Name;
                                 break;
                         }
@@ -447,17 +456,19 @@ namespace Gestion_Web.Formularios.Clientes
                 ListLocalidadGarantePatrimoniales.ClearSelection();
                 ListTiposViviendasGarante.ClearSelection();
                 ListPoseeRodadoGarantePatrimonial.ClearSelection();
-
+                if(direccion.Estado!=0)
+                {
+                    txtCallePatrimonialGarante.Text = direccion.Calle;
+                    txtDomicilioPatrimonialGarante.Text = direccion.Numero;
+                    ListProvinciaGarantePatrimoniales.SelectedValue = direccion.Provincia;
+                    CargarLocalidadesGarantesPatrimoniales(ListProvinciaGarantePatrimoniales.SelectedValue);
+                    ListLocalidadGarantePatrimoniales.SelectedValue = direccion.Localidad;
+                    txtCodigoPostalGarantePatrimonial.Text = direccion.CodigoPostal;
+                    ListTiposViviendasGarante.SelectedValue = direccion.Tipo;
+                    txtMetrosViviendaGarante.Text = direccion.Metros;
+                }
                 ListPoseeViviendaGarantePatrimonial.SelectedValue = patrimonioGarante.Vivienda.ToString();
-                txtCallePatrimonialGarante.Text = direccion.Calle;
-                txtDomicilioPatrimonialGarante.Text = direccion.Numero;
-                ListProvinciaGarantePatrimoniales.SelectedValue = direccion.Provincia;
-                //ver 
-                CargarLocalidadesGarantesPatrimoniales(ListProvinciaGarantePatrimoniales.SelectedValue);
-                ListLocalidadGarantePatrimoniales.SelectedValue = direccion.Localidad;
-                txtCodigoPostalGarantePatrimonial.Text = direccion.CodigoPostal;
-                ListTiposViviendasGarante.SelectedValue = direccion.Tipo;
-                txtMetrosViviendaGarante.Text = direccion.Metros;
+                
                 ListPoseeRodadoGarantePatrimonial.SelectedValue = patrimonioGarante.Rodado.ToString();
                 txtModeloRodadoGarante.Text = patrimonioGarante.Modelo;
                 txtMarcaRodadoGarante.Text = patrimonioGarante.Marca;
@@ -1360,6 +1371,7 @@ namespace Gestion_Web.Formularios.Clientes
                 prospectoDireccion.Localidad = ListLocalidadGarantePatrimoniales.SelectedValue;
                 prospectoDireccion.Tipo = ListTiposViviendasGarante.SelectedItem.Text;
                 prospectoDireccion.Metros = txtMetrosViviendaGarante.Text;
+                prospectoDireccion.Estado = 1;
 
 
                 garantePatrimonial.Vivienda = Convert.ToInt32(ListPoseeViviendaGarantePatrimonial.SelectedValue);
@@ -1377,6 +1389,12 @@ namespace Gestion_Web.Formularios.Clientes
                     if (controladorProspectos.ObtenerIdDireccionByIdGarante(garantePatrimonial.IdGarante) > 0)
                     {
                         prospectoDireccion.Id = controladorProspectos.ObtenerIdDireccionByIdGarante(garantePatrimonial.IdGarante);
+                        if (garantePatrimonial.Vivienda == 0)
+                        {
+                            prospectoDireccion.Estado = 0;
+                             direccionAgregada = controladorProspectos.AgregarOModificarDireccionPatrimonioGarante(prospectoDireccion);
+                            garantePatrimonial.IdDireccion = direccionAgregada.Id;
+                        }
                     }
 
                     if (prospectoDireccion.Provincia != "-1" && garantePatrimonial.Vivienda == 1)
@@ -1409,21 +1427,21 @@ namespace Gestion_Web.Formularios.Clientes
                     if (controladorProspectos.ObtenerIdDireccionByIdGarante(garantePatrimonial.IdGarante) > 0)
                     {
                         prospectoDireccion.Id = controladorProspectos.ObtenerIdDireccionByIdGarante(garantePatrimonial.IdGarante);
-                    }
-                    if (prospectoDireccion.Provincia != "-1")
-                    {
-                        if (garantePatrimonial.Vivienda == 1)
-                        {
-                            prospectoDireccion.Estado = 1;
-                            var direccionAgregado = controladorProspectos.AgregarOModificarDireccionPatrimonioGarante(prospectoDireccion);
-                            garantePatrimonial.IdDireccion = direccionAgregado.Id;
-                        }
-                        else
+                        if (garantePatrimonial.Vivienda == 0)
                         {
                             prospectoDireccion.Estado = 0;
                             var direccionAgregado = controladorProspectos.AgregarOModificarDireccionPatrimonioGarante(prospectoDireccion);
                             garantePatrimonial.IdDireccion = direccionAgregado.Id;
                         }
+                    }
+                   
+                    if (prospectoDireccion.Provincia != "-1" && garantePatrimonial.Vivienda == 1)
+                    {
+                      
+                            
+                            var direccionAgregado = controladorProspectos.AgregarOModificarDireccionPatrimonioGarante(prospectoDireccion);
+                            garantePatrimonial.IdDireccion = direccionAgregado.Id;
+                      
                     }
 
                     Garantes_Patrimonial garanteAgregado = new Garantes_Patrimonial();
@@ -1621,59 +1639,78 @@ namespace Gestion_Web.Formularios.Clientes
         }
         protected void verificarBoton(object sender, EventArgs e)
         {
+            int prospecto = -1;
+            if (accion == 1 && ViewState["idprospecto"]!=null)
+            {
+                prospecto = (int)ViewState["idprospecto"];
+
+            }
+            if (accion == 2)
+            {
+                prospecto = this.IdProspecto;
+            }
+            if(prospecto!=-1)
+            {
+
+            
             String path = null;
             LinkButton clickedButton = (LinkButton)sender;
             FileUpload fileupload = null;
             switch (clickedButton.ID)
             {
                 case "btnAgregarArchivoFianza":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/Fianza/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/Fianza/");
                     fileupload = FileFianza;
                     break;
                 case "btnAgregarArchivoPagare":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/Pagare/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/Pagare/");
                     fileupload = FilePagare;
                     break;
                 case "btnAgregarArchivoContratoComercial":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/ContratoComercial/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/ContratoComercial/");
                     fileupload = FileContratoComercial;
                     break;
                 case "btnAgregarArchivoDNIDistribuidor":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/DNIDistribuidor/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/DNIDistribuidor/");
                     fileupload = FileDNIDistribuidor;
                     break;
                 case "btnAgregarArchivoDNIGarante":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/DNIGarante/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/DNIGarante/");
                     fileupload = FileDNIGarante;
                     break;
                 case "btnAgregarArchivoServicioDistribuidor":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/ServicioDistribuidor/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/ServicioDistribuidor/");
                     fileupload = FileServicioDistribuidor;
                     break;
                 case "btnAgregarArchivoServicioGarante":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/ServicioGarante/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/ServicioGarante/");
                     fileupload = FileServicioGarante;
                     break;
                 case "btnAgregarArchivoConstanciaAFIP":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/ConstanciaAFIP/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/ConstanciaAFIP/");
                     fileupload = FileConstanciaAFIP;
                     break;
                 case "btnAgregarArchivoReciboSueldoGarante":
-                    path = Server.MapPath("../../DocumentacionProspecto/" + this.IdProspecto + "/ReciboSueldoGarante/");
+                    path = Server.MapPath("../../DocumentacionProspecto/" + prospecto + "/ReciboSueldoGarante/");
                     fileupload = FileReciboSueldoGarante;
 
 
                     break;
             }
             subirDocumento(path, fileupload);
-
+            }
+            else
+            {
+                //ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "alert", "mensajeAlert('Debe rellenar los datos del prospecto primero')", true);
+                this.ClientScript.RegisterClientScriptBlock(this.Page.GetType(), "alert", "mensajeAlert('Debe rellenar los datos del prospecto primero');", true);
+            }
         }
 
         public void subirDocumento(String path, FileUpload file)
         {
 
             //if(!String.IsNullOrEmpty(this.txtCodArticulo.Text))
-            if (this.IdProspecto > 0)
+            if (this.IdProspecto > 0 || (int)ViewState["idprospecto"] >0)
             {
                 if (IsPostBack)
                 {
@@ -1681,10 +1718,11 @@ namespace Gestion_Web.Formularios.Clientes
 
                     if (file.HasFile)
                     {
+                       
                         String fileExtension =
                             System.IO.Path.GetExtension(file.FileName).ToLower();
 
-                        String[] allowedExtensions = { ".doc", ".docx", "pdf", ".jpg", ".png", ".jpeg" };
+                        String[] allowedExtensions = { ".doc", ".docx", ".pdf", ".jpg", ".png", ".jpeg" };
 
                         for (int i = 0; i < allowedExtensions.Length; i++)
                         {

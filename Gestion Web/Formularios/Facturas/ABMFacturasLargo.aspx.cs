@@ -263,7 +263,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     string CodArt = Session["FacturasABM_ArticuloModal"] as string;
 
-                    if(!string.IsNullOrEmpty(CodArt))
+                    if (!string.IsNullOrEmpty(CodArt))
                     {
                         Articulo art = contArticulo.obtenerArticuloFacturar(CodArt, Convert.ToInt32(this.DropListLista.SelectedValue));
                         if (art != null)
@@ -271,7 +271,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (!VerificarArticulosSinActualizarAntesDeFacturar(art))
                             {
                                 Session["ArticuloUltimaFechaActualizacion"] = 1;
-                                mensajeActualizacionArticuloFecha = "El precio del articulo "+ art.codigo +" no se actualiza hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias.";
+                                mensajeActualizacionArticuloFecha = "El precio del articulo " + art.codigo + " no se actualiza hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias.";
                             }
                         }
                         else
@@ -295,7 +295,7 @@ namespace Gestion_Web.Formularios.Facturas
                     Configuracion config = new Configuracion();
                     foreach (var codigoArticulo in CodigosArticulos)
                     {
-                        if(yaEntro == 0)
+                        if (yaEntro == 0)
                         {
                             Articulo art = contArticulo.obtenerArticuloFacturar(codigoArticulo, Convert.ToInt32(this.DropListLista.SelectedValue));
                             if (art != null)
@@ -309,7 +309,7 @@ namespace Gestion_Web.Formularios.Facturas
                             }
                             else
                                 Log.EscribirSQL(Convert.ToInt32(Session["Login_IdUser"]), "ERROR", "ELSE: No se encontro el articulo para verificar la ultima fecha de actualizacion. Ubicacion: ABMFacturasLargo.Page_Load. Codigo Articulo: " + codigoArticulo);
-                            
+
                         }
 
                         Session["FacturasABM_ArticuloModal"] = codigoArticulo;
@@ -547,7 +547,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     r.Add(remitoAguardar);
                 }
-                
+
                 Factura f = controlador.AsignarVariosRemito(r);
                 Session.Add("Factura", f);
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
@@ -2033,7 +2033,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal ingresosBrutos = 0;
                 var percepcionBSASCliente = contClienteEntity.obtenerIngresosBrutoCliente(idCliente);
                 var percepcionCABACliente = contClienteEntity.obtenerPercepcionCABACliente(idCliente);
-                
+
 
                 if (percepcionCABACliente != null)
                 {
@@ -2961,7 +2961,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error en el metodo btnAgregar_Click() " + ex.Message);
             }
@@ -3097,7 +3097,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (art != null)
                 {
-                    
+
                     Cliente prov = this.contCliente.obtenerProveedoresRazonSocial(art.proveedor.razonSocial);
                     if (prov != null)
                     {
@@ -4632,6 +4632,8 @@ namespace Gestion_Web.Formularios.Facturas
                 //recalculo total
                 this.totalItem();
 
+
+
                 //item
                 ItemFactura item = new ItemFactura();
                 item.articulo = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
@@ -4641,17 +4643,17 @@ namespace Gestion_Web.Formularios.Facturas
                 item.total = Convert.ToDecimal(this.txtTotalArri.Text, CultureInfo.InvariantCulture);
 
                 //cargo la descripcion del articulo que tengo en pantalla
-                if(string.IsNullOrEmpty(item.articulo.descripcion))
+                if (string.IsNullOrEmpty(item.articulo.descripcion))
                 {
                     item.articulo.descripcion = this.txtDescripcion.Text;
                 }
                 else
                 {
                     string descAux = item.articulo.descripcion;
-                    if(descAux != this.txtDescripcion.Text)
+                    if (descAux != this.txtDescripcion.Text)
                         item.articulo.descripcion = this.txtDescripcion.Text;
                 }
-                
+
 
                 //agrego//costos
                 item.Costo = item.articulo.costo;
@@ -4737,6 +4739,50 @@ namespace Gestion_Web.Formularios.Facturas
                 f.items.Add(item);
                 f.items = f.items.Distinct().ToList();
                 Session.Add("Factura", f);
+                #region Articulos compuestos
+                Articulo articuloCompuesto = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                var articulos = contArticulo.obtenerArticulosByArticuloCompuesto(articuloCompuesto.id);
+                if (articulos != null)
+                {
+
+                    foreach (var art in articulos)
+                    {
+                        ItemFactura fact = new ItemFactura();
+                        
+                        fact.articulo = art.articulo;
+                        fact.articulo.descripcion += "(" + articuloCompuesto.codigo + ")";
+                        fact.cantidad = Convert.ToInt32(art.cantidad) * item.cantidad;
+                        fact.precioSinRecargo = 0;
+                        fact.precioSinIva = 0;
+                        fact.precioUnitario = 0;
+                        fact.Costo = 0;
+                        fact.CostoReal = 0;
+                        fact.costoImponible = 0;
+                        fact.total = 0;
+                        
+                        this.nuevaFactura.items.Add(fact);
+                        //lo agrego al session
+                        if (Session["Factura"] == null)
+                        {
+                            Factura fac = new Factura();
+                            Session.Add("Factura", fac);
+                        }
+
+                        Factura fa = Session["Factura"] as Factura;
+
+                      
+                        
+                            fact.nroRenglon = fa.items.Count() + 1;
+                        
+                        fa.items.Add(fact);
+                        fa.items = fa.items.Distinct().ToList();
+                        Session.Add("Factura", fa);
+
+
+
+                    }
+                }
+                #endregion
 
                 this.cargarItems();
 
