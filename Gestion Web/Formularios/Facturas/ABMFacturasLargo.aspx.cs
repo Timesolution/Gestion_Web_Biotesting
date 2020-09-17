@@ -148,6 +148,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
                     this.cargarMonedasModalTarjetas();
+                    this.cargarDivisas();
 
                     if (accion != 6 && accion != 7 && accion != 9)
                     {
@@ -363,6 +364,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.verificarVtaCombustible();
                 //Verifico si tiene una obsevacion en FC predeterminada para cargar en los comentarios
                 this.verificarObservacionesFC();
+                //Cargo las divisas
 
                 //verifico si es postback y tengo que llenar la tabla de las trazas para poder obtener el estado de los chkbox
                 if (this.lblMovTraza.Text != "")
@@ -2737,6 +2739,23 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private void cargarDivisas()
+        {
+            controladorCobranza controladorCobranza = new controladorCobranza();
+
+            DataTable dt = controladorCobranza.obtenerMonedasDT();
+
+            DataRow dr = dt.NewRow();
+            dr["moneda"] = "Seleccione...";
+            dr["id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
+
+            this.DropListDivisa.DataSource = dt;
+            this.DropListDivisa.DataValueField = "id";
+            this.DropListDivisa.DataTextField = "moneda";
+            this.DropListDivisa.DataBind();
+        }
+
         private void cargarMonedasModalTarjetas()
         {
             try
@@ -3945,6 +3964,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //Obtengo items
                 //List<ItemFactura> items = this.obtenerItems();
                 Factura fact = Session["Factura"] as Factura;
+
+                //VARIABLE PARA GUARDAR SI ELIGIO UNA DIVISA
+                int divisaElegida = 0;
+                
                 //List<ItemFactura> items = fact.items;
 
                 //agrego info traza a los items
@@ -4150,8 +4173,17 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
                     }
-                    //facturo
-                    int i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
+
+                    int i = 0;
+                    //Chequeo si eligio alguna divisa para guardar el tipo de cambio y facturo
+                    if (DropListDivisa.SelectedValue != "-1")
+                    {
+                        divisaElegida = Convert.ToInt32(DropListDivisa.SelectedValue);
+                        i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito,divisaElegida);
+                    }
+                    else
+                        i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
+
                     if (i > 0)
                     {
                         #region func post generarl
@@ -4560,6 +4592,20 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrió un error verificando los articulos con precios sin actualizar. Excepción: " + Ex.Message));
                 return true;
+            }
+        }
+
+        protected void DropListDivisa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCobranza controladorCobranza = new controladorCobranza();
+                txtValorDivisa.Text = controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)).ToString().Replace(',', '.');
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en ABMFactirasLargo.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
             }
         }
 

@@ -87,6 +87,9 @@
                                                 <asp:LinkButton ID="lbtnImprimirTicketDeCambio" runat="server" OnClick="lbtnImprimirTicketDeCambio_Click">Imprimir Ticket De Cambio</asp:LinkButton>
                                             </li>
                                         </asp:PlaceHolder>
+                                        <li>
+                                            <asp:LinkButton ID="lbtnImprimirFC_En_Otra_Divisa" runat="server" OnClick="lbtnImprimirFC_En_Otra_Divisa_Click">Imprimir FC en otra divisa</asp:LinkButton>
+                                        </li>
                                     </ul>
                                 </div>
                                 <!-- /btn-group -->
@@ -96,7 +99,7 @@
                                     <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                 </h5>
                             </td>
-                            
+
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
                                     <asp:LinkButton ID="lbImpresion" class="btn btn-primary" runat="server" Text="<span class='shortcut-icon icon-print'></span>" Visible="false" Style="width: 100%" OnClick="lbImpresion_Click" />
@@ -1365,11 +1368,89 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button ID="btnBuscarNumerosFacturas" runat="server" Text="Buscar" class="btn btn-success" OnClick="btnBuscarNumerosFacturas_Click" OnClientClick="this.disabled = true; this.value = 'Buscando...';" UseSubmitBehavior="false"/>
+                        <asp:Button ID="btnBuscarNumerosFacturas" runat="server" Text="Buscar" class="btn btn-success" OnClick="btnBuscarNumerosFacturas_Click" OnClientClick="this.disabled = true; this.value = 'Buscando...';" UseSubmitBehavior="false" />
                     </div>
                 </div>
             </div>
         </div>
+
+        <%-- Modal Imprimir FC en Divisa Elegida --%>
+        <div id="modalImprimirFC_EnOtraDivisa" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Imprimir FC en Otra Divisa</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <asp:UpdatePanel ID="UpdatePanel8" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label class="col-md-4">Numero del Doc.</label>
+                                                <div class="col-md-8">
+                                                    <asp:Label ID="lblNumeroFC" runat="server"></asp:Label>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group">
+                                                <label class="col-md-4">Divisa</label>
+                                                <div class="col-md-8">
+                                                    <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                                </div>
+                                                <%--<div class="col-md-2">
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Seleccione un tipo de Moneda" ControlToValidate="DropListTipo" InitialValue="Seleccione..." ValidationGroup="MonedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                </div>--%>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4">Cotizacion</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <asp:TextBox ID="txtCotizacion" runat="server" class="form-control" disabled Style="text-align: right"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="col-md-12">
+                                                <div class="widget stacked widget-box">
+                                                    <div class="widget-header">
+                                                        <h3>Información</h3>
+                                                    </div>
+                                                    <!-- /widget-header -->
+                                                    <div class="widget-content">
+                                                        <p>La divisa elegida en la lista, traera el valor de la divisa al momento en que se realizo la FC o NT/ND.</p>
+                                                        <p>Si no se guardo con ninguna divisa, el valor a tomar sera el valor actual de la divisa seleccionada.</p>
+                                                        <strong>Divisa guardada</strong><br />
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaGuardada" ForeColor="DarkGreen"></asp:Label>
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaValor" ForeColor="DarkGreen"></asp:Label></p>
+                                                    </div>
+                                                    <!-- /widget-content -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                        <div class="modal-footer">
+                            <asp:Button ID="btnImprimirFCDivisa" runat="server" Text="Imprimir" class="btn btn-success" ValidationGroup="MonedaGroup" OnClick="btnImprimirFCDivisa_Click" />
+                        </div>
+                        <%--<div class="modal-footer">
+                            <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon fa fa-paper-plane'></span>" class="btn btn-success" OnClick="" ValidationGroup="EnvioGroup"></asp:LinkButton>
+                        </div>--%>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <%-- Fin Modal Imprimir FC en Divisa Elegida --%>
 
         <div id="modalAgregarFactura" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -1565,6 +1646,11 @@
         <script type="text/javascript">
             function openModalMailPorCliente() {
                 $('#modalConfirmacionEnvioMailPorCliente').modal('show');
+            }
+        </script>
+        <script type="text/javascript">
+            function openModalImprimirFC_EnOtraDivisa() {
+                $('#modalImprimirFC_EnOtraDivisa').modal('show');
             }
         </script>
         <script type="text/javascript">

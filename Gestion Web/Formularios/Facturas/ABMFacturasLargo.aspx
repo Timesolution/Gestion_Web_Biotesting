@@ -460,6 +460,32 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="form-group">
+                                                                                        <label class="col-md-3">Divisa: </label>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="input-group">
+                                                                                                <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control ui-popover" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Eliga la divisa con la que desea facturar" title="" data-original-title="Ayuda" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <div class="input-group">
+                                                                                                <span class="input-group-addon">$</span>
+                                                                                                <asp:TextBox ID="txtValorDivisa" runat="server" class="form-control" disabled Style="text-align: right"></asp:TextBox>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <%--<div class="form-group">
+                                                                                            <label class="col-md-4">Divisa</label>
+                                                                                            <div class="col-md-6">
+                                                                                                <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                                                                            </div>
+                                                                                            <div class="col-md-6">
+                                                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Seleccione un tipo de Moneda" ControlToValidate="DropListTipo" InitialValue="Seleccione..." ValidationGroup="MonedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                                                            </div>
+                                                                                        </div>--%>
+                                                                                        <div class="col-md-2">
+                                                                                            <asp:Label runat="server" ID="lblDivisaFacturar"></asp:Label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
                                                                                         <div class="col-md-12">
                                                                                             <asp:TextBox placeholder="AGREGUE AQUI OBSERVACIONES" ID="txtComentarios" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
                                                                                         </div>
@@ -782,9 +808,9 @@
                                                 <asp:Button ID="btnRefacturar" runat="server" Visible="false" Text="Refacturar" CssClass="btn btn-success" OnClick="btnRefacturar_Click" />
                                                 <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="~/Default.aspx" />
                                             </div>
-                                            <div class="alert alert-warning alert-dismissable col-sm-4" style="text-align:center">
-                                                <asp:Label runat="server" ID="lblArtTotales1" Font-Bold="true"  >Articulos Totales: </asp:Label>
-                                                <asp:Label runat="server" ID="lblArtTotales2" Font-Bold="true"  >0</asp:Label>
+                                            <div class="alert alert-warning alert-dismissable col-sm-4" style="text-align: center">
+                                                <asp:Label runat="server" ID="lblArtTotales1" Font-Bold="true">Articulos Totales: </asp:Label>
+                                                <asp:Label runat="server" ID="lblArtTotales2" Font-Bold="true">0</asp:Label>
                                             </div>
                                         </div>
                                     </ContentTemplate>
@@ -1907,7 +1933,7 @@
                 </div>
             </div>
         </div>
-        <%--MODAL APLICAR DESCUENTO--%> 
+        <%--MODAL APLICAR DESCUENTO--%>
         <div id="modalCalcularDescuentoConUnMonto" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -2002,7 +2028,7 @@
                 </div>
             </asp:Panel>
         </div>
-<%--        MODAL BUSCAR CLIENTE--%>
+        <%--        MODAL BUSCAR CLIENTE--%>
         <div id="modalBuscarClienteDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
             <asp:Panel ID="Panel1" runat="server">
                 <div class="modal-dialog" style="width: 60%;">
