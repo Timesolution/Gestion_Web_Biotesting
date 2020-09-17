@@ -21,6 +21,7 @@ using System.Web.Configuration;
 using Gestion_Api.Modelo.Enums;
 using System.Diagnostics;
 using Task_Api.Entitys;
+using Gestion_Api.Controladores.ControladoresEntity;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -4490,7 +4491,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         var cronogramaPago = controladorFacturacion.AgregarPago(pagosProgramados);
 
-                        if(cronogramaPago != null)
+                        if (cronogramaPago != null)
                         {
                             eventoCliente.Cliente = factura.cliente.id;
                             eventoCliente.Fecha = DateTime.Now;
@@ -4888,8 +4889,169 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en una sola caja de texto. "));
             }
-            if(string.IsNullOrEmpty(this.txtNumeroFactura.Text) && string.IsNullOrEmpty(this.txtRazonSocial.Text) && string.IsNullOrEmpty(this.txtObservacion.Text))
+            if (string.IsNullOrEmpty(this.txtNumeroFactura.Text) && string.IsNullOrEmpty(this.txtRazonSocial.Text) && string.IsNullOrEmpty(this.txtObservacion.Text))
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe escribir en al menos una caja de texto. "));
+        }
+
+        /// <summary>
+        /// Este metodo, levanta un PopUp para elegir en que divisa desea imprimir la FC
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void lbtnImprimirFC_En_Otra_Divisa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorMoneda controladorMoneda = new controladorMoneda();
+
+                string idsListaFacturasTildados = "";
+                int contadorFacturasTildadas = 0;
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        contadorFacturasTildadas++;
+                        idsListaFacturasTildados += ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idsListaFacturasTildados) && contadorFacturasTildadas == 1)
+                {
+                    DropListDivisa.ClearSelection();
+
+                    controladorCobranza controladorCobranza = new controladorCobranza();
+                    controladorFacturacion controladorFacturacion = new controladorFacturacion();
+                    ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
+
+                    Factura factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(idsListaFacturasTildados));
+                    lblNumeroFC.Text = factura.numero;
+                    DataTable dt = controladorCobranza.obtenerMonedasDT();
+
+                    //agrego todos
+                    //DataRow dr = dt.NewRow();
+                    //dr["moneda"] = "Seleccione...";
+                    //dr["id"] = -1;
+                    //dt.Rows.InsertAt(dr, 0);
+
+                    this.DropListDivisa.DataSource = dt;
+                    this.DropListDivisa.DataValueField = "id";
+                    this.DropListDivisa.DataTextField = "moneda";
+                    this.DropListDivisa.DataBind();
+
+                    //Verificar si tiene alguna divisa por defecto guardada en la tabla Factuas_Moneda
+                    Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(factura.id);
+                    if (facturas_Moneda != null)
+                    {
+                        DropListDivisa.SelectedValue = Convert.ToString(facturas_Moneda.idMoneda);
+                        txtCotizacion.Text = Convert.ToString(facturas_Moneda.ValorMoneda);
+                        string monedaGuardada = DropListDivisa.Items.FindByValue(DropListDivisa.SelectedValue).Text;
+                        lblFacturaMonedaGuardada.Text = monedaGuardada + ": $";
+                        lblFacturaMonedaValor.Text = facturas_Moneda.ValorMoneda.ToString();
+                    }
+                    else
+                    {
+                        DropListDivisa.SelectedValue = DropListDivisa.Items.FindByText("Pesos").Value;
+                        txtCotizacion.Text = "1.00";
+                        lblFacturaMonedaGuardada.Text = "-";
+                        lblFacturaMonedaValor.Text = "";
+                    }
+
+                    ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalImprimirFC_EnOtraDivisa", "openModalImprimirFC_EnOtraDivisa();", true);
+                }
+                else if (contadorFacturasTildadas > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar SOLO un documento"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos UN documento"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en FacturasF.lbtnImprimirFC_En_Otra_Divisa_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+            }
+        }
+
+        protected void DropListDivisa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCobranza controladorCobranza = new controladorCobranza();
+                string moneda = lblFacturaMonedaGuardada.Text;
+                if(moneda != "-")
+                {
+                    moneda = moneda.Replace(": $", string.Empty);
+                }
+                if (!string.IsNullOrEmpty(lblFacturaMonedaValor.Text) && DropListDivisa.SelectedItem.Text.Contains(moneda))
+                {
+                    txtCotizacion.Text = lblFacturaMonedaValor.Text.Replace(',', '.');
+                }
+                else
+                {
+                    txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)), 2).ToString().Replace(',', '.');
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en FacturasF.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+            }
+        }
+
+        protected void btnImprimirFCDivisa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorFacturacion controladorFacturacion = new controladorFacturacion();
+                Factura factura = controladorFacturacion.obtenerFacturaByNumero(lblNumeroFC.Text).FirstOrDefault();
+                if (factura != null)
+                    this.DetalleFactura_OtraDivisa(factura);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en FacturasF.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+            }
+        }
+
+        protected void DetalleFactura_OtraDivisa(Factura factura)
+        {
+            try
+            {
+                //obtengo numero factura
+
+                string idFactura = Convert.ToString(factura.id);
+                int tipo = factura.tipo.id;
+
+                TipoDocumento tp = this.contDocumentos.obtenerTipoDoc("Presupuesto");
+
+                if (tipo == tp.id || tipo == 11 || tipo == 12)//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "&div=" + DropListDivisa.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                }
+                else
+                {
+                    if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26)//Si es Factura A/E, Nota credito A/E o Nota debito A/E
+                    {
+                        //factura
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "&div=" + DropListDivisa.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
+                    }
+                    else
+                    {
+                        //facturab
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=2&Presupuesto=" + idFactura + "&div=" + DropListDivisa.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
+using Gestion_Api.Controladores.ControladoresEntity;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using Gestor_Solution.Modelo;
@@ -25,6 +27,8 @@ namespace Gestion_Web.Formularios.Facturas
         private int idPresupuesto;
         private int accion;
         private int original;
+        private decimal imprimirOtraDivisa;
+        private int idMoneda;
         controladorFacturacion controlador = new controladorFacturacion();
         controladorCliente controlCliente = new controladorCliente();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
@@ -33,6 +37,8 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCobranza contCobranza = new controladorCobranza();
         ControladorPedido contPedidos = new ControladorPedido();
         controladorFactEntity controladorFactEntity = new controladorFactEntity();
+        controladorMoneda controladorMoneda = new controladorMoneda();
+        ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
 
         Configuracion configuracion = new Configuracion();
         protected void Page_Load(object sender, EventArgs e)
@@ -44,6 +50,19 @@ namespace Gestion_Web.Formularios.Facturas
                     idPresupuesto = Convert.ToInt32(Request.QueryString["Presupuesto"]);
                     this.accion = Convert.ToInt32(Request.QueryString["a"]);
                     this.original = Convert.ToInt32(Request.QueryString["o"]);
+                    
+                    if (Request.QueryString["div"] != null)
+                    {
+                        idMoneda = Convert.ToInt32(Request.QueryString["div"]);
+                        Moneda moneda = controladorMoneda.obtenerMonedaID(idMoneda);
+                        Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(idPresupuesto);
+
+                        if(facturas_Moneda.idMoneda == moneda.id)
+                            imprimirOtraDivisa = facturas_Moneda.ValorMoneda;
+                        else
+                            imprimirOtraDivisa = moneda.cambio;
+                    }
+
                     //presupuesto
                     if (accion == 0)
                     {
@@ -494,6 +513,23 @@ namespace Gestion_Web.Formularios.Facturas
                 //string totalS = Numalet.ToCardinal("18.25");
                 //cant unidades
                 decimal cant = 2;
+
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow row in dtDatos.Rows)
+                    {
+                        row[""] = Decimal.Round(Convert.ToDecimal(row[""]) / imprimirOtraDivisa);
+                    }
+
+                    subtotal = subtotal / imprimirOtraDivisa;
+                    descuento = descuento / imprimirOtraDivisa;
+                    subtotal2 = subtotal2 / imprimirOtraDivisa;
+                    iva = iva / imprimirOtraDivisa;
+                    retencion = retencion / imprimirOtraDivisa;
+                    conceptos = conceptos / imprimirOtraDivisa;
+                    total = total / imprimirOtraDivisa;
+                    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+                }
                 //decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
                 //decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
                 //decimal totalIva27 = Convert.ToDecimal(dr["TotalIva27"]);
@@ -1002,7 +1038,10 @@ namespace Gestion_Web.Formularios.Facturas
                 String textoDolares = String.Empty;
                 if (dolar != null)
                 {
-                    TotalDolares = Decimal.Round((total / dolar.cambio), 3);
+                    if(imprimirOtraDivisa > 0 && dolar.id == idMoneda)
+                        TotalDolares = Decimal.Round((total / imprimirOtraDivisa), 3);
+                    else
+                        TotalDolares = Decimal.Round((total / dolar.cambio), 3);
                 }
                 if (tipoDoc.Contains("Nota de"))
                 {
@@ -1011,6 +1050,32 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
+                }
+
+                //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow row in dtDatos.Rows)
+                    {
+                        row["PUnitario"] = Decimal.Round(Convert.ToDecimal(row["PUnitario"]) / imprimirOtraDivisa, 2);
+                        row["Descuento"] = Decimal.Round(Convert.ToDecimal(row["Descuento"]) / imprimirOtraDivisa);
+                        row["PorcentajeDescuentoItem"] = Decimal.Round(Convert.ToDecimal(row["PorcentajeDescuentoItem"]) / imprimirOtraDivisa, 2);
+                        row["PSinIva"] = Decimal.Round(Convert.ToDecimal(row["PSinIva"]) / imprimirOtraDivisa, 2);
+                        row["PorcentajeIva"] = Decimal.Round(Convert.ToDecimal(row["PorcentajeIva"]) / imprimirOtraDivisa, 2);
+                        row["Total"] = Decimal.Round(Convert.ToDecimal(row["Total"]) / imprimirOtraDivisa, 2);
+                        row["FinalA"] = Decimal.Round(Convert.ToDecimal(row["FinalA"]) / imprimirOtraDivisa, 2);
+                        row["FinalB"] = Decimal.Round(Convert.ToDecimal(row["FinalB"]) / imprimirOtraDivisa, 2);
+                        row["DescuentoSinIva"] = Decimal.Round(Convert.ToDecimal(row["DescuentoSinIva"]) / imprimirOtraDivisa, 2);
+                    }
+
+                    subtotal = Decimal.Round(subtotal / imprimirOtraDivisa, 2);
+                    descuento = Decimal.Round(descuento / imprimirOtraDivisa, 2);
+                    subtotal2 = Decimal.Round(subtotal2 / imprimirOtraDivisa, 2);
+                    iva = iva / Decimal.Round(imprimirOtraDivisa, 2);
+                    retencion = Decimal.Round(retencion / imprimirOtraDivisa, 2);
+                    conceptos = Decimal.Round(conceptos / imprimirOtraDivisa, 2);
+                    total = Decimal.Round(total / imprimirOtraDivisa, 2);
+                    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
                 }
 
                 //Condición de Pago
@@ -1088,7 +1153,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param10 = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param11 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
                 ReportParameter param12 = new ReportParameter("ParamFechaIni", fechaInicio);
-                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer+" \n Direccion Sucursal: "+pv.direccion);
+                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer + " \n Direccion Sucursal: " + pv.direccion);
                 ReportParameter param14 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param15 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
                 ReportParameter param16 = new ReportParameter("ParamNroFac", nroFactura);
