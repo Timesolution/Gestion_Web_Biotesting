@@ -3399,6 +3399,7 @@
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedoresSucursalCategoria.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\InformeRemitos.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

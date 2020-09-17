@@ -193,6 +193,8 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
+                ViewState["dtremitos"] = dtRemitos;
+
                 if (saldo == 0)
                     lblSaldo.Text = "$0.00";
                 else
@@ -1267,6 +1269,79 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception Ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. Excepción: " + Ex.Message));
+            }
+        }
+
+        protected void lbtnImprimirFiltro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ViewState["dtremitos"] != null)
+                {
+                    DataTable dtRemitos = (DataTable)ViewState["dtremitos"];
+
+                    this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("InformeRemitos.rdlc");
+
+                    ReportDataSource rds = new ReportDataSource("DetalleRemitos", dtRemitos);
+
+                    this.ReportViewer1.LocalReport.DataSources.Clear();
+                    this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                    this.ReportViewer1.LocalReport.Refresh();
+
+                    Warning[] warnings;
+
+                    string mimeType, encoding, fileNameExtension;
+
+                    string[] streams;
+
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a buscar la ruta de la carpeta pdfs para guardar el pdf a generar");
+                    string path = Server.MapPath("/Formularios/Facturas/pdfs/");
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Encontro la ruta: " + path);
+                    //limpio la carpeta donde van los pdfs asi no muestra pdfs viejos
+                    
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a limpiar la carpeta donde estan los pdfs asi no muestra los viejos");
+                    BorrarPDFS(path);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Borro los archivos de la carpeta");
+
+
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a verificar si existe directorio");
+                    if (!Directory.Exists(path))
+                    {
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a crear el directorio");
+                        Directory.CreateDirectory(path);
+                    }
+
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    //this.Response.Clear();
+                    //this.Response.Buffer = true;
+                    //this.Response.ContentType = "application/pdf";
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    //this.Response.BinaryWrite(pdfContent);
+
+                    //this.Response.End();
+
+                    //Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    //save the generated report in the server
+                    //String path = Server.MapPath("../../Facturas/" + f.empresa.id + "/" + "/fc-" + f.numero + "_" + f.id + ".pdf");
+                    FileStream stream = File.Create(path + "listadoremitos.pdf", pdfContent.Length);
+                    stream.Write(pdfContent, 0, pdfContent.Length);
+                    stream.Close();
+
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Ahora va a buscar si hay archivos generados en la carpeta pdfs");
+                    string[] pdfs = Directory.GetFiles(path);
+                    string nombre = path + "listadoremitos.pdf";
+                    this.descargar(nombre);                    
+
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

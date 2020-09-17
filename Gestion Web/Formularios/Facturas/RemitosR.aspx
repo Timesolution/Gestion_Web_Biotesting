@@ -56,15 +56,17 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
-                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Todo</a>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <asp:LinkButton ID="lbtnImprimirTodo" runat="server" OnClick="lbtnImprimirTodo_Click">
+                                            <li>
+                                                <asp:LinkButton ID="lbtnImprimirTodo" runat="server" OnClick="lbtnImprimirTodo_Click">
                                                         <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                         &nbsp Imprimir
-                                                        </asp:LinkButton>
-                                                    </li>
-                                                </ul>
+                                                </asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnImprimirFiltro" runat="server" OnClick="lbtnImprimirFiltro_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Imprimir detalle
+                                                </asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -606,7 +608,7 @@
                     }
                 });
             }--%>
-        </script>
+</script>
 
         <!-- Core Scripts - Include with every page -->
         <script src="../../Scripts/jquery-1.10.2.js"></script>
@@ -634,12 +636,12 @@
         <script>
 
 
-                $(function () {
-                    $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 });
 
-                $(function () {
-                    $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 });
 
         </script>
