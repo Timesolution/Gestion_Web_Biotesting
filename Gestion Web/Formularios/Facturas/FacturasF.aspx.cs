@@ -4945,15 +4945,16 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         DropListDivisa.SelectedValue = Convert.ToString(facturas_Moneda.idMoneda);
                         txtCotizacion.Text = Convert.ToString(facturas_Moneda.ValorMoneda);
-                        string monedaGuardada = DropListDivisa.Text;
-                        lblFacturaMonedaGuardada.Text = monedaGuardada + ": " + facturas_Moneda.ValorMoneda.ToString();
+                        string monedaGuardada = DropListDivisa.Items.FindByValue(DropListDivisa.SelectedValue).Text;
+                        lblFacturaMonedaGuardada.Text = monedaGuardada + ": $";
+                        lblFacturaMonedaValor.Text = facturas_Moneda.ValorMoneda.ToString();
                     }
                     else
                     {
                         DropListDivisa.SelectedValue = DropListDivisa.Items.FindByText("Pesos").Value;
                         txtCotizacion.Text = "1.00";
                         lblFacturaMonedaGuardada.Text = "-";
-                        //ListTipoDocumento.Items.FindByText(pro.TipoDocumento).Selected = true;
+                        lblFacturaMonedaValor.Text = "";
                     }
 
                     ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalImprimirFC_EnOtraDivisa", "openModalImprimirFC_EnOtraDivisa();", true);
@@ -4979,7 +4980,19 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 controladorCobranza controladorCobranza = new controladorCobranza();
-                txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)),2).ToString().Replace(',', '.');
+                string moneda = lblFacturaMonedaGuardada.Text;
+                if(moneda != "-")
+                {
+                    moneda = moneda.Replace(": $", string.Empty);
+                }
+                if (!string.IsNullOrEmpty(lblFacturaMonedaValor.Text) && DropListDivisa.SelectedItem.Text.Contains(moneda))
+                {
+                    txtCotizacion.Text = lblFacturaMonedaValor.Text.Replace(',', '.');
+                }
+                else
+                {
+                    txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)), 2).ToString().Replace(',', '.');
+                }
             }
             catch (Exception ex)
             {

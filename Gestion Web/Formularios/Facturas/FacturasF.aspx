@@ -1426,7 +1426,8 @@
                                                         <p>La divisa elegida en la lista, traera el valor de la divisa al momento en que se realizo la FC o NT/ND.</p>
                                                         <p>Si no se guardo con ninguna divisa, el valor a tomar sera el valor actual de la divisa seleccionada.</p>
                                                         <strong>Divisa guardada</strong><br />
-                                                        <asp:Label runat="server" ID="lblFacturaMonedaGuardada" ForeColor="DarkGreen"></asp:Label></p>
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaGuardada" ForeColor="DarkGreen"></asp:Label>
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaValor" ForeColor="DarkGreen"></asp:Label></p>
                                                     </div>
                                                     <!-- /widget-content -->
                                                 </div>
