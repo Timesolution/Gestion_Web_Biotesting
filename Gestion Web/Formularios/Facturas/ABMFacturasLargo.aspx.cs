@@ -181,6 +181,10 @@ namespace Gestion_Web.Formularios.Facturas
                     //vengo desde el remito y voy a facturar
                     if (this.accion == 4)
                     {
+                        if(this.configuracion.agregarItemsFactura=="0")
+                        {
+                            this.lbtnAgregarArticuloASP.Attributes.Add("disabled", "disabled");
+                        }
                         string idRemito = Request.QueryString["id_rem"].ToString();
                         GenerarFacturaRemito(idRemito);
                     }

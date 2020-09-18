@@ -39,6 +39,8 @@ namespace Gestion_Web.Formularios.Valores
             public string Credito;
             public string Debito;
             public string NumeroDocumento;
+            public string Observaciones;
+            
         }
         class ListItemTemporal
         {
@@ -354,6 +356,7 @@ namespace Gestion_Web.Formularios.Valores
                 List<MayorTemporal> listaMayorTemporal = new List<MayorTemporal>();
                 foreach (var item in listaMayor)
                 {
+                    
                     listaMayorTemporal.Add(new MayorTemporal
                     {
                         Fecha = item.Fecha.Value.ToString("dd/MM/yyyy"),
@@ -369,8 +372,10 @@ namespace Gestion_Web.Formularios.Valores
                         Nivel5 = item.Cuentas_Contables4.Descripcion,
                         Debito = item.Debito.ToString(),
                         Credito = item.Credito.ToString(),
-                        NumeroDocumento = item.NumeroDocumento
-                    });
+                        NumeroDocumento = item.NumeroDocumento,
+                        Observaciones = item.Observaciones ?? ""
+
+                    });;
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 serializer.MaxJsonLength = 5000000;
@@ -443,12 +448,14 @@ namespace Gestion_Web.Formularios.Valores
                     int idNivel3 = Convert.ToInt32(linea[8]);
                     int idNivel4 = Convert.ToInt32(linea[9]);
                     int idNivel5 = Convert.ToInt32(linea[10]);
+                    string observaciones = linea[11].ToString();
 
                     string puntoDeVenta = contSucursal.obtenerPtoVentaEntityID(idPuntoDeVenta).NombreFantasia;
                     string numeroDocumento = "0000-" + contPlanCuentas.ObtenerCantidadDeRegistrosCreadosDeLaTabla_MayorFiltradoPorTipoDeMayor(1).ToString().PadLeft(8,'0');
 
                     contPlanCuentas.AgregarRegistroToTableMayor(new Mayor
                     {
+                        Observaciones = observaciones,
                         Fecha = fechaDateTime,
                         Debito = debe,
                         Credito = haber,

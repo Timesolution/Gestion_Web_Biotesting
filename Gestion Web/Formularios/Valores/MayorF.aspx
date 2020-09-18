@@ -56,6 +56,7 @@
                                     <th>Nivel 3</th>
                                     <th>Nivel 4</th>
                                     <th>Nivel 5</th>
+                                    <th>Observaciones</th>
                                 </tr>
                             </thead>
                         </table>
@@ -225,6 +226,11 @@
                                         <asp:TextBox ID="txtImporte_ModalAgregarRegistro" onkeypress="javascript:return ValidarSoloNumeros(event)" runat="server" class="form-control"></asp:TextBox>
                                         <asp:Label runat="server" ID="lb_ImporteError_ModalAgregarRegistro" Style="display: none" Text="Ingrese un importe." ForeColor="Red" Font-Bold="true"></asp:Label>
                                     </div>
+                                    <div class="col-md-3">
+                                        <label>Observaciones</label>
+                                        <asp:TextBox ID="txtObservaciones_ModalAgregarRegistro" TextMode="MultiLine" Rows="5" runat="server" class="form-control"></asp:TextBox>
+                                        <asp:Label runat="server" ID="Label1" Style="display: none" Text="Ingrese un importe." ForeColor="Red" Font-Bold="true"></asp:Label>
+                                    </div>
 
                                     <div class="col-md-3">
                                         <br />
@@ -246,6 +252,7 @@
                                                     <th>Sucursal</th>
                                                     <th>Punto de Venta</th>
                                                     <th>Plan Cuenta</th>
+                                                    <th>Observaciones</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -345,6 +352,7 @@
         var controlTxtFecha_ModalAgregarRegistro;
         var controlTxtImporte_ModalAgregarRegistro;
         var controlDropList_TipoOperacion_ModalAgregarRegistro;
+        var controlTxtObservaciones_ModalAgregarRegistro;
 
         var dropLists_ModalBusqueda = [];
         var dropLists_Niveles_ModalAgregarRegistro = [];
@@ -416,6 +424,7 @@
             controlLabel_ImporteError_ModalAgregarRegistro = document.getElementById('<%= lb_ImporteError_ModalAgregarRegistro.ClientID %>');
 
             controlTxtImporte_ModalAgregarRegistro = document.getElementById('<%= txtImporte_ModalAgregarRegistro.ClientID %>');
+            controlTxtObservaciones_ModalAgregarRegistro = document.getElementById('<%= txtObservaciones_ModalAgregarRegistro.ClientID %>');
 
             controlDropList_TipoOperacion_ModalAgregarRegistro = document.getElementById('<%= dropList_TipoOperacion_ModalAgregarRegistro.ClientID %>');
 
@@ -575,6 +584,7 @@
                     "<td> " + obj[i].Nivel3 + "</td>" +
                     "<td> " + obj[i].Nivel4 + "</td>" +
                     "<td> " + obj[i].Nivel5 + "</td>" +
+                    "<td> " + obj[i].Observaciones + "</td>" +
                     "</tr> ");
             };
             $(controlBotonFiltrar).removeAttr('disabled');
@@ -908,6 +918,7 @@
             var planCuenta = $('#<%=DropListNivel4_ModalAgregarRegistro.ClientID %> option:selected').text();
 
             var fecha = controlTxtFecha_ModalAgregarRegistro.value;
+            var observaciones = controlTxtObservaciones_ModalAgregarRegistro.value;
             var idEmpresa = $('#<%= DropListEmpresa_ModalAgregarRegistro.ClientID %>').val();
             var idSucursal = $('#<%= DropListSucursal_ModalAgregarRegistro.ClientID %>').val();
             var idPuntoDeVenta = $('#<%= dropListPuntoVenta_ModalAgregarRegistro.ClientID %>').val();
@@ -917,7 +928,7 @@
             var idNivel4 = $('#<%= DropListNivel4_ModalAgregarRegistro.ClientID %>').val();
             var idNivel5 = $('#<%= DropListNivel5_ModalAgregarRegistro.ClientID %>').val();
 
-            var datos_DeLaFila = [fecha, debe, haber, idEmpresa, idSucursal, idPuntoDeVenta, idNivel1, idNivel2, idNivel3, idNivel4, idNivel5].join('_');
+            var datos_DeLaFila = [fecha, debe, haber, idEmpresa, idSucursal, idPuntoDeVenta, idNivel1, idNivel2, idNivel3, idNivel4, idNivel5, observaciones].join('_');
 
             var table = document.getElementById("tablaMayor_Temporal");
 
@@ -929,6 +940,7 @@
                 "<td>" + sucursal + "</td>" +
                 "<td>" + puntoDeVenta + "</td>" +
                 "<td>" + planCuenta + "</td>" +
+                "<td>" + observaciones + "</td>" +
                 "<td style=\"display:none\">" + datos_DeLaFila + "</td>" +
                 "<td>" +
                 "<a onclick=\"javascript: return eliminarFila(this);\" id=\"btnEliminar_" + (table.rows.length - 1) + "\" class=\"btn btn-danger\" style=\"text-align: right\" autopostback=\"false\"><span class=\"shortcut-icon icon-trash\"></span></a>" +

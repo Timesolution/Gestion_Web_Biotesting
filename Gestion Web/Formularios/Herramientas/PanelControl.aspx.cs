@@ -25,6 +25,7 @@ namespace Gestion_Web.Formularios.Herramientas
         {
             try
             {
+                
                 //this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 //this.idPuntoVenta = Convert.ToInt32(Request.QueryString["puntoVenta"]);
 
@@ -39,7 +40,10 @@ namespace Gestion_Web.Formularios.Herramientas
                 if (this.configuracion.editarArticulo == "1")
                 {
                     this.panelPrecio.Visible = true;
+                    
                 }
+               
+
             }
             catch
             {
@@ -136,6 +140,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
                 this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue = configuracion.ModificarCantidadEnVentaEntreSucursales;
                 this.txtObservacionesFC.Text = configuracion.ObservacionesFC;
+                
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -157,6 +162,16 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     this.lbtnModoSeguro.CssClass = "btn btn-danger";
                     this.lbtnModoSeguro.Text = "Desactivado";
+                }
+                if(configuracion.agregarItemsFactura == "1")
+                {
+                    this.lbtnAgregarItemsFactura.CssClass = "btn btn-success";
+                    this.lbtnAgregarItemsFactura.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnAgregarItemsFactura.CssClass = "btn btn-danger";
+                    this.lbtnAgregarItemsFactura.Text = "Desactivado";
                 }
 
                 // Visualizacion de Cheques
@@ -1383,6 +1398,32 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: ObservacionesFC " + ex.Message);
+            }
+        }
+
+        protected void lbtnAgregarItemsFactura_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.agregarItemsFactura == "0")
+                    configuracion.agregarItemsFactura = "1";
+                else
+                    configuracion.agregarItemsFactura = "0";
+
+                int i = configuracion.ModificarModoAgregarItemsFactura();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion agregar items factura.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: agregar items factura se modificado con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: agregar items factura!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
             }
         }
     }

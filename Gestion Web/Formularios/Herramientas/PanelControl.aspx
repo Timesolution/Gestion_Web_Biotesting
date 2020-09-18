@@ -604,6 +604,12 @@
                                                 <asp:LinkButton ID="lbtnModoSeguro" runat="server" OnClick="lbtnModoSeguro_Click" />
                                             </div>
                                         </div>
+                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Agregar ítems al Facturar o Remitir:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnAgregarItemsFactura" runat="server" OnClick="lbtnAgregarItemsFactura_Click" />
+                                            </div>
+                                        </div>
 
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
