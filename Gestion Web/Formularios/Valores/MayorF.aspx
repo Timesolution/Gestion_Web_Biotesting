@@ -584,7 +584,7 @@
                     "<td> " + obj[i].Nivel3 + "</td>" +
                     "<td> " + obj[i].Nivel4 + "</td>" +
                     "<td> " + obj[i].Nivel5 + "</td>" +
-                    "<td> " + obj[i].Observaciones + "</td>" +
+                    '<td data-toggle="modal" data-placement="top" title="' + obj[i].Observaciones +'" >' + obj[i].Observaciones.substring(0,20) + "</td>" +
                     "</tr> ");
             };
             $(controlBotonFiltrar).removeAttr('disabled');

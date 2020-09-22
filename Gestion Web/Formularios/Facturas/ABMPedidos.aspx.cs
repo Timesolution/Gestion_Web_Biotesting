@@ -344,6 +344,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("Pedido", p);
                 this.ListEmpresa.SelectedValue = p.empresa.id.ToString();
                 this.cargarSucursal(p.empresa.id);
+                this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
 
@@ -354,7 +355,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListClientes.SelectedValue = p.cliente.id.ToString();
 
                 }
-
+                this.cargarVendedor();
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 this.DropListFormaPago.SelectedValue = p.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
@@ -2038,7 +2039,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.ptoV = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                         p.fecha = DateTime.Now;
                         p.cotizacion.id = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
-                        p.vendedor.id = cl.vendedor.id;
+                        p.vendedor.id = Convert.ToInt32(this.DropListVendedor.SelectedValue);
                         p.formaPAgo.id = cl.formaPago.id;
                         p.listaP.id = cl.lisPrecio.id;
                         p.comentario = this.txtComentarios.Text;
