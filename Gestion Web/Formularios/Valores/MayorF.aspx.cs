@@ -279,7 +279,11 @@ namespace Gestion_Web.Formularios.Valores
                         ddls[i].DataValueField = "Id";
                         ddls[i].DataBind();
                     }
-                    lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
+                    //lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
+                    if (!string.IsNullOrEmpty(ddls[i].SelectedValue))
+                        lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
+                    else
+                        lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, 0);
                 }
             }
             catch (Exception ex)
