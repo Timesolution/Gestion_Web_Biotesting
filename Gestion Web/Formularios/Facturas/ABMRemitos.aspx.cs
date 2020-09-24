@@ -1507,11 +1507,12 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             ItemRemitoTemporal itemRemitoTemporal = new ItemRemitoTemporal();
                             itemRemitoTemporal.codigo = datos[0];
+                            itemRemitoTemporal.linea = datos[1];
                             itemRemitoTemporal.cantidad = datos[2];
                             itemRemitoTemporal.descripcion = datos[3];
                             itemRemitoTemporal.precioUnitario = datos[4];
                             itemRemitoTemporal.total = datos[6];
-                            itemRemitoTemporal.linea = contador.ToString();
+                            //itemRemitoTemporal.linea = contador.ToString();
 
                             if (VerificarQueLosCamposEstenCorrectos(itemRemitoTemporal))
                             {
