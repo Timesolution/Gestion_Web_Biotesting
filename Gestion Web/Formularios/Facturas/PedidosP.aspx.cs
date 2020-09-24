@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Facturas
         private string fechaEntregaH;
         private int idCliente;
         private int idEstado;
+        private int zona;
         int idVendedor;
         int tipoEntrega;
         int tipoFecha;
@@ -55,6 +56,7 @@ namespace Gestion_Web.Formularios.Facturas
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
                 suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
+                this.zona= Convert.ToInt32(Request.QueryString["zona"]);
                 idCliente = Convert.ToInt32(Request.QueryString["Cliente"]);
                 idEstado = Convert.ToInt32(Request.QueryString["estado"]);
                 Vendedor = Convert.ToInt32(Request.QueryString["V"]);
@@ -63,6 +65,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.tipoEntrega = Convert.ToInt32(Request.QueryString["te"]);
                 this.tipoFecha = Convert.ToInt32(Request.QueryString["tf"]);
                 this.tipoFecha2 = Convert.ToInt32(Request.QueryString["tf2"]);
+
+
                 //this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
 
                 this.numero = Request.QueryString["n"];
@@ -132,14 +136,14 @@ namespace Gestion_Web.Formularios.Facturas
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         this.ListVendedor.SelectedValue = this.idVendedor.ToString();
                         this.Vendedor = idVendedor;
-                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor,this.zona);
                     }
                     else if (perfil == "Cliente")
                     {
                         //deshabilito el list de vendedor
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         //para asegurarme de cargar por defecto los pedidos del cliente
-                        this.cargarPedidosRango(fechaD, fechaH, suc, this.idVendedor, idEstado, this.Vendedor);
+                        this.cargarPedidosRango(fechaD, fechaH, suc, this.idVendedor, idEstado, this.Vendedor,this.zona);
                     }
                     else if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
                     {
@@ -148,8 +152,8 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
-                    }                    
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona);
+                    }
 
                     //if (idCliente > 0)
                     //{
@@ -185,9 +189,9 @@ namespace Gestion_Web.Formularios.Facturas
                     this.lbtnFacturar.Visible = true;
                 }
 
-                if(accion == 5)
+                if (accion == 5)
                 {
-                    cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor);
+                    cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona);
                 }
 
                 if (idCliente > 0)
@@ -580,6 +584,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorZona contZona = new controladorZona();
 
                 var list = contZona.obtenerZona();
+                var listaZonas = contZona.obtenerZona();
                 if (list != null)
                 {
 
@@ -596,6 +601,22 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.DropListZonaEntregaCantidad.DataBind();
 
+
+
+                }
+                if (listaZonas != null)
+                {
+                    listaZonas.Insert(0, new Gestion_Api.Entitys.Zona
+                    {
+                        id = 0,
+                        nombre = "Todos"
+                    });
+
+                    this.DropListZona.DataSource = listaZonas;
+                    this.DropListZona.DataValueField = "id";
+                    this.DropListZona.DataTextField = "nombre";
+
+                    this.DropListZona.DataBind();
                 }
             }
             catch (Exception Ex)
@@ -713,7 +734,7 @@ namespace Gestion_Web.Formularios.Facturas
         #endregion
 
         #region funciones busquedas
-        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor)
+        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor,int zona)
         {
             try
             {
@@ -890,7 +911,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //fila
                 TableRow tr = new TableRow();
-                tr.ID = p["id"].ToString();             
+                tr.ID = p["id"].ToString();
 
                 //Celdas
                 TableCell celFecha = new TableCell();
@@ -1257,13 +1278,13 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             Response.Redirect("PedidosP.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal="
                                 + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&art=");
+                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&art=");
                         }
                         else
                         {
                             Response.Redirect("PedidosP.aspx?fechadesde=" + this.txtFechaEntregaDesde.Text + "&fechaHasta=" + this.txtFechaEntregaHasta.Text + "&Sucursal="
                                 + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&art=");
+                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue+ "&art=");
                         }
                     }
                     else
@@ -1306,7 +1327,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    if(accion == 5)
+                    if (accion == 5)
                         ch = tr.Cells[8].Controls[2] as CheckBox;
                     else
                         ch = tr.Cells[5].Controls[2] as CheckBox;
@@ -1527,7 +1548,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
-                if(contador > 1)
+                if (contador > 1)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo puede remitir un pedido a la vez!"));
                     return;
@@ -2040,7 +2061,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 throw;
             }
-            
+
         }
     }
 }

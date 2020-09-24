@@ -344,6 +344,13 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEstado" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3">Zona</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListZona" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                         </div>

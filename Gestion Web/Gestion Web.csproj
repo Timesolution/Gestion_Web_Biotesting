@@ -367,6 +367,7 @@
     <Content Include="Formularios\Clientes\ProspectosF.aspx" />
     <Content Include="Formularios\Clientes\ProspectosABM.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
+    <Content Include="Formularios\Facturas\ConsolidarP.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Facturas\CronogramaPagosF.aspx" />
@@ -1506,6 +1507,13 @@
     </Compile>
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.designer.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ConsolidarP.aspx.cs">
+      <DependentUpon>ConsolidarP.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ConsolidarP.aspx.designer.cs">
+      <DependentUpon>ConsolidarP.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\CRM.aspx.cs">
       <DependentUpon>CRM.aspx</DependentUpon>
