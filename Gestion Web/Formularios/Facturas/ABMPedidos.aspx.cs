@@ -417,6 +417,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.phDatosEntrega.Visible = true;
                 this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones;
                 //this.txtPorcDescuento.Text = p.neto10.ToString();
+                this.txtDescuento.Text = p.descuento.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroPedido();
@@ -437,6 +438,7 @@ namespace Gestion_Web.Formularios.Facturas
                 var idsCotizaciones = idCotizacion.Split(';').ToList();
                 idsCotizaciones.Remove(idsCotizaciones.Last());
                 decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
+                decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
 
                 Pedido p = new Pedido();
 
@@ -448,6 +450,7 @@ namespace Gestion_Web.Formularios.Facturas
                 p.cliente = cliente;
                 p.tipo.id = 13;//id tipo documento pedido
                 p.formaPAgo.id = cliente.formaPago.id;
+                p.descuento = descuentoNeto;
 
                 for (int i = 0; i < idsCotizaciones.Count; i++)
                 {
@@ -479,6 +482,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (!descuentosDiferentes)
                     p.neto10 = descuentoTemp;
+                   
+                    
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Las cotizaciones tienen descuentos distintos! El descuento para el pedido sera 0"));

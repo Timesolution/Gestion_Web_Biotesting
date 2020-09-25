@@ -690,7 +690,7 @@ namespace Gestion_Web.Formularios.Facturas
                     foreach (Control C in phCotizaciones.Controls)
                     {
                         TableRow tr = C as TableRow;
-                        if (!tr.Cells[5].Text.Contains("Anulada"))
+                        if (!tr.Cells[4].Text.Contains("Anulado"))
                         {
                             CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
 
@@ -709,6 +709,8 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             int aux = 0;
                             int contadorRepetido = 0;
+                            decimal descuento = 0;
+                            bool validarDescuento = false;
 
                             string errores = null;
                             string[] j = idtildado.Split(';');
@@ -723,9 +725,17 @@ namespace Gestion_Web.Formularios.Facturas
                                     if (i == 0)
                                     {
                                         idC = cotizacion.cliente.id; //FIJO
+                                        descuento = cotizacion.neto10;
+                                    }
+                                    else
+                                    {
+                                        if(descuento != cotizacion.neto10)
+                                        {
+                                            validarDescuento = true;
+                                        }
                                     }
                                     aux = cotizacion.cliente.id; //CAMBIA
-
+                                  
                                     if (idC != aux && i != 0)
                                     {
                                         contadorRepetido++;
@@ -737,22 +747,28 @@ namespace Gestion_Web.Formularios.Facturas
                                 }
 
                             }
-
-                            if(errores == null)
+                            if (!validarDescuento)
                             {
-                                if (contadorRepetido == 0)
+                                if (errores == null)
                                 {
-                                    Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado + "&cliente=" + aux, false);
+                                    if (contadorRepetido == 0)
+                                    {
+                                        Response.Redirect("../../Formularios/Facturas/ABMPedidos.aspx?accion=4&Cot=" + idtildado + "&cliente=" + aux, false);
+                                    }
+                                    else
+                                    {
+                                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar cotizaciones que sean del mismo cliente."));
+                                    }
                                 }
                                 else
                                 {
-                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar cotizaciones que sean del mismo cliente."));
+                                    Log.EscribirSQL(1, "ERROR", "Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click. Una de las cotizaciones arrojo null al buscarla en la BD. Codigo: var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));");
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Esta cotizaciones no se puedieron procesar,</br> ID Cotizacion: " + errores + ""));
                                 }
                             }
                             else
                             {
-                                Log.EscribirSQL(1, "ERROR", "Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click. Una de las cotizaciones arrojo null al buscarla en la BD. Codigo: var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));");
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Esta cotizaciones no se puedieron procesar,</br> ID Cotizacion: " + errores + ""));
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar cotizaciones con el mismo porcentaje de descuento"));
                             }
                         }
                         else

@@ -119,15 +119,15 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 else
                 {
                     //verifico si puede cambiar preci0s
-                    string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
-                    if (permiso2 != null)
-                    {                        
-                        if (accion == 2)
-                        {
-                            this.permisoEditar = 1;
+                    //string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
+                    //if (permiso2 != null)
+                    //{                        
+                    //    if (accion == 2)
+                    //    {
+                    //        this.permisoEditar = 1;
                                                     
-                        }
-                    }
+                    //    }
+                    //}
                     //verifico si puede cambiar stock
                     string permiso3 = listPermisos.Where(x => x == "69").FirstOrDefault();
                     if (permiso3 != null)

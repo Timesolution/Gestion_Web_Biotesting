@@ -751,7 +751,9 @@
         function CheckAll() {
             var total = 0;
             for (var i = 1; i < document.getElementById('dataTablesP-example').rows.length; i++) {
-                document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = true;
+                //document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = true;
+                document.getElementById('dataTablesP-example').rows[i].cells[5].childNodes[2].children[0].checked = true;
+
             }
         }
     </script>
@@ -760,7 +762,8 @@
         function CheckNone() {
             var total = 0;
             for (var i = 1; i < document.getElementById('dataTablesP-example').rows.length; i++) {
-                document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = false;
+                //document.getElementById('dataTablesP-example').rows[i].cells[8].childNodes[2].childNodes[0].checked = false;
+                document.getElementById('dataTablesP-example').rows[i].cells[5].childNodes[2].children[0].checked = false;
             }
         }
     </script>
