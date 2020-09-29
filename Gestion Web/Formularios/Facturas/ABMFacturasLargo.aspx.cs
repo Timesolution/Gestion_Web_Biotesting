@@ -11625,5 +11625,27 @@ namespace Gestion_Web.Formularios.Facturas
         //    public string alias;
         //}
         #endregion
+
+        protected void btnCalcularRetencionPorMonto_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtPorcRetencion.Text = "0";
+                ActualizarTotales();
+                if (!String.IsNullOrWhiteSpace(txtMontoRetencionCalcular.Text))
+                {
+                    txtPorcRetencion.Text = decimal.Round((Convert.ToDecimal(txtsubTotal.Text) * (Convert.ToDecimal(txtMontoRetencionCalcular.Text) / 100)), 2).ToString();
+                    ActualizarTotales();
+                }
+                //Para recalcular el label del modal de metodo de pago de tarjeta
+                this.txtRetencion.Text = txtMontoRetencionCalcular.Text;
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "cerrarModalRetencionMonto();", true);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en ABMFacturasLargo.btnCalcularRetencionPorMonto_Click. Excepcion: " + ex.Message);
+                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte para informarnos sobre este error.", true);
+            }
+        }
     }
 }
