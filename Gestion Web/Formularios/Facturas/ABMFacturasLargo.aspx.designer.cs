@@ -733,6 +733,15 @@ namespace Gestion_Web.Formularios.Facturas {
         protected global::System.Web.UI.WebControls.TextBox txtPorcRetencion;
         
         /// <summary>
+        /// A3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor A3;
+        
+        /// <summary>
         /// txtRetencion control.
         /// </summary>
         /// <remarks>
@@ -2342,6 +2351,42 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarMontoParaCalcularPorcentajeDescuento;
+        
+        /// <summary>
+        /// txtMontoRetencionCalcular control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMontoRetencionCalcular;
+        
+        /// <summary>
+        /// updatePanel15 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updatePanel15;
+        
+        /// <summary>
+        /// Label4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label4;
+        
+        /// <summary>
+        /// btnCalcularRetencionPorMonto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCalcularRetencionPorMonto;
         
         /// <summary>
         /// Panel2 control.

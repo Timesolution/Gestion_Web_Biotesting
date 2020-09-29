@@ -681,32 +681,33 @@
                                                                 </div>
 
                                                                 <div class="form-group" style="text-align: left">
-                                                                    <label class="col-md-3">Percepción: </label>
+                                                                    <label class="col-md-3">Percepción %: </label>
                                                                     <div class="col-md-4">
                                                                         <asp:TextBox ID="txtPorcRetencion" Style="text-align: right" runat="server" class="form-control" AutoPostBack="True" OnTextChanged="txtRetencion_TextChanged" TextMode="Number" Text="0"></asp:TextBox>
-
                                                                     </div>
-                                                                    <div class="col-md-5">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">$</span>
-
-                                                                            <asp:TextBox ID="txtRetencion" Style="text-align: right" runat="server" class="form-control" Text="0.00" disabled></asp:TextBox>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="form-group" style="text-align: left">
-                                                                    <strong>
-                                                                        <label class="col-md-3">Total:</label></strong>
-                                                                    <div class="col-md-9">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">$</span>
-                                                                            <asp:TextBox ID="txtTotal" Style="text-align: right" runat="server" class="form-control" onchange="javascript:return ActualizarTotalArticulos();" Text="0.00" disabled Font-Bold="True"></asp:TextBox>
-                                                                        </div>
+                                                                <div class="col-md-5">
+                                                                    <div class="input-group">
+                                                                        <a class="btn btn-info ui-tooltip input-group-addon" title data-original-title="Retencion" data-toggle="modal" href="#modalCalcularRetencionConUnMonto" runat="server" id="A3" visible="true">
+                                                                            <i class="shortcut-icon icon-money"></i>
+                                                                        </a>
+                                                                        <asp:TextBox ID="txtRetencion" Style="text-align: right" runat="server" class="form-control" Text="0.00" disabled></asp:TextBox>
+                                                                        <%--<span class="input-group-addon">$</span>--%>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </td>
+
+                                                            <div class="form-group" style="text-align: left">
+                                                                <strong>
+                                                                    <label class="col-md-3">Total:</label></strong>
+                                                                <div class="col-md-9">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">$</span>
+                                                                        <asp:TextBox ID="txtTotal" Style="text-align: right" runat="server" class="form-control" onchange="javascript:return ActualizarTotalArticulos();" Text="0.00" disabled Font-Bold="True"></asp:TextBox>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                        </div>
+                                        </td>
                                                         <%--<td>
                                                             <div role="form" class="form-horizontal col-md-12">
                                                                 <div class="form-group" style="text-align: left">
@@ -788,7 +789,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
+                                    </div>
                                     </div>
 
                                 </ContentTemplate>
@@ -1971,6 +1972,47 @@
                 </div>
             </div>
         </div>
+        <%-- FIN MODAL --%>
+
+        <%-- MODAL CALCULAR RETENCION CON MONTO --%>
+        <div id="modalCalcularRetencionConUnMonto" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="btnCerrarModalRetencionMonto" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
+                        <h4 class="modal-title">Aplicar Retencion</h4>
+                    </div>
+                    <div class="modal-body" style="padding-bottom: 0px;">
+
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <label for="validateSelect" class="col-md-3">Monto de Retencion</label>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <asp:TextBox ID="txtMontoRetencionCalcular" runat="server" class="form-control" TextMode="Number" Text="100" ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">$</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <asp:RequiredFieldValidator ErrorMessage="*" Font-Bold="true" ForeColor="Red" ValidationGroup="PorcentajeCantGroup" ControlToValidate="txtMontoRetencionCalcular" runat="server" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <asp:UpdatePanel ID="updatePanel15" runat="server">
+                            <ContentTemplate>
+                                <asp:Label ID="Label4" runat="server" Style="display: none;"></asp:Label>
+                                <asp:LinkButton ID="btnCalcularRetencionPorMonto" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar Retencion" ValidationGroup="MontoDescuentoGroup" OnClick="btnCalcularRetencionPorMonto_Click" />
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%-- FIN MODAL --%>
+
         <%--MODAL BUSCAR ARTICULOS --%>
         <div id="modalBuscarArticuloDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
             <asp:Panel ID="Panel2" runat="server">
@@ -2620,6 +2662,9 @@
         }
         function cerrarModalDescuentoMonto() {
             document.getElementById('btnCerrarModalDescuentoMonto').click();
+        }
+        function cerrarModalRetencionMonto() {
+            document.getElementById('btnCerrarModalRetencionMonto').click();
         }
     </script>
 
