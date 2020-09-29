@@ -4403,6 +4403,25 @@ namespace Gestion_Web.Formularios.Clientes
             }
         }
 
+        protected void DropListIva_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if(DropListIva.SelectedValue == "1")
+                {
+                    txtCuit.MaxLength = 20;
+                }
+                else
+                {
+                    txtCuit.MaxLength = 11;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "Ubicacion en ClientesABM.DropListIva_SelectedIndexChanged .Excepcion: " + ex.Message);
+            }
+        }
+
 
 
         #endregion

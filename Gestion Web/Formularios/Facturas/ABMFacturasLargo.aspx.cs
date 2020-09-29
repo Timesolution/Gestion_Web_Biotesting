@@ -11634,7 +11634,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ActualizarTotales();
                 if (!String.IsNullOrWhiteSpace(txtMontoRetencionCalcular.Text))
                 {
-                    txtPorcRetencion.Text = (Convert.ToDecimal(txtMontoRetencionCalcular.Text) / 100).ToString();
+                    txtPorcRetencion.Text = decimal.Round((Convert.ToDecimal(txtsubTotal.Text) * (Convert.ToDecimal(txtMontoRetencionCalcular.Text) / 100)), 2).ToString();
                     ActualizarTotales();
                 }
                 //Para recalcular el label del modal de metodo de pago de tarjeta

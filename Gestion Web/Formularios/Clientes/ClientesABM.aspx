@@ -144,7 +144,7 @@
                                                     <div class="form-group">
                                                         <label for="validateSelect" class="col-md-4">Iva</label>
                                                         <div class="col-md-4">
-                                                            <asp:DropDownList ID="DropListIva" runat="server" class="form-control">
+                                                            <asp:DropDownList ID="DropListIva" runat="server" class="form-control" OnSelectedIndexChanged="DropListIva_SelectedIndexChanged" AutoPostBack="true">
                                                                 <asp:ListItem Text="Seleccione..." Value="-1"></asp:ListItem>
                                                             </asp:DropDownList>
                                                         </div>
