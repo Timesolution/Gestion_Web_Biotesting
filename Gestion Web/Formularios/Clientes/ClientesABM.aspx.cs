@@ -1608,7 +1608,7 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente.direcciones = this.obtenerListDirecciones();
 
 
-                if (this.controlador.validateCuit(this.txtCuit.Text, this.DropListTipo.SelectedItem.Text))
+                if (this.controlador.validateCuit(this.txtCuit.Text, this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
                 {
                     if (accion == 1) //Si es 1 es cliente 
                     {
@@ -1894,7 +1894,7 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente.formaPago.id = this.controlador.obtenerPrimerFormaPago();
                 }
 
-                if (this.controlador.validateCuit(this.txtCuit.Text.Replace("-", String.Empty), this.DropListTipo.SelectedItem.Text))
+                if (this.controlador.validateCuit(this.txtCuit.Text.Replace("-", String.Empty), this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
                 {
                     if (accion == 2)
                     {
@@ -1943,7 +1943,6 @@ namespace Gestion_Web.Formularios.Clientes
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El CUIT ingresado es incorrecto"));
-
                 }
 
             }
