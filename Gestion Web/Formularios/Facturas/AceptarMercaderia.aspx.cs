@@ -42,17 +42,12 @@ namespace Gestion_Web.Formularios.Facturas
             { 
                 btnAgregar.Attributes.Add("disabled", "disabled");
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "alert", "InformarAvisoCaja()", true);
-                //ClientScript.RegisterClientScriptBlock(this.UpdatePanel1.GetType(), "alert", "InformarAvisoCaja()",true);
-                //string script = " $.msgGrowl(\"Error al guardar los detalles de la mercaderia! \", {type: \"warning\"});";
-                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
-                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "InformarAvisoCaja", "InformarAvisoCaja();", true);
-                //ScriptManager.RegisterStartupScript(this, this.GetType(), "asd", "InformarAvisoCaja();", true);
 
             }
             else if (result == -1)
             {
                 btnAgregar.Attributes.Remove("disabled");
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("error"));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este error. En lo posible, mandenos captura de pantalla con el mensaje de error via WhatsApp."));
             }
         }
 
