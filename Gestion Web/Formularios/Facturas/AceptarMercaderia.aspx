@@ -39,7 +39,7 @@
                                             <div class="col-md-3">
                                                 <asp:TextBox ID="txtNumero" MaxLength="8" runat="server" class="form-control" disabled="true" onchange="completar8Ceros(this, this.value)"></asp:TextBox>
                                             </div>
-                                        </div>                                                                                
+                                        </div>
                                     </fieldset>
                                 </div>
 
@@ -59,7 +59,7 @@
                                 <br />
                                 <div class="btn-toolbar">
                                     <div class="btn-group">
-                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" OnClick="btnAgregar_Click" class="btn btn-success"  />
+                                        <asp:Button ID="btnAgregar" type="button" runat="server" Text="Guardar" OnClick="btnAgregar_Click" class="btn btn-success" />
                                     </div>
                                 </div>
                             </div>
@@ -101,8 +101,7 @@
                 key = e.which;
             }
             if (key < 48 || key > 57) {
-                if (key == 8)
-                {
+                if (key == 8) {
                     return true;
                 }
                 else {
@@ -110,6 +109,17 @@
                 }
             }
             return true;
+        }
+
+        
+    </script>
+    <script type="text/javascript">
+        function InformarAvisoCaja() {
+            $.msgGrowl({
+                type: 'warning'
+                , title: 'Atencion'
+                , text: 'Disculpe, no se podra aceptar la mercaderia porque hay una caja con fecha de apertura mayor al dia de hoy.'
+            });
         }
     </script>
 

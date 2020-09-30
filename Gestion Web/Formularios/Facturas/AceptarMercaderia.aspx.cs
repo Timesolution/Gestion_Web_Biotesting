@@ -16,6 +16,7 @@ namespace Gestion_Web.Formularios.Facturas
         Mensajes m = new Mensajes();
         controladorFacturacion contFacturacion = new controladorFacturacion();
         controladorFactEntity contFactEntity = new controladorFactEntity();
+        controladorCajaEntity controladorCajaEntity = new controladorCajaEntity();
         int fc = 0;
         int fm = 0;
 
@@ -23,6 +24,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             this.VerificarLogin();
 
+            int idSucursal = (int)Session["Login_SucUser"];
             fc = Convert.ToInt32(Request.QueryString["fc"]);
             fm = Convert.ToInt32(Request.QueryString["fm"]);
 
@@ -34,6 +36,24 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
             CargarItemsFacturaEnPH();
+
+            int result = controladorCajaEntity.ObtenerFechaAperturaDePuntosVta(idSucursal);
+            if (result == 0)
+            { 
+                btnAgregar.Attributes.Add("disabled", "disabled");
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "alert", "InformarAvisoCaja()", true);
+                //ClientScript.RegisterClientScriptBlock(this.UpdatePanel1.GetType(), "alert", "InformarAvisoCaja()",true);
+                //string script = " $.msgGrowl(\"Error al guardar los detalles de la mercaderia! \", {type: \"warning\"});";
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "InformarAvisoCaja", "InformarAvisoCaja();", true);
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "asd", "InformarAvisoCaja();", true);
+
+            }
+            else if (result == -1)
+            {
+                btnAgregar.Attributes.Remove("disabled");
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("error"));
+            }
         }
 
         private void VerificarLogin()
@@ -139,7 +159,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error al cargar los items de la factura en el PH " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al cargar los items de la factura en el PH " + ex.Message);
             }
         }
 
@@ -216,7 +236,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string[] tempTexts = tr.ID.Split('_');
                     int idItemFactura = Convert.ToInt32(tempTexts[0]);
                     int idArticulo = Convert.ToInt32(tempTexts[1]);
-                    
+
                     FacturasMercaderias_Detalle fcmDetalle = new FacturasMercaderias_Detalle();
 
                     fcmDetalle.IdItemFactura = Convert.ToInt32(idItemFactura);
@@ -231,13 +251,13 @@ namespace Gestion_Web.Formularios.Facturas
                     fcmDetallelista.Add(fcmDetalle);
                 }
 
-                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles((int)Session["Login_IdUser"], fcmDetallelista, fc,hayDiferencia);
+                int temp = contFactEntity.GuardarFacturasMercaderiasDetalles((int)Session["Login_IdUser"], fcmDetallelista, fc, hayDiferencia);
 
-                if(temp > 0)
+                if (temp > 0)
                 {
                     Log.EscribirSQL(1, "Info", "Se guardaron los detalles de la mercaderia con exito");
                     string script = " $.msgbox(\"Mercaderia aceptada con exito! \", {type: \"info\"}); location.href = 'FacturasMercaderiasF.aspx'";
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
                 }
                 else
                 {
