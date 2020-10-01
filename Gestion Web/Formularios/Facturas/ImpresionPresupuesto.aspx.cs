@@ -50,17 +50,26 @@ namespace Gestion_Web.Formularios.Facturas
                     idPresupuesto = Convert.ToInt32(Request.QueryString["Presupuesto"]);
                     this.accion = Convert.ToInt32(Request.QueryString["a"]);
                     this.original = Convert.ToInt32(Request.QueryString["o"]);
-                    
+
                     if (Request.QueryString["div"] != null)
                     {
                         idMoneda = Convert.ToInt32(Request.QueryString["div"]);
                         Moneda moneda = controladorMoneda.obtenerMonedaID(idMoneda);
                         Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(idPresupuesto);
 
-                        if(facturas_Moneda.idMoneda == moneda.id)
-                            imprimirOtraDivisa = facturas_Moneda.ValorMoneda;
+                        if (facturas_Moneda != null)
+                        {
+                            if (facturas_Moneda.idMoneda == moneda.id)
+                                imprimirOtraDivisa = facturas_Moneda.ValorMoneda;
+                            else
+                                imprimirOtraDivisa = moneda.cambio;
+                        }
                         else
-                            imprimirOtraDivisa = moneda.cambio;
+                        {
+                            imprimirOtraDivisa = 1;
+                        }
+
+
                     }
 
                     //presupuesto
@@ -1038,7 +1047,7 @@ namespace Gestion_Web.Formularios.Facturas
                 String textoDolares = String.Empty;
                 if (dolar != null)
                 {
-                    if(imprimirOtraDivisa > 0 && dolar.id == idMoneda)
+                    if (imprimirOtraDivisa > 0 && dolar.id == idMoneda)
                         TotalDolares = Decimal.Round((total / imprimirOtraDivisa), 3);
                     else
                         TotalDolares = Decimal.Round((total / dolar.cambio), 3);
