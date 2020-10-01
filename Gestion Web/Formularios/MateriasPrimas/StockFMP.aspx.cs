@@ -129,7 +129,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                     //    }
                     //}
                     //verifico si puede cambiar stock
-                    string permiso3 = listPermisos.Where(x => x == "69").FirstOrDefault();
+                    string permiso3 = listPermisos.Where(x => x == "241").FirstOrDefault();
                     if (permiso3 != null)
                     {
                         if (accion == 2)
@@ -142,7 +142,7 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                     string perfil = Session["Login_NombrePerfil"] as string;
                     if (perfil == "SuperAdministrador")
                     {
-                        this.permisoEditar = 1;
+                        //this.permisoEditar = 1;
                         this.lstSucursal.Attributes.Remove("disabled");
                         this.ListSucursalPF.Attributes.Remove("disabled");
                     }
