@@ -23,6 +23,9 @@
                                     <li>
                                         <a href="#modalConfirmacionArticulo" data-toggle="modal" style="width: 90%">Importar Articulos</a>
                                     </li>
+                                    <li>
+                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click">Exportar Articulos</asp:LinkButton>
+                                    </li>
                                 </ul>
                             </div>
                         </td>
@@ -1309,7 +1312,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Importar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false"/> 
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Importar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
@@ -1524,6 +1527,15 @@
             return true;
         }
     </script>
+    <script type="text/javascript">
+        function MensajeArchivoDescargado() {
+            $.msgGrowl({
+                type: 'success'
+                , title: 'Descargado'
+                , text: 'El archivo se encuentra en la carpeta ArchivoExportacion/Salida.'
+            });
+        }
+    </script>
     <%--<script>
         function disableButton(btnImportarArticulo) {
             var btn = document.getElementById(btnImportarArticulo);
@@ -1537,6 +1549,4 @@
             btn2.disable = false;
         }
     </script>--%>
-
-
 </asp:Content>

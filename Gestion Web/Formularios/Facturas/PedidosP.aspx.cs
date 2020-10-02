@@ -2063,5 +2063,44 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
+        protected void lbtnConsolidar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckBox ch = null;
+                string idtildado = "";
+                bool verificarClientesIguales = false;
+                foreach (Control C in phPedidos.Controls)
+                {
+                   
+                    TableRow tr = C as TableRow;
+                    if (accion == 5)
+                        ch = tr.Cells[8].Controls[2] as CheckBox;
+                    else
+                        ch = tr.Cells[5].Controls[2] as CheckBox;
+
+                    if (ch.Checked == true)
+                    {
+                        idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    Response.Redirect("../../Formularios/Facturas/ConsolidarP.aspx?pedidos=" + idtildado);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
+            }
+        }
+
+   
     }
 }
