@@ -644,6 +644,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cargarItems();
                 this.ActualizarTotales();
                 this.obtenerNroFactura();
+                this.CargarDropList_DireccionesDeEntregaDelCliente(f.cliente.id);
 
                 var itemCero = f.items.Where(x => x.total == 0).FirstOrDefault();
                 if (itemCero != null)
@@ -6554,7 +6555,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 var facturaActual = Session["Factura"] as Factura;
 
-                if (facturaActual.total >= Convert.ToInt32(configuracion.TopeLimiteFacturacionParaPedirCuit) && facturaActual.EsFactura() && (facturaActual.cliente.cuit.Length != 11 || facturaActual.cliente.cuit == "00000000000"))
+                if (facturaActual.total >= Convert.ToInt32(configuracion.TopeLimiteFacturacionParaPedirCuit) && facturaActual.EsFactura() && (facturaActual.cliente.cuit.Length != 11 || facturaActual.tipo.id != 24 || facturaActual.cliente.cuit == "00000000000"))
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto de la factura es mayor a " + configuracion.TopeLimiteFacturacionParaPedirCuit + ", se requiere CUIT del comprador \", {type: \"alert\"});", true);
                     return 0;
