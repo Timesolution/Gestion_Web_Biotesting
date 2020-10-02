@@ -15,22 +15,40 @@ namespace Gestion_Web.Formularios.Facturas
     {
 
         /// <summary>
-        /// lblParametros control.
+        /// phPedidos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblParametros;
+        protected global::System.Web.UI.WebControls.PlaceHolder phPedidos;
 
         /// <summary>
-        /// labelSaldo control.
+        /// phSaldo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelSaldo;
+        protected global::System.Web.UI.WebControls.PlaceHolder phSaldo;
+
+        /// <summary>
+        /// lblCodigoArticulo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCodigoArticulo;
+
+        /// <summary>
+        /// lblDescripcionArticulo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDescripcionArticulo;
 
         /// <summary>
         /// lblSaldo control.
@@ -42,12 +60,21 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.Label lblSaldo;
 
         /// <summary>
-        /// phFacturas control.
+        /// phArticulos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phFacturas;
+        protected global::System.Web.UI.WebControls.PlaceHolder phArticulos;
+
+        /// <summary>
+        /// btnAgregar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAgregar;
     }
 }

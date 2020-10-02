@@ -36,6 +36,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnFacturar" runat="server" OnClick="btnFacturar_Click">Facturar</asp:LinkButton>
                                             </li>
+                                             <li>
+                                                <asp:LinkButton ID="lbtnConsolidar" runat="server" OnClick="lbtnConsolidar_Click">Preparar Pedidos</asp:LinkButton>
+                                            </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnFacturarFamilia" runat="server" OnClick="lbtnFacturarFamilia_Click" Visible="false">Facturar por Grupo</asp:LinkButton>
                                             </li>

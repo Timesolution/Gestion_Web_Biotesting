@@ -366,7 +366,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtHorarioEntrega.Text = p.horaEntrega;
                 this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
                 this.txtComentarios.Text = p.comentario;
-                this.txtDescuento.Text = p.descuento.ToString();
+                this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
                 if(p.tipo.tipo == "Cotizacion") //cotizacion
