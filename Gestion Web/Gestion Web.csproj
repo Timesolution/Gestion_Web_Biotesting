@@ -57,7 +57,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\GestionApi\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -364,6 +364,7 @@
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Clientes\ABMEstadosCRM.aspx" />
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
+    <Content Include="Formularios\Clientes\FamiliaF.aspx" />
     <Content Include="Formularios\Clientes\ProspectosF.aspx" />
     <Content Include="Formularios\Clientes\ProspectosABM.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
@@ -1486,6 +1487,13 @@
     </Compile>
     <Compile Include="Formularios\Clientes\ActividadClientes.aspx.designer.cs">
       <DependentUpon>ActividadClientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Clientes\FamiliaF.aspx.cs">
+      <DependentUpon>FamiliaF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\FamiliaF.aspx.designer.cs">
+      <DependentUpon>FamiliaF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Clientes\ProspectosF.aspx.cs">
       <DependentUpon>ProspectosF.aspx</DependentUpon>
