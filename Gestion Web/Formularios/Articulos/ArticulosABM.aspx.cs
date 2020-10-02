@@ -4161,6 +4161,8 @@ namespace Gestion_Web.Formularios.Articulos
                     txtVisibilidad.Text = articuloEcommerce.Visibilidad;
                     txtColor.Text = articuloEcommerce.Color;
                     txtTalle.Text = articuloEcommerce.Talle;
+                    ListAuxiliar.SelectedValue = articuloEcommerce.Auxiliar.ToString();
+                    ListComisionable.SelectedValue = articuloEcommerce.Comisionable.ToString();
 
                 }
             }
@@ -4343,7 +4345,9 @@ namespace Gestion_Web.Formularios.Articulos
                     ProductoOnline = txtProductoOnline.Text,
                     Visibilidad = txtVisibilidad.Text,
                     Color = txtColor.Text,
-                    Talle = txtTalle.Text
+                    Talle = txtTalle.Text,
+                    Auxiliar = ListAuxiliar.SelectedValue,
+                    Comisionable = ListComisionable.SelectedValue
                 };
 
                 var articuloEcommerce = contArtEnt.AgregarArticuloEcommerce(articulosEcommerce);
