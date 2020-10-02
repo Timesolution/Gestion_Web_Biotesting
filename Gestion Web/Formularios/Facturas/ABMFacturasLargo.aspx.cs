@@ -160,7 +160,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if(accion!=9)
                         {
                             //selecciono punto de venta por defecto
-                            this.ListPuntoVenta.SelectedIndex = 1;
+                            //this.ListPuntoVenta.SelectedIndex = 1;
                         }
                         
                     }
@@ -687,7 +687,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                //this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                if (this.accion != 6 || ListPuntoVenta.SelectedIndex == 0)
+                {
+                    this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                }
                 if (!String.IsNullOrEmpty(f.comentario))
                 {
                     this.checkDatos.Checked = true;
@@ -1506,7 +1510,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //selecciono punto de venta electronica si existe
                 foreach (DataRow row in dt.Rows)
                 {
-                    if (row["FormaFactura"].ToString()=="Electronica")
+                    if (row["FormaFactura"].ToString() == "Electronica")
                     {
                         this.ListPuntoVenta.SelectedValue = row["Id"].ToString();
                         break;

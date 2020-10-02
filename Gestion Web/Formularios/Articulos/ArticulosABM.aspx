@@ -602,7 +602,8 @@
                                                         <div class="widget-header">
                                                             <span class="icon-group"></span>
                                                             <%--<h3>Otros Proveedores</h3>--%>
-                                                            <h3><asp:Label ID="lblNombreArticulo" runat="server"></asp:Label></h3>
+                                                            <h3>
+                                                                <asp:Label ID="lblNombreArticulo" runat="server"></asp:Label></h3>
                                                         </div>
                                                         <!-- .widget-header -->
 
@@ -1521,7 +1522,8 @@
                                     </asp:UpdatePanel>
                                 </div>
                                 <%--Medidas--%>
-                                <div class="tab-pane fade" id="Medidas">lbtnAgregarOEditarMedida_Click
+                                <div class="tab-pane fade" id="Medidas">
+                                    lbtnAgregarOEditarMedida_Click
                                     <asp:UpdatePanel ID="UpdatePanel9" UpdateMode="Always" runat="server">
                                         <ContentTemplate>
 
@@ -1534,7 +1536,7 @@
                                                     <br />
                                                     <fieldset>
                                                         <div class="form-group">
-                                                            <asp:Label Text="" ID="lbIDMedidaOculto" style="display:none" runat="server" />
+                                                            <asp:Label Text="" ID="lbIDMedidaOculto" Style="display: none" runat="server" />
                                                             <label for="name" class="col-md-2">Nombre:</label>
                                                             <div class="col-md-2">
                                                                 <asp:TextBox ID="txtMedidaNombre" runat="server" class="form-control"></asp:TextBox>
@@ -1896,7 +1898,7 @@
                                                                         <asp:LinkButton ID="lbtnApareceLista" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnApareceLista_Click" Style="width: 100%" ValidationGroup="ApareceListaGroup" />
                                                                     </div>
                                                                 </td>
-                                                            </tr> 
+                                                            </tr>
                                                             <tr>
                                                                 <td style="width: 90%">
                                                                     <label class="col-md-3">Arancel Importacion</label>
@@ -1913,7 +1915,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                             <tr>
+                                                            <tr>
                                                                 <td style="width: 90%">
                                                                     <label class="col-md-3">SIM</label>
                                                                     <div class="col-md-7">
@@ -1997,10 +1999,28 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
+                                                                    <label for="validateSelect" class="col-md-4">Auxiliar</label>
+                                                                    <div class="col-md-5">
+                                                                        <asp:DropDownList ID="ListAuxiliar" class="form-control" runat="server">
+                                                                            <asp:ListItem Value="1" Text="Si" ></asp:ListItem>
+                                                                            <asp:ListItem Value="2" Text="No" ></asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="validateSelect" class="col-md-4">Comisionable</label>
+                                                                    <div class="col-md-5">
+                                                                        <asp:DropDownList ID="ListComisionable" class="form-control" runat="server">
+                                                                            <asp:ListItem Value="1" Text="Si" ></asp:ListItem>
+                                                                            <asp:ListItem Value="2" Text="No" ></asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
                                                                     <asp:Button ID="btnGuardarEcommerce" ValidationGroup="store" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnGuardarEcommerce_Click" />
                                                                 </div>
-                                                          </fieldset>
-                                                       </div>
+                                                            </fieldset>
+                                                        </div>
                                                     </div>
                                                     <!-- /widget-content -->
                                                 </div>
