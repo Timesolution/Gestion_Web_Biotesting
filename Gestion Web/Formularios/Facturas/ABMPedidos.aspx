@@ -482,6 +482,7 @@
                                 <div role="form" class="form-horizontal col-md-12">
                                     <div class="col-md-12">
                                         <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="PedidosGroup" />
+                                        <asp:Button ID="btnAgregarBorrador" runat="server" Text="Guardar como borrador" class="btn btn-success" OnClick="btnAgregarBorrador_Click" ValidationGroup="PedidosGroup" />
                                         <asp:Button ID="btnNuevo" runat="server" Text="Nuevo" class="btn btn-success" OnClick="btnNuevo_Click" />
                                         <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="~/Formularios/Facturas/ABMPedidos.aspx" />
                                     </div>

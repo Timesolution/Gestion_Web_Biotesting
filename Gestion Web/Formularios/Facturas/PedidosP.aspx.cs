@@ -924,6 +924,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celNumero.Text = p["numero"].ToString().PadLeft(8, '0');
                 celNumero.HorizontalAlign = HorizontalAlign.Left;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
+                celNumero.Width = Unit.Percentage(15);
                 tr.Cells.Add(celNumero);
 
                 TableCell celRazon = new TableCell();
@@ -1025,6 +1026,24 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     celAccion.Controls.Add(lDetail);
                 }
+                Literal l4 = new Literal();
+                l4.Text = "&nbsp";
+                celAccion.Controls.Add(l4);
+
+                LinkButton btnCuentaCorriente = new LinkButton();
+                btnCuentaCorriente.CssClass = "btn btn-info ui-tooltip";
+                btnCuentaCorriente.Attributes.Add("data-toggle", "tooltip");
+                btnCuentaCorriente.Attributes.Add("title data-original-title", "Cuenta Corriente");
+                btnCuentaCorriente.ID = "btnCuentaCorriente_" + p["id"].ToString();
+                btnCuentaCorriente.Text = "<span class='shortcut-icon icon-money'></span>";
+                //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                btnCuentaCorriente.Font.Size = 12;
+                btnCuentaCorriente.Click += new EventHandler(this.redireccionarCuentaCorriente);
+                celAccion.Controls.Add(btnCuentaCorriente);
+                celAccion.Width = Unit.Percentage(20);
+                celAccion.VerticalAlign = VerticalAlign.Middle;
+
+               
 
                 tr.Cells.Add(celAccion);
 
@@ -1056,6 +1075,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celNumero.Text = p.numero.ToString().PadLeft(8, '0');
                 celNumero.HorizontalAlign = HorizontalAlign.Left;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
+                celNumero.Width = Unit.Percentage(7);
                 tr.Cells.Add(celNumero);
 
                 TableCell celRazon = new TableCell();
@@ -1115,6 +1135,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 TableCell celAccion = new TableCell();
 
+
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.CssClass = "btn btn-info ui-tooltip";
                 btnEliminar.Attributes.Add("data-toggle", "tooltip");
@@ -1125,7 +1146,7 @@ namespace Gestion_Web.Formularios.Facturas
                 btnEliminar.Font.Size = 12;
                 btnEliminar.Click += new EventHandler(this.detallePedido);
                 celAccion.Controls.Add(btnEliminar);
-                celAccion.Width = Unit.Percentage(10);
+                celAccion.Width = Unit.Percentage(20);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
 
                 Literal l3 = new Literal();
@@ -1194,12 +1215,39 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog(" + idPedido + ")", true);
 
             }
+
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de cotizacion desde la interfaz. " + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
             }
         }
+
+
+        private void redireccionarCuentaCorriente(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtengo numero factura
+                string idBoton = (sender as LinkButton).ID;
+                string[] atributos = idBoton.Split('_');
+                string idPedido = atributos[1];
+                Pedido ped = this.controlador.obtenerPedidoId(Convert.ToInt32(idPedido));
+                Response.Write("<script>window.open ('CuentaCorrienteF.aspx?a=2&Cliente=" + ped.cliente.id.ToString() + "&Sucursal=0" + "&Tipo=-1" + "&fd=01/01/2000" + "&fh=" + DateTime.Now.ToString("dd/MM/yyyy") + "','_blank');</script>");
+                //Response.Redirect("CuentaCorrienteF.aspx?a=2&Cliente=" + ped.cliente.id.ToString() + "&Sucursal=0" + "&Tipo=-1" + "&fd=01/01/2000" + "&fh=" + DateTime.Now.ToString("dd/MM/yyyy"));
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al abrir la cuenta corriente del cliente. " + ex.Message));
+                Log.EscribirSQL(1, "ERROR", "Error al abrir la cuenta corriente del cliente. " + ex.Message);
+            }
+
+
+        }
+
+
+
         //obtengo vendedor del cliente
         private void obtenerVendedor(int Cliente)
         {

@@ -132,7 +132,7 @@ namespace Gestion_Web.Formularios.Facturas
                     // se genera pedido desde la cotizacion
                     if (this.accion == 4)
                     {
-                        
+
                         //cargarCliente(Convert.ToInt32(cliente));
                         GenerarPedidoCotizacion();
                     }
@@ -153,7 +153,7 @@ namespace Gestion_Web.Formularios.Facturas
                     cambiarHabilitacionBotonbtnImportarXML();
                 }
 
-                
+
 
                 //si viene de la pantalla de articulos, modal
                 if (Session["PedidosABM_ArticuloModal"] != null)
@@ -347,8 +347,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
                 this.cargarCliente(p.cliente.id);
                 this.DropListClientes.SelectedValue = p.cliente.id.ToString();
-
-                if(DropListClientes.SelectedValue == "-1")
+                if (p.estado.id != this.controlador.obtenerEstadoDesc("Borrador").id)
+                {
+                    btnAgregarBorrador.Attributes.Add("disabled", "disabled");
+                }
+                if (DropListClientes.SelectedValue == "-1")
                 {
                     var c = contCliente.obtenerClienteID(p.cliente.id);
                     this.DropListClientes.Items.Add(new ListItem { Value = p.cliente.id.ToString(), Text = c.alias });
@@ -369,15 +372,15 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.cargarItems();
                 this.actualizarTotales();
-                if(p.tipo.tipo == "Cotizacion") //cotizacion
+                if (p.tipo.tipo == "Cotizacion") //cotizacion
                 {
                     this.labelNroPedido.Text = "Cotizacion N° " + p.numero;
                 }
-                else if(p.tipo.tipo == "Pedido")
+                else if (p.tipo.tipo == "Pedido")
                 {
                     this.labelNroPedido.Text = "Pedido N° " + p.numero;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -482,8 +485,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (!descuentosDiferentes)
                     p.neto10 = descuentoTemp;
-                   
-                    
+
+
                 else
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Las cotizaciones tienen descuentos distintos! El descuento para el pedido sera 0"));
@@ -1234,9 +1237,9 @@ namespace Gestion_Web.Formularios.Facturas
                             txtMailEntrega.Text = clienteDatos.Mail;
                             chkEnviarMail.Checked = true;
                         }
-                        
+
                     }
-                    
+
                     //try
                     //{
                     //    this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
@@ -1545,7 +1548,51 @@ namespace Gestion_Web.Formularios.Facturas
                 c.items.Add(item);
                 c.items = c.items.Distinct().ToList(); //AGREGA LOS ITEMS AL PEDIDO Y CHEQUEA QUE NO HAYA ID REPTIDOS DE LOS ITEMS 
                 Session.Add("Pedido", c);
+                #region Articulos compuestos
+                Articulo articuloCompuesto = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+                var articulos = contArticulo.obtenerArticulosByArticuloCompuesto(articuloCompuesto.id);
+                if (articulos != null)
+                {
 
+                    foreach (var art in articulos)
+                    {
+                        ItemPedido pedido = new ItemPedido();
+                        pedido.descripcion = art.articulo.descripcion;
+                        pedido.articulo = art.articulo;
+                        pedido.descripcion += "(" + articuloCompuesto.codigo + ")";
+                        pedido.articulo.costo = 0;
+                        pedido.articulo.costoImponible = 0;
+                        pedido.articulo.costoReal = 0;
+                        pedido.articulo.precioSinIva = 0;
+                        pedido.articulo.precioVenta = 0;
+                        pedido.cantidad = Convert.ToInt32(art.cantidad) * item.cantidad;
+                        pedido.descuento = 0;
+                        pedido.precioUnitario = 0;
+                        pedido.total = 0;
+
+                        this.Pedido.items.Add(pedido);
+                        //lo agrego al session
+                        if (Session["Factura"] == null)
+                        {
+                            Factura fac = new Factura();
+                            Session.Add("Factura", fac);
+                        }
+
+                        Pedido p = Session["Pedido"] as Pedido;
+
+
+
+                        pedido.nroRenglon = p.items.Count() + 1;
+
+                        p.items.Add(pedido);
+                        p.items = p.items.Distinct().ToList();
+                        Session.Add("Pedido", p);
+
+
+
+                    }
+                }
+                #endregion
                 //lo dibujo en pantalla
                 this.cargarItems();
 
@@ -1948,7 +1995,7 @@ namespace Gestion_Web.Formularios.Facturas
                 string neto = decimal.Round(this.Pedido.neto, 2).ToString();
                 this.txtNeto.Text = neto;
                 //if (this.txtDescuento.Text == "0")
-                    this.txtDescuento.Text = decimal.Round(this.Pedido.descuento, 2).ToString();
+                this.txtDescuento.Text = decimal.Round(this.Pedido.descuento, 2).ToString();
 
                 this.txtsubTotal.Text = decimal.Round(this.Pedido.subTotal, 2).ToString();
 
@@ -2069,23 +2116,31 @@ namespace Gestion_Web.Formularios.Facturas
                             tp = controlador.obtenerTipoDoc("Pedido");
                         }
                         p.tipo = tp;
-
-                        string perfil = Session["Login_NombrePerfil"] as string;
-                        if (perfil == "Vendedor")
+                        if (ViewState["Borrador"] != null)
                         {
-                            p.estado = this.controlador.obtenerEstadoDesc("Pendiente Vendedor");
+                            p.estado = this.controlador.obtenerEstadoDesc("Borrador");
+                            ViewState["Borrador"] = null;
                         }
                         else
                         {
-                            if (perfil == "Cliente")
+                            string perfil = Session["Login_NombrePerfil"] as string;
+                            if (perfil == "Vendedor")
                             {
-                                p.estado = this.controlador.obtenerEstadoDesc("A Autorizar");
+                                p.estado = this.controlador.obtenerEstadoDesc("Pendiente Vendedor");
                             }
                             else
                             {
-                                p.estado.id = int.Parse(confEstados.EstadoInicialPedidos);
+                                if (perfil == "Cliente")
+                                {
+                                    p.estado = this.controlador.obtenerEstadoDesc("A Autorizar");
+                                }
+                                else
+                                {
+                                    p.estado.id = int.Parse(confEstados.EstadoInicialPedidos);
+                                }
                             }
                         }
+
 
                         int i = this.controlador.ProcesarPedido(p);
                         if (i > 0)
@@ -2135,7 +2190,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 eventos.Descripcion = "Emisión de Pedido # " + pedido1.numero;
                             }
-                            
+
                             eventos.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
                             eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
                             eventos.Tarea = "";
@@ -2471,7 +2526,7 @@ namespace Gestion_Web.Formularios.Facturas
                         p.senia = this.txtSenia.Text;
                         p.estado.id = 1;//por defecto lo pongo en estado pendiente.
 
-                        if(this.labelNroPedido.Text.ToLower().Contains("cotizacion"))
+                        if (this.labelNroPedido.Text.ToLower().Contains("cotizacion"))
                         {
                             tp = controlador.obtenerTipoDoc("Cotizacion");
                             p.tipo = tp;
@@ -2482,25 +2537,31 @@ namespace Gestion_Web.Formularios.Facturas
                             tp = controlador.obtenerTipoDoc("Pedido");
                             p.tipo = tp;
                         }
-                        
 
-                        string perfil = Session["Login_NombrePerfil"] as string;
-                        if (perfil == "Vendedor")
+                        if (ViewState["Borrador"] != null)
                         {
-                            p.estado = this.controlador.obtenerEstadoDesc("Pendiente Vendedor");
+                            p.estado = this.controlador.obtenerEstadoDesc("Borrador");
+                            ViewState["Borrador"] = null;
                         }
                         else
                         {
-                            if (perfil == "Cliente")
+                            string perfil = Session["Login_NombrePerfil"] as string;
+                            if (perfil == "Vendedor")
                             {
-                                p.estado = this.controlador.obtenerEstadoDesc("A Autorizar");
+                                p.estado = this.controlador.obtenerEstadoDesc("Pendiente Vendedor");
                             }
                             else
                             {
-                                p.estado = this.controlador.obtenerEstadoDesc("Pendiente");
+                                if (perfil == "Cliente")
+                                {
+                                    p.estado = this.controlador.obtenerEstadoDesc("A Autorizar");
+                                }
+                                else
+                                {
+                                    p.estado = this.controlador.obtenerEstadoDesc("Pendiente");
+                                }
                             }
                         }
-
                         int i = this.controlador.ProcesarPedido(p);
                         if (i > 0)
                         {
@@ -2520,7 +2581,7 @@ namespace Gestion_Web.Formularios.Facturas
                             this.btnAgregar.Visible = false;
                             this.btnNuevo.Visible = true;
 
-                            if(this.cotizacion == 1)
+                            if (this.cotizacion == 1)
                             {
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico pedido  " + this.labelNroPedido.Text);
                                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?a=1&co=1&Pedido=" + i + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');location.href = 'ABMPedidos.aspx?c=1';", true);
@@ -3810,7 +3871,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     txtDescuento.Text = txtMontoParaAplicarDescuentoAlTotal.Text;
                     actualizarTotales();
-                    
+
                 }
                 //Para recalcular el label del modal de metodo de pago de tarjeta
                 //this.lblMontoOriginal.Text = (Convert.ToDecimal(this.txtTotal.Text)).ToString();
@@ -3922,7 +3983,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         foreach (XElement x in u.Elements("ITEM"))
                         {
-                            
+
                             codigo = x.Element("INVENTID").Value.ToString();
                             cantidad = Convert.ToDecimal(x.Element("QTY").Value);
                             color = x.Element("COLOR").Value.ToString();
@@ -3966,6 +4027,27 @@ namespace Gestion_Web.Formularios.Facturas
                 File.Delete(rutaCompleta);
                 Log.EscribirSQL(1, "ERROR", "Error importando pedidos desde archivo. Ubicacion: ABMPedidos.aspx / Metodo: btnImportarXML_Click " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("CATH: Error importando pedidos desde archivo."));
+            }
+        }
+
+        protected void btnAgregarBorrador_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ViewState["Borrador"] = 1;
+                if (this.accion == 2)
+                {
+                    this.modificarPedido();
+                }
+                else
+                {
+
+                    this.generarPedido();
+                }
+            }
+            catch
+            {
+
             }
         }
     }
