@@ -2568,6 +2568,10 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (c.monotributo == "1")
                 {
+                    if (this.ListPuntoVenta.SelectedValue == "-1")
+                    {
+                        this.ListPuntoVenta.SelectedIndex = 1;
+                    }
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                     //como estoy en cotizacion pido el ultimo numero de este documento
@@ -2576,6 +2580,10 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
+                    if (this.ListPuntoVenta.SelectedValue == "-1")
+                    {
+                        this.ListPuntoVenta.SelectedIndex = 1;
+                    }
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                     //como estoy en cotizacion pido el ultimo numero de este documento
