@@ -201,7 +201,6 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         string facturas = Request.QueryString["facturas"];
                         this.GenerarNotaCredito(facturas);
-                        this.obtenerNroNotaCreditoInicio();
                         this.phDatosEntrega.Visible = true;
                     }
 
