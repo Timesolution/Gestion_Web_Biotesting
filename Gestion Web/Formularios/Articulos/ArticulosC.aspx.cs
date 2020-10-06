@@ -488,7 +488,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 this.LitFiltro.Text = "Filtros: " + Sgrupo + ", " + SSubgrupo;
 
-                List<Articulo> articulos = this.controlador.filtrarArticulosGrupoSubGrupo(grupo, subgrupo, proveedor, sdias, marca, this.descSubGrupo);
+                List<Articulo> articulos = this.controlador.filtrarArticulosGrupoSubGrupoStore(grupo, subgrupo, proveedor, sdias, marca, this.descSubGrupo);
                 this.cargarArticulosTabla(articulos);
             }
             catch (Exception ex)
@@ -781,7 +781,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 this.phBotonesGrupos.Controls.Clear();
 
-                DataTable dtGrupos = controlador.obtenerGruposArticulos();
+                DataTable dtGrupos = controlador.obtenerGruposStore();
 
                 char letra = 'A';
                 string colorBoton = "btn btn-primary";
