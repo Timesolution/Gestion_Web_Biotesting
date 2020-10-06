@@ -80,7 +80,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (this.accion == 0)
                 {
                     List<Articulo> articulos = new List<Articulo>();
-                    articulos = this.controlador.obtenerArticulosReduc();
+                    articulos = this.controlador.obtenerArticulosReducStore();
                     this.cargarArticulosTabla(articulos);
                 }
                 this.cargarBotonesDeLosGrupos();
@@ -459,7 +459,7 @@ namespace Gestion_Web.Formularios.Articulos
                 List<Articulo> articulos = new List<Articulo>();
                 this.LitFiltro.Text = "Articulo " + art;
 
-                articulos = this.controlador.buscarArticuloList(art);
+                articulos = this.controlador.buscarArticuloListStore(art);
                 this.cargarArticulosTabla(articulos);
             }
             catch (Exception ex)
