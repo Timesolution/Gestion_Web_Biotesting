@@ -155,15 +155,15 @@ namespace Gestion_Web.Formularios.Facturas
                         //si el usuario tiene pto vta selecciono la del user
                         this.ListPuntoVenta.SelectedValue = this.idPtoVentaUser.ToString();
                     }
-                    else
-                    {
-                        if(accion!=9)
-                        {
-                            //selecciono punto de venta por defecto
-                            //this.ListPuntoVenta.SelectedIndex = 1;
-                        }
-                        
-                    }
+                    //else
+                    //{
+                    //selecciono punto de venta por defecto
+                    //if (accion != 9)
+                    //{
+                    //    this.ListPuntoVenta.SelectedIndex = 1;
+                    //}
+
+                    //}
 
                     //verifico que no este cerrada la caja para el punto de venta
                     this.verificarCierreCaja();
@@ -201,6 +201,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         string facturas = Request.QueryString["facturas"];
                         this.GenerarNotaCredito(facturas);
+                        this.obtenerNroNotaCreditoInicio();
                         this.phDatosEntrega.Visible = true;
                     }
 
@@ -688,11 +689,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                //this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
-                if (this.accion != 6 || ListPuntoVenta.SelectedIndex == 0)
-                {
-                    this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
-                }
+                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
                 if (!String.IsNullOrEmpty(f.comentario))
                 {
                     this.checkDatos.Checked = true;
@@ -1508,15 +1505,23 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.ListPuntoVenta.DataBind();
 
-                //selecciono punto de venta electronica si existe
-                foreach (DataRow row in dt.Rows)
+                DataRow row1 = dt.Rows[1];
+                ListPuntoVenta.SelectedValue = row1["Id"].ToString();
+
+                if (accion == 9)
                 {
-                    if (row["FormaFactura"].ToString() == "Electronica")
+                    //selecciono punto de venta electronica si existe
+                    foreach (DataRow row in dt.Rows)
                     {
-                        this.ListPuntoVenta.SelectedValue = row["Id"].ToString();
-                        break;
+                        if (row["FormaFactura"].ToString() == "Electronica")
+                        {
+                            this.ListPuntoVenta.SelectedValue = row["Id"].ToString();
+                            break;
+                        }
                     }
                 }
+
+                
             }
             catch (Exception ex)
             {
@@ -2532,10 +2537,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (c.monotributo == "1")
                 {
-                    if (this.ListPuntoVenta.SelectedValue == "-1")
-                    {
-                        this.ListPuntoVenta.SelectedIndex = 1;
-                    }
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                     //como estoy en cotizacion pido el ultimo numero de este documento
@@ -2544,10 +2545,6 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    if(this.ListPuntoVenta.SelectedValue=="-1")
-                    {
-                        this.ListPuntoVenta.SelectedIndex = 1;
-                    }
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                     //como estoy en cotizacion pido el ultimo numero de este documento
@@ -2568,10 +2565,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (c.monotributo == "1")
                 {
-                    if (this.ListPuntoVenta.SelectedValue == "-1")
-                    {
-                        this.ListPuntoVenta.SelectedIndex = 1;
-                    }
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                     //como estoy en cotizacion pido el ultimo numero de este documento
@@ -2580,10 +2573,6 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    if (this.ListPuntoVenta.SelectedValue == "-1")
-                    {
-                        this.ListPuntoVenta.SelectedIndex = 1;
-                    }
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                     //como estoy en cotizacion pido el ultimo numero de este documento
