@@ -354,7 +354,7 @@ namespace Gestion_Web.Formularios.Cobros
                     dtImpagas = controlador.obtenerMovimientosImpagasNotaDebito(this.fechaD, this.fechaH, this.idSucursal, this.idCliente, this.idVendedor, this.idTipo);
                 }
 
-                dtImpagas.Columns.Add("codigoCliente");
+                //dtImpagas.Columns.Add("codigoCliente");
                 dtImpagas.Columns.Add("Telefono");
                 decimal saldoAcum = 0;
                 if (dtImpagas.Rows.Count > 0)
