@@ -67,12 +67,12 @@ namespace Gestion_Web.Formularios.Clientes
                 DataTable dtClientes = new DataTable();
                 if (clientes != null && clientes != "")
                 {
-                    dtClientes = controlador.obtenerClientesAliasDT(clientes);
+                    dtClientes = controlador.obtenerClientesAliasDTReporte(clientes);
                 }
                 else
                 {
                     //dtClientes = controlador.obtenerClientesReducDT();
-                    dtClientes = controlador.obtenerClientesAliasDT("%");
+                    dtClientes = controlador.obtenerClientesAliasDTReporte("%");
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
@@ -84,8 +84,6 @@ namespace Gestion_Web.Formularios.Clientes
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
 
                 this.ReportViewer1.LocalReport.Refresh();
-                //    }
-                //}
 
                 Warning[] warnings;
 
