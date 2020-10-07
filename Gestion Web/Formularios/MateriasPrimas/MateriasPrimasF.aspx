@@ -55,11 +55,11 @@
                                     <th runat="server" style="width: 11%">Codigo</th>
                                     <th runat="server" style="width: 23%">Descripcion</th>
                                     <th runat="server" style="width: 10%">Stock Minimo</th>
-                                    <th runat="server" style="width: 20%">Unidad medida</th>
+                                    <th runat="server" style="width: 15%">Unidad medida</th>
                                     <th runat="server" style="width: 10%">Importe</th>
                                     <th runat="server" style="width: 15%">Moneda</th>
 
-                                    <th runat="server" class="td-actions" style="width: 1%"></th>
+                                    <th runat="server" class="td-actions" style="width: 10%"></th>
                                 </tr>
                             </thead>
                             <tbody>

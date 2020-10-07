@@ -178,14 +178,20 @@ namespace Gestion_Web.Formularios.MateriasPrimas
                 this.materiaPrima.Moneda = ddlMonedaVenta.SelectedIndex;
                 this.materiaPrima.UnidadMedida = ddlUnidadDeMedida.SelectedItem.Text;
                 this.materiaPrima.StockMinimo = Convert.ToDecimal(txtStockMinimo.Text);
+                int sucursal = Convert.ToInt32(Session["Login_SucUser"]);
                 
                 if (accion == 1)//crea
                 {
                     int i = contMateriaPrima.agregarMateriaPrima(materiaPrima);
                     if (i > 0)
                     {
+                        MateriaPrima_Composiciones materiaPrimaComposicion = new MateriaPrima_Composiciones();
+                        materiaPrimaComposicion.MateriaPrima = new MateriaPrima();
+                        materiaPrimaComposicion.Id_MateriaPrima = this.materiaPrima.Id;
+                        materiaPrimaComposicion.Cantidad_real = 0;
+                        contMateriaPrima.AgregarMateriaPrimaStock(materiaPrimaComposicion, sucursal);
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Materia prima agregada correctamente."));
-                        Response.Redirect("MateriasPrimasF.aspx");
+                        Response.Redirect("MateriasPrimasF.aspx",true);
                     }
                     else
                     {
