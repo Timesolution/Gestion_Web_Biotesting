@@ -419,6 +419,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
                 this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones;
+                this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 //this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.txtDescuento.Text = p.descuento.ToString();
                 this.cargarItems();
@@ -442,6 +443,7 @@ namespace Gestion_Web.Formularios.Facturas
                 idsCotizaciones.Remove(idsCotizaciones.Last());
                 decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
                 decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
+                int vendedor = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).vendedor.id;
 
                 Pedido p = new Pedido();
 
@@ -454,6 +456,7 @@ namespace Gestion_Web.Formularios.Facturas
                 p.tipo.id = 13;//id tipo documento pedido
                 p.formaPAgo.id = cliente.formaPago.id;
                 p.descuento = descuentoNeto;
+                p.vendedor.id = vendedor;
 
                 for (int i = 0; i < idsCotizaciones.Count; i++)
                 {
@@ -913,19 +916,24 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     idSucursal = Convert.ToInt32(this.ListSucursal.SelectedValue);
                 }
-                Sucursal s = this.cs.obtenerSucursalID(idSucursal);
-                string idCliente = s.clienteDefecto.ToString();
-
-                if (idCliente != "-1" && idCliente != "-2" && idCliente != null)
+                if (accion != 2)
                 {
-                    if (this.DropListClientes.Items.FindByValue(idCliente) == null)
+                    Sucursal s = this.cs.obtenerSucursalID(idSucursal);
+                    string idCliente = s.clienteDefecto.ToString();
+
+                    if (idCliente != "-1" && idCliente != "-2" && idCliente != null)
                     {
-                        this.cargarClienteEnLista(Convert.ToInt32(idCliente));
+                        if (this.DropListClientes.Items.FindByValue(idCliente) == null)
+                        {
+                            this.cargarClienteEnLista(Convert.ToInt32(idCliente));
+                        }
+                        this.DropListClientes.SelectedValue = idCliente;
                     }
-                    this.DropListClientes.SelectedValue = idCliente;
                     this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
                     this.obtenerNroPedido();
                 }
+
+
             }
             catch (Exception ex)
             {
