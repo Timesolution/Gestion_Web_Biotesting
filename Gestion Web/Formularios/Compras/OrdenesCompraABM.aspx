@@ -84,8 +84,8 @@
                                     <label for="name" class="col-md-2">Tipo</label>
                                     <div class="col-md-4">
                                         <asp:DropDownList ID="ListTipo" class="form-control" runat="server">
-                                            <asp:ListItem Value="1"> Nacional </asp:ListItem>
-                                            <asp:ListItem Value="2"> Importacion </asp:ListItem>
+                                            <asp:ListItem Value="1"> Internacional </asp:ListItem>
+                                            <asp:ListItem Value="2"> Nacional </asp:ListItem>
                                             <asp:ListItem Value="3"> Proyectos </asp:ListItem>
                                             </asp:DropDownList>
                                     </div>
