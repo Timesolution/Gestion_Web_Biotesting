@@ -1492,6 +1492,9 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
+                this.ListPuntoVenta.ClearSelection();
+                
+
                 //agrego todos
                 DataRow dr = dt.NewRow();
                 dr["NombreFantasia"] = "Seleccione...";
@@ -1501,6 +1504,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.DataSource = dt;
                 this.ListPuntoVenta.DataValueField = "Id";
                 this.ListPuntoVenta.DataTextField = "NombreFantasia";
+
+                this.ListPuntoVenta.SelectedValue = "-1";
 
                 this.ListPuntoVenta.DataBind();
 
