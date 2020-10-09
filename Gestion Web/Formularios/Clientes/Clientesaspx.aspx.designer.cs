@@ -33,6 +33,15 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
 
         /// <summary>
+        /// lbtnExportarTxt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnExportarTxt;
+
+        /// <summary>
         /// lbtnExportar control.
         /// </summary>
         /// <remarks>

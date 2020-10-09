@@ -24,8 +24,11 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnImprimir" runat="server" OnClick="lbtnImprimir_Click">Imprimir</asp:LinkButton>
                                             </li>
+                                             <li>
+                                                <asp:LinkButton ID="lbtnExportarTxt" runat="server" OnClick="lbtnExportarTxt_Click">Exportar Clientes TXT</asp:LinkButton>
+                                            </li>
                                             <li>
-                                                <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar Clientes</asp:LinkButton>
+                                                <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar Clientes Excel</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <a href="#modalReporteCliente" data-toggle="modal" style="width: 90%">Exportar Clientes x Vendedor</a>

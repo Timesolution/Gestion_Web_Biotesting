@@ -52,6 +52,24 @@
                                     </div>
 
                                 </td>
+                                <td>&nbsp
+                                </td>
+
+                                <td style="width: 95%">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label3" Text="" ForeColor="#cccccc"></asp:Label>
+                                    </h5>
+                                </td>
+                                <td style="width: 5%">
+                                    <div class="shortcuts" style="height: 100%">
+
+                                        <asp:LinkButton class="btn btn-primary" ToolTip="Exportar Reporte txt" ID="lbtnExportartxt"  Style="width: 100%" runat="server" OnClick="lbtnExportartxt_Click"> 
+                                            <i ID="iconExportartxt" class="fa fa-print"></i>
+                                        </asp:LinkButton>
+
+                                    </div>
+
+                                </td>
 
                                 <td>&nbsp
                                 </td>

@@ -1672,5 +1672,49 @@ namespace Gestion_Web.Formularios.Clientes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al importar clientes.CATCH.Metodo:lbtnImportarCliente_Click"));
             }
         }
+
+        protected void lbtnExportarTxt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorReportes controladorReportes = new controladorReportes();
+
+                string rutaTxt = Server.MapPath("../ArchivosExportacion/Salida/");
+
+                if (!Directory.Exists(rutaTxt))
+                {
+                    Directory.CreateDirectory(rutaTxt);
+                }
+
+                string archivos = controladorReportes.generarArchivoClientes(rutaTxt);
+
+                System.IO.FileStream fs = null;
+                fs = System.IO.File.Open(archivos, System.IO.FileMode.Open);
+
+                byte[] btFile = new byte[fs.Length];
+                fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
+                fs.Close();
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/octet-stream";
+                //this.Response.AddHeader("content-length", comprobante.Length.ToString());
+                this.Response.AddHeader("Content-disposition", "attachment; filename= " + archivos);
+                this.Response.BinaryWrite(btFile);
+                this.Response.End();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Thread was being aborted"))
+                {
+                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, this.GetType(), "alert", "MensajeArchivoDescargado()", true);
+                }
+                else
+                {
+                    Log.EscribirSQL(1, "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente .Ubicacion: CuentaCorrienteF.lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con el area de soporte para informarnos sobre este error."));
+                }
+            }
+        }
     }
 }

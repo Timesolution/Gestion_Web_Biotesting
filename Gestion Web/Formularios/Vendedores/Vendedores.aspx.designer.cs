@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Vendedores {
-    
-    
-    public partial class Vendedores {
-        
+namespace Gestion_Web.Formularios.Vendedores
+{
+
+
+    public partial class Vendedores
+    {
+
         /// <summary>
         /// txtBusqueda control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Vendedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
-        
+
         /// <summary>
         /// lbBuscar control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Vendedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbBuscar;
-        
+
         /// <summary>
         /// Literal1 control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Vendedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal Literal1;
-        
+
         /// <summary>
         /// btnExportar control.
         /// </summary>
@@ -47,7 +49,16 @@ namespace Gestion_Web.Formularios.Vendedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnExportar;
-        
+
+        /// <summary>
+        /// btnExportartxt control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportartxt;
+
         /// <summary>
         /// btnImprimir control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace Gestion_Web.Formularios.Vendedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnImprimir;
-        
+
         /// <summary>
         /// phVendedores control.
         /// </summary>

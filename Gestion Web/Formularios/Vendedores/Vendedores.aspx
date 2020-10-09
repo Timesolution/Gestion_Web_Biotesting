@@ -48,6 +48,12 @@
                                                         &nbsp Exportar
                                                     </asp:LinkButton>
                                                 </li>
+                                                    <li>
+                                                    <asp:LinkButton ID="btnExportartxt" runat="server" OnClick="btnExportartxt_Click">
+                                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                    </asp:LinkButton>
+                                                </li>
                                                 <li>
                                                     <asp:LinkButton ID="btnImprimir" runat="server" OnClick="btnImprimir_Click">
                                                         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
