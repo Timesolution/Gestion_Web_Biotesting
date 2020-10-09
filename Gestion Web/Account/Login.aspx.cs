@@ -49,6 +49,7 @@ namespace Gestion_Web.Account
                 {
                     this.LogAndRedirect();
                 }
+                Page.Form.DefaultButton = this.btnIniciarSesion.UniqueID;
             }
             catch (Exception Ex)
             {

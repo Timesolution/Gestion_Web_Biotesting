@@ -31,6 +31,15 @@ namespace Gestion_Web.Account {
         protected global::System.Web.UI.WebControls.TextBox txtpassword;
         
         /// <summary>
+        /// btnIniciarSesion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnIniciarSesion;
+        
+        /// <summary>
         /// Field control.
         /// </summary>
         /// <remarks>
