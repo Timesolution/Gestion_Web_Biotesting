@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Reportes
         private int idProveedor;
         private string listas;
         private int idTipo;
+        private int aux;
 
         class SucursalesTemporal
         {
@@ -59,6 +60,7 @@ namespace Gestion_Web.Formularios.Reportes
                 idProveedor = Convert.ToInt32(Request.QueryString["Prov"]);
                 idTipo = Convert.ToInt32(Request.QueryString["tipo"]);
                 listas = Request.QueryString["l"];
+                aux = Convert.ToInt32(Request.QueryString["aux"]);
 
                 if (!IsPostBack)
                 {
@@ -94,8 +96,8 @@ namespace Gestion_Web.Formularios.Reportes
                     DropListVendedores.SelectedValue = idVendedor.ToString();
                     DropListProveedores.SelectedValue = idProveedor.ToString();
                     ListTipo.SelectedValue = this.idTipo.ToString();
-                    this.lblParametrosUrl.Text = this.fechaD + "&" + this.fechaH + "&" + this.suc + "&" + this.idArticulo + "&" + this.idSubGrupo + "&" + this.idGrupo + "&" + this.idCliente + "&" + this.idVendedor + "&" + this.idProveedor + "&" + this.idTipo + "&" + this.listas;
-                    this.cargarDatosRango(fechaD, fechaH, suc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, idTipo);
+                    this.lblParametrosUrl.Text = this.fechaD + "&" + this.fechaH + "&" + this.suc + "&" + this.idArticulo + "&" + this.idSubGrupo + "&" + this.idGrupo + "&" + this.idCliente + "&" + this.idVendedor + "&" + this.idProveedor + "&" + this.idTipo + "&" + this.listas + "&" + this.aux;
+                    this.cargarDatosRango(fechaD, fechaH, suc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, idTipo,aux);
                 }
 
 
@@ -516,7 +518,7 @@ namespace Gestion_Web.Formularios.Reportes
             }
         }
 
-        private void cargarDatosRango(string fechaD, string fechaH, int idSuc, int idGrupo, int idSubGrupo, int idArticulo, int idCliente, int idVendedor, int idProveedor, string listas, int tipo)
+        private void cargarDatosRango(string fechaD, string fechaH, int idSuc, int idGrupo, int idSubGrupo, int idArticulo, int idCliente, int idVendedor, int idProveedor, string listas, int tipo,int auxiliar)
         {
             try
             {
@@ -531,10 +533,10 @@ namespace Gestion_Web.Formularios.Reportes
 
                     this.lblProductosVendidos.Text = contFacturacion.obtenerTotalProductosVendidos(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo).ToString();
                     this.lblVentasRealizadas.Text = contFacturacion.obtenerTotalVentasRealizadas(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo).ToString();
-                    this.cargarTablaTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
+                    this.cargarTablaTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo, auxiliar);
                     this.cargarTablaTopClientesCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
                     this.cargarTablaTopVendedoresCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
-                    this.cargarTablaTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
+                    this.cargarTablaTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo,auxiliar);
                     this.cargarTablaTopClientesImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
                     this.cargarTablaTopVendedoresImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
                     //this.cargarTablaTopSubGrupos(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
@@ -549,10 +551,10 @@ namespace Gestion_Web.Formularios.Reportes
                     this.lblPedidosPendientes.Text = contPedido.obtenerTotalPedidosPendientes(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue)).ToString();
                     this.lblProductosVendidos.Text = contFacturacion.obtenerTotalProductosVendidos(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), listas, tipo).ToString();
                     this.lblVentasRealizadas.Text = contFacturacion.obtenerTotalVentasRealizadas(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), listas, tipo).ToString();
-                    this.cargarTablaTopArticulosCantidad(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo);
+                    this.cargarTablaTopArticulosCantidad(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo, auxiliar);
                     this.cargarTablaTopClientesCantidad(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo);
                     this.cargarTablaTopVendedoresCantidad(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo);
-                    this.cargarTablaTopArticulosImporte(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo);
+                    this.cargarTablaTopArticulosImporte(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo, auxiliar);
                     this.cargarTablaTopClientesImporte(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo);
                     this.cargarTablaTopVendedoresImporte(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue), Convert.ToInt32(this.DropListProveedores.SelectedValue), listas, tipo);
                     //this.cargarTablaTopSubGrupos(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListGrupo.SelectedValue), Convert.ToInt32(this.DropListSubGrupo.SelectedValue), Convert.ToInt32(this.DropListArticulos.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListVendedores.SelectedValue));
@@ -634,7 +636,7 @@ namespace Gestion_Web.Formularios.Reportes
                     if (DropListSucursal.SelectedValue != "-1")
                     {
                         //this.cargarFacturasRango(fechaD,fechaH,Convert.ToInt32(DropListSucursal.SelectedValue));
-                        Response.Redirect("ReportesVentas.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Articulo=" + DropListArticulos.SelectedValue + "&SubGrupo=" + DropListSubGrupo.SelectedValue + "&Grupo=" + DropListGrupo.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&Vendedor=" + DropListVendedores.SelectedValue + "&Prov=" + DropListProveedores.SelectedValue + "&l=" + listas + "&tipo=" + this.ListTipo.SelectedValue);
+                        Response.Redirect("ReportesVentas.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Articulo=" + DropListArticulos.SelectedValue + "&SubGrupo=" + DropListSubGrupo.SelectedValue + "&Grupo=" + DropListGrupo.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&Vendedor=" + DropListVendedores.SelectedValue + "&Prov=" + DropListProveedores.SelectedValue + "&l=" + listas + "&tipo=" + this.ListTipo.SelectedValue + "&aux="+ DropListStore.SelectedValue);
                     }
                     else
                     {
@@ -679,11 +681,11 @@ namespace Gestion_Web.Formularios.Reportes
 
         //TOP Articulos
 
-        public void cargarTablaTopArticulosCantidad(string fechaD, string fechaH, int idSuc, int idGrupo, int idSubGrupo, int idArticulo, int idCliente, int idVendedor, int idProveedor, string listas, int tipo)
+        public void cargarTablaTopArticulosCantidad(string fechaD, string fechaH, int idSuc, int idGrupo, int idSubGrupo, int idArticulo, int idCliente, int idVendedor, int idProveedor, string listas, int tipo,int auxiliar)
         {
             try
             {
-                DataTable dt = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
+                DataTable dt = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo , auxiliar);
                 foreach (DataRow dr in dt.Rows)
                 {
                     this.cargarTopArticulosCantidadTable(dr);
@@ -857,13 +859,13 @@ namespace Gestion_Web.Formularios.Reportes
 
         //TOP Articulos
 
-        public void cargarTablaTopArticulosImporte(string fechaD, string fechaH, int idSuc, int idGrupo, int idSubGrupo, int idArticulo, int idCliente, int idVendedor, int idProveedor, string listas, int tipo)
+        public void cargarTablaTopArticulosImporte(string fechaD, string fechaH, int idSuc, int idGrupo, int idSubGrupo, int idArticulo, int idCliente, int idVendedor, int idProveedor, string listas, int tipo,int aux)
         {
             try
             {
                 decimal montoTotalDeArticulosVendidos = 0;
 
-                DataTable dt = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo);
+                DataTable dt = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, listas, tipo,aux);
                 foreach (DataRow dr in dt.Rows)
                 {
                     this.cargarTopArticulosImporteTable(dr);
@@ -1132,28 +1134,28 @@ namespace Gestion_Web.Formularios.Reportes
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "&aux=" + this.aux+ "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
 
         protected void lbtnExportar_Click(object sender, EventArgs e)
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=1&ex=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo);
+            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=1&ex=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "&aux=" + this.aux);
         }
 
         protected void lbtnImprimir2_Click(object sender, EventArgs e)
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=2&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Reportes/ImpresionReporte.aspx?valor=2&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo  +"&aux=" + this.aux + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
         }
 
         protected void lbtnExportar2_Click(object sender, EventArgs e)
         {
             string fd = this.txtFechaDesde.Text.ToString();
             string fh = this.txtFechaHasta.Text.ToString();
-            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=2&ex=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo);
+            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=2&ex=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo + "&aux=" + this.aux );
         }
 
         protected void lbtnImprimir3_Click(object sender, EventArgs e)
@@ -1212,10 +1214,10 @@ namespace Gestion_Web.Formularios.Reportes
                 string listas = param[10].Remove(param[10].Length - 1);
                 controladorFacturacion contFacturacion = new controladorFacturacion();
                 //fechaD, fechaH, idSuc, idArticulo,idSubGrupo,idGrupo, idSubGrupo,  idCliente, idVendedor, idProveedor, listas, tipo
-                DataTable dt = contFacturacion.obtenerTopCantidadArticulosAnualGrafico(param[0], param[1], Convert.ToInt32(param[2]), Convert.ToInt32(param[5]), Convert.ToInt32(param[4]), Convert.ToInt32(param[3]), Convert.ToInt32(param[6]), Convert.ToInt32(param[7]), Convert.ToInt32(param[8]), listas, Convert.ToInt32(param[9]));
+                DataTable dt = contFacturacion.obtenerTopCantidadArticulosAnualGrafico(param[0], param[1], Convert.ToInt32(param[2]), Convert.ToInt32(param[5]), Convert.ToInt32(param[4]), Convert.ToInt32(param[3]), Convert.ToInt32(param[6]), Convert.ToInt32(param[7]), Convert.ToInt32(param[8]), listas, Convert.ToInt32(param[9]), Convert.ToInt32(param[10]));
 
 
-                DataTable dt2 = contFacturacion.obtenerTopImporteArticulosAnualGrafico(param[0], param[1], Convert.ToInt32(param[2]), Convert.ToInt32(param[5]), Convert.ToInt32(param[4]), Convert.ToInt32(param[3]), Convert.ToInt32(param[6]), Convert.ToInt32(param[7]), Convert.ToInt32(param[8]), listas, Convert.ToInt32(param[9]));
+                DataTable dt2 = contFacturacion.obtenerTopImporteArticulosAnualGrafico(param[0], param[1], Convert.ToInt32(param[2]), Convert.ToInt32(param[5]), Convert.ToInt32(param[4]), Convert.ToInt32(param[3]), Convert.ToInt32(param[6]), Convert.ToInt32(param[7]), Convert.ToInt32(param[8]), listas, Convert.ToInt32(param[9]), Convert.ToInt32(param[10]));
 
 
 
@@ -1251,7 +1253,7 @@ namespace Gestion_Web.Formularios.Reportes
                 string listas = param[10].Remove(param[10].Length - 1);
                 controladorFacturacion contFacturacion = new controladorFacturacion();
                 //fechaD, fechaH, idSuc, idArticulo,idSubGrupo,idGrupo, idSubGrupo,  idCliente, idVendedor, idProveedor, listas, tipo
-                DataTable dt = contFacturacion.obtenerTopImporteArticulosAnualGrafico(param[0], param[1], Convert.ToInt32(param[2]), Convert.ToInt32(param[5]), Convert.ToInt32(param[4]), Convert.ToInt32(param[3]), Convert.ToInt32(param[6]), Convert.ToInt32(param[7]), Convert.ToInt32(param[8]), listas, Convert.ToInt32(param[9]));
+                DataTable dt = contFacturacion.obtenerTopImporteArticulosAnualGrafico(param[0], param[1], Convert.ToInt32(param[2]), Convert.ToInt32(param[5]), Convert.ToInt32(param[4]), Convert.ToInt32(param[3]), Convert.ToInt32(param[6]), Convert.ToInt32(param[7]), Convert.ToInt32(param[8]), listas, Convert.ToInt32(param[9]), Convert.ToInt32(param[10]));
 
                 List<DatosGraficoVentasImporte> datos = new List<DatosGraficoVentasImporte>();
                 if (dt != null)

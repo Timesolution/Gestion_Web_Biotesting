@@ -48,6 +48,7 @@ namespace Gestion_Web.Formularios.Reportes
         private int estado;
         private int tipo;
         private int categoria;
+        private int auxiliar;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -70,6 +71,7 @@ namespace Gestion_Web.Formularios.Reportes
                     this.listas = Request.QueryString["l"] as string;
                     this.tipo = Convert.ToInt32(Request.QueryString["t"]);
                     this.categoria = Convert.ToInt32(Request.QueryString["cat"]);
+                    this.auxiliar = Convert.ToInt32(Request.QueryString["aux"]);
 
                     if (valor == 1)// reporte Articulos cantidad = 1 
                     {
@@ -164,7 +166,7 @@ namespace Gestion_Web.Formularios.Reportes
 
                 //Tablas TOP Cantidades
                 //fechaH += " 23:59:59.000";
-                DataTable dtArticulosCant = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                DataTable dtArticulosCant = contFacturacion.obtenerTopArticulosCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo,this.auxiliar);
                 DataTable dtClientesCant = contFacturacion.obtenerTopClientesCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
                 DataTable dtVendedoresCant = contFacturacion.obtenerTopVendedoresCantidad(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
 
@@ -235,7 +237,7 @@ namespace Gestion_Web.Formularios.Reportes
                 if (!String.IsNullOrEmpty(this.listas))
                     this.listas = this.listas.Remove(listas.Length - 1);
                 //Tablas TOP Importes
-                DataTable dtArticulosImporte = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo);
+                DataTable dtArticulosImporte = contFacturacion.obtenerTopArticulosImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor, idProveedor, this.listas, this.tipo,this.auxiliar);
                 //DataTable dtClientesImporte = contFacturacion.obtenerTopClientesImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
                 //DataTable dtVendedoresImporte = contFacturacion.obtenerTopVendedoresImporte(fechaD, fechaH, idSuc, idGrupo, idSubGrupo, idArticulo, idCliente, idVendedor);
 
