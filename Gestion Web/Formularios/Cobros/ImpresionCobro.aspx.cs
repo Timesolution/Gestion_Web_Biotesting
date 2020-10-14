@@ -94,6 +94,10 @@ namespace Gestion_Web.Formularios.Cobros
                     {
                         this.generarReporte11();
                     }
+                    if (valor == 11) // reporte saldo a favor clientes
+                    {
+                        this.generarReporte12();
+                    }
                 }
             }
             catch (Exception ex)
@@ -967,6 +971,73 @@ namespace Gestion_Web.Formularios.Cobros
 
             }
         }
+
+        private void generarReporte12()
+        {
+            try
+            {
+                Decimal saldoTotal = 0;
+                DataTable dtDatos2 = controlador.ObtenerTablaSaldosClientes(this.fechaD, this.fechaH, this.idCliente, this.idVendedor, this.idSucursal, this.idTipo, this.impagasVencidas);
+
+                foreach (DataRow row in dtDatos2.Rows)
+                {
+                    //String[] saldo = row.ItemArray[2].ToString().Split('$');
+                    //saldoTotal += Convert.ToDecimal(saldo[1]);
+                    saldoTotal += Convert.ToDecimal(row["Impago"].ToString());
+                }
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("SaldosClientes.rdlc");
+
+                ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
+                ReportDataSource rds = new ReportDataSource("dsImpaga", dtDatos2);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "SALDOS_CLIENTES", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private DataTable generarDetalleCobrosDT(string listaCobros)
         {
             try

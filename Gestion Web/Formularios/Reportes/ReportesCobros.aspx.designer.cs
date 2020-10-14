@@ -31,13 +31,13 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
         
         /// <summary>
-        /// lbtnImprimir control.
+        /// lbtnImprimirVencimientos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirVencimientos;
         
         /// <summary>
         /// lbtnExportar2 control.
@@ -49,15 +49,6 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar2;
         
         /// <summary>
-        /// lbtnImprimirDetalle control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirDetalle;
-        
-        /// <summary>
         /// lbtnExportarImpagasDetallado control.
         /// </summary>
         /// <remarks>
@@ -65,15 +56,6 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportarImpagasDetallado;
-        
-        /// <summary>
-        /// lbtnImprimirDetalleNotaDebito control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirDetalleNotaDebito;
         
         /// <summary>
         /// lbtnExportar control.
@@ -85,15 +67,6 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportar;
         
         /// <summary>
-        /// lbtnImprimirVencimientos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirVencimientos;
-        
-        /// <summary>
         /// lbtnExportarVencimientos control.
         /// </summary>
         /// <remarks>
@@ -101,6 +74,33 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnExportarVencimientos;
+        
+        /// <summary>
+        /// btnExpImpagasVendedor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExpImpagasVendedor;
+        
+        /// <summary>
+        /// lbtnImprimir control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimir;
+        
+        /// <summary>
+        /// lbtnImprimirDetalle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirDetalle;
         
         /// <summary>
         /// btnImpagasVendedor control.
@@ -112,13 +112,22 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton btnImpagasVendedor;
         
         /// <summary>
-        /// btnExpImpagasVendedor control.
+        /// lbtnImprimirDetalleNotaDebito control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnExpImpagasVendedor;
+        protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirDetalleNotaDebito;
+        
+        /// <summary>
+        /// btnReporteSaldoPositivoClientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnReporteSaldoPositivoClientes;
         
         /// <summary>
         /// lblParametros control.

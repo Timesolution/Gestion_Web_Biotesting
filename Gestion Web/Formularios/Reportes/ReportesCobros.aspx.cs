@@ -568,7 +568,6 @@ namespace Gestion_Web.Formularios.Reportes
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando tabla de Top Articulos" + ex.Message));
-
             }
         }
 
@@ -788,8 +787,19 @@ namespace Gestion_Web.Formularios.Reportes
             }
         }
 
+
         #endregion
 
-
+        protected void btnReporteSaldoPositivoClientes_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?Cobro=" + 0 + "&valor=3&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&suc=" + DropListSucursal.SelectedValue + "&cli=" + DropListClientes.SelectedValue + "&ven=" + DropListVendedores.SelectedValue + "&t=" + DropListTipo.SelectedValue + "&vencida=" + this.ListEstado.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte al area de soporte via WhatsApp: +54 9 11 3782-0435 para informarnos sobre este error."));
+            }
+        }
     }
 }
