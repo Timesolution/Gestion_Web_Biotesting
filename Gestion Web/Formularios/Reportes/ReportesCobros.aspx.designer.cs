@@ -85,6 +85,15 @@ namespace Gestion_Web.Formularios.Reportes {
         protected global::System.Web.UI.WebControls.LinkButton btnExpImpagasVendedor;
         
         /// <summary>
+        /// btnReporteSaldoPositivoClientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnReporteSaldoPositivoClientes;
+        
+        /// <summary>
         /// lbtnImprimir control.
         /// </summary>
         /// <remarks>
@@ -119,15 +128,6 @@ namespace Gestion_Web.Formularios.Reportes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirDetalleNotaDebito;
-        
-        /// <summary>
-        /// btnReporteSaldoPositivoClientes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnReporteSaldoPositivoClientes;
         
         /// <summary>
         /// lblParametros control.

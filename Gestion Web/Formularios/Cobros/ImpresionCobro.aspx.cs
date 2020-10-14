@@ -983,7 +983,7 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     //String[] saldo = row.ItemArray[2].ToString().Split('$');
                     //saldoTotal += Convert.ToDecimal(saldo[1]);
-                    saldoTotal += Convert.ToDecimal(row["Impago"].ToString());
+                    saldoTotal += Convert.ToDecimal(row["importe"].ToString());
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;

@@ -17,72 +17,24 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="cliente">
-          <DataField>cliente</DataField>
+        <Field Name="id">
+          <DataField>id</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="razonSocial">
           <DataField>razonSocial</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="id">
-          <DataField>id</DataField>
+        <Field Name="importe">
+          <DataField>importe</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="fecha">
-          <DataField>fecha</DataField>
+        <Field Name="lista">
+          <DataField>lista</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="tipo">
-          <DataField>tipo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="numero">
-          <DataField>numero</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="id_doc">
-          <DataField>id_doc</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="debe">
-          <DataField>debe</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="haber">
-          <DataField>haber</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="saldo">
-          <DataField>saldo</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="saldoAcumulado">
-          <DataField>saldoAcumulado</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="vendedor">
-          <DataField>vendedor</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="telefono">
-          <DataField>telefono</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="contrareembolso">
-          <DataField>contrareembolso</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="codigoCliente">
-          <DataField>codigoCliente</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Direccion">
-          <DataField>Direccion</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="GuiaDespacho">
-          <DataField>GuiaDespacho</DataField>
+        <Field Name="saldoMax">
+          <DataField>saldoMax</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="SaldoPositivo">
@@ -91,8 +43,8 @@
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>ds_Impagas</rd:DataSetName>
-        <rd:SchemaPath>C:\Proyectos\Luciano_Diaz\Gestion\Gestion_Web\Gestion Web\Formularios\Cobros\ds_Impagas.xsd</rd:SchemaPath>
+        <rd:DataSetName>dsCobros</rd:DataSetName>
+        <rd:SchemaPath>C:\Proyectos\Luciano_Diaz\Gestion\Gestion_Web\Gestion Web\Formularios\Cobros\dsCobros.xsd</rd:SchemaPath>
         <rd:TableName>DatosImpagas</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
@@ -114,7 +66,7 @@
                   <Width>2.5cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.91792cm</Width>
+                  <Width>2.55292cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.80458cm</Width>
@@ -180,9 +132,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox6</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -216,9 +165,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox8</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -241,7 +187,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Importe</Value>
+                                  <Value>Impago</Value>
                                   <Style>
                                     <FontStyle>Italic</FontStyle>
                                     <FontWeight>Bold</FontWeight>
@@ -360,9 +306,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>lista</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -397,9 +340,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>saldoMax</rd:DefaultName>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                          </Visibility>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -493,16 +433,8 @@
             <TablixColumnHierarchy>
               <TablixMembers>
                 <TablixMember />
-                <TablixMember>
-                  <Visibility>
-                    <Hidden>true</Hidden>
-                  </Visibility>
-                </TablixMember>
-                <TablixMember>
-                  <Visibility>
-                    <Hidden>true</Hidden>
-                  </Visibility>
-                </TablixMember>
+                <TablixMember />
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
               </TablixMembers>
@@ -524,7 +456,7 @@
             <Top>1.35379cm</Top>
             <Left>1.11125cm</Left>
             <Height>1.03188cm</Height>
-            <Width>17.60771cm</Width>
+            <Width>18.24271cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -577,7 +509,7 @@
         <Height>1.07417in</Height>
         <Style />
       </Body>
-      <Width>7.36967in</Width>
+      <Width>7.61967in</Width>
       <Page>
         <PageHeader>
           <Height>1.28792cm</Height>
