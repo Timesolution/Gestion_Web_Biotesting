@@ -2281,8 +2281,15 @@ namespace Gestion_Web.Formularios.Articulos
                 ControladorImportacionArticulos controladorImportacionArticulos = new ControladorImportacionArticulos();
 
                 int sucursal = (int)Session["Login_SucUser"];
+                string mensaje = "";
 
-                string mensaje = controladorImportacionArticulos.ImportarArticulosGestion();
+                int registrosTotal = controladorImportacionArticulos.CantidadRegistrosImportar();
+                int vueltas = registrosTotal / 500;
+
+                for (int i = 0; i < vueltas; i++)
+                {
+                    mensaje = controladorImportacionArticulos.ImportarArticulosGestion(i);
+                }
 
                 if (!string.IsNullOrEmpty(mensaje))
                 {
