@@ -619,6 +619,18 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-4">Auxiliar</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListStore" runat="server" class="form-control">
+                                                <asp:ListItem Text="Ambos" Value="-1" />
+                                                <asp:ListItem Text="No" Value="0" />
+                                                <asp:ListItem Text="Si" Value="1" />
+                                                
+                                            </asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-4">Listas de precio</label>
                                     </div>
                                     <div class="form-group">

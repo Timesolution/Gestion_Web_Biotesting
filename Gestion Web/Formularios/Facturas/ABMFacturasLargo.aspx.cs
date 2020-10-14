@@ -1532,6 +1532,33 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pto ventas. " + ex.Message));
             }
         }
+
+        public void cargarPuntoVta2(int sucu)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["NombreFantasia"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.ListPuntoVenta.DataSource = dt;
+                this.ListPuntoVenta.DataValueField = "Id";
+                this.ListPuntoVenta.DataTextField = "NombreFantasia";
+
+                this.ListPuntoVenta.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pto ventas. " + ex.Message));
+            }
+        }
+
         public void cargarFormaPAgo()
         {
             try
@@ -5563,7 +5590,8 @@ namespace Gestion_Web.Formularios.Facturas
         protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
             //this.txtPtoVenta.Text = this.ListSucursal.SelectedValue;
-            cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+            //cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+            cargarPuntoVta2(Convert.ToInt32(this.ListSucursal.SelectedValue));
 
             cargarVendedor();
             //Me fijo si hay que cargar un cliente por defecto

@@ -2003,7 +2003,7 @@
                                                                     <div class="col-md-5">
                                                                         <asp:DropDownList ID="ListAuxiliar" class="form-control" runat="server">
                                                                             <asp:ListItem Value="1" Text="Si" ></asp:ListItem>
-                                                                            <asp:ListItem Value="2" Text="No" ></asp:ListItem>
+                                                                            <asp:ListItem Value="0" Text="No" ></asp:ListItem>
                                                                         </asp:DropDownList>
                                                                     </div>
                                                                 </div>
@@ -2012,7 +2012,7 @@
                                                                     <div class="col-md-5">
                                                                         <asp:DropDownList ID="ListComisionable" class="form-control" runat="server">
                                                                             <asp:ListItem Value="1" Text="Si" ></asp:ListItem>
-                                                                            <asp:ListItem Value="2" Text="No" ></asp:ListItem>
+                                                                            <asp:ListItem Value="0" Text="No" ></asp:ListItem>
                                                                         </asp:DropDownList>
                                                                     </div>
                                                                 </div>
