@@ -79,12 +79,21 @@ namespace Disipar.Models
 
         }
 
-        public string mensajeGrowlSucces(string encabezado, string mensaje)
+        #region Mensaje Growls
+
+
+        /// <summary>
+        /// Mensaje Growl de tipo Advertencia
+        /// </summary>
+        /// <param name="encabezado"></param>
+        /// <param name="mensaje"></param>
+        /// <returns></returns>
+        public string mensajeGrowlInfo(string encabezado, string mensaje)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("<script type = 'text/javascript'>");
             sb.Append("window.onload=function(){");
-            sb.Append("$.msgGrowl ({ title: '" + encabezado + "',  text: '" + mensaje + "' });");
+            sb.Append("$.msgGrowl ({ type: 'info', title: '" + encabezado + "',  text: '" + mensaje + "' });");
             //sb.Append(";");
             //sb.Append(message);
             sb.Append("};");
@@ -93,6 +102,69 @@ namespace Disipar.Models
             return sb.ToString();
 
         }
+
+        /// <summary>
+        /// Mensaje Growl de tipo Exito
+        /// </summary>
+        /// <param name="encabezado"></param>
+        /// <param name="mensaje"></param>
+        /// <returns></returns>
+        public string mensajeGrowlSucces(string encabezado, string mensaje)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<script type = 'text/javascript'>");
+            sb.Append("window.onload=function(){");
+            sb.Append("$.msgGrowl ({ type: 'success', title: '" + encabezado + "',  text: '" + mensaje + "' });");
+            //sb.Append(";");
+            //sb.Append(message);
+            sb.Append("};");
+            sb.Append("</script>");
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Mensaje Growl de tipo Error
+        /// </summary>
+        /// <param name="encabezado"></param>
+        /// <param name="mensaje"></param>
+        /// <returns></returns>
+        public string mensajeGrowlError(string encabezado, string mensaje)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<script type = 'text/javascript'>");
+            sb.Append("window.onload=function(){");
+            sb.Append("$.msgGrowl ({ type: 'error', title: '" + encabezado + "',  text: '" + mensaje + "' });");
+            //sb.Append(";");
+            //sb.Append(message);
+            sb.Append("};");
+            sb.Append("</script>");
+
+            return sb.ToString();
+
+        }
+
+        /// <summary>
+        /// Mensaje Growl de tipo Advertencia
+        /// </summary>
+        /// <param name="encabezado"></param>
+        /// <param name="mensaje"></param>
+        /// <returns></returns>
+        public string mensajeGrowlWarning(string encabezado, string mensaje)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<script type = 'text/javascript'>");
+            sb.Append("window.onload=function(){");
+            sb.Append("$.msgGrowl ({ type: 'warning', title: '" + encabezado + "',  text: '" + mensaje + "' });");
+            //sb.Append(";");
+            //sb.Append(message);
+            sb.Append("};");
+            sb.Append("</script>");
+
+            return sb.ToString();
+
+        }
+
+        #endregion
 
         public string foco(string idElemento)
         {

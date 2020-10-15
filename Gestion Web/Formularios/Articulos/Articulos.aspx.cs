@@ -2273,41 +2273,56 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-
         protected void lbtnImportarArticulo_Click(object sender, EventArgs e)
         {
             try
             {
-                ControladorImportacionArticulos controladorImportacionArticulos = new ControladorImportacionArticulos();
-
-                int sucursal = (int)Session["Login_SucUser"];
-                string mensaje = "";
-
-                int registrosTotal = controladorImportacionArticulos.CantidadRegistrosImportar();
-                int vueltas = registrosTotal / 500;
-
-                for (int i = 0; i < vueltas; i++)
+                try
                 {
-                    mensaje = controladorImportacionArticulos.ImportarArticulosGestion(i);
+                    ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                    Informes_Pedidos ip = new Informes_Pedidos();
+
+                    //Cargo el objeto Informes_Pedidos
+                    cargarDatosInformePedido(ip);
+
+                    //Agrego el informe para ejecutar la funcion de importacion. Si todo es correcto retorna 1. En caso contrario, revisar error segun el entero.
+                    int i = controladorInformesEntity.agregarInformePedido(ip,null);
+
+                    if (i > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Solicitud Generada", "Se ha generado la solicitud de Importacion con exito. Podra visualizar el estado en Reportes -> Informes Solicitados."));
+                    if (i == -1) 
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlError("Error","Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte. "));
                 }
-
-                if (!string.IsNullOrEmpty(mensaje))
+                catch (Exception Ex)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(mensaje, "../Articulos/Articulos.aspx"));
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar ningun articulo."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("CATCH: Error solicitando Importacion de Articulos. Excepcion: " + Ex.Message));
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo importar articulos. Contacte a soporte."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este error."));
             }
             finally
             {
                 btnImportarArticulo.Enabled = true;
+            }
+        }
+
+        public void cargarDatosInformePedido(Informes_Pedidos ip)
+        {
+            try
+            {
+                //DateTime fechaD = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                ip.Fecha = DateTime.Now;
+                ip.Informe = 7;
+                ip.Usuario = (int)Session["Login_IdUser"];
+                ip.Estado = 0;
+                ip.NombreInforme = "Importacion Articulos - " + DateTime.Now.ToString("MMyyyy");
+            }
+            catch (Exception Ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrió un error cargando datos para Informe Pedido. Excepción: " + Ex.Message));
             }
         }
 
@@ -2359,5 +2374,6 @@ namespace Gestion_Web.Formularios.Articulos
                 }
             }
         }
+
     }
 }
