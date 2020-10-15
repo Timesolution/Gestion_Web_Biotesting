@@ -2291,17 +2291,18 @@ namespace Gestion_Web.Formularios.Articulos
                     if (i > 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Solicitud Generada", "Se ha generado la solicitud de Importacion con exito. Podra visualizar el estado en Reportes -> Informes Solicitados."));
                     if (i == -1) 
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlError("Error","Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte. "));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlError("Error", "Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp: +54 9 11 3782-0435. "));
                 }
                 catch (Exception Ex)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("CATCH: Error solicitando Importacion de Articulos. Excepcion: " + Ex.Message));
+                    Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta. Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + Ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este problema via WhatsApp: +54 9 11 3782-0435."));
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este error."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este problema via WhatsApp: +54 9 11 3782-0435."));
             }
             finally
             {
