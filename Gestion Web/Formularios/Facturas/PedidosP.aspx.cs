@@ -1371,27 +1371,44 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 CheckBox ch = null;
+                bool estado = false;
                 string idtildado = "";
                 foreach (Control C in phPedidos.Controls)
                 {
                     TableRow tr = C as TableRow;
                     if (accion == 5)
+                    {
                         ch = tr.Cells[8].Controls[2] as CheckBox;
+                        if (tr.Cells[7].Text == "Facturado")
+                            estado = true;
+
+                    }
                     else
+                    {
                         ch = tr.Cells[5].Controls[2] as CheckBox;
+                        if (tr.Cells[4].Text == "Facturado")
+                            estado = true;
+                    }
 
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
                     }
                 }
-                if (!String.IsNullOrEmpty(idtildado))
+                if ((this.configuracion.facturarMismoPedidoVariasVeces == "1" && (estado)) || !estado)
                 {
-                    Response.Redirect("../../Formularios/Facturas/ABMFacturas.aspx?accion=5&pedidos=" + idtildado);
+                    if (!String.IsNullOrEmpty(idtildado))
+                    {
+                        Response.Redirect("../../Formularios/Facturas/ABMFacturas.aspx?accion=5&pedidos=" + idtildado);
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
+                    }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
                 }
 
             }
@@ -1580,14 +1597,27 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string idtildado = "";
                 int contador = 0;
+                bool estado = false;
                 foreach (Control C in phPedidos.Controls)
                 {
                     CheckBox ch = null;
                     TableRow tr = C as TableRow;
                     if (accion == 5)
+                    {
                         ch = tr.Cells[8].Controls[2] as CheckBox;
+                        if (tr.Cells[7].Text == "Remitido")
+                            estado = true;
+                    }
+
                     else
+                    {
                         ch = tr.Cells[5].Controls[2] as CheckBox;
+                        if (tr.Cells[4].Text == "Remitido")
+                            estado = true;
+                    }
+
+
+
                     if (ch.Checked == true)
                     {
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -1601,40 +1631,46 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Solo puede remitir un pedido a la vez!"));
                     return;
                 }
-
-                if (!String.IsNullOrEmpty(idtildado))
+                if ((this.configuracion.remitirMismoPedidoVariasVeces == "1" && (estado)) || !estado)
                 {
-                    foreach (String id in idtildado.Split(';'))
+                    if (!String.IsNullOrEmpty(idtildado))
                     {
-                        if (id != "" && id != null)
+                        foreach (String id in idtildado.Split(';'))
                         {
-                            Pedido p = new Pedido();
-                            p = this.controlador.obtenerPedidoId(Convert.ToInt32(id));
-                            if (p != null)
+                            if (id != "" && id != null)
                             {
-                                Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + p.id);
-                                int i = this.contRemito.RemitirDesdePedido(p);
-
-                                if (i < 1)
+                                Pedido p = new Pedido();
+                                p = this.controlador.obtenerPedidoId(Convert.ToInt32(id));
+                                if (p != null)
                                 {
-                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error generando Remito desde pedido. "));
+                                    Response.Redirect("ABMRemitos.aspx?accion=4&id_ped=" + p.id);
+                                    int i = this.contRemito.RemitirDesdePedido(p);
+
+                                    if (i < 1)
+                                    {
+                                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error generando Remito desde pedido. "));
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo pedido a remitir. "));
                                     return;
                                 }
                             }
-                            else
-                            {
-                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error obteniendo pedido a remitir. "));
-                                return;
-                            }
                         }
+
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito!. ", "PedidosP.aspx"));
+
                     }
-
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito!. ", "PedidosP.aspx"));
-
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un documento!. "));
+                    }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un documento!. "));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","No se puede remitir un pedido ya remitido "));
                 }
             }
             catch (Exception ex)

@@ -1254,11 +1254,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                     }
 
-                    //try
-                    //{
-                    //    this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
-                    //}
-                    //catch { }
+                    if(this.cliente.vendedor.id > 0)
+                    {
+                        this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
+                    }
+                    
                     this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
 
                     //pongo en cero por si eligieron un cliente con desc o percepciones y dps lo cambiaron
