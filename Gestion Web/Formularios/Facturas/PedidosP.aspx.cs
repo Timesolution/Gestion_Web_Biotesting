@@ -1389,20 +1389,18 @@ namespace Gestion_Web.Formularios.Facturas
                         if (tr.Cells[4].Text == "Facturado")
                             estado = true;
                     }
-                }
-                if ((this.configuracion.facturarMismoPedidoVariasVeces == "1" && (estado)) || !estado)
-                {
 
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
                     }
-
+                }
+                if ((this.configuracion.facturarMismoPedidoVariasVeces == "1" && (estado)) || !estado)
+                {
                     if (!String.IsNullOrEmpty(idtildado))
                     {
                         Response.Redirect("../../Formularios/Facturas/ABMFacturas.aspx?accion=5&pedidos=" + idtildado);
                     }
-
                     else
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
