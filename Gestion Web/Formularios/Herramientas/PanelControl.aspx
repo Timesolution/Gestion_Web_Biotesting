@@ -610,6 +610,18 @@
                                                 <asp:LinkButton ID="lbtnAgregarItemsFactura" runat="server" OnClick="lbtnAgregarItemsFactura_Click" />
                                             </div>
                                         </div>
+                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Remitir mas de una vez un pedido:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnRemitirMultiplesVeces" runat="server" OnClick="lbtnRemitirMultiplesVeces_Click" />
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Facturar mas de una vez un pedido:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnFacturarMultiplesVeces" runat="server" OnClick="lbtnFacturarMultiplesVeces_Click" />
+                                            </div>
+                                        </div>
 
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
