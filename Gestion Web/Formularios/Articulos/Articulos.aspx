@@ -21,10 +21,10 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#modalConfirmacionArticulo" data-toggle="modal" style="width: 90%">Importar Articulos</a>
+                                        <a href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%;color:Tomato">Importar Articulos desde Base Externa</a>
                                     </li>
                                     <li>
-                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click">Exportar Articulos</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Exportar Articulos</asp:LinkButton>
                                     </li>
                                 </ul>
                             </div>
@@ -100,6 +100,7 @@
                                     <li>
                                         <a href="#modalArticulosOtrosProveedores" data-toggle="modal" style="width: 90%">Articulos de Otros Proveedores</a>
                                     </li>
+                                    
                                 </ul>
                             </div>
 
@@ -1289,7 +1290,7 @@
 
     <%-- Importacion de articulos --%>
 
-    <div id="modalConfirmacionArticulo" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalConfirmacionImportacionArticulos" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1304,15 +1305,18 @@
                                     <i class="icon-warning-sign" style="color: orange"></i>
                                 </h1>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-4">Por la magnitud del proceso a ejecutar, se generara una solicitud de Importacion de Articulos para que trabaje en segundo plano. Mientras tanto, podra seguir haciendo uso del sistema.</label>
+                            </div>
                             <div class="col-md-7">
                                 <h5>
-                                    <asp:Label runat="server" ID="Label3" Text="Esta seguro que desea importar los articulos?" Style="text-align: center"></asp:Label>
+                                    <asp:Label runat="server" ID="Label3" Text="" Style="text-align: center">Desea generar la solicitud ?</asp:Label>
                                 </h5>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Importar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" OnClientClick="this.disabled = true; this.value = 'Importando...';" UseSubmitBehavior="false" />
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
@@ -1370,7 +1374,6 @@
         });
     </script>
     <script>
-
         function AsignarProveedor() {
             var idProveedor = document.getElementById('<%= DropListProveedor.ClientID %>').value;
             var idProveedorHF = document.getElementById('<%= idProveedorHF.ClientID %>');
@@ -1536,6 +1539,7 @@
             });
         }
     </script>
+     
     <%--<script>
         function disableButton(btnImportarArticulo) {
             var btn = document.getElementById(btnImportarArticulo);

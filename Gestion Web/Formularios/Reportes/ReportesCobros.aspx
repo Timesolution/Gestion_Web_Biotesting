@@ -26,34 +26,37 @@
                                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                                 <ul class="dropdown-menu">
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnImprimir" OnClick="btnImprimir_Click" runat="server">Reporte impagas clientes</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnImprimirVencimientos" OnClick="lbtnImprimirVencimientos_Click" runat="server" ForeColor="Tomato">Imprimir detalle vencimientos</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnExportar2" OnClick="lbtnExportar2_Click" runat="server">Exportar reporte impagas</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnExportar2" OnClick="lbtnExportar2_Click" runat="server" ForeColor="OliveDrab">Exportar reporte impagas</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnImprimirDetalle" OnClick="lbtnImprimirDetalle_Click" runat="server">Reporte impagas detallado</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnExportarImpagasDetallado" OnClick="lbtnExportarImpagasDetallado_Click" runat="server" ForeColor="OliveDrab">Exportar impagas detallado</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnExportarImpagasDetallado" OnClick="lbtnExportarImpagasDetallado_Click" runat="server">Exportar impagas detallado</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnExportar" OnClick="lbtnExportar_Click" runat="server" ForeColor="OliveDrab">Exportar reporte detallado</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnImprimirDetalleNotaDebito" OnClick="lbtnImprimirDetalleNotaDebito_Click" runat="server">Reporte Notas de Debito impagas detallado</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnExportarVencimientos" OnClick="lbtnExportarVencimientos_Click" runat="server" ForeColor="OliveDrab">Exportar detalle vencimientos</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnExportar" OnClick="lbtnExportar_Click" runat="server">Exportar reporte detallado</asp:LinkButton>
+                                                        <asp:LinkButton ID="btnExpImpagasVendedor" OnClick="btnExpImpagasVendedor_Click" runat="server" ForeColor="OliveDrab">Exportar impagas por vendedor</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnImprimirVencimientos" OnClick="lbtnImprimirVencimientos_Click" runat="server">Imprimir detalle vencimientos</asp:LinkButton>
+                                                        <asp:LinkButton ID="btnReporteSaldoPositivoClientes" OnClick="btnReporteSaldoPositivoClientes_Click" runat="server" ForeColor="OliveDrab">Exportar Saldos Clientes</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="lbtnExportarVencimientos" OnClick="lbtnExportarVencimientos_Click" runat="server">Exportar detalle vencimientos</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnImprimir" OnClick="btnImprimir_Click" runat="server" ForeColor="Purple">Reporte impagas clientes</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="btnImpagasVendedor" OnClick="btnImpagasVendedor_Click" runat="server">Reporte impagas por vendedor</asp:LinkButton>
+                                                        <asp:LinkButton ID="lbtnImprimirDetalle" OnClick="lbtnImprimirDetalle_Click" runat="server" ForeColor="Purple">Reporte impagas detallado</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="btnExpImpagasVendedor" OnClick="btnExpImpagasVendedor_Click" runat="server">Exportar impagas por vendedor</asp:LinkButton>
+                                                        <asp:LinkButton ID="btnImpagasVendedor" OnClick="btnImpagasVendedor_Click" runat="server" ForeColor="Purple">Reporte impagas por vendedor</asp:LinkButton>
+                                                    </li>
+                                                    <li>
+                                                        <asp:LinkButton ID="lbtnImprimirDetalleNotaDebito" OnClick="lbtnImprimirDetalleNotaDebito_Click" runat="server" ForeColor="Purple">Reporte Notas de Debito impagas detallado</asp:LinkButton>
                                                     </li>
                                                 </ul>
                                             </div>
