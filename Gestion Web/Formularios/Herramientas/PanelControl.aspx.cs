@@ -173,6 +173,36 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.lbtnAgregarItemsFactura.CssClass = "btn btn-danger";
                     this.lbtnAgregarItemsFactura.Text = "Desactivado";
                 }
+                if (configuracion.agregarItemsFactura == "1")
+                {
+                    this.lbtnAgregarItemsFactura.CssClass = "btn btn-success";
+                    this.lbtnAgregarItemsFactura.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnAgregarItemsFactura.CssClass = "btn btn-danger";
+                    this.lbtnAgregarItemsFactura.Text = "Desactivado";
+                }
+                if (configuracion.remitirMismoPedidoVariasVeces == "1")
+                {
+                    this.lbtnRemitirMultiplesVeces.CssClass = "btn btn-success";
+                    this.lbtnRemitirMultiplesVeces.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnRemitirMultiplesVeces.CssClass = "btn btn-danger";
+                    this.lbtnRemitirMultiplesVeces.Text = "Desactivado";
+                }
+                if (configuracion.facturarMismoPedidoVariasVeces == "1")
+                {
+                    this.lbtnFacturarMultiplesVeces.CssClass = "btn btn-success";
+                    this.lbtnFacturarMultiplesVeces.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnFacturarMultiplesVeces.CssClass = "btn btn-danger";
+                    this.lbtnFacturarMultiplesVeces.Text = "Desactivado";
+                }
 
                 // Visualizacion de Cheques
                 this.cargarVisualizacionCheques();
@@ -1419,6 +1449,58 @@ namespace Gestion_Web.Formularios.Herramientas
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: agregar items factura!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnRemitirMultiplesVeces_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.remitirMismoPedidoVariasVeces == "0")
+                    configuracion.remitirMismoPedidoVariasVeces = "1";
+                else
+                    configuracion.remitirMismoPedidoVariasVeces = "0";
+
+                int i = configuracion.ModificarRemitirMismoPedidoVariasVeces();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Modo Seguro.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Remitir mas de una vez un pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: Remitir mas de una vez un pedido!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnFacturarMultiplesVeces_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.facturarMismoPedidoVariasVeces == "0")
+                    configuracion.facturarMismoPedidoVariasVeces = "1";
+                else
+                    configuracion.facturarMismoPedidoVariasVeces = "0";
+
+                int i = configuracion.ModificarFacturarMismoPedidoVariasVeces();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Modo Seguro.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Facturar mas de una vez un pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Facturar mas de una vez un pedido!. \", {type: \"error\"});", true);
                 }
             }
             catch
