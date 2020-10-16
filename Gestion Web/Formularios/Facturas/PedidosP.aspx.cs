@@ -1408,7 +1408,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
                 }
 
             }
@@ -1670,7 +1670,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se puede remitir un pedido ya remitido "));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","No se puede remitir un pedido ya remitido "));
                 }
             }
             catch (Exception ex)
