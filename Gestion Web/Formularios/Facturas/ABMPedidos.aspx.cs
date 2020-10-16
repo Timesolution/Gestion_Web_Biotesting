@@ -929,7 +929,13 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         this.DropListClientes.SelectedValue = idCliente;
                     }
-                    this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
+
+                    if (this.DropListClientes.SelectedValue != "-1")
+                    {
+                        this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
+
+                    }
+
                     this.obtenerNroPedido();
                 }
 

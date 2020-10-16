@@ -79,6 +79,8 @@ namespace Gestion_Web.Formularios.Clientes
 
                 ListHijo.DataBind();
 
+                ListNieto.Items.Clear();
+
             }
             catch (Exception ex)
             {

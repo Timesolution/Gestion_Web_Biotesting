@@ -12,6 +12,7 @@ using Planario_Api.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -2173,6 +2174,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idCliente = (int)usuario_cliente.IdCliente;
                 try
                 {
+                    this.DropListClientes.ClearSelection();
                     this.DropListClientes.SelectedValue = idCliente.ToString();
                     if (this.DropListClientes.SelectedValue == "-1")
                     {
@@ -4418,6 +4420,8 @@ namespace Gestion_Web.Formularios.Facturas
                             this.EnviarSMSAviso(fact);
                         }
 
+                        #region Creacionsesiones estetica
+
                         int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
 
                         if (tieneSistemaEstetica == 1)
@@ -4425,10 +4429,17 @@ namespace Gestion_Web.Formularios.Facturas
                             Estetica_Api.Controladores.ControladorSesiones controladorSesiones = new Estetica_Api.Controladores.ControladorSesiones();
                             foreach (var item in fact.items)
                             {
-                                controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, item.precioUnitario, fact.id);
+                                // obtengo el importe
+                                decimal importe = ((100 - fact.neto10) / 100) * (item.total / item.cantidad);
+                                for (int x = 0; x < item.cantidad; x++)
+                                {
+                                    controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, importe, fact.id);
+                                }
+                                
                             }
                         }
 
+                        #endregion
                         #endregion
 
                         Session.Remove("Factura");
