@@ -56,7 +56,7 @@ namespace Gestion_Web.Formularios.Facturas
                 fechaD = Request.QueryString["Fechadesde"];
                 fechaH = Request.QueryString["FechaHasta"];
                 suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
-                this.zona= Convert.ToInt32(Request.QueryString["zona"]);
+                this.zona = Convert.ToInt32(Request.QueryString["zona"]);
                 idCliente = Convert.ToInt32(Request.QueryString["Cliente"]);
                 idEstado = Convert.ToInt32(Request.QueryString["estado"]);
                 Vendedor = Convert.ToInt32(Request.QueryString["V"]);
@@ -122,6 +122,8 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListTipoEntrega.SelectedValue = this.tipoEntrega.ToString();
                     this.RadioFechaPedido.Checked = Convert.ToBoolean(this.tipoFecha);
                     this.RadioFechaEntrega.Checked = Convert.ToBoolean(this.tipoFecha2);
+
+                    
                 }
                 string perfil = Session["Login_NombrePerfil"] as string;
                 //por defecto
@@ -136,14 +138,14 @@ namespace Gestion_Web.Formularios.Facturas
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         this.ListVendedor.SelectedValue = this.idVendedor.ToString();
                         this.Vendedor = idVendedor;
-                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor,this.zona);
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona);
                     }
                     else if (perfil == "Cliente")
                     {
                         //deshabilito el list de vendedor
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         //para asegurarme de cargar por defecto los pedidos del cliente
-                        this.cargarPedidosRango(fechaD, fechaH, suc, this.idVendedor, idEstado, this.Vendedor,this.zona);
+                        this.cargarPedidosRango(fechaD, fechaH, suc, this.idVendedor, idEstado, this.Vendedor, this.zona);
                     }
                     else if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
                     {
@@ -160,18 +162,21 @@ namespace Gestion_Web.Formularios.Facturas
                     //    this.lbtnFacturar.Visible = true;
                     //}
                 }
+
                 //busca por pedido
                 if (accion == 1)
                 {
                     this.buscarPorNumero();
                     this.lbtnFacturar.Visible = true;
                 }
+
                 //busca por numero
                 if (accion == 2)
                 {
                     this.buscarPorCliente();
                     this.lbtnFacturar.Visible = true;
                 }
+
                 //busco por cliente padre
                 if (accion == 3)
                 {
@@ -182,6 +187,7 @@ namespace Gestion_Web.Formularios.Facturas
                         this.iconoBusqueda.Attributes.Add("disabled", "disabled");
                     }
                 }
+
                 //busco por observacion
                 if (accion == 4)
                 {
@@ -733,8 +739,9 @@ namespace Gestion_Web.Formularios.Facturas
         }
         #endregion
 
-        #region funciones busquedas
-        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor,int zona)
+        #region BUSQUEDAS
+
+        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor, int zona)
         {
             try
             {
@@ -757,7 +764,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscnado cliente en PedidosP.cargarPedidosRango. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -765,13 +773,19 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Pedido p = this.controlador.obtenerPedidoPorNumero(this.numero);
-                this.phPedidos.Controls.Clear();
-                this.cargarEnPh(p);
+                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorNumero(this.numero,13);//13 es el tipo de documento pedido
+                if (dtPedidos != null && dtPedidos.Rows.Count > 0)
+                {
+                    this.cargarPedidos(dtPedidos);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
+                }
+                else if (dtPedidos == null || dtPedidos.Rows.Count == 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con el N° Pedido " + this.numero));
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por numero. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en PedidosP.buscarPorNumero. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -779,39 +793,39 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //Pedido p = this.controlador.obtenerPedidoPorCliente(this.cliente);
-                var pedidos = this.controlador.obtenerListaPedidosPorCliente(this.cliente);
-                if (pedidos != null)
+                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorCliente(this.cliente,13);//13 es el tipo de documento pedido
+                if (dtPedidos != null && dtPedidos.Rows.Count > 0)
                 {
-                    this.phPedidos.Controls.Clear();
-                    foreach (var p in pedidos)
-                    {
-                        this.cargarEnPh(p);
-                    }
+                    this.cargarPedidos(dtPedidos);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
                 }
+                else if(dtPedidos == null || dtPedidos.Rows.Count == 0 )
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con el N° Cliente " + this.cliente));
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por cliente. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando pedido por cliente. Ubicacion: PedidosP.buscarPorCliente. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
+
         private void buscarPorObservacion()
         {
             try
             {
-                var pedidos = this.controlador.obtenerListaPedidosPorObservacion(this.observacion, 13); //13 es el tipo de documento pedido
-                if (pedidos != null)
+                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorObservacion(this.observacion, 13); //13 es el tipo de documento pedido
+                if (dtPedidos != null && dtPedidos.Rows.Count > 0)
                 {
-                    this.phPedidos.Controls.Clear();
-                    foreach (var p in pedidos)
-                    {
-                        this.cargarEnPh(p);
-                    }
+                    this.cargarPedidos(dtPedidos);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
                 }
+                else if (dtPedidos == null || dtPedidos.Rows.Count == 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con la observacion " + this.observacion));
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por cliente. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando pedido por observacion. Ubicacion: PedidosP.buscarPorCliente. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
         #endregion
@@ -1043,7 +1057,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celAccion.Width = Unit.Percentage(20);
                 celAccion.VerticalAlign = VerticalAlign.Middle;
 
-               
+
 
                 tr.Cells.Add(celAccion);
 
@@ -1332,7 +1346,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             Response.Redirect("PedidosP.aspx?fechadesde=" + this.txtFechaEntregaDesde.Text + "&fechaHasta=" + this.txtFechaEntregaHasta.Text + "&Sucursal="
                                 + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue+ "&art=");
+                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&art=");
                         }
                     }
                     else
@@ -1408,7 +1422,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion", "Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
                 }
 
             }
@@ -1670,7 +1684,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","No se puede remitir un pedido ya remitido "));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion", "No se puede remitir un pedido ya remitido "));
                 }
             }
             catch (Exception ex)
@@ -2157,7 +2171,7 @@ namespace Gestion_Web.Formularios.Facturas
                 bool verificarClientesIguales = false;
                 foreach (Control C in phPedidos.Controls)
                 {
-                   
+
                     TableRow tr = C as TableRow;
                     if (accion == 5)
                         ch = tr.Cells[8].Controls[2] as CheckBox;
@@ -2185,6 +2199,6 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-   
+
     }
 }

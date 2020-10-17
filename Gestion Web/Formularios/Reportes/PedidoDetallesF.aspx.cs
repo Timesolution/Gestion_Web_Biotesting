@@ -317,8 +317,8 @@ namespace Gestion_Web.Formularios.Reportes
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de Cotizaciones. " + ex.Message));
-
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error cargando cotizaciones. Ubicacion: PedidosDetalleF.cargarCotizacion. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -701,28 +701,22 @@ namespace Gestion_Web.Formularios.Reportes
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
             }
         }
+
         private void buscarPorObservacion()
         {
             try
             {
-                //var cotizaciones = this.controlador.obtenerPedidosPorObservacionDT(this.observacion,10); //10 es el tipo de documento cotizacion
-                //if (cotizaciones != null)
-                //{
-                //    this.cargarCotizacion(cotizaciones);
-                //}
-                var cotizaciones = this.controlador.obtenerListaPedidosPorObservacion(this.observacion, 10); //10 es el tipo de documento pedido
-                if (cotizaciones != null)
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorObservacion(this.observacion, 10); //10 es el tipo de documento pedido
+                if (dtCotizaciones.Rows.Count > 0)
                 {
-                    this.phCotizaciones.Controls.Clear();
-                    foreach (var c in cotizaciones)
-                    {
-                        this.cargarEnPh(c);
-                    }
+                    this.cargarCotizacion(dtCotizaciones);
                 }
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cotizacion por observacion. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: PedidosDetalleF.buscarPorObservacion. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
         protected void btnBuscarNumeros_Click(object sender, EventArgs e)
