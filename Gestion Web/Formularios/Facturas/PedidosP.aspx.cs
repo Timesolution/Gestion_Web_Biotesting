@@ -1393,42 +1393,58 @@ namespace Gestion_Web.Formularios.Facturas
                     if (accion == 5)
                     {
                         ch = tr.Cells[8].Controls[2] as CheckBox;
-                        if (tr.Cells[7].Text == "Facturado")
-                            estado = true;
-
                     }
                     else
                     {
                         ch = tr.Cells[5].Controls[2] as CheckBox;
-                        if (tr.Cells[4].Text == "Facturado")
-                            estado = true;
                     }
 
                     if (ch.Checked == true)
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";// .Substring(12, ch.ID.Length - 12) + ";";
+                        if (accion == 5)
+                        {
+                            if (tr.Cells[7].Text == "Facturado")
+                            {
+                                estado = true;
+                            }
+                        }
+                        else
+                        {
+                            if (tr.Cells[4].Text == "Facturado")
+                            {
+                                estado = true;
+                            }
+                        }
+                        
+                            
+
                     }
                 }
-                if ((this.configuracion.facturarMismoPedidoVariasVeces == "1" && (estado)) || !estado)
-                {
+               
                     if (!String.IsNullOrEmpty(idtildado))
+                    {
+                    if ((this.configuracion.facturarMismoPedidoVariasVeces == "1" && (estado)) || !estado)
                     {
                         Response.Redirect("../../Formularios/Facturas/ABMFacturas.aspx?accion=5&pedidos=" + idtildado);
                     }
                     else
                     {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion", "Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
+                    }
+                    }
+                    else
+                    {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
                     }
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion", "Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
-                }
+                
+               
 
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscnado cliente en PedidosP.cargarPedidosRango. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
         protected void btnSi_Click(object sender, EventArgs e)
@@ -1619,15 +1635,13 @@ namespace Gestion_Web.Formularios.Facturas
                     if (accion == 5)
                     {
                         ch = tr.Cells[8].Controls[2] as CheckBox;
-                        if (tr.Cells[7].Text == "Remitido")
-                            estado = true;
+                        
                     }
 
                     else
                     {
                         ch = tr.Cells[5].Controls[2] as CheckBox;
-                        if (tr.Cells[4].Text == "Remitido")
-                            estado = true;
+                        
                     }
 
 
@@ -1637,6 +1651,16 @@ namespace Gestion_Web.Formularios.Facturas
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                         contador++;
                         idtildado += ch.ID.Split('_')[1] + ";";
+                        if(accion==5)
+                        {
+                            if (tr.Cells[7].Text == "Remitido")
+                                estado = true;
+                        }
+                        else
+                        {
+                            if (tr.Cells[4].Text == "Remitido")
+                                estado = true;
+                        }
                     }
                 }
 
