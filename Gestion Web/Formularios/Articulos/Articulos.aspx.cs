@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Articulos
         private controladorPais contPais = new controladorPais();
         private controladorListaPrecio contListaPrecio = new controladorListaPrecio();
         controladorCliente _controladorCliente = new controladorCliente();
+        ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
 
         Mensajes m = new Mensajes();
         Configuracion config = new Configuracion();
@@ -58,6 +59,16 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 btnModificarPrecio.Attributes.Add("onclick", " this.disabled = true;  " + btnModificarPrecio.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnModificarPrecio, null) + ";");
                 btnSeteaPrecioventa.Attributes.Add("onclick", " this.disabled = true;  " + btnSeteaPrecioventa.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnSeteaPrecioventa, null) + ";");
+
+                //CHEQUEO SI LA EMPRESA ES DEPORT SHOW, PARA HABILITAR LA DESCARGA .CSV DE ARTICULOS PARA MAGENTO
+                int idEmpresa = (int)Session["Login_SucUser"];
+                Empresa empresa = controladorEmpresa.obtenerEmpresaByIdSucursal(idEmpresa);
+
+                if(string.Equals(empresa.RazonSocial,"RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
+                    lbtnExportarArticulosMagento.Visible = true;
+                else
+                    lbtnExportarArticulosMagento.Visible = false;
+
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
@@ -2291,18 +2302,18 @@ namespace Gestion_Web.Formularios.Articulos
                     if (i > 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Solicitud Generada", "Se ha generado la solicitud de Importacion con exito. Podra visualizar el estado en Reportes -> Informes Solicitados."));
                     if (i == -1) 
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlError("Error", "Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp: +54 9 11 3782-0435. "));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlError("Error", "Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
                 }
                 catch (Exception Ex)
                 {
                     Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta. Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + Ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este problema via WhatsApp: +54 9 11 3782-0435."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte para informarnos sobre este problema via WhatsApp: +54 9 11 3782-0435."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
             finally
             {
@@ -2376,5 +2387,42 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+        protected void lbtnExportarArticulosMagento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorReportes controladorReportes = new controladorReportes();
+
+                string rutaTxt = Server.MapPath("../ArchivosExportacion/Salida/");
+
+                if (!Directory.Exists(rutaTxt))
+                {
+                    Directory.CreateDirectory(rutaTxt);
+                }
+
+                string archivos = controladorReportes.generarArchivoArticulosMagento(rutaTxt);
+
+                System.IO.FileStream fs = null;
+                fs = System.IO.File.Open(archivos, System.IO.FileMode.Open);
+
+                byte[] btFile = new byte[fs.Length];
+                fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
+                fs.Close();
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/octet-stream";
+                this.Response.AddHeader("Content-disposition", "attachment; filename= " + archivos);
+                this.Response.BinaryWrite(btFile);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado","Se ha generado el archivo con exito. El mismo se encuentra en /ArchivosExportacion/Salida/"));
+                this.Response.End();
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "ERROR", "CATCH: Ocurrio un error.Ubicacion: Articulos.lbtnExportarArticulosMagento_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+            }
+        }
     }
 }
