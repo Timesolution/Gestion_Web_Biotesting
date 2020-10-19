@@ -1469,7 +1469,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarRemitirMismoPedidoVariasVeces();
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Modo Seguro.");
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Remitir mas de una vez un pedido.");
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Remitir mas de una vez un pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
                 }
                 else
@@ -1495,7 +1495,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarFacturarMismoPedidoVariasVeces();
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Modo Seguro.");
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Facturar mas de una vez un pedido.");
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Facturar mas de una vez un pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
                 }
                 else
@@ -1507,6 +1507,37 @@ namespace Gestion_Web.Formularios.Herramientas
             {
 
             }
+        }
+
+        protected void lbtnSumaPuntosCobros_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.sumaPuntosCobros == "0")
+                    configuracion.sumaPuntosCobros = "1";
+                else
+                    configuracion.sumaPuntosCobros = "0";
+
+                int i = configuracion.ModificarSumaPuntosCobros();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Modo Seguro.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Suma puntos con cobros modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Suma puntos con cobros!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void btnGuardarPuntosCobro_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
