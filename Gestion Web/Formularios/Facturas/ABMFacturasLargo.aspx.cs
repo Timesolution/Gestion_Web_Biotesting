@@ -46,7 +46,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCobranza contCobranza = new controladorCobranza();
         Configuracion configuracion = new Configuracion();
         controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
-
+        controladorCuentaCorriente controladorCC = new controladorCuentaCorriente();
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
 
         //factura
@@ -1871,17 +1871,20 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente contCliente = new controladorCliente();
                 this.cliente = contCliente.obtenerClienteID(idCliente);
                 Configuracion c = new Configuracion();
+                decimal saldoOperativo = ObtenerSaldoOperativo();
+                
+                
 
                 if (this.cliente != null)
                 {
                     this.lblMovSolicitud.Text = "";
                     if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
-                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit;
+                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
                     }
                     else
                     {
-                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit;
+                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
                     }
                     if (this.cliente.cuit.Length == 11)
                     {
@@ -2089,6 +2092,37 @@ namespace Gestion_Web.Formularios.Facturas
         protected void DropList_DomicilioDeEntrega_SelectIndexChanged(object sender, EventArgs e)
         {
             CargarIngresosBrutos(Convert.ToInt32(HiddenField_IdCliente.Value));
+        }
+
+        private decimal ObtenerSaldoOperativo()
+        {
+            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today);
+            decimal saldoOperativo;
+            decimal saldoAcumulado = 0;
+
+            foreach (DataRow row in datos.Rows)
+            {
+                if (this.accion == 2)
+                {
+                    if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                    {
+                        saldoAcumulado += Convert.ToDecimal(row["debe"]);
+                    }
+                    if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                    {
+                        saldoAcumulado -= Convert.ToDecimal(row["haber"]);
+                    }
+                }
+                else
+                {
+                    saldoAcumulado += Convert.ToDecimal(row["saldo"]);
+                }
+
+                row["SaldoAcumulado"] = saldoAcumulado.ToString();
+            }
+
+            saldoOperativo = cliente.saldoMax - saldoAcumulado;
+            return saldoOperativo;
         }
 
         private void CargarIngresosBrutos(int idCliente)
