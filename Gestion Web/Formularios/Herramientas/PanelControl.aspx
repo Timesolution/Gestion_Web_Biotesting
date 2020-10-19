@@ -489,7 +489,7 @@
                                             </div>
                                         </div>
 
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Filtro Articulos Sucursal:</label>
                                             <div class="col-md-4">
                                                 <asp:DropDownList ID="DropListFiltroArticulosSucursal" runat="server" class="form-control">
@@ -560,10 +560,10 @@
                                             <div class="col-md-2">
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:LinkButton ID="lbtnObeservacionesFC" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnObeservacionesFC_Click"/>
+                                                <asp:LinkButton ID="lbtnObeservacionesFC" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnObeservacionesFC_Click" />
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Proveedor Predeterminado Importacion</label>
                                             <div class="col-md-4">
@@ -572,7 +572,7 @@
                                             <div class="col-md-2">
                                             </div>
                                             <div class="col-md-2">
-                                                <asp:LinkButton ID="lbtnProveedores" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnProveedores_Click"/>
+                                                <asp:LinkButton ID="lbtnProveedores" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnProveedores_Click" />
                                             </div>
                                         </div>
 
@@ -604,22 +604,28 @@
                                                 <asp:LinkButton ID="lbtnModoSeguro" runat="server" OnClick="lbtnModoSeguro_Click" />
                                             </div>
                                         </div>
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Agregar ítems al Facturar o Remitir:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnAgregarItemsFactura" runat="server" OnClick="lbtnAgregarItemsFactura_Click" />
                                             </div>
                                         </div>
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Remitir mas de una vez un pedido:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnRemitirMultiplesVeces" runat="server" OnClick="lbtnRemitirMultiplesVeces_Click" />
                                             </div>
                                         </div>
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Facturar mas de una vez un pedido:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnFacturarMultiplesVeces" runat="server" OnClick="lbtnFacturarMultiplesVeces_Click" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Sumar puntos cobro:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalSumaPuntosCobro" class="btn btn-success" />
                                             </div>
                                         </div>
 
@@ -714,6 +720,69 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+    <div id="modalSumaPuntosCobro" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 75%;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Puntos por cobro</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel runat="server" UpdateMode="Always" ID="UpdatePanel3">
+                            <ContentTemplate>
+                                <fieldset>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Puntos por cobro</label>
+                                        <div class="input-group">
+                                            <asp:DropDownList ID="ListPuntosCobro" runat="server" class="form-control">
+                                                <asp:ListItem Value="0" Text="No"></asp:ListItem>
+                                                <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Porcentaje Tarjeta</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtPorcentajeTarjeta" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">%</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Porcentaje Efectivo</label>
+                                        <div class="input-group">
+                                             <asp:TextBox ID="txtPorcentajeEfectivo" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Porcentaje Transferencias</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtPorcentajeTransferencia" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Porcentaje Cheques</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtPorcentajeChequesq" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                        <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnGuardarPuntosCobro" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnGuardarPuntosCobro_Click" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -870,8 +939,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

@@ -368,10 +368,10 @@
             </div>
         </div>
 
+        <%-- Modal Busqueda por Numero de pedido, cliente u observacion --%>
         <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Busqueda</h4>
@@ -381,23 +381,14 @@
                             <div class="form-group">
                                 <label class="col-md-4">N° Cliente</label>
                                 <div class="col-md-4">
-
-                                    <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
-
-                                    <!-- /input-group -->
+                                    <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control" TextMode="Number"></asp:TextBox>
                                 </div>
-
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4">N° Pedido</label>
                                 <div class="col-md-4">
-                                    <asp:TextBox ID="txtNumeroPedido" runat="server" class="form-control"></asp:TextBox>
+                                    <asp:TextBox ID="txtNumeroPedido" runat="server" class="form-control" TextMode="Number"></asp:TextBox>
                                 </div>
-                                <%--<div class="col-md-4">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                </div>--%>
-                                <!-- /input-group -->
-
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4">Buscar por observacion</label>
@@ -411,9 +402,9 @@
                         <asp:LinkButton ID="btnBuscarNumeros" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscarNumeros_Click" />
                     </div>
                 </div>
-
             </div>
         </div>
+        <%-- Fin modal de busqueda --%>
 
         <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
