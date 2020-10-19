@@ -531,6 +531,7 @@
         </div>
     <%-- FIN MODAL CONFIRMACION ANULACION DE COTIZACION --%>
 
+    <%-- Modal Busqueda por Numero de Cotizacion, Cliente u Observacion --%>
     <div id="modalNro" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -540,18 +541,18 @@
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
-                        <%--<div class="form-group">
+                        <div class="form-group">
                             <label class="col-md-4">N° Cliente</label>
                             <div class="col-md-4">
-                                <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control" TextMode="number"></asp:TextBox>
                             </div>
-                        </div>--%>
-                        <%--<div class="form-group">
-                            <label class="col-md-4">N° Pedido</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4">N° Cotizacion</label>
                             <div class="col-md-4">
-                                <asp:TextBox ID="txtNumeroPedido" runat="server" class="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtNumeroCotizacion" runat="server" class="form-control" TextMode="number"></asp:TextBox>
                             </div>
-                        </div>--%>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-4">Buscar por observacion</label>
                             <div class="col-md-4">
@@ -566,6 +567,7 @@
             </div>
         </div>
     </div>
+    <%-- Fin Modal Busqueda de Busqueda --%>
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <script>

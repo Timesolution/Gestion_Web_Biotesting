@@ -419,6 +419,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                this.txtComentarios.Text = f.comentario;
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroFactura();

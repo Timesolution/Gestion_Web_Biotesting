@@ -31,7 +31,9 @@ namespace Gestion_Web.Formularios.Facturas
 
         int idVendedor;
 
-        string observacion = string.Empty;
+        string numeroCotizacion = string.Empty;
+        string clienteCotizacion = string.Empty;
+        string observacionCotizacion = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -45,7 +47,9 @@ namespace Gestion_Web.Formularios.Facturas
                 idEstado = Convert.ToInt32(Request.QueryString["estado"]);
                 vendedor = Convert.ToInt32(Request.QueryString["V"]);
                 accion = Convert.ToInt32(Request.QueryString["a"]);
-                observacion = Request.QueryString["o"];
+                this.numeroCotizacion = Request.QueryString["n"];
+                this.clienteCotizacion = Request.QueryString["c"];
+                this.observacionCotizacion = Request.QueryString["o"];
 
                 if (!IsPostBack)
                 {
@@ -78,9 +82,17 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.cargarCotizacionesRango(fechaD, fechaH, suc);
                 }
-                else if (accion == 1)
+                if (accion == 1)//Busqueda por Observacion
                 {
-                    buscarPorObservacion();
+                    BuscarPorObservacion();
+                }
+                if (accion == 2)//Busqueda por Numero Cliente
+                {
+                    BuscarPorNumeroCliente();
+                }
+                if (accion == 3)//Busqueda por Numero Cotizacion
+                {
+                    BuscarPorNumeroCotizacion();
                 }
 
                 //if (idCliente <= 0)
@@ -89,7 +101,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en CotizacionesC. Ubicacion: CotizacionesC.Page_Load. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -367,7 +380,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de Cotizaciones. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error cargando cotizaciones. Ubicacion: CotizacionesC.cargarCotizacion. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
 
             }
         }
@@ -720,7 +734,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                                 var cotizacion = controladorPedido.obtenerPedidoId(Convert.ToInt32(j[i]));
 
-                                if(cotizacion != null)
+                                if (cotizacion != null)
                                 {
                                     if (i == 0)
                                     {
@@ -729,13 +743,13 @@ namespace Gestion_Web.Formularios.Facturas
                                     }
                                     else
                                     {
-                                        if(descuento != cotizacion.neto10)
+                                        if (descuento != cotizacion.neto10)
                                         {
                                             validarDescuento = true;
                                         }
                                     }
                                     aux = cotizacion.cliente.id; //CAMBIA
-                                  
+
                                     if (idC != aux && i != 0)
                                     {
                                         contadorRepetido++;
@@ -855,35 +869,88 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
+
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
             }
         }
-        private void buscarPorObservacion()
+
+        #region Busquedas
+
+        private void BuscarPorObservacion()
         {
             try
             {
-                //var cotizaciones = this.controlador.obtenerPedidosPorObservacionDT(this.observacion,10); //10 es el tipo de documento cotizacion
-                //if (cotizaciones != null)
-                //{
-                //    this.cargarCotizacion(cotizaciones);
-                //}
-                var cotizaciones = this.controlador.obtenerListaPedidosPorObservacion(this.observacion, 10); //10 es el tipo de documento pedido
-                if (cotizaciones != null)
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorObservacion(this.observacionCotizacion, 10); //10 es el tipo de documento pedido
+                if (dtCotizaciones.Rows.Count > 0)
                 {
-                    this.phCotizaciones.Controls.Clear();
-                    foreach (var c in cotizaciones)
-                    {
-                        this.cargarEnPh(c);
-                    }
+                    this.cargarCotizacion(dtCotizaciones);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
                 }
+                else if(dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con la observacion: " + this.observacionCotizacion.ToString()));
+
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cotizacion por observacion. " + ex.Message));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: CotizacionesC.buscarPorObservacion. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
+
+        private void BuscarPorNumeroCotizacion()
+        {
+            try
+            {
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorNumero(this.numeroCotizacion, 10); //10 es el tipo de documento Cotizacion
+                if (dtCotizaciones.Rows.Count > 0)
+                {
+                    this.cargarCotizacion(dtCotizaciones);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                }
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cotizacion: " + this.numeroCotizacion));
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: CotizacionesC.buscarPorObservacion. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+            }
+        }
+
+        private void BuscarPorNumeroCliente()
+        {
+            try
+            {
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorCliente(this.clienteCotizacion, 10); //10 es el tipo de documento Cotizacion
+                if (dtCotizaciones.Rows.Count > 0)
+                {
+                    this.cargarCotizacion(dtCotizaciones);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                }
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cliente : " + this.clienteCotizacion));
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: CotizacionesC.buscarPorObservacion. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+            }
+        }
+
+        #endregion
+
         protected void btnBuscarNumeros_Click(object sender, EventArgs e)
         {
+            if (!string.IsNullOrEmpty(this.txtNumeroCotizacion.Text))
+            {
+                Response.Redirect("CotizacionesC.aspx?a=3&n=" + this.txtNumeroCotizacion.Text);
+            }
+            if (!string.IsNullOrEmpty(this.txtCodigoCliente.Text))
+            {
+                Response.Redirect("CotizacionesC.aspx?a=2&c=" + this.txtCodigoCliente.Text);
+            }
             if (!string.IsNullOrEmpty(this.txtObservacion.Text))
             {
                 Response.Redirect("CotizacionesC.aspx?a=1&o=" + this.txtObservacion.Text);
