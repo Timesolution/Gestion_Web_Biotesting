@@ -625,7 +625,7 @@
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Sumar puntos cobro:</label>
                                             <div class="col-md-2">
-                                                <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalSumaPuntosCobro" class="btn btn-success" />
+                                                <asp:LinkButton ID="lbtnSumaPuntosCobro" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalSumaPuntosCobro" class="btn btn-success" />
                                             </div>
                                         </div>
 
@@ -747,7 +747,7 @@
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Tarjeta</label>
                                         <div class="input-group">
-                                            <asp:TextBox ID="txtPorcentajeTarjeta" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                            <asp:TextBox ID="txtPorcentajeTarjeta" runat="server" class="form-control" TextMode="Number" />
                                         <span class="input-group-addon">%</span>
 
                                         </div>
@@ -755,21 +755,21 @@
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Efectivo</label>
                                         <div class="input-group">
-                                             <asp:TextBox ID="txtPorcentajeEfectivo" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                             <asp:TextBox ID="txtPorcentajeEfectivo" runat="server" class="form-control" TextMode="Number"  />
                                         <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Transferencias</label>
                                         <div class="input-group">
-                                            <asp:TextBox ID="txtPorcentajeTransferencia" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                            <asp:TextBox ID="txtPorcentajeTransferencia" runat="server" class="form-control" TextMode="Number"  />
                                         <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Cheques</label>
                                         <div class="input-group">
-                                            <asp:TextBox ID="txtPorcentajeChequesq" runat="server" class="form-control" TextMode="Number"  ValidationGroup="MontoDescuentoGroup" />
+                                            <asp:TextBox ID="txtPorcentajeCheques" runat="server" class="form-control" TextMode="Number"  />
                                         <span class="input-group-addon">%</span>
                                         </div>
                                     </div>

@@ -36,6 +36,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.cargarEstados();
                     this.CargarSucursalesParaGarantiaYServiceOficial();
                     this.CargarProveedores();
+                    this.CargarPuntosCobro();
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -1111,6 +1112,40 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error al cargar proveedores" + ex.Message);
             }
         }
+        public void CargarPuntosCobro()
+        {
+            try
+            {
+                controladorCobranza contCobranza = new controladorCobranza();
+                this.ListPuntosCobro.SelectedValue = this.configuracion.sumaPuntosCobros;
+                DataTable dt = contCobranza.obtenerPorcentajesPuntosCobros();
+                foreach(DataRow dr in dt.Rows)
+                {
+                    if (dr["tipoPago"].ToString()=="Efectivo")
+                    {
+                        txtPorcentajeEfectivo.Text = dr["porcentaje"].ToString();
+                    }
+                    if (dr["tipoPago"].ToString() == "Cheques")
+                    {
+                        txtPorcentajeCheques.Text = dr["porcentaje"].ToString();
+                    }
+                    if (dr["tipoPago"].ToString() == "Transferencia")
+                    {
+                        txtPorcentajeTransferencia.Text = dr["porcentaje"].ToString();
+                    }
+                    if (dr["tipoPago"].ToString() == "Tarjeta")
+                    {
+                        txtPorcentajeTarjeta.Text = dr["porcentaje"].ToString();
+                    }
+                }
+                
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al cargar proveedores" + ex.Message);
+            }
+        }
 
         protected void lbtnTiempoLineas_Click(object sender, EventArgs e)
         {
@@ -1509,16 +1544,18 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
-        protected void lbtnSumaPuntosCobros_Click(object sender, EventArgs e)
+        protected void btnGuardarPuntosCobro_Click(object sender, EventArgs e)
         {
             try
             {
-                if (configuracion.sumaPuntosCobros == "0")
-                    configuracion.sumaPuntosCobros = "1";
-                else
-                    configuracion.sumaPuntosCobros = "0";
 
-                int i = configuracion.ModificarSumaPuntosCobros();
+                controladorCobranza controladorCobranza = new controladorCobranza();
+                int i = configuracion.ModificarSumaPuntosCobros(ListPuntosCobro.SelectedValue);
+                controladorCobranza.ModificarPorcentajesPuntos("Efectivo", this.txtPorcentajeEfectivo.Text == "" ? "0" : this.txtPorcentajeEfectivo.Text);
+                controladorCobranza.ModificarPorcentajesPuntos("Cheques", this.txtPorcentajeCheques.Text == "" ? "0" : this.txtPorcentajeCheques.Text);
+                controladorCobranza.ModificarPorcentajesPuntos("Transferencia", this.txtPorcentajeTransferencia.Text == "" ? "0" : this.txtPorcentajeTransferencia.Text);
+                controladorCobranza.ModificarPorcentajesPuntos("Tarjeta",this.txtPorcentajeTarjeta.Text == "" ? "0" : this.txtPorcentajeTarjeta.Text);
+
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Modo Seguro.");
@@ -1535,9 +1572,6 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
-        protected void btnGuardarPuntosCobro_Click(object sender, EventArgs e)
-        {
-
-        }
+    
     }
 }
