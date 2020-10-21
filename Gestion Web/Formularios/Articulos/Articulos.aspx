@@ -24,7 +24,10 @@
                                         <a href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%;color:Tomato">Importar Articulos desde Base Externa</a>
                                     </li>
                                     <li>
-                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Exportar Articulos</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Exportar Articulos .txt</asp:LinkButton>
+                                    </li>
+                                    <li>
+                                        <asp:LinkButton ID="lbtnExportarArticulosMagento" runat="server" OnClick="lbtnExportarArticulosMagento_Click" ForeColor="OliveDrab" Visible="false">Exportar Articulos Magento .txt</asp:LinkButton>
                                     </li>
                                 </ul>
                             </div>

@@ -40,6 +40,7 @@ namespace Gestion_Web.Formularios.Clientes
         ControladorPlanCuentas contPlanCta = new ControladorPlanCuentas();
         controladorFunciones controladorFunciones = new controladorFunciones();
         controladorUsuario controladorUsuario = new controladorUsuario();
+        controladorCobranza controladorCobranza = new controladorCobranza();
 
         //para saber si es alta(1) o modificacion(2)
         private int accion;
@@ -54,6 +55,7 @@ namespace Gestion_Web.Formularios.Clientes
         private int PosDir;
         private int PosCon;
         private int crm;
+        private int totalPuntos = 0;
 
         public class IIBBTemporal
         {
@@ -216,6 +218,7 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     this.cargarTablaDireccion();
                     this.cargarTablaContacto();
+                    this.cargarTablaPuntos();
                 }
                 TabName.Value = Request.Form[TabName.UniqueID];
                 if (crm == 1)
@@ -2361,6 +2364,76 @@ namespace Gestion_Web.Formularios.Clientes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando contactos en PH " + ex.Message));
             }
         }
+
+
+        public void cargarTablaPuntos()
+        {
+            try
+            {
+                if (Session["ClientesABM_Cliente"] != null)
+                {
+                    Cliente c = Session["ClientesABM_Cliente"] as Cliente;
+                    DataTable puntos = controladorCobranza.ObtenerPuntosCliente(c.id);
+                    this.phPuntos.Controls.Clear();
+                    int id = 0; 
+                    foreach (DataRow dt in puntos.Rows)
+                    {
+                        this.cargarPHPuntos(dt, id);
+                        id++;
+                    }
+                    this.labelPuntos.Text = totalPuntos.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error dibujando contactos" + ex.Message));
+            }
+        }
+
+        public void cargarPHPuntos(DataRow dr, int id)
+        {
+            try
+            {
+                //fila
+                TableRow tr = new TableRow();
+                tr.ID = "Puntos_" + id.ToString();
+
+                //Celdas
+
+                TableCell celFecha = new TableCell();
+                celFecha.Text = Convert.ToDateTime(dr["fecha"]).ToString("dd/MM/yyyy");
+                celFecha.VerticalAlign = VerticalAlign.Middle;
+                celFecha.Width = Unit.Percentage(25);
+                tr.Cells.Add(celFecha);
+
+                TableCell celCobro = new TableCell();
+                celCobro.Text = dr["numero"].ToString();
+                celCobro.VerticalAlign = VerticalAlign.Middle;
+                celCobro.Width = Unit.Percentage(20);
+                tr.Cells.Add(celCobro);
+
+                TableCell celPuntos = new TableCell();
+                celPuntos.Text = dr["puntos"].ToString();
+                totalPuntos += Convert.ToInt32(dr["puntos"]);
+                celPuntos.VerticalAlign = VerticalAlign.Middle;
+                celPuntos.Width = Unit.Percentage(20);
+                tr.Cells.Add(celPuntos);
+
+                TableCell celTipoPago = new TableCell();
+                celTipoPago.Text = dr["tipoPago"].ToString();
+                celTipoPago.VerticalAlign = VerticalAlign.Middle;
+                celTipoPago.Width = Unit.Percentage(20);
+                tr.Cells.Add(celTipoPago);
+
+                phPuntos.Controls.Add(tr);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando puntos en PH " + ex.Message));
+            }
+        }
+
         private void QuitarItemContacto(object sender, EventArgs e)
         {
             try

@@ -34,6 +34,7 @@
                                 <li><a href="#OrdenesCompra" id="linkOrdenesCompra" runat="server" data-toggle="tab" visible="false">Orden de Compra</a></li>
                                 <li><a href="#CodigoBTB" id="linkCodigoBTB" runat="server" data-toggle="tab" visible="false">Codigo BTB</a></li>
                                 <li><a href="#IngresosBrutos" id="linkIngresosBrutos" runat="server" data-toggle="tab" visible="true">IIBB Otras Jurisdicciones</a></li>
+                                <li><a href="#Puntos" id="linkPuntos" runat="server" data-toggle="tab" visible="true">Puntos</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade active in" id="home">
@@ -1343,6 +1344,68 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <%-- Puntos --%>
+                                <div class="tab-pane fade" id="Puntos">
+                                    <asp:UpdatePanel ID="UpdatePanel11" UpdateMode="Always" runat="server">
+                                        <ContentTemplate>
+                                            <div class="col-md-12">
+                                                <div class="widget big-stats-container stacked">
+                                                    <div class="widget-content">
+                                                        <div id="big_stats" class="cf">
+                                                            <div class="stat">
+                                                                <h4>Puntos Totales</h4>
+                                                                <asp:Label ID="labelPuntos" runat="server" Text="" class="value"></asp:Label>
+                                                            </div>
+                                                            <!-- .stat -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /widget-content -->
+
+                                                </div>
+                                                <!-- /widget -->
+
+                                            </div>
+                                            <!-- /span12 -->
+                                            <div class="col-md-12">
+
+                                                <div class="widget stacked widget-table">
+
+                                                    <div class="widget-header">
+                                                        <span class="icon-external-link"></span>
+                                                        <h3>Puntos</h3>
+                                                    </div>
+                                                    <!-- .widget-header -->
+
+                                                    <div class="widget-content">
+                                                        <table class="table table-bordered table-striped">
+
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width: 25%">Fecha</th>
+                                                                    <th style="width: 25%">Numero de cobro</th>
+                                                                    <th style="width: 25%">Puntos</th>
+                                                                    <
+                                                                    <th style="width: 25%">Tipo de pago</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <asp:PlaceHolder ID="phPuntos" runat="server"></asp:PlaceHolder>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <!-- .widget-content -->
+
+                                                </div>
+
+                                            </div>
+                                        </ContentTemplate>
+                                        <Triggers>
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <%-- Fin Puntos --%>
                             </div>
                         </div>
                     </div>
@@ -1898,7 +1961,7 @@
             }
         };
     </script>
-
+    <link href="../../css/pages/reports.css" rel="stylesheet">
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
