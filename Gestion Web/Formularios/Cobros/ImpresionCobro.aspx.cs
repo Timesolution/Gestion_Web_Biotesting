@@ -181,8 +181,8 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Movimiento_Cobro mov = this.controlador.obtenerMovimientoCobroByIDCobro(idCobro);                
-                
+                Movimiento_Cobro mov = this.controlador.obtenerMovimientoCobroByIDCobro(idCobro);
+
                 DataTable dtDatos = controlador.obtenerDatosCobro(mov.id);
                 DataTable dtDetalle = controlador.obtenerDetalleCobro(mov.id);
                 DataTable dtTotal = controlador.obtenerTotalCobro(mov.id);
@@ -200,7 +200,7 @@ namespace Gestion_Web.Formularios.Cobros
                             foreach (DataRow row in dtContado.Rows)
                             {
                                 var rowEfectivo = dtDetalle.AsEnumerable().Where(x => x["Tipo"].ToString() == "Efectivo").FirstOrDefault();
-                                if(rowEfectivo != null)
+                                if (rowEfectivo != null)
                                 {
                                     rowEfectivo["Tipo"] = row["Tipo"];
                                 }
@@ -208,7 +208,7 @@ namespace Gestion_Web.Formularios.Cobros
                         }
                     }
                 }
-                catch { }  
+                catch { }
 
                 //datos empresa emisora
                 DataRow drEmpresa = dtDatos.Rows[0];
@@ -238,7 +238,7 @@ namespace Gestion_Web.Formularios.Cobros
                 ReportDataSource rds6 = new ReportDataSource("DetalleTransferencia", dtTransferencia);
                 ReportDataSource rds7 = new ReportDataSource("DatosEmpresa", dtEmpresa);
                 ReportParameter param = new ReportParameter("ParamComentarios", comentarios);
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
@@ -284,7 +284,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 Decimal saldoTotal = 0;
                 DataTable dtDatos2 = controlador.obtenerTablaTopClientes(this.fechaD, this.fechaH, this.idCliente, this.idVendedor, this.idSucursal, this.idTipo, this.impagasVencidas);
-                
+
                 foreach (DataRow row in dtDatos2.Rows)
                 {
                     //String[] saldo = row.ItemArray[2].ToString().Split('$');
@@ -366,7 +366,7 @@ namespace Gestion_Web.Formularios.Cobros
                     foreach (DataRow row in dtImpagas.Rows)
                     {
                         Gestor_Solution.Modelo.Cliente cAux = contCliente.obtenerClienteID(Convert.ToInt32(row["cliente"]));
-                        if(cAux!=null)
+                        if (cAux != null)
                         {
                             row["codigoCliente"] = cAux.codigo;
                         }
@@ -374,7 +374,7 @@ namespace Gestion_Web.Formularios.Cobros
                         {
                             row["codigoCliente"] = "";
                         }
-                       
+
                         DataTable dtTelefono = contCliente.obtenerContactoCliente(Convert.ToInt32(row["cliente"]), 1);
                         if (dtTelefono.Rows.Count > 0)
                         {
@@ -382,7 +382,7 @@ namespace Gestion_Web.Formularios.Cobros
                         }
 
                         var dtDireccion = contCliente.obtenerDireccionCliente(Convert.ToInt32(row["cliente"]), 1);
-                        if(dtDireccion.Rows.Count != 0)
+                        if (dtDireccion.Rows.Count != 0)
                         {
                             row["Telefono"] += " / " + dtDireccion.Rows[0].ItemArray[2].ToString();
                         }
@@ -478,7 +478,7 @@ namespace Gestion_Web.Formularios.Cobros
                         }
                         else
                             row["codigoCliente"] = "";
-                        
+
                     }
                 }
 
@@ -656,7 +656,7 @@ namespace Gestion_Web.Formularios.Cobros
                         //row["Importe"] = f.netoNGrabado * -1;
                         row["Importe"] = f.subTotal * -1;
                     }
-                    
+
                     row["Documento"] = f.tipo.tipo + "" + f.numero;
                     row["Cliente"] = f.cliente.razonSocial;
 
@@ -739,7 +739,7 @@ namespace Gestion_Web.Formularios.Cobros
                 DateTime treinta = DateTime.Today.AddDays(30);
                 DateTime cuarenta = DateTime.Today.AddDays(45);
                 DateTime sesenta = DateTime.Today.AddDays(60);
-                
+
                 DataTable dt = this.controlador.obtenerImpagasClientesByRango(this.fechaD, this.fechaH, idCliente, idVendedor, this.idSucursal, this.idTipo, this.impagasVencidas);
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ImpagasVencimientos.rdlc");
@@ -814,7 +814,7 @@ namespace Gestion_Web.Formularios.Cobros
                         DataTable dtTelefono = contCliente.obtenerContactoCliente(Convert.ToInt32(row["cliente"]), 1);
                         var dtDireccion = contCliente.obtenerDireccionCliente(Convert.ToInt32(row["cliente"]), 1);
 
-                        if( string.IsNullOrEmpty(row["GuiaDespacho"].ToString()))
+                        if (string.IsNullOrEmpty(row["GuiaDespacho"].ToString()))
                         {
                             row["GuiaDespacho"] = "";
                         }
@@ -825,7 +825,7 @@ namespace Gestion_Web.Formularios.Cobros
                         //Verifico que el cliente tenga direccion cargadas, y lo recorro
                         if (dtDireccion != null && dtDireccion.Rows.Count > 0)
                         {
-                            Log.EscribirSQL(1,"ERROR", "Voy agregar la direccion del cliente con id: " + Convert.ToInt32(row["cliente"]));
+                            Log.EscribirSQL(1, "ERROR", "Voy agregar la direccion del cliente con id: " + Convert.ToInt32(row["cliente"]));
                             row["Direccion"] = dtDireccion.Rows[0]["direccion"] + ", " + dtDireccion.Rows[0]["localidad"];
 
                             //Si el cliente tiene mas de una direccion, lo concateno con el resto
@@ -916,7 +916,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 Response.Cookies["listaReporteDetalleCobros"].Expires = DateTime.Now.AddDays(-1);
 
-                listaCobros = listaCobros.Remove(listaCobros.Length - 1).Replace(',',';');
+                listaCobros = listaCobros.Remove(listaCobros.Length - 1).Replace(',', ';');
 
                 DataTable dt = this.generarDetalleCobrosDT(listaCobros);
 
@@ -976,20 +976,59 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Decimal saldoTotal = 0;
-                DataTable dtDatos2 = controlador.ObtenerTablaSaldosClientes(this.fechaD, this.fechaH, this.idCliente, this.idVendedor, this.idSucursal, this.idTipo, this.impagasVencidas);
+                controladorCuentaCorriente controladorCuentaCorriente = new controladorCuentaCorriente();
+                Decimal saldoTotalPositivo = 0;
 
+                //DateTime fdesde = Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR"));
+                //DateTime fhasta = Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+
+                DataTable dtDatos2 = controlador.ObtenerTablaSaldosClientes(this.fechaD, this.fechaH, this.idCliente, this.idVendedor, this.idSucursal, -1, this.impagasVencidas);
+
+                //foreach (DataRow row in dtDatos2.Rows)
+                //{
+                //    //String[] saldo = row.ItemArray[2].ToString().Split('$');
+                //    //saldoTotal += Convert.ToDecimal(saldo[1]);
+                //    saldoTotal += Convert.ToDecimal(row["importe"].ToString());
+                //}
+
+                //Obtengo el Saldo a Favor de Cada Uno
                 foreach (DataRow row in dtDatos2.Rows)
                 {
-                    //String[] saldo = row.ItemArray[2].ToString().Split('$');
-                    //saldoTotal += Convert.ToDecimal(saldo[1]);
-                    saldoTotal += Convert.ToDecimal(row["importe"].ToString());
+                    decimal saldoAcumulado = 0;
+                    if ((Convert.ToInt32(row["id"].ToString()) == 632))
+                        {
+                        int i = 0;
+                    }
+                    DataTable datos = controladorCuentaCorriente.obtenerMovimientosByCuentaDT((Convert.ToInt32(row["id"].ToString())), this.idSucursal, -1, 2, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")));
+
+                    foreach (DataRow saldosFinales in datos.Rows)
+                    {
+                       
+                            if (Math.Abs(Convert.ToDecimal(saldosFinales["debe"])) > 0)
+                            {
+                                saldoAcumulado += Convert.ToDecimal(saldosFinales["debe"]);
+                            }
+                            if (Math.Abs(Convert.ToDecimal(saldosFinales["haber"])) > 0)
+                            {
+                                saldoAcumulado -= Convert.ToDecimal(saldosFinales["haber"]);
+                            }
+                    }
+
+                    decimal SaldoAfavor = Decimal.Round(Convert.ToDecimal(saldoAcumulado.ToString()), 2);
+
+                    if (SaldoAfavor < 0)
+                    {
+                        row["SaldoPositivo"] = SaldoAfavor;
+                        saldoTotalPositivo += (decimal)row["SaldoPositivo"];
+                    }
+                    else
+                        row["SaldoPositivo"] = 0.00;
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("SaldosClientes.rdlc");
 
-                ReportParameter param = new ReportParameter("ParamSaldo", saldoTotal.ToString());
+                ReportParameter param = new ReportParameter("ParamSaldo", saldoTotalPositivo.ToString());
                 ReportDataSource rds = new ReportDataSource("dsImpaga", dtDatos2);
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
