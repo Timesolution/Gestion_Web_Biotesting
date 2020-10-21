@@ -44,7 +44,7 @@
                                                         <asp:LinkButton ID="btnExpImpagasVendedor" OnClick="btnExpImpagasVendedor_Click" runat="server" ForeColor="OliveDrab">Exportar impagas por vendedor</asp:LinkButton>
                                                     </li>
                                                     <li>
-                                                        <asp:LinkButton ID="btnReporteSaldoPositivoClientes" OnClick="btnReporteSaldoPositivoClientes_Click" runat="server" ForeColor="OliveDrab">Exportar Saldos Posit. Clientes (.excel) </asp:LinkButton>
+                                                        <asp:LinkButton ID="btnReporteSaldoPositivoClientes" OnClick="btnReporteSaldoPositivoClientes_Click" runat="server" ForeColor="OliveDrab">Exportar Saldos A Fav. Clientes</asp:LinkButton>
                                                     </li>
                                                     <li>
                                                         <asp:LinkButton ID="lbtnImprimir" OnClick="btnImprimir_Click" runat="server" ForeColor="Purple">Reporte impagas clientes</asp:LinkButton>
