@@ -69,7 +69,7 @@ namespace Disipar.Models
             StringBuilder sb = new StringBuilder();
             sb.Append("<script type = 'text/javascript'>");
             sb.Append("window.onload=function(){");
-            sb.Append("$.msgbox(\"" + mensaje + "\", {type: \"error\"});");
+            sb.Append("$.msgbox(\"<h2>Ups!</h2></br>Disculpe, ha ocurrido un error inesperado. </br>Por favor, haga click en <strong><a href='../Formularios/Herramientas/Soporte.aspx' target='_blank'>Como Generar un Ticket</a></strong> y siga con los pasos para ayudarnos a agilizar en la deteccion del incoveniente.</br>Gracias!\", {type: \"error\"});");
             sb.Append(";");
             //sb.Append(message);
             sb.Append("};");
