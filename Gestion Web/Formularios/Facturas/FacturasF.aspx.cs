@@ -4737,7 +4737,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando pago. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error quitando el pago. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -4926,6 +4926,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     Factura factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(idsListaFacturasTildados));
                     lblNumeroFC.Text = factura.numero;
+                    this.hfIDFactura.Value = factura.id.ToString();
                     DataTable dt = controladorCobranza.obtenerMonedasDT();
 
                     //agrego todos
@@ -4961,17 +4962,17 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else if (contadorFacturasTildadas > 1)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar SOLO un documento"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar <strong style='color:black'>solo</strong> un documento"));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos UN documento"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos <strong style='color:black'>un</strong> documento"));
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en FacturasF.lbtnImprimirFC_En_Otra_Divisa_Click. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -4997,7 +4998,7 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en FacturasF.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -5006,14 +5007,15 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 controladorFacturacion controladorFacturacion = new controladorFacturacion();
-                Factura factura = controladorFacturacion.obtenerFacturaByNumero(lblNumeroFC.Text).FirstOrDefault();
+                //Factura factura = controladorFacturacion.obtenerFacturaByNumero(lblNumeroFC.Text).FirstOrDefault();
+                Factura factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(this.hfIDFactura.Value));
                 if (factura != null)
                     this.DetalleFactura_OtraDivisa(factura);
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en FacturasF.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
 
@@ -5049,8 +5051,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
-                Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
+                Log.EscribirSQL(1, "ERROR", "CATCH: Error cargando articulos detalle desde la interfaz. Ubicacion: FacturasF.DetalleFactura_OtraDivisa. Excepcion:" + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error al mostrar el detalle de la factura desde la interfaz. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
             }
         }
     }
