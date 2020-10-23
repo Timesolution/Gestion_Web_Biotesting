@@ -52,8 +52,9 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Estetica Api">
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Estetica Api.dll</HintPath>
+    <Reference Include="Estetica Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\EsteticaAPI\Estetica Api\bin\Debug\Estetica Api.dll</HintPath>
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -369,6 +370,7 @@
     <Content Include="Formularios\Clientes\ProspectosABM.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
     <Content Include="Formularios\Facturas\ConsolidarP.aspx" />
+    <Content Include="Formularios\Facturas\ComisionesF.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Facturas\CronogramaPagosF.aspx" />
@@ -1522,6 +1524,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\ConsolidarP.aspx.designer.cs">
       <DependentUpon>ConsolidarP.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ComisionesF.aspx.cs">
+      <DependentUpon>ComisionesF.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ComisionesF.aspx.designer.cs">
+      <DependentUpon>ComisionesF.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\CRM.aspx.cs">
       <DependentUpon>CRM.aspx</DependentUpon>
