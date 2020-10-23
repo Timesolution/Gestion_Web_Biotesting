@@ -69,6 +69,11 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                     lbtnExportarArticulosMagento.Visible = false;
 
+                if (string.Equals(empresa.RazonSocial, "ID Group"))
+                {
+                    lblHabilitadoImportacionArticulos.Visible = false;
+                    btnImportarArticulo.Attributes.Remove("disabled");
+                }
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
@@ -2307,7 +2312,7 @@ namespace Gestion_Web.Formularios.Articulos
                 catch (Exception Ex)
                 {
                     Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta. Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + Ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
                 }
             }
             catch (Exception ex)

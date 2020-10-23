@@ -1309,17 +1309,18 @@
                                 </h1>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-4">Por la magnitud del proceso a ejecutar, se generara una solicitud de Importacion de Articulos para que trabaje en segundo plano. Mientras tanto, podra seguir haciendo uso del sistema.</label>
+                                <label class="col-md-9" style="text-align: justify;">Por la magnitud del proceso a ejecutar, se generara una solicitud de Importacion de Articulos para que trabaje en segundo plano. Mientras tanto, podra seguir haciendo uso del sistema.</label>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-12">
                                 <h5>
-                                    <asp:Label runat="server" ID="Label3" Text="" Style="text-align: center">Desea generar la solicitud ?</asp:Label>
+                                    <asp:Label runat="server" ID="Label3" Text="" Style="text-align: right;font-size: 16px;">¿ Desea generar la solicitud ?</asp:Label>
                                 </h5>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" />
+                        <asp:Label ID="lblHabilitadoImportacionArticulos" runat="server" style="float:left" Visible="true">*Opcion no habilitada*</asp:Label>
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" disabled/>
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
