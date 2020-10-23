@@ -119,6 +119,13 @@
                         <!--<img src="../images/animated-overlay.gif"-->
                     </div>
                 </div>
+                <div >
+                        <div class="more-ot-alert" style="display:block;position:absolute;margin-left:400px;width:220px;bottom:0px;">
+                            <p style="font-size: 12px">
+                                Necesita ayuda? Haga click <strong><a href="../Formularios/Herramientas/Soporte.aspx">aqui</a></strong>
+                            </p>
+                        </div>
+                </div>
                 <asp:CheckBox ID="Field" runat="server" class="field login-checkbox" TabIndex="4" Visible="false" />
                 <!-- /login-fields -->
                 <!-- .actions -->
@@ -142,13 +149,7 @@
     <div class="login-extra">
         Olvido su <a href="#" id="rc" data-toggle="modal" onclick="validar()">Contraseña</a> ?
     </div>
-    <div class="login-action" style="margin-right:25px">
-            <div class="more-ot-alert">
-                <p style="font-size: 16px">
-                    Necesita ayuda? Haga click <strong><a href="../Formularios/Herramientas/Soporte.aspx">aqui</a></strong>
-                </p>
-            </div>
-    </div>
+    
         
 
 

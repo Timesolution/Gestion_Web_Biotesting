@@ -69,6 +69,11 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                     lbtnExportarArticulosMagento.Visible = false;
 
+                if (string.Equals(empresa.RazonSocial, "ID Group"))
+                {
+                    lblHabilitadoImportacionArticulos.Visible = false;
+                    btnImportarArticulo.Attributes.Remove("disabled");
+                }
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
