@@ -2121,15 +2121,16 @@ namespace Gestion_Web.Formularios.Personal
                 pago.Total = Convert.ToDecimal(this.txtTotalIngresado.Text, CultureInfo.DefaultThreadCurrentUICulture);
 
                 pago.ImputacionesEmpleados = imputaciones;
+                string observaciones = this.txtObservaciones.Text;
 
                 int i = 0;
                 if (this.accion == 2)
                 {
-                    i = this.contPagos.agregarPagoCuentaEmpleado(pago, listPago, dtDocumentos, this.lstChequeTercero2);
+                    i = this.contPagos.agregarPagoCuentaEmpleado(pago, listPago, dtDocumentos, this.lstChequeTercero2,observaciones);
                 }
                 else
                 {
-                    i = this.contPagos.generarPagoRemuneracion(pago, listPago, dtDocumentos, this.lstChequeTercero2);
+                    i = this.contPagos.generarPagoRemuneracion(pago, listPago, dtDocumentos, this.lstChequeTercero2,observaciones);
                 }
 
                 if (i > 0)

@@ -222,6 +222,11 @@ namespace Gestion_Web.Formularios.Personal
                 {
                     celNumero.Text = "Pago a Cuenta Nº " + m.Numero;
                 }
+                if (m.TipoDocumento.Value == 33)
+                {
+                    string descripcion = controlador.ObtenerDescripcionTipoPagoOtro(Convert.ToInt32(m.Id));
+                    celNumero.Text = descripcion +" N°" + m.Numero;
+                }
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumero);
 
@@ -308,8 +313,30 @@ namespace Gestion_Web.Formularios.Personal
                 //Gestion_Api.Modelo.Log.EscribirSQL(1, "ERROR", "Error al mostrar detalle de Remuneracion desde la interfaz. " + ex.Message);
             }
         }
+
+        protected void lbtnAgregar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MovimientosCCE movimiento = new MovimientosCCE();
+                string descripcion = txtDescripcion.Text;
+                movimiento.Sucursal = this.sucursal;
+                movimiento.Fecha = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                movimiento.Haber = 0;
+                movimiento.Debe = Convert.ToInt32(txtImporte.Text);
+                movimiento.Saldo = Convert.ToInt32(txtImporte.Text);
+                movimiento.Numero = txtNumero.Text;
+                movimiento.Documento = 3;
+                movimiento.TipoDocumento = 33;
+                controlador.AgregarMovimientoOtro(movimiento, this.idEmpleado, descripcion);
+                cargarMovimientos(this.idEmpleado);
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
     
-
-
+        }
     }
 }

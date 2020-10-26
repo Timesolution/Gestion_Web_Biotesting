@@ -20,6 +20,7 @@ namespace Gestion_Web.Formularios.Personal
 
         controladorCCEmpleado controlador = new controladorCCEmpleado();
         controladorEmpleado contEmpleado = new controladorEmpleado();
+        controladorPagos contPago = new controladorPagos();
         controladorDocumentos contDocumentos = new controladorDocumentos();
         controladorUsuario contUser = new controladorUsuario();
         Cliente cliente = new Cliente();
@@ -306,7 +307,8 @@ namespace Gestion_Web.Formularios.Personal
                 decimal saldo = 0;
                 foreach (var pago in mov)
                 {
-                    this.cargarMovimientoPH(pago);
+                    string observaciones=contPago.ObtenerObservacionesbyIdPago(pago.Id);
+                    this.cargarMovimientoPH(pago, observaciones);
                     saldo += pago.Total.Value;
                 }
                 this.labelSaldo.Text = saldo.ToString("$0.00");
@@ -317,7 +319,7 @@ namespace Gestion_Web.Formularios.Personal
             }
         }
 
-        private void cargarMovimientoPH(PagoRemuneracione p)
+        private void cargarMovimientoPH(PagoRemuneracione p,string observaciones)
         {
             try
             {
@@ -333,7 +335,7 @@ namespace Gestion_Web.Formularios.Personal
                 tr.Cells.Add(celFecha);
 
                 TableCell celNumero = new TableCell();
-                celNumero.Text = "Pago Remuneracion Nº " + p.Numero;                
+                celNumero.Text = "Pago Remuneracion Nº " + p.Numero + "-" + observaciones;                
                 celNumero.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celNumero);
 
