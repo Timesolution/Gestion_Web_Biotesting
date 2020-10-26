@@ -39,7 +39,7 @@ namespace Gestion_Web.Formularios.Reportes
                     {
                         DateTime fechaDesde = DateTime.Now;
                         DateTime fechaHasta = DateTime.Now;
- 
+
                         fechaD = fechaDesde.ToString("dd/MM/yyyy");
                         fechaH = fechaHasta.ToString("dd/MM/yyyy");
                     }
@@ -49,12 +49,12 @@ namespace Gestion_Web.Formularios.Reportes
                     txtFechaHasta.Text = fechaH;
                 }
 
-                if(accion == 0)
+                if (accion == 0)
                 {
                     this.cargarInformesPedidos();
                 }
 
-               
+
             }
             catch (Exception Ex)
             {
@@ -119,7 +119,7 @@ namespace Gestion_Web.Formularios.Reportes
             {
                 var ip = this.controlador.obtenerInformesPedidosFiltro(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.idUsuario), this.idTipoInforme);
 
-                if(ip!= null)
+                if (ip != null)
                 {
                     foreach (Informes_Pedidos infPed in ip)
                     {
@@ -173,26 +173,33 @@ namespace Gestion_Web.Formularios.Reportes
                 {
                     //LinkButton btnDetalles = new LinkButton();
                     HyperLink hpDetalles = new HyperLink();
-                    hpDetalles.CssClass = "btn btn-info ui-tooltip";
-                    hpDetalles.Attributes.Add("data-toggle", "tooltip");
-                    hpDetalles.Attributes.Add("title data-original-title", "Detalles");
-                    hpDetalles.ID = "btnSelec_" + ip.Id.ToString();
-                    hpDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
-                    hpDetalles.Font.Size = 12;
-                    hpDetalles.NavigateUrl = "/Informes/" + ip.Id + "/" + ip.NombreInforme;
-                    //btnDetalles.Click += new EventHandler(this.descargarArchivos);
+                    if (ip.NombreInforme.Contains("Importacion Articulos"))
+                    {
+                        hpDetalles.Text = "Importado";
+                    }
+                    else
+                    {
+                        hpDetalles.CssClass = "btn btn-info ui-tooltip";
+                        hpDetalles.Attributes.Add("data-toggle", "tooltip");
+                        hpDetalles.Attributes.Add("title data-original-title", "Detalles");
+                        hpDetalles.ID = "btnSelec_" + ip.Id.ToString();
+                        hpDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
+                        hpDetalles.Font.Size = 12;
+                        hpDetalles.NavigateUrl = "/Informes/" + ip.Id + "/" + ip.NombreInforme;
+                        //btnDetalles.Click += new EventHandler(this.descargarArchivos);
 
-                    if (ip.Informe1.Id == 1)
-                        hpDetalles.NavigateUrl += ".zip";
-                    if (ip.Informe1.Id == 2 || ip.Informe1.Id == 5)
-                        hpDetalles.NavigateUrl += ".xls";
-                    if (ip.Informe1.Id == 3 || ip.Informe1.Id == 4)
-                        hpDetalles.NavigateUrl += ".xlsx";
-                    if (ip.Informe1.Id == 6)
-                        hpDetalles.NavigateUrl += ".pdf"; 
-
+                        if (ip.Informe1.Id == 1)
+                            hpDetalles.NavigateUrl += ".zip";
+                        if (ip.Informe1.Id == 2 || ip.Informe1.Id == 5)
+                            hpDetalles.NavigateUrl += ".xls";
+                        if (ip.Informe1.Id == 3 || ip.Informe1.Id == 4)
+                            hpDetalles.NavigateUrl += ".xlsx";
+                        if (ip.Informe1.Id == 6)
+                            hpDetalles.NavigateUrl += ".pdf";
+                    }
                     celEstado.Controls.Add(hpDetalles);
                     tr.Controls.Add(celEstado);
+
                 }
                 celEstado.VerticalAlign = VerticalAlign.Middle;
                 celEstado.HorizontalAlign = HorizontalAlign.Left;
@@ -285,7 +292,7 @@ namespace Gestion_Web.Formularios.Reportes
                     dr["id"] = -1;
                     dt.Rows.InsertAt(dr, 0);
                 }
-                
+
                 this.DropListUsuario.DataSource = dt;
                 this.DropListUsuario.DataValueField = "Id";
                 this.DropListUsuario.DataTextField = "usuario";
@@ -307,7 +314,7 @@ namespace Gestion_Web.Formularios.Reportes
                 string idInformePedido = atributos[1];
 
                 DirectoryInfo di = new DirectoryInfo(Server.MapPath("../../Informes/" + idInformePedido + "/"));
-                FileInfo [] files = di.GetFiles();
+                FileInfo[] files = di.GetFiles();
 
                 foreach (FileInfo fi in files)
                 {
@@ -324,7 +331,7 @@ namespace Gestion_Web.Formularios.Reportes
                     response.End();
                 }
 
-                
+
 
 
             }

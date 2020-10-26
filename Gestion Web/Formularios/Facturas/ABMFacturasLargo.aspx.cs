@@ -4712,8 +4712,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en ABMFactirasLargo.DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte."));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error. Ubicacion: ABMFacturasLargo.aspx. Metodo: DropListDivisa_SelectedIndexChanged. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -11723,8 +11723,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en ABMFacturasLargo.btnCalcularRetencionPorMonto_Click. Excepcion: " + ex.Message);
-                ScriptManager.RegisterClientScriptBlock(this.updatePanelAgregarMontoParaCalcularPorcentajeDescuento, updatePanelAgregarMontoParaCalcularPorcentajeDescuento.GetType(), "alert", "Disculpe, ha ocurrido un error inesperado. Por favor, contacte con soporte para informarnos sobre este error.", true);
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error. Ubicacion: ABMFacturasLargo.aspx. Metodo: btnCalcularRetencionPorMonto_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
     }

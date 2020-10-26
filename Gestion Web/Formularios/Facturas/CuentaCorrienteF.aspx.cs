@@ -948,8 +948,8 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    Log.EscribirSQL(1, "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente .Ubicacion: CuentaCorrienteF.lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con el area de soporte para informarnos sobre este error."));
+                    int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente. Ubicacion: CuentaCorrienteF.aspx. Metodo: lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
             }
 

@@ -84,7 +84,7 @@
                                             <div class="faq-toc">
                                                 <ol>
                                                     <li>1. Asunto del Ticket: Nombre de su empresa + "- Problema con el Sistema"</li>
-                                                    <li>2. Detalle del Problema: Escribanos en detalle su incoveniente, que es lo que quiso hacer, el filtro que uso, la opcion que clickeo, etc.</li>
+                                                    <li>2. Detalle del Problema: Diganos el #Numero de Error que le muestra el mensaje del sistema y cuentenos un poco los detalles,por ejemplo que es lo que quiso hacer, el filtro que uso, la opcion que clickeo, etc.</li>
                                                     <li>3. URL: (dentro del cuerpo del mensaje) Copie y pegue la Direccion URL de la barra superior de su navegador del sitio en donde se produjo el inconveniente.</li>
                                                     <li>4. Adjuntar Archivo: En caso de que lo desee, podra mandarnos una captura de pantalla del sitio en donde se produjo su inconveniente sin que se visualize el mensaje de error titulado 'Ups!'.</li>
                                                 </ol>
