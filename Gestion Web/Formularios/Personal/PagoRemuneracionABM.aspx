@@ -625,6 +625,12 @@
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
+                            <div class="form-group">
+                            <label class="col-md-2">Observaciones:</label>
+                            <div class="col-md-12">
+                                <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" PlaceHolder="Escriba aqui comentarios..." TextMode="MultiLine" Rows="6"></asp:TextBox>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="col-md-4">

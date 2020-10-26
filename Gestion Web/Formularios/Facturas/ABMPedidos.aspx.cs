@@ -44,6 +44,7 @@ namespace Gestion_Web.Formularios.Facturas
         Configuracion confEstados = new Configuracion();
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         controladorCotizaciones contCot = new controladorCotizaciones();
+        controladorCuentaCorriente controladorCC = new controladorCuentaCorriente();
         //Pedido
         Pedido Pedido = new Pedido();
         Cliente cliente = new Cliente();
@@ -1236,13 +1237,14 @@ namespace Gestion_Web.Formularios.Facturas
                 ControladorClienteEntity contClienteEnt = new ControladorClienteEntity();
                 this.cliente = contCliente.obtenerClienteID(idCliente);
                 var clienteDatos = contClienteEnt.obtenerClienteDatosByIdCliente(idCliente);
+                decimal saldoOperativo = ObtenerSaldoOperativo();
 
                 if (this.cliente != null)
                 {
 
                     CargarPacienteEspecifico(Convert.ToInt32(idCliente));
 
-                    this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit;
+                    this.labelCliente.Text = this.cliente.razonSocial + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
                     if (clienteDatos != null)
                     {
@@ -2471,6 +2473,38 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL(1, "ERROR", "salto catch de GenerarImpresionPDF error: " + e.Message);
             }
         }
+
+        private decimal ObtenerSaldoOperativo()
+        {
+            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today);
+            decimal saldoOperativo;
+            decimal saldoAcumulado = 0;
+
+            foreach (DataRow row in datos.Rows)
+            {
+                if (this.accion == 2)
+                {
+                    if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                    {
+                        saldoAcumulado += Convert.ToDecimal(row["debe"]);
+                    }
+                    if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                    {
+                        saldoAcumulado -= Convert.ToDecimal(row["haber"]);
+                    }
+                }
+                else
+                {
+                    saldoAcumulado += Convert.ToDecimal(row["saldo"]);
+                }
+
+                row["SaldoAcumulado"] = saldoAcumulado.ToString();
+            }
+
+            saldoOperativo = cliente.saldoMax - saldoAcumulado;
+            return saldoOperativo;
+        }
+
         public string generarCodigo(int idPedido)
         {
             try
