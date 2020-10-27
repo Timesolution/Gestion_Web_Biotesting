@@ -1393,6 +1393,7 @@
                                                 <label class="col-md-4">Numero del Doc.</label>
                                                 <div class="col-md-8">
                                                     <asp:Label ID="lblNumeroFC" runat="server"></asp:Label>
+                                                    <asp:HiddenField ID="hfIDFactura" runat="server" value="" />
                                                 </div>
                                             </div>
                                             <br />
@@ -1419,13 +1420,13 @@
                                             <div class="col-md-12">
                                                 <div class="widget stacked widget-box">
                                                     <div class="widget-header">
-                                                        <h3>Información</h3>
+                                                        <h3>Ayuda</h3>
                                                     </div>
                                                     <!-- /widget-header -->
                                                     <div class="widget-content">
-                                                        <p>La divisa elegida en la lista, traera el valor de la divisa al momento en que se realizo la FC o NT/ND.</p>
-                                                        <p>Si no se guardo con ninguna divisa, el valor a tomar sera el valor actual de la divisa seleccionada.</p>
-                                                        <strong>Divisa guardada</strong><br />
+                                                        <p>La divisa elegida en la lista, traera el <strong>valor de la divisa al momento</strong> en que se realizo la FC o NT/ND.</p>
+                                                        <p>Si no se guardo con ninguna divisa, el valor a tomar sera el <strong>valor actual</strong> de la divisa seleccionada.</p>
+                                                        <strong>Divisa guardada:</strong><br />
                                                         <asp:Label runat="server" ID="lblFacturaMonedaGuardada" ForeColor="DarkGreen"></asp:Label>
                                                         <asp:Label runat="server" ID="lblFacturaMonedaValor" ForeColor="DarkGreen"></asp:Label></p>
                                                     </div>
@@ -1440,7 +1441,7 @@
                             </Triggers>
                         </asp:UpdatePanel>
                         <div class="modal-footer">
-                            <asp:Button ID="btnImprimirFCDivisa" runat="server" Text="Imprimir" class="btn btn-success" ValidationGroup="MonedaGroup" OnClick="btnImprimirFCDivisa_Click" />
+                            <asp:Button ID="btnImprimirFCDivisa" runat="server" Text="Imprimir" class="btn btn-success" ValidationGroup="MonedaGroup" OnClick="btnImprimirFCDivisa_Click" OnClientClick="this.disabled = true; this.value = 'Imprimiendo...';" UseSubmitBehavior="false"/>
                         </div>
                         <%--<div class="modal-footer">
                             <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon fa fa-paper-plane'></span>" class="btn btn-success" OnClick="" ValidationGroup="EnvioGroup"></asp:LinkButton>

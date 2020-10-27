@@ -29,6 +29,7 @@ namespace Gestion_Web.Formularios.Facturas
         private int original;
         private decimal imprimirOtraDivisa;
         private int idMoneda;
+        Moneda monedaElegida = new Moneda();
         controladorFacturacion controlador = new controladorFacturacion();
         controladorCliente controlCliente = new controladorCliente();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
@@ -51,25 +52,29 @@ namespace Gestion_Web.Formularios.Facturas
                     this.accion = Convert.ToInt32(Request.QueryString["a"]);
                     this.original = Convert.ToInt32(Request.QueryString["o"]);
 
+                    //Verifico si el usuario eligio imprimir el documento en otra divisa
                     if (Request.QueryString["div"] != null)
                     {
+                        //Si eligio esta opcion, entonces chequeo si la divisa elegida es igual a la divisa que se guardo en el momento de
+                        //de facturar, en la tabla Facturas_Moneda de la BD
                         idMoneda = Convert.ToInt32(Request.QueryString["div"]);
-                        Moneda moneda = controladorMoneda.obtenerMonedaID(idMoneda);
+                        monedaElegida = controladorMoneda.obtenerMonedaID(idMoneda);
                         Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(idPresupuesto);
 
+                        //Si se encontro registro en la tabla, entonces verifico si la moneda guardada es la misma que la moneda elegida
+                        //porque si es igual, entonces sea el valor de la divisa en el momento en que se facturo
                         if (facturas_Moneda != null)
                         {
-                            if (facturas_Moneda.idMoneda == moneda.id)
+                            if (facturas_Moneda.idMoneda == monedaElegida.id)
                                 imprimirOtraDivisa = facturas_Moneda.ValorMoneda;
                             else
-                                imprimirOtraDivisa = moneda.cambio;
+                                imprimirOtraDivisa = monedaElegida.cambio;
                         }
+                        //Si no hay registro, entonces seteo la moneda al valor actual
                         else
                         {
-                            imprimirOtraDivisa = 1;
+                            imprimirOtraDivisa = monedaElegida.cambio;
                         }
-
-
                     }
 
                     //presupuesto
@@ -270,6 +275,31 @@ namespace Gestion_Web.Formularios.Facturas
                 //Comentario factura
                 DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
 
+                //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow row in dtDatos.Rows)
+                    {
+                        row["PUnitario"] = Decimal.Round(Convert.ToDecimal(row["PUnitario"]) / imprimirOtraDivisa, 2);
+                        row["Descuento"] = Decimal.Round(Convert.ToDecimal(row["Descuento"]) / imprimirOtraDivisa);
+                        row["PorcentajeDescuentoItem"] = Decimal.Round(Convert.ToDecimal(row["PorcentajeDescuentoItem"]) / imprimirOtraDivisa, 2);
+                        row["PSinIva"] = Decimal.Round(Convert.ToDecimal(row["PSinIva"]) / imprimirOtraDivisa, 2);
+                        row["PorcentajeIva"] = Decimal.Round(Convert.ToDecimal(row["PorcentajeIva"]) / imprimirOtraDivisa, 2);
+                        row["Total"] = Decimal.Round(Convert.ToDecimal(row["Total"]) / imprimirOtraDivisa, 2);
+                        row["FinalA"] = Decimal.Round(Convert.ToDecimal(row["FinalA"]) / imprimirOtraDivisa, 2);
+                        row["FinalB"] = Decimal.Round(Convert.ToDecimal(row["FinalB"]) / imprimirOtraDivisa, 2);
+                        row["DescuentoSinIva"] = Decimal.Round(Convert.ToDecimal(row["DescuentoSinIva"]) / imprimirOtraDivisa, 2);
+                    }
+
+                    subtotal = Decimal.Round(subtotal / imprimirOtraDivisa, 2);
+                    descuento = Decimal.Round(descuento / imprimirOtraDivisa, 2);
+                    total = Decimal.Round(total / imprimirOtraDivisa, 2);
+
+                    //Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
+                    //La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
+                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa,2).ToString() + ").";
+                }
+
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Presupesto2.rdlc");
                 ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("ItemsPresupuesto", dtDatos);
@@ -356,7 +386,6 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-
                 Factura fact = this.controlador.obtenerFacturaId(idFactura);
 
                 DataTable dtDatos = new DataTable();
@@ -523,22 +552,22 @@ namespace Gestion_Web.Formularios.Facturas
                 //cant unidades
                 decimal cant = 2;
 
-                if (imprimirOtraDivisa > 0)
-                {
-                    foreach (DataRow row in dtDatos.Rows)
-                    {
-                        row[""] = Decimal.Round(Convert.ToDecimal(row[""]) / imprimirOtraDivisa);
-                    }
+                //if (imprimirOtraDivisa > 0)
+                //{
+                //    foreach (DataRow row in dtDatos.Rows)
+                //    {
+                //        row[""] = Decimal.Round(Convert.ToDecimal(row[""]) / imprimirOtraDivisa);
+                //    }
 
-                    subtotal = subtotal / imprimirOtraDivisa;
-                    descuento = descuento / imprimirOtraDivisa;
-                    subtotal2 = subtotal2 / imprimirOtraDivisa;
-                    iva = iva / imprimirOtraDivisa;
-                    retencion = retencion / imprimirOtraDivisa;
-                    conceptos = conceptos / imprimirOtraDivisa;
-                    total = total / imprimirOtraDivisa;
-                    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
-                }
+                //    subtotal = subtotal / imprimirOtraDivisa;
+                //    descuento = descuento / imprimirOtraDivisa;
+                //    subtotal2 = subtotal2 / imprimirOtraDivisa;
+                //    iva = iva / imprimirOtraDivisa;
+                //    retencion = retencion / imprimirOtraDivisa;
+                //    conceptos = conceptos / imprimirOtraDivisa;
+                //    total = total / imprimirOtraDivisa;
+                //    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+                //}
                 //decimal totalIva105 = Convert.ToDecimal(dr["TotalIva105"]);
                 //decimal totalIva21 = Convert.ToDecimal(dr["TotalIva21"]);
                 //decimal totalIva27 = Convert.ToDecimal(dr["TotalIva27"]);
@@ -599,6 +628,36 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Comentario factura
                 DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
+
+                //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow row in dtDatos.Rows)
+                    {
+                        row["PUnitario"] = Decimal.Round(Convert.ToDecimal(row["PUnitario"]) / imprimirOtraDivisa, 2);
+                        row["Descuento"] = Decimal.Round(Convert.ToDecimal(row["Descuento"]) / imprimirOtraDivisa);
+                        row["PorcentajeDescuentoItem"] = Decimal.Round(Convert.ToDecimal(row["PorcentajeDescuentoItem"]) / imprimirOtraDivisa, 2);
+                        row["PSinIva"] = Decimal.Round(Convert.ToDecimal(row["PSinIva"]) / imprimirOtraDivisa, 2);
+                        row["PorcentajeIva"] = Decimal.Round(Convert.ToDecimal(row["PorcentajeIva"]) / imprimirOtraDivisa, 2);
+                        row["Total"] = Decimal.Round(Convert.ToDecimal(row["Total"]) / imprimirOtraDivisa, 2);
+                        row["FinalA"] = Decimal.Round(Convert.ToDecimal(row["FinalA"]) / imprimirOtraDivisa, 2);
+                        row["FinalB"] = Decimal.Round(Convert.ToDecimal(row["FinalB"]) / imprimirOtraDivisa, 2);
+                        row["DescuentoSinIva"] = Decimal.Round(Convert.ToDecimal(row["DescuentoSinIva"]) / imprimirOtraDivisa, 2);
+                    }
+
+                    subtotal = Decimal.Round(subtotal / imprimirOtraDivisa, 2);
+                    descuento = Decimal.Round(descuento / imprimirOtraDivisa, 2);
+                    subtotal2 = Decimal.Round(subtotal2 / imprimirOtraDivisa, 2);
+                    iva = iva / Decimal.Round(imprimirOtraDivisa, 2);
+                    retencion = Decimal.Round(retencion / imprimirOtraDivisa, 2);
+                    conceptos = Decimal.Round(conceptos / imprimirOtraDivisa, 2);
+                    total = Decimal.Round(total / imprimirOtraDivisa, 2);
+                    totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+
+                    //Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
+                    //La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
+                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
+                }
 
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
@@ -1061,6 +1120,30 @@ namespace Gestion_Web.Formularios.Facturas
                     textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
                 }
 
+                //Condición de Pago
+                string condicionPago = String.Empty;
+                if (fact.formaPAgo.id == 7)
+                {
+                    condicionPago = fact.cliente.vencFC.ToString();
+                }
+
+                String nroPedido = String.Empty;
+                String nroRemito = String.Empty;
+                //Pedido Relacionado
+                Pedido pedidoFc = this.contPedidos.obtenerPedidoByFacturaID(idPresupuesto);
+                if (pedidoFc != null)
+                {
+                    nroPedido = pedidoFc.numero;
+                }
+                //Remito Relacionado
+                Remito remitoFc = this.controlador.obtenerRemitoByFactura(idPresupuesto);
+                if (remitoFc != null)
+                {
+                    nroRemito = remitoFc.numero;
+                }
+                //Comentario factura
+                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
+
                 //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
                 if (imprimirOtraDivisa > 0)
                 {
@@ -1085,31 +1168,11 @@ namespace Gestion_Web.Formularios.Facturas
                     conceptos = Decimal.Round(conceptos / imprimirOtraDivisa, 2);
                     total = Decimal.Round(total / imprimirOtraDivisa, 2);
                     totalS = Numalet.ToCardinal(total.ToString().Replace(',', '.'));
-                }
 
-                //Condición de Pago
-                string condicionPago = String.Empty;
-                if (fact.formaPAgo.id == 7)
-                {
-                    condicionPago = fact.cliente.vencFC.ToString();
+                    ///Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
+                    ///La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
+                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
-
-                String nroPedido = String.Empty;
-                String nroRemito = String.Empty;
-                //Pedido Relacionado
-                Pedido pedidoFc = this.contPedidos.obtenerPedidoByFacturaID(idPresupuesto);
-                if (pedidoFc != null)
-                {
-                    nroPedido = pedidoFc.numero;
-                }
-                //Remito Relacionado
-                Remito remitoFc = this.controlador.obtenerRemitoByFactura(idPresupuesto);
-                if (remitoFc != null)
-                {
-                    nroRemito = remitoFc.numero;
-                }
-                //Comentario factura
-                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
 
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);

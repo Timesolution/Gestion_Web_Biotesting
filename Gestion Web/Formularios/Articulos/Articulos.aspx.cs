@@ -69,6 +69,11 @@ namespace Gestion_Web.Formularios.Articulos
                 else
                     lbtnExportarArticulosMagento.Visible = false;
 
+                if (string.Equals(empresa.RazonSocial, "ID Group"))
+                {
+                    lblHabilitadoImportacionArticulos.Visible = false;
+                    btnImportarArticulo.Attributes.Remove("disabled");
+                }
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
@@ -158,11 +163,12 @@ namespace Gestion_Web.Formularios.Articulos
                     this.lblConfigCSV.Text += "PuntoComa(;)";
                 else
                     this.lblConfigCSV.Text += "Coma(,)";
-
+               
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pagina. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ocurrio un error en la seccion de articulos. Ubicacion: Articulos.aspx. Metodo: Page_Load. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -2301,19 +2307,22 @@ namespace Gestion_Web.Formularios.Articulos
 
                     if (i > 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Solicitud Generada", "Se ha generado la solicitud de Importacion con exito. Podra visualizar el estado en Reportes -> Informes Solicitados."));
-                    if (i == -1) 
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlError("Error", "Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+                    if (i == -1)
+                    {
+                        int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "ELSE: Fue por el 'else' al querer generar un pedido para la importacion de articulos llamando al metodo controladorInformesEntity.agregarInformePedido. Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click.");
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                    }
                 }
                 catch (Exception Ex)
                 {
                     Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta. Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + Ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(""));
                 }
             }
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(""));
             }
             finally
             {
@@ -2377,12 +2386,13 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 if (ex.Message.Contains("Thread was being aborted"))
                 {
-                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, this.GetType(), "alert", "MensajeArchivoDescargado()", true);
+                    //ScriptManager.RegisterStartupScript(this.UpdatePanel1, this.GetType(), "alert", "MensajeArchivoDescargado()", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado","Se ha descargo el archivo .xls con exito."));
                 }
                 else
                 {
-                    Log.EscribirSQL(1, "ERROR", "CATCH: No se pudo generar el archivo.txt con los articulos .Ubicacion: Articulos.lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor, contacte con el area de soporte para informarnos sobre este error."));
+                    int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "CATCH: No se pudo generar el archivo.txt con los articulos .Ubicacion: Articulos.aspx. Metodo: lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
             }
         }
@@ -2420,8 +2430,8 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "CATCH: Ocurrio un error.Ubicacion: Articulos.lbtnExportarArticulosMagento_Click. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error grabando el pedido de la Importacion. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "CATCH: Ocurrio un error grabando el pedido de la Importacion. Ubicacion: Articulos.aspx. Metodo: lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
     }

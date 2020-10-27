@@ -15,7 +15,7 @@ namespace Disipar.Models
             StringBuilder sb = new StringBuilder();
             sb.Append("<script type = 'text/javascript'>");
             sb.Append("window.onload=function(){");
-            sb.Append("$.msgbox(\""+ mensaje +"\");");
+            sb.Append("$.msgbox(\"" + mensaje + "\");");
             sb.Append(";");
             //sb.Append(message);
             sb.Append("};");
@@ -64,12 +64,12 @@ namespace Disipar.Models
 
         }
 
-        public string mensajeBoxError(string mensaje)
+        public string mensajeBoxError(string NumeroDeError)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("<script type = 'text/javascript'>");
             sb.Append("window.onload=function(){");
-            sb.Append("$.msgbox(\"" + mensaje + "\", {type: \"error\"});");
+            sb.Append("$.msgbox(\"<h2>Ups!</h2><p style='text-align:justify'>Ha ocurrido un error inesperado. Por favor, haga click en <strong><a href='/Formularios/Herramientas/Soporte.aspx' target='_blank'>Como Generar un Ticket</a></strong> y siga con los pasos mencionados para ayudarnos a agilizar la deteccion del incoveniente.</p><strong>Disculpe las molestias</strong></br><p style='text-align:right;position:absolute;bottom:10px;left: 10px;'>Error N# " + NumeroDeError + "</p>\", {type: \"error\"});");
             sb.Append(";");
             //sb.Append(message);
             sb.Append("};");
@@ -203,10 +203,10 @@ namespace Disipar.Models
             sb.Append("};");
 
             sb.Append("</script>");
-            
+
 
             return sb.ToString();
-            
+
 
         }
 
