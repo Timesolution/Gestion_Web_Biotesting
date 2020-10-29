@@ -599,7 +599,7 @@
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Busqueda</h4>
+                        <h4 class="modal-title">Exportar Presupuestos facturados</h4>
                     </div>
                     <div class="modal-body">
                         <div role="form" class="form-horizontal col-md-12">

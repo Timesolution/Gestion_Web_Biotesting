@@ -2429,7 +2429,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (accion == 15)
                         {
-                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesdePresupuesto.Text + "&fechaHasta=" + txtFechaHastaPresupuesto.Text + "&Sucursal=" + ListSucursalPresupuesto.SelectedValue + "&Emp=" + ListEmpresaPresupuesto.SelectedValue + "&tipo=0" + "&doc=0" + "&cl=" + ListClientePresupuesto.SelectedValue + "&e=1" + "&anuladas=0" + "&vend=" + Convert.ToInt32(this.ListVendedorPresupuesto.SelectedValue) + "&fp=" + Convert.ToInt32(this.ListFormaPagoPresupuesto.SelectedValue),true);
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=15&fechadesde=" + txtFechaDesdePresupuesto.Text + "&fechaHasta=" + txtFechaHastaPresupuesto.Text + "&Sucursal=" + ListSucursalPresupuesto.SelectedValue + "&Emp=" + ListEmpresaPresupuesto.SelectedValue + "&tipo=0" + "&doc=0" + "&cl=" + ListClientePresupuesto.SelectedValue + "&e=1" + "&anuladas=0" + "&vend=" + Convert.ToInt32(this.ListVendedorPresupuesto.SelectedValue) + "&fp=" + Convert.ToInt32(this.ListFormaPagoPresupuesto.SelectedValue),true);
                         }
                     }
                     else
@@ -5137,7 +5137,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                ExportToExcelPresupuesto(15);
+                ExportToExcelPresupuesto(16);
             }
             catch (Exception ex)
             {
