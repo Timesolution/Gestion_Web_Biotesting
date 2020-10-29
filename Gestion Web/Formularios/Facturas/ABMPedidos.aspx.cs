@@ -49,6 +49,7 @@ namespace Gestion_Web.Formularios.Facturas
         Pedido Pedido = new Pedido();
         Cliente cliente = new Cliente();
         TipoDocumento tp = new TipoDocumento();
+        Configuracion configuracion = new Configuracion();
 
         int flag_clienteModal = 0;
 
@@ -1248,9 +1249,13 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListLista.SelectedValue = this.cliente.lisPrecio.id.ToString();
                     if (clienteDatos != null)
                     {
-                        if (!String.IsNullOrEmpty(clienteDatos.Mail))
+                        if (!String.IsNullOrEmpty(clienteDatos.Mail) )
                         {
                             txtMailEntrega.Text = clienteDatos.Mail;
+                            
+                        }
+                        if (!String.IsNullOrEmpty(clienteDatos.Mail) && configuracion.enviaMailPedido == "1")
+                        {
                             chkEnviarMail.Checked = true;
                         }
 
