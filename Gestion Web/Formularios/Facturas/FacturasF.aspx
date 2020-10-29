@@ -324,6 +324,16 @@
                                                 </li>
                                             </ul>
                                         </li>
+                                          <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Presupuestos</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="LinkButton1" runat="server" data-toggle="modal" href="#modalPresupuesto">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar presupuestos
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -581,6 +591,125 @@
                 </div>
             </div>
         </div>
+
+
+              <div id="modalPresupuesto" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Busqueda</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel9" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Desde</label>
+                                        <div class="col-md-4">
+
+                                            <asp:TextBox ID="txtFechaDesdePresupuesto" runat="server" class="form-control"></asp:TextBox>
+
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesdePresupuesto" ValidationGroup="PresupuestoGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Hasta</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtFechaHastaPresupuesto" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHastaPresupuesto" ValidationGroup="PresupuestoGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <!-- /input-group -->
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Empresa</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListEmpresaPresupuesto" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListEmpresa_SelectedIndexChanged"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEmpresa" InitialValue="-1" ValidationGroup="PresupuestoGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListSucursalPresupuesto" runat="server" class="form-control" ></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListSucursalPresupuesto" InitialValue="-1" ValidationGroup="PresupuestoGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cod Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtCodClientePresupuesto" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="btnBuscarCodPresupuesto" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodPresupuesto_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListClientePresupuesto" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Tipo Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListTipoClientePresupuesto" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                          
+              
+                                    <div class="form-group">
+                                        <label class="col-md-4">Lista Precio</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListPrecioPresupuesto" runat="server" class="form-control">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Formas Pago</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListFormaPagoPresupuesto" runat="server" class="form-control">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Vendedor</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="ListVendedorPresupuesto" runat="server" class="form-control">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnExportarPRPFacturados" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnExportarPRPFacturados_Click" ValidationGroup="PresupuestoGroup" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
 
         <div id="modalPagosProgramados" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -1706,6 +1835,8 @@
                 $("#<%= txtFechaDesdeDto.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaHastaDto.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaPago.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= txtFechaDesdePresupuesto.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= txtFechaHastaPresupuesto.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             }
         </script>
 

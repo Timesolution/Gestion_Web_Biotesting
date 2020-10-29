@@ -628,7 +628,18 @@
                                                 <asp:LinkButton ID="lbtnSumaPuntosCobro" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalSumaPuntosCobro" class="btn btn-success" />
                                             </div>
                                         </div>
-
+                                          <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Enviar mail al realizar pedido:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnEnviarMailPedido" runat="server" OnClick="lbtnEnviarMailPedido_Click" />
+                                            </div>
+                                        </div>
+                                          <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Enviar mail al realizar factura:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnEnviarMailFactura" runat="server" OnClick="lbtnEnviarMailFactura_Click" />
+                                            </div>
+                                        </div>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </fieldset>

@@ -204,6 +204,26 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.lbtnFacturarMultiplesVeces.CssClass = "btn btn-danger";
                     this.lbtnFacturarMultiplesVeces.Text = "Desactivado";
                 }
+                if (configuracion.enviaMailFactura == "1")
+                {
+                    this.lbtnEnviarMailFactura.CssClass = "btn btn-success";
+                    this.lbtnEnviarMailFactura.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnEnviarMailFactura.CssClass = "btn btn-danger";
+                    this.lbtnEnviarMailFactura.Text = "Desactivado";
+                }
+                if (configuracion.enviaMailPedido == "1")
+                {
+                    this.lbtnEnviarMailPedido.CssClass = "btn btn-success";
+                    this.lbtnEnviarMailPedido.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnEnviarMailPedido.CssClass = "btn btn-danger";
+                    this.lbtnEnviarMailPedido.Text = "Desactivado";
+                }
 
                 // Visualizacion de Cheques
                 this.cargarVisualizacionCheques();
@@ -1572,6 +1592,56 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
-    
+        protected void lbtnEnviarMailPedido_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.enviaMailPedido == "0")
+                    configuracion.enviaMailPedido = "1";
+                else
+                    configuracion.enviaMailPedido = "0";
+
+                int i = configuracion.ModificarEnviarMailPedido(configuracion.enviaMailPedido);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Enviar Mail Pedido.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion:Enviar Mail Pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Enviar Mail Pedido!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnEnviarMailFactura_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.enviaMailFactura == "0")
+                    configuracion.enviaMailFactura = "1";
+                else
+                    configuracion.enviaMailFactura = "0";
+
+                int i = configuracion.ModificarEnviarMailFactura(configuracion.enviaMailFactura);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Enviar Mail Factura.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Enviar Mail Factura modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Enviar Mail Factura!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

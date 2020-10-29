@@ -8291,9 +8291,13 @@ namespace Gestion_Web.Formularios.Facturas
                     stream.Write(pdfContent, 0, pdfContent.Length);
                     stream.Close();
 
-                    Attachment adjunto = new Attachment(path);
 
-                    int i = contFunciones.enviarMailFactura(adjunto, f, destinatarios);
+                    Attachment adjunto = new Attachment(path);
+                    int i = 0;
+                   
+                       i = contFunciones.enviarMailFactura(adjunto, f, destinatarios);
+                    
+                    
                     if (i > 0)
                     {
                         adjunto.Dispose();
@@ -10371,13 +10375,14 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                 }
-                if (this.txtMailEntrega.Text != "")
+                if (this.txtMailEntrega.Text != "" && configuracion.enviaMailFactura=="1")
                 {
                     this.checkDatos.Checked = true;
                     this.phDatosEntrega.Visible = true;
                     this.txtMailEntrega.Attributes.Remove("disabled");
                     this.chkEnviarMail.Checked = true;
                 }
+
             }
             catch
             {

@@ -174,7 +174,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //verifico si el perfil tiene permiso para editar FC y agregar FC
                 this.verificarPermisoEditarFC();
                 this.verificarPermisoAgregarFC();
-                this.cargarFacturasRango(fechaD, fechaH, suc, tipo, cliente, tipofact, lista, empresa, vendedor, formaPago, tipoCliente);
+                this.cargarFacturasRango(fechaD, fechaH, suc, tipo, cliente, tipofact, lista, empresa, vendedor, formaPago, tipoCliente,0);
                 this.Form.DefaultButton = this.btnBuscarCod.UniqueID;
             }
             catch (Exception ex)
@@ -402,6 +402,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListClientes.DataBind();
 
+                this.ListClientePresupuesto.DataSource = dt;
+                this.ListClientePresupuesto.DataValueField = "id";
+                this.ListClientePresupuesto.DataTextField = "alias";
+
+                this.ListClientePresupuesto.DataBind();
+
                 if (this.cliente > 0)//agrego al usuario mismo como cliente?? 
                 {
                     Gestor_Solution.Modelo.Cliente cl = contCliente.obtenerClienteID(cliente);
@@ -411,6 +417,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (this.DropListClientes.Items.Contains(item) == false)
                         {
                             DropListClientes.Items.Add(item);
+                        }
+                        if (this.ListClientePresupuesto.Items.Contains(item) == false)
+                        {
+                            ListClientePresupuesto.Items.Add(item);
                         }
                     }
                 }
@@ -453,6 +463,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListTipoCliente.DataValueField = "id";
                 this.DropListTipoCliente.DataTextField = "tipo";
                 this.DropListTipoCliente.DataBind();
+
+                this.ListTipoClientePresupuesto.DataSource = dt;
+                this.ListTipoClientePresupuesto.DataValueField = "id";
+                this.ListTipoClientePresupuesto.DataTextField = "tipo";
+                this.ListTipoClientePresupuesto.DataBind();
             }
             catch (Exception ex)
             {
@@ -486,6 +501,12 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListEmpresaAgregarFC.DataValueField = "Id";
                 this.DropListEmpresaAgregarFC.DataTextField = "Razon Social";
                 this.DropListEmpresaAgregarFC.DataBind();
+
+
+                this.ListEmpresaPresupuesto.DataSource = dt;
+                this.ListEmpresaPresupuesto.DataValueField = "Id";
+                this.ListEmpresaPresupuesto.DataTextField = "Razon Social";
+                this.ListEmpresaPresupuesto.DataBind();
 
             }
             catch (Exception ex)
@@ -527,6 +548,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListSucursalAgregarFC.DataTextField = "nombre";
                 this.DropListSucursalAgregarFC.DataBind();
 
+
+                this.ListSucursalPresupuesto.DataSource = dt;
+                this.ListSucursalPresupuesto.DataValueField = "Id";
+                this.ListSucursalPresupuesto.DataTextField = "nombre";
+                this.ListSucursalPresupuesto.DataBind();
             }
             catch (Exception ex)
             {
@@ -635,6 +661,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListListas.DataTextField = "nombre";
 
                 this.DropListListas.DataBind();
+
+                this.ListPrecioPresupuesto.DataSource = dt;
+                this.ListPrecioPresupuesto.DataValueField = "id";
+                this.ListPrecioPresupuesto.DataTextField = "nombre";
+                this.ListPrecioPresupuesto.DataBind();
             }
             catch (Exception ex)
             {
@@ -658,6 +689,13 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListFormasPago.DataTextField = "forma";
 
                 this.DropListFormasPago.DataBind();
+
+
+                this.ListFormaPagoPresupuesto.DataSource = dt;
+                this.ListFormaPagoPresupuesto.DataValueField = "id";
+                this.ListFormaPagoPresupuesto.DataTextField = "forma";
+
+                this.ListFormaPagoPresupuesto.DataBind();
             }
             catch (Exception ex)
             {
@@ -685,6 +723,7 @@ namespace Gestion_Web.Formularios.Facturas
                     item.Text = dr["nombre"].ToString() + " " + dr["apellido"].ToString();
                     this.DropListVendedor.Items.Add(item);
                     this.DropListVendedorAgregarFC.Items.Add(item);
+                    this.ListVendedorPresupuesto.Items.Add(item);
                 }
             }
             catch (Exception ex)
@@ -784,11 +823,11 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
             }
         }
-        private void cargarFacturasRango(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago, int idTipoCliente)
+        private void cargarFacturasRango(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago, int idTipoCliente,int PRPFacturados)
         {
             try
             {
-                DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue));
+                DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue),PRPFacturados);
                 decimal saldo = 0;
 
                 foreach (DataRow row in dtFacturas.Rows)
@@ -1181,6 +1220,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListClientes.DataValueField = "id";
                 this.DropListClientes.DataTextField = "alias";
                 this.DropListClientes.DataBind();
+
 
             }
             catch (Exception ex)
@@ -2358,7 +2398,9 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
+                        
                     }
+                   
                     else
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar una sucursal"));
@@ -2375,6 +2417,41 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado de facturas. " + ex.Message));
 
             }
+        }
+        private void ExportToExcelPresupuesto(int accion)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(txtFechaDesdePresupuesto.Text) && (!String.IsNullOrEmpty(txtFechaHastaPresupuesto.Text)))
+                {
+
+                    if (ListSucursalPresupuesto.SelectedValue != "-1")
+                    {
+                        if (accion == 15)
+                        {
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesdePresupuesto.Text + "&fechaHasta=" + txtFechaHastaPresupuesto.Text + "&Sucursal=" + ListSucursalPresupuesto.SelectedValue + "&Emp=" + ListEmpresaPresupuesto.SelectedValue + "&tipo=0" + "&doc=0" + "&cl=" + ListClientePresupuesto.SelectedValue + "&e=1" + "&anuladas=0" + "&vend=" + Convert.ToInt32(this.ListVendedorPresupuesto.SelectedValue) + "&fp=" + Convert.ToInt32(this.ListFormaPagoPresupuesto.SelectedValue),true);
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar una sucursal"));
+                    }
+
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar ambas fechas"));
+
+                }
+
+            }
+               
+            catch (Exception ex)
+            {
+                Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "error", ex.Message.ToString());
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado de facturas. " + ex.Message));
+            }
+           
         }
         private void descargar(string path)
         {
@@ -5053,6 +5130,40 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Log.EscribirSQL(1, "ERROR", "CATCH: Error cargando articulos detalle desde la interfaz. Ubicacion: FacturasF.DetalleFactura_OtraDivisa. Excepcion:" + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error al mostrar el detalle de la factura desde la interfaz. Por favor, contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+            }
+        }
+
+        protected void btnExportarPRPFacturados_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ExportToExcelPresupuesto(15);
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "error", ex.Message.ToString());
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error exportando a excel. " + ex.Message));
+            }
+        }
+
+        protected void btnBuscarCodPresupuesto_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                String buscar = this.txtCodClientePresupuesto.Text.Replace(' ', '%');
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
+
+                this.ListClientePresupuesto.DataSource = dtClientes;
+                this.ListClientePresupuesto.DataValueField = "id";
+                this.ListClientePresupuesto.DataTextField = "alias";
+                this.ListClientePresupuesto.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "error", ex.Message.ToString());
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
             }
         }
     }
