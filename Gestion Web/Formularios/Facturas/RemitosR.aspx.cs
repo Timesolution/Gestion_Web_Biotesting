@@ -43,8 +43,8 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.VerificarLogin();
-                fechaD = Request.QueryString["Fechadesde"];
-                fechaH = Request.QueryString["FechaHasta"];
+                fechaD = Request.QueryString["fechadesde"];
+                fechaH = Request.QueryString["fechaHasta"];
                 suc = Convert.ToInt32(Request.QueryString["Sucursal"]);
                 anuladas = Convert.ToInt32(Request.QueryString["An"]);
                 this.original = Convert.ToInt32(Request.QueryString["o"]);

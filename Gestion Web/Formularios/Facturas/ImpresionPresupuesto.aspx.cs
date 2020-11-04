@@ -40,6 +40,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFactEntity controladorFactEntity = new controladorFactEntity();
         controladorMoneda controladorMoneda = new controladorMoneda();
         ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
+        controladorContacto controlContacto = new controladorContacto();
 
         Configuracion configuracion = new Configuracion();
         protected void Page_Load(object sender, EventArgs e)
@@ -1363,6 +1364,8 @@ namespace Gestion_Web.Formularios.Facturas
                 string codigoCliente = srCliente[5].ToString();
                 int idCliente = Convert.ToInt32(srCliente["idCliente"].ToString());
 
+                contacto contacto = controlContacto.obtenerContactoId(idCliente);
+
                 //DataTable dtTotal = controlador.obtenerTotalPresupuesto(idPresupuesto);
                 DataTable dtTotales = controlador.obtenerTotalRemito(idRemito);
                 DataRow dr = dtTotales.Rows[0];
@@ -1417,6 +1420,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
+                
                 controladorRemitos contRemito = new controladorRemitos();
                 //obtengo id empresa para buscar el logo correspondiente    
                 Remito r = contRemito.obtenerRemitoId(idRemito);
@@ -1483,6 +1487,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
 
                 ReportParameter param33 = new ReportParameter();
+
                 //cot
                 if (configuracion.cot == "1")
                 {
@@ -1508,6 +1513,8 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param37 = new ReportParameter("Neto", neto.ToString("C"));
 
                 ReportParameter param38 = new ReportParameter("Euro", euro.ToString("C"));
+
+                ReportParameter param39 = new ReportParameter("Telefono", contacto.numero);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -1545,6 +1552,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param36);
                 this.ReportViewer1.LocalReport.SetParameters(param37);
                 this.ReportViewer1.LocalReport.SetParameters(param38);
+                this.ReportViewer1.LocalReport.SetParameters(param39);
 
                 this.ReportViewer1.LocalReport.Refresh();
 
