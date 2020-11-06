@@ -150,6 +150,8 @@ namespace Gestion_Web.Account
                         Response.Redirect("../Formularios/Facturas/ABMPedidos.aspx?c=1" + "&cliente=" + this.cliente);
                     if (this.mascotasFc == 6)
                         Response.Redirect("../Formularios/Facturas/CotizacionesC.aspx?fechadesde=01/01/2000&fechaHasta=" + DateTime.Now.ToString("dd/MM/yyyy") + "&Sucursal=" + usuario.sucursal.id + "&Cliente=" + this.cliente + "&estado=0&v=0");
+                    if (this.mascotasFc == 7)
+                        Response.Redirect("../Formularios/Clientes/ClientesABM.aspx?accion=2&id=" + this.cliente);
 
                 }
             }
