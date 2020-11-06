@@ -58,7 +58,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\GestionAPI\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -372,6 +372,7 @@
     <Content Include="Formularios\Facturas\ConsolidarP.aspx" />
     <Content Include="Formularios\Facturas\ComisionesF.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
+    <Content Include="Formularios\Facturas\ImpresionComisiones.aspx" />
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Facturas\CronogramaPagosF.aspx" />
     <Content Include="Formularios\Facturas\RetencionesF.aspx" />
@@ -1538,6 +1539,13 @@
     </Compile>
     <Compile Include="Formularios\Facturas\CRM.aspx.designer.cs">
       <DependentUpon>CRM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ImpresionComisiones.aspx.cs">
+      <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ImpresionComisiones.aspx.designer.cs">
+      <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
@@ -3424,6 +3432,7 @@
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedoresSucursalCategoria.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\InformeComisiones.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\InformeRemitos.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
       <SubType>Designer</SubType>

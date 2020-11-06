@@ -19,6 +19,10 @@ using Gestion_Api.Entitys;
 using System.Globalization;
 using System.Web.Configuration;
 using Gestion_Api.Modelo.Enums;
+using System.ServiceModel.Security.Tokens;
+using Gestion_Web.TS_Gestion_DesarrolloDataSetTableAdapters;
+using Microsoft.Owin.Security;
+using System.Data.Entity.ModelConfiguration.Configuration;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -84,9 +88,16 @@ namespace Gestion_Web.Formularios.Facturas
 
                 foreach (DataRow row in lista.Rows)
                 {
-                    decimal total = (Convert.ToDecimal(row["saldo"].ToString()) - Convert.ToDecimal(row["iva"].ToString())) - Convert.ToDecimal(row["arttotal"].ToString());
+                    decimal saldo = !string.IsNullOrEmpty(row["saldo"].ToString()) ? Convert.ToDecimal(row["saldo"].ToString()) : 0;
+                    decimal iva = !string.IsNullOrEmpty(row["iva"].ToString()) ? Convert.ToDecimal(row["iva"].ToString()) : 0;
+                    decimal totalArt = !string.IsNullOrEmpty(row["arttotal"].ToString()) ? Convert.ToDecimal(row["arttotal"].ToString()) : 0;
+
+                    decimal total = (saldo - iva) - totalArt;
                     this.cargarEnPh(row, total);
                 }
+
+                lbtnGenerarComisiones.Visible = true;
+
             }
             catch (Exception ex)
             {
@@ -185,6 +196,8 @@ namespace Gestion_Web.Formularios.Facturas
                 padre.HorizontalAlign = HorizontalAlign.Right;
                 padre.VerticalAlign = VerticalAlign.Middle;
                 TextBox txt1 = new TextBox();
+                txt1.ID = "txtPadre_" + row["id"].ToString();
+                txt1.TextMode = TextBoxMode.Number;
                 padre.Controls.Add(txt1);
                 tr.Cells.Add(padre);
 
@@ -192,6 +205,8 @@ namespace Gestion_Web.Formularios.Facturas
                 abuelo.HorizontalAlign = HorizontalAlign.Right;
                 abuelo.VerticalAlign = VerticalAlign.Middle;
                 TextBox txt2 = new TextBox();
+                txt2.ID = "txtAbuelo_" + row["id"].ToString();
+                txt2.TextMode = TextBoxMode.Number;
                 abuelo.Controls.Add(txt2);
                 tr.Cells.Add(abuelo);
 
@@ -262,5 +277,242 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #endregion
+
+        protected void lbtnGenerarComisiones_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                DataTable dt = new DataTable();
+
+                dt.Columns.Add("idCliente");
+                dt.Columns.Add("alias");
+                dt.Columns.Add("total");
+
+                foreach (Control C in phComsiones.Controls)
+                {
+                    decimal padre = 0;
+                    decimal abuelo = 0;
+                    TableRow tr = C as TableRow;
+                    TextBox padre1 = tr.Cells[tr.Cells.Count - 2].Controls[0] as TextBox;
+                    TextBox abuelo1 = tr.Cells[tr.Cells.Count - 1].Controls[0] as TextBox;
+                    decimal total = Convert.ToDecimal(tr.Cells[tr.Cells.Count - 3].Text);
+
+                    //TextBox padre1 = new TextBox();
+                    //padre1.Text = "10";
+                    //TextBox abuelo1 = new TextBox();
+                    //abuelo1.Text = "10";
+
+                    if (!string.IsNullOrEmpty(padre1.Text))
+                    {
+                        padre = Convert.ToDecimal(padre1.Text);
+
+                    }
+
+                    if (!string.IsNullOrEmpty(abuelo1.Text))
+                    {
+                        abuelo = Convert.ToDecimal(abuelo1.Text);
+
+                    }
+
+                    string idCliente = tr.ID;
+
+                    var datos = controladorClienteEntity.ObtenerPadreAbueloDelCliente(Convert.ToInt32(idCliente));
+
+
+                    // verifico si el datatable tiene rows.
+                    // si tiene, voy a recorrer cada 1 verificando si existe el idcliente asi se la suma al total de la comision a percibir.
+                    if (dt.Rows.Count > 0)
+                    {
+
+                        var modifico = SumarComision(dt, datos, total, padre, abuelo);
+
+
+                        //if (modifico.modificoPadre == 0 && modifico.modificoAbuelo == 0)
+                        //{
+                        //    AgregarFilas(dt, datos, padre, abuelo, total);
+                        //}
+
+                        if (modifico.modificoPadre == 0)
+                        {
+                            DataRow row = datos.Rows[0];
+
+                            if (!string.IsNullOrEmpty(row["idPadre"].ToString()))
+                            {
+                                string id = row["idPadre"].ToString();
+                                string nombre = row["Padre"].ToString();
+
+                                AgregarFila(dt, id, nombre, total, padre);
+                            }
+
+                        }
+
+                        if (modifico.modificoAbuelo == 0)
+                        {
+                            DataRow row = datos.Rows[0];
+
+                            if (!string.IsNullOrEmpty(row["idAbuelo"].ToString()))
+                            {
+                                string id = row["idAbuelo"].ToString();
+                                string nombre = row["Abuelo"].ToString();
+
+                                AgregarFila(dt, id, nombre, total, abuelo);
+                            }
+                        }
+
+                    }
+                    else if (dt.Rows.Count == 0)
+                    {
+                        // aca seteo las primeras 2 filas o 1 sola, depende si tiene padre o abuelo o los 2.
+                        // si tiene los 2 se crean 2 nuevos rows. sino solo 1.
+                        AgregarFilas(dt, datos, padre, abuelo, total);
+                    }
+
+                }
+
+                Session["informeComisiones"] = dt;
+
+                Response.Redirect("ImpresionComisiones.aspx?ex=1&a=1");
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado. " + ex.Message));
+            }
+        }
+
+
+        public (int modificoPadre, int modificoAbuelo) SumarComision(DataTable dt, DataTable datos, decimal total, decimal padre, decimal abuelo)
+        {
+            try
+            {
+                int modificoPadre = 0;
+                int modificoAbuelo = 0;
+                // recorro la tabla a exportar que estoy rellenando
+                foreach (DataRow row in dt.Rows)
+                {
+                    // verifico que el total sea mayor a 0 sino no tiene sentido tener que agregar una comision a ese cliente
+                    if (total > 0)
+                    {
+                        // obtengo los datos de la familia
+                        DataRow familia = datos.Rows[0];
+
+                        // verifico si existe el id del cliente en la tabla a exportar
+                        if (row["idCliente"].ToString() == familia["idPadre"].ToString())
+                        {
+                            decimal comisionTotal = Convert.ToDecimal(row["total"].ToString());
+                            comisionTotal += total * (padre / 100);
+                            row["total"] = String.Format("{0:n}", comisionTotal);
+                            modificoPadre = 1;
+                        }
+
+                        // verifico si existe el id del cliente en la tabla a exportar
+                        else if (row["idCliente"].ToString() == familia["idAbuelo"].ToString())
+                        {
+                            decimal comisionTotal = Convert.ToDecimal(row["total"].ToString());
+                            comisionTotal += total * (abuelo / 100);
+                            row["total"] = String.Format("{0:n}", comisionTotal);
+                            modificoAbuelo = 1;
+                        }
+
+                    }
+
+                }
+
+                return (modificoPadre, modificoAbuelo);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado. " + ex.Message));
+                return (-1, -1);
+            }
+        }
+
+        public void AgregarFila(DataTable dt, string id, string nombre, decimal total, decimal porcentaje)
+        {
+            try
+            {
+                // verifico que idpadre sea dif de null o vacio ya que puede ser que no tenga padre.
+                if (!string.IsNullOrEmpty(id))
+                {
+                    if (porcentaje > 0 && total > 0)
+                    {
+                        DataRow firstRow = dt.NewRow();
+                        firstRow["idCliente"] = id;
+                        firstRow["alias"] = nombre;
+
+                        decimal comisionTotal = total * (porcentaje / 100);
+                        firstRow["total"] = String.Format("{0:n}", comisionTotal);
+
+                        dt.Rows.Add(firstRow);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void AgregarFilas(DataTable dt, DataTable datos, decimal padre, decimal abuelo, decimal total)
+        {
+            try
+            {
+
+                DataRow row = datos.Rows[0];
+
+                // verifico que idpadre sea dif de null o vacio ya que puede ser que no tenga padre.
+                if (!string.IsNullOrEmpty(row["idPadre"].ToString()))
+                {
+                    if (padre > 0 && total > 0)
+                    {
+                        DataRow firstRow = dt.NewRow();
+                        firstRow["idCliente"] = row["idPadre"].ToString();
+                        firstRow["alias"] = row["Padre"].ToString();
+
+                        decimal comisionTotal = total * (padre / 100);
+                        firstRow["total"] = String.Format("{0:n}", comisionTotal);
+
+                        dt.Rows.Add(firstRow);
+                    }
+
+                }
+
+                // verifico que idabuelo sea dif de null o vacio ya que puede ser que no tenga abuelo.
+                if (!string.IsNullOrEmpty(row["idAbuelo"].ToString()))
+                {
+                    if (abuelo > 0 && total > 0)
+                    {
+                        DataRow secondRow = dt.NewRow();
+                        secondRow["idCliente"] = row["idAbuelo"].ToString();
+                        secondRow["alias"] = row["Abuelo"].ToString();
+
+                        decimal comisionTotal = total * (abuelo / 100);
+                        secondRow["total"] = String.Format("{0:n}", comisionTotal);
+
+                        dt.Rows.Add(secondRow);
+                    }
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado. " + ex.Message));
+
+            }
+        }
+
     }
+
+
+
+
+
 }

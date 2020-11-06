@@ -58,12 +58,12 @@
 
 
                             <td style="width: 5%">
-                                <%-- <div class="shortcuts" style="height: 100%">
+                                <div class="shortcuts" style="height: 100%">
 
-                                    <a class="btn btn-primary ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar" style="width: 100%">
-                                        <i class="shortcut-icon icon-plus"></i>
+                                    <a class="btn btn-primary" style="width: 100%" data-toggle="modal" href="#modalPorcentajes">
+                                        <i class="shortcut-icon icon-list"></i>
                                     </a>
-                                </div>--%>
+                                </div>
                             </td>
                             <td style="width: 5%">
                                 <div class="shortcuts" style="height: 100%">
@@ -112,7 +112,7 @@
                                             <th>Total</th>
                                             <th>Padre</th>
                                             <th>Abuelo</th>
-                                            <th class="td-actions" style="width: 10%"></th>
+                                            <%--<th class="td-actions" style="width: 10%"></th>--%>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -123,6 +123,7 @@
                             </div>
                         </div>
                         <!-- /.content -->
+                        <asp:Button ID="lbtnGenerarComisiones" Style="margin-top: 10px;" runat="server" Text="Generar" class="btn btn-success" OnClick="lbtnGenerarComisiones_Click" Visible="false" />
                     </div>
                 </div>
             </div>
@@ -185,6 +186,45 @@
 
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbtnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modalPorcentajes" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Rellenar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                                <ContentTemplate>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4">Padre</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtPorcentajePadre" class="form-control" runat="server" TextMode="Number"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Abuelo</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtPorcentajeAbuelo" class="form-control" runat="server" TextMode="Number"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnAsignar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClientClick="javascript:CheckAll();" />
                     </div>
                 </div>
             </div>
@@ -287,6 +327,20 @@
             function pageLoad() {
                 $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
                 $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            }
+        </script>
+
+        <script>
+            function CheckAll() {
+
+                var padre = document.getElementById('<%=txtPorcentajePadre.ClientID%>').value;
+                var abuelo = document.getElementById('<%=txtPorcentajeAbuelo.ClientID%>').value;
+
+                for (var i = 1; i < document.getElementById('dataTables-example').rows.length; i++) {
+
+                    document.getElementById('dataTables-example').rows[i].cells[5].childNodes[0].value = padre;
+                    document.getElementById('dataTables-example').rows[i].cells[6].childNodes[0].value = abuelo;
+                }
             }
         </script>
 
