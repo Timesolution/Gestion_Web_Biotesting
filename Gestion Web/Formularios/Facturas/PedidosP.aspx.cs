@@ -123,7 +123,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.RadioFechaPedido.Checked = Convert.ToBoolean(this.tipoFecha);
                     this.RadioFechaEntrega.Checked = Convert.ToBoolean(this.tipoFecha2);
 
-                    
+
                 }
                 string perfil = Session["Login_NombrePerfil"] as string;
                 //por defecto
@@ -166,6 +166,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //busca por pedido
                 if (accion == 1)
                 {
+                    bultosTabla.Visible = false;
+                    lineasTabla.Visible = false;
+                    tiempoTabla.Visible = false;
+
                     this.buscarPorNumero();
                     this.lbtnFacturar.Visible = true;
                 }
@@ -173,6 +177,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //busca por numero
                 if (accion == 2)
                 {
+                    bultosTabla.Visible = false;
+                    lineasTabla.Visible = false;
+                    tiempoTabla.Visible = false;
+
                     this.buscarPorCliente();
                     this.lbtnFacturar.Visible = true;
                 }
@@ -191,6 +199,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //busco por observacion
                 if (accion == 4)
                 {
+                    bultosTabla.Visible = false;
+                    lineasTabla.Visible = false;
+                    tiempoTabla.Visible = false;
+
                     this.buscarPorObservacion();
                     this.lbtnFacturar.Visible = true;
                 }
@@ -769,18 +781,21 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        /// <summary>
+        /// Este metodo busca los pedidos usando de parametro el texto introducido en la caja de texto de 'N de pedido'
+        /// </summary>
         private void buscarPorNumero()
         {
             try
             {
-                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorNumero(this.numero,13);//13 es el tipo de documento pedido
+                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorNumero(this.numero, 13);//13 es el tipo de documento pedido
                 if (dtPedidos != null && dtPedidos.Rows.Count > 0)
                 {
                     this.cargarPedidos(dtPedidos);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
                 }
                 else if (dtPedidos == null || dtPedidos.Rows.Count == 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con el N° Pedido " + this.numero));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con el N° Pedido " + this.numero));
             }
             catch (Exception ex)
             {
@@ -789,18 +804,21 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        /// <summary>
+        /// Este metodo busca los pedidos usando de parametro el texto introducido en la caja de texto de 'N de Cliente'
+        /// </summary>
         private void buscarPorCliente()
         {
             try
             {
-                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorCliente(this.cliente,13);//13 es el tipo de documento pedido
+                DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorCliente(this.cliente, 13);//13 es el tipo de documento pedido
                 if (dtPedidos != null && dtPedidos.Rows.Count > 0)
                 {
                     this.cargarPedidos(dtPedidos);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
                 }
-                else if(dtPedidos == null || dtPedidos.Rows.Count == 0 )
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con el N° Cliente " + this.cliente));
+                else if (dtPedidos == null || dtPedidos.Rows.Count == 0)
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con el N° Cliente " + this.cliente));
             }
             catch (Exception ex)
             {
@@ -809,6 +827,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        /// <summary>
+        /// Este metodo busca los pedidos usando de parametro el texto introducido en la caja de texto de 'Observacion'
+        /// </summary>
         private void buscarPorObservacion()
         {
             try
@@ -817,10 +838,10 @@ namespace Gestion_Web.Formularios.Facturas
                 if (dtPedidos != null && dtPedidos.Rows.Count > 0)
                 {
                     this.cargarPedidos(dtPedidos);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtPedidos.Rows.Count.ToString() + " pedidos."));
                 }
                 else if (dtPedidos == null || dtPedidos.Rows.Count == 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con la observacion " + this.observacion));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado pedidos con la observacion " + this.observacion));
             }
             catch (Exception ex)
             {
@@ -1260,8 +1281,6 @@ namespace Gestion_Web.Formularios.Facturas
 
         }
 
-
-
         //obtengo vendedor del cliente
         private void obtenerVendedor(int Cliente)
         {
@@ -1369,6 +1388,10 @@ namespace Gestion_Web.Formularios.Facturas
         {
             if (!string.IsNullOrEmpty(this.txtNumeroPedido.Text))
             {
+                //DataTable dtPedidos = this.controlador.ObtenerDataTablePedidosPorNumero(this.txtNumeroPedido.Text, 13);//13 es el tipo de documento pedido
+                //Response.Redirect("PedidosP.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal="
+                //                + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
+                //                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&art=");
                 Response.Redirect("PedidosP.aspx?a=1&n=" + this.txtNumeroPedido.Text);
             }
             if (!string.IsNullOrEmpty(this.txtCodigoCliente.Text))
@@ -1416,14 +1439,14 @@ namespace Gestion_Web.Formularios.Facturas
                                 estado = true;
                             }
                         }
-                        
-                            
+
+
 
                     }
                 }
-               
-                    if (!String.IsNullOrEmpty(idtildado))
-                    {
+
+                if (!String.IsNullOrEmpty(idtildado))
+                {
                     if ((this.configuracion.facturarMismoPedidoVariasVeces == "1" && (estado)) || !estado)
                     {
                         Response.Redirect("../../Formularios/Facturas/ABMFacturas.aspx?accion=5&pedidos=" + idtildado);
@@ -1432,11 +1455,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion", "Al menos uno de los pedidos seleccionados ya fue remitido o facturado"));
                     }
-                    }
-                    else
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
-                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos un pedido"));
+                }
             }
             catch (Exception ex)
             {
@@ -1632,13 +1655,13 @@ namespace Gestion_Web.Formularios.Facturas
                     if (accion == 5)
                     {
                         ch = tr.Cells[8].Controls[2] as CheckBox;
-                        
+
                     }
 
                     else
                     {
                         ch = tr.Cells[5].Controls[2] as CheckBox;
-                        
+
                     }
 
 
@@ -1648,7 +1671,7 @@ namespace Gestion_Web.Formularios.Facturas
                         //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                         contador++;
                         idtildado += ch.ID.Split('_')[1] + ";";
-                        if(accion==5)
+                        if (accion == 5)
                         {
                             if (tr.Cells[7].Text == "Remitido")
                                 estado = true;

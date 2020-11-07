@@ -71,18 +71,18 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                if (chbDisparaTarea.Checked == true)
-                {
-                    divVencimientoTarea.Visible = true;
-                    divTarea.Visible = true;
-                    divSituacion.Visible = true;
-                }
-                else
-                {
-                    divVencimientoTarea.Visible = false;
-                    divTarea.Visible = false;
-                    divSituacion.Visible = false;
-                }
+                //if (chbDisparaTarea.Checked == true)
+                //{
+                //    divVencimientoTarea.Visible = true;
+                //    divTarea.Visible = true;
+                //    divSituacion.Visible = true;
+                //}
+                //else
+                //{
+                //    divVencimientoTarea.Visible = false;
+                //    divTarea.Visible = false;
+                //    divSituacion.Visible = false;
+                //}
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
@@ -3573,6 +3573,7 @@ namespace Gestion_Web.Formularios.Clientes
                     Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
+
                     if (FileUpload1.HasFile)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se adjunto un archivo al CRM");
@@ -3581,6 +3582,7 @@ namespace Gestion_Web.Formularios.Clientes
                     }
                     else
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No se adjunto ningun archivo al CRM");
+
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if (this.chbEnviarMailCRM.Checked == true)
                     {
@@ -3603,7 +3605,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
 
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento guardado con exito! " + mensajeEnvioMail, null));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Guardado", mensajeEnvioMail));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                     limpiarCamposCRM();
@@ -3611,14 +3613,14 @@ namespace Gestion_Web.Formularios.Clientes
                 else
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente.");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo guardar el evento"));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Disculpe, no se pudo guardar el evento, informe al area de soporte."));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al guardar evento. Avisar a Soporte (Revisar Log)"));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }

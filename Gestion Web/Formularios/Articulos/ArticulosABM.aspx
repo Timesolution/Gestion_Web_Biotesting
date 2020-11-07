@@ -1961,6 +1961,9 @@
                                                                     <div class="col-md-4">
                                                                         <asp:TextBox ID="txtTipoProducto" runat="server" class="form-control"></asp:TextBox>
                                                                     </div>
+                                                                    <div class="col-md-4">
+                                                                        <asp:Label ID="lblAyudaTipoProducto" runat="server" ForeColor="DarkRed">Escriba CONFIGURABLE o SIMPLE en mayuscula</asp:Label>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="col-md-2">Categoria</label>
@@ -1977,7 +1980,7 @@
                                                                 <div class="form-group">
                                                                     <label class="col-md-2">Producto Online</label>
                                                                     <div class="col-md-4">
-                                                                        <asp:TextBox ID="txtProductoOnline" runat="server" class="form-control"></asp:TextBox>
+                                                                        <asp:TextBox ID="txtProductoOnline" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
