@@ -915,115 +915,141 @@
                                     <div class="form-horizontal col-md-12">
                                         <asp:UpdatePanel ID="UpdatePanelTareas" UpdateMode="Conditional" runat="server">
                                             <ContentTemplate>
-                                                <div class="form-group">
-                                                    <label for="name" class="col-md-1">Fecha</label>
-                                                    <div class="col-md-2">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
-                                                            <asp:TextBox ID="txtFechaEvento" runat="server" class="form-control"></asp:TextBox>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-2">Fecha</label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
+                                                                    <asp:TextBox ID="txtFechaEvento" runat="server" class="form-control"></asp:TextBox>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtFechaEvento" ValidationGroup="EventosGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-2">Detalle</label>
+                                                            <div class="col-md-10">
+                                                                <asp:TextBox ID="txtDetalleEvento" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
+                                                            </div>
+                                                            <div class="">
+                                                                <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2">
+                                                                Enviar Mail
+                                                            </label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon">
+                                                                        <input type="checkbox" id="chbEnviarMailCRM" runat="server">
+                                                                    </span>
+                                                                    <input type="text" class="form-control" id="txtEnviarMailCRM" runat="server" maxlength="39">
+                                                                </div>
+                                                                <a id='resultado'></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2">
+                                                                Adjuntar a Email
+                                                            </label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group">
+                                                                    <asp:FileUpload ID="FileUpload1" runat="server" ToolTip="Adjuntar archivo para e-mail" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-2"></label>
+                                                            <div class="col-md-10">
+                                                                <asp:Button ID="lbtnAgregarEventoCliente" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" OnClientClick="this.disabled = true; this.value = 'Guardando...';" UseSubmitBehavior="false" />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator36" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtFechaEvento" ValidationGroup="EventosGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    <div class="col-sm-1">
+                                                        <hr style="margin-top: 0px; border: none; border-left: 1px solid hsla(200, 10%, 70%,100); height: 320px; width: 1px;" />
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="name" class="col-md-1">Detalle</label>
-                                                    <div class="col-md-4">
-                                                        <asp:TextBox ID="txtDetalleEvento" Style="height: 150px; width: 700px" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <asp:Label ID="lblIdEventoCliente" runat="server" Text="0" Visible="false" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-1">
-                                                        Enviar Mail
-                                                    </label>
-                                                    <div class="col-md-4">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">
-                                                                <input type="checkbox" id="chbEnviarMailCRM" runat="server">
-                                                            </span>
-                                                            <input type="text" class="form-control" id="txtEnviarMailCRM" runat="server" maxlength="39">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label class="col-md-2">Dispara tarea</label>
+                                                            <div class="col-md-10">
+                                                                <div class="input-group">
+                                                                    <asp:CheckBox ID="chbDisparaTarea" runat="server" />
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <a id='resultado'></a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-md-1">
-                                                        Adjuntar a Email
-                                                    </label>
-                                                    <div class="col-md-4">
-                                                        <div class="input-group">
-                                                            <asp:FileUpload ID="FileUpload1" runat="server" ToolTip="Adjuntar archivo para e-mail" />
+                                                        <div class="form-group" id="divTarea" runat="server">
+                                                            <label for="name" class="col-md-2">Tarea</label>
+                                                            <div class="col-md-10">
+                                                                <asp:TextBox ID="txtTarea" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-md-1">Dispara tarea</label>
-                                                    <div class="col-md-4">
-                                                        <div class="input-group">
-                                                            <asp:CheckBox ID="chbDisparaTarea" runat="server" AutoPostBack="true" OnCheckedChanged="Check_Clicked" />
+                                                        <div class="form-group" id="divSituacion" runat="server">
+                                                            <label for="name" class="col-md-2">Estado</label>
+                                                            <div class="col-md-10">
+                                                                <asp:DropDownList ID="drpCRMSituacion" runat="server" class="form-control">
+                                                                </asp:DropDownList>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group" id="divTarea" runat="server">
-                                                    <label for="name" class="col-md-1">Tarea</label>
-                                                    <div class="col-md-4">
-                                                        <asp:TextBox ID="txtTarea" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group" id="divSituacion" runat="server">
-                                                    <label for="name" class="col-md-1">Estado</label>
-                                                    <div class="col-md-4">
-                                                        <asp:DropDownList ID="drpCRMSituacion" runat="server" class="form-control">
-                                                        </asp:DropDownList>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group" id="divVencimientoTarea" runat="server">
-                                                    <label for="name" class="col-md-1">Vencimiento</label>
-                                                    <div class="col-md-2">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
-                                                            <asp:TextBox ID="txtFechaVencimiento" runat="server" class="form-control"></asp:TextBox>
+                                                        <div class="form-group" id="divVencimientoTarea" runat="server">
+                                                            <label for="name" class="col-md-2">Vencimiento</label>
+                                                            <div class="col-md-10" style="float: right;width: 370px;">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
+                                                                    <asp:TextBox ID="txtFechaVencimiento" runat="server" class="form-control"></asp:TextBox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <!-- /widget -->
+                                                            <div class="widget stacked widget-box">
+                                                                <div class="widget-header">
+                                                                    <i class="icon-pushpin"></i>
+                                                                    <h3>Atencion!</h3>
+                                                                </div>
+                                                                <!-- /widget-header -->
+                                                                <div class="widget-content">
+                                                                    <p style="text-align: justify">Para poder guardar la Tarea de este CRM, debera tildar la opcion de <strong style="color: black">Dispara Tarea</strong> que se encuentra en la parte superior.</p>
+                                                                </div>
+                                                                <!-- /widget-content -->
+                                                            </div>
+                                                            <!-- /widget -->
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="name" class="col-md-1"></label>
-                                                    <div class="col-md-4">
-                                                        <asp:Button ID="lbtnAgregarEventoCliente" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnAgregarEventoCliente_Click" ValidationGroup="EventosGroup" OnClientClick="this.disabled = true; this.value = 'Guardando...';" UseSubmitBehavior="false" />
-                                                    </div>
+                                                <div class="row">
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <div class="widget stacked widget-table">
-                                                        <div class="widget-header">
-                                                            <span class="icon-external-link"></span>
-                                                            <h3>Eventos</h3>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="widget stacked widget-table">
+                                                            <div class="widget-header">
+                                                                <span class="icon-external-link"></span>
+                                                                <h3>Eventos</h3>
+                                                            </div>
+                                                            <!-- .widget-header -->
+                                                            <div class="widget-content">
+                                                                <table class="table table-bordered table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Fecha</th>
+                                                                            <th>Detalle</th>
+                                                                            <th>Tarea</th>
+                                                                            <th>Vencimiento</th>
+                                                                            <th>Estado</th>
+                                                                            <th>Usuario</th>
+                                                                            <th style="width: 10%"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <asp:PlaceHolder ID="phEventos" runat="server"></asp:PlaceHolder>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <!-- .widget-content -->
                                                         </div>
-                                                        <!-- .widget-header -->
-                                                        <div class="widget-content">
-                                                            <table class="table table-bordered table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Fecha</th>
-                                                                        <th>Detalle</th>
-                                                                        <th>Tarea</th>
-                                                                        <th>Vencimiento</th>
-                                                                        <th>Estado</th>
-                                                                        <th>Usuario</th>
-                                                                        <th style="width: 10%"></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <asp:PlaceHolder ID="phEventos" runat="server"></asp:PlaceHolder>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <!-- .widget-content -->
                                                     </div>
                                                 </div>
                                             </ContentTemplate>
