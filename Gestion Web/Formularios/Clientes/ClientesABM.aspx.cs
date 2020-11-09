@@ -2375,12 +2375,17 @@ namespace Gestion_Web.Formularios.Clientes
                     Cliente c = Session["ClientesABM_Cliente"] as Cliente;
                     DataTable puntos = controladorCobranza.ObtenerPuntosCliente(c.id);
                     this.phPuntos.Controls.Clear();
-                    int id = 0; 
-                    foreach (DataRow dt in puntos.Rows)
+                    int id = 0;
+
+                    if(puntos != null && puntos.Rows.Count > 0)
                     {
-                        this.cargarPHPuntos(dt, id);
-                        id++;
+                        foreach (DataRow dt in puntos.Rows)
+                        {
+                            this.cargarPHPuntos(dt, id);
+                            id++;
+                        }
                     }
+
                     this.labelPuntos.Text = totalPuntos.ToString();
                 }
             }
