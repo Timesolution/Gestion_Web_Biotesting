@@ -105,7 +105,7 @@ namespace Gestion_Web.Account
                     else
                     {
                         //Response.Redirect("Account/Login.aspx");
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Usuario y/o contraseña incorrectos"));
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("Usuario y/o contraseña incorrectos"));
                         txtUsuario.Text = "";
                     }
                     
