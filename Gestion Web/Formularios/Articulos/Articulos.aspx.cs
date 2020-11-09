@@ -60,15 +60,16 @@ namespace Gestion_Web.Formularios.Articulos
                 btnModificarPrecio.Attributes.Add("onclick", " this.disabled = true;  " + btnModificarPrecio.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnModificarPrecio, null) + ";");
                 btnSeteaPrecioventa.Attributes.Add("onclick", " this.disabled = true;  " + btnSeteaPrecioventa.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnSeteaPrecioventa, null) + ";");
 
-                //CHEQUEO SI LA EMPRESA ES DEPORT SHOW, PARA HABILITAR LA DESCARGA .CSV DE ARTICULOS PARA MAGENTO
                 int idEmpresa = (int)Session["Login_SucUser"];
                 Empresa empresa = controladorEmpresa.obtenerEmpresaByIdSucursal(idEmpresa);
 
+                ///Chequeo si la empresa es parte de Deport Show, para habilitar la descarga del archivo .txt de los articulos para Magento
                 if(string.Equals(empresa.RazonSocial,"RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
                     lbtnExportarArticulosMagento.Visible = true;
                 else
                     lbtnExportarArticulosMagento.Visible = false;
 
+                ///Chequeo si la empresa es ID GROUP, para habilitar la importacion de articulos desde la base externa.
                 if (string.Equals(empresa.RazonSocial, "ID Group"))
                 {
                     lblHabilitadoImportacionArticulos.Visible = false;
@@ -2299,14 +2300,14 @@ namespace Gestion_Web.Formularios.Articulos
                     ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
                     Informes_Pedidos ip = new Informes_Pedidos();
 
-                    //Cargo el objeto Informes_Pedidos
+                    ///Cargo el objeto Informes_Pedidos
                     cargarDatosInformePedido(ip);
 
-                    //Agrego el informe para ejecutar la funcion de importacion. Si todo es correcto retorna 1. En caso contrario, revisar error segun el entero.
+                    ///Agrego el informe para ejecutar la funcion de importacion. Si todo es correcto retorna 1. En caso contrario, revisar error segun el entero.
                     int i = controladorInformesEntity.agregarInformePedido(ip,null);
 
                     if (i > 0)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Solicitud Generada", "Se ha generado la solicitud de Importacion con exito. Podra visualizar el estado en Reportes -> Informes Solicitados."));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de Importacion con <strong>exito</strong>. Podra visualizar el estado en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
                     if (i == -1)
                     {
                         int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "ELSE: Fue por el 'else' al querer generar un pedido para la importacion de articulos llamando al metodo controladorInformesEntity.agregarInformePedido. Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click.");
