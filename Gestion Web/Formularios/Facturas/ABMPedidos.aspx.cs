@@ -1263,7 +1263,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if(this.cliente.vendedor.id > 0)
                     {
-                        this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
+                        if(DropListVendedor.Items.FindByValue(this.cliente.vendedor.id.ToString()) != null)
+                        {
+                            this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
+                        }
+
+                        //this.DropListVendedor.SelectedValue = this.cliente.vendedor.id.ToString();
                     }
                     
                     this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
@@ -1370,6 +1375,8 @@ namespace Gestion_Web.Formularios.Facturas
             var c = contCliente.obtenerClienteID(idCliente);
             this.DropListClientes.Items.Add(new ListItem { Value = idCliente.ToString(), Text = c.alias });
             this.DropListClientes.SelectedValue = idCliente.ToString();
+
+            this.DropListClientes_SelectedIndexChanged(this, EventArgs.Empty);
         }
 
 

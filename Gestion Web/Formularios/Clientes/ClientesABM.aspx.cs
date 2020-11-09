@@ -24,6 +24,8 @@ namespace Gestion_Web.Formularios.Clientes
 {
     public partial class ClientesABM : System.Web.UI.Page
     {
+        // verifico si es de uruguay el cuit.
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
         //mensajes popUp
         Mensajes m = new Mensajes();
         //controladores
@@ -71,18 +73,21 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                //if (chbDisparaTarea.Checked == true)
-                //{
-                //    divVencimientoTarea.Visible = true;
-                //    divTarea.Visible = true;
-                //    divSituacion.Visible = true;
-                //}
-                //else
-                //{
-                //    divVencimientoTarea.Visible = false;
-                //    divTarea.Visible = false;
-                //    divSituacion.Visible = false;
-                //}
+                if(esUruguay == 1)
+                    txtCuit.Text = "Root";
+
+                if (chbDisparaTarea.Checked == true)
+                {
+                    divVencimientoTarea.Visible = true;
+                    divTarea.Visible = true;
+                    divSituacion.Visible = true;
+                }
+                else
+                {
+                    divVencimientoTarea.Visible = false;
+                    divTarea.Visible = false;
+                    divSituacion.Visible = false;
+                }
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
@@ -1574,13 +1579,16 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     cliente.cuit = cliente.cuit.PadLeft(8, '0');
                 }
-
-                if (cliente.cuit.Length < 11 && this.DropListIva.SelectedItem.Text == "Responsable Inscripto")
+                
+                // si tiene 0, quiere decir que no es uruguay y tiene que corroborar que tenga 11 digitos, delo contrario si es uruguay no lo valida.
+                if (esUruguay == 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El tipo de iva Resp. Inscripto requiere de un CUIT de 11 digitos."));
-                    return;
+                    if (cliente.cuit.Length < 11 && this.DropListIva.SelectedItem.Text == "Responsable Inscripto")
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El tipo de iva Resp. Inscripto requiere de un CUIT de 11 digitos."));
+                        return;
+                    }
                 }
-
 
                 //alerta cliente                
                 cliente.alerta.descripcion = this.txtAlerta.Text;
@@ -1611,7 +1619,86 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente.direcciones = this.obtenerListDirecciones();
 
 
-                if (this.controlador.validateCuit(this.txtCuit.Text, this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
+                if(esUruguay == 0)
+                {
+                    if (this.controlador.validateCuit(this.txtCuit.Text, this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
+                    {
+                        if (accion == 1) //Si es 1 es cliente 
+                        {
+                            cliente.origen = 1;
+                            int i = this.controlador.agregarCliente(cliente);
+
+                            //Actualizo IIBB según el padrón de Clientes
+                            if (i > 0)
+                            {
+                                int iibb = this.controlador.actualizarPadronCliente(i, this.txtCuit.Text.Replace("-", ""), 1);//1 = padron clientes, 2 = padron proveedores
+                            }
+
+                            if (idForma > 0)
+                            {
+                                this.contClienteEntity.agregarFormaVentaACliente(cliente.id, idForma);
+                            }
+
+                            //Verifico si utiliza modo distribución y si quien lo da de alta es dsitribuidor, se agrega al distribuidor como padre 
+                            if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
+                            {
+                                if (perfil == "Distribuidor")
+                                {
+                                    var idDistribuidor = (int)Session["Login_Vendedor"];
+                                    Clientes_Referidos cr = new Clientes_Referidos();
+                                    if (DropListTipo.SelectedItem.Text.ToLower() == "lider")
+                                    {
+                                        cr.Padre = idDistribuidor;
+                                        cr.Hijo = i;
+                                    }
+                                    if (DropListTipo.SelectedItem.Text.ToLower() == "experta")
+                                    {
+                                        cr.Padre = Convert.ToInt32(DropListFamilia.SelectedValue);
+                                        cr.Hijo = i;
+                                    }
+
+                                    this.contClienteEntity.agregarClienteReferido(cr);
+                                }
+                            }
+
+
+                            //datos de mail para envio FC
+                            Cliente_Datos datos = new Cliente_Datos();
+                            datos.Mail = this.txtMailEntrega.Text;
+                            datos.IdCliente = cliente.id;
+                            datos.Celular = this.txtCodArea.Text + "-" + this.txtCelularSMS.Text;
+                            datos.AplicaDescuentoCantidad = Convert.ToInt32(this.ListDescuentoPorCantidad.SelectedValue);
+                            if (!String.IsNullOrEmpty(this.txtFechaNacimientoSMS.Text))
+                            {
+                                datos.FechaNacimiento = Convert.ToDateTime(this.txtFechaNacimientoSMS.Text, new CultureInfo("es-AR"));
+                            }
+                            this.contClienteEntity.agregarClienteDatos(datos);
+
+                            this.verificarAgregarTareaAvisoCumpleanios(datos);
+
+                            this.RespuestaAgregarCliente(i);
+                        }
+                        if (accion == 3) // Si es 3 es proveedor
+                        {
+                            cliente.origen = 2;
+                            int i = this.controlador.agregarCliente(cliente);
+                            if (i > 0)
+                            {
+                                //agrego cuenta al proveedor
+                                ControladorCCProveedor contCCP = new ControladorCCProveedor();
+                                contCCP.agregarCuentaProveedor(i);
+                                int iibb = this.controlador.actualizarPadronCliente(i, this.txtCuit.Text.Replace("-", ""), 2);
+                            }
+                            this.RespuestaAgregarProveedor(i);
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El CUIT ingresado es incorrecto"));
+
+                    }
+                }
+                else
                 {
                     if (accion == 1) //Si es 1 es cliente 
                     {
@@ -1682,11 +1769,8 @@ namespace Gestion_Web.Formularios.Clientes
                         this.RespuestaAgregarProveedor(i);
                     }
                 }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El CUIT ingresado es incorrecto"));
 
-                }
+                
 
             }
             catch (Exception ex)
@@ -1897,7 +1981,60 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente.formaPago.id = this.controlador.obtenerPrimerFormaPago();
                 }
 
-                if (this.controlador.validateCuit(this.txtCuit.Text.Replace("-", String.Empty), this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
+                if(esUruguay == 0)
+                {
+                    if (this.controlador.validateCuit(this.txtCuit.Text.Replace("-", String.Empty), this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
+                    {
+                        if (accion == 2)
+                        {
+                            cliente.origen = 1;
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico cliente: " + this.txtCodCliente.Text);
+                            int i = this.controlador.modificarCliente(cliente, cuitCli, codCli);
+                            if (idForma > 0)
+                            {
+                                this.contClienteEntity.modificarFormaVentaACliente(cliente.id, idForma);
+                            }
+
+                            //Verifico si utiliza modo distribución y si quien lo da de alta es dsitribuidor, se agrega al distribuidor como padre 
+                            if (WebConfigurationManager.AppSettings.Get("Distribucion") != "1")
+                            {
+                                //if (perfil == "Distribuidor")
+                                //{
+
+                                //    var idDistribuidor = (int)Session["Login_Vendedor"];
+                                //    if (DropListTipo.SelectedItem.Text == "Lider")
+                                //    {
+                                //        cr.Padre = idDistribuidor;
+                                //        cr.Hijo = cliente.id;
+                                //    }
+                                //    if (DropListTipo.SelectedItem.Text == "Experta")
+                                //    {
+                                //        cr.Padre = Convert.ToInt32(DropListFamilia.SelectedValue);
+                                //        cr.Hijo = cliente.id;
+                                //    }
+                                //    this.contClienteEntity.modificarClienteReferido(cr);
+                                //}
+                                this.contClienteEntity.quitarFormaVentaACliente(idCliente, -1);
+                            }
+                            //else
+                            //{
+                            //}
+                            this.RespuestaModificarCliente(i);
+                        }
+                        if (accion == 4)
+                        {
+                            cliente.origen = 2;
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico proveedor: " + this.txtCodCliente.Text);
+                            int i = this.controlador.modificarProveedor(cliente, cuitCli, codCli);
+                            this.RespuestaModificarProveedor(i);
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El CUIT ingresado es incorrecto"));
+                    }
+                }
+                else
                 {
                     if (accion == 2)
                     {
@@ -1942,10 +2079,6 @@ namespace Gestion_Web.Formularios.Clientes
                         int i = this.controlador.modificarProveedor(cliente, cuitCli, codCli);
                         this.RespuestaModificarProveedor(i);
                     }
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("El CUIT ingresado es incorrecto"));
                 }
 
             }
@@ -2375,17 +2508,12 @@ namespace Gestion_Web.Formularios.Clientes
                     Cliente c = Session["ClientesABM_Cliente"] as Cliente;
                     DataTable puntos = controladorCobranza.ObtenerPuntosCliente(c.id);
                     this.phPuntos.Controls.Clear();
-                    int id = 0;
-
-                    if(puntos != null && puntos.Rows.Count > 0)
+                    int id = 0; 
+                    foreach (DataRow dt in puntos.Rows)
                     {
-                        foreach (DataRow dt in puntos.Rows)
-                        {
-                            this.cargarPHPuntos(dt, id);
-                            id++;
-                        }
+                        this.cargarPHPuntos(dt, id);
+                        id++;
                     }
-
                     this.labelPuntos.Text = totalPuntos.ToString();
                 }
             }
@@ -3578,7 +3706,6 @@ namespace Gestion_Web.Formularios.Clientes
                     Attachment adjunto = null;
                     string mensajeEnvioMail = "";
                     Usuario usuario = new Usuario();
-
                     if (FileUpload1.HasFile)
                     {
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se adjunto un archivo al CRM");
@@ -3587,7 +3714,6 @@ namespace Gestion_Web.Formularios.Clientes
                     }
                     else
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "No se adjunto ningun archivo al CRM");
-
                     usuario = controladorUsuario.obtenerUsuariosID(Convert.ToInt32((int)Session["Login_IdUser"]));
                     if (this.chbEnviarMailCRM.Checked == true)
                     {
@@ -3610,7 +3736,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtTarea.Text = "";
                     drpCRMSituacion.SelectedIndex = 0;
 
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Guardado", mensajeEnvioMail));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento guardado con exito! " + mensajeEnvioMail, null));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
                     this.cargarEventosCliente();
                     limpiarCamposCRM();
@@ -3618,14 +3744,14 @@ namespace Gestion_Web.Formularios.Clientes
                 else
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente.");
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Disculpe, no se pudo guardar el evento, informe al area de soporte."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo guardar el evento"));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al guardar evento. Avisar a Soporte (Revisar Log)"));
                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
             }
         }
