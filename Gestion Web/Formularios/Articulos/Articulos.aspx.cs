@@ -2404,17 +2404,17 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 controladorReportes controladorReportes = new controladorReportes();
 
-                string rutaTxt = Server.MapPath("../ArchivosExportacion/Salida/");
+                string rutaCSV = Server.MapPath("../ArchivosExportacion/Salida/");
 
-                if (!Directory.Exists(rutaTxt))
+                if (!Directory.Exists(rutaCSV))
                 {
-                    Directory.CreateDirectory(rutaTxt);
+                    Directory.CreateDirectory(rutaCSV);
                 }
 
-                string archivos = controladorReportes.generarArchivoArticulosMagento(rutaTxt);
+                string archivoCSV = controladorReportes.generarArchivoArticulosMagento(rutaCSV);
 
                 System.IO.FileStream fs = null;
-                fs = System.IO.File.Open(archivos, System.IO.FileMode.Open);
+                fs = System.IO.File.Open(archivoCSV, System.IO.FileMode.Open);
 
                 byte[] btFile = new byte[fs.Length];
                 fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
@@ -2423,9 +2423,9 @@ namespace Gestion_Web.Formularios.Articulos
                 this.Response.Clear();
                 this.Response.Buffer = true;
                 this.Response.ContentType = "application/octet-stream";
-                this.Response.AddHeader("Content-disposition", "attachment; filename= " + archivos);
+                this.Response.AddHeader("Content-disposition", "attachment; filename= Articulos_Magento");
                 this.Response.BinaryWrite(btFile);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado","Se ha generado el archivo con exito. El mismo se encuentra en /ArchivosExportacion/Salida/"));
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado","Se ha generado el archivo con exito. El mismo se encuentra en /ArchivosExportacion/Salida/"));
                 this.Response.End();
 
             }
