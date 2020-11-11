@@ -64,7 +64,7 @@ namespace Gestion_Web.Formularios.Articulos
                 Empresa empresa = controladorEmpresa.obtenerEmpresaByIdSucursal(idEmpresa);
 
                 ///Chequeo si la empresa es parte de Deport Show, para habilitar la descarga del archivo .txt de los articulos para Magento
-                if(string.Equals(empresa.RazonSocial,"RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
+                if (string.Equals(empresa.RazonSocial, "RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
                     lbtnExportarArticulosMagento.Visible = true;
                 else
                     lbtnExportarArticulosMagento.Visible = false;
@@ -164,7 +164,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.lblConfigCSV.Text += "PuntoComa(;)";
                 else
                     this.lblConfigCSV.Text += "Coma(,)";
-               
+
             }
             catch (Exception ex)
             {
@@ -2304,7 +2304,7 @@ namespace Gestion_Web.Formularios.Articulos
                     cargarDatosInformePedido(ip);
 
                     ///Agrego el informe para ejecutar la funcion de importacion. Si todo es correcto retorna 1. En caso contrario, revisar error segun el entero.
-                    int i = controladorInformesEntity.agregarInformePedido(ip,null);
+                    int i = controladorInformesEntity.agregarInformePedido(ip, null);
 
                     if (i > 0)
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de Importacion con <strong>exito</strong>. Podra visualizar el estado en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
@@ -2388,7 +2388,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (ex.Message.Contains("Thread was being aborted"))
                 {
                     //ScriptManager.RegisterStartupScript(this.UpdatePanel1, this.GetType(), "alert", "MensajeArchivoDescargado()", true);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado","Se ha descargo el archivo .xls con exito."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado", "Se ha descargo el archivo .xls con exito."));
                 }
                 else
                 {
@@ -2423,16 +2423,18 @@ namespace Gestion_Web.Formularios.Articulos
                 this.Response.Clear();
                 this.Response.Buffer = true;
                 this.Response.ContentType = "application/octet-stream";
-                this.Response.AddHeader("Content-disposition", "attachment; filename= Articulos_Magento");
+                this.Response.AddHeader("Content-disposition", "attachment; filename= Articulos_Magento.csv");
                 this.Response.BinaryWrite(btFile);
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Archivo Descargado","Se ha generado el archivo con exito. El mismo se encuentra en /ArchivosExportacion/Salida/"));
                 this.Response.End();
 
             }
             catch (Exception ex)
             {
-                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "CATCH: Ocurrio un error grabando el pedido de la Importacion. Ubicacion: Articulos.aspx. Metodo: lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                if (!ex.Message.Contains("Thread was being aborted"))
+                {
+                    int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "CATCH: Ocurrio un error grabando el pedido de la Importacion. Ubicacion: Articulos.aspx. Metodo: lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                }
             }
         }
     }
