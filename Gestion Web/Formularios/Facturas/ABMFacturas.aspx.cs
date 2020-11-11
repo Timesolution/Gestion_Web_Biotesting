@@ -2788,7 +2788,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int user = (int)Session["Login_IdUser"];
                     string presupuestos = Request.QueryString["prps"];
 
-                    int i = this.controlador.ProcesoRefacturarPRPEditado(fact, user,presupuestos);
+                    int i = this.controlador.ProcesoRefacturarPRPEditado(null,fact, user,presupuestos);
                     if (i > 0)
                     {
                         //mando imprimir factura
@@ -3266,7 +3266,7 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         //facturo
-                        int i = this.controlador.ProcesarFactura(fact, dtPago, user,generaRemito);
+                        int i = this.controlador.ProcesarFactura(null,fact, dtPago, user,generaRemito);
                         if (i > 0)
                         {
                             //factura exitosa
@@ -3322,7 +3322,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                 //solo hago en cuenta corriente la fact partida
                 fact.formaPAgo = this.controlador.obtenerFormaPagoFP("Cuenta Corriente");
-                int i = contFcEnt.procesarFacturacionPorcentual(fact, dtPago, user, idForma);
+                int i = contFcEnt.procesarFacturacionPorcentual(null,fact, dtPago, user, idForma);
                 if (i > 0)
                 {
                     //factura exitosa

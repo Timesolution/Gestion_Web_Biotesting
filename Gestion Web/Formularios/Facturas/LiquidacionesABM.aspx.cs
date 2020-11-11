@@ -260,10 +260,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //TERMINO SEGUNDO PRP///
 
-                int i = contFact.ProcesarFactura(f, dt, (int)Session["Login_IdUser"], 0);
+                int i = contFact.ProcesarFactura(null,f, dt, (int)Session["Login_IdUser"], 0);
 
 
-                int j = contFact.ProcesarFactura(f2, dt, (int)Session["Login_IdUser"], 0);
+                int j = contFact.ProcesarFactura(null,f2, dt, (int)Session["Login_IdUser"], 0);
 
                 if (i > 0 && j > 0)
                 {

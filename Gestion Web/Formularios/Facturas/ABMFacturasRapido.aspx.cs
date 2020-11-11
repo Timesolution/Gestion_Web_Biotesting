@@ -2158,7 +2158,7 @@ namespace Gestion_Web.Formularios.Facturas
                     fact.iva21 = fact.obtenerNetoNoGravado();
 
                     //facturo
-                    int i = this.controlador.ProcesarFactura(fact, dtPago, user,generaRemito);
+                    int i = this.controlador.ProcesarFactura(null,fact, dtPago, user,generaRemito);
                     if (i > 0)
                     {
                         //factura exitosa

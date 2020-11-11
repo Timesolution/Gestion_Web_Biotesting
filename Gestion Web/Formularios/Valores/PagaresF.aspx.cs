@@ -529,7 +529,7 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 //Genero PRP
-                int i = this.controlador.generarFacturaLiquidacionPagares(listPagares, monto, numeroLiquidacion);
+                int i = this.controlador.generarFacturaLiquidacionPagares(null,listPagares, monto, numeroLiquidacion);
                 if (i > 0)
                 {
                     //Limpio campo liquidación
