@@ -3886,7 +3886,7 @@ namespace Gestion_Web.Formularios.Facturas
                     AgregarComentariosIvaYNetoDiscriminados(fact);
                     fact.comentario = this.txtComentarios.Text;
 
-                    int i = this.controlador.ProcesoRefacturarPRPEditado(fact, user, presupuestos);
+                    int i = this.controlador.ProcesoRefacturarPRPEditado(dropList_DomicilioEntrega.SelectedValue.ToString(), fact, user, presupuestos);
                     if (i > 0)
                     {
                         //despues de refacturar establezco el iva de nuevo en NO informa
@@ -4278,10 +4278,10 @@ namespace Gestion_Web.Formularios.Facturas
                     if (DropListDivisa.SelectedValue != "-1")
                     {
                         divisaElegida = Convert.ToInt32(DropListDivisa.SelectedValue);
-                        i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito,divisaElegida);
+                        i = this.controlador.ProcesarFactura(dropList_DomicilioEntrega.SelectedItem.ToString(), fact, dtPago, user, generaRemito,divisaElegida);
                     }
                     else
-                        i = this.controlador.ProcesarFactura(fact, dtPago, user, generaRemito);
+                        i = this.controlador.ProcesarFactura(dropList_DomicilioEntrega.SelectedItem.ToString(),fact, dtPago, user, generaRemito);
 
                     if (i > 0)
                     {
@@ -4558,7 +4558,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                 //solo hago en cuenta corriente la fact partida
                 fact.formaPAgo = this.controlador.obtenerFormaPagoFP("Cuenta Corriente");
-                int i = contFcEnt.procesarFacturacionPorcentual(fact, dtPago, user, idForma);
+                int i = contFcEnt.procesarFacturacionPorcentual(dropList_DomicilioEntrega.SelectedValue.ToString(),fact, dtPago, user, idForma);
                 if (i > 0)
                 {
                     int idPRP = contFcEnt.obtenerFacturaPorcentualById(i, 0);

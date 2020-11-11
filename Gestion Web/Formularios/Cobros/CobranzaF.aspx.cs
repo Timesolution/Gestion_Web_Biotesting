@@ -795,7 +795,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal total = Convert.ToDecimal(this.txtFinal.Text);
                 if (total > 0)
                 {
-                    int i = this.contCobranza.GenerarNotaCreditoDescuento(this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, total, facturas);
+                    int i = this.contCobranza.GenerarNotaCreditoDescuento(null,this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, total, facturas);
 
                     if (i > 0)
                     {
@@ -1023,7 +1023,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string tipoNCND = drpNCND.SelectedValue;
                     string descripcionArt = txtDescripcionArt.Text;
 
-                    int i = this.contCobranza.GenerarNotaCreditoDebito(this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, importe, facturas, tipoNCND, descripcionArt);
+                    int i = this.contCobranza.GenerarNotaCreditoDebito(null,this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, importe, facturas, tipoNCND, descripcionArt);
 
                     if (i > 0)
                     {

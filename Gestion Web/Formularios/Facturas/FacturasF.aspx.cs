@@ -594,6 +594,36 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
+        public void cargarSucursalPresupuesto(int idEmpresa)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursalesDT(idEmpresa);
+
+                // agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr1 = dt.NewRow();
+                dr1["nombre"] = "Todas";
+                dr1["id"] = 0;
+                dt.Rows.InsertAt(dr1, 1);
+
+                this.ListSucursalPresupuesto.DataSource = dt;
+                this.ListSucursalPresupuesto.DataValueField = "Id";
+                this.ListSucursalPresupuesto.DataTextField = "nombre";
+                this.ListSucursalPresupuesto.DataBind();
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
         public void cargarPuntosVenta(int idSucursal)
         {
             try
@@ -1244,6 +1274,18 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+        protected void ListEmpresaPresupuesto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int idEmpresa = Convert.ToInt32(this.ListEmpresaPresupuesto.SelectedValue);
+                this.cargarSucursalPresupuesto(idEmpresa);
+            }
+            catch
+            {
+
+            }
+        }
         protected void ListEmpresaDto_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1416,7 +1458,7 @@ namespace Gestion_Web.Formularios.Facturas
                         idClienteAux = Convert.ToInt32(this.listClienteFacturarPRP.SelectedValue);
                     }
 
-                    int i = this.controlador.ProcesoRefacturarPRP(idtildado, user, idClienteAux);//this.controlador.ProcesoEliminarFactura(idtildado, user);
+                    int i = this.controlador.ProcesoRefacturarPRP(null,idtildado, user, idClienteAux);//this.controlador.ProcesoEliminarFactura(idtildado, user);
                     if (i > 0)
                     {
                         this.restablecerIvaCliente();
@@ -3624,7 +3666,7 @@ namespace Gestion_Web.Formularios.Facturas
                             int j = 0;
                             for (int i = 0; i <= cantidad; i++)
                             {
-                                j += this.controlador.agregarFcManual(idEmpresa, idSucursal, idVendedor, idList, idPtoVta, idCliente, td, a);
+                                j += this.controlador.agregarFcManual(null,idEmpresa, idSucursal, idVendedor, idList, idPtoVta, idCliente, td, a);
                             }
                             if (j == cantidad + 1)
                             {
@@ -4133,7 +4175,7 @@ namespace Gestion_Web.Formularios.Facturas
                         tipoNota = "Nota de Credito ";
                     }
 
-                    int i = this.controlador.GenerarNotaCreditoDebitoDiferenciaCambio(1, Convert.ToDecimal(lblDiferenciaCambio.Text), factura, tipoNota);
+                    int i = this.controlador.GenerarNotaCreditoDebitoDiferenciaCambio(null,1, Convert.ToDecimal(lblDiferenciaCambio.Text), factura, tipoNota);
 
                     if (i > 0)
                     {
@@ -5137,7 +5179,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                ExportToExcelPresupuesto(16);
+                ExportToExcelPresupuesto(15);
             }
             catch (Exception ex)
             {
@@ -5166,5 +5208,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
             }
         }
+
+    
     }
 }
