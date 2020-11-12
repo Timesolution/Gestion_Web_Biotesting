@@ -266,6 +266,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.flag_clienteModal = 1;
                     this.cargarClienteDesdeModal();
+
                 }
 
                 //si viene de la pantalla de articulos, modal
@@ -712,6 +713,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.lbtnAccion.Visible = false;
                 this.panelBusquedaCliente.Visible = false;
+
+
+                CargarDropList_DireccionesDeEntregaDelCliente(f.cliente.id);
             }
             catch (Exception ex)
             {
@@ -4238,7 +4242,14 @@ namespace Gestion_Web.Formularios.Facturas
                         //fact.netoNGrabado = fact.obtenerNetoNoGravado();
                     }
 
-                    int idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
+                    int idForma = 0;
+
+                    if (!string.IsNullOrEmpty(this.ListFormaVenta.SelectedValue))
+                    {
+                        idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
+                    }
+
+                    
                     int porcenOK = this.validarFacturacionPorcentual();
 
                     Log.EscribirSQL(99, "ELECTRONICA", "porcenOK: " + porcenOK + " idForma: " + idForma);
@@ -4273,15 +4284,23 @@ namespace Gestion_Web.Formularios.Facturas
                         fact.comentario += " - Percepcion IVA a Consumidor Final ($" + this.nuevaFactura.iva10 + ").";
                     }
 
+                    string domicilioEntrega = "Seleccione";
+                    if(dropList_DomicilioEntrega.SelectedItem != null)
+                    {
+                        domicilioEntrega = dropList_DomicilioEntrega.SelectedItem.ToString();
+                    }
+
                     int i = 0;
                     //Chequeo si eligio alguna divisa para guardar el tipo de cambio y facturo
                     if (DropListDivisa.SelectedValue != "-1")
                     {
                         divisaElegida = Convert.ToInt32(DropListDivisa.SelectedValue);
-                        i = this.controlador.ProcesarFactura(dropList_DomicilioEntrega.SelectedItem.ToString(), fact, dtPago, user, generaRemito,divisaElegida);
+
+
+                        i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito,divisaElegida);
                     }
                     else
-                        i = this.controlador.ProcesarFactura(dropList_DomicilioEntrega.SelectedItem.ToString(),fact, dtPago, user, generaRemito);
+                        i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito);
 
                     if (i > 0)
                     {
