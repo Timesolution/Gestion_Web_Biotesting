@@ -76,18 +76,18 @@ namespace Gestion_Web.Formularios.Clientes
                 if(esUruguay == 1)
                     txtCuit.Text = "Root";
 
-                if (chbDisparaTarea.Checked == true)
-                {
-                    divVencimientoTarea.Visible = true;
-                    divTarea.Visible = true;
-                    divSituacion.Visible = true;
-                }
-                else
-                {
-                    divVencimientoTarea.Visible = false;
-                    divTarea.Visible = false;
-                    divSituacion.Visible = false;
-                }
+                //if (chbDisparaTarea.Checked == true)
+                //{
+                //    divVencimientoTarea.Visible = true;
+                //    divTarea.Visible = true;
+                //    divSituacion.Visible = true;
+                //}
+                //else
+                //{
+                //    divVencimientoTarea.Visible = false;
+                //    divTarea.Visible = false;
+                //    divSituacion.Visible = false;
+                //}
 
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
