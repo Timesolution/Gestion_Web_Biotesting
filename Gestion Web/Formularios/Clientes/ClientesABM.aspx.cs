@@ -3541,7 +3541,7 @@ namespace Gestion_Web.Formularios.Clientes
                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se va a cagar el CRM del cliente");
                 this.phEventos.Controls.Clear();
 
-                List<Clientes_Eventos> eventos = this.contClienteEntity.obtenerEventosClienteByCliente(this.idCliente);
+                List<Clientes_Eventos> eventos = this.contClienteEntity.obtenerEventosClienteByClienteReducido(this.idCliente);
 
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
