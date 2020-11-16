@@ -92,7 +92,6 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarClientes();
                     this.cargarUsuario();
 
-                    idUsuario = DropListUsuarios.SelectedIndex;
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                     txtVencimientoDesde.Text = fechaD;
