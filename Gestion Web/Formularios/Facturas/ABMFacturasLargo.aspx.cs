@@ -455,6 +455,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //_idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
 
                 //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
+                //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), _idCliente);
 
                 //if (usuario_cliente.IdCliente > 0)
                 //    cargarClienteDesdeModal();
