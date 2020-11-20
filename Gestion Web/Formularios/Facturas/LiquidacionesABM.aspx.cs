@@ -181,9 +181,9 @@ namespace Gestion_Web.Formularios.Facturas
                 item.articulo = art;
                 item.articulo.descripcion = item.articulo.descripcion + " Numero " + txtNroLiqui.Text;
                 item.cantidad = 1;
-                item.precioUnitario = Convert.ToInt32(txtImporte.Text);
-                item.total = Convert.ToInt32(txtImporte.Text);
-                item.precioSinIva = Convert.ToInt32(txtImporte.Text);
+                item.precioUnitario = Convert.ToDecimal(txtImporte.Text);
+                item.total = Convert.ToDecimal(txtImporte.Text);
+                item.precioSinIva = Convert.ToDecimal(txtImporte.Text);
                 item.datosExtras = null;
 
                 DataTable dt = new DataTable();
@@ -210,7 +210,7 @@ namespace Gestion_Web.Formularios.Facturas
                 f.formaPAgo = contFact.obtenerFormaPagoFP("Cuenta Corriente");
                 f.items.Add(item);
                 f.listaP.id = 1;
-                f.total = Convert.ToInt32(txtImporte.Text);
+                f.total = Convert.ToDecimal(txtImporte.Text);
                 //TERMINO PRIMER PRP
 
 
