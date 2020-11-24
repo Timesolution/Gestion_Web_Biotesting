@@ -1305,7 +1305,7 @@
       <Width>8.28942in</Width>
       <Page>
         <PageHeader>
-          <Height>5.58958cm</Height>
+          <Height>6.79444cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1706,7 +1706,7 @@
                 </Image>
               </ReportItems>
               <KeepTogether>true</KeepTogether>
-              <Top>0.14048cm</Top>
+              <Top>1.41048cm</Top>
               <Left>0.28334cm</Left>
               <Height>5.06646cm</Height>
               <Width>20.5072cm</Width>
@@ -1716,6 +1716,40 @@
                 </Border>
               </Style>
             </Rectangle>
+            <Textbox Name="Fecha5">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Parameters!DuplicadoFactura.Value</Value>
+                      <Style>
+                        <FontSize>20pt</FontSize>
+                        <Format>dd/MM/yyyy</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Fecha</rd:DefaultName>
+              <Top>0.00543cm</Top>
+              <Height>0.96132cm</Height>
+              <Width>21.05513cm</Width>
+              <ZIndex>1</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1724,7 +1758,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>5.10647cm</Height>
+          <Height>5.77703cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1782,7 +1816,7 @@
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <Top>4.34772cm</Top>
-              <Left>15.35205cm</Left>
+              <Left>15.38733cm</Left>
               <Height>0.6cm</Height>
               <Width>4.93417cm</Width>
               <ZIndex>1</ZIndex>
@@ -2433,6 +2467,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamCondicionPago">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DuplicadoFactura">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

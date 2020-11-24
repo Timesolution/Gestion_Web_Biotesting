@@ -40,8 +40,9 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFactEntity controladorFactEntity = new controladorFactEntity();
         controladorMoneda controladorMoneda = new controladorMoneda();
         ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
+        controladorFunciones contFunciones = new controladorFunciones();
         controladorContacto controlContacto = new controladorContacto();
-
+        Mensajes m = new Mensajes();
         Configuracion configuracion = new Configuracion();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -86,12 +87,13 @@ namespace Gestion_Web.Formularios.Facturas
                     //factura a,e
                     if (accion == 1)
                     {
-                        this.generarReporte3(idPresupuesto);
+
+                        this.generarReportePDF(idPresupuesto);
                     }
                     //factura b
                     if (accion == 2)
                     {
-                        this.generarReporte4(idPresupuesto);
+                        generarReportePDF(idPresupuesto);
                     }
                     //Remito
                     if (accion == 3)
@@ -208,12 +210,12 @@ namespace Gestion_Web.Formularios.Facturas
                         direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
                             drl[4].ToString() + " " + drl[5].ToString();
                     }
-                    if (drl[0].ToString() == "Entrega" && direccionEntrega==null)
+                    if (drl[0].ToString() == "Entrega" && direccionEntrega == null)
                     {
                         direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
                             drl[4].ToString() + " " + drl[5].ToString();
                     }
-                    else if(drl[0].ToString() == "Entrega" && direccionEntrega != null)
+                    else if (drl[0].ToString() == "Entrega" && direccionEntrega != null)
                     {
                         direEntrega = direccionEntrega;
                     }
@@ -307,7 +309,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
                     //La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
-                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa,2).ToString() + ").";
+                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
 
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Presupesto2.rdlc");
@@ -922,7 +924,6 @@ namespace Gestion_Web.Formularios.Facturas
                 dtDatos = agregarAlicuotaIVAEnLaDescripcionDeLosArticulos(dtDatos);
 
                 DataTable dtDetalle = controlador.obtenerDetallePresupuesto(idPresupuesto);
-
                 //nro remito factura
                 DataTable dtNroRemito = controlador.obtenerNroRemitoByFactura(idPresupuesto);
 
@@ -1114,8 +1115,8 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     direEntrega = direLegal;
                 }
-               
-              
+
+
 
 
                 //Total equivalente en dolares
@@ -1419,7 +1420,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //direccion cliente
                 string direLegal = "-";
                 string direEntrega = "-";
-                DataTable dtFactura=controlador.obtenerNroFacturaByRemito(idRemito);
+                DataTable dtFactura = controlador.obtenerNroFacturaByRemito(idRemito);
                 int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
                 string direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
                 DataTable dtDireccion = controlCliente.obtenerDireccionesById(idCliente);
@@ -1854,6 +1855,990 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "Error en fun: agregarAlicuotaIVAEnLaDescripcionDeLosArticulos. " + ex.Message);
                 return tablaArticulos;
             }
+        }
+
+        public void BorrarPDFS(string path)
+        {
+            string[] pdfs = Directory.GetFiles(path);
+
+            foreach (string filePath in pdfs)
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        private int GenerarFacturaAPDF(Factura f, string pathGenerar, string duplicado)
+        {
+            Configuracion configuracion = new Configuracion();
+
+            if (f.tipo.tipo.Contains("Factura A") || f.tipo.tipo.Contains("Debito A") || f.tipo.tipo.Contains("Credito A")
+            || f.tipo.tipo.Contains("Factura E") || f.tipo.tipo.Contains("Debito E") || f.tipo.tipo.Contains("Credito E"))
+            {
+                #region Fact A/E
+                //obtengo detalle de items
+                DataTable dtDatos = controlador.obtenerDatosPresupuesto(f.id);
+
+                //datos de encabezado y pie
+                DataTable dtDetalle = controlador.obtenerDetallePresupuesto(f.id);
+
+                //nro remito factura
+                DataTable dtNroRemito = controlador.obtenerNroRemitoByFactura(f.id);
+
+                //Factura fact = controlador.obtenerFacturaId(idPresupuesto);
+
+                //datos del emisor
+                String razonSoc = String.Empty;
+                String direComer = String.Empty;
+                String condIVA = String.Empty;
+                String ingBrutos = String.Empty;
+                String fechaInicio = String.Empty;
+                String cuitEmpresa = String.Empty;
+                String nroFactura = String.Empty;
+                String tipoDoc = String.Empty;
+                String letraDoc = String.Empty;
+                String CodigoDoc = String.Empty;
+                String CAE = String.Empty;
+                String ptoVta = String.Empty;
+                String codBarra = String.Empty;
+                String fechaVto = string.Empty;
+                String cotizacionFecha = String.Empty;
+
+                //levanto los datos de la factura
+                var drDatosFactura = dtDetalle.Rows[0];
+                if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["CondicionIva"].ToString()))
+                {
+                    dtDetalle.Rows[0]["IVA"] = dtDetalle.Rows[0]["IVA2"];
+                }
+                //datos cotizacion al momento de fc
+                if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["TipoCambio"].ToString()))
+                {
+                    cotizacionFecha = dtDetalle.Rows[0]["TipoCambio"].ToString();
+                }
+                //sucursalfacturada                
+                string sucursalFact = dtDetalle.Rows[0]["SucursalFacturada"].ToString();
+                if (sucursalFact != "0")
+                {
+                    controladorSucursal contSuc = new controladorSucursal();
+                    Sucursal s = contSuc.obtenerSucursalID(Convert.ToInt32(sucursalFact));
+                    sucursalFact = "-" + s.nombre;
+                }
+                else
+                {
+                    sucursalFact = " ";
+                }
+
+
+                //datos empresa emisora
+                DataTable dtEmpresa = controlEmpresa.obtenerEmpresaById((int)drDatosFactura["Empresa"]);
+
+                foreach (DataRow row in dtEmpresa.Rows)
+                {
+                    //verifico cual es la empresa de la factura
+                    //if ((int)row[0] == )
+                    //{
+                    cuitEmpresa = row.ItemArray[1].ToString();
+                    razonSoc = row.ItemArray[2].ToString();
+                    ingBrutos = row.ItemArray[3].ToString();
+                    fechaInicio = Convert.ToDateTime(row["Fecha Inicio"]).ToString("dd/MM/yyyy");// .ItemArray[4].ToString();
+                                                                                                 //fechaInicio = Convert.ToDateTime(fechaInicio).ToShortDateString();
+                    condIVA = row.ItemArray[5].ToString();
+                    direComer = row.ItemArray[6].ToString();
+                    //}
+                }
+
+                //datos factura
+                string auxNro = drDatosFactura["Numero"].ToString();
+                nroFactura = auxNro.Substring(auxNro.Length - 13, 13);
+                //nombre tipo documento para el parametro
+                tipoDoc = auxNro.Substring(0, auxNro.Length - 16);
+                //letra y cod. factura                
+                if (tipoDoc == "Factura E ")
+                {
+                    letraDoc = "E";
+                    CodigoDoc = "Cod. 19";
+                }
+                else
+                {
+                    letraDoc = "A";
+                    CodigoDoc = "Cod. 01";
+                }
+
+                if (drDatosFactura["Cae"] != null)
+                {
+                    CAE = drDatosFactura["Cae"].ToString();
+                    //CAE = "-";
+                }
+                else
+                {
+                    CAE = "-";
+                }
+                ptoVta = drDatosFactura["ptoVenta"].ToString();
+                fechaVto = Convert.ToDateTime(drDatosFactura["Fecha"]).AddDays(10).ToString("ddMMyyyy");
+                codBarra = controlador.obtenerCodigoBarraFactura(drDatosFactura["CUIT"].ToString(), ptoVta, CAE, fechaVto);
+
+                if (string.IsNullOrEmpty(codBarra))
+                {
+                    codBarra = "0";
+
+                }
+
+                //verifico si el pto de venta es preimpresa para mostrar o no el logo de "cbte no fiscal".
+                PuntoVenta pv = this.controlSucursal.obtenerPuntoVentaPV(ptoVta, Convert.ToInt32(dtDetalle.Rows[0]["Sucursal"]), Convert.ToInt32(dtDetalle.Rows[0]["Empresa"]));
+                int esPreimpresa = 0;
+                if (pv != null)
+                {
+                    if (pv.formaFacturar == "Preimpresa" || pv.formaFacturar == "Fiscal")
+                    {
+                        esPreimpresa = 1;
+                    }
+                }
+
+                DataRow srCliente = dtDetalle.Rows[0];
+                string codigoCliente = srCliente[5].ToString();
+
+                //DataTable dtTotal = controlador.obtenerTotalPresupuesto(idPresupuesto);
+                DataTable dtTotales = controlador.obtenerTotalPresupuesto2(f.id);
+                DataRow dr = dtTotales.Rows[0];
+
+                //neto no grabado
+                decimal subtotal = Convert.ToDecimal(dr[4]);
+
+                decimal descuento = Convert.ToDecimal(dr[1]);
+
+                //subtotal menos el descuento
+                decimal subtotal2 = Convert.ToDecimal(dr[5]);
+
+                //iva discriminado de la fact
+                decimal iva = Convert.ToDecimal(dr[3]);
+
+                //IIBB (retenciones)
+                decimal retencion = Convert.ToDecimal(dr["retenciones"]);
+
+                //total de la factura
+                decimal total = Convert.ToDecimal(dr[2]);
+
+                //letras
+                string totalS = Gestion_Api.Auxiliares.Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+                //string totalS = Numalet.ToCardinal("18.25");
+
+                //cant unidades
+                decimal cant = 2;
+
+                //Total equivalente en dolares
+                controladorMoneda contMoneda = new controladorMoneda();
+                Moneda dolar = contMoneda.obtenerMonedaDesc("Dolar");
+                decimal TotalDolares = 0;
+                String textoDolares = String.Empty;
+                if (dolar != null)
+                {
+                    TotalDolares = Decimal.Round((total / dolar.cambio), 3);
+                }
+                if (tipoDoc.Contains("Nota de"))
+                {
+                    textoDolares = " ";
+                }
+                else
+                {
+                    textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
+                }
+
+                //direccion cliente
+                string direLegal = "-";
+                string direEntrega = "-";
+                DataTable dtDireccion = controlador.obtenerDireccionPresupuesto(f.id);
+                if (dtDireccion != null)
+                {
+                    foreach (DataRow drl in dtDireccion.Rows)
+                    {
+                        if (drl[0].ToString() == "Legal")
+                        {
+                            direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                                drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                        if (drl[0].ToString() == "Entrega")
+                        {
+                            direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                                drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                    }
+                }
+
+
+                //Comentario factura
+                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(f.id);
+
+                //obtengo id empresa para buscar el logo correspondiente
+                int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
+                string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc + "/Logo.jpg");
+                Log.EscribirSQL(1, "INFO", "Ruta Logo " + logo);
+                BarcodeProfessional bcp = new BarcodeProfessional();
+
+                //Barcode settings
+                bcp.Symbology = Neodynamic.WebControls.BarcodeProfessional.Symbology.Code39;
+                bcp.BarHeight = 0.25f;
+                bcp.Code = codBarra;
+
+                byte[] prodBarcode = bcp.GetBarcodeImage(System.Drawing.Imaging.ImageFormat.Png);
+                DataTable dtImagen = new DataTable();
+
+                DataColumn ColumnImagen = new DataColumn("Imagen", Type.GetType("System.Byte[]"));
+
+                dtImagen.Columns.Add(ColumnImagen);
+                dtImagen.Rows.Add(prodBarcode);
+                //Generate the barcode image and store it into the Barcode Column
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                if (letraDoc == "A")
+                {
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
+                }
+                if (letraDoc == "E")
+                {
+                    //letras
+                    totalS = Gestion_Api.Auxiliares.Numalet.ToCardinal(subtotal2.ToString().Replace(',', '.'));
+                    if (CAE == "-")
+                    {
+                        this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaRE_2.rdlc");
+                    }
+                    else
+                    {
+                        this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaRE.rdlc");
+                    }
+
+                }
+                //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+
+                ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
+                ReportDataSource rds2 = new ReportDataSource("DatosFactura", dtDatos);
+                ReportDataSource rds3 = new ReportDataSource("dtImagen", dtImagen);
+                ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
+                ReportDataSource rds5 = new ReportDataSource("NumeroRemito", dtNroRemito);
+
+                ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
+                ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
+                ReportParameter param3 = new ReportParameter("Descuento", descuento.ToString("C"));
+                ReportParameter param03 = new ReportParameter("ParamSucFact", sucursalFact);//sucursalFact                
+
+                ReportParameter param31 = new ReportParameter("ParamRetencion", retencion.ToString("C"));
+                //logo
+                //ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///C:\Imagen\Logo.jpg");
+                ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+
+                Log.EscribirSQL(1, "INFO", @"Asigno Ruta file:///" + logo);
+
+                //string imagePath = Server.MapPath("~/images/Facturas/GS_LOGO.png");
+                //ReportParameter paramImg = new ReportParameter("ParamImagen", imagePath);
+
+                ReportParameter param3b = new ReportParameter("Subtotal2", subtotal2.ToString("C"));
+                ReportParameter param4b = new ReportParameter("Iva", iva.ToString("C"));
+
+                ReportParameter param4 = new ReportParameter("DomicilioEntrega", direEntrega);
+                ReportParameter param5 = new ReportParameter("DomicilioLegal", direLegal);
+
+                ReportParameter param6 = new ReportParameter("CodigoCliente", codigoCliente);
+
+                ReportParameter param7 = new ReportParameter("TotalLetras", totalS);
+                ReportParameter param8 = new ReportParameter("TotalUnidades", cant.ToString());
+
+                ReportParameter param10 = new ReportParameter("ParamRazonSoc", razonSoc);
+                ReportParameter param11 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
+                ReportParameter param12 = new ReportParameter("ParamFechaIni", fechaInicio);
+                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer);
+                ReportParameter param14 = new ReportParameter("ParamCondIva", condIVA);
+                ReportParameter param15 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
+                ReportParameter param16 = new ReportParameter("ParamNroFac", nroFactura);
+                ReportParameter param17 = new ReportParameter("ParamTipoDoc", tipoDoc);
+                ReportParameter param18 = new ReportParameter("ParamCAE", CAE);
+                ReportParameter param19 = new ReportParameter("ParamPtoVta", ptoVta);
+                ReportParameter param20 = new ReportParameter("ParamBarra", codBarra);
+                ReportParameter param21 = new ReportParameter("ParamLetra", letraDoc);
+                ReportParameter param22 = new ReportParameter("ParamCodDoc", CodigoDoc);
+                ReportParameter param23 = new ReportParameter("ParamTotalDolares", textoDolares);
+                ReportParameter param24 = new ReportParameter("ParamPreimpresa", esPreimpresa.ToString());
+
+                ReportParameter param25 = new ReportParameter("ParamCambioDolar", cotizacionFecha);
+                ReportParameter param26 = new ReportParameter("DuplicadoFactura", duplicado);
+
+
+                //ReportParameter param16 = new ReportParameter("ParamRazonSoc", nroFactura);
+
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds5);
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param03);//sucfacturada
+                this.ReportViewer1.LocalReport.SetParameters(param31);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+
+                this.ReportViewer1.LocalReport.SetParameters(param3b);
+                this.ReportViewer1.LocalReport.SetParameters(param4b);
+
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+                this.ReportViewer1.LocalReport.SetParameters(param6);
+
+                this.ReportViewer1.LocalReport.SetParameters(param7);
+                this.ReportViewer1.LocalReport.SetParameters(param8);
+
+                //parametros datos empresa
+                this.ReportViewer1.LocalReport.SetParameters(param10);
+                this.ReportViewer1.LocalReport.SetParameters(param11);
+                this.ReportViewer1.LocalReport.SetParameters(param12);
+                this.ReportViewer1.LocalReport.SetParameters(param13);
+                this.ReportViewer1.LocalReport.SetParameters(param14);
+                this.ReportViewer1.LocalReport.SetParameters(param15);
+                this.ReportViewer1.LocalReport.SetParameters(param16);
+                this.ReportViewer1.LocalReport.SetParameters(param17);
+                this.ReportViewer1.LocalReport.SetParameters(param18);
+                this.ReportViewer1.LocalReport.SetParameters(param19);
+                this.ReportViewer1.LocalReport.SetParameters(param20);
+                this.ReportViewer1.LocalReport.SetParameters(param21);
+                this.ReportViewer1.LocalReport.SetParameters(param22);
+                //equivalente total dolares
+                this.ReportViewer1.LocalReport.SetParameters(param23);
+                this.ReportViewer1.LocalReport.SetParameters(param25);
+                //param esPreimpresa o no
+                this.ReportViewer1.LocalReport.SetParameters(param24);
+                //imagen
+                this.ReportViewer1.LocalReport.SetParameters(param32);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get pdf content
+
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                //save the generated report in the server
+                //String path = Server.MapPath("../../Facturas/" + f.empresa.id + "/" + "/fc-" + f.numero + "_" + f.id + ".pdf");
+
+                FileStream stream = File.Create(pathGenerar, pdfContent.Length);
+                stream.Write(pdfContent, 0, pdfContent.Length);
+                stream.Close();
+
+                #endregion
+                
+            }
+            return 1;
+        }
+
+
+
+        private int GenerarFacturaBPDF(Factura f, string pathGenerar, string duplicado)
+        {
+          
+                #region Fact B || Fact C
+                DataTable dtDatos = controlador.obtenerDatosPresupuesto(f.id);
+                DataTable dtDetalle = controlador.obtenerDetallePresupuesto(f.id);
+
+                //nro remito factura
+                DataTable dtNroRemito = controlador.obtenerNroRemitoByFactura(f.id);
+
+                //levanto los datos de la factura
+                var drDatosFactura = dtDetalle.Rows[0];
+                //datos empresa emisora
+                DataTable dtEmpresa = this.controlEmpresa.obtenerEmpresaById((int)drDatosFactura["Empresa"]);
+
+                String razonSoc = String.Empty;
+                String direComer = String.Empty;
+                String condIVA = String.Empty;
+                String ingBrutos = String.Empty;
+                String fechaInicio = String.Empty;
+                String cuitEmpresa = String.Empty;
+                String nroFactura = String.Empty;
+                String tipoDoc = String.Empty;
+                String CAE = String.Empty;
+                String ptoVta = String.Empty;
+                String codBarra = String.Empty;
+                String fechaVto = String.Empty;
+                String cotizacionFecha = String.Empty;
+
+                foreach (DataRow row in dtEmpresa.Rows)
+                {
+                    //verifico cual es la empresa de la factura
+                    //if ((int)row[0] == )
+                    //{
+                    cuitEmpresa = row.ItemArray[1].ToString();
+                    razonSoc = row.ItemArray[2].ToString();
+                    ingBrutos = row.ItemArray[3].ToString();
+                    fechaInicio = Convert.ToDateTime(row["Fecha Inicio"]).ToString("dd/MM/yyyy");// .ItemArray[4].ToString();
+                                                                                                 //fechaInicio = Convert.ToDateTime(fechaInicio).ToShortDateString();
+                    condIVA = row.ItemArray[5].ToString();
+                    direComer = row.ItemArray[6].ToString();
+                    //}
+                }
+
+                //datos factura
+                string auxNro = drDatosFactura["Numero"].ToString();
+                nroFactura = auxNro.Substring(auxNro.Length - 13, 13);
+
+                tipoDoc = auxNro.Substring(0, auxNro.Length - 16);
+
+                if (drDatosFactura["Cae"].ToString() != "")
+                {
+                    CAE = drDatosFactura["Cae"].ToString();
+                    //CAE = "-";
+                }
+                else
+                {
+                    CAE = "-";
+                }
+                ptoVta = drDatosFactura["ptoVenta"].ToString();
+                fechaVto = Convert.ToDateTime(drDatosFactura["Fecha"]).AddDays(10).ToString("ddMMyyyy");
+                codBarra = controlador.obtenerCodigoBarraFactura(drDatosFactura["CUIT"].ToString(), ptoVta, CAE, fechaVto);
+
+                if (configuracion.monotributo == "1")
+                {
+                    if (tipoDoc.Contains("Debito"))
+                    {
+                        tipoDoc = "Nota de Debito C";
+                    }
+                    else
+                    {
+                        if (tipoDoc.Contains("Credito"))
+                        {
+                            tipoDoc = "Nota de Credito C";
+                        }
+                        else
+                        {
+                            tipoDoc = "Factura C";
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(codBarra))
+                {
+                    codBarra = "0";
+
+                }
+
+                //verifico si el pto de venta es preimpresa para mostrar o no el logo de "cbte no fiscal".
+                PuntoVenta pv = this.controlSucursal.obtenerPuntoVentaPV(ptoVta, Convert.ToInt32(dtDetalle.Rows[0]["Sucursal"]), Convert.ToInt32(dtDetalle.Rows[0]["Empresa"]));
+                int esPreimpresa = 0;
+                if (pv != null)
+                {
+                    if (pv.formaFacturar == "Preimpresa" || pv.formaFacturar == "Fiscal")
+                    {
+                        esPreimpresa = 1;
+                    }
+                }
+
+                DataRow srCliente = dtDetalle.Rows[0];
+                string codigoCliente = srCliente[5].ToString();
+
+                if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["CondicionIva"].ToString()))
+                {
+                    dtDetalle.Rows[0]["IVA"] = dtDetalle.Rows[0]["IVA2"];
+                }
+
+                //datos cotizacion al momento de fc
+                if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["TipoCambio"].ToString()))
+                {
+                    cotizacionFecha = dtDetalle.Rows[0]["TipoCambio"].ToString();
+                }
+
+                //sucursalfacturada                
+                string sucursalFact = dtDetalle.Rows[0]["SucursalFacturada"].ToString();
+                if (sucursalFact != "0")
+                {
+                    controladorSucursal contSuc = new controladorSucursal();
+                    Sucursal s = contSuc.obtenerSucursalID(Convert.ToInt32(sucursalFact));
+                    sucursalFact = "-" + s.nombre;
+                }
+                else
+                {
+                    sucursalFact = " ";
+                }
+
+                //DataTable dtTotal = controlador.obtenerTotalPresupuesto(idPresupuesto);
+                DataTable dtTotales = controlador.obtenerTotalPresupuesto2(f.id);
+                DataRow dr = dtTotales.Rows[0];
+
+                //neto no grabado
+                decimal subtotal = Convert.ToDecimal(dr[4]);
+
+                //subtotal menos el descuento
+                decimal subtotal2 = Convert.ToDecimal(dr[5]);
+
+                //iva discriminado de la fact
+                decimal iva = Convert.ToDecimal(dr[3]);
+
+                subtotal = subtotal + iva;
+
+                //total de la factura
+                decimal total = Convert.ToDecimal(dr[2]);
+
+                //retenciones
+                decimal retencion = Convert.ToDecimal(dr[6]);
+
+                //percepcion IVA Cons. Final
+                decimal percepIVA = Convert.ToDecimal(dr[8]);
+
+                //decimal descuento = Convert.ToDecimal(dr[1]);
+                //sumo el total de items - total de factura y saco el descuento
+                DataTable dtDescuento = controlador.obtenerTotalItem2(f.id);
+                decimal descuento = 0;
+                foreach (DataRow drr in dtDescuento.Rows)
+                {
+                    descuento = Convert.ToDecimal(drr[0]);
+                }
+
+                descuento = decimal.Round(((descuento + retencion) - total), 2);
+                if (Math.Abs(descuento) == Convert.ToDecimal(0.01))
+                {
+                    descuento = 0;
+                }
+
+                //letras
+                string totalS = Gestion_Api.Auxiliares.Numalet.ToCardinal(total.ToString().Replace(',', '.'));
+                //string totalS = Numalet.ToCardinal("18.25");
+
+                //cant unidades
+                decimal cant = 2;
+
+                //direccion cliente
+                string direLegal = "-";
+                string direEntrega = "-";
+                DataTable dtDireccion = controlador.obtenerDireccionPresupuesto(f.id);
+                if (dtDireccion != null)
+                {
+                    foreach (DataRow drl in dtDireccion.Rows)
+                    {
+                        if (drl[0].ToString() == "Legal")
+                        {
+                            //direLegal = "-";
+                            direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                            drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                        if (drl[0].ToString() == "Entrega")
+                        {
+                            //direEntrega = "";
+                            direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                            drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                    }
+                }
+                if (direLegal != "-" && direEntrega == "-")
+                {
+                    direEntrega = direLegal;
+                }
+
+                //Total equivalente en dolares
+                controladorMoneda contMoneda = new controladorMoneda();
+                Moneda dolar = contMoneda.obtenerMonedaDesc("Dolar");
+                decimal TotalDolares = 0;
+                String textoDolares = String.Empty;
+                if (dolar != null)
+                {
+                    TotalDolares = Decimal.Round((total / dolar.cambio), 3);
+                }
+                if (tipoDoc.Contains("Nota de"))
+                {
+                    textoDolares = " ";
+                }
+                else
+                {
+                    textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
+                }
+
+                //Comentario factura
+                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(f.id);
+
+                //obtengo id empresa para buscar el logo correspondiente
+                int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
+                //string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/Logo.jpg");
+                string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc + "/" + pv.id + "/Logo.jpg");
+                //codigo barra codBarra
+                //Create an instance of Barcode Professional
+                BarcodeProfessional bcp = new BarcodeProfessional();
+
+                //Barcode settings
+
+                bcp.Symbology = Neodynamic.WebControls.BarcodeProfessional.Symbology.Code39;
+
+                bcp.BarHeight = 0.25f;
+                bcp.Code = codBarra;
+
+                byte[] prodBarcode = bcp.GetBarcodeImage(System.Drawing.Imaging.ImageFormat.Png);
+                DataTable dtImagen = new DataTable();
+
+                DataColumn ColumnImagen = new DataColumn("Imagen", Type.GetType("System.Byte[]"));
+
+                dtImagen.Columns.Add(ColumnImagen);
+
+                //DataRow drImagen = dtImagen.NewRow();
+                // object [] rowArray = new object[1];
+                // rowArray.SetValue(prodBarcode, 0);
+
+                //drImagen.ItemArray = rowArray;
+                //drImagen. = prodBarcode;
+
+                dtImagen.Rows.Add(prodBarcode);
+                //Generate the barcode image and store it into the Barcode Column
+
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaRB.rdlc");
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
+                ReportDataSource rds2 = new ReportDataSource("DatosPresupuesto", dtDatos);
+                ReportDataSource rds3 = new ReportDataSource("dtImagen", dtImagen);
+                ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
+                ReportDataSource rds5 = new ReportDataSource("NumeroRemito", dtNroRemito);
+
+                ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
+                ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
+                ReportParameter param3 = new ReportParameter("Descuento", descuento.ToString("C"));
+                ReportParameter param3a = new ReportParameter("ParamRetencion", retencion.ToString("C"));
+                ReportParameter param3a2 = new ReportParameter("ParamPercepIVA", percepIVA.ToString("C"));//percepIVA
+                ReportParameter param03 = new ReportParameter("ParamSucFact", sucursalFact);//sucursalFact                
+                ReportParameter param24 = new ReportParameter("DuplicadoFactura", duplicado);//Duplicado     
+                ReportParameter param3b = new ReportParameter("Subtotal2", subtotal2.ToString("C"));
+                param3b.Visible = false;
+                ReportParameter param4b = new ReportParameter("Iva", iva.ToString("C"));
+                param4b.Visible = false;
+
+                ReportParameter param4 = new ReportParameter("DomicilioEntrega", direEntrega);
+                ReportParameter param5 = new ReportParameter("DomicilioLegal", direLegal);
+
+                ReportParameter param6 = new ReportParameter("CodigoCliente", codigoCliente);
+
+                ReportParameter param7 = new ReportParameter("TotalLetras", totalS);
+                ReportParameter param8 = new ReportParameter("TotalUnidades", cant.ToString());
+
+                //parametros Datos empresa,cae y doc
+                ReportParameter param10 = new ReportParameter("ParamRazonSoc", razonSoc);
+                ReportParameter param11 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
+                ReportParameter param12 = new ReportParameter("ParamFechaIni", fechaInicio);
+                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer);
+                ReportParameter param14 = new ReportParameter("ParamCondIva", condIVA);
+                ReportParameter param15 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
+                ReportParameter param16 = new ReportParameter("ParamNroFac", nroFactura);
+                ReportParameter param17 = new ReportParameter("ParamTipoDoc", tipoDoc);
+                ReportParameter param18 = new ReportParameter("ParamCAE", CAE);
+                ReportParameter param19 = new ReportParameter("ParamPreimpresa", esPreimpresa.ToString());
+                ReportParameter param20 = new ReportParameter("ParamBarra", codBarra);
+
+                ReportParameter param23 = new ReportParameter("ParamTotalDolares", textoDolares);
+                ReportParameter param23b = new ReportParameter("ParamCambioDolar", cotizacionFecha);
+
+                ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+                this.ReportViewer1.LocalReport.SetParameters(param32);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds5);
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param3a);//retencion
+                this.ReportViewer1.LocalReport.SetParameters(param3a2);//percepcion iva cf
+                this.ReportViewer1.LocalReport.SetParameters(param03);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+
+                this.ReportViewer1.LocalReport.SetParameters(param3b);
+                this.ReportViewer1.LocalReport.SetParameters(param4b);
+
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+                this.ReportViewer1.LocalReport.SetParameters(param6);
+
+                this.ReportViewer1.LocalReport.SetParameters(param7);
+                this.ReportViewer1.LocalReport.SetParameters(param8);
+
+                //parametros datos empresa
+                this.ReportViewer1.LocalReport.SetParameters(param10);
+                this.ReportViewer1.LocalReport.SetParameters(param11);
+                this.ReportViewer1.LocalReport.SetParameters(param12);
+                this.ReportViewer1.LocalReport.SetParameters(param13);
+                this.ReportViewer1.LocalReport.SetParameters(param14);
+                this.ReportViewer1.LocalReport.SetParameters(param15);
+                this.ReportViewer1.LocalReport.SetParameters(param16);
+                this.ReportViewer1.LocalReport.SetParameters(param17);
+                this.ReportViewer1.LocalReport.SetParameters(param18);
+                this.ReportViewer1.LocalReport.SetParameters(param19);
+                this.ReportViewer1.LocalReport.SetParameters(param20);
+
+                this.ReportViewer1.LocalReport.SetParameters(param23);
+                this.ReportViewer1.LocalReport.SetParameters(param23b);
+                this.ReportViewer1.LocalReport.SetParameters(param24);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get pdf content
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                //save the generated report in the server
+                //String path = Server.MapPath("../../Facturas/" + f.empresa.id + "/" + "/fc-" + f.numero + "_" + f.id + ".pdf");
+                FileStream stream = File.Create(pathGenerar, pdfContent.Length);
+                stream.Write(pdfContent, 0, pdfContent.Length);
+                stream.Close();
+
+               
+                #endregion
+            
+            return 1;
+        }
+
+        private int GenerarFacturaPPDF(Factura f, string pathGenerar, string duplicado)
+        {
+
+          
+                #region presupuesto
+                //obtengo detalle de items
+                //DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
+                DataTable dtDatos = controlador.obtenerDatosPresupuesto(f.id);
+
+                DataTable dtDetalle = controlador.obtenerDetallePresupuesto(f.id);
+
+                DataRow srCliente = dtDetalle.Rows[0];
+                string codigoCliente = srCliente[5].ToString();
+
+                //DataTable dtTotal = controlador.obtenerTotalPresupuesto(idPresupuesto);
+                DataTable dtTotales = controlador.obtenerTotalPresupuesto2(f.id);
+                DataRow dr = dtTotales.Rows[0];
+                decimal subtotal = Convert.ToDecimal(dr[0]);
+
+                decimal descuento = Convert.ToDecimal(dr[1]);
+                decimal total = Convert.ToDecimal(dr[2]);
+
+                String cotizacionFecha = String.Empty;
+
+                //obtengo el telefono del cliente para agregarlo al pedido
+                string telefono = "";
+                List<contacto> contactosClientes = this.controlCliente.obtenerContactos(Convert.ToInt32(srCliente["idCliente"]));
+                if (contactosClientes.Count > 0 & contactosClientes != null)
+                {
+                    telefono = contactosClientes[0].numero;
+                }
+                if (String.IsNullOrEmpty(telefono))
+                {
+                    telefono = "-";
+                }
+
+                //direccion cliente
+                string direLegal = "-";
+                string direEntrega = "-";
+                DataTable dtDireccion = controlador.obtenerDireccionPresupuesto(f.id);
+                foreach (DataRow drl in dtDireccion.Rows)
+                {
+                    if (drl[0].ToString() == "Legal")
+                    {
+                        direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                            drl[4].ToString() + " " + drl[5].ToString();
+                    }
+                    if (drl[0].ToString() == "Entrega")
+                    {
+                        direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                            drl[4].ToString() + " " + drl[5].ToString();
+                    }
+                }
+
+                //sucursal venta
+                string sucursalOrigen = dtDetalle.Rows[0]["Sucursal"].ToString();
+                Sucursal sucvta = this.controlSucursal.obtenerSucursalID(Convert.ToInt32(sucursalOrigen));
+                //sucursalfacturada                
+                string sucursalFact = dtDetalle.Rows[0]["SucursalFacturada"].ToString();
+                if (sucursalFact != "0")
+                {
+                    Sucursal s = this.controlSucursal.obtenerSucursalID(Convert.ToInt32(sucursalFact));
+                    sucursalFact = "-" + s.nombre;
+                }
+                else
+                {
+                    sucursalFact = " ";
+                }
+
+                if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["CondicionIva"].ToString()))
+                {
+                    dtDetalle.Rows[0]["IVA"] = dtDetalle.Rows[0]["IVA2"];
+                }
+                //datos cotizacion al momento de fc
+                if (!String.IsNullOrEmpty(dtDetalle.Rows[0]["TipoCambio"].ToString()))
+                {
+                    cotizacionFecha = dtDetalle.Rows[0]["TipoCambio"].ToString();
+                }
+
+                //string logo = Server.MapPath("../../Images/Logo.jpg");
+
+                //Cargo configuracion para mostrar Precio de venta con o sin IVA.
+                Configuracion c = new Configuracion();
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+
+                if (c.porcentajeIva != "0")
+                {
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Presupesto2.rdlc");
+                }
+                else
+                {
+                    //subtotal sin iva
+                    subtotal = Convert.ToDecimal(dr[4]);
+                    total = subtotal - descuento;
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Presupesto2SinIva.rdlc");
+                }
+
+                //Comentario factura
+                DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(f.id);
+
+                //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Presupesto2.rdlc");
+                ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
+                ReportDataSource rds2 = new ReportDataSource("ItemsPresupuesto", dtDatos);
+                ReportDataSource rds3 = new ReportDataSource("DatosPresupuesto", dtDatos);
+                ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
+
+
+                ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
+                ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
+                ReportParameter param3 = new ReportParameter("Descuento", descuento.ToString("C"));
+                ReportParameter param03 = new ReportParameter("ParamSucFact", sucursalFact);//sucursalFact
+                ReportParameter param04 = new ReportParameter("ParamSucursal", sucvta.nombre);//sucursalVta
+
+                //ReportParameter param32 = new ReportParameter("Porcentaje", porcentaje.ToString("N"));
+
+                ReportParameter param4 = new ReportParameter("DomicilioEntrega", direEntrega);
+                ReportParameter param5 = new ReportParameter("DomicilioLegal", direLegal);
+
+                ReportParameter param6 = new ReportParameter("CodigoCliente", codigoCliente);
+                ReportParameter param7 = new ReportParameter("TelefonoEntrega", telefono);
+                ReportParameter param8 = new ReportParameter("ParamCambioDolar", cotizacionFecha);
+                ReportParameter param9 = new ReportParameter("DuplicadoFactura", duplicado);
+
+                //ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+                //this.ReportViewer1.LocalReport.SetParameters(param32);
+
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds4);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param03);
+                this.ReportViewer1.LocalReport.SetParameters(param04);
+
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+                this.ReportViewer1.LocalReport.SetParameters(param6);
+                this.ReportViewer1.LocalReport.SetParameters(param7);
+                this.ReportViewer1.LocalReport.SetParameters(param8);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get pdf content
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                //save the generated report in the server
+                //String path = Server.MapPath("../../Facturas/" + f.empresa.id + "/" + "/fc-" + f.numero + "_" + f.id + ".pdf");
+                FileStream stream = File.Create(pathGenerar, pdfContent.Length);
+                stream.Write(pdfContent, 0, pdfContent.Length);
+                stream.Close();
+                
+                #endregion
+
+            
+            return 1;
+        }
+        public void generarReportePDF(int id)
+        {
+            string path = Server.MapPath("pdfs/");
+
+            //limpio la carpeta donde van los pdfs asi no muestra pdfs viejos
+            BorrarPDFS(path);
+
+            int contadorOk = 0;
+            int contadorTotal = 0;
+            int i = 0, j = 0;
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            Factura f = this.controlador.obtenerFacturaId(Convert.ToInt32(id));
+
+
+            if (f.tipo.tipo.Contains("Presupuesto") || f.tipo.tipo.Contains("PRP"))
+            {
+                 i = GenerarFacturaPPDF(f, path + "fc-" + f.numero + "_" + f.id + "1" + ".pdf", "Original");
+                 j = GenerarFacturaPPDF(f, path + "fc-" + f.numero + "_" + f.id + "2" + ".pdf", "Duplicado");
+            }
+
+            if (f.tipo.tipo.Contains("Factura B") || f.tipo.tipo.Contains("Debito B") || f.tipo.tipo.Contains("Credito B")
+            || f.tipo.tipo.Contains("Factura C") || f.tipo.tipo.Contains("Debito C") || f.tipo.tipo.Contains("Credito C"))
+            {
+                 i = GenerarFacturaBPDF(f, path + "fc-" + f.numero + "_" + f.id + "1" + ".pdf", "Original");
+                 j = GenerarFacturaBPDF(f, path + "fc-" + f.numero + "_" + f.id + "2" + ".pdf", "Duplicado");
+            }
+
+            if (f.tipo.tipo.Contains("Factura A") || f.tipo.tipo.Contains("Debito A") || f.tipo.tipo.Contains("Credito A")
+          || f.tipo.tipo.Contains("Factura E") || f.tipo.tipo.Contains("Debito E") || f.tipo.tipo.Contains("Credito E"))
+            {
+                 i = GenerarFacturaAPDF(f, path + "fc-" + f.numero + "_" + f.id + "1" + ".pdf", "Original");
+                 j = GenerarFacturaAPDF(f, path + "fc-" + f.numero + "_" + f.id + "2" + ".pdf", "Duplicado");
+            }
+
+            if (i > 0 & j > 0)
+            {
+                contadorOk++;
+            }
+            string[] pdfs = Directory.GetFiles(path);
+            string nombreCompleto = path + "fc-" + DateTime.Now.ToString("dd-MM-yyyy_hhmmss") + ".pdf";
+            string nombre = "fc-" + DateTime.Now.ToString("dd-MM-yyyy_hhmmss") + ".pdf";
+            int ok = this.contFunciones.CombineMultiplePDFs(pdfs, nombreCompleto);
+            if (ok > 0)
+            {
+                ReadPdf(nombreCompleto);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Realizados con exito:" + contadorOk + "de " + contadorTotal, ""));
+            }
+            else
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo imprimir"));
+            }
+        }
+
+        public void ReadPdf(string filePath)
+        {
+            try
+            {
+                Response.Clear();
+                Response.ContentType = "application/pdf";
+                Response.WriteFile(filePath);
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
         }
     }
 }
