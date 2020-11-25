@@ -3744,15 +3744,14 @@ namespace Gestion_Web.Formularios.Clientes
                 else
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente.");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo guardar el evento"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Disculpe, no se pudo guardar el evento. Por favor, contacte con el area de <strong><a href='/Formularios/Herramientas/Soporte.aspx'>soporte</a></strong>."));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
                 }
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente. Excepcion: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al guardar evento. Avisar a Soporte (Revisar Log)"));
-                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Ocurrio un error.\", {type: \"error\"});", true);
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo agregar el evento. Ubicacion: ClientesABM. Metodo: agregarEventoCliente. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
