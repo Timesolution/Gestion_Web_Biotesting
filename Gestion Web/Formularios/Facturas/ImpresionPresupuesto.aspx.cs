@@ -1420,8 +1420,13 @@ namespace Gestion_Web.Formularios.Facturas
                 string direLegal = "-";
                 string direEntrega = "-";
                 DataTable dtFactura=controlador.obtenerNroFacturaByRemito(idRemito);
-                int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
-                string direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
+                string direccionEntrega = null;
+
+
+                if (dtFactura.Rows.Count > 0) { 
+                    int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
+                    direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
+                }
                 DataTable dtDireccion = controlCliente.obtenerDireccionesById(idCliente);
                 if (dtDireccion != null)
                 {
