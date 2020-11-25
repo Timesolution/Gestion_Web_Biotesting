@@ -280,12 +280,15 @@ namespace Gestion_Web.Formularios.Facturas
                     nroRemito = remitoFc.numero;
                 }
 
-                //Comentario factura
+                ////Comentario factura
                 DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
-                if (controlador.obtenerDetalleLiquidacion(idPresupuesto) != null)
-                {
-                    dtComentarios.Rows[0]["Observaciones"] = controlador.obtenerDetalleLiquidacion(idPresupuesto);
-                }
+              
+                //String Observaciones= controlador.obtenerDetalleLiquidacion(idPresupuesto);
+                //if (Observaciones != null) {
+                //    dtComentarios.Rows[0]["Observaciones"] = Observaciones;
+                //}
+                
+              
 
                 //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
                 if (imprimirOtraDivisa > 0)
