@@ -92,8 +92,7 @@
                                 </thead>
                                 <tbody>
                                     <asp:PlaceHolder ID="phProductos" runat="server" />
-                                    <asp:HiddenField ID="hiddenProdId" runat="server" />
-                                    <asp:HiddenField ID="hiddenProdCantidad" runat="server" />
+                                    <asp:HiddenField ID="hiddenProd" runat="server" />
                                 </tbody>
                             </table>
                         </div>
@@ -118,14 +117,12 @@
         <script>
             function borrarProd(idprod) {
                 event.preventDefault();
-                var pepe = document.getElementById('<%= hiddenProdId.ClientID%>').value;
-                var reg = idprod + "+(,[0-9]+)?;";
-   
+                var pepe = document.getElementById('<%= hiddenProd.ClientID%>').value;
+                var reg = "\\d+,+(" + idprod + ")+,+\\d*;*";
                 var re = new RegExp(reg);
-                if (document.getElementById('<%= hiddenProdId.ClientID%>').value.includes(idprod)) {
-                    document.getElementById('<%= hiddenProdId.ClientID%>').value = document.getElementById('<%= hiddenProdId.ClientID%>').value.replace(idprod+";", "");
-                    document.getElementById('<%= hiddenProdCantidad.ClientID%>').value = document.getElementById('<%= hiddenProdCantidad.ClientID%>').value.replace(re, "");
-                    var pepe = document.getElementById('<%= hiddenProdId.ClientID%>').value;
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(idprod)) {
+                    document.getElementById('<%= hiddenProd.ClientID%>').value = document.getElementById('<%= hiddenProd.ClientID%>').value.replace(re, "");
+                    var pepe = document.getElementById('<%= hiddenProd.ClientID%>').value;
                     document.getElementById("prod_"+idprod).outerHTML="";
                 }
             }
@@ -158,26 +155,24 @@
 
             function succesAgregarPr(response) {
                 var obj = JSON.parse(response.d);
-                if (document.getElementById('<%= hiddenProdId.ClientID%>').value.includes(obj.id)) {
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value.includes(obj.codigo)) {
                     return;
                 }
                 $('#tableProductos').append(
-                    "<tr id=\"prod_" + obj.id + "\">" +
+                    "<tr id=\"prod_"+obj.codigo+"\">" +
                     "<td> " + obj.codigo + "</td>" +
                     "<td> " + obj.descripcion + "</td>" +
                     "<td> " + obj.cantidad + "</td>" +
-                    "<td> <a class=\"btn btn-info \" onclick=\"javascript: return borrarProd('"+ obj.id.toString() +"');\" >" +
+                    "<td> <a class=\"btn btn-info \" onclick=\"javascript: return borrarProd('"+ obj.codigo.toString() +"');\" >" +
                     "<i class=\"shortcut-icon icon-trash\"></i> </a> " +
                     "</td > " +
                     "</tr>"
                 );
-                if (document.getElementById('<%= hiddenProdId.ClientID%>').value == "") {
-                    document.getElementById('<%= hiddenProdId.ClientID%>').value += obj.id + ";";
-                    document.getElementById('<%= hiddenProdCantidad.ClientID%>').value += obj.id + "," + obj.cantidad + ";";
+                if (document.getElementById('<%= hiddenProd.ClientID%>').value == "") {
+                    document.getElementById('<%= hiddenProd.ClientID%>').value += obj.id + "," + obj.codigo + "," + obj.cantidad;
                 }
                 else {
-                    document.getElementById('<%= hiddenProdId.ClientID%>').value += + obj.id + ";";
-                    document.getElementById('<%= hiddenProdCantidad.ClientID%>').value +=  obj.id + "," + obj.cantidad + ";";
+                    document.getElementById('<%= hiddenProd.ClientID%>').value += ";" + obj.id + "," + obj.codigo + "," + obj.cantidad;
                 }
             }
         </script>

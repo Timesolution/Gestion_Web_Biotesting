@@ -199,8 +199,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (suc.clienteDefecto < 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La sucursal con la que inicio sesion no tiene un cliente por defecto cargado."));
-                    hiddenProdId.Value = "";
-                    hiddenProdCantidad.Value = "";
+                    hiddenProd.Value = "";
                     return;
                 }
                 else
@@ -229,8 +228,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (suc2.clienteDefecto < 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La sucursal que selecciono no tiene un cliente por defecto cargado."));
-                    hiddenProdId.Value = "";
-                    hiddenProdCantidad.Value = "";
+                    hiddenProd.Value = "";
                     return;
                 }
                 else
@@ -239,7 +237,8 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 f2.vendedor.id = f2.cliente.vendedor.id;
                 f2.formaPAgo = contFact.obtenerFormaPagoFP("Cuenta Corriente");
-                string[] items2 = hiddenProdCantidad.Value.Substring(0, hiddenProdCantidad.Value.Length-1).Split(';');
+
+                string[] items2 = hiddenProd.Value.Split(';');
                 foreach (var pr in items2)
                 {
                     //item
@@ -247,13 +246,12 @@ namespace Gestion_Web.Formularios.Facturas
                     string[] producto = pr.Split(',');                    
                     Articulo art2 = contArt.obtenerArticuloByID(Convert.ToInt32(producto[0]));
                     item2.articulo = art2;
-                    item2.cantidad = Convert.ToDecimal(producto[1]);
+                    item2.cantidad = Convert.ToDecimal(producto[2]);
                     item2.descuento = 0;
                     item2.precioUnitario = 0;
                     item2.total = item2.precioUnitario * item2.cantidad;
                     item2.precioSinIva = 0;
                     item2.datosExtras = null;
-                    f.comentario += "\n -" + art2.descripcion + " x" + item2.cantidad.ToString() + " unidades";
 
                     f2.items.Add(item2);
                 }
