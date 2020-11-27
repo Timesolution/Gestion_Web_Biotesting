@@ -280,10 +280,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Comentario factura
                 DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
-                //if (controlador.obtenerDetalleLiquidacion(idPresupuesto) != null)
-                //{
-                //    dtComentarios.Rows[0]["Observaciones"] = controlador.obtenerDetalleLiquidacion(idPresupuesto);
-                //}
 
                 //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
                 if (imprimirOtraDivisa > 0)
