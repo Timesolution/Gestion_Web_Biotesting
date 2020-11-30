@@ -1416,35 +1416,37 @@ namespace Gestion_Web.Formularios.Facturas
                 string direLegal = "-";
                 string direEntrega = "-";
                 DataTable dtFactura=controlador.obtenerNroFacturaByRemito(idRemito);
+                string direccionEntrega = null;
 
-                if(dtFactura.Rows.Count > 0)
-                {
+
+                if (dtFactura.Rows.Count > 0) { 
                     int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
-                    string direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
-                    DataTable dtDireccion = controlCliente.obtenerDireccionesById(idCliente);
-                    if (dtDireccion != null)
+                    direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
+                }
+                DataTable dtDireccion = controlCliente.obtenerDireccionesById(idCliente);
+                if (dtDireccion != null)
+                {
+                    foreach (DataRow drl in dtDireccion.Rows)
                     {
-                        foreach (DataRow drl in dtDireccion.Rows)
+                        if (drl[0].ToString() == "Legal")
                         {
-                            if (drl[0].ToString() == "Legal")
-                            {
-                                //direLegal = "-";
-                                direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
-                                drl[4].ToString() + " " + drl[5].ToString() + " ";
-                            }
-                            if (drl[0].ToString() == "Entrega" && direccionEntrega == null)
-                            {
-                                direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
-                                    drl[4].ToString() + " " + drl[5].ToString();
-                            }
-                            else if (drl[0].ToString() == "Entrega" && direccionEntrega != null)
-                            {
-                                direEntrega = direccionEntrega;
-                            }
+                            //direLegal = "-";
+                            direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                            drl[4].ToString() + " " + drl[5].ToString() + " ";
+                        }
+                        if (drl[0].ToString() == "Entrega" && direccionEntrega == null)
+                        {
+                            direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
+                                drl[4].ToString() + " " + drl[5].ToString();
+                        }
+                        else if (drl[0].ToString() == "Entrega" && direccionEntrega != null)
+                        {
+                            direEntrega = direccionEntrega;
                         }
                     }
                 }
-                
+
+
                 controladorRemitos contRemito = new controladorRemitos();
                 //obtengo id empresa para buscar el logo correspondiente    
                 Remito r = contRemito.obtenerRemitoId(idRemito);
