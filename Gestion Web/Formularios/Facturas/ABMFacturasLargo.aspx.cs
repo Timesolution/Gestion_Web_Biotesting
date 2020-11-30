@@ -815,11 +815,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
                 this.DropListLista.SelectedValue = f.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
-                if (this.accion != 9 || ListPuntoVenta.SelectedIndex==0)
+                if (this.accion != 9 || ListPuntoVenta.SelectedIndex == 0)
                 {
                     this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
                 }
-                
+
                 this.cargarCliente(f.cliente.id);
                 this.DropListClientes.SelectedValue = f.cliente.id.ToString();
                 this.cargarItems();
@@ -1511,7 +1511,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
                 this.ListPuntoVenta.ClearSelection();
-                
+
 
                 //agrego todos
                 DataRow dr = dt.NewRow();
@@ -1543,7 +1543,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -1889,8 +1889,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cliente = contCliente.obtenerClienteID(idCliente);
                 Configuracion c = new Configuracion();
                 decimal saldoOperativo = ObtenerSaldoOperativo();
-                
-                
+
+
 
                 if (this.cliente != null)
                 {
@@ -3305,8 +3305,16 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                        //if (string.IsNullOrEmpty(txtPUnitario.Text))
-                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+
+                        if (configuracion.commitante == "1")
+                        {
+                            if (string.IsNullOrEmpty(txtPUnitario.Text))
+                            {
+                                this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                            }
+                        }
+                        else
+                            this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
                     this.verificarAlertaArticulo(art);
@@ -4082,7 +4090,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //VARIABLE PARA GUARDAR SI ELIGIO UNA DIVISA
                 int divisaElegida = 0;
-                
+
                 //List<ItemFactura> items = fact.items;
 
                 //agrego info traza a los items
@@ -4261,7 +4269,7 @@ namespace Gestion_Web.Formularios.Facturas
                         idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                     }
 
-                    
+
                     int porcenOK = this.validarFacturacionPorcentual();
 
                     Log.EscribirSQL(99, "ELECTRONICA", "porcenOK: " + porcenOK + " idForma: " + idForma);
@@ -4297,7 +4305,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     string domicilioEntrega = "Seleccione";
-                    if(dropList_DomicilioEntrega.SelectedItem != null)
+                    if (dropList_DomicilioEntrega.SelectedItem != null)
                     {
                         domicilioEntrega = dropList_DomicilioEntrega.SelectedItem.ToString();
                     }
@@ -4309,7 +4317,7 @@ namespace Gestion_Web.Formularios.Facturas
                         divisaElegida = Convert.ToInt32(DropListDivisa.SelectedValue);
 
 
-                        i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito,divisaElegida);
+                        i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito, divisaElegida);
                     }
                     else
                         i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito);
@@ -4501,7 +4509,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 {
                                     controladorSesiones.CargarSesiones(fact.cliente.id, item.articulo.id, importe, fact.id);
                                 }
-                                
+
                             }
                         }
 
@@ -4589,7 +4597,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idForma = Convert.ToInt32(this.ListFormaVenta.SelectedValue);
                 //solo hago en cuenta corriente la fact partida
                 fact.formaPAgo = this.controlador.obtenerFormaPagoFP("Cuenta Corriente");
-                int i = contFcEnt.procesarFacturacionPorcentual(dropList_DomicilioEntrega.SelectedValue.ToString(),fact, dtPago, user, idForma);
+                int i = contFcEnt.procesarFacturacionPorcentual(dropList_DomicilioEntrega.SelectedValue.ToString(), fact, dtPago, user, idForma);
                 if (i > 0)
                 {
                     int idPRP = contFcEnt.obtenerFacturaPorcentualById(i, 0);
@@ -4933,7 +4941,7 @@ namespace Gestion_Web.Formularios.Facturas
                     foreach (var art in articulos)
                     {
                         ItemFactura fact = new ItemFactura();
-                        
+
                         fact.articulo = art.articulo;
                         fact.articulo.descripcion += "(" + articuloCompuesto.codigo + ")";
                         fact.cantidad = Convert.ToInt32(art.cantidad) * item.cantidad;
@@ -4944,7 +4952,7 @@ namespace Gestion_Web.Formularios.Facturas
                         fact.CostoReal = 0;
                         fact.costoImponible = 0;
                         fact.total = 0;
-                        
+
                         this.nuevaFactura.items.Add(fact);
                         //lo agrego al session
                         if (Session["Factura"] == null)
@@ -4955,10 +4963,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                         Factura fa = Session["Factura"] as Factura;
 
-                      
-                        
-                            fact.nroRenglon = fa.items.Count() + 1;
-                        
+
+
+                        fact.nroRenglon = fa.items.Count() + 1;
+
                         fa.items.Add(fact);
                         fa.items = fa.items.Distinct().ToList();
                         Session.Add("Factura", fa);
@@ -8325,10 +8333,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                     Attachment adjunto = new Attachment(path);
                     int i = 0;
-                   
-                       i = contFunciones.enviarMailFactura(adjunto, f, destinatarios);
-                    
-                    
+
+                    i = contFunciones.enviarMailFactura(adjunto, f, destinatarios);
+
+
                     if (i > 0)
                     {
                         adjunto.Dispose();
@@ -10406,7 +10414,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                 }
-                if (this.txtMailEntrega.Text != "" && configuracion.enviaMailFactura=="1")
+                if (this.txtMailEntrega.Text != "" && configuracion.enviaMailFactura == "1")
                 {
                     this.checkDatos.Checked = true;
                     this.phDatosEntrega.Visible = true;

@@ -280,10 +280,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Comentario factura
                 DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(idPresupuesto);
-                if (controlador.obtenerDetalleLiquidacion(idPresupuesto) != null)
-                {
-                    dtComentarios.Rows[0]["Observaciones"] = controlador.obtenerDetalleLiquidacion(idPresupuesto);
-                }
 
                 //Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
                 if (imprimirOtraDivisa > 0)
@@ -1420,8 +1416,13 @@ namespace Gestion_Web.Formularios.Facturas
                 string direLegal = "-";
                 string direEntrega = "-";
                 DataTable dtFactura=controlador.obtenerNroFacturaByRemito(idRemito);
-                int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
-                string direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
+                string direccionEntrega = null;
+
+
+                if (dtFactura.Rows.Count > 0) { 
+                    int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
+                    direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
+                }
                 DataTable dtDireccion = controlCliente.obtenerDireccionesById(idCliente);
                 if (dtDireccion != null)
                 {
