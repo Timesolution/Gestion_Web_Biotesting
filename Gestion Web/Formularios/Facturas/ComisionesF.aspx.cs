@@ -284,11 +284,23 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 DataTable dt = new DataTable();
+                DataTable detalleDT = new DataTable();
 
+                // Le pongo las columnas al detalle
+                detalleDT.Columns.Add("idCliente"); // beneficiario
+                detalleDT.Columns.Add("dador"); // este es el cliente que le da el porcentaje al beneficiario (idcliente)
+                detalleDT.Columns.Add("importe");// el importe es el total de comision
+                detalleDT.Columns.Add("comision"); // el porcentaje de la comision
+                detalleDT.Columns.Add("subtotal"); // el subtotal es el total
+                detalleDT.Columns.Add("alias");
+                detalleDT.Columns.Add("total");
+
+                // Le pongo las columnas al datatable.
                 dt.Columns.Add("idCliente");
                 dt.Columns.Add("alias");
                 dt.Columns.Add("total");
 
+                // Recorro el phComsiones para obtener cada row de la tabla.
                 foreach (Control C in phComsiones.Controls)
                 {
                     decimal padre = 0;
@@ -296,25 +308,24 @@ namespace Gestion_Web.Formularios.Facturas
                     TableRow tr = C as TableRow;
                     TextBox padre1 = tr.Cells[tr.Cells.Count - 2].Controls[0] as TextBox;
                     TextBox abuelo1 = tr.Cells[tr.Cells.Count - 1].Controls[0] as TextBox;
+                    string dador = tr.Cells[0].Text;
                     decimal total = Convert.ToDecimal(tr.Cells[tr.Cells.Count - 3].Text);
 
-                    //TextBox padre1 = new TextBox();
-                    //padre1.Text = "10";
-                    //TextBox abuelo1 = new TextBox();
-                    //abuelo1.Text = "10";
-
+                    // Verifico si el padre tiene algo, para poder convertirlo a int.
                     if (!string.IsNullOrEmpty(padre1.Text))
                     {
                         padre = Convert.ToDecimal(padre1.Text);
 
                     }
 
+                    // Verifico si el abuelo tiene algo, para poder convertirlo a int.
                     if (!string.IsNullOrEmpty(abuelo1.Text))
                     {
                         abuelo = Convert.ToDecimal(abuelo1.Text);
 
                     }
 
+                    // obtengo el id del cliente que el tr contiene el id del mismo.
                     string idCliente = tr.ID;
 
                     var datos = controladorClienteEntity.ObtenerPadreAbueloDelCliente(Convert.ToInt32(idCliente));
@@ -342,7 +353,12 @@ namespace Gestion_Web.Formularios.Facturas
                                 string id = row["idPadre"].ToString();
                                 string nombre = row["Padre"].ToString();
 
-                                AgregarFila(dt, id, nombre, total, padre);
+                                if (padre > 0 && total > 0)
+                                {
+                                    AgregarFila(dt, id, nombre, total, padre);
+                                    AgregarFilaDetalle(id, total, padre, detalleDT, dador);
+                                }
+
                             }
 
                         }
@@ -356,7 +372,12 @@ namespace Gestion_Web.Formularios.Facturas
                                 string id = row["idAbuelo"].ToString();
                                 string nombre = row["Abuelo"].ToString();
 
-                                AgregarFila(dt, id, nombre, total, abuelo);
+                                if (abuelo > 0 && total > 0)
+                                {
+                                    AgregarFila(dt, id, nombre, total, abuelo);
+                                    AgregarFilaDetalle(id, total, abuelo, detalleDT, dador);
+                                }
+
                             }
                         }
 
@@ -365,12 +386,20 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         // aca seteo las primeras 2 filas o 1 sola, depende si tiene padre o abuelo o los 2.
                         // si tiene los 2 se crean 2 nuevos rows. sino solo 1.
-                        AgregarFilas(dt, datos, padre, abuelo, total);
+                        AgregarFilas(dt, datos, padre, abuelo, total, detalleDT, dador);
+
                     }
 
                 }
 
-                Session["informeComisiones"] = dt;
+                DataView detalleDTSort = detalleDT.DefaultView;
+                detalleDTSort.Sort = "idCliente desc";
+                DataTable sortedDT = detalleDTSort.ToTable();
+
+                DataTable final = CombinarDataTable(dt, sortedDT);
+
+
+                Session["informeComisiones"] = final;
 
                 Response.Redirect("ImpresionComisiones.aspx?ex=1&a=1");
 
@@ -381,6 +410,36 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+
+        public DataTable CombinarDataTable(DataTable dt, DataTable detalleDT)
+        {
+            try
+            {
+
+                foreach (DataRow rowDT in dt.Rows)
+                {
+
+                    foreach (DataRow rowDetalleDT in detalleDT.Rows)
+                    {
+
+                        if (rowDT["idCliente"].ToString() == rowDetalleDT["idCliente"].ToString())
+                        {
+                            rowDetalleDT["alias"] = rowDT["alias"].ToString();
+                            rowDetalleDT["total"] = rowDT["total"].ToString();
+                        }
+
+                    }
+
+                }
+
+                return detalleDT;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         public (int modificoPadre, int modificoAbuelo) SumarComision(DataTable dt, DataTable datos, decimal total, decimal padre, decimal abuelo)
         {
@@ -458,7 +517,33 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        public void AgregarFilas(DataTable dt, DataTable datos, decimal padre, decimal abuelo, decimal total)
+        public void AgregarFilaDetalle(string id, decimal total, decimal porcentaje, DataTable detalleDT, string dador)
+        {
+            try
+            {
+
+                DataRow newRow = detalleDT.NewRow();
+
+                newRow["idCliente"] = id;
+                newRow["dador"] = dador;
+                newRow["importe"] = total; 
+                newRow["comision"] = porcentaje;
+                newRow["alias"] = "";
+                newRow["total"] = "";
+
+                decimal comisionTotal = total * (porcentaje / 100);
+                newRow["subtotal"] = String.Format("{0:n}", comisionTotal);
+
+                detalleDT.Rows.Add(newRow);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void AgregarFilas(DataTable dt, DataTable datos, decimal padre, decimal abuelo, decimal total, DataTable detalleDT, string dador)
         {
             try
             {
@@ -478,6 +563,8 @@ namespace Gestion_Web.Formularios.Facturas
                         firstRow["total"] = String.Format("{0:n}", comisionTotal);
 
                         dt.Rows.Add(firstRow);
+
+                        AgregarFilaDetalle(row["idPadre"].ToString(), total, padre, detalleDT, dador);
                     }
 
                 }
@@ -495,6 +582,9 @@ namespace Gestion_Web.Formularios.Facturas
                         secondRow["total"] = String.Format("{0:n}", comisionTotal);
 
                         dt.Rows.Add(secondRow);
+
+                        AgregarFilaDetalle(row["idAbuelo"].ToString(), total, abuelo, detalleDT, dador);
+
                     }
 
 
