@@ -39,7 +39,9 @@ namespace Gestion_Web.Formularios.Articulos
         private int accion;
         private int id;
         private int EditarAc;
+        private int EditarAt;
         private int idCompuesto;
+        private int idTrigger;
         private int EditarPa;
         private int idProvArt;
         //idtemporario
@@ -62,6 +64,8 @@ namespace Gestion_Web.Formularios.Articulos
                     this.idCompuesto = 0;
                     Session.Add("ArticulosABM_EditarAc", EditarAc);
                     Session.Add("ArticulosABM_IdCompuesto", idCompuesto);
+                    Session.Add("ArticulosABM_EditarAt", EditarAt);
+                    Session.Add("ArticulosABM_IdTrigger", idTrigger);
 
                     this.EditarPa = 0;
                     this.idProvArt = 0;
@@ -129,6 +133,7 @@ namespace Gestion_Web.Formularios.Articulos
                         this.linkMedidas.Visible = true;
                         this.linkBeneficios.Visible = true;
                         this.linkCatalogo.Visible = true;
+                        this.linkTrigger.Visible = true;
                         this.linkArticulosSucursales.Visible = true;
                         this.linkStockMinimoSucursales.Visible = true;
 
@@ -181,6 +186,7 @@ namespace Gestion_Web.Formularios.Articulos
                     //this.txtModificado.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
                     this.cargarProveedorArticulos(this.id);
                     this.cargarArticulosCompuestos(this.id);    //usar esta funcion para cambiar el precio al art padre
+                    this.cargarArticulosTrigger(this.id);
                     this.cargarDescuentos();
                     this.cargarMedidasVentaArticulo(this.id);
                     this.cargarDatosCombustibles();
@@ -1290,6 +1296,41 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Articulo. " + ex.Message));
             }
         }
+
+        private void cargarProductoTrigger(string busqueda)
+        {
+            try
+            {
+                //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
+                DataTable dtArticulos = this.controlador.buscarArticulosDT(busqueda);
+
+                if (dtArticulos != null)
+                {
+                    //agrego todos
+                    DataRow dr = dtArticulos.NewRow();
+                    dr["Descripcion"] = "Seleccione...";
+                    dr["id"] = -1;
+                    dtArticulos.Rows.InsertAt(dr, 0);
+
+                    this.DropListArticulosTrig.DataSource = dtArticulos;
+                    this.DropListArticulosTrig.DataValueField = "id";
+                    this.DropListArticulosTrig.DataTextField = "Descripcion";
+
+                    this.DropListArticulosTrig.DataBind();
+                    //this.txtDescripcionArticulo.Text = art.descripcion;
+                    //this.txtArticuloCompuesto.Text = art.id.ToString();
+                    //this.txtCantidadArticulo.Focus();
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra Articulo " + busqueda));
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Articulo. " + ex.Message));
+            }
+        }
         private int irProximoArticulo(int idArticulo)
         {
             try
@@ -2237,6 +2278,87 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Grupo en la lista. " + ex.Message));
             }
         }
+        private void cargarArticulosTrigger(int idArticulo)
+        {
+            try
+            {
+                phArticulosTrigger.Controls.Clear();
+                List<ArticulosCompuestos> articulosCompuestos = this.controlador.obtenerArticulosByArticuloTrigger(idArticulo);
+                foreach (ArticulosCompuestos ac in articulosCompuestos)
+                {
+                    this.cargarArticulosTriggerPH(ac);
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error cargando Grupos. " + ex.Message));
+            }
+        }
+        private void cargarArticulosTriggerPH(ArticulosCompuestos ac)
+        {
+            try
+            {
+                TableRow tr = new TableRow();
+
+
+                TableCell celCodigo = new TableCell();
+                celCodigo.Text = ac.articulo.codigo;
+                celCodigo.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCodigo);
+
+                TableCell celDescripcion = new TableCell();
+                celDescripcion.Text = ac.articulo.descripcion;
+                celDescripcion.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celDescripcion);
+
+                TableCell celCantidad = new TableCell();
+                celCantidad.Text = ac.cantidad.ToString("0.00");
+                celCantidad.VerticalAlign = VerticalAlign.Middle;
+                celCantidad.HorizontalAlign = HorizontalAlign.Right;
+                tr.Cells.Add(celCantidad);
+
+                TableCell celAction = new TableCell();
+                LinkButton btnEditar = new LinkButton();
+                btnEditar.ID = "btnEditarAT_" + ac.id;
+                btnEditar.CssClass = "btn btn-info ui-tooltip";
+                btnEditar.Attributes.Add("data-toggle", "tooltip");
+                btnEditar.Attributes.Add("title data-original-title", "Editar");
+                btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                //btnEditar.Font.Size = 9;
+                btnEditar.Click += new EventHandler(this.EditarArticuloTrigger);
+                celAction.Controls.Add(btnEditar);
+
+                Literal l = new Literal();
+                l.Text = "&nbsp";
+                celAction.Controls.Add(l);
+
+
+                LinkButton btnEliminar = new LinkButton();
+                btnEliminar.ID = "btnEliminarAT_" + ac.id;
+                btnEliminar.CssClass = "btn btn-info";
+                //btnEliminar.Attributes.Add("data-toggle", "modal");
+                //btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                //btnEliminar.Font.Size = 9;
+                btnEliminar.Click += new EventHandler(this.QuitarArticuloTrigger);
+                //btnEliminar.Attributes.Add("onclientclick", "abrirdialog("+ movV.id +")");
+                //btnEliminar.OnClientClick = "abrirdialog(" + sg.id + ");";
+                //btnEliminar.OnClientClick = "mostrarMensaje(this.id)";
+                celAction.Controls.Add(btnEliminar);
+                celAction.Width = Unit.Percentage(10);
+                celAction.VerticalAlign = VerticalAlign.Middle;
+                celAction.HorizontalAlign = HorizontalAlign.Center;
+                tr.Cells.Add(celAction);
+
+                phArticulosTrigger.Controls.Add(tr);
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando articulos compuestos en la lista. " + ex.Message));
+            }
+        }
         protected void DropListArticulosComp_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -2331,6 +2453,89 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+        protected void lbAgregarArticuloTrig_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int editar = (int)Session["ArticulosABM_EditarAt"];
+                if (editar == 0)
+                {
+                    if (this.id != Convert.ToInt32(this.DropListArticulosTrig.SelectedValue))
+                    {
+                        ArticulosCompuestos art = new ArticulosCompuestos();
+                        art.articuloCompuesto.id = this.id;
+                        art.articulo.id = Convert.ToInt32(this.DropListArticulosTrig.SelectedValue);
+                        art.estado = 1;
+                        art.cantidad = Convert.ToDecimal(this.txtCantidadArtTrigger.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        int i = this.controlador.agregarArticulosCompuestos(art,1);
+                        if (i > 0)
+                        {
+                            //agrego bien
+                            //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Grupo de Articulo: " + g.descripcion);
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo Compuesto agregado con exito", null));
+                            this.txtCodProdTrigger.Text = "";
+                            this.txtDescripcionArtTrigger.Text = "";
+                            this.txtCantidadArtTrigger.Text = "";
+                            this.lbAvisoCompuestoTrigger.Visible = false;
+                            this.cargarArticulosTrigger(this.id);
+
+                        }
+                        else
+                        {
+                            if (i == -2)
+                            {
+                                this.lbAvisoCompuestoTrigger.Text = "El Articulo ya figura en la lista de Articulos Compuestos";
+                                this.lbAvisoCompuestoTrigger.Visible = true;
+                            }
+                            else
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Datos de Proveedor"));
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.lbAvisoCompuestoTrigger.Text = "No se puede ingresar el mismo Articulo como Compuesto";
+                        this.lbAvisoCompuestoTrigger.Visible = true;
+                        this.txtCodProdTrigger.Focus();
+                    }
+                }
+                else
+                {
+                    ArticulosCompuestos art = new ArticulosCompuestos();
+                    art.id = (int)Session["ArticulosABM_idTrigger"];
+                    art.articuloCompuesto.id = this.id;
+                    art.articulo.id = Convert.ToInt32(this.txtArticuloTrig.Text);
+                    art.estado = 1;
+                    art.cantidad = Convert.ToDecimal(this.txtCantidadArtTrigger.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                    art.precio = 0;
+                    art.precioEnArticulo = 1;
+                    int i = this.controlador.modificarArticulosCompuestos(art);
+                    if (i > 0)
+                    {
+                        //agrego bien
+                        //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Grupo de Articulo: " + g.descripcion);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo Compuesto agregado con exito", null));
+                        this.txtCodProdTrigger.Text = "";
+                        this.txtDescripcionArtTrigger.Text = "";
+                        this.txtCantidadArtTrigger.Text = "";
+                        this.txtCodProdTrigger.Enabled = true;
+                        this.cargarArticulosTrigger(this.id);
+
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando Articulo Compuesto"));
+
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
         private void QuitarArticuloCompuesto(object sender, EventArgs e)
         {
             try
@@ -2339,6 +2544,7 @@ namespace Gestion_Web.Formularios.Articulos
                 string[] datos = (sender as LinkButton).ID.Split('_');
                 string idArticuloCompuesto = datos[1];
                 ArticulosCompuestos ac = this.controlador.obtenerArticulosCompuestosID(Convert.ToInt32(idArticuloCompuesto));
+                ac.precioEnArticulo = 0;
                 ac.estado = 0;
                 int i = this.controlador.modificarArticulosCompuestos(ac);
                 if (i > 0)
@@ -2347,6 +2553,38 @@ namespace Gestion_Web.Formularios.Articulos
                     //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Grupo de Articulo: " + g.descripcion);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo Compuesto eliminado con exito", null));
                     this.cargarArticulosCompuestos(this.id);
+
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error eliminado Articulo Compuesto"));
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando Articulo Compuesto. " + ex.Message));
+            }
+        }
+
+         private void QuitarArticuloTrigger(object sender, EventArgs e)
+        {
+            try
+            {
+
+                string[] datos = (sender as LinkButton).ID.Split('_');
+                string idArticuloCompuesto = datos[1];
+                ArticulosCompuestos ac = this.controlador.obtenerArticulosCompuestosID(Convert.ToInt32(idArticuloCompuesto));
+                ac.estado = 0;
+                ac.precioEnArticulo = 1;
+                int i = this.controlador.modificarArticulosCompuestos(ac);
+                if (i > 0)
+                {
+                    //agrego bien
+                    //Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Grupo de Articulo: " + g.descripcion);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Articulo Compuesto eliminado con exito", null));
+                    this.cargarArticulosTrigger(this.id);
 
                 }
                 else
@@ -2377,7 +2615,32 @@ namespace Gestion_Web.Formularios.Articulos
                 this.txtBusqueda.Enabled = false;
                 this.idCompuesto = Convert.ToInt32(idArticuloCompuesto);
                 Session.Add("ArticulosABM_EditarAc", EditarAc);
-                Session.Add("ArticulosABM_IdCompuesto", idCompuesto);
+                Session.Add("ArticulosABM_IdTrigger", idCompuesto);
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error editando direccion " + ex.Message));
+            }
+        }
+
+        private void EditarArticuloTrigger(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] datos = (sender as LinkButton).ID.Split('_');
+                string idArticuloCompuesto = datos[1];
+                //obtengo el cliente del session
+                ArticulosCompuestos ac = this.controlador.obtenerArticulosCompuestosID(Convert.ToInt32(idArticuloCompuesto));
+                this.txtArticuloTrig.Text = ac.articulo.id.ToString();
+                this.txtCodProdTrigger.Text = ac.articulo.codigo;
+                this.txtDescripcionArtTrigger.Text = ac.articulo.descripcion;
+                this.txtCantidadArtTrigger.Text = ac.cantidad.ToString();
+                this.EditarAt = 1;
+                this.txtCodProdTrigger.Enabled = false;
+                this.idTrigger = Convert.ToInt32(idArticuloCompuesto);
+                Session.Add("ArticulosABM_EditarAt", EditarAt);
+                Session.Add("ArticulosABM_IdTrigger", idTrigger);
 
             }
             catch (Exception ex)
@@ -4363,5 +4626,43 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
+        protected void lbBuscarArticuloTrigger_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(this.txtCodProdTrigger.Text))
+                {
+                    this.cargarProductoTrigger(this.txtCodProdTrigger.Text);
+                }
+                else
+                {
+                    this.txtDescripcionArticulo.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Articulo. " + ex.Message));
+            }
+       
+          
+        }
+
+        protected void DropListArticulosTrig_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Articulo articulo = controlador.obtenerArticuloByID(Convert.ToInt32(DropListArticulosTrig.SelectedValue));
+                this.txtDescripcionArtTrigger.Text = DropListArticulosTrig.SelectedItem.Text;
+                this.txtCodProdTrigger.Text = DropListArticulosTrig.SelectedValue;
+                this.txtCantidadArtTrigger.Focus();
+            }
+            catch
+            {
+
+            }
+        }
+
+      
     }
 }

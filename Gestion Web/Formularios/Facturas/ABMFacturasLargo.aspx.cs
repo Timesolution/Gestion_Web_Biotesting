@@ -182,7 +182,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //vengo desde el remito y voy a facturar
                     if (this.accion == 4)
                     {
-                        if(this.configuracion.agregarItemsFactura=="0")
+                        if (this.configuracion.agregarItemsFactura == "0")
                         {
                             this.lbtnAgregarArticuloASP.Attributes.Add("disabled", "disabled");
                         }
@@ -4934,46 +4934,79 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("Factura", f);
                 #region Articulos compuestos
                 Articulo articuloCompuesto = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
-                var articulos = contArticulo.obtenerArticulosByArticuloCompuesto(articuloCompuesto.id);
+                var articulos = contArticulo.obtenerArticulosYTriggerByArticuloCompuesto(articuloCompuesto.id);
                 if (articulos != null)
                 {
 
                     foreach (var art in articulos)
                     {
-                        ItemFactura fact = new ItemFactura();
-
-                        fact.articulo = art.articulo;
-                        fact.articulo.descripcion += "(" + articuloCompuesto.codigo + ")";
-                        fact.cantidad = Convert.ToInt32(art.cantidad) * item.cantidad;
-                        fact.precioSinRecargo = 0;
-                        fact.precioSinIva = 0;
-                        fact.precioUnitario = 0;
-                        fact.Costo = 0;
-                        fact.CostoReal = 0;
-                        fact.costoImponible = 0;
-                        fact.total = 0;
-
-                        this.nuevaFactura.items.Add(fact);
-                        //lo agrego al session
-                        if (Session["Factura"] == null)
+                        if (art.precioEnArticulo == 0)
                         {
-                            Factura fac = new Factura();
-                            Session.Add("Factura", fac);
+                            ItemFactura fact = new ItemFactura();
+
+                            fact.articulo = art.articulo;
+                            fact.articulo.descripcion += "(" + articuloCompuesto.codigo + ")";
+                            fact.cantidad = Convert.ToInt32(art.cantidad) * item.cantidad;
+                            fact.precioSinRecargo = 0;
+                            fact.precioSinIva = 0;
+                            fact.precioUnitario = 0;
+                            fact.Costo = 0;
+                            fact.CostoReal = 0;
+                            fact.costoImponible = 0;
+                            fact.total = 0;
+
+                            this.nuevaFactura.items.Add(fact);
+                            //lo agrego al session
+                            if (Session["Factura"] == null)
+                            {
+                                Factura fac = new Factura();
+                                Session.Add("Factura", fac);
+                            }
+
+                            Factura fa = Session["Factura"] as Factura;
+
+
+
+                            fact.nroRenglon = fa.items.Count() + 1;
+
+                            fa.items.Add(fact);
+                            fa.items = fa.items.Distinct().ToList();
+                            Session.Add("Factura", fa);
+
+
+
                         }
 
-                        Factura fa = Session["Factura"] as Factura;
+
+                        else
+                        {
+
+                            ItemFactura fact = new ItemFactura();
+
+
+                            fact.articulo = art.articulo;
+                            fact.cantidad = Convert.ToInt32(art.cantidad) * item.cantidad;
+                            fact.precioUnitario = fact.articulo.precioVenta;
+                            fact.total = fact.articulo.precioVenta * fact.cantidad;
+                            this.nuevaFactura.items.Add(fact);
+                            //lo agrego al session
+                            if (Session["Factura"] == null)
+                            {
+                                Factura fac = new Factura();
+                                Session.Add("Factura", fac);
+                            }
+
+                            Factura fa = Session["Factura"] as Factura;
 
 
 
-                        fact.nroRenglon = fa.items.Count() + 1;
+                            fact.nroRenglon = fa.items.Count() + 1;
 
-                        fa.items.Add(fact);
-                        fa.items = fa.items.Distinct().ToList();
-                        Session.Add("Factura", fa);
-
-
-
-                    }
+                            fa.items.Add(fact);
+                            fa.items = fa.items.Distinct().ToList();
+                            Session.Add("Factura", fa);
+                        }
+                     }
                 }
                 #endregion
 
