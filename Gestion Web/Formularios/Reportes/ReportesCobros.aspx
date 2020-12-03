@@ -241,10 +241,13 @@
                         <div role="form" class="form-horizontal col-md-12">
                             <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
-                                    <div class="form-group" style="display: none">
-                                        <label class="col-md-4" style="display: none">Desde</label>
+                                    <%--<div class="form-group" style="display: none">--%>
+                                    <div class="form-group">
+                                        <%--<label class="col-md-4" style="display: none">Desde</label>--%>
+                                        <label class="col-md-4">Desde</label>
                                         <div class="col-md-4">
-                                            <asp:TextBox ID="txtFechaDesde" runat="server" Text="01/01/2000" Style="display: none" class="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
+                                            <%--<asp:TextBox ID="txtFechaDesde" runat="server" Text="01/01/2000" Style="display: none" class="form-control"></asp:TextBox>--%>
                                             <!-- /input-group -->
                                         </div>
                                         <div class="col-md-4">

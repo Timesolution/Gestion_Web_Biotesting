@@ -3305,8 +3305,16 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         this.txtIva.Text = art.porcentajeIva.ToString() + "%";
-                        //if (string.IsNullOrEmpty(txtPUnitario.Text))
-                        this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+
+                        if (configuracion.commitante == "1")
+                        {
+                            if (string.IsNullOrEmpty(txtPUnitario.Text))
+                            {
+                                this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
+                            }
+                        }
+                        else
+                            this.txtPUnitario.Text = decimal.Round(art.precioVenta, 2).ToString();
                     }
 
                     this.verificarAlertaArticulo(art);
@@ -4932,7 +4940,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                     foreach (var art in articulos)
                     {
-
                         if (art.precioEnArticulo == 0)
                         {
                             ItemFactura fact = new ItemFactura();
@@ -4999,12 +5006,7 @@ namespace Gestion_Web.Formularios.Facturas
                             fa.items = fa.items.Distinct().ToList();
                             Session.Add("Factura", fa);
                         }
-
-
-
-
-
-                    }
+                     }
                 }
                 #endregion
 

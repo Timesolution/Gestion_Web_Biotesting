@@ -61,7 +61,7 @@ namespace Gestion_Web.Formularios.Reportes
                     this.cargarClientes();
                     this.cargarVendedores();
                     this.cargarSucursal();
-                    //txtFechaDesde.Text = fechaD;
+                    txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                     DropListClientes.SelectedValue = idCliente.ToString();
                     DropListVendedores.SelectedValue = idVendedor.ToString();
