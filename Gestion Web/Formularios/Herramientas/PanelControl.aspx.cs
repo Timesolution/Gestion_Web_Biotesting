@@ -204,6 +204,16 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.lbtnFacturarMultiplesVeces.CssClass = "btn btn-danger";
                     this.lbtnFacturarMultiplesVeces.Text = "Desactivado";
                 }
+                if (configuracion.facturarMismoRemitoVariasVeces == "1")
+                {
+                    this.lbtnFacturarMultiplesVecesRemito.CssClass = "btn btn-success";
+                    this.lbtnFacturarMultiplesVecesRemito.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnFacturarMultiplesVecesRemito.CssClass = "btn btn-danger";
+                    this.lbtnFacturarMultiplesVecesRemito.Text = "Desactivado";
+                }
                 if (configuracion.enviaMailFactura == "1")
                 {
                     this.lbtnEnviarMailFactura.CssClass = "btn btn-success";
@@ -1636,6 +1646,32 @@ namespace Gestion_Web.Formularios.Herramientas
                 else
                 {
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Enviar Mail Factura!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        protected void lbtnFacturarMultiplesVecesRemito_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.facturarMismoRemitoVariasVeces == "0")
+                    configuracion.facturarMismoRemitoVariasVeces = "1";
+                else
+                    configuracion.facturarMismoRemitoVariasVeces = "0";
+
+                int i = configuracion.ModificarFacturarMismoRemitoVariasVeces();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Facturar mas de una vez un remito.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Facturar mas de una vez un pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Facturar mas de una vez un pedido!. \", {type: \"error\"});", true);
                 }
             }
             catch
