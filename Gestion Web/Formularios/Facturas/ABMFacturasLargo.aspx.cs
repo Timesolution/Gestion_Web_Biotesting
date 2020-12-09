@@ -4565,26 +4565,42 @@ namespace Gestion_Web.Formularios.Facturas
 
         public void PasarEstadoPacienteOK(int idCliente)
         {
-            Estetica_Api.Controladores.ControladorPropietarios controladorPropietarios = new Estetica_Api.Controladores.ControladorPropietarios();
+            try
+            {
+                Estetica_Api.Controladores.ControladorPropietarios controladorPropietarios = new Estetica_Api.Controladores.ControladorPropietarios();
 
-            controladorPropietarios.PasarPacienteOK(idCliente);
+                controladorPropietarios.PasarPacienteOK(idCliente);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
         }
 
         public void AgregarEventoCliente(int idCliente, string FactNumero)
         {
-            Gestion_Api.Entitys.Clientes_Eventos eventos = new Gestion_Api.Entitys.Clientes_Eventos();
-            ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+            try
+            {
+                Gestion_Api.Entitys.Clientes_Eventos eventos = new Gestion_Api.Entitys.Clientes_Eventos();
+                ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
-            eventos.Cliente = idCliente;
-            eventos.Descripcion = "Emisión de Factura/PRP # " + FactNumero;
+                eventos.Cliente = idCliente;
+                eventos.Descripcion = "Emisión de Factura/PRP # " + FactNumero;
 
-            eventos.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
-            eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
-            eventos.Tarea = "";
-            eventos.Estado = controladorClienteEntity.ObtenerIdEstadoByDescripcion("Finalizado");
-            eventos.Vencimiento = null;
+                eventos.Fecha = Convert.ToDateTime(DateTime.Now, new CultureInfo("es-AR"));
+                eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+                eventos.Tarea = "";
+                eventos.Estado = controladorClienteEntity.ObtenerIdEstadoByDescripcion("Finalizado");
+                eventos.Vencimiento = null;
 
-            this.contClienteEntity.agregarEventoCliente(eventos);
+                this.contClienteEntity.agregarEventoCliente(eventos);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
         }
 
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
