@@ -749,7 +749,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         for (int i = 0; i < x; i++)
                         {
-                            if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(j[i])))
+                            if (contRemitoEntity.VerificarSiElRemitoYaFueFacturado(Convert.ToInt32(j[i]))&& c.facturarMismoRemitoVariasVeces == "0")
                                 errores += Convert.ToString(j[i]) + " | ";
                         }
 

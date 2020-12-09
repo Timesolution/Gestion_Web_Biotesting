@@ -35,6 +35,7 @@
                                 <li class=""><a href="#ArticulosSucursales" runat="server" id="linkArticulosSucursales" visible="false" data-toggle="tab">Articulos Sucursales</a></li>
                                 <li class=""><a href="#StockMinimoSucursales" runat="server" id="linkStockMinimoSucursales" visible="false" data-toggle="tab">Stock Minimo Sucursales</a></li>
                                 <li class=""><a href="#Catalogo" runat="server" id="linkCatalogo" visible="false" data-toggle="tab">Otros </a></li>
+                                <li class=""><a href="#Trigger" runat="server" id="linkTrigger" visible="false" data-toggle="tab">Trigger </a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade active in" id="home">
@@ -1086,6 +1087,119 @@
                                     </asp:UpdatePanel>
                                 </div>
                                 <%--Fin Composicion--%>
+                                <%--Trigger--%>
+                                <div class="tab-pane fade" id="Trigger">
+                                    <asp:UpdatePanel ID="UpdatePanelTrigger" UpdateMode="Always" runat="server">
+                                        <ContentTemplate>
+
+                                            <div class="widget-content">
+                                                <div role="form" class="form-horizontal col-md-10">
+
+                                                    <br />
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <label for="validateSelect" class="col-md-4">Busqueda</label>
+                                                            <div class="col-md-4">
+                                                                <div class="input-group">
+                                                                    <asp:TextBox ID="txtCodProdTrigger" runat="server" class="form-control" placeholder="Buscar Articulo"></asp:TextBox>
+                                                                    <span class="input-group-btn">
+                                                                        <asp:LinkButton ID="lbBuscarArticuloTrigger" runat="server" Text="Buscar" class="btn btn-primary" OnClick="lbBuscarArticuloTrigger_Click" ValidationGroup="BusquedaArticuloTrigger">
+                                                                            <i class="shortcut-icon icon-search"></i></asp:LinkButton>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator57" runat="server" ErrorMessage="Ingrese un Codigo" ControlToValidate="txtCodProdTrigger" ValidationGroup="BusquedaArticuloTrigger" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Articulos</label>
+                                                            <div class="col-md-4">
+                                                                <asp:DropDownList ID="DropListArticulosTrig" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListArticulosTrig_SelectedIndexChanged"></asp:DropDownList>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator58" runat="server" ErrorMessage="*" ControlToValidate="DropListArticulosComp" InitialValue="-1" ValidationGroup="ArticuloTrigger" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Descripcion</label>
+
+                                                            <div class="col-md-8">
+                                                                <asp:TextBox ID="txtDescripcionArtTrigger" runat="server" class="form-control" Disabled=""></asp:TextBox>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="name" class="col-md-4">Cantidad</label>
+
+                                                            <div class="col-md-3">
+
+
+                                                                <asp:TextBox ID="txtCantidadArtTrigger" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" Style="text-align: right"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <asp:LinkButton ID="lbAgregarArticuloTrig" runat="server" Text="Buscar" class="btn btn-success" OnClick="lbAgregarArticuloTrig_Click" ValidationGroup="ArticuloTrigger">
+                                                                            <i class="shortcut-icon icon-ok"></i></asp:LinkButton>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator59" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtCantidadArtTrigger" ValidationGroup="ArticuloTrigger" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox runat="server" ID="txtArticuloTrig" Visible="false"></asp:TextBox>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <asp:Label runat="server" ID="lbAvisoCompuestoTrigger" class="alert alert-danger alert-dismissable" Visible="false"></asp:Label>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+
+                                            <div class="widget-content">
+                                                <div class="col-md-12">
+                                                    <div class="widget stacked widget-table">
+
+                                                        <div class="widget-header">
+                                                            <span class="icon-bookmark"></span>
+                                                            <h3>Composicion</h3>
+                                                        </div>
+                                                        <!-- .widget-header -->
+
+                                                        <div class="widget-content">
+                                                            <table class="table table-bordered table-striped">
+
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Codigo Articulo</th>
+                                                                        <th>Descripcion</th>
+                                                                        <th>Cantidad</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <asp:PlaceHolder ID="phArticulosTrigger" runat="server"></asp:PlaceHolder>
+                                                                </tbody>
+
+                                                            </table>
+
+                                                        </div>
+                                                        <!-- .widget-content -->
+
+                                                    </div>
+                                    
+                                                </div>
+                                            </div>
+
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="lbAgregarArticuloComp" EventName="Click" />
+                                            <asp:AsyncPostBackTrigger ControlID="lbBuscar" EventName="Click" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <%--Fin Trigger--%>
                                 <%--Descuentos--%>
                                 <div class="tab-pane fade" id="Descuentos">
                                     <asp:UpdatePanel ID="UpdatePanel5" UpdateMode="Always" runat="server">
@@ -2005,8 +2119,8 @@
                                                                     <label for="validateSelect" class="col-md-4">Auxiliar</label>
                                                                     <div class="col-md-5">
                                                                         <asp:DropDownList ID="ListAuxiliar" class="form-control" runat="server">
-                                                                            <asp:ListItem Value="1" Text="Si" ></asp:ListItem>
-                                                                            <asp:ListItem Value="0" Text="No" ></asp:ListItem>
+                                                                            <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                                            <asp:ListItem Value="0" Text="No"></asp:ListItem>
                                                                         </asp:DropDownList>
                                                                     </div>
                                                                 </div>
@@ -2014,8 +2128,8 @@
                                                                     <label for="validateSelect" class="col-md-4">Comisionable</label>
                                                                     <div class="col-md-5">
                                                                         <asp:DropDownList ID="ListComisionable" class="form-control" runat="server">
-                                                                            <asp:ListItem Value="1" Text="Si" ></asp:ListItem>
-                                                                            <asp:ListItem Value="0" Text="No" ></asp:ListItem>
+                                                                            <asp:ListItem Value="1" Text="Si"></asp:ListItem>
+                                                                            <asp:ListItem Value="0" Text="No"></asp:ListItem>
                                                                         </asp:DropDownList>
                                                                     </div>
                                                                 </div>

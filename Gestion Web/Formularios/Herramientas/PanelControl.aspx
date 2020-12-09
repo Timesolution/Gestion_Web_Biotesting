@@ -640,6 +640,12 @@
                                                 <asp:LinkButton ID="lbtnEnviarMailFactura" runat="server" OnClick="lbtnEnviarMailFactura_Click" />
                                             </div>
                                         </div>
+                                          <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Facturar mas de una vez un remito:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnFacturarMultiplesVecesRemito" runat="server" OnClick="lbtnFacturarMultiplesVecesRemito_Click" />
+                                            </div>
+                                        </div>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </fieldset>
