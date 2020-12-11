@@ -394,7 +394,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                     }
                 }
-
+                    
                 String vendedor = "Todos";
 
                 if (this.idVendedor > 0)

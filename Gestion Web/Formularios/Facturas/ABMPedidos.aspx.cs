@@ -420,7 +420,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.SelectedValue = idPtoVentaUser.ToString();
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
-                this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones;
+                this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones + "  " + p.comentario;
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 //this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.txtDescuento.Text = p.descuento.ToString();
@@ -446,6 +446,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
                 decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
                 int vendedor = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).vendedor.id;
+                string comentario = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).comentario;
 
                 Pedido p = new Pedido();
 
@@ -459,6 +460,7 @@ namespace Gestion_Web.Formularios.Facturas
                 p.formaPAgo.id = cliente.formaPago.id;
                 p.descuento = descuentoNeto;
                 p.vendedor.id = vendedor;
+                p.comentario = comentario;
 
                 for (int i = 0; i < idsCotizaciones.Count; i++)
                 {
