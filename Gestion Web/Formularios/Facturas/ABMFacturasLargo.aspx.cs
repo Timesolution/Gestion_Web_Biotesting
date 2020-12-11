@@ -632,7 +632,14 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtFechaEntrega.Text = f.pedidos[0].fechaEntrega.ToString("dd/MM/yyyy");
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
                 this.txtBultosEntrega.Text = f.bultosEntrega;
-                this.txtComentarios.Text = f.comentario;
+
+                if (!string.IsNullOrEmpty(f.comentario))
+                {
+                    this.txtComentarios.Text = f.comentario;
+                    checkDatos.Checked = true;
+                    this.phDatosEntrega.Visible = true;
+                }
+
                 //cargocliente
                 //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
                 //_idCliente = f.cliente.id;

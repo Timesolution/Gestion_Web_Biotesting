@@ -336,7 +336,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (dt.Rows.Count > 0)
                     {
 
-                        var modifico = SumarComision(dt, datos, total, padre, abuelo);
+                        var modifico = SumarComision(dt, datos, total, padre, abuelo, detalleDT, dador);
 
 
                         //if (modifico.modificoPadre == 0 && modifico.modificoAbuelo == 0)
@@ -441,7 +441,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        public (int modificoPadre, int modificoAbuelo) SumarComision(DataTable dt, DataTable datos, decimal total, decimal padre, decimal abuelo)
+        public (int modificoPadre, int modificoAbuelo) SumarComision(DataTable dt, DataTable datos, decimal total, decimal padre, decimal abuelo, DataTable detalleDT, string dador)
         {
             try
             {
@@ -463,6 +463,7 @@ namespace Gestion_Web.Formularios.Facturas
                             comisionTotal += total * (padre / 100);
                             row["total"] = String.Format("{0:n}", comisionTotal);
                             modificoPadre = 1;
+                            AgregarFilaDetalle(familia["idPadre"].ToString(), total, padre, detalleDT, dador);
                         }
 
                         // verifico si existe el id del cliente en la tabla a exportar
@@ -472,6 +473,7 @@ namespace Gestion_Web.Formularios.Facturas
                             comisionTotal += total * (abuelo / 100);
                             row["total"] = String.Format("{0:n}", comisionTotal);
                             modificoAbuelo = 1;
+                            AgregarFilaDetalle(familia["idAbuelo"].ToString(), total, abuelo, detalleDT, dador);
                         }
 
                     }
@@ -521,20 +523,23 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                if(porcentaje > 0)
+                {
+                    DataRow newRow = detalleDT.NewRow();
 
-                DataRow newRow = detalleDT.NewRow();
+                    newRow["idCliente"] = id;
+                    newRow["dador"] = dador;
+                    newRow["importe"] = total;
+                    newRow["comision"] = porcentaje;
+                    newRow["alias"] = "";
+                    newRow["total"] = "";
 
-                newRow["idCliente"] = id;
-                newRow["dador"] = dador;
-                newRow["importe"] = total; 
-                newRow["comision"] = porcentaje;
-                newRow["alias"] = "";
-                newRow["total"] = "";
+                    decimal comisionTotal = total * (porcentaje / 100);
+                    newRow["subtotal"] = String.Format("{0:n}", comisionTotal);
 
-                decimal comisionTotal = total * (porcentaje / 100);
-                newRow["subtotal"] = String.Format("{0:n}", comisionTotal);
-
-                detalleDT.Rows.Add(newRow);
+                    detalleDT.Rows.Add(newRow);
+                }
+                
 
             }
             catch (Exception ex)
