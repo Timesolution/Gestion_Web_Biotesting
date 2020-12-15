@@ -500,7 +500,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),6))
                     return;
 
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -743,7 +743,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                     {
                         idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                        if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                        if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),4))
                             return;
 
                         int temp;
@@ -896,7 +896,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),5))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -936,7 +936,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
             {
                 idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),9))
                     return;
 
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1014,7 +1014,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
 
                 string idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),8))
                     return;
 
                 int temp;
@@ -1097,7 +1097,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),7))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1170,7 +1170,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),3))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1217,7 +1217,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),10))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1362,7 +1362,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),2))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));     
@@ -1421,7 +1421,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),12))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1469,7 +1469,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),14))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1517,7 +1517,7 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 {
                     string idtildado = ObtenerIdTildadoOrdenReparacion();
 
-                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado)))
+                    if (ChequearSiORFinalizo(Convert.ToInt32(idtildado),13))
                         return;
 
                     var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(Convert.ToInt32(idtildado));
@@ -1554,13 +1554,17 @@ namespace Gestion_Web.Formularios.OrdenReparacion
                 Log.EscribirSQL(1, "ERROR", "Error al cambiar al estado: Reparado por Service Oficial - Enviado a Garantias " + ex.Message);
             }
         }
-
-        public bool ChequearSiORFinalizo(int idOR)
+        //Le paso por parametro el Estado de la orden y un estado a comparar en caso de que coincidan significa que ya se encuentra en ese estado
+        public bool ChequearSiORFinalizo(int idOR,int Opc)
         {
             try
             {
                 var or = contOrdenReparacion.ObtenerOrdenReparacionPorID(idOR);
-
+                if(or.Estado== Opc)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden ya se encuentra en el estado al que se quiere modificar"));
+                    return true;
+                }
                 if (or.Estado == 2 || or.Estado == 12)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("La orden de reparacion ya se encuentra finalizada!"));
