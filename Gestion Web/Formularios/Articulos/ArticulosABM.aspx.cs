@@ -3633,12 +3633,14 @@ namespace Gestion_Web.Formularios.Articulos
                 this.phCostos.Controls.Clear();
 
                 decimal anterior = 0;
+                decimal anterior2 = 0;
 
                 List<Articulos_Costos> costos = contArtEntity.obtenerCostosArticulo(this.id);
                 foreach (var c in costos)
                 {
-                    this.cargarHistorialCostosPH(c, anterior, 0);
+                    this.cargarHistorialCostosPH(c, anterior,anterior2, 0);
                     anterior = c.Costo.Value;
+                    anterior2 = c.Venta.Value;
                 }
 
                 //cargo el costo actual para tener referencia
@@ -3647,15 +3649,16 @@ namespace Gestion_Web.Formularios.Articulos
                 ac.Costo = Convert.ToDecimal(this.txtCosto.Text);
                 ac.Proveedor = ac.articulo.proveedor;
                 ac.Fecha = DateTime.Now;
-                this.cargarHistorialCostosPH(ac, anterior, 1);
+                ac.Venta = Convert.ToDecimal(this.tPrecioVenta.Value, CultureInfo.InvariantCulture);
+                this.cargarHistorialCostosPH(ac, anterior,anterior2, 1);
 
             }
-            catch
+            catch(Exception ex)
             {
 
             }
         }
-        public void cargarHistorialCostosPH(Articulos_Costos c, decimal anterior, int costoActual)
+        public void cargarHistorialCostosPH(Articulos_Costos c, decimal anterior,decimal anterior2 ,int costoActual)
         {
             try
             {
@@ -3678,12 +3681,6 @@ namespace Gestion_Web.Formularios.Articulos
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celFecha);
 
-                TableCell celCosto = new TableCell();
-                celCosto.Text = "$" + c.Costo.Value.ToString();
-                celCosto.HorizontalAlign = HorizontalAlign.Right;
-                celCosto.VerticalAlign = VerticalAlign.Middle;
-                tr.Cells.Add(celCosto);
-
                 TableCell celMoneda = new TableCell();
                 if (costoActual == 1)
                     celMoneda.Text = this.DropDownMonedaVent.SelectedItem.Text;
@@ -3693,6 +3690,14 @@ namespace Gestion_Web.Formularios.Articulos
                 celMoneda.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celMoneda);
 
+                TableCell celCosto = new TableCell();
+                celCosto.Text = "$" + c.Costo.Value.ToString();
+                celCosto.HorizontalAlign = HorizontalAlign.Right;
+                celCosto.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celCosto);
+
+           
+
                 TableCell celPorcentaje = new TableCell();
                 if (anterior > 0)
                     celPorcentaje.Text = decimal.Round((((c.Costo.Value * 100 / anterior) / 100) - 1) * 100, 2).ToString() + " %";
@@ -3701,6 +3706,21 @@ namespace Gestion_Web.Formularios.Articulos
                 celPorcentaje.HorizontalAlign = HorizontalAlign.Right;
                 celPorcentaje.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celPorcentaje);
+
+                TableCell celVenta = new TableCell();
+                celVenta.Text = "$" + c.Venta.Value.ToString();
+                celVenta.HorizontalAlign = HorizontalAlign.Right;
+                celVenta.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celVenta);
+
+                TableCell celPorcentajeVenta = new TableCell();
+                if (anterior2 > 0)
+                    celPorcentajeVenta.Text = decimal.Round((((c.Venta.Value * 100 / anterior2) / 100) - 1) * 100, 2).ToString() + " %";
+                else
+                    celPorcentajeVenta.Text = "0 %";
+                celPorcentajeVenta.HorizontalAlign = HorizontalAlign.Right;
+                celPorcentajeVenta.VerticalAlign = VerticalAlign.Middle;
+                tr.Cells.Add(celPorcentajeVenta);
 
                 //TableCell celAccion = new TableCell();
                 //LinkButton btnBorrar = new LinkButton();
@@ -3733,14 +3753,15 @@ namespace Gestion_Web.Formularios.Articulos
 
                 var a = contArtEntity.obtenerArticuloEntity(art.id);
 
-                if (a.costo != art.costo)
+                if (a.costo != art.costo || a.precioVenta != art.precioVenta)
                 {
                     Articulos_Costos reg = new Articulos_Costos();
                     reg.IdArticulo = art.id;
-                    reg.Proveedor = art.proveedor.id;
+                    reg.Proveedor = a.proveedor;
                     reg.Costo = a.costo;//guardo el costo viejo
                     reg.Fecha = DateTime.Now;
-                    reg.Moneda = art.monedaVenta.id;
+                    reg.Moneda = a.monedaVenta;
+                    reg.Venta = a.precioVenta;
                     contArtEntity.agregarArticuloCosto(reg);
                 }
             }
