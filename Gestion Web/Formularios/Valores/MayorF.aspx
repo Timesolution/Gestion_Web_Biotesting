@@ -183,6 +183,11 @@
 
                                 <hr />
 
+                                <div class="row col-lg-12" style="display: flex; justify-content: flex-end;">
+                                    <asp:TextBox ID="txtBuscarNiveles" runat="server" class="form-control" placeholder="Busqueda nivel 5" style="margin-right: 5px; max-width: 33%;"></asp:TextBox>
+                                    <asp:LinkButton ID="lbtnBuscarNiveles" OnClientClick="CargarNivel5_ModalAgregarRegistro(); return false;" runat="server" Text="Buscar" class="btn btn-success" AutoPostBack="false" />
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-5ths col-xs-6">
                                         <label>Nivel 1</label>
@@ -206,7 +211,7 @@
 
                                     <div class="col-md-5ths col-xs-6">
                                         <label>Nivel 5</label>
-                                        <asp:DropDownList ID="DropListNivel5_ModalAgregarRegistro" runat="server" class="form-control"></asp:DropDownList>
+                                        <asp:DropDownList ID="DropListNivel5_ModalAgregarRegistro" onchange="OnChangeNivel5()" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
                                 </div>
 
@@ -1175,5 +1180,214 @@
             }
             return seleccionoTodo;
         }
+
+
+        //Buscador esto busca el ultimo nivel, cuando se selecciona 1, se setean los niveles anteriores en sus correspondientes DDL.
+
+        function CargarNivel5_ModalAgregarRegistro() {
+
+            var buscador = document.getElementById('<%= txtBuscarNiveles.ClientID %>');
+
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/BuscarUltimoNivel",
+                data: '{textoABuscar: "' + buscador.value + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert("Hubo un error en la busqueda.");
+                },
+                success: OnSuccessCargarNivel5_ModalAgregarRegistro2
+            });
+        }
+
+        //Cargo el nivel 5
+        function OnSuccessCargarNivel5_ModalAgregarRegistro2(response) {
+            while (controlDropListNivel5_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel5_ModalAgregarRegistro.remove(0);
+            }
+
+            //BorradoMasivoDeDropDownList();
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 5);
+
+            for (i = 0; i < obj.length; i++) {
+                option = document.createElement('option');
+                option.value = obj[i].id;
+                option.text = obj[i].nombre;
+
+                controlDropListNivel5_ModalAgregarRegistro.add(option);
+            }
+
+            CargarNivel4DesdeNivel5(controlDropListNivel5_ModalAgregarRegistro.value);
+        }
+
+        function OnChangeNivel5() {
+            CargarNivel4DesdeNivel5(controlDropListNivel5_ModalAgregarRegistro.value);
+        }
+
+        //Hago la busqueda del nivel 4
+        function CargarNivel4DesdeNivel5(idJerarquia5){
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerNivelAnteriorByIdJerarquia5",
+                data: '{idjerarquia: "' + idJerarquia5 + '", nivel: "' + 4 + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert('No se encontraron datos del nivel ' + 4);
+                },
+                success: OnSuccessCargarNivel4_DesdeNivel5
+            });
+        }
+
+        //cargo el nivel 4
+        function OnSuccessCargarNivel4_DesdeNivel5(response) {
+            while (controlDropListNivel4_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel4_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 4);
+
+            option = document.createElement('option');
+            option.value = obj.id;
+            option.text = obj.nombre;
+
+            controlDropListNivel4_ModalAgregarRegistro.add(option);
+
+            CargarNivel3DesdeNivel5(controlDropListNivel5_ModalAgregarRegistro.value);
+        }
+
+        //hago la busqueda del nivel 3
+        function CargarNivel3DesdeNivel5(idJerarquia5) {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerNivelAnteriorByIdJerarquia5",
+                data: '{idjerarquia: "' + idJerarquia5 + '", nivel: "' + 3 + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert('No se encontraron datos del nivel ' + 3);
+                },
+                success: OnSuccessCargarNivel3_DesdeNivel5
+            });
+        }
+
+        //Cargo el nivel 3
+        function OnSuccessCargarNivel3_DesdeNivel5(response) {
+            while (controlDropListNivel3_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel3_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 3);
+
+            option = document.createElement('option');
+            option.value = obj.id;
+            option.text = obj.nombre;
+
+            controlDropListNivel3_ModalAgregarRegistro.add(option);
+
+            CargarNivel2DesdeNivel5(controlDropListNivel5_ModalAgregarRegistro.value);
+        }
+
+        //hago la busqueda del nivel 2
+        function CargarNivel2DesdeNivel5(idJerarquia5) {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerNivelAnteriorByIdJerarquia5",
+                data: '{idjerarquia: "' + idJerarquia5 + '", nivel: "' + 2 + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert('No se encontraron datos del nivel ' + 2);
+                },
+                success: OnSuccessCargarNivel2_DesdeNivel5
+            });
+        }
+
+        //Cargo el nivel 2
+        function OnSuccessCargarNivel2_DesdeNivel5(response) {
+            while (controlDropListNivel2_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel2_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 2);
+
+            option = document.createElement('option');
+            option.value = obj.id;
+            option.text = obj.nombre;
+
+            controlDropListNivel2_ModalAgregarRegistro.add(option);
+
+            CargarNivel1DesdeNivel5(controlDropListNivel5_ModalAgregarRegistro.value);
+        }
+
+        //hago la busqueda del nivel 1
+        function CargarNivel1DesdeNivel5(idJerarquia5) {
+            $.ajax({
+                type: "POST",
+                url: "MayorF.aspx/ObtenerNivelAnteriorByIdJerarquia5",
+                data: '{idjerarquia: "' + idJerarquia5 + '", nivel: "' + 1 + '"}',
+                contentType: "application/json",
+                dataType: 'json',
+                error: function () {
+                    alert('No se encontraron datos del nivel ' + 2);
+                },
+                success: OnSuccessCargarNivel1_DesdeNivel5
+            });
+        }
+
+        //Cargo el nivel 1
+        function OnSuccessCargarNivel1_DesdeNivel5(response) {
+            while (controlDropListNivel1_ModalAgregarRegistro.options.length > 0) {
+                controlDropListNivel1_ModalAgregarRegistro.remove(0);
+            }
+
+            var data = response.d;
+            obj = JSON.parse(data);
+
+            MostrarAlertaDeQueNoSeEncontroElNivelSiNoHayDatos(data, 2);
+
+            option = document.createElement('option');
+            option.value = obj.id;
+            option.text = obj.nombre;
+
+            controlDropListNivel1_ModalAgregarRegistro.add(option);
+
+        }
+
+        function BorradoMasivoDeDropDownList() {
+
+            //while (controlDropListNivel5_ModalAgregarRegistro.options.length > 0) {
+            //    controlDropListNivel5_ModalAgregarRegistro.remove(0);
+            //}
+            //while (controlDropListNivel4_ModalAgregarRegistro.options.length > 0) {
+            //    controlDropListNivel4_ModalAgregarRegistro.remove(0);
+            //}
+            //while (controlDropListNivel3_ModalAgregarRegistro.options.length > 0) {
+            //    controlDropListNivel3_ModalAgregarRegistro.remove(0);
+            //}
+            //while (controlDropListNivel2_ModalAgregarRegistro.options.length > 0) {
+            //    controlDropListNivel2_ModalAgregarRegistro.remove(0);
+            //}
+            //while (controlDropListNivel1_ModalAgregarRegistro.options.length > 0) {
+            //    controlDropListNivel1_ModalAgregarRegistro.remove(0);
+            //}
+
+        }
+
+
     </script>
 </asp:Content>
