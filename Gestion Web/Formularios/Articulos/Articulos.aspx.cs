@@ -35,6 +35,7 @@ namespace Gestion_Web.Formularios.Articulos
 
         Mensajes m = new Mensajes();
         Configuracion config = new Configuracion();
+        private int permisoEliminarArticulo = 0;
         int accion;
         int listas;
         int grupo;
@@ -215,6 +216,12 @@ namespace Gestion_Web.Formularios.Articulos
                     string perfil = Session["Login_NombrePerfil"] as string;
                     string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
                     string permisoCambioSuc = listPermisos.Where(x => x == "207").FirstOrDefault();
+                    string permisoEliminarArticulo = listPermisos.Where(x => x == "242").FirstOrDefault();
+
+                    if(permisoEliminarArticulo != null)
+                    {
+                        this.permisoEliminarArticulo = 1;
+                    }
 
                     if (permiso2 != null)
                     {
@@ -462,24 +469,28 @@ namespace Gestion_Web.Formularios.Articulos
                     celAction.Controls.Add(btnComposicionMateriasPrimas);
                 }
 
-                Literal l3 = new Literal();
-                l3.Text = "&nbsp";
-                celAction.Controls.Add(l3);
-
-                LinkButton btnEliminar = new LinkButton();
-                btnEliminar.ID = "btnEliminar_" + row["id"].ToString();
-                btnEliminar.CssClass = "btn btn-info";
-                btnEliminar.Attributes.Add("data-toggle", "modal");
-                btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-
-                btnEliminar.OnClientClick = "abrirdialog(" + row["id"].ToString() + ");";
-                if (this.permisoEliminar == 0)
+                // si tiene persmiso para eliminar en 1 quiere decir que puede eliminar los articulos.
+                if(this.permisoEliminarArticulo == 1)
                 {
-                    btnEliminar.Visible = false;
-                }
+                    Literal l3 = new Literal();
+                    l3.Text = "&nbsp";
+                    celAction.Controls.Add(l3);
 
-                celAction.Controls.Add(btnEliminar);
+                    LinkButton btnEliminar = new LinkButton();
+                    btnEliminar.ID = "btnEliminar_" + row["id"].ToString();
+                    btnEliminar.CssClass = "btn btn-info";
+                    btnEliminar.Attributes.Add("data-toggle", "modal");
+                    btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+
+                    btnEliminar.OnClientClick = "abrirdialog(" + row["id"].ToString() + ");";
+                    if (this.permisoEliminar == 0)
+                    {
+                        btnEliminar.Visible = false;
+                    }
+
+                    celAction.Controls.Add(btnEliminar);
+                }
 
 
                 TableRow tr = new TableRow();

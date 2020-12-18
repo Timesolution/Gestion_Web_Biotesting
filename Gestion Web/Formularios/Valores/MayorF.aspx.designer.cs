@@ -186,6 +186,24 @@ namespace Gestion_Web.Formularios.Valores
         protected global::System.Web.UI.WebControls.DropDownList dropListPuntoVenta_ModalAgregarRegistro;
 
         /// <summary>
+        /// txtBuscarNiveles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBuscarNiveles;
+
+        /// <summary>
+        /// lbtnBuscarNiveles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscarNiveles;
+
+        /// <summary>
         /// DropListNivel1_ModalAgregarRegistro control.
         /// </summary>
         /// <remarks>

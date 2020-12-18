@@ -274,10 +274,24 @@ namespace Gestion_Web.Formularios.Valores
                     }
                     if (lista != null)
                     {
-                        ddls[i].DataSource = lista;
-                        ddls[i].DataTextField = "Descripcion";
-                        ddls[i].DataValueField = "Id";
-                        ddls[i].DataBind();
+                        //pregunta si es el drop nivel 5
+                        if(i == 4)
+                        {
+                            var lista2 = lista.Select(p => new { Id = p.Id, Descripcion = p.Codigo + " " + p.Descripcion });
+
+                            ddls[i].DataSource = lista2;
+                            ddls[i].DataTextField = "Descripcion";
+                            ddls[i].DataValueField = "Id";
+                            ddls[i].DataBind();
+                        }
+                        else
+                        {
+                            ddls[i].DataSource = lista;
+                            ddls[i].DataTextField = "Descripcion";
+                            ddls[i].DataValueField = "Id";
+                            ddls[i].DataBind();
+                        }
+                        
                     }
                     //lista = contPlanCuentas.obtenerCuentasContablesByNivel(i + 2, Convert.ToInt32(ddls[i].SelectedValue));
                     if (!string.IsNullOrEmpty(ddls[i].SelectedValue))
@@ -402,14 +416,30 @@ namespace Gestion_Web.Formularios.Valores
 
                 List<ListItemTemporal> listaCuentasTemporal = new List<ListItemTemporal>();
 
-                foreach (var item in listaCuentas)
+                if(jerarquia == 5)
                 {
-                    listaCuentasTemporal.Add(new ListItemTemporal
+                    foreach (var item in listaCuentas)
                     {
-                        id = item.Id.ToString(),
-                        nombre = item.Descripcion
-                    });
+                        listaCuentasTemporal.Add(new ListItemTemporal
+                        {
+                            id = item.Id.ToString(),
+                            nombre = item.Codigo + " " + item.Descripcion
+                        });
+                    }
                 }
+                else
+                {
+                    foreach (var item in listaCuentas)
+                    {
+                        listaCuentasTemporal.Add(new ListItemTemporal
+                        {
+                            id = item.Id.ToString(),
+                            nombre = item.Descripcion
+                        });
+                    }
+                }
+
+                
 
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 serializer.MaxJsonLength = 5000000;
@@ -482,6 +512,73 @@ namespace Gestion_Web.Formularios.Valores
             {
 
             }
+        }
+
+        //Buscador
+
+        [WebMethod]
+
+        public static string BuscarUltimoNivel(string textoABuscar)
+        {
+            try
+            {
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
+                var niveles5 = contPlanCuentas.BusquedaUltimoNivelByDescripcion(5, textoABuscar);
+
+                List<ListItemTemporal> listaCuentasTemporal = new List<ListItemTemporal>();
+
+                foreach (var item in niveles5)
+                {
+                    listaCuentasTemporal.Add(new ListItemTemporal
+                    {
+                        id = item.Id.ToString(),
+                        nombre = item.Codigo + " " + item.Descripcion
+                    });
+                }
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON = serializer.Serialize(listaCuentasTemporal);
+
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        [WebMethod]
+
+        public static string ObtenerNivelAnteriorByIdJerarquia5(string idjerarquia, string nivel)
+        {
+            try
+            {
+                ControladorPlanCuentas contPlanCuentas = new ControladorPlanCuentas();
+                var niveles = contPlanCuentas.ObtenerNivelAnteriorByIdJerarquia5(Convert.ToInt32(idjerarquia), Convert.ToInt32(nivel));
+
+                ItemTemporal CuentasTemporal = new ItemTemporal();
+
+                CuentasTemporal.id = niveles.Id.ToString();
+                CuentasTemporal.nombre = niveles.Descripcion;
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON = serializer.Serialize(CuentasTemporal);
+
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public class ItemTemporal
+        {
+            public string id { get; set; }
+            public string nombre { get; set; }
         }
 
         protected void lbtnCrearRegistroManual_Click(object sender, EventArgs e)

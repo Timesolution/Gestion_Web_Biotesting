@@ -274,6 +274,22 @@ namespace Gestion_Web.Formularios.Personal
                     celAction.Controls.Add(cbSeleccion);
                     celAction.Width = Unit.Percentage(10);
                     celAction.VerticalAlign = VerticalAlign.Middle;
+
+                    Literal l5 = new Literal();
+                    l5.Text = "&nbsp";
+                    celAction.Controls.Add(l5);
+
+                    LinkButton btnEliminar = new LinkButton();
+                    btnEliminar.ID = "btnEliminar_" + emp.id;
+                    btnEliminar.CssClass = "btn btn-info";
+                    btnEliminar.Attributes.Add("data-toggle", "modal");
+                    btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                    btnEliminar.OnClientClick = "abrirdialog(" + emp.id + ");";
+
+                    celAction.Controls.Add(btnEliminar);
+
+
                     tr.Cells.Add(celAction);
 
                     //cargo el primer cliente en detalle
@@ -653,6 +669,30 @@ namespace Gestion_Web.Formularios.Personal
             catch (Exception ex)
             {
 
+            }
+        }
+
+        protected void btnSi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idEmpleado = Convert.ToInt32(this.txtMovimiento.Text);
+
+                int resultado = controlador.EliminarEmpleado(idEmpleado);
+
+                if (resultado > 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Personal eliminado con exito", null));
+                }
+
+                cargarEmpleados();
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrió un error. Ubicacion: Empleados. Metodo: btnSi_Click. Excepción: " + ex.Message);
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
     }
