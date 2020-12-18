@@ -1557,8 +1557,10 @@
                                                                     <tr>
                                                                         <th>Proveedor</th>
                                                                         <th>Fecha Act.</th>
-                                                                        <th style="text-align: right;">Costo</th>
                                                                         <th>Moneda</th>
+                                                                        <th style="text-align: right;">Costo</th>
+                                                                        <th style="text-align: right;">%</th>
+                                                                        <th style="text-align: right;">Precio Venta</th>
                                                                         <th style="text-align: right;">%</th>
                                                                     </tr>
                                                                 </thead>
