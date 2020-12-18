@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Controladores.ControladoresEntity;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using System;
@@ -1000,5 +1001,116 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando cotizaciones para facturar. " + ex.Message));
             }
         }
+
+        #region Funciones de los Controles
+
+        protected void DropListDivisa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCobranza controladorCobranza = new controladorCobranza();
+                //string moneda = lblFacturaMonedaGuardada.Text;
+                //if (moneda != "-")
+                //{
+                //    moneda = moneda.Replace(": $", string.Empty);
+                //}
+                //if (!string.IsNullOrEmpty(lblFacturaMonedaValor.Text) && DropListDivisa.SelectedItem.Text.Contains(moneda))
+                //{
+                //    txtCotizacion.Text = lblFacturaMonedaValor.Text.Replace(',', '.');
+                //}
+                //else
+                //{
+                    txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)), 2).ToString().Replace(',', '.');
+                //}
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: DropListDivisa_SelectedIndexChanged. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        #endregion
+
+        #region Accion
+        protected void lbtnImprimirCT_En_Otra_Divisa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorMoneda controladorMoneda = new controladorMoneda();
+
+                string idsListaCotizacionesTildadas = "";
+                int contadorCotizacionesTildadas = 0;
+                foreach (Control C in phCotizaciones.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        contadorCotizacionesTildadas++;
+                        idsListaCotizacionesTildadas += ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idsListaCotizacionesTildadas) && contadorCotizacionesTildadas == 1)
+                {
+                    DropListDivisa.ClearSelection();
+
+                    controladorCobranza controladorCobranza = new controladorCobranza();
+                    controladorFacturacion controladorFacturacion = new controladorFacturacion();
+                    ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
+
+                    //Factura factura = controladorFacturacion.obtenerFacturaId(Convert.ToInt32(idsListaCotizacionesTildadas));
+                    //lblNumeroCT.Text = factura.numero;
+                    //this.hfIDCotizacion.Value = factura.id.ToString();
+                    DataTable dt = controladorCobranza.obtenerMonedasDT();
+
+                    //agrego todos
+                    //DataRow dr = dt.NewRow();
+                    //dr["moneda"] = "Seleccione...";
+                    //dr["id"] = -1;
+                    //dt.Rows.InsertAt(dr, 0);
+
+                    this.DropListDivisa.DataSource = dt;
+                    this.DropListDivisa.DataValueField = "id";
+                    this.DropListDivisa.DataTextField = "moneda";
+                    this.DropListDivisa.DataBind();
+
+                    //Verificar si tiene alguna divisa por defecto guardada en la tabla Factuas_Moneda
+                    //Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(factura.id);
+                    //if (facturas_Moneda != null)
+                    //{
+                    //    DropListDivisa.SelectedValue = Convert.ToString(facturas_Moneda.idMoneda);
+                    //    txtCotizacion.Text = Convert.ToString(facturas_Moneda.ValorMoneda);
+                    //    string monedaGuardada = DropListDivisa.Items.FindByValue(DropListDivisa.SelectedValue).Text;
+                    //    lblFacturaMonedaGuardada.Text = monedaGuardada + ": $";
+                    //    lblFacturaMonedaValor.Text = facturas_Moneda.ValorMoneda.ToString();
+                    //}
+                    //else
+                    //{
+                        DropListDivisa.SelectedValue = DropListDivisa.Items.FindByText("Pesos").Value;
+                        txtCotizacion.Text = "1.00";
+                        //lblFacturaMonedaGuardada.Text = "-";
+                        //lblFacturaMonedaValor.Text = "";
+                    //}
+
+                    ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalImprimirCT_EnOtraDivisa", "openModalImprimirCT_EnOtraDivisa();", true);
+                }
+                else if (contadorCotizacionesTildadas > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar <strong style='color:black'>solo</strong> un documento"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos <strong style='color:black'>un</strong> documento"));
+                }
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: lbtnImprimirCT_En_Otra_Divisa_Click. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+        #endregion
+
     }
 }

@@ -30,6 +30,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnAnular" runat="server" data-toggle="modal" href="#modalConfirmacion">Anular</asp:LinkButton>
                                             </li>
+                                            <li>
+                                                <asp:LinkButton ID="lbtnImprimirCT_En_Otra_Divisa" runat="server" OnClick="lbtnImprimirCT_En_Otra_Divisa_Click" >Imprimir CT en otra divisa</asp:LinkButton>
+                                            </li>
                                         </ul>
                                     </div>
                                 </asp:PlaceHolder>
@@ -569,6 +572,84 @@
     </div>
     <%-- Fin Modal Busqueda de Busqueda --%>
 
+    <%-- Modal Imprimir CT en Divisa Elegida --%>
+        <div id="modalImprimirCT_EnOtraDivisa" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Imprimir CT en Otra Divisa</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <asp:UpdatePanel ID="UpdatePanel8" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label class="col-md-4">Numero del Doc.</label>
+                                                <div class="col-md-8">
+                                                    <asp:Label ID="lblNumeroCT" runat="server"></asp:Label>
+                                                    <asp:HiddenField ID="hfIDCotizacion" runat="server" value="" />
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="form-group">
+                                                <label class="col-md-4">Divisa</label>
+                                                <div class="col-md-8">
+                                                    <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                                </div>
+                                                <%--<div class="col-md-2">
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Seleccione un tipo de Moneda" ControlToValidate="DropListTipo" InitialValue="Seleccione..." ValidationGroup="MonedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                </div>--%>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4">Cotizacion</label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <asp:TextBox ID="txtCotizacion" runat="server" class="form-control" disabled Style="text-align: right"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="col-md-12">
+                                                <div class="widget stacked widget-box">
+                                                    <div class="widget-header">
+                                                        <h3>Ayuda</h3>
+                                                    </div>
+                                                    <!-- /widget-header -->
+                                                    <div class="widget-content">
+                                                        <p>La divisa elegida en la lista, traera el <strong>valor de la divisa actual</strong> para realizar los calculos en base al valor de la moneda seleccionada.</p>
+                                                        <%--<strong>Divisa guardada:</strong><br />
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaGuardada" ForeColor="DarkGreen"></asp:Label>
+                                                        <asp:Label runat="server" ID="lblFacturaMonedaValor" ForeColor="DarkGreen"></asp:Label></p>
+                                                    --%></div>
+                                                    <!-- /widget-content -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                        <div class="modal-footer">
+                            <asp:Button ID="btnImprimirCTDivisa" runat="server" Text="Imprimir" class="btn btn-success" ValidationGroup="MonedaGroup"  OnClientClick="this.disabled = true; this.value = 'Imprimiendo...';" UseSubmitBehavior="false"/>
+                        </div>
+                        <%--<div class="modal-footer">
+                            <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon fa fa-paper-plane'></span>" class="btn btn-success" OnClick="" ValidationGroup="EnvioGroup"></asp:LinkButton>
+                        </div>--%>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <%-- Fin Modal Imprimir CT en Divisa Elegida --%>
+
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <script>
 
@@ -612,6 +693,12 @@
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
 
+    </script>
+
+    <script type="text/javascript">
+            function openModalImprimirCT_EnOtraDivisa() {
+                $('#modalImprimirCT_EnOtraDivisa').modal('show');
+            }
     </script>
 
 
