@@ -26,6 +26,7 @@ namespace Gestion_Web.Formularios.Clientes
     {
         // verifico si es de uruguay el cuit.
         int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
+        int esCCW = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsCCW"));
         //mensajes popUp
         Mensajes m = new Mensajes();
         //controladores
@@ -3719,7 +3720,7 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto,esCCW) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3807,7 +3808,7 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto, esCCW) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";

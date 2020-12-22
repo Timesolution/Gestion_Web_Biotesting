@@ -36,9 +36,13 @@ namespace Gestion_Web.Formularios.Facturas
         private int monedaOriginal = 0;
         private long zonaEntrega;
         private int estadoPedido;
+        private decimal imprimirOtraDivisa;
+        private int idMoneda;
+        Moneda monedaElegida = new Moneda();
 
         DataTable dtPedidosTemp;
 
+        controladorMoneda controladorMoneda = new controladorMoneda();
         ControladorPedido controlador = new ControladorPedido();
         controladorSucursal contSucursal = new controladorSucursal();
         controladorArticulo contArt = new controladorArticulo();
@@ -47,7 +51,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(!IsPostBack)
+                if (!IsPostBack)
                 {
                     dtPedidosTemp = new DataTable();
                     this.InicializarDtPedidos();
@@ -66,6 +70,14 @@ namespace Gestion_Web.Formularios.Facturas
                     cotizacion = Convert.ToInt32(Request.QueryString["co"]);
                     zonaEntrega = Convert.ToInt64(Request.QueryString["ze"]);
                     estadoPedido = Convert.ToInt32(Request.QueryString["ep"]);
+
+                    ///Verifico si el usuario eligio imprimir el documento en otra divisa
+                    if (Request.QueryString["div"] != null)
+                    {
+                        idMoneda = Convert.ToInt32(Request.QueryString["div"]);
+                        monedaElegida = controladorMoneda.obtenerMonedaID(idMoneda);
+                        imprimirOtraDivisa = monedaElegida.cambio;
+                    }
 
                     //Obtengo la configuracion para ver los pedidos en moneda original o no.
                     string pmo = WebConfigurationManager.AppSettings.Get("PedidosMonedaOriginal");
@@ -92,11 +104,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte5();
                     }
-                    if(accion==5)
+                    if (accion == 5)
                     {
                         this.generarReporte6(); //Pedidos Consolidado
                     }
-                    if(accion==6)
+                    if (accion == 6)
                     {
                         this.generarReporte7(); //Pedidos por Grupo
                     }
@@ -110,10 +122,10 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de Pedido. " + ex.Message));
-                
+
                 Log.EscribirSQL(1, "ERROR", "Error al mostrar detalle de Pedido. " + ex.Message);
             }
         }
@@ -194,7 +206,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch
             {
-                
+
             }
         }
 
@@ -223,8 +235,8 @@ namespace Gestion_Web.Formularios.Facturas
                 Articulo a = new Articulo();
                 foreach (DataRow rowDatos in dtDatos.Rows)
                 {
-                    a = this.contArt.obtenerArticuloByID(Convert.ToInt32(rowDatos["Id"]));         
-                    if(a!=null)
+                    a = this.contArt.obtenerArticuloByID(Convert.ToInt32(rowDatos["Id"]));
+                    if (a != null)
                     {
                         rowDatos["codigoBarra"] = a.codigoBarra;
                     }
@@ -287,15 +299,15 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 //obtengo el telefono del cliente para agregarlo al pedido
                 List<contacto> contactosClientes = controlCliente.obtenerContactos(idCliente);
-                if (contactosClientes.Count > 0 & contactosClientes !=null)
+                if (contactosClientes.Count > 0 & contactosClientes != null)
                 {
                     telefono = contactosClientes[0].numero;
                 }
-                if(String.IsNullOrEmpty(telefono))
+                if (String.IsNullOrEmpty(telefono))
                 {
                     telefono = "-";
-                }                
-                
+                }
+
                 //obtengo los datos de Zona entregaentrega
                 Clientes_Entregas cl = controlCli.obtenerEntregaCliente(idCliente);
 
@@ -306,21 +318,40 @@ namespace Gestion_Web.Formularios.Facturas
                         zona = cl.Zona.nombre;
                     }
                 }
-                if(string.IsNullOrEmpty(zona))
+                if (string.IsNullOrEmpty(zona))
                 {
                     zona = "-";
                 }
 
                 dtDatos = contArtEntity.obtenerPresentacionesArtDT(dtDatos);
-                dtDatos = contArtEntity.obtenerStockArtDT(dtDatos,suc);
+                dtDatos = contArtEntity.obtenerStockArtDT(dtDatos, suc);
 
-                //subtotal, retencion, descuento
+                ///subtotal, retencion, descuento, total
                 DataRow row = dtTotal.Rows[0];
                 decimal subtotal = Convert.ToDecimal(row["subtotal"]);
                 decimal descuento = Convert.ToDecimal(row["descuento"]);
                 decimal retencion = Convert.ToDecimal(row["retenciones"]);
+                decimal total = Convert.ToDecimal(row["TotalFinal"]);
 
-                ReportParameter paramZona = new ReportParameter("ParamZona",zona);
+                ///Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow rowDatos in dtDatos.Rows)
+                    {
+                        rowDatos["PrecioUnitario"] = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]) / imprimirOtraDivisa, 2);
+                        rowDatos["Total"] = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]) / imprimirOtraDivisa);
+                    }
+
+                    subtotal = Decimal.Round(subtotal / imprimirOtraDivisa, 2);
+                    descuento = Decimal.Round(descuento / imprimirOtraDivisa, 2);
+                    retencion = Decimal.Round(retencion / imprimirOtraDivisa, 2);
+                    total = Decimal.Round(total / imprimirOtraDivisa, 2);
+
+                    ///Sumo el comentario al campo de observaciones para informar en base a que divisa se realizaron los calculos de los precios
+                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
+                }
+
+                ReportParameter paramZona = new ReportParameter("ParamZona", zona);
                 ReportParameter paramTel = new ReportParameter("ParamTel", telefono);
                 ReportParameter paramFormaPago = new ReportParameter("ParamFormaPago", formaPago);
 
@@ -340,14 +371,14 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param10 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
 
 
-                this.ReportViewer1.ProcessingMode = ProcessingMode.Local; 
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
                 //ReportDataSource rds = new ReportDataSource("DetallePedido", dtDetalle);
                 ReportDataSource rds = new ReportDataSource("DatosDetalle", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosPedido", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("TotalPedido", dtTotal);
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
@@ -369,7 +400,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.ReportViewer1.LocalReport.SetParameters(rpHora);
                 //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
-                
+
 
                 Warning[] warnings;
 
@@ -389,7 +420,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.Response.End();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -405,7 +436,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("PedidosListado.rdlc");
                 ReportDataSource rds = new ReportDataSource("dtPedidos", this.dtPedidos);
-                
+
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -414,7 +445,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.ReportViewer1.LocalReport.SetParameters(rpFecha);
                 //this.ReportViewer1.LocalReport.SetParameters(rpHora);
                 //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);
-                
+
                 Session["dtDatosPedidos"] = null;
                 this.ReportViewer1.LocalReport.Refresh();
 
@@ -466,11 +497,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                DataTable dt = this.controlador.obtenerCantidadArticulosEnPedidos(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente,this.articulo,this.proveedor,this.zonaEntrega, this.estadoPedido);
+                DataTable dt = this.controlador.obtenerCantidadArticulosEnPedidos(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente, this.articulo, this.proveedor, this.zonaEntrega, this.estadoPedido);
 
                 //Sucursal s = this.contSucursal.obtenerSucursalID(this.sucursal);
                 Sucursal s = new Sucursal();
-                if (sucursal>0)
+                if (sucursal > 0)
                 {
                     s = this.contSucursal.obtenerSucursalID(this.sucursal);
                 }
@@ -478,7 +509,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     s.nombre = "Todos";
                 }
-                
+
                 String grupo = "Todos";
                 if (this.idGrupo > 0)
                 {
@@ -554,7 +585,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Pedido p = this.controlador.obtenerPedidoId(this.idPedido);
                 var pEnt = contPedEnt.obtenerCantidadBultosPedido(this.idPedido);
                 var comentarios = contPedEnt.obtenerComentariosPedido(this.idPedido);
-                var zonaCliente = contCliEnt.obtenerEntregaCliente(p.cliente.id);                
+                var zonaCliente = contCliEnt.obtenerEntregaCliente(p.cliente.id);
                 var expreso = contCliEnt.obtenerExpresoCliente(p.cliente.id);
 
                 DataTable dtHojas = new DataTable();
@@ -592,14 +623,14 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("PedidosBultos.rdlc");
 
-                ReportDataSource rds = new ReportDataSource("DatosCantidad", dtHojas);                
+                ReportDataSource rds = new ReportDataSource("DatosCantidad", dtHojas);
                 ReportParameter param2 = new ReportParameter("ParamBultos", pEnt.CantidadBultos.Value.ToString());
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                
+
                 this.ReportViewer1.LocalReport.SetParameters(param2);
-                
+
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;
@@ -630,7 +661,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //dt.Columns.Add("Pedido");
                 dt.Columns.Add("Codigo");
                 dt.Columns.Add("Descripcion");
-                dt.Columns.Add("Cantidad",typeof(decimal));
+                dt.Columns.Add("Cantidad", typeof(decimal));
                 dt.Columns.Add("Ubicacion");
                 dt.Columns.Add("Pedido");
                 dt.Columns.Add("Stock");
@@ -641,7 +672,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (!String.IsNullOrEmpty(ped))
                     {
                         Pedido p = this.controlador.obtenerPedidoId(Convert.ToInt32(ped));
-                        if(p!=null)
+                        if (p != null)
                         {
                             foreach (var item in p.items)
                             {
@@ -661,7 +692,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 else
                                 {
                                     Articulo a = this.contArt.obtenerArticuloByID(item.articulo.id);
-                                    if(a!=null)
+                                    if (a != null)
                                     {
                                         row["Descripcion"] = a.descripcion;
                                     }
@@ -677,7 +708,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 dt.Rows.Add(row);
                             }
                         }
-                        
+
                     }
                 }
 
@@ -742,7 +773,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (Directory.Exists(path))
                 {
-                    Directory.Delete(path,true);
+                    Directory.Delete(path, true);
                 }
                 Directory.CreateDirectory(path);
                 string[] pedidos = idPedidos.Split(';');
@@ -755,7 +786,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             string fileName = "p-" + p.numero + "_" + p.id + ".pdf";
                             int i = this.GenerarImpresionPDF(p, path + fileName);
-                            if(i > 0)
+                            if (i > 0)
                             {
                                 contadorOk++;
                             }
@@ -778,7 +809,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                     }
                     catch { }
-                    
+
                     this.descargar(nombre);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Realizados con exito:" + contadorOk + "de " + contadorTotal, ""));
                 }
@@ -796,7 +827,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                DataTable dt = this.controlador.obtenerCantidadEnPedidosPorCliente(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente, this.articulo, this.proveedor,this.zonaEntrega);
+                DataTable dt = this.controlador.obtenerCantidadEnPedidosPorCliente(this.fdesde, this.fhasta, this.sucursal, this.idGrupo, this.cliente, this.articulo, this.proveedor, this.zonaEntrega);
                 //Sucursal s = this.contSucursal.obtenerSucursalID(this.sucursal);
                 Sucursal s = new Sucursal();
                 if (sucursal > 0)
@@ -975,7 +1006,7 @@ namespace Gestion_Web.Formularios.Facturas
                     zona = "-";
                 }
 
-                
+
 
                 dtDatos = contArtEntity.obtenerPresentacionesArtDT(dtDatos);
                 dtDatos = contArtEntity.obtenerStockArtDT(dtDatos, suc);
@@ -1065,7 +1096,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                decimal monto = Convert.ToDecimal(dtDatos.Rows[0]["CotizacionMO"]); 
+                decimal monto = Convert.ToDecimal(dtDatos.Rows[0]["CotizacionMO"]);
                 return monto;
             }
             catch (Exception ex)
