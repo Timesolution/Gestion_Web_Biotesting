@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -15,6 +17,8 @@ namespace Gestion_Web.Formularios.Facturas
 {
     public partial class CotizacionesC : System.Web.UI.Page
     {
+        #region Variables y Controladores
+
         ControladorPedido controlador = new ControladorPedido();
         controladorUsuario contUser = new controladorUsuario();
         ControladorPedidoEntity contPedEntity = new ControladorPedidoEntity();
@@ -35,6 +39,9 @@ namespace Gestion_Web.Formularios.Facturas
         string numeroCotizacion = string.Empty;
         string clienteCotizacion = string.Empty;
         string observacionCotizacion = string.Empty;
+        #endregion
+
+        #region Page Load
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -102,10 +109,14 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error en CotizacionesC. Ubicacion: CotizacionesC.Page_Load. Excepcion:" + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: Page_Load. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
+
+        #endregion
+
+        #region Verificacion Usuario
 
         private void VerificarLogin()
         {
@@ -162,6 +173,10 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        #endregion
+
+        #region Cargas de Datos
+
         public void cargarSucursal()
         {
             try
@@ -185,7 +200,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarSucursal. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -263,7 +279,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes a la lista. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarClientes. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+
             }
         }
 
@@ -301,7 +319,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Vendedores. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarVendedor. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -329,12 +348,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListEstado.DataBind();
 
-
-
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando Estados de Pedidos a la lista. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarEstados. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+
             }
         }
 
@@ -361,7 +380,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando cotizaciones rango. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarCotizacionesRango. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -381,9 +401,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error cargando cotizaciones. Ubicacion: CotizacionesC.cargarCotizacion. Excepcion:" + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
-
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarCotizacion. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -495,10 +514,12 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando cotizacion en ph dr. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarEnPhDR. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
 
         }
+
         private void cargarEnPh(Pedido p)
         {
             try
@@ -598,10 +619,16 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando cotizacion. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: cargarEnPh. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
 
         }
+
+        #endregion
+
+        #region Impresion Documento
+
         private void detallePedido(object sender, EventArgs e)
         {
             try
@@ -631,10 +658,99 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de cotizacion desde la interfaz. " + ex.Message));
-                Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: detallePedido. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
+
+        #endregion
+
+        #region Modal Filtro
+
+        /// <summary>
+        /// Metodo que detecta el cambio en la lista de clientes para el filtro de cotizaciones
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void DropListClientes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
+            }
+            catch
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Metodo que obtiene vendedor correspondiente del cliente
+        /// </summary>
+        /// <param name="Cliente"></param>
+        private void obtenerVendedor(int Cliente)
+        {
+            try
+            {
+                controladorCliente contCl = new controladorCliente();
+                var cl = contCl.obtenerClienteID(Cliente);
+                this.ListVendedor.SelectedValue = cl.vendedor.id.ToString();
+            }
+            catch
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Metodo que busca al cliente a traves del inputText 'txtCodCliente'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorCliente contrCliente = new controladorCliente();
+                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(this.txtCodCliente.Text);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+                //this.cargarClientesTable(cliente);
+
+                //this.ListRazonSocial.DataSource = dtClientes;
+                //this.ListRazonSocial.DataValueField = "id";
+                //this.ListRazonSocial.DataTextField = "razonSocial";
+
+                //this.ListRazonSocial.DataBind();
+                //controladorCliente contrCliente = new controladorCliente();
+                //Cliente cl = contrCliente.obtenerClienteCodigo(txtCodCliente.Text);
+
+                //if (cl != null)
+                //{
+                //    this.DropListClientes.SelectedValue = cl.id.ToString();
+                //}
+                //else
+                //{
+                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encontro cliente con el codigo ingresado\", {type: \"info\"});", true);
+                //}
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: btnBuscarCod_Click. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
+            }
+        }
+
+        /// <summary>
+        /// Metodo que realiza la busqueda de cotizaciones con los parametros del filtro ya seteados.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try
@@ -660,39 +776,271 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado de cotizaciones. " + ex.Message));
-
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: btnBuscar_Click. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
-        private void buscar(string cot)
+        #endregion
+
+        #region Busqueda
+
+        /// <summary>
+        /// Metodo que realiza un postback de la pagina enviando por parametro como queryString, a la accion a llamar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnBuscarNumeros_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.txtNumeroCotizacion.Text))
+            {
+                Response.Redirect("CotizacionesC.aspx?a=3&n=" + this.txtNumeroCotizacion.Text);
+            }
+            if (!string.IsNullOrEmpty(this.txtCodigoCliente.Text))
+            {
+                Response.Redirect("CotizacionesC.aspx?a=2&c=" + this.txtCodigoCliente.Text);
+            }
+            if (!string.IsNullOrEmpty(this.txtObservacion.Text))
+            {
+                Response.Redirect("CotizacionesC.aspx?a=1&o=" + this.txtObservacion.Text);
+            }
+        }
+
+        /// <summary>
+        /// Metodo que realiza la busqueda por observacion en la cotizacion
+        /// </summary>
+        private void BuscarPorObservacion()
         {
             try
             {
-                List<Cotizaciones> facturas = new List<Cotizaciones>();
-                string query = "select * from articulos where descripcion like '%" + cot + "%'";
-                //facturas = this.controlador.buscarArticuloList(query);
-                //this.cargarArticulosTabla(articulos);
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorObservacion(this.observacionCotizacion, 10); //10 es el tipo de documento pedido
+                if (dtCotizaciones.Rows.Count > 0)
+                {
+                    this.cargarCotizacion(dtCotizaciones);
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                }
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con la observacion: " + this.observacionCotizacion.ToString()));
+
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando articulo. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: BuscarPorObservacion. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
-        protected void UpdatePanel3_Load(object sender, EventArgs e)
+        /// <summary>
+        /// Metodo que realiza la busqueda por numero de cotizacion
+        /// </summary>
+        private void BuscarPorNumeroCotizacion()
         {
-            //
-            this.labelIva.Text = "testc escribo desde el update panel amigo!!";
+            try
+            {
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorNumero(this.numeroCotizacion, 10); //10 es el tipo de documento Cotizacion
+                if (dtCotizaciones.Rows.Count > 0)
+                {
+                    this.cargarCotizacion(dtCotizaciones);
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                }
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cotizacion: " + this.numeroCotizacion));
 
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: BuscarPorNumeroCotizacion. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Metodo que realiza la busqueda por numero de cliente de la cotizacion
+        /// </summary>
+        private void BuscarPorNumeroCliente()
+        {
+            try
+            {
+                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorCliente(this.clienteCotizacion, 10); //10 es el tipo de documento Cotizacion
+                if (dtCotizaciones.Rows.Count > 0)
+                {
+                    this.cargarCotizacion(dtCotizaciones);
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                }
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cliente : " + this.clienteCotizacion));
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: BuscarPorNumeroCliente. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        #endregion
+
+        #region Acciones
+
+        #region Imprimir en Otra Divisa
+
+        protected void lbtnImprimirCT_En_Otra_Divisa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorMoneda controladorMoneda = new controladorMoneda();
+
+                string idsListaCotizacionesTildadas = "";
+                int contadorCotizacionesTildadas = 0;
+                foreach (Control C in phCotizaciones.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        contadorCotizacionesTildadas++;
+                        idsListaCotizacionesTildadas += ch.ID.Split('_')[1];
+                    }
+                }
+                if (!String.IsNullOrEmpty(idsListaCotizacionesTildadas) && contadorCotizacionesTildadas == 1)
+                {
+                    DropListDivisa.ClearSelection();
+
+                    controladorCobranza controladorCobranza = new controladorCobranza();
+                    controladorCotizaciones controladorCotizacion = new controladorCotizaciones();
+                    ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
+
+                    Pedido cotizacion = controlador.obtenerPedidoId(Convert.ToInt32(idsListaCotizacionesTildadas));
+                    lblNumeroCT.Text = cotizacion.numero;
+                    this.hfIDCotizacion.Value = cotizacion.id.ToString();
+                    DataTable dt = controladorCobranza.obtenerMonedasDT();
+
+                    this.DropListDivisa.DataSource = dt;
+                    this.DropListDivisa.DataValueField = "id";
+                    this.DropListDivisa.DataTextField = "moneda";
+                    this.DropListDivisa.DataBind();
+
+                    DropListDivisa.SelectedValue = DropListDivisa.Items.FindByText("Pesos").Value;
+                    txtCotizacion.Text = "1.00";
+
+                    ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalImprimirCT_EnOtraDivisa", "openModalImprimirCT_EnOtraDivisa();", true);
+                }
+                else if (contadorCotizacionesTildadas > 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar <strong style='color:black'>solo</strong> un documento"));
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos <strong style='color:black'>un</strong> documento"));
+                }
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: lbtnImprimirCT_En_Otra_Divisa_Click. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        protected void btnImprimirCTDivisa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                try
+                {
+                    ///Si es un pedido pendiente de vendedor, lo cambio a pendiente la primera vez que lo imprimo
+                    Pedido ped = this.controlador.obtenerPedidoId(Convert.ToInt32(hfIDCotizacion.Value));
+                    if (ped.estado.id == 5)
+                    {
+                        int i = this.contPedEntity.cambiarEstadoPedido(ped.id, 1);
+                        if (i > 0)
+                        {
+                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Cambio estado pendiente vendedor a pendiente pedido id: " + ped.id);
+                        }
+                    }
+                }
+                catch (Exception ex) { }
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?co=1&a=1&div=" + DropListDivisa.SelectedValue + "&Pedido=" + Convert.ToInt32(hfIDCotizacion.Value) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: btnImprimirCTDivisa_Click. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
 
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void DropListDivisa_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog()", true);
+            try
+            {
+                controladorCobranza controladorCobranza = new controladorCobranza();
+                txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)), 2).ToString().Replace(',', '.');
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: DropListDivisa_SelectedIndexChanged. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+        #endregion
+
+        #region Anular Cotizacion
+
+        protected void btnSi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                foreach (Control C in phCotizaciones.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    if (!tr.Cells[5].Text.Contains("Anulada"))
+                    {
+                        CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
+                        if (ch.Checked == true)
+                        {
+                            //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                            idtildado += ch.ID.Split('_')[1] + ";";
+                        }
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    int i = this.controlador.anularPedidos(idtildado);
+                    if (i > 0)
+                    {
+                        Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ANULACION Pedido id: " + idtildado);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cotizaciones anuladas con exito. ", "CotizacionesC.aspx"));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error anulando Cotizaciones. "));
+
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una cotizacion"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: btnSi_Click. Excepción: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
         }
 
+        #endregion
+
+        #region Generar Pedido
+
+        /// <summary>
+        /// Metodo que genera un pedido a traves de la cotizacion seleccionada.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void lbtnGenPedido_Click(object sender, EventArgs e)
         {
             int x = 0;
@@ -798,357 +1146,51 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 catch (Exception ex)
                 {
-                    Log.EscribirSQL(1, "ERROR", "CATH.Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click.");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
+                    int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: lbtnGenPedido_Click. Excepción: " + ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "ERROR", "CATH.Ubicacion: CotizacionesC.aspx. Metodo: lbtnGenPedido_Click.");
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
-            }
-        }
-
-        protected void DropListClientes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
-            }
-            catch
-            {
-
-            }
-        }
-
-        //obtengo vendedor del cliente
-        private void obtenerVendedor(int Cliente)
-        {
-            try
-            {
-                controladorCliente contCl = new controladorCliente();
-                var cl = contCl.obtenerClienteID(Cliente);
-                this.ListVendedor.SelectedValue = cl.vendedor.id.ToString();
-            }
-            catch
-            {
-
-            }
-        }
-
-        //boton buscar en el cliente
-        protected void btnBuscarCod_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                controladorCliente contrCliente = new controladorCliente();
-                DataTable dtClientes = contrCliente.obtenerClientesAliasDT(this.txtCodCliente.Text);
-
-                //cargo la lista
-                this.DropListClientes.DataSource = dtClientes;
-                this.DropListClientes.DataValueField = "id";
-                this.DropListClientes.DataTextField = "alias";
-                this.DropListClientes.DataBind();
-                //this.cargarClientesTable(cliente);
-
-                //this.ListRazonSocial.DataSource = dtClientes;
-                //this.ListRazonSocial.DataValueField = "id";
-                //this.ListRazonSocial.DataTextField = "razonSocial";
-
-                //this.ListRazonSocial.DataBind();
-                //controladorCliente contrCliente = new controladorCliente();
-                //Cliente cl = contrCliente.obtenerClienteCodigo(txtCodCliente.Text);
-
-                //if (cl != null)
-                //{
-                //    this.DropListClientes.SelectedValue = cl.id.ToString();
-                //}
-                //else
-                //{
-                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se encontro cliente con el codigo ingresado\", {type: \"info\"});", true);
-                //}
-            }
-            catch (Exception ex)
-            {
-
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
-            }
-        }
-
-        #region Busquedas
-
-        private void BuscarPorObservacion()
-        {
-            try
-            {
-                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorObservacion(this.observacionCotizacion, 10); //10 es el tipo de documento pedido
-                if (dtCotizaciones.Rows.Count > 0)
-                {
-                    this.cargarCotizacion(dtCotizaciones);
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
-                }
-                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con la observacion: " + this.observacionCotizacion.ToString()));
-
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: CotizacionesC.buscarPorObservacion. Excepcion:" + ex.Message);
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
-            }
-        }
-
-        private void BuscarPorNumeroCotizacion()
-        {
-            try
-            {
-                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorNumero(this.numeroCotizacion, 10); //10 es el tipo de documento Cotizacion
-                if (dtCotizaciones.Rows.Count > 0)
-                {
-                    this.cargarCotizacion(dtCotizaciones);
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
-                }
-                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cotizacion: " + this.numeroCotizacion));
-
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: CotizacionesC.buscarPorObservacion. Excepcion:" + ex.Message);
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
-            }
-        }
-
-        private void BuscarPorNumeroCliente()
-        {
-            try
-            {
-                DataTable dtCotizaciones = this.controlador.ObtenerDataTablePedidosPorCliente(this.clienteCotizacion, 10); //10 es el tipo de documento Cotizacion
-                if (dtCotizaciones.Rows.Count > 0)
-                {
-                    this.cargarCotizacion(dtCotizaciones);
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
-                }
-                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cliente : " + this.clienteCotizacion));
-
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error buscando cotizacion por observacion. Ubicacion: CotizacionesC.buscarPorObservacion. Excepcion:" + ex.Message);
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte con el area de soporte via WhatsApp (+54 9 11 3782-0435) para informarnos sobre este problema."));
-            }
-        }
-
-        #endregion
-
-        protected void btnBuscarNumeros_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(this.txtNumeroCotizacion.Text))
-            {
-                Response.Redirect("CotizacionesC.aspx?a=3&n=" + this.txtNumeroCotizacion.Text);
-            }
-            if (!string.IsNullOrEmpty(this.txtCodigoCliente.Text))
-            {
-                Response.Redirect("CotizacionesC.aspx?a=2&c=" + this.txtCodigoCliente.Text);
-            }
-            if (!string.IsNullOrEmpty(this.txtObservacion.Text))
-            {
-                Response.Redirect("CotizacionesC.aspx?a=1&o=" + this.txtObservacion.Text);
-            }
-        }
-
-        protected void btnSi_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string idtildado = "";
-                foreach (Control C in phCotizaciones.Controls)
-                {
-                    TableRow tr = C as TableRow;
-                    if (!tr.Cells[5].Text.Contains("Anulada"))
-                    {
-                        CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
-                        if (ch.Checked == true)
-                        {
-                            //idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
-                            idtildado += ch.ID.Split('_')[1] + ";";
-                        }
-                    }
-                }
-                if (!String.IsNullOrEmpty(idtildado))
-                {
-                    int i = this.controlador.anularPedidos(idtildado);
-                    if (i > 0)
-                    {
-                        Gestion_Api.Modelo.Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "ANULACION Pedido id: " + idtildado);
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Cotizaciones anuladas con exito. ", "CotizacionesC.aspx"));
-                    }
-                    else
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error anulando Cotizaciones. "));
-
-                    }
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos una cotizacion"));
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando cotizaciones para facturar. " + ex.Message));
-            }
-        }
-
-        #region Funciones de los Controles
-
-        protected void DropListDivisa_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                controladorCobranza controladorCobranza = new controladorCobranza();
-                //string moneda = lblFacturaMonedaGuardada.Text;
-                //if (moneda != "-")
-                //{
-                //    moneda = moneda.Replace(": $", string.Empty);
-                //}
-                //if (!string.IsNullOrEmpty(lblFacturaMonedaValor.Text) && DropListDivisa.SelectedItem.Text.Contains(moneda))
-                //{
-                //    txtCotizacion.Text = lblFacturaMonedaValor.Text.Replace(',', '.');
-                //}
-                //else
-                //{
-                txtCotizacion.Text = Decimal.Round(controladorCobranza.obtenerCotizacion(Convert.ToInt32(DropListDivisa.SelectedValue)), 2).ToString().Replace(',', '.');
-                //}
-            }
-            catch (Exception ex)
-            {
-                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: DropListDivisa_SelectedIndexChanged. Excepción: " + ex.Message);
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: lbtnGenPedido_Click. Excepción: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
         #endregion
 
-        #region Accion
-        protected void lbtnImprimirCT_En_Otra_Divisa_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                controladorMoneda controladorMoneda = new controladorMoneda();
-
-                string idsListaCotizacionesTildadas = "";
-                int contadorCotizacionesTildadas = 0;
-                foreach (Control C in phCotizaciones.Controls)
-                {
-                    TableRow tr = C as TableRow;
-                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
-                    if (ch.Checked == true)
-                    {
-                        contadorCotizacionesTildadas++;
-                        idsListaCotizacionesTildadas += ch.ID.Split('_')[1];
-                    }
-                }
-                if (!String.IsNullOrEmpty(idsListaCotizacionesTildadas) && contadorCotizacionesTildadas == 1)
-                {
-                    DropListDivisa.ClearSelection();
-
-                    controladorCobranza controladorCobranza = new controladorCobranza();
-                    controladorCotizaciones controladorCotizacion = new controladorCotizaciones();
-                    ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
-
-                    Pedido cotizacion = controlador.obtenerPedidoId(Convert.ToInt32(idsListaCotizacionesTildadas));
-                    lblNumeroCT.Text = cotizacion.numero;
-                    this.hfIDCotizacion.Value = cotizacion.id.ToString();
-                    DataTable dt = controladorCobranza.obtenerMonedasDT();
-
-                    //agrego todos
-                    //DataRow dr = dt.NewRow();
-                    //dr["moneda"] = "Seleccione...";
-                    //dr["id"] = -1;
-                    //dt.Rows.InsertAt(dr, 0);
-
-                    this.DropListDivisa.DataSource = dt;
-                    this.DropListDivisa.DataValueField = "id";
-                    this.DropListDivisa.DataTextField = "moneda";
-                    this.DropListDivisa.DataBind();
-
-                    //Verificar si tiene alguna divisa por defecto guardada en la tabla Factuas_Moneda
-                    //Facturas_Moneda facturas_Moneda = controladorFacturaMoneda.ObtenerFacturaMonedaById(factura.id);
-                    //if (facturas_Moneda != null)
-                    //{
-                    //    DropListDivisa.SelectedValue = Convert.ToString(facturas_Moneda.idMoneda);
-                    //    txtCotizacion.Text = Convert.ToString(facturas_Moneda.ValorMoneda);
-                    //    string monedaGuardada = DropListDivisa.Items.FindByValue(DropListDivisa.SelectedValue).Text;
-                    //    lblFacturaMonedaGuardada.Text = monedaGuardada + ": $";
-                    //    lblFacturaMonedaValor.Text = facturas_Moneda.ValorMoneda.ToString();
-                    //}
-                    //else
-                    //{
-                    DropListDivisa.SelectedValue = DropListDivisa.Items.FindByText("Pesos").Value;
-                    txtCotizacion.Text = "1.00";
-                    //lblFacturaMonedaGuardada.Text = "-";
-                    //lblFacturaMonedaValor.Text = "";
-                    //}
-
-                    ScriptManager.RegisterStartupScript(UpdatePanel1, UpdatePanel1.GetType(), "openModalImprimirCT_EnOtraDivisa", "openModalImprimirCT_EnOtraDivisa();", true);
-                }
-                else if (contadorCotizacionesTildadas > 1)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar <strong style='color:black'>solo</strong> un documento"));
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos <strong style='color:black'>un</strong> documento"));
-                }
-            }
-            catch (Exception ex)
-            {
-                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: lbtnImprimirCT_En_Otra_Divisa_Click. Excepción: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-            }
-        }
         #endregion
 
-        protected void btnImprimirCTDivisa_Click(object sender, EventArgs e)
+        #region  Funcions Varias
+
+        private void buscar(string cot)
         {
             try
             {
-                /////Obtengo numero de cotizacion
-                //string idBoton = (sender as LinkButton).ID;
-                //string[] atributos = idBoton.Split('_');
-                //string idPedido = atributos[1];
-
-                try
-                {
-                    ///Si es un pedido pendiente de vendedor, lo cambio a pendiente la primera vez que lo imprimo
-                    Pedido ped = this.controlador.obtenerPedidoId(Convert.ToInt32(hfIDCotizacion.Value));
-                    if (ped.estado.id == 5)
-                    {
-                        int i = this.contPedEntity.cambiarEstadoPedido(ped.id, 1);
-                        if (i > 0)
-                        {
-                            Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Cambio estado pendiente vendedor a pendiente pedido id: " + ped.id);
-                        }
-                    }
-                }
-                catch (Exception ex) { }
-
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPedido.aspx?co=1&a=1&Pedido=" + Convert.ToInt32(hfIDCotizacion.Value) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                //ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "window.open('ImpresionPedido.aspx?co=1&a=1&Pedido=" + Convert.ToInt32(hfIDCotizacion.Value) + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-                //ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog(" + idPedido + ")", true);
-
+                List<Cotizaciones> facturas = new List<Cotizaciones>();
+                string query = "select * from articulos where descripcion like '%" + cot + "%'";
+                //facturas = this.controlador.buscarArticuloList(query);
+                //this.cargarArticulosTabla(articulos);
             }
             catch (Exception ex)
             {
-                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: btnImprimirCTDivisa_Click. Excepción: " + ex.Message);
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: buscar. Excepción: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de cotizacion desde la interfaz. " + ex.Message));
-                //Log.EscribirSQL(1, "ERROR", "Error cargando articulos detalle desde la interfaz. " + ex.Message);
-            }
 
+            }
         }
+
+        protected void UpdatePanel3_Load(object sender, EventArgs e)
+        {
+            this.labelIva.Text = "testc escribo desde el update panel amigo!!";
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "abrirdialog()", true);
+        }
+
+        #endregion
+
     }
 }

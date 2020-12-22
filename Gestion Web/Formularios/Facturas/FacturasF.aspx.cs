@@ -4019,16 +4019,16 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.cargarEnPh(factura);
                     }
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con esta numeracion: " + this.numeroFactura));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con esta numeracion: " + this.numeroFactura));
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por numero. CATCH:" + ex.Message));
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError("Error buscando pedido por numero. CATCH:" + ex.Message));
             }
         }
 
@@ -4048,16 +4048,16 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.cargarEnPh(factura);
                     }
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con estos caracteres: " + this.razonSocialCliente));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con estos caracteres: " + this.razonSocialCliente));
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando Factura por Cliente. CATCH:  " + ex.Message));
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError("Error buscando Factura por Cliente. CATCH:  " + ex.Message));
             }
         }
 
@@ -4077,16 +4077,16 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.cargarEnPh(factura);
                     }
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se encontraron " + cantidadFacturasEncontradas + " facturas.", null));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con esta observacion: " + this.observacion));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se ha encontrado ninguna factura con esta observacion: " + this.observacion));
                 }
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("WEB: Error buscando Factura por observacion.CATCH:  " + ex.Message));
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError("WEB: Error buscando Factura por observacion.CATCH:  " + ex.Message));
             }
         }
 
