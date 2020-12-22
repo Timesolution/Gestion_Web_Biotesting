@@ -581,8 +581,7 @@
                         <h4 class="modal-title">Imprimir CT en Otra Divisa</h4>
                     </div>
                     <div class="modal-body">
-
-                        <asp:UpdatePanel ID="UpdatePanel8" UpdateMode="Always" runat="server">
+                        <asp:UpdatePanel ID="UpdatePanel8" UpdateMode="Conditional" runat="server">
                             <ContentTemplate>
                                 <div role="form" class="form-horizontal col-md-12">
                                     <div class="row">
@@ -598,7 +597,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-4">Divisa</label>
                                                 <div class="col-md-8">
-                                                    <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" AutoPostBack="True" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
+                                                    <asp:DropDownList ID="DropListDivisa" runat="server" class="form-control" OnSelectedIndexChanged="DropListDivisa_SelectedIndexChanged"></asp:DropDownList>
                                                 </div>
                                                 <%--<div class="col-md-2">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ErrorMessage="Seleccione un tipo de Moneda" ControlToValidate="DropListTipo" InitialValue="Seleccione..." ValidationGroup="MonedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
@@ -635,10 +634,11 @@
                                 </div>
                             </ContentTemplate>
                             <Triggers>
+                                <asp:AsyncPostBackTrigger ControlID="DropListDivisa" EventName="SelectedIndexChanged" />
                             </Triggers>
                         </asp:UpdatePanel>
                         <div class="modal-footer">
-                            <asp:Button ID="btnImprimirCTDivisa" runat="server" Text="Imprimir" class="btn btn-success" ValidationGroup="MonedaGroup"  OnClientClick="this.disabled = true; this.value = 'Imprimiendo...';" UseSubmitBehavior="false"/>
+                            <asp:Button ID="btnImprimirCTDivisa" runat="server" Text="Imprimir" class="btn btn-success" ValidationGroup="MonedaGroup" OnClick="btnImprimirCTDivisa_Click" OnClientClick="this.disabled = true; this.value = 'Imprimiendo...';" UseSubmitBehavior="false"/>
                         </div>
                         <%--<div class="modal-footer">
                             <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='shortcut-icon fa fa-paper-plane'></span>" class="btn btn-success" OnClick="" ValidationGroup="EnvioGroup"></asp:LinkButton>
