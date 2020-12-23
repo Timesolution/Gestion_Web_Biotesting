@@ -30,6 +30,12 @@ namespace Gestion_Web.Formularios.Facturas
         private string fechaH;
         int accion;
 
+        /// <summary>
+        /// 1: btnImprimirCTDivisa
+        /// 2: lbtnImprimirCT_En_Otra_Divisa
+        /// </summary>
+        public static int botonApretado = 0;
+        
         private int idCliente;
         private int idEstado;
         private int vendedor;
@@ -792,6 +798,8 @@ namespace Gestion_Web.Formularios.Facturas
         /// <param name="e"></param>
         protected void btnBuscarNumeros_Click(object sender, EventArgs e)
         {
+            botonApretado = 1;
+
             if (!string.IsNullOrEmpty(this.txtNumeroCotizacion.Text))
             {
                 Response.Redirect("CotizacionesC.aspx?a=3&n=" + this.txtNumeroCotizacion.Text);
@@ -817,9 +825,10 @@ namespace Gestion_Web.Formularios.Facturas
                 if (dtCotizaciones.Rows.Count > 0)
                 {
                     this.cargarCotizacion(dtCotizaciones);
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                    if (botonApretado == 1)/// apreto el boton btnImprimirCTDivisa
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
                 }
-                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0 && botonApretado == 1)
                     ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con la observacion: " + this.observacionCotizacion.ToString()));
 
             }
@@ -841,9 +850,11 @@ namespace Gestion_Web.Formularios.Facturas
                 if (dtCotizaciones.Rows.Count > 0)
                 {
                     this.cargarCotizacion(dtCotizaciones);
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+
+                    if(botonApretado == 1)/// apreto el boton btnImprimirCTDivisa
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
                 }
-                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0 && botonApretado == 1)
                     ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cotizacion: " + this.numeroCotizacion));
 
             }
@@ -865,9 +876,10 @@ namespace Gestion_Web.Formularios.Facturas
                 if (dtCotizaciones.Rows.Count > 0)
                 {
                     this.cargarCotizacion(dtCotizaciones);
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
+                    if (botonApretado == 1)/// apreto el boton btnImprimirCTDivisa
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlSucces("Busqueda Completada", "Se han encontrado " + dtCotizaciones.Rows.Count.ToString() + " cotizaciones."));
                 }
-                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0)
+                else if (dtCotizaciones == null || dtCotizaciones.Rows.Count == 0 && botonApretado == 1)
                     ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeGrowlWarning("Busqueda Completada", "No se han encontrado cotizaciones con el N° Cliente : " + this.clienteCotizacion));
 
             }
@@ -888,6 +900,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                botonApretado = 2;
+
                 controladorMoneda controladorMoneda = new controladorMoneda();
 
                 string idsListaCotizacionesTildadas = "";
@@ -927,17 +941,17 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else if (contadorCotizacionesTildadas > 1)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar <strong style='color:black'>solo</strong> un documento"));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar <strong style='color:black'>solo</strong> un documento"));
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos <strong style='color:black'>un</strong> documento"));
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("Debe seleccionar al menos <strong style='color:black'>un</strong> documento"));
                 }
             }
             catch (Exception ex)
             {
                 int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CotizacionesC. Metodo: lbtnImprimirCT_En_Otra_Divisa_Click. Excepción: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
 
@@ -945,6 +959,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                
+
                 try
                 {
                     ///Si es un pedido pendiente de vendedor, lo cambio a pendiente la primera vez que lo imprimo

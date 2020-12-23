@@ -339,13 +339,18 @@ namespace Gestion_Web.Formularios.Facturas
                     foreach (DataRow rowDatos in dtDatos.Rows)
                     {
                         rowDatos["PrecioUnitario"] = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]) / imprimirOtraDivisa, 2);
-                        rowDatos["Total"] = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]) / imprimirOtraDivisa);
+                        rowDatos["Total"] = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]) / imprimirOtraDivisa, 2);
                     }
 
                     subtotal = Decimal.Round(subtotal / imprimirOtraDivisa, 2);
                     descuento = Decimal.Round(descuento / imprimirOtraDivisa, 2);
                     retencion = Decimal.Round(retencion / imprimirOtraDivisa, 2);
                     total = Decimal.Round(total / imprimirOtraDivisa, 2);
+
+                    dtTotal.Rows[0][0] = total.ToString();
+                    dtTotal.Rows[0][1] = subtotal.ToString();
+                    dtTotal.Rows[0][2] = descuento.ToString();
+                    dtTotal.Rows[0][3] = retencion.ToString();
 
                     ///Sumo el comentario al campo de observaciones para informar en base a que divisa se realizaron los calculos de los precios
                     dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";

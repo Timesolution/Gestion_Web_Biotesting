@@ -1521,9 +1521,6 @@
               <Height>0.73229cm</Height>
               <Width>3.88412cm</Width>
               <ZIndex>3</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1561,9 +1558,6 @@
               <Height>0.73229cm</Height>
               <Width>3.42762cm</Width>
               <ZIndex>4</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>

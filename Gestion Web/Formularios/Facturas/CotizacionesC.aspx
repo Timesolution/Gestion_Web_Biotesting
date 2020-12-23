@@ -127,8 +127,12 @@
                         <div id="big_stats" class="cf">
                             <div class="stat">
                                 <h4>Saldo</h4>
-                                <asp:Label ID="lblSaldo" runat="server" Text="" class="value" Visible="false"></asp:Label>
+                                <asp:Label ID="lblSaldo" style="margin-left: 125px;" runat="server" Text="" class="value" Visible="false"></asp:Label>
+                                <div style="float:right">
+                                <asp:LinkButton ID="lbtnAyudaBloqueadorNavegador" CssClass="btn btn-info" runat="server" data-toggle="modal" href="#modalAyudaBloqueadorNavegador">Ayuda Impresion</asp:LinkButton>
+                                </div>
                             </div>
+                            
                             <!-- .stat -->
                         </div>
                     </asp:PlaceHolder>
@@ -650,6 +654,30 @@
         </div>
     </div>
     <%-- Fin Modal Imprimir CT en Divisa Elegida --%>
+
+    <%-- Modal Ayuda Bloqueador Ventanas Emergentes --%>
+    <div id="modalAyudaBloqueadorNavegador" class="modal fade" tabindex="-1" role="dialog" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Ayuda para Impresion</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Si usted ejectua la accion de <b>Imprimir un documento</b> y este automaticamente no se muestra, entonces el navegador esta bloqueando la ventana donde se mostrara el documento.</p>
+                    <p>Segun sea su navegador, puede desbloquear estas ventanas siguiendo estos pasos: </p>
+                    <p style="color:black"><b>Chrome:</b><br />* Oprima sobre "Ventana Emergente Bloqueada" y seleccione la primer opcion</p>
+                    <img src="../../img/ayuda_BloqueadorChrome.png" />
+                    <br />
+                    <br />
+                    <p style="color:black"><b>Firefox:</b><br />* Oprima sobre "Opciones" y seleccione la primer opcion</p>
+                    <img src="../../img/ayuda_BloqueadorFirefox.png" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <%-- Fin Modal Ayuda Bloqueador Ventanas Emergentes --%>
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <script>
