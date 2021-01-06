@@ -353,7 +353,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dtTotal.Rows[0][3] = retencion.ToString();
 
                     ///Sumo el comentario al campo de observaciones para informar en base a que divisa se realizaron los calculos de los precios
-                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
+                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Cotización emitida en divisa:  (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
 
                 ReportParameter paramZona = new ReportParameter("ParamZona", zona);
