@@ -4958,7 +4958,7 @@ namespace Gestion_Web.Formularios.Facturas
                 #region Articulos compuestos
                 Articulo articuloCompuesto = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
                 var articulos = contArticulo.obtenerArticulosYTriggerByArticuloCompuesto(articuloCompuesto.id);
-                if (articulos != null)
+                if (articulos != null )
                 {
 
                     foreach (var art in articulos)
@@ -5001,7 +5001,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
 
 
-                        else
+                        else if(art.precioEnArticulo == 0  && ListSucursalCliente.Visible == false)
                         {
 
                             ItemFactura fact = new ItemFactura();
@@ -5730,13 +5730,18 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            if(ListSucursalCliente.SelectedIndex!=-1)
+            ListSucursalCliente.SelectedIndex = 0;
             //this.txtPtoVenta.Text = this.ListSucursal.SelectedValue;
             //cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
+
             cargarPuntoVta2(Convert.ToInt32(this.ListSucursal.SelectedValue));
 
             cargarVendedor();
             //Me fijo si hay que cargar un cliente por defecto
             this.verificarClienteDefecto();
+           
         }
         protected void ListPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -5799,9 +5804,9 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //vacio la factura actual
-
+                if (ListSucursalCliente.SelectedIndex != -1)
+                    ListSucursalCliente.SelectedIndex = 0;
                 //controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
-
                 if (Session["Factura"] != null)
                 {
                     Factura f = Session["Factura"] as Factura;
@@ -5831,6 +5836,8 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (ListSucursalCliente.SelectedIndex != -1)
+                ListSucursalCliente.SelectedIndex = 0;
             this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));
         }
         protected void btnAgregarFP_Click(object sender, EventArgs e)
@@ -6658,7 +6665,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (this.ListSucursalCliente.SelectedIndex != -1)
+                if (this.ListSucursalCliente.SelectedIndex != -1 || this.ListSucursalCliente.SelectedValue == "-1")
                 {
                     foreach (var item in f.items)
                     {
