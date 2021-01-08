@@ -76,7 +76,7 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         this.cargarInforme4();
                     }
-                    if(accion == 8)/// Listado de articulos con los ultimos precios actualizados
+                    if (accion == 8)/// Listado de articulos con los ultimos precios actualizados
                     {
                         this.CargarInforme5();
                     }
@@ -98,14 +98,14 @@ namespace Gestion_Web.Formularios.Articulos
                     sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
                 }
                 var stock = contArticulos.obtenerStocksArticulosBySuc(sucursal, grupo, subgrupo, proveedor, sdias, ceros, marca, this.inactivos);
-             
+
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ReporteStockR.rdlc");
                 ReportDataSource rds = new ReportDataSource("DSStocks", stock);
 
                 string fecha = DateTime.Today.ToString("dd/MM/yyyy");
                 ReportParameter rp = new ReportParameter("ParamFecha", fecha);
-                
+
                 controladorSucursal cont = new controladorSucursal();
                 var suc = cont.obtenerSucursalID(this.sucursal);
                 ReportParameter rp2 = new ReportParameter("ParamSucursal", suc.nombre);
@@ -233,7 +233,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
                 }
-                var stock = contArticulos.obtenerStocksUnicoArticulosBySuc(sucursal, grupo, subgrupo, proveedor, sdias, marca,this.inactivos);
+                var stock = contArticulos.obtenerStocksUnicoArticulosBySuc(sucursal, grupo, subgrupo, proveedor, sdias, marca, this.inactivos);
                 string fecha = DateTime.Today.ToString("dd/MM/yyyy");
                 var suc = cont.obtenerSucursalID(this.sucursal);
 
@@ -382,11 +382,12 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Reporte_ArticulosPreciosActualizados.rdlc");
                 ReportDataSource rds = new ReportDataSource("ArticulosPreciosActualizados", dt);
 
-                string fecha = DateTime.Today.ToString("dd/MM/yyyy"); 
-                string fechaBuscarString = fechaBuscar.ToString("dd/MM/yyyy"); 
+                string fecha = DateTime.Today.ToString("dd/MM/yyyy");
+                string fechaBuscarString = fechaBuscar.ToString("dd/MM/yyyy");
                 ReportParameter rpTitulo = new ReportParameter("ParamTitulo", "Articulos - Precios Actualizados");
                 ReportParameter rpFechaTomada = new ReportParameter("ParamFechaTomada", fechaBuscarString);
                 ReportParameter rpFechaHoy = new ReportParameter("ParamFechaHoy", fecha);
+                ReportParameter rpArticulosEncontrados = new ReportParameter("ParamArticulosEncontrados", "*Articulos encontrados: " + dt.Rows.Count.ToString());
 
                 controladorSucursal cont = new controladorSucursal();
                 //var suc = cont.obtenerSucursalID(this.sucursal);
@@ -397,6 +398,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ReportViewer1.LocalReport.SetParameters(rpTitulo);
                 this.ReportViewer1.LocalReport.SetParameters(rpFechaTomada);
                 this.ReportViewer1.LocalReport.SetParameters(rpFechaHoy);
+                this.ReportViewer1.LocalReport.SetParameters(rpArticulosEncontrados);
                 //this.ReportViewer1.LocalReport.SetParameters(rp2);
 
                 Warning[] warnings;
@@ -471,14 +473,14 @@ namespace Gestion_Web.Formularios.Articulos
                     articulos = this.contArticulos.obtenerArticuloByFechaActualizacion(fecha);
                 }
 
-                Log.EscribirSQL(1,"Info","Obtuve la lista de articulos para hacer las etiquetas, voy a agregar las columnas al datatable");
+                Log.EscribirSQL(1, "Info", "Obtuve la lista de articulos para hacer las etiquetas, voy a agregar las columnas al datatable");
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("Descripcion");
                 dt.Columns.Add("Precio");
                 dt.Columns.Add("Margen");
                 dt.Columns.Add("Codigo");
-                
+
                 dt.Columns.Add("CodigoBarra");
                 dt.Columns.Add("Imagen");
 
@@ -502,7 +504,7 @@ namespace Gestion_Web.Formularios.Articulos
                         dr["Descripcion"] = item.descripcion;
                         dr["Precio"] = item.precioVenta.ToString("N");
                         dr["Codigo"] = item.codigo;
-                        dr["CodigoBarra"] = item.codigoBarra ;
+                        dr["CodigoBarra"] = item.codigoBarra;
                         //
                         Log.EscribirSQL(1, "Info", "voy a obtener a generar el codigo");
                         string imagen = this.generarCodigo(dr["CodigoBarra"].ToString(), item.id);
@@ -570,10 +572,10 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
                 ReportDataSource rds = new ReportDataSource("DataSetArticulos", dt);
 
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                
+
                 Warning[] warnings;
 
                 string mimeType, encoding, fileNameExtension;

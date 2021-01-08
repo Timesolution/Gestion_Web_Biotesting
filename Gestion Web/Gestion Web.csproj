@@ -3380,9 +3380,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Formularios\Articulos\ArticulosOtrosProveedores.rdlc" />
-    <Content Include="Formularios\Articulos\ListaArticulosPreciosActualizados.rdlc">
-      <SubType>Designer</SubType>
-    </Content>
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosDescuentoCantidadR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosUbicacionR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ListaPreciosR.rdlc" />

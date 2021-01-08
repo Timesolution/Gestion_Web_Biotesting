@@ -2456,8 +2456,17 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=8&d=" + cantidadDias + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
-
+                if (cantidadDias > 0)
+                {
+                    DateTime fechaBuscar = DateTime.Today.AddDays(cantidadDias * -1);
+                    DataTable dt = this.controlador.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
+                    if (dt.Rows.Count > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=8&d=" + cantidadDias + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    else
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se han encontrado resultados para imprimir."));
+                }
+                else
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("La cantidad de dias debe ser mayor a 0."));
             }
             catch (Exception ex)
             {
@@ -2471,7 +2480,19 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
-                Response.Redirect("ReporteAF.aspx?e=1&accion=8&d=" + cantidadDias);
+
+                if (cantidadDias > 0)
+                {
+                    DateTime fechaBuscar = DateTime.Today.AddDays(cantidadDias * -1);
+                    DataTable dt = this.controlador.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
+
+                    if (dt.Rows.Count > 0)
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=8&d=" + cantidadDias);
+                    else
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se han encontrado resultados para imprimir."));
+                }
+                else
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("La cantidad de dias debe ser mayor a 0."));
 
             }
             catch (Exception ex)

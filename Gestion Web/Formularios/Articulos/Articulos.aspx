@@ -1365,7 +1365,7 @@
                     </div>
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbtnImprimirActualizacionPreciosPDF" runat="server" Text="Generar PDF" class="btn btn-danger" ValidationGroup="ModalImprimirArticulosActualizados" OnClick="lbtnImprimirActualizacionPreciosPDF_Click" />
-                        <asp:LinkButton ID="lbtnImprimirActualizacionPreciosExcel" runat="server" Text="Generar Excel" class="btn btn-success" ValidationGroup="ModalImprimirArticulosActualizados"OnClick="lbtnImprimirActualizacionPreciosExcel_Click" />
+                        <asp:LinkButton ID="lbtnImprimirActualizacionPreciosExcel" runat="server" Text="Generar Excel" class="btn btn-success" ValidationGroup="ModalImprimirArticulosActualizados" OnClick="lbtnImprimirActualizacionPreciosExcel_Click" />
                     </div>
                 </div>
             </div>
