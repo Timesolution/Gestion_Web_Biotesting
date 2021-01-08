@@ -76,6 +76,10 @@ namespace Gestion_Web.Formularios.Articulos
                     {
                         this.cargarInforme4();
                     }
+                    if(accion == 8)/// Listado de articulos con los ultimos precios actualizados
+                    {
+                        this.CargarInforme5();
+                    }
                 }
             }
             catch (Exception ex)
@@ -326,6 +330,86 @@ namespace Gestion_Web.Formularios.Articulos
                     Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
 
                     String filename = string.Format("{0}.{1}", "Stocks", "xls");
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/ms-excel";
+                    this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                    this.Response.BinaryWrite(xlsContent);
+
+                    this.Response.End();
+                }
+                else
+                {
+                    //get pdf content
+
+                    Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    this.Response.Clear();
+                    this.Response.Buffer = true;
+                    this.Response.ContentType = "application/pdf";
+                    this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                    this.Response.BinaryWrite(pdfContent);
+
+                    this.Response.End();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al sacar reporte de stock pendiente " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void CargarInforme5()
+        {
+            try
+            {
+                string sdias = null;
+                if (dias > 0)
+                {
+                    sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
+                }
+
+                DateTime fechaBuscar = DateTime.Today.AddDays(dias * -1);
+
+                DataTable dt = this.contArticulos.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Reporte_ArticulosPreciosActualizados.rdlc");
+                ReportDataSource rds = new ReportDataSource("ArticulosPreciosActualizados", dt);
+
+                string fecha = DateTime.Today.ToString("dd/MM/yyyy"); 
+                string fechaBuscarString = fechaBuscar.ToString("dd/MM/yyyy"); 
+                ReportParameter rpTitulo = new ReportParameter("ParamTitulo", "Articulos - Precios Actualizados");
+                ReportParameter rpFechaTomada = new ReportParameter("ParamFechaTomada", fechaBuscarString);
+                ReportParameter rpFechaHoy = new ReportParameter("ParamFechaHoy", fecha);
+
+                controladorSucursal cont = new controladorSucursal();
+                //var suc = cont.obtenerSucursalID(this.sucursal);
+                //ReportParameter rp2 = new ReportParameter("ParamSucursal", suc.nombre);
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.SetParameters(rpTitulo);
+                this.ReportViewer1.LocalReport.SetParameters(rpFechaTomada);
+                this.ReportViewer1.LocalReport.SetParameters(rpFechaHoy);
+                //this.ReportViewer1.LocalReport.SetParameters(rp2);
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                if (this.excel == 1)
+                {
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "Articulos_Precios_Actualizacion", "xls");
 
                     this.Response.Clear();
                     this.Response.Buffer = true;

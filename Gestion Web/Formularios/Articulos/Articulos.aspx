@@ -21,10 +21,13 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%;color:Tomato">Importar Articulos desde Base Externa</a>
+                                        <a href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato">Importar Articulos desde Base Externa</a>
                                     </li>
                                     <li>
                                         <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Exportar Articulos .txt</asp:LinkButton>
+                                    </li>
+                                    <li>
+                                        <a href="#modalImprimirArticulosActualizados" data-toggle="modal" style="width: 90%; color: blueviolet">Imprimir Art. Actualizados</a>
                                     </li>
                                     <li>
                                         <asp:LinkButton ID="lbtnExportarArticulosMagento" runat="server" OnClick="lbtnExportarArticulosMagento_Click" ForeColor="OliveDrab" Visible="false">Exportar Articulos Magento .txt</asp:LinkButton>
@@ -103,7 +106,7 @@
                                     <li>
                                         <a href="#modalArticulosOtrosProveedores" data-toggle="modal" style="width: 90%">Articulos de Otros Proveedores</a>
                                     </li>
-                                    
+
                                 </ul>
                             </div>
 
@@ -1313,20 +1316,62 @@
                             </div>
                             <div class="col-md-12">
                                 <h5>
-                                    <asp:Label runat="server" ID="Label3" Text="" Style="text-align: right;font-size: 16px;">¿ Desea generar la solicitud ?</asp:Label>
+                                    <asp:Label runat="server" ID="Label3" Text="" Style="text-align: right; font-size: 16px;">¿ Desea generar la solicitud ?</asp:Label>
                                 </h5>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:Label ID="lblHabilitadoImportacionArticulos" runat="server" style="float:left" Visible="true">*Opcion no habilitada*</asp:Label>
-                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" disabled/>
+                        <asp:Label ID="lblHabilitadoImportacionArticulos" runat="server" Style="float: left" Visible="true">*Opcion no habilitada*</asp:Label>
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" disabled />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <%-- Fin Importacion de articulos --%>
+
+    <%-- MODAL IMPRIMIR ART. ACTUALIZADOS --%>
+
+    <div id="modalImprimirArticulosActualizados" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                    <h4 class="modal-title">Imprimir Articulos Actualizados</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-1">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-10">
+                                <label style="text-align: justify">Eliga el dia de la ultima actualizacion de precios de los articulos con la que desea realizar la impresion. </label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <div class="col-md-3">
+                                <asp:TextBox ID="txtUltimaActualizacionDia" runat="server" class="form-control" MaxLength="3" TextMode="Number" Style="width: 100px" PlaceHolder="Dias"></asp:TextBox>
+                            </div>
+                            <div class="col-md-9">
+                                <asp:RequiredFieldValidator ID="rfvtxtUltimaActualizacionDia" runat="server" ForeColor="#ff0000" ErrorMessage="*Requerido" ControlToValidate="txtUltimaActualizacionDia" ValidationGroup="ModalImprimirArticulosActualizados"></asp:RequiredFieldValidator>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnImprimirActualizacionPreciosPDF" runat="server" Text="Generar PDF" class="btn btn-danger" ValidationGroup="ModalImprimirArticulosActualizados" OnClick="lbtnImprimirActualizacionPreciosPDF_Click" />
+                        <asp:LinkButton ID="lbtnImprimirActualizacionPreciosExcel" runat="server" Text="Generar Excel" class="btn btn-success" ValidationGroup="ModalImprimirArticulosActualizados"OnClick="lbtnImprimirActualizacionPreciosExcel_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%-- FIN MODAL IMPRIMIR ART. ACTUALIZADOS --%>
 
     <script>
         function abrirdialog(valor) {
@@ -1543,7 +1588,7 @@
             });
         }
     </script>
-     
+
     <%--<script>
         function disableButton(btnImportarArticulo) {
             var btn = document.getElementById(btnImportarArticulo);

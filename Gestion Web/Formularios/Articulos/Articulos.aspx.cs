@@ -218,7 +218,7 @@ namespace Gestion_Web.Formularios.Articulos
                     string permisoCambioSuc = listPermisos.Where(x => x == "207").FirstOrDefault();
                     string permisoEliminarArticulo = listPermisos.Where(x => x == "242").FirstOrDefault();
 
-                    if(permisoEliminarArticulo != null)
+                    if (permisoEliminarArticulo != null)
                     {
                         this.permisoEliminarArticulo = 1;
                     }
@@ -470,7 +470,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
 
                 // si tiene persmiso para eliminar en 1 quiere decir que puede eliminar los articulos.
-                if(this.permisoEliminarArticulo == 1)
+                if (this.permisoEliminarArticulo == 1)
                 {
                     Literal l3 = new Literal();
                     l3.Text = "&nbsp";
@@ -1088,6 +1088,8 @@ namespace Gestion_Web.Formularios.Articulos
 
             }
         }
+
+
         protected void lbtnDesactualizados_Click(object sender, EventArgs e)
         {
             try
@@ -2446,6 +2448,36 @@ namespace Gestion_Web.Formularios.Articulos
                     int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "CATCH: Ocurrio un error grabando el pedido de la Importacion. Ubicacion: Articulos.aspx. Metodo: lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
+            }
+        }
+
+        protected void lbtnImprimirActualizacionPreciosPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=8&d=" + cantidadDias + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "Ubicacion: Articulos.aspx. Metodo: btnImprimirArticulosActualizados_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        protected void lbtnImprimirActualizacionPreciosExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
+                Response.Redirect("ReporteAF.aspx?e=1&accion=8&d=" + cantidadDias);
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "Ubicacion: Articulos.aspx. Metodo: btnImprimirArticulosActualizados_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
     }

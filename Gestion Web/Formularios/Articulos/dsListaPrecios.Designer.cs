@@ -30,6 +30,8 @@ namespace Gestion_Web.Formularios.Articulos {
         
         private CatalogoDataTable tableCatalogo;
         
+        private ArticulosPreciosActualizadosDataTable tableArticulosPreciosActualizados;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -66,6 +68,9 @@ namespace Gestion_Web.Formularios.Articulos {
                 }
                 if ((ds.Tables["Catalogo"] != null)) {
                     base.Tables.Add(new CatalogoDataTable(ds.Tables["Catalogo"]));
+                }
+                if ((ds.Tables["ArticulosPreciosActualizados"] != null)) {
+                    base.Tables.Add(new ArticulosPreciosActualizadosDataTable(ds.Tables["ArticulosPreciosActualizados"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -112,6 +117,16 @@ namespace Gestion_Web.Formularios.Articulos {
         public CatalogoDataTable Catalogo {
             get {
                 return this.tableCatalogo;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public ArticulosPreciosActualizadosDataTable ArticulosPreciosActualizados {
+            get {
+                return this.tableArticulosPreciosActualizados;
             }
         }
         
@@ -191,6 +206,9 @@ namespace Gestion_Web.Formularios.Articulos {
                 if ((ds.Tables["Catalogo"] != null)) {
                     base.Tables.Add(new CatalogoDataTable(ds.Tables["Catalogo"]));
                 }
+                if ((ds.Tables["ArticulosPreciosActualizados"] != null)) {
+                    base.Tables.Add(new ArticulosPreciosActualizadosDataTable(ds.Tables["ArticulosPreciosActualizados"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -242,6 +260,12 @@ namespace Gestion_Web.Formularios.Articulos {
                     this.tableCatalogo.InitVars();
                 }
             }
+            this.tableArticulosPreciosActualizados = ((ArticulosPreciosActualizadosDataTable)(base.Tables["ArticulosPreciosActualizados"]));
+            if ((initTable == true)) {
+                if ((this.tableArticulosPreciosActualizados != null)) {
+                    this.tableArticulosPreciosActualizados.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -258,6 +282,8 @@ namespace Gestion_Web.Formularios.Articulos {
             base.Tables.Add(this.tableListaPreciosDescuentoCantidad);
             this.tableCatalogo = new CatalogoDataTable();
             base.Tables.Add(this.tableCatalogo);
+            this.tableArticulosPreciosActualizados = new ArticulosPreciosActualizadosDataTable();
+            base.Tables.Add(this.tableArticulosPreciosActualizados);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -275,6 +301,12 @@ namespace Gestion_Web.Formularios.Articulos {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeCatalogo() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        private bool ShouldSerializeArticulosPreciosActualizados() {
             return false;
         }
         
@@ -341,6 +373,9 @@ namespace Gestion_Web.Formularios.Articulos {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void CatalogoRowChangeEventHandler(object sender, CatalogoRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public delegate void ArticulosPreciosActualizadosRowChangeEventHandler(object sender, ArticulosPreciosActualizadosRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -1476,6 +1511,524 @@ namespace Gestion_Web.Formularios.Articulos {
         }
         
         /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class ArticulosPreciosActualizadosDataTable : global::System.Data.TypedTableBase<ArticulosPreciosActualizadosRow> {
+            
+            private global::System.Data.DataColumn columnid;
+            
+            private global::System.Data.DataColumn columncodigo;
+            
+            private global::System.Data.DataColumn columndescripcion;
+            
+            private global::System.Data.DataColumn columncambioMoneda;
+            
+            private global::System.Data.DataColumn columnmonedaVenta;
+            
+            private global::System.Data.DataColumn columnprecioVenta;
+            
+            private global::System.Data.DataColumn columnprecioSinIva;
+            
+            private global::System.Data.DataColumn columnPorcentajeIva;
+            
+            private global::System.Data.DataColumn columndescGR;
+            
+            private global::System.Data.DataColumn columndescSG;
+            
+            private global::System.Data.DataColumn columngrupo;
+            
+            private global::System.Data.DataColumn columnsubGrupo;
+            
+            private global::System.Data.DataColumn columnultimaActualizacion;
+            
+            private global::System.Data.DataColumn columncosto;
+            
+            private global::System.Data.DataColumn columncostoReal;
+            
+            private global::System.Data.DataColumn columnSubLista;
+            
+            private global::System.Data.DataColumn columnproveedor;
+            
+            private global::System.Data.DataColumn columnNombreProveedor;
+            
+            private global::System.Data.DataColumn columnapareceLista;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ArticulosPreciosActualizadosDataTable() {
+                this.TableName = "ArticulosPreciosActualizados";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal ArticulosPreciosActualizadosDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected ArticulosPreciosActualizadosDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn idColumn {
+                get {
+                    return this.columnid;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn codigoColumn {
+                get {
+                    return this.columncodigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn descripcionColumn {
+                get {
+                    return this.columndescripcion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn cambioMonedaColumn {
+                get {
+                    return this.columncambioMoneda;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn monedaVentaColumn {
+                get {
+                    return this.columnmonedaVenta;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn precioVentaColumn {
+                get {
+                    return this.columnprecioVenta;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn precioSinIvaColumn {
+                get {
+                    return this.columnprecioSinIva;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PorcentajeIvaColumn {
+                get {
+                    return this.columnPorcentajeIva;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn descGRColumn {
+                get {
+                    return this.columndescGR;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn descSGColumn {
+                get {
+                    return this.columndescSG;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn grupoColumn {
+                get {
+                    return this.columngrupo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn subGrupoColumn {
+                get {
+                    return this.columnsubGrupo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ultimaActualizacionColumn {
+                get {
+                    return this.columnultimaActualizacion;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn costoColumn {
+                get {
+                    return this.columncosto;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn costoRealColumn {
+                get {
+                    return this.columncostoReal;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SubListaColumn {
+                get {
+                    return this.columnSubLista;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn proveedorColumn {
+                get {
+                    return this.columnproveedor;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn NombreProveedorColumn {
+                get {
+                    return this.columnNombreProveedor;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn apareceListaColumn {
+                get {
+                    return this.columnapareceLista;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ArticulosPreciosActualizadosRow this[int index] {
+                get {
+                    return ((ArticulosPreciosActualizadosRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event ArticulosPreciosActualizadosRowChangeEventHandler ArticulosPreciosActualizadosRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event ArticulosPreciosActualizadosRowChangeEventHandler ArticulosPreciosActualizadosRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event ArticulosPreciosActualizadosRowChangeEventHandler ArticulosPreciosActualizadosRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public event ArticulosPreciosActualizadosRowChangeEventHandler ArticulosPreciosActualizadosRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void AddArticulosPreciosActualizadosRow(ArticulosPreciosActualizadosRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ArticulosPreciosActualizadosRow AddArticulosPreciosActualizadosRow(
+                        string id, 
+                        string codigo, 
+                        string descripcion, 
+                        string cambioMoneda, 
+                        string monedaVenta, 
+                        string precioVenta, 
+                        string precioSinIva, 
+                        string PorcentajeIva, 
+                        string descGR, 
+                        string descSG, 
+                        string grupo, 
+                        string subGrupo, 
+                        string ultimaActualizacion, 
+                        string costo, 
+                        string costoReal, 
+                        string SubLista, 
+                        string proveedor, 
+                        string NombreProveedor, 
+                        string apareceLista) {
+                ArticulosPreciosActualizadosRow rowArticulosPreciosActualizadosRow = ((ArticulosPreciosActualizadosRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        id,
+                        codigo,
+                        descripcion,
+                        cambioMoneda,
+                        monedaVenta,
+                        precioVenta,
+                        precioSinIva,
+                        PorcentajeIva,
+                        descGR,
+                        descSG,
+                        grupo,
+                        subGrupo,
+                        ultimaActualizacion,
+                        costo,
+                        costoReal,
+                        SubLista,
+                        proveedor,
+                        NombreProveedor,
+                        apareceLista};
+                rowArticulosPreciosActualizadosRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowArticulosPreciosActualizadosRow);
+                return rowArticulosPreciosActualizadosRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                ArticulosPreciosActualizadosDataTable cln = ((ArticulosPreciosActualizadosDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new ArticulosPreciosActualizadosDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal void InitVars() {
+                this.columnid = base.Columns["id"];
+                this.columncodigo = base.Columns["codigo"];
+                this.columndescripcion = base.Columns["descripcion"];
+                this.columncambioMoneda = base.Columns["cambioMoneda"];
+                this.columnmonedaVenta = base.Columns["monedaVenta"];
+                this.columnprecioVenta = base.Columns["precioVenta"];
+                this.columnprecioSinIva = base.Columns["precioSinIva"];
+                this.columnPorcentajeIva = base.Columns["PorcentajeIva"];
+                this.columndescGR = base.Columns["descGR"];
+                this.columndescSG = base.Columns["descSG"];
+                this.columngrupo = base.Columns["grupo"];
+                this.columnsubGrupo = base.Columns["subGrupo"];
+                this.columnultimaActualizacion = base.Columns["ultimaActualizacion"];
+                this.columncosto = base.Columns["costo"];
+                this.columncostoReal = base.Columns["costoReal"];
+                this.columnSubLista = base.Columns["SubLista"];
+                this.columnproveedor = base.Columns["proveedor"];
+                this.columnNombreProveedor = base.Columns["NombreProveedor"];
+                this.columnapareceLista = base.Columns["apareceLista"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            private void InitClass() {
+                this.columnid = new global::System.Data.DataColumn("id", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnid);
+                this.columncodigo = new global::System.Data.DataColumn("codigo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncodigo);
+                this.columndescripcion = new global::System.Data.DataColumn("descripcion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columndescripcion);
+                this.columncambioMoneda = new global::System.Data.DataColumn("cambioMoneda", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncambioMoneda);
+                this.columnmonedaVenta = new global::System.Data.DataColumn("monedaVenta", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnmonedaVenta);
+                this.columnprecioVenta = new global::System.Data.DataColumn("precioVenta", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnprecioVenta);
+                this.columnprecioSinIva = new global::System.Data.DataColumn("precioSinIva", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnprecioSinIva);
+                this.columnPorcentajeIva = new global::System.Data.DataColumn("PorcentajeIva", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPorcentajeIva);
+                this.columndescGR = new global::System.Data.DataColumn("descGR", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columndescGR);
+                this.columndescSG = new global::System.Data.DataColumn("descSG", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columndescSG);
+                this.columngrupo = new global::System.Data.DataColumn("grupo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columngrupo);
+                this.columnsubGrupo = new global::System.Data.DataColumn("subGrupo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnsubGrupo);
+                this.columnultimaActualizacion = new global::System.Data.DataColumn("ultimaActualizacion", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnultimaActualizacion);
+                this.columncosto = new global::System.Data.DataColumn("costo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncosto);
+                this.columncostoReal = new global::System.Data.DataColumn("costoReal", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncostoReal);
+                this.columnSubLista = new global::System.Data.DataColumn("SubLista", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSubLista);
+                this.columnproveedor = new global::System.Data.DataColumn("proveedor", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnproveedor);
+                this.columnNombreProveedor = new global::System.Data.DataColumn("NombreProveedor", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnNombreProveedor);
+                this.columnapareceLista = new global::System.Data.DataColumn("apareceLista", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnapareceLista);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ArticulosPreciosActualizadosRow NewArticulosPreciosActualizadosRow() {
+                return ((ArticulosPreciosActualizadosRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new ArticulosPreciosActualizadosRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(ArticulosPreciosActualizadosRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.ArticulosPreciosActualizadosRowChanged != null)) {
+                    this.ArticulosPreciosActualizadosRowChanged(this, new ArticulosPreciosActualizadosRowChangeEvent(((ArticulosPreciosActualizadosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.ArticulosPreciosActualizadosRowChanging != null)) {
+                    this.ArticulosPreciosActualizadosRowChanging(this, new ArticulosPreciosActualizadosRowChangeEvent(((ArticulosPreciosActualizadosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.ArticulosPreciosActualizadosRowDeleted != null)) {
+                    this.ArticulosPreciosActualizadosRowDeleted(this, new ArticulosPreciosActualizadosRowChangeEvent(((ArticulosPreciosActualizadosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.ArticulosPreciosActualizadosRowDeleting != null)) {
+                    this.ArticulosPreciosActualizadosRowDeleting(this, new ArticulosPreciosActualizadosRowChangeEvent(((ArticulosPreciosActualizadosRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void RemoveArticulosPreciosActualizadosRow(ArticulosPreciosActualizadosRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                dsListaPrecios ds = new dsListaPrecios();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "ArticulosPreciosActualizadosDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
         public partial class ListaPreciosRow : global::System.Data.DataRow {
@@ -2396,6 +2949,566 @@ namespace Gestion_Web.Formularios.Articulos {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class ArticulosPreciosActualizadosRow : global::System.Data.DataRow {
+            
+            private ArticulosPreciosActualizadosDataTable tableArticulosPreciosActualizados;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            internal ArticulosPreciosActualizadosRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableArticulosPreciosActualizados = ((ArticulosPreciosActualizadosDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string id {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.idColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'id\' in table \'ArticulosPreciosActualizados\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string codigo {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.codigoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'codigo\' in table \'ArticulosPreciosActualizados\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.codigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string descripcion {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.descripcionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'descripcion\' in table \'ArticulosPreciosActualizados\' is DBN" +
+                                "ull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.descripcionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string cambioMoneda {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.cambioMonedaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'cambioMoneda\' in table \'ArticulosPreciosActualizados\' is DB" +
+                                "Null.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.cambioMonedaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string monedaVenta {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.monedaVentaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'monedaVenta\' in table \'ArticulosPreciosActualizados\' is DBN" +
+                                "ull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.monedaVentaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string precioVenta {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.precioVentaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'precioVenta\' in table \'ArticulosPreciosActualizados\' is DBN" +
+                                "ull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.precioVentaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string precioSinIva {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.precioSinIvaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'precioSinIva\' in table \'ArticulosPreciosActualizados\' is DB" +
+                                "Null.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.precioSinIvaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PorcentajeIva {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.PorcentajeIvaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PorcentajeIva\' in table \'ArticulosPreciosActualizados\' is D" +
+                                "BNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.PorcentajeIvaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string descGR {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.descGRColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'descGR\' in table \'ArticulosPreciosActualizados\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.descGRColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string descSG {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.descSGColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'descSG\' in table \'ArticulosPreciosActualizados\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.descSGColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string grupo {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.grupoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'grupo\' in table \'ArticulosPreciosActualizados\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.grupoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string subGrupo {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.subGrupoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'subGrupo\' in table \'ArticulosPreciosActualizados\' is DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.subGrupoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ultimaActualizacion {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.ultimaActualizacionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ultimaActualizacion\' in table \'ArticulosPreciosActualizados" +
+                                "\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.ultimaActualizacionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string costo {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.costoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'costo\' in table \'ArticulosPreciosActualizados\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.costoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string costoReal {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.costoRealColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'costoReal\' in table \'ArticulosPreciosActualizados\' is DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.costoRealColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SubLista {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.SubListaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'SubLista\' in table \'ArticulosPreciosActualizados\' is DBNull" +
+                                ".", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.SubListaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string proveedor {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.proveedorColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'proveedor\' in table \'ArticulosPreciosActualizados\' is DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.proveedorColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string NombreProveedor {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.NombreProveedorColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'NombreProveedor\' in table \'ArticulosPreciosActualizados\' is" +
+                                " DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.NombreProveedorColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string apareceLista {
+                get {
+                    try {
+                        return ((string)(this[this.tableArticulosPreciosActualizados.apareceListaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'apareceLista\' in table \'ArticulosPreciosActualizados\' is DB" +
+                                "Null.", e);
+                    }
+                }
+                set {
+                    this[this.tableArticulosPreciosActualizados.apareceListaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsidNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.idColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetidNull() {
+                this[this.tableArticulosPreciosActualizados.idColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IscodigoNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.codigoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetcodigoNull() {
+                this[this.tableArticulosPreciosActualizados.codigoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsdescripcionNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.descripcionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetdescripcionNull() {
+                this[this.tableArticulosPreciosActualizados.descripcionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IscambioMonedaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.cambioMonedaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetcambioMonedaNull() {
+                this[this.tableArticulosPreciosActualizados.cambioMonedaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsmonedaVentaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.monedaVentaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetmonedaVentaNull() {
+                this[this.tableArticulosPreciosActualizados.monedaVentaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsprecioVentaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.precioVentaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetprecioVentaNull() {
+                this[this.tableArticulosPreciosActualizados.precioVentaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsprecioSinIvaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.precioSinIvaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetprecioSinIvaNull() {
+                this[this.tableArticulosPreciosActualizados.precioSinIvaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPorcentajeIvaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.PorcentajeIvaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPorcentajeIvaNull() {
+                this[this.tableArticulosPreciosActualizados.PorcentajeIvaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsdescGRNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.descGRColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetdescGRNull() {
+                this[this.tableArticulosPreciosActualizados.descGRColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsdescSGNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.descSGColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetdescSGNull() {
+                this[this.tableArticulosPreciosActualizados.descSGColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsgrupoNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.grupoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetgrupoNull() {
+                this[this.tableArticulosPreciosActualizados.grupoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IssubGrupoNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.subGrupoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetsubGrupoNull() {
+                this[this.tableArticulosPreciosActualizados.subGrupoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsultimaActualizacionNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.ultimaActualizacionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetultimaActualizacionNull() {
+                this[this.tableArticulosPreciosActualizados.ultimaActualizacionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IscostoNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.costoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetcostoNull() {
+                this[this.tableArticulosPreciosActualizados.costoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IscostoRealNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.costoRealColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetcostoRealNull() {
+                this[this.tableArticulosPreciosActualizados.costoRealColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSubListaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.SubListaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSubListaNull() {
+                this[this.tableArticulosPreciosActualizados.SubListaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsproveedorNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.proveedorColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetproveedorNull() {
+                this[this.tableArticulosPreciosActualizados.proveedorColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsNombreProveedorNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.NombreProveedorColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetNombreProveedorNull() {
+                this[this.tableArticulosPreciosActualizados.NombreProveedorColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsapareceListaNull() {
+                return this.IsNull(this.tableArticulosPreciosActualizados.apareceListaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetapareceListaNull() {
+                this[this.tableArticulosPreciosActualizados.apareceListaColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -2483,6 +3596,40 @@ namespace Gestion_Web.Formularios.Articulos {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public CatalogoRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+        public class ArticulosPreciosActualizadosRowChangeEvent : global::System.EventArgs {
+            
+            private ArticulosPreciosActualizadosRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ArticulosPreciosActualizadosRowChangeEvent(ArticulosPreciosActualizadosRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public ArticulosPreciosActualizadosRow Row {
                 get {
                     return this.eventRow;
                 }
