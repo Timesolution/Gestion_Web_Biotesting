@@ -21,16 +21,16 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato">Importar Articulos desde Base Externa</a>
+                                        <a id="hrefImportarArticulos" href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato" Visible="false">Importar - Articulos desde Base Externa</a>
                                     </li>
                                     <li>
-                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Exportar Articulos .txt</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Reporte - Articulos (.txt)</asp:LinkButton>
                                     </li>
                                     <li>
-                                        <a href="#modalImprimirArticulosActualizados" data-toggle="modal" style="width: 90%; color: blueviolet">Imprimir Art. Actualizados</a>
+                                        <a href="#modalImprimirArticulosActualizados" data-toggle="modal" style="width: 90%; color: OliveDrab">Reporte - Art. Precios Actualizados</a>
                                     </li>
                                     <li>
-                                        <asp:LinkButton ID="lbtnExportarArticulosMagento" runat="server" OnClick="lbtnExportarArticulosMagento_Click" ForeColor="OliveDrab" Visible="false">Exportar Articulos Magento .txt</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExportarArticulosMagento" runat="server" OnClick="lbtnExportarArticulosMagento_Click" ForeColor="OliveDrab" Visible="false">Reporte - Articulos Magento</asp:LinkButton>
                                     </li>
                                 </ul>
                             </div>
@@ -1323,7 +1323,7 @@
                     </div>
                     <div class="modal-footer">
                         <asp:Label ID="lblHabilitadoImportacionArticulos" runat="server" Style="float: left" Visible="true">*Opcion no habilitada*</asp:Label>
-                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" disabled />
+                        <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" Visible="false" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
