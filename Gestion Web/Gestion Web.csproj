@@ -58,7 +58,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\GestionAPI\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -3388,6 +3388,9 @@
     <EmbeddedResource Include="Formularios\Articulos\NominaArticulosR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ReporteStockPendienteR.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\ReporteStockR.rdlc" />
+    <EmbeddedResource Include="Formularios\Articulos\Reporte_ArticulosPreciosActualizados.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasChicas.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasGrandes.rdlc" />
     <EmbeddedResource Include="Formularios\Articulos\REtiquetasMedianas.rdlc" />

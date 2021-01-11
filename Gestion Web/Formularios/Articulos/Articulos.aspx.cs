@@ -23,6 +23,8 @@ namespace Gestion_Web.Formularios.Articulos
 {
     public partial class Articulos : System.Web.UI.Page
     {
+        #region Variables y Controladores
+
         private controladorListaPrecio controladorPrecio = new controladorListaPrecio();
         private controladorArticulo controlador = new controladorArticulo();
         private controladorUsuario contUser = new controladorUsuario();
@@ -54,6 +56,106 @@ namespace Gestion_Web.Formularios.Articulos
         int permisoMostrarBotonAgregarMateriasPrimas = 0;
         public Dictionary<string, string> camposArticulos = null;
 
+        #endregion
+
+        #region Verificacion de Usuario
+
+        private void VerificarLogin()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    Response.Redirect("../../Account/Login.aspx");
+                }
+                else
+                {
+                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Maestro.Articulos.Articulos") != 1)
+                    if (this.verificarAcceso() != 1)
+                    {
+                        Response.Redirect("/Default.aspx?m=1", false);
+                    }
+                }
+            }
+            catch
+            {
+                Response.Redirect("../../Account/Login.aspx");
+            }
+        }
+
+        private int verificarAcceso()
+        {
+            try
+            {
+                string permisos = Session["Login_Permisos"] as string;
+                string[] listPermisos = permisos.Split(';');
+
+                string permiso = listPermisos.Where(x => x == "14").FirstOrDefault();
+
+                if (permiso == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    //verifico si puede cambiar preci0s
+                    string perfil = Session["Login_NombrePerfil"] as string;
+                    string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
+                    string permisoCambioSuc = listPermisos.Where(x => x == "207").FirstOrDefault();
+                    string permisoEliminarArticulo = listPermisos.Where(x => x == "242").FirstOrDefault();
+
+                    if (permisoEliminarArticulo != null)
+                    {
+                        this.permisoEliminarArticulo = 1;
+                    }
+
+                    if (permiso2 != null)
+                    {
+                        this.phActualizacionPrecios.Visible = true;
+                        this.permisoEliminar = 1;
+                    }
+                    //verifico si puede cambiar sucursal
+                    if (perfil == "SuperAdministrador" || perfil == "Stock" || permiso2 != null)
+                    {
+                        this.DropListSucursal_St2.Attributes.Remove("disabled");
+                        this.DropListSucursalRef.Attributes.Remove("disabled");
+                        this.DropListSucNoVendido.Attributes.Remove("disabled");
+                    }
+                    else
+                    {
+                        this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
+                        this.DropListSucursalRef.SelectedValue = Session["Login_SucUser"].ToString();
+                        this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
+                    }
+
+                    if (string.IsNullOrEmpty(permisoCambioSuc))
+                    {
+                        listSucursal.SelectedValue = Session["Login_SucUser"].ToString();
+                        listSucursal.Enabled = false;
+                        listSucursal.CssClass = "form-control";
+                    }
+
+                    if (listPermisos.Contains("179"))
+                        this.permisoStockValorizado = 1;
+
+                    //verifico si muestro el boton de agregar materias primas de los articulos
+                    string permiso195 = listPermisos.Where(x => x == "195").FirstOrDefault();
+                    if (permiso195 != null)
+                    {
+                        this.permisoMostrarBotonAgregarMateriasPrimas = 1;
+                    }
+
+                    return 1;
+                }
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        #endregion
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -74,7 +176,7 @@ namespace Gestion_Web.Formularios.Articulos
                 if (string.Equals(empresa.RazonSocial, "ID Group"))
                 {
                     lblHabilitadoImportacionArticulos.Visible = false;
-                    btnImportarArticulo.Attributes.Remove("disabled");
+                    btnImportarArticulo.Visible = true;
                 }
 
                 this.VerificarLogin();
@@ -171,100 +273,6 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ocurrio un error en la seccion de articulos. Ubicacion: Articulos.aspx. Metodo: Page_Load. Excepcion: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-            }
-        }
-
-        private void VerificarLogin()
-        {
-            try
-            {
-                if (Session["User"] == null)
-                {
-                    Response.Redirect("../../Account/Login.aspx");
-                }
-                else
-                {
-                    //if (this.contUser.validarAcceso((int)Session["Login_IdUser"], "Maestro.Articulos.Articulos") != 1)
-                    if (this.verificarAcceso() != 1)
-                    {
-                        Response.Redirect("/Default.aspx?m=1", false);
-                    }
-                }
-            }
-            catch
-            {
-                Response.Redirect("../../Account/Login.aspx");
-            }
-        }
-
-        private int verificarAcceso()
-        {
-            try
-            {
-                string permisos = Session["Login_Permisos"] as string;
-                string[] listPermisos = permisos.Split(';');
-
-                string permiso = listPermisos.Where(x => x == "14").FirstOrDefault();
-
-                if (permiso == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    //verifico si puede cambiar preci0s
-                    string perfil = Session["Login_NombrePerfil"] as string;
-                    string permiso2 = listPermisos.Where(x => x == "62").FirstOrDefault();
-                    string permisoCambioSuc = listPermisos.Where(x => x == "207").FirstOrDefault();
-                    string permisoEliminarArticulo = listPermisos.Where(x => x == "242").FirstOrDefault();
-
-                    if(permisoEliminarArticulo != null)
-                    {
-                        this.permisoEliminarArticulo = 1;
-                    }
-
-                    if (permiso2 != null)
-                    {
-                        this.phActualizacionPrecios.Visible = true;
-                        this.permisoEliminar = 1;
-                    }
-                    //verifico si puede cambiar sucursal
-                    if (perfil == "SuperAdministrador" || perfil == "Stock" || permiso2 != null)
-                    {
-                        this.DropListSucursal_St2.Attributes.Remove("disabled");
-                        this.DropListSucursalRef.Attributes.Remove("disabled");
-                        this.DropListSucNoVendido.Attributes.Remove("disabled");
-                    }
-                    else
-                    {
-                        this.DropListSucursal_St2.SelectedValue = Session["Login_SucUser"].ToString();
-                        this.DropListSucursalRef.SelectedValue = Session["Login_SucUser"].ToString();
-                        this.DropListSucNoVendido.SelectedValue = Session["Login_SucUser"].ToString();
-                    }
-
-                    if (string.IsNullOrEmpty(permisoCambioSuc))
-                    {
-                        listSucursal.SelectedValue = Session["Login_SucUser"].ToString();
-                        listSucursal.Enabled = false;
-                        listSucursal.CssClass = "form-control";
-                    }
-
-                    if (listPermisos.Contains("179"))
-                        this.permisoStockValorizado = 1;
-
-                    //verifico si muestro el boton de agregar materias primas de los articulos
-                    string permiso195 = listPermisos.Where(x => x == "195").FirstOrDefault();
-                    if (permiso195 != null)
-                    {
-                        this.permisoMostrarBotonAgregarMateriasPrimas = 1;
-                    }
-
-                    return 1;
-                }
-            }
-            catch
-            {
-                return -1;
             }
         }
 
@@ -470,7 +478,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
 
                 // si tiene persmiso para eliminar en 1 quiere decir que puede eliminar los articulos.
-                if(this.permisoEliminarArticulo == 1)
+                if (this.permisoEliminarArticulo == 1)
                 {
                     Literal l3 = new Literal();
                     l3.Text = "&nbsp";
@@ -2302,46 +2310,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        protected void lbtnImportarArticulo_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                try
-                {
-                    ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
-                    Informes_Pedidos ip = new Informes_Pedidos();
-
-                    ///Cargo el objeto Informes_Pedidos
-                    cargarDatosInformePedido(ip);
-
-                    ///Agrego el informe para ejecutar la funcion de importacion. Si todo es correcto retorna 1. En caso contrario, revisar error segun el entero.
-                    int i = controladorInformesEntity.agregarInformePedido(ip, null);
-
-                    if (i > 0)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de Importacion con <strong>exito</strong>. Podra visualizar el estado en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
-                    if (i == -1)
-                    {
-                        int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "ELSE: Fue por el 'else' al querer generar un pedido para la importacion de articulos llamando al metodo controladorInformesEntity.agregarInformePedido. Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click.");
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-                    }
-                }
-                catch (Exception Ex)
-                {
-                    Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta. Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + Ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(""));
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.EscribirSQL(1, "ERROR", "CATCH: No se pudieron importar articulos desde base externta.Ubicacion: Articulos.aspx. Metodo:lbtnImportarArticulo_Click. Mensaje: " + ex.Message);
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(""));
-            }
-            finally
-            {
-                btnImportarArticulo.Enabled = true;
-            }
-        }
-
         public void cargarDatosInformePedido(Informes_Pedidos ip)
         {
             try
@@ -2359,8 +2327,10 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+        #region Acciones
+
         /// <summary>
-        /// 
+        /// Este metodo genera un archivo .txt con todos los articulos correspondientes al cliente que lo genero.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2409,6 +2379,50 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+        /// <summary>
+        /// Este metodo genera una solicitud para el proyecto de informes, donde se ejecuta el proceso de importacion de articulos desde una base externa a la base del gestion.
+        /// Este metodo es exclusivo de IDGROUP.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void lbtnImportarArticulo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                Informes_Pedidos ip = new Informes_Pedidos();
+
+                ///Cargo el objeto Informes_Pedidos
+                cargarDatosInformePedido(ip);
+
+                ///Agrego el informe para ejecutar la funcion de importacion. Si todo es correcto retorna 1. En caso contrario, revisar error segun el entero.
+                int i = controladorInformesEntity.agregarInformePedido(ip, null);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de Importacion con <strong>exito</strong>. Podra visualizar el estado en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                if (i == -1)
+                {
+                    int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "ELSE: Fue por el 'else' al querer generar un pedido para la importacion de articulos llamando al metodo controladorInformesEntity.agregarInformePedido. Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+            finally
+            {
+                btnImportarArticulo.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Este metodo es exclusico para DEPORT SHOW, genera un .csv de articulos en un formato solicitado.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void lbtnExportarArticulosMagento_Click(object sender, EventArgs e)
         {
             try
@@ -2448,5 +2462,68 @@ namespace Gestion_Web.Formularios.Articulos
                 }
             }
         }
+
+        /// <summary>
+        /// Este metodo permite imprimir articulos con detalles de la ultima fecha de actualizacion de precios en PDF.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void lbtnImprimirActualizacionPreciosPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
+                if (cantidadDias > 0)
+                {
+                    DateTime fechaBuscar = DateTime.Today.AddDays(cantidadDias * -1);
+                    DataTable dt = this.controlador.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
+                    if (dt.Rows.Count > 0)
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=8&d=" + cantidadDias + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                    else
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se han encontrado resultados para imprimir."));
+                }
+                else
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("La cantidad de dias debe ser mayor a 0."));
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "Ubicacion: Articulos.aspx. Metodo: btnImprimirArticulosActualizados_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Este metodo permite imprimir articulos con detalles de la ultima fecha de actualizacion de precios en Excel.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void lbtnImprimirActualizacionPreciosExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
+
+                if (cantidadDias > 0)
+                {
+                    DateTime fechaBuscar = DateTime.Today.AddDays(cantidadDias * -1);
+                    DataTable dt = this.controlador.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
+
+                    if (dt.Rows.Count > 0)
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=8&d=" + cantidadDias);
+                    else
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se han encontrado resultados para imprimir."));
+                }
+                else
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("La cantidad de dias debe ser mayor a 0."));
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "Ubicacion: Articulos.aspx. Metodo: btnImprimirArticulosActualizados_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        #endregion
     }
 }
