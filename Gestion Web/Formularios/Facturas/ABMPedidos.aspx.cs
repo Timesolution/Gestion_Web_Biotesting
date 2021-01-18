@@ -1704,18 +1704,23 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string ordenar = WebConfigurationManager.AppSettings.Get("CriterioOrdenarArticulosPedido");
                 Pedido c = Session["Pedido"] as Pedido;
                 //limpio el place holder y lo vuelvo a cargar
                 this.phArticulos.Controls.Clear();
                 int pos = 0;
                 int cont = 1;
+                if(ordenar=="1")
+                {
+                    c.items = c.items.OrderBy(x => x.articulo.ubicacion).ThenBy(x => x.articulo.descripcion).ToList();
+                }
                 foreach (ItemPedido item in c.items)
                 {
                     pos = c.items.IndexOf(item);
                     this.agregarItemPedido(item, pos, cont);
                     cont++;
                 }
-
+               
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "openPopover();", true);
 
             }
