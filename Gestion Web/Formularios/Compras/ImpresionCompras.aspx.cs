@@ -727,7 +727,13 @@ namespace Gestion_Web.Formularios.Compras
 
                     saldoTotal += Convert.ToDecimal(row["Total"]);
                     var p = cont.obtenerProveedorID((int)row["Proveedor"]);
-                    row["razonSocial"] = p.razonSocial;
+                    if (p == null)
+                    {
+                        row["razonSocial"] = "Sin proveedor";
+                    }
+                    else {
+                        row["razonSocial"] = p.razonSocial;
+                    }      
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
