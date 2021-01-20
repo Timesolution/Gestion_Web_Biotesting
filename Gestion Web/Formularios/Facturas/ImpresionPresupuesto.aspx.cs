@@ -667,6 +667,13 @@ namespace Gestion_Web.Formularios.Facturas
                     dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
 
+                int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
+
+                if (tieneSistemaEstetica == 1)
+                {
+                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Referido:  " + dtDetalle.Rows[0]["ZonaDescripcion"].ToString() + ".";
+                }
+
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
                 //string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc +"/Logo.jpg");                

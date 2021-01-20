@@ -420,6 +420,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.SelectedValue = idPtoVentaUser.ToString();
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
+                this.DropListZonaEntrega.SelectedValue = p.zonaEntrega;
+                this.ListTipoEntrega.SelectedValue = p.tipoEntrega;
+                this.txtHorarioEntrega.Text = p.horaEntrega;
+                this.txtSenia.Text = p.senia;
                 this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones + "  " + p.comentario;
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 //this.txtPorcDescuento.Text = p.neto10.ToString();
@@ -443,10 +447,15 @@ namespace Gestion_Web.Formularios.Facturas
                 Cliente cliente = contCliente.obtenerClienteID(idCliente);
                 var idsCotizaciones = idCotizacion.Split(';').ToList();
                 idsCotizaciones.Remove(idsCotizaciones.Last());
-                decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
-                decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
-                int vendedor = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).vendedor.id;
-                string comentario = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).comentario;
+                //decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
+                //decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
+                //int vendedor = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).vendedor.id;
+                //string comentario = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).comentario;
+
+                //esto es un asco de la programacion
+                Pedido p2 = new Pedido();
+                p2 = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0]));
+                decimal descuentoTemp = p2.neto10;
 
                 Pedido p = new Pedido();
 
@@ -458,9 +467,14 @@ namespace Gestion_Web.Formularios.Facturas
                 p.cliente = cliente;
                 p.tipo.id = 13;//id tipo documento pedido
                 p.formaPAgo.id = cliente.formaPago.id;
-                p.descuento = descuentoNeto;
-                p.vendedor.id = vendedor;
-                p.comentario = comentario;
+                p.descuento = p2.descuento;
+                p.vendedor.id = p2.vendedor.id;
+                p.comentario = p2.comentario;
+                p.senia = p2.senia;
+                p.horaEntrega = p2.horaEntrega;
+                p.tipoEntrega = p2.tipoEntrega;
+                p.zonaEntrega = p2.zonaEntrega;
+                //p.s
 
                 for (int i = 0; i < idsCotizaciones.Count; i++)
                 {
