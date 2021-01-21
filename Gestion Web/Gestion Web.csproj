@@ -3446,6 +3446,9 @@
     <EmbeddedResource Include="Formularios\Facturas\PedidosMO.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosNeto.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosPendientesCliente.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\Reporte_VentasFiltradas.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\RetencionesListado.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\RetencionesR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\RFormulario12.rdlc" />

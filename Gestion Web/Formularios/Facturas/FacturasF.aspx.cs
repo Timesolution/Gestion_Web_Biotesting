@@ -42,6 +42,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         Mensajes m = new Mensajes();
         private int accion;
+        private int filtro = 0;
         private string numeroFactura = string.Empty;
         private string razonSocialCliente = string.Empty;
         private string observacion = string.Empty;
@@ -68,6 +69,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.VerificarLogin();
                 //datos de filtro
                 accion = Convert.ToInt32(Request.QueryString["a"]);
+                filtro = Convert.ToInt32(Request.QueryString["filtro"]);
                 numeroFactura = Request.QueryString["n"];
                 razonSocialCliente = Request.QueryString["rz"];
                 observacion = Request.QueryString["o"];
@@ -174,7 +176,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //verifico si el perfil tiene permiso para editar FC y agregar FC
                 this.verificarPermisoEditarFC();
                 this.verificarPermisoAgregarFC();
-                this.cargarFacturasRango(fechaD, fechaH, suc, tipo, cliente, tipofact, lista, empresa, vendedor, formaPago, tipoCliente,0);
+                this.cargarFacturasRango(fechaD, fechaH, suc, tipo, cliente, tipofact, lista, empresa, vendedor, formaPago, tipoCliente, 0);
                 this.Form.DefaultButton = this.btnBuscarCod.UniqueID;
             }
             catch (Exception ex)
@@ -853,26 +855,33 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
             }
         }
-        private void cargarFacturasRango(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago, int idTipoCliente,int PRPFacturados)
+        private void cargarFacturasRango(string fechaD, string fechaH, int idSuc, int tipo, int idCliente, int tipofact, int idLista, int idEmp, int idVendedor, int formaPago, int idTipoCliente, int PRPFacturados)
         {
             try
             {
-                DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue),PRPFacturados);
+                DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue), PRPFacturados);
                 decimal saldo = 0;
 
-                foreach (DataRow row in dtFacturas.Rows)
+                if (dtFacturas != null && dtFacturas.Rows.Count <= 8000)
                 {
-                    this.cargarEnPhDR(row);
-                    if (row["estado"].ToString() == "1")
+                    foreach (DataRow row in dtFacturas.Rows)
                     {
-                        saldo += Convert.ToDecimal(row["total"].ToString());
+                        this.cargarEnPhDR(row);
+                        if (row["estado"].ToString() == "1")
+                        {
+                            saldo += Convert.ToDecimal(row["total"].ToString());
+                        }
                     }
+                    labelSaldo.Text = "$" + saldo.ToString("N");
                 }
-                labelSaldo.Text = "$" + saldo.ToString("N");
+                else if(filtro == 1)
+                    SolicitarReporteVentasFiltrados();
+
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando facturas.  " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
         private void cargarLabel(string fechaD, string fechaH, int idSuc, int tipo)
@@ -1329,7 +1338,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (DropListSucursal.SelectedValue != "-1")
                     {
-                        Response.Redirect("FacturasF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&tc=" + DropListTipoCliente.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        Response.Redirect("FacturasF.aspx?filtro=1&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&tc=" + DropListTipoCliente.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                     }
                     else
                     {
@@ -1458,7 +1467,7 @@ namespace Gestion_Web.Formularios.Facturas
                         idClienteAux = Convert.ToInt32(this.listClienteFacturarPRP.SelectedValue);
                     }
 
-                    int i = this.controlador.ProcesoRefacturarPRP(null,idtildado, user, idClienteAux);//this.controlador.ProcesoEliminarFactura(idtildado, user);
+                    int i = this.controlador.ProcesoRefacturarPRP(null, idtildado, user, idClienteAux);//this.controlador.ProcesoEliminarFactura(idtildado, user);
                     if (i > 0)
                     {
                         this.restablecerIvaCliente();
@@ -2440,9 +2449,9 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
-                        
+
                     }
-                   
+
                     else
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar una sucursal"));
@@ -2471,7 +2480,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (accion == 15)
                         {
-                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=15&fechadesde=" + txtFechaDesdePresupuesto.Text + "&fechaHasta=" + txtFechaHastaPresupuesto.Text + "&Sucursal=" + ListSucursalPresupuesto.SelectedValue + "&Emp=" + ListEmpresaPresupuesto.SelectedValue + "&tipo=0" + "&doc=0" + "&cl=" + ListClientePresupuesto.SelectedValue + "&e=1" + "&anuladas=0" + "&vend=" + Convert.ToInt32(this.ListVendedorPresupuesto.SelectedValue) + "&fp=" + Convert.ToInt32(this.ListFormaPagoPresupuesto.SelectedValue),true);
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=15&fechadesde=" + txtFechaDesdePresupuesto.Text + "&fechaHasta=" + txtFechaHastaPresupuesto.Text + "&Sucursal=" + ListSucursalPresupuesto.SelectedValue + "&Emp=" + ListEmpresaPresupuesto.SelectedValue + "&tipo=0" + "&doc=0" + "&cl=" + ListClientePresupuesto.SelectedValue + "&e=1" + "&anuladas=0" + "&vend=" + Convert.ToInt32(this.ListVendedorPresupuesto.SelectedValue) + "&fp=" + Convert.ToInt32(this.ListFormaPagoPresupuesto.SelectedValue), true);
                         }
                     }
                     else
@@ -2487,13 +2496,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
-               
+
             catch (Exception ex)
             {
                 Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "error", ex.Message.ToString());
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error obteniendo listado de facturas. " + ex.Message));
             }
-           
+
         }
         private void descargar(string path)
         {
@@ -3495,13 +3504,13 @@ namespace Gestion_Web.Formularios.Facturas
                 int tipo = Convert.ToInt32(atributos[2]);
                 TipoDocumento tp = this.contDocumentos.obtenerTipoDoc("Presupuesto");
 
-                if (tipo == tp.id || tipo == 11 || tipo == 12)//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
+                if (tipo == tp.id || tipo == 11 || tipo == 12 )//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 }
                 else
                 {
-                    if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26)//Si es Factura A/E, Nota credito A/E o Nota debito A/E
+                    if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26 || tipo == 33 || tipo == 35 || tipo == 34)//Si es Factura A/E/M, Nota credito A/E o Nota debito A/E/M
                     {
                         //factura
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
@@ -3666,7 +3675,7 @@ namespace Gestion_Web.Formularios.Facturas
                             int j = 0;
                             for (int i = 0; i <= cantidad; i++)
                             {
-                                j += this.controlador.agregarFcManual(null,idEmpresa, idSucursal, idVendedor, idList, idPtoVta, idCliente, td, a);
+                                j += this.controlador.agregarFcManual(null, idEmpresa, idSucursal, idVendedor, idList, idPtoVta, idCliente, td, a);
                             }
                             if (j == cantidad + 1)
                             {
@@ -3926,6 +3935,7 @@ namespace Gestion_Web.Formularios.Facturas
         #endregion
 
         #region Servicio de Informes
+
         protected void btnSolicitarInformeIIBB_Click(object sender, EventArgs e)
         {
             try
@@ -3935,7 +3945,7 @@ namespace Gestion_Web.Formularios.Facturas
                 InformeXML infXML = new InformeXML();
 
                 //Cargo el objeto Informes_Pedidos
-                cargarDatosInformePedido(ip);
+                cargarDatosInformePedido(ip, 1);
 
                 //Cargo el objeto InformeXML
                 cargarDatosInformeXML(infXML);
@@ -3956,6 +3966,44 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        public void SolicitarReporteVentasFiltrados()
+        {
+            try
+            {
+                ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                Informes_Pedidos ip = new Informes_Pedidos();
+                InformeXML infXML = new InformeXML();
+
+                ///Cargo el objeto Informes_Pedidos
+                cargarDatosInformePedido(ip, 2);
+
+                ///Cargo el objeto InformeXML
+                cargarDatosInformeXML(infXML);
+
+                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 500. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                else
+                {
+                    int idError = Log.ObtenerUltimoIDLog();
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas. Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Este metodo setea los campos al objeto InformeXML, para deserializar al momento de leer los parametros/configuraciones de la solicitud del informe.
+        /// </summary>
+        /// <param name="infXML"></param>
         public void cargarDatosInformeXML(InformeXML infXML)
         {
             try
@@ -3968,6 +4016,7 @@ namespace Gestion_Web.Formularios.Facturas
                 infXML.Empresa = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
                 infXML.Sucursal = Convert.ToInt32(this.DropListSucursal.SelectedValue);
                 infXML.Cliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
+                infXML.TipoCliente = Convert.ToInt32(this.DropListTipoCliente.SelectedValue);
                 infXML.Tipo = Convert.ToInt32(this.DropListTipo.SelectedValue);
                 infXML.Documento = Convert.ToInt32(this.DropListDocumento.SelectedValue);
                 infXML.ListaPrecio = Convert.ToInt32(this.DropListListas.SelectedValue);
@@ -3982,20 +4031,42 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        public void cargarDatosInformePedido(Informes_Pedidos ip)
+        /// <summary>
+        /// Este metodo setea los campos al objeto de Informeas_Pedidos, recibiendo una accion para saber que tipo de informe es.
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="accion"></param>
+        public void cargarDatosInformePedido(Informes_Pedidos ip, int accion)
         {
             try
             {
                 DateTime fechaD = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
                 ip.Fecha = DateTime.Now;
-                ip.Informe = 2;
                 ip.Usuario = (int)Session["Login_IdUser"];
                 ip.Estado = 0;
-                ip.NombreInforme = "IIBB-" + fechaD.ToString("MMyyyy");
+
+                switch (accion)
+                {
+                    ///Informe para IIBB
+                    case 1:
+                        ip.Informe = 2;
+                        ip.NombreInforme = "IIBB-" + fechaD.ToString("MMyyyy");
+                        break;
+                    ///Informe para Articulos Filtrados
+                    case 2:
+                        ip.Informe = 8;
+                        ip.Usuario = (int)Session["Login_IdUser"];
+                        ip.NombreInforme = "REPORTE_VENTAS-" + fechaD.ToString("MMyyyy");
+                        break;
+                    default:
+                        break;
+                }
+
             }
             catch (Exception Ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Ocurrió un error cargando datos para Informe Pedido. Excepción: " + Ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarDatosInformePedido. Excepcion: " + Ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
 
         }
@@ -4175,7 +4246,7 @@ namespace Gestion_Web.Formularios.Facturas
                         tipoNota = "Nota de Credito ";
                     }
 
-                    int i = this.controlador.GenerarNotaCreditoDebitoDiferenciaCambio(null,1, Convert.ToDecimal(lblDiferenciaCambio.Text), factura, tipoNota);
+                    int i = this.controlador.GenerarNotaCreditoDebitoDiferenciaCambio(null, 1, Convert.ToDecimal(lblDiferenciaCambio.Text), factura, tipoNota);
 
                     if (i > 0)
                     {
@@ -5101,7 +5172,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 controladorCobranza controladorCobranza = new controladorCobranza();
                 string moneda = lblFacturaMonedaGuardada.Text;
-                if(moneda != "-")
+                if (moneda != "-")
                 {
                     moneda = moneda.Replace(": $", string.Empty);
                 }
@@ -5209,6 +5280,6 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-    
+
     }
 }

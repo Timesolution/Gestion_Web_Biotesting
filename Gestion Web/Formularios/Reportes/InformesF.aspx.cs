@@ -190,7 +190,7 @@ namespace Gestion_Web.Formularios.Reportes
 
                         if (ip.Informe1.Id == 1)
                             hpDetalles.NavigateUrl += ".zip";
-                        if (ip.Informe1.Id == 2 || ip.Informe1.Id == 5)
+                        if (ip.Informe1.Id == 2 || ip.Informe1.Id == 5 || ip.Informe1.Id == 8)
                             hpDetalles.NavigateUrl += ".xls";
                         if (ip.Informe1.Id == 3 || ip.Informe1.Id == 4)
                             hpDetalles.NavigateUrl += ".xlsx";
