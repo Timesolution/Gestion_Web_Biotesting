@@ -2341,13 +2341,21 @@ namespace Gestion_Web.Formularios.Facturas
                 if (accion != 6 && accion != 7)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
-                    if (cliente[1].Contains("Responsable Inscripto") && c.monotributo != "1")
+                    if (cliente[1].Contains("Responsable Inscripto") && (c.monotributo != "1" && c.monotributo != "2"))
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                         PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                         //como estoy en cotizacion pido el ultimo numero de este documento
                         int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Factura A");
                         this.labelNroFactura.Text = "Factura A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                    }
+                    else if(cliente[1].Contains("Responsable Inscripto") && c.monotributo == "2")
+                    {
+                        int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
+                        PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+                        //como estoy en cotizacion pido el ultimo numero de este documento
+                        int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Factura A");
+                        this.labelNroFactura.Text = "Factura M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                     }
                     else
                     {
@@ -2411,12 +2419,16 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        if (tipoDoc.Contains("Factura A") || tipoDoc.Contains("Credito A"))
+                        if (tipoDoc.Contains("Factura A") || tipoDoc.Contains("Credito A") || tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
                         {
                             int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                             PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                             int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
-                            this.labelNroFactura.Text = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+
+                            if(tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
+                                this.labelNroFactura.Text = "Nota de Credito M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            else
+                                this.labelNroFactura.Text = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                         }
                         else
                         {
@@ -2663,6 +2675,14 @@ namespace Gestion_Web.Formularios.Facturas
                     int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito C");
                     this.labelNroFactura.Text = "Nota de Credito C N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                 }
+                else if (c.monotributo == "2")
+                {
+                    int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
+                    PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+                    //como estoy en cotizacion pido el ultimo numero de este documento
+                    int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
+                    this.labelNroFactura.Text = "Nota de Credito M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                }
                 else
                 {
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
@@ -2755,6 +2775,10 @@ namespace Gestion_Web.Formularios.Facturas
                         ti = controlador.obtenerTipoDoc("Factura A");
                         //tipos = tp.id.ToString() + ";1";
                         break;
+                    case "Factura M N":
+                        ti = controlador.obtenerTipoDoc("Factura M");
+                        //tipos = tp.id.ToString() + ";1";
+                        break;
                     case "Factura B N":
                         ti = controlador.obtenerTipoDoc("Factura B");
                         //tipos = tp.id.ToString() + ";1";
@@ -2769,6 +2793,10 @@ namespace Gestion_Web.Formularios.Facturas
                         break;
                     case "Nota de Credito A N":
                         ti = controlador.obtenerTipoDoc("Nota de Credito A");
+                        //tipos = tp.id.ToString() + ";3";
+                        break;
+                    case "Nota de Credito M N":
+                        ti = controlador.obtenerTipoDoc("Nota de Credito M");
                         //tipos = tp.id.ToString() + ";3";
                         break;
                     case "Nota de Credito B N":
@@ -7642,7 +7670,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26)//Si es Factura A/E, Nota credito A/E o Nota debito A/E
+                    if (tipo == 1 || tipo == 9 || tipo == 4 || tipo == 24 || tipo == 25 || tipo == 26 || tipo == 33 || tipo == 34 || tipo == 35)//Si es Factura A/E/M, Nota credito A/E/M o Nota debito A/E/M
                     {
                         //factura
                         script = "window.open('ImpresionPresupuesto.aspx?a=1&Presupuesto=" + idFactura + "', '_blank');";

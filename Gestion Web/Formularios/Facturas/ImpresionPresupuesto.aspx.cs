@@ -83,7 +83,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte2(idPresupuesto);
                     }
-                    //factura a,e
+                    //factura a,e,M
                     if (accion == 1)
                     {
                         this.generarReporte3(idPresupuesto);
@@ -504,6 +504,21 @@ namespace Gestion_Web.Formularios.Facturas
                     letraDoc = "E";
                     CodigoDoc = "Cod. 19";
                 }
+                else if(tipoDoc.Contains("Factura M"))
+                {
+                    letraDoc = "M";
+                    CodigoDoc = "Cod. 51";
+                }
+                else if (tipoDoc.Contains("Nota de Credito M"))
+                {
+                    letraDoc = "M";
+                    CodigoDoc = "Cod. 53";
+                }
+                else if (tipoDoc.Contains("Nota de Debito M"))
+                {
+                    letraDoc = "M";
+                    CodigoDoc = "Cod. 52";
+                }
                 else
                 {
                     letraDoc = "A";
@@ -667,6 +682,9 @@ namespace Gestion_Web.Formularios.Facturas
                     dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
 
+                if (tipoDoc.Contains("Factura M") || tipoDoc.Contains("Nota de Credito M") || tipoDoc.Contains("Nota de Debito M"))
+                    dtComentarios.Rows[0]["Observaciones"] += Environment.NewLine + "OPERACION SUJETA A RETENCION";
+
                 int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
 
                 if (tieneSistemaEstetica == 1)
@@ -703,7 +721,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                if (letraDoc == "A")
+                if (letraDoc == "A" || letraDoc == "M")
                 {
                     if (pv.monedaFacturacion > 1)
                         this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaREnMonedaOriginal.rdlc");
@@ -1196,6 +1214,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
 
+                
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
                 //string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/Logo.jpg");

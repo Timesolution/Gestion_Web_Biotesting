@@ -2319,7 +2319,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ip.Informe = 7;
                 ip.Usuario = (int)Session["Login_IdUser"];
                 ip.Estado = 0;
-                ip.NombreInforme = "Importacion Articulos - " + DateTime.Now.ToString("MMyyyy");
+                ip.NombreInforme = "IMPORTACION-ARTICULOS_" + DateTime.Now.ToString("MMyyyy");
             }
             catch (Exception Ex)
             {
@@ -2402,7 +2402,8 @@ namespace Gestion_Web.Formularios.Articulos
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de Importacion con <strong>exito</strong>. Podra visualizar el estado en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
                 if (i == -1)
                 {
-                    int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "ELSE: Fue por el 'else' al querer generar un pedido para la importacion de articulos llamando al metodo controladorInformesEntity.agregarInformePedido. Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click.");
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: Fue por el 'else' al querer generar un pedido para la importacion de articulos llamando al metodo controladorInformesEntity.agregarInformePedido. Ubicacion: Articulos.aspx. Metodo: lbtnImportarArticulo_Click.");
+                    int idError = Log.ObtenerUltimoIDLog();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
 
