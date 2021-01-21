@@ -609,8 +609,9 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
+                string tieneEstetica = WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica");
                 Configuracion config = new Configuracion();
-                Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));
+                Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio), Convert.ToInt32(tieneEstetica));
                 Session.Add("Factura", f);
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
                 this.ListSucursal.SelectedValue = "-1";

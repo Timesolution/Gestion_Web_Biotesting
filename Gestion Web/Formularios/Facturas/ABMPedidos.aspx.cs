@@ -420,6 +420,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.SelectedValue = idPtoVentaUser.ToString();
                 this.CheckBox1.Checked = true;
                 this.phDatosEntrega.Visible = true;
+                this.DropListZonaEntrega.SelectedValue = p.zonaEntrega;
+                this.ListTipoEntrega.SelectedValue = p.tipoEntrega;
+                this.txtHorarioEntrega.Text = p.horaEntrega;
+                this.txtSenia.Text = p.senia;
                 this.txtComentarios.Text = "COTIZACIONES Nº: " + numerosCotizaciones + "  " + p.comentario;
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 //this.txtPorcDescuento.Text = p.neto10.ToString();
@@ -443,10 +447,15 @@ namespace Gestion_Web.Formularios.Facturas
                 Cliente cliente = contCliente.obtenerClienteID(idCliente);
                 var idsCotizaciones = idCotizacion.Split(';').ToList();
                 idsCotizaciones.Remove(idsCotizaciones.Last());
-                decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
-                decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
-                int vendedor = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).vendedor.id;
-                string comentario = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).comentario;
+                //decimal descuentoTemp = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).neto10;
+                //decimal descuentoNeto = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).descuento;
+                //int vendedor = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).vendedor.id;
+                //string comentario = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0])).comentario;
+
+                //esto es un asco de la programacion
+                Pedido p2 = new Pedido();
+                p2 = controlador.obtenerPedidoId(Convert.ToInt32(idsCotizaciones[0]));
+                decimal descuentoTemp = p2.neto10;
 
                 Pedido p = new Pedido();
 
@@ -458,9 +467,14 @@ namespace Gestion_Web.Formularios.Facturas
                 p.cliente = cliente;
                 p.tipo.id = 13;//id tipo documento pedido
                 p.formaPAgo.id = cliente.formaPago.id;
-                p.descuento = descuentoNeto;
-                p.vendedor.id = vendedor;
-                p.comentario = comentario;
+                p.descuento = p2.descuento;
+                p.vendedor.id = p2.vendedor.id;
+                p.comentario = p2.comentario;
+                p.senia = p2.senia;
+                p.horaEntrega = p2.horaEntrega;
+                p.tipoEntrega = p2.tipoEntrega;
+                p.zonaEntrega = p2.zonaEntrega;
+                //p.s
 
                 for (int i = 0; i < idsCotizaciones.Count; i++)
                 {
@@ -1704,18 +1718,23 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string ordenar = WebConfigurationManager.AppSettings.Get("CriterioOrdenarArticulosPedido");
                 Pedido c = Session["Pedido"] as Pedido;
                 //limpio el place holder y lo vuelvo a cargar
                 this.phArticulos.Controls.Clear();
                 int pos = 0;
                 int cont = 1;
+                if(ordenar=="1")
+                {
+                    c.items = c.items.OrderBy(x => x.articulo.ubicacion).ThenBy(x => x.articulo.descripcion).ToList();
+                }
                 foreach (ItemPedido item in c.items)
                 {
                     pos = c.items.IndexOf(item);
                     this.agregarItemPedido(item, pos, cont);
                     cont++;
                 }
-
+               
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "openPopover();", true);
 
             }

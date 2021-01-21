@@ -405,7 +405,14 @@ namespace Gestion_Web.Formularios.Compras
                 controladorCliente cont = new controladorCliente();
                 var p = cont.obtenerProveedorID((int)c.Proveedor);
                 TableCell celRazon = new TableCell();
-                celRazon.Text = p.razonSocial;
+                if (p == null)
+                {
+                    celRazon.Text = "Sin proveedor";
+                }
+                else
+                {
+                    celRazon.Text = p.razonSocial;
+                }
                 celRazon.VerticalAlign = VerticalAlign.Middle;
                 celRazon.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celRazon);
@@ -474,7 +481,7 @@ namespace Gestion_Web.Formularios.Compras
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando comra a la tabla. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando compra a la tabla. " + ex.Message));
             }
         }
 
@@ -798,7 +805,7 @@ namespace Gestion_Web.Formularios.Compras
                     fechaH = DateTime.Today.ToString("dd/MM/yyyy");
                 }
                 //Response.Redirect("ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&t=" + this.tipoDoc + "&ex=0");
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&e="+ this.empresa + "&t=" + this.tipoDoc + "&ex=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCompras.aspx?a=1&tf=" + this.tipoFecha + "&fd=" + this.fechaD + "&fh=" + this.fechaH + "&s=" + this.suc + "&pv=" + this.puntoVenta + "&prov=" + this.proveedor + "&e=" + this.empresa + "&t=" + this.tipoDoc + "&ex=0', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch (Exception ex)
             {

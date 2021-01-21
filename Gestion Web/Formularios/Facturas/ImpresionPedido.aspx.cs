@@ -356,6 +356,14 @@ namespace Gestion_Web.Formularios.Facturas
                     dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Cotización emitida en divisa:  (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
                 }
 
+                int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
+
+                if (tieneSistemaEstetica == 1)
+                {
+                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Referido:  " + dtDetalle.Rows[0]["ZonaDescripcion"].ToString() + ".";
+                }
+
+
                 ReportParameter paramZona = new ReportParameter("ParamZona", zona);
                 ReportParameter paramTel = new ReportParameter("ParamTel", telefono);
                 ReportParameter paramFormaPago = new ReportParameter("ParamFormaPago", formaPago);
