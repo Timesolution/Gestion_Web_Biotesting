@@ -222,8 +222,8 @@
             // IE8 animation polyfill
             if ($("html").hasClass("lt-ie9")) {
                 var speed = 400;
-                var times = 300;
-                var loop = setInterval(anim, 300);
+                var times = Infinity;
+                var loop = setInterval(anim, Infinity);
                 function anim() {
                     times--;
                     if (times === 0) { clearInterval(loop); }

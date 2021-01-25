@@ -1,11 +1,13 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using Gestor_Solution.Modelo;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
@@ -34,7 +36,8 @@ namespace Gestion_Web.Formularios.Cobros
         private int puntoVenta;
         private int idTipo;
         private int vendedor;
-        //int accion;
+        private int filtro = 0;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -48,6 +51,7 @@ namespace Gestion_Web.Formularios.Cobros
                 this.fechaD = Request.QueryString["Fechadesde"];
                 this.fechaH = Request.QueryString["FechaHasta"];
                 this.vendedor = Convert.ToInt32(Request.QueryString["vend"]);
+                filtro = Convert.ToInt32(Request.QueryString["filtro"]);
 
                 if (!IsPostBack)
                 {
@@ -204,6 +208,8 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
+                int generarReporte = 0;
+
                 if (idCliente == 0 && idEmpresa == 0 && idSucursal == 0 && puntoVenta == 0)
                 {
                     this.idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
@@ -218,15 +224,24 @@ namespace Gestion_Web.Formularios.Cobros
                     List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
-                    foreach (Movimiento_Cobro m in Movimiento)
-                    {
-                        saldo += m.cob.total;
-                        this.cargarEnPh(m);
-                    }
-                    this.labelSaldo.Text = saldo.ToString("C");
-                    //(this.lblSaldo.Text = "Saldo $ " + saldo.ToString("0.00");
-                    this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
+                    ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
+                    if (Movimiento != null && Movimiento.Count <= 5)
+                    {
+                        foreach (Movimiento_Cobro m in Movimiento)
+                        {
+                            saldo += m.cob.total;
+                            this.cargarEnPh(m);
+                        }
+
+                        this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
+
+                    }
+                    else
+                        generarReporte = 1;
+
+
+                    this.labelSaldo.Text = saldo.ToString("C");
                 }
                 else
                 {
@@ -235,21 +250,137 @@ namespace Gestion_Web.Formularios.Cobros
                     List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, puntoVenta, idEmpresa, idSucursal, idTipo, this.vendedor);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
-                    foreach (Movimiento_Cobro m in Movimiento)
+
+                    ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
+                    if (Movimiento != null && Movimiento.Count <= 5)
                     {
-                        saldo += m.cob.total;
-                        this.cargarEnPh(m);
+                        foreach (Movimiento_Cobro m in Movimiento)
+                        {
+                            saldo += m.cob.total;
+                            this.cargarEnPh(m);
+                        }
+                        this.labelSaldo.Text = saldo.ToString("C");
+                        //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("0.00");
+                        this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
+
                     }
-                    this.labelSaldo.Text = saldo.ToString("C");
-                    //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("0.00");
-                    this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
+                    else
+                        generarReporte = 1;
                 }
+
+                if(generarReporte == 1)
+                    SolicitarReporte_CobrosRealizados();
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando movimientos. " + ex.Message));
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CobrosRealizadosF.aspx. Metodo: cargarMovimientos. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
             }
         }
+
+        #region Generar Pedido Reporte
+
+        public void SolicitarReporte_CobrosRealizados()
+        {
+            try
+            {
+                ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                Informes_Pedidos ip = new Informes_Pedidos();
+                InformeXML infXML = new InformeXML();
+
+                ///Cargo el objeto Informes_Pedidos
+                cargarDatosInformePedido(ip, 1);
+
+                ///Cargo el objeto InformeXML
+                cargarDatosInformeXML(infXML);
+
+                ///Concatenamos el ID de la insercion al reporte a guardar
+                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+
+                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                if (i > 0)
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", mje.mensajeBoxInfo("Se ha generado una solicitud de reporte de cobros con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                else
+                {
+                    int idError = Log.ObtenerUltimoIDLog();
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de cobros. Ubicacion: CobrosRealizadosF.aspx. Metodo: SolicitarReporte_CobrosRealizados.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CobrosRealizadosF.aspx. Metodo: SolicitarReporte_CobrosRealizados. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Este metodo setea los campos al objeto InformeXML, para deserializar al momento de leer los parametros/configuraciones de la solicitud del informe.
+        /// </summary>
+        /// <param name="infXML"></param>
+        public void cargarDatosInformeXML(InformeXML infXML)
+        {
+            try
+            {
+                DateTime fechaDesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
+                DateTime fechaHasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR"));
+
+                infXML.FechaDesde = fechaDesde.ToString("dd/MM/yyyy");
+                infXML.FechaHasta = fechaHasta.ToString("dd/MM/yyyy");
+                infXML.Empresa = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
+                infXML.Sucursal = Convert.ToInt32(this.DropListSucursal.SelectedValue);
+                infXML.Cliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
+                infXML.PuntoVenta = Convert.ToInt32(this.DropListPuntoVta.SelectedValue);
+                infXML.Tipo = Convert.ToInt32(this.DropListTipo.SelectedValue);
+                infXML.Vendedor = Convert.ToInt32(this.DropListVendedores.SelectedValue);
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CobrosRealizadosF.aspx. Metodo: cargarDatosInformeXML. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Este metodo setea los campos al objeto de Informeas_Pedidos, recibiendo una accion para saber que tipo de informe es.
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="accion"></param>
+        public void cargarDatosInformePedido(Informes_Pedidos ip, int accion)
+        {
+            try
+            {
+                DateTime fechaD = Convert.ToDateTime(txtFechaDesde.Text, new CultureInfo("es-AR"));
+                ip.Fecha = DateTime.Now;
+                ip.Usuario = (int)Session["Login_IdUser"];
+                ip.Estado = 0;
+
+                switch (accion)
+                {
+                    ///Informe para Cobros Realizados
+                    case 1:
+                        ip.Informe = 11;
+                        ip.Usuario = (int)Session["Login_IdUser"];
+                        ip.NombreInforme = "REPORTE-COBROS-REALIZADOS_";
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CobrosRealizadosF.aspx. Metodo: cargarDatosInformePedido. Excepcion: " + Ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+            }
+
+        }
+
+        #endregion
+
 
         private void cargarLabel(string fechaD, string fechaH, int idCliente, int idPuntoVenta, int idEmpresa, int idSucursal, int idTipo)
         {
@@ -283,8 +414,8 @@ namespace Gestion_Web.Formularios.Cobros
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando datos de Busqueda. " + ex.Message));
-
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: CobrosRealizadosF.aspx. Metodo: cargarLabel. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
             }
         }
 

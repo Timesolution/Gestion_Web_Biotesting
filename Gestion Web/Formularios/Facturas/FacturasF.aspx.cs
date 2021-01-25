@@ -862,7 +862,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue), PRPFacturados);
                 decimal saldo = 0;
 
-                if (dtFacturas != null && dtFacturas.Rows.Count <= 8000)
+                if (dtFacturas != null && dtFacturas.Rows.Count <= 2000)
                 {
                     foreach (DataRow row in dtFacturas.Rows)
                     {
@@ -3980,11 +3980,14 @@ namespace Gestion_Web.Formularios.Facturas
                 ///Cargo el objeto InformeXML
                 cargarDatosInformeXML(infXML);
 
+                ///Concatenamos el ID de la insercion al reporte a guardar
+                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+
                 ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
                 int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
 
                 if (i > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 500. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
                 else
                 {
                     int idError = Log.ObtenerUltimoIDLog();
@@ -3997,6 +4000,10 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+            finally
+            {
+                filtro = 0;
             }
         }
 
@@ -4052,11 +4059,11 @@ namespace Gestion_Web.Formularios.Facturas
                         ip.Informe = 2;
                         ip.NombreInforme = "IIBB-" + fechaD.ToString("MMyyyy");
                         break;
-                    ///Informe para Articulos Filtrados
+                    ///Informe para Ventas Filtradas
                     case 2:
                         ip.Informe = 8;
                         ip.Usuario = (int)Session["Login_IdUser"];
-                        ip.NombreInforme = "REPORTE_VENTAS-" + fechaD.ToString("MMyyyy");
+                        ip.NombreInforme = "REPORTE-VENTAS_";
                         break;
                     default:
                         break;
@@ -4070,6 +4077,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
         #endregion
 
         #region Busqueda de Facturas
