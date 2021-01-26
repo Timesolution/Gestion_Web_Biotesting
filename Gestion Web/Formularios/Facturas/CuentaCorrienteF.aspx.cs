@@ -13,6 +13,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Globalization;
 using System.IO;
+using Gestion_Api.Entitys;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -951,6 +952,73 @@ namespace Gestion_Web.Formularios.Facturas
                     int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente. Ubicacion: CuentaCorrienteF.aspx. Metodo: lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
+            }
+
+        }
+        public void cargarDatosInformePedido(Informes_Pedidos ip, int accion)
+        {
+            try
+            {
+                ip.Fecha = DateTime.Now;
+                ip.Usuario = (int)Session["Login_IdUser"];
+                ip.Estado = 0;
+
+                switch (accion)
+                {
+                    ///Informe para IIBB
+                    case 1:
+                        ip.Informe = 10;
+                        ip.NombreInforme = "ECOMMERCE-CUENTACORRIENTE";
+                        ip.Usuario = (int)Session["Login_IdUser"];
+                        break;
+                    ///Informe para Ventas Filtradas
+
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarDatosInformePedido. Excepcion: " + Ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+
+        }
+
+        public void SolicitarReporteArticulosTxt()
+        {
+            try
+            {
+                ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                Informes_Pedidos ip = new Informes_Pedidos();
+                InformeXML infXML = new InformeXML();
+
+                ///Cargo el objeto Informes_Pedidos
+                cargarDatosInformePedido(ip, 1);
+
+                ///Cargo el objeto InformeXML
+
+                ///Concatenamos el ID de la insercion al reporte a guardar
+                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+
+                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                else
+                {
+                    int idError = Log.ObtenerUltimoIDLog();
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas. Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
 
         }
