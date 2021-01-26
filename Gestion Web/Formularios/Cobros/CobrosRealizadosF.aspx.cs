@@ -226,7 +226,7 @@ namespace Gestion_Web.Formularios.Cobros
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
-                    if (Movimiento != null && Movimiento.Count <= 5)
+                    if (Movimiento != null && Movimiento.Count <= 2000)
                     {
                         foreach (Movimiento_Cobro m in Movimiento)
                         {
@@ -252,7 +252,7 @@ namespace Gestion_Web.Formularios.Cobros
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
-                    if (Movimiento != null && Movimiento.Count <= 5)
+                    if (Movimiento != null && Movimiento.Count <= 2000)
                     {
                         foreach (Movimiento_Cobro m in Movimiento)
                         {
@@ -268,8 +268,11 @@ namespace Gestion_Web.Formularios.Cobros
                         generarReporte = 1;
                 }
 
-                if(generarReporte == 1)
+                if(generarReporte == 1 && filtro == 1)
+                {
                     SolicitarReporte_CobrosRealizados();
+                    filtro = 0;
+                }
             }
             catch (Exception ex)
             {
@@ -288,25 +291,36 @@ namespace Gestion_Web.Formularios.Cobros
                 Informes_Pedidos ip = new Informes_Pedidos();
                 InformeXML infXML = new InformeXML();
 
-                ///Cargo el objeto Informes_Pedidos
-                cargarDatosInformePedido(ip, 1);
+                int id_a_setear = controladorInformesEntity.ObtenerUltimoIdInformePedido();
 
-                ///Cargo el objeto InformeXML
-                cargarDatosInformeXML(infXML);
+                if(id_a_setear >= 0)
+                {
+                    ///Cargo el objeto Informes_Pedidos
+                    cargarDatosInformePedido(ip, 1);
 
-                ///Concatenamos el ID de la insercion al reporte a guardar
-                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+                    ///Cargo el objeto InformeXML
+                    cargarDatosInformeXML(infXML);
 
-                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
-                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+                    ///Concatenamos el ID de la insercion al reporte a guardar
+                    ip.NombreInforme += (id_a_setear + 1).ToString();
 
-                if (i > 0)
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", mje.mensajeBoxInfo("Se ha generado una solicitud de reporte de cobros con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                    ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                    int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                    if (i > 0)
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", mje.mensajeBoxInfo("Se ha generado una solicitud de reporte de cobros con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                    else
+                    {
+                        int idError = Log.ObtenerUltimoIDLog();
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de cobros. Ubicacion: ControladorInformesEntity. Metodo: generarPedidoDeInforme.");
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+                    }
+                }
                 else
                 {
                     int idError = Log.ObtenerUltimoIDLog();
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de cobros. Ubicacion: CobrosRealizadosF.aspx. Metodo: SolicitarReporte_CobrosRealizados.");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de cobros. Varible 'id_a_setear' es igual a -1. Ubicacion: ControladorInformesEntity. Metodo: ObtenerUltimoIdInformePedido.");
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
                 }
 
             }
@@ -620,7 +634,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Response.Redirect("CobrosRealizadosF.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
+                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&fechadesde=" + this.fechaD + "&fechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
                 cargarMovimientos();
             }
             catch (Exception ex)

@@ -874,8 +874,11 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     labelSaldo.Text = "$" + saldo.ToString("N");
                 }
-                else if(filtro == 1)
+                else if (filtro == 1)
+                {
                     SolicitarReporteVentasFiltrados();
+                    filtro = 0;
+                }
 
             }
             catch (Exception ex)
@@ -3504,7 +3507,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int tipo = Convert.ToInt32(atributos[2]);
                 TipoDocumento tp = this.contDocumentos.obtenerTipoDoc("Presupuesto");
 
-                if (tipo == tp.id || tipo == 11 || tipo == 12 )//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
+                if (tipo == tp.id || tipo == 11 || tipo == 12)//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idFactura + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                 }
@@ -3974,25 +3977,36 @@ namespace Gestion_Web.Formularios.Facturas
                 Informes_Pedidos ip = new Informes_Pedidos();
                 InformeXML infXML = new InformeXML();
 
-                ///Cargo el objeto Informes_Pedidos
-                cargarDatosInformePedido(ip, 2);
+                int id_a_setear = controladorInformesEntity.ObtenerUltimoIdInformePedido();
 
-                ///Cargo el objeto InformeXML
-                cargarDatosInformeXML(infXML);
+                if (id_a_setear >= 0)
+                {
+                    ///Cargo el objeto Informes_Pedidos
+                    cargarDatosInformePedido(ip, 2);
 
-                ///Concatenamos el ID de la insercion al reporte a guardar
-                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+                    ///Cargo el objeto InformeXML
+                    cargarDatosInformeXML(infXML);
 
-                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
-                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+                    ///Concatenamos el ID de la insercion al reporte a guardar
+                    ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
 
-                if (i > 0)
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                    ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                    int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                    if (i > 0)
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                    else
+                    {
+                        int idError = Log.ObtenerUltimoIDLog();
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas. Ubicacion: ControladorInformesEntity. Metodo: generarPedidoDeInforme.");
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                    }
+                }
                 else
                 {
                     int idError = Log.ObtenerUltimoIDLog();
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas. Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango.");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas filtradas. Varible 'id_a_setear' es igual a -1. Ubicacion: ControladorInformesEntity. Metodo: ObtenerUltimoIdInformePedido.");
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
 
             }
@@ -4000,10 +4014,6 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-            }
-            finally
-            {
-                filtro = 0;
             }
         }
 
