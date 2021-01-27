@@ -197,7 +197,11 @@ namespace Gestion_Web.Formularios.Reportes
                         if (ip.Informe1.Id == 6)
                             hpDetalles.NavigateUrl += ".pdf";
                         if (ip.Informe1.Id == 9 || ip.Informe1.Id == 10)
+                        {
+                            hpDetalles.Attributes.Add("download", "");
                             hpDetalles.NavigateUrl += ".txt";
+                        }
+                            
                     }
                     celEstado.Controls.Add(hpDetalles);
                     tr.Controls.Add(celEstado);
