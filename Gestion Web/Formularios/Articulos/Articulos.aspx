@@ -24,7 +24,7 @@
                                         <a id="hrefImportarArticulos" href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato" Visible="false">Importar - Articulos desde Base Externa</a>
                                     </li>
                                     <li>
-                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click" ForeColor="OliveDrab">Reporte - Articulos (.txt)</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click1" ForeColor="OliveDrab">Reporte - Articulos (.txt)</asp:LinkButton>
                                     </li>
                                     <li>
                                         <a href="#modalImprimirArticulosActualizados" data-toggle="modal" style="width: 90%; color: OliveDrab">Reporte - Art. Precios Actualizados</a>

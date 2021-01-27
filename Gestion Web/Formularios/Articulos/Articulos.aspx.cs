@@ -2593,5 +2593,18 @@ namespace Gestion_Web.Formularios.Articulos
             }
           
         }
+
+        protected void lbtnExportarArticulos_Click1(object sender, EventArgs e)
+        {
+            try
+            {
+                SolicitarReporteArticulosTxt();
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+        }
     }
 }

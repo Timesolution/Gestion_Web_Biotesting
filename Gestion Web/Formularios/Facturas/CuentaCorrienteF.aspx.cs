@@ -915,38 +915,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                controladorReportes controladorReportes = new controladorReportes();
-
-                string rutaTxt = Server.MapPath("../ArchivosExportacion/Salida/");
-
-                if (!Directory.Exists(rutaTxt))
-                {
-                    Directory.CreateDirectory(rutaTxt);
-                }
-
-                string archivos = controladorReportes.generarArchivoCuentaCorriente(rutaTxt);
-
-                System.IO.FileStream fs = null;
-                fs = System.IO.File.Open(archivos, System.IO.FileMode.Open);
-
-                byte[] btFile = new byte[fs.Length];
-                fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
-                fs.Close();
-
-                this.Response.Clear();
-                this.Response.Buffer = true;
-                this.Response.ContentType = "application/octet-stream";
-                //this.Response.AddHeader("content-length", comprobante.Length.ToString());
-                this.Response.AddHeader("Content-disposition", "attachment; filename= " + archivos);
-                this.Response.BinaryWrite(btFile);
-                this.Response.End();
+                SolicitarReporteCuentaCorriente();
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("Thread was being aborted"))
-                {
-                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, this.GetType(), "alert", "MensajeArchivoDescargado()", true);
-                }
+                
                 else
                 {
                     int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente. Ubicacion: CuentaCorrienteF.aspx. Metodo: lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
@@ -986,7 +959,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         }
 
-        public void SolicitarReporteArticulosTxt()
+        public void SolicitarReporteCuentaCorriente()
         {
             try
             {
