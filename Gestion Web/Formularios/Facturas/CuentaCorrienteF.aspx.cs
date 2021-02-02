@@ -915,16 +915,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                
                 SolicitarReporteCuentaCorriente();
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) { 
+            
                 
-                else
-                {
+               
                     int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente. Ubicacion: CuentaCorrienteF.aspx. Metodo: lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-                }
+                
             }
 
         }
@@ -941,7 +941,7 @@ namespace Gestion_Web.Formularios.Facturas
                     ///Informe para IIBB
                     case 1:
                         ip.Informe = 10;
-                        ip.NombreInforme = "ECOMMERCE-CUENTACORRIENTE";
+                        ip.NombreInforme = "ECOMMERCE-CUENTACORRIENTE_";
                         ip.Usuario = (int)Session["Login_IdUser"];
                         break;
                     ///Informe para Ventas Filtradas
