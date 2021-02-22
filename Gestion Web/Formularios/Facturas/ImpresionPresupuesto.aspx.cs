@@ -303,7 +303,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
                     //La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
-                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa,2).ToString() + ").";
+                    dtComentarios.Rows[0]["Observaciones"] += "\nPrecios calculados en base a la divisa seleccionada. (" + monedaElegida.moneda + ")";
                 }
 
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Presupesto2.rdlc");
@@ -679,7 +679,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
                     //La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
-                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
+                    dtComentarios.Rows[0]["Observaciones"] += "\nPrecios calculados en base a la divisa seleccionada. (" + monedaElegida.moneda + ")";
                 }
 
                 if (tipoDoc.Contains("Factura M") || tipoDoc.Contains("Nota de Credito M") || tipoDoc.Contains("Nota de Debito M"))
@@ -1211,7 +1211,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     ///Seteo el comentario para informar en base a que divisa se realizaron los calculos de los precios
                     ///La tabla que posee los comentarios es Facturas_Comentarios y el Procedure que la llama es Gest_Facturas_Comentarios_GetOne
-                    dtComentarios.Rows[0]["Observaciones"] += " Precios calculados en base a la divisa seleccionada (" + monedaElegida.moneda + "/$" + Decimal.Round(imprimirOtraDivisa, 2).ToString() + ").";
+                    dtComentarios.Rows[0]["Observaciones"] += "\nPrecios calculados en base a la divisa seleccionada. (" + monedaElegida.moneda + ")";
                 }
 
                 
