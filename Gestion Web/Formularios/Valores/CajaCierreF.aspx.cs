@@ -304,11 +304,12 @@ namespace Gestion_Web.Formularios.Valores
                 btnDetalles.CssClass = "btn btn-info ui-tooltip";
                 btnDetalles.Attributes.Add("data-toggle", "tooltip");
                 btnDetalles.Attributes.Add("title data-original-title", "Detalles");
+                btnDetalles.OnClientClick = "return false";
                 btnDetalles.ID = "btnSelec_" + c.Id.ToString();
                 btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
                 btnDetalles.Font.Size = 12;
                 //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
-                //btnDetalles.Click += new EventHandler(this.detalleFactura);
+                //btnDetalles.Click += new EventHandler();
                 celAccion.Controls.Add(btnDetalles);
 
                 Literal l3 = new Literal();
@@ -320,6 +321,7 @@ namespace Gestion_Web.Formularios.Valores
                 btnEliminar.CssClass = "btn btn-info";
                 btnEliminar.Attributes.Add("data-toggle", "modal");
                 btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                btnEliminar.OnClientClick = "return false";
                 btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";          
                 btnEliminar.OnClientClick = "abrirdialog(" + c.Id + ");";                
                 

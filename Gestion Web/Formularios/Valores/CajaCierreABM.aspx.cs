@@ -686,6 +686,25 @@ namespace Gestion_Web.Formularios.Valores
  
             }
         }
+        protected void btnArqueo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorCaja controladorCaja = new ControladorCaja();
+                Caja_Arqueos arqueo = new Caja_Arqueos();
+                arqueo.Fecha = DateTime.Today;
+                arqueo.PuntoVenta = this.puntoVenta;
+                arqueo.Sucursal = this.sucursal;
+                arqueo.TotalCaja = Convert.ToDecimal(txtTotal.Text);
+                arqueo.TotalSistema = Convert.ToDecimal(txtTotalCaja.Text);
+                arqueo.Estado = 1;
+                controladorCaja.agregarArqueo(arqueo);
+            }
+            catch
+            {
+
+            }
+        }
 
         protected void btnRecargar_Click(object sender, EventArgs e)
         {
@@ -705,6 +724,8 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
+                txtFechaAperturaConfirmacion.Text = txtFechaApertura.Text;
+                calcularTotal();
                 //Configuracion c = new Configuracion();
 
                 //DateTime cierre = Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR"));
@@ -1188,10 +1209,69 @@ namespace Gestion_Web.Formularios.Valores
             }
         }
 
+
+
+
         #endregion
 
-        
+        protected void btnAgregarParcial_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorFacturacion contFact = new controladorFacturacion();
+                ControladorPlenario contPlenario = new ControladorPlenario();
+                controladorFactEntity contFactEntity = new controladorFactEntity();
+                txtFechaApertura.Text = DateTime.Today.ToString("dd/MM/yyyy");
+                calcularTotal();
+                string fechaD = this.txtFecha.Text;
+                string fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                List<Factura> Facturas = contFact.obtenerFacturasEntreSucursal(fechaD, fechaH, 0, sucursal);
 
-        
+                var chequearMercaderia = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("CajaCierreAceptarMercaderia"));
+
+                if (Facturas != null)
+                {
+                    //int ok = this.contCaja.verificarValidarMercaderiaCaja(this.sucursal, Convert.ToDateTime(this.txtFecha.Text, new CultureInfo("es-AR")));
+                    int ok;
+
+                    if (chequearMercaderia > 0)
+                    {
+                        var temp = contFactEntity.AceptarMercaderiaAntesDelMaximoEstablecido(sucursal);
+
+                        if (temp)
+                            ok = 1;
+                        else
+                            ok = -1;
+                    }
+                    else
+                    {
+                        ok = 1;
+                    }
+
+                    if (ok > 0 && Facturas.Count > 0 || Facturas.Count == 0)
+                    {
+                        //agrego diferencia
+                        this.agregarDiferencia();
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "abrirdialog()", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "$.msgbox(\"Debe aceptar la mercaderia recibida primero!. \");", true);
+                    }
+                }
+                else
+                {
+                    //agrego diferencia
+                    this.agregarDiferencia();
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, this.UpdatePanel2.GetType(), "alert", "abrirdialog()", true);
+                }
+
+            }
+            catch
+            {
+
+            }
+
+        }
     }
 }

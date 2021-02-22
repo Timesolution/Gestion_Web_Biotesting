@@ -32,6 +32,7 @@ namespace Gestion_Web.Formularios.Personal
                 this.idEmpleado = Convert.ToInt32(Request.QueryString["emp"]);
                 this.sucursal = Convert.ToInt32(Request.QueryString["s"]);
                 this.tipo = Convert.ToInt32(Request.QueryString["t"]);
+                txtFechaDesde.Text = DateTime.Today.ToString("dd/MM/yyyy");
                 if (!IsPostBack)
                 {
                     this.cargarEmpleados();

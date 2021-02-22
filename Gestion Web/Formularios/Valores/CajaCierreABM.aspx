@@ -530,6 +530,7 @@
                                                     <div class="col-md-8">
                                                         <%--<asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="ArticuloGroup" OnClick="btnAgregar_Click" />--%>
                                                         <asp:Button ID="btnAgregar" runat="server" Text="Confirmar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="ArticuloGroup" />
+                                                        <asp:Button ID="btnAgregarParcial" runat="server" Text="Cierre Parcial" class="btn btn-success" OnClick="btnAgregarParcial_Click" ValidationGroup="ArticuloGroup" />
                                                         <asp:Button ID="btnAbrirModal" runat="server" Style="display: none;" Text="Confirmar" class="btn btn-success" data-toggle="modal" href="#modalConfirmacion" />
                                                         <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="../Valores/CajaF.aspx" />
                                                     </div>

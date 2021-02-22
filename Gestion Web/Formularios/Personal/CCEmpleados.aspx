@@ -152,7 +152,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-4">Numero</label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <asp:TextBox ID="txtNumero" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-4">
@@ -161,7 +161,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-4">Descripcion</label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <asp:TextBox ID="txtDescripcion" class="form-control" runat="server"></asp:TextBox>
                                             </div>
                                             <div class="col-md-4">

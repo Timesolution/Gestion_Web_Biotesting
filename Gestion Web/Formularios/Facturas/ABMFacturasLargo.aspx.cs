@@ -437,6 +437,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                if (ListSucursalCliente.SelectedIndex != -1)
+                    ListSucursalCliente.SelectedIndex = 0;
                 controladorCliente contrCliente = new controladorCliente();
                 String buscar = txtCodigoCliente.Text.Replace(' ', '%');
                 DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
@@ -3434,7 +3436,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Si viene de Pedidos y existe criterio de ordenamiento en el web.config, ordeno los articulos segun ese criterio
                 if (this.accion == 5 && !string.IsNullOrEmpty(ordenar) && ordenar == "1")
-                    f.items = f.items.OrderBy(x => x.articulo.ubicacion).ToList();
+                    f.items = f.items.OrderBy(x => x.articulo.ubicacion ).ThenBy(x => x.articulo.descripcion).ToList();
+              
+          
 
                 foreach (ItemFactura item in f.items)
                 {

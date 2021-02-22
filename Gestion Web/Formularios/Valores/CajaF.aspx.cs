@@ -1130,6 +1130,10 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 Caja_Cierre ultimoCierreCaja = contCajaCierre.obtenerUltimoCierrePV(caja.suc.id, caja.pv.id);
+                if(ultimoCierreCaja == null)
+                {
+                    return true;
+                }
                 if (ultimoCierreCaja != null && caja.fecha.Date >= ultimoCierreCaja.FechaApertura.Value.Date)
                 {
                     return true;
