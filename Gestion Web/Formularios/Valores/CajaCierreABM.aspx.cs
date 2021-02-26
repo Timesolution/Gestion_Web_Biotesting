@@ -690,15 +690,15 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
-                ControladorCaja controladorCaja = new ControladorCaja();
-                Caja_Arqueos arqueo = new Caja_Arqueos();
-                arqueo.Fecha = DateTime.Today;
-                arqueo.PuntoVenta = this.puntoVenta;
-                arqueo.Sucursal = this.sucursal;
-                arqueo.TotalCaja = Convert.ToDecimal(txtTotal.Text);
-                arqueo.TotalSistema = Convert.ToDecimal(txtTotalCaja.Text);
-                arqueo.Estado = 1;
-                controladorCaja.agregarArqueo(arqueo);
+                //ControladorCaja controladorCaja = new ControladorCaja();
+                //Caja_Arqueos arqueo = new Caja_Arqueos();
+                //arqueo.Fecha = DateTime.Today;
+                //arqueo.PuntoVenta = this.puntoVenta;
+                //arqueo.Sucursal = this.sucursal;
+                //arqueo.TotalCaja = Convert.ToDecimal(txtTotal.Text);
+                //arqueo.TotalSistema = Convert.ToDecimal(txtTotalCaja.Text);
+                //arqueo.Estado = 1;
+                //controladorCaja.agregarArqueo(arqueo);
             }
             catch
             {
