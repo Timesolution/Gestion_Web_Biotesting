@@ -12,7 +12,7 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="/img/Logos/gestion solution 2.png" rel="shortcut icon" type="image/x-icon" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -40,8 +40,12 @@
     <link href="./Scripts/plugins/msgGrowl/css/msgGrowl.css" rel="stylesheet">
     <link href="./Scripts/plugins/lightbox/themes/evolution-dark/jquery.lightbox.css" rel="stylesheet">
     <link href="./Scripts/plugins/msgbox/jquery.msgbox.css" rel="stylesheet">
-
+    
     <style>
+        .footer{
+
+        }
+
         .more-ot-alert {
             display: none;
             padding: 1.2rem;
@@ -54,35 +58,47 @@
             font-size: 28px;
         }
 
-        .more-ot-alert:before {
-            content: "";
-            position: absolute;
-            top: 24px;
-            left: -15px;
-            border-style: solid;
-            border-width: 15px 15px 15px 0;
-            border-color: transparent #9e9e9e;
-            display: block;
-            width: 0;
-            z-index: 1;
-        }
+            .more-ot-alert:before {
+                content: "";
+                position: absolute;
+                top: 24px;
+                left: -15px;
+                border-style: solid;
+                border-width: 15px 15px 15px 0;
+                border-color: transparent #9e9e9e;
+                display: block;
+                width: 0;
+                z-index: 1;
+            }
 
-        .more-ot-alert:after {
-            content: "";
-            position: absolute;
-            top: 27px;
-            left: -12px;
-            border-style: solid;
-            border-width: 12px 12px 12px 0;
-            border-color: transparent #eee;
-            display: block;
-            width: 0;
-            z-index: 1;
-        }
+            .more-ot-alert:after {
+                content: "";
+                position: absolute;
+                top: 27px;
+                left: -12px;
+                border-style: solid;
+                border-width: 12px 12px 12px 0;
+                border-color: transparent #eee;
+                display: block;
+                width: 0;
+                z-index: 1;
+            }
 
         @keyframes move {
             50% {
                 transform: translate(10px, 0);
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .more-ot-alert {
+                margin-left: 0 !important;
+                bottom: -30% !important;
+            }
+
+            .footer {
+                position: relative !important;
+                margin: 20px auto;
             }
         }
     </style>
@@ -618,7 +634,7 @@
             </div>--%>
         </div>
     </form>
-
+    <footer>
     <div class="footer" style="position: absolute; width: 100%;">
 
         <div class="container">
@@ -631,7 +647,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div></footer>
 </body>
 </html>
 
