@@ -93,12 +93,16 @@ namespace Gestion_Web
             {
                 if(!IsPostBack)
                 {
-                    int idSuc = (int)Session["Login_SucUser"];
-                    Sucursal s = this.contSucu.obtenerSucursalID(idSuc);
-                    this.Label1.Text = Context.User.Identity.Name;
-                    this.Label2.Text = s.nombre;
-                    this.Label3.Text = Session["Login_NombrePerfil"] as string;
-                    this.cargarIniciales();
+                    if(Session["Login_SucUser"] != null)
+                    {
+                        int idSuc = (int)Session["Login_SucUser"];
+                        Sucursal s = this.contSucu.obtenerSucursalID(idSuc);
+                        this.Label1.Text = Context.User.Identity.Name;
+                        this.Label2.Text = s.nombre;
+                        this.Label3.Text = Session["Login_NombrePerfil"] as string;
+                        this.cargarIniciales();
+                    }
+                    
                 }
                 System.Uri asd = Request.Url;// poner .contains = mi formulario
                 if (asd.AbsolutePath.Contains("ABMFacturasImagenes.aspx"))
