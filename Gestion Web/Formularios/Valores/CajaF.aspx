@@ -339,6 +339,16 @@
                                             <asp:LinkButton ID="lbtnBuscarTipoMovNombre" runat="server" class="btn btn-info" Text="<i class='shortcut-icon icon-search'></i>" OnClick="lbtnBuscarTipoMovNombre_Click" />
                                         </div>
                                     </div>
+                                           <%--<div class="form-group">
+                                               <asp:Label ID="lblCajaOrigen" CssClass="col-md-4" Visible="false" Text="text" runat="server" />
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="listCajaOrigen" Visible="false" runat="server" class="form-control"></asp:DropDownList>
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="listCajaOrigen" InitialValue="-1" ValidationGroup="BusquedaGroup_2" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>--%>
                                     <div class="form-group">
                                         <label class="col-md-4"></label>
                                         <div class="col-md-6">

@@ -634,7 +634,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&fechadesde=" + this.fechaD + "&fechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
+                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&fechadesde=" + this.txtFechaDesde.Text + "&fechaHasta=" + this.txtFechaHasta.Text + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
                 cargarMovimientos();
             }
             catch (Exception ex)
@@ -888,7 +888,8 @@ namespace Gestion_Web.Formularios.Cobros
 
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
-                    Session.Add("listaReporteDetalleCobros", listaCobros);
+                    Response.Cookies["listaReporteDetalleCobros"].Value = listaCobros;
+                    Response.Cookies["listaReporteDetalleCobros"].Expires = DateTime.Now.AddMinutes(10);
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=10','_blank');", true);
                 }
                 else
