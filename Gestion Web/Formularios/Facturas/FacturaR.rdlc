@@ -191,6 +191,26 @@
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
+    <DataSet Name="dtCodigoQr">
+      <Query>
+        <DataSourceName>dsPresupuesto</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Imagen">
+          <DataField>Imagen</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>dsPresupuesto</rd:DataSetName>
+        <rd:SchemaPath>C:\Proyectos\Luciano_Diaz\Gestion\Gestion_Web\Gestion Web\Formularios\Facturas\dsPresupuesto.xsd</rd:SchemaPath>
+        <rd:TableName>dtCodigoQr</rd:TableName>
+        <rd:TableAdapterFillMethod />
+        <rd:TableAdapterGetDataMethod />
+        <rd:TableAdapterName />
+      </rd:DataSetInfo>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -1868,7 +1888,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>6.52058cm</Height>
+          <Height>7.44319cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1889,7 +1909,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>1.34109cm</Top>
+              <Top>1.34108cm</Top>
               <Left>16.81551cm</Left>
               <Height>0.6cm</Height>
               <Width>3.61045cm</Width>
@@ -1925,7 +1945,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>5.78827cm</Top>
+              <Top>5.78826cm</Top>
               <Left>15.79916cm</Left>
               <Height>0.6cm</Height>
               <Width>4.93417cm</Width>
@@ -1957,7 +1977,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>1.34109cm</Top>
+              <Top>1.34108cm</Top>
               <Left>4.44727cm</Left>
               <Height>0.6cm</Height>
               <Width>3.01316cm</Width>
@@ -1993,7 +2013,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>1.34109cm</Top>
+              <Top>1.34108cm</Top>
               <Left>0.51364cm</Left>
               <Height>0.6cm</Height>
               <Width>3.93758cm</Width>
@@ -2029,7 +2049,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>1.34109cm</Top>
+              <Top>1.34108cm</Top>
               <Left>7.46043cm</Left>
               <Height>0.6cm</Height>
               <Width>3.84568cm</Width>
@@ -2065,7 +2085,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Iva</rd:DefaultName>
-              <Top>1.34109cm</Top>
+              <Top>1.34108cm</Top>
               <Left>11.29662cm</Left>
               <Height>0.6cm</Height>
               <Width>2.56177cm</Width>
@@ -2099,7 +2119,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalLetras</rd:DefaultName>
-              <Top>0.03526cm</Top>
+              <Top>0.03525cm</Top>
               <Left>0.54892cm</Left>
               <Height>0.6cm</Height>
               <Width>13.30948cm</Width>
@@ -2133,7 +2153,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>3.38764cm</Top>
+              <Top>3.38763cm</Top>
               <Left>14.76218cm</Left>
               <Height>0.6cm</Height>
               <Width>5.97115cm</Width>
@@ -2167,7 +2187,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>4.02291cm</Top>
+              <Top>4.0229cm</Top>
               <Left>18.13121cm</Left>
               <Height>0.6cm</Height>
               <Width>2.6374cm</Width>
@@ -2199,7 +2219,7 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>3.35235cm</Top>
+              <Top>3.35234cm</Top>
               <Left>4.44727cm</Left>
               <Height>0.6cm</Height>
               <Width>5.1077cm</Width>
@@ -2218,7 +2238,7 @@
               <Source>Embedded</Source>
               <Value>afip</Value>
               <Sizing>Fit</Sizing>
-              <Top>1.89804cm</Top>
+              <Top>1.89803cm</Top>
               <Left>0.54892cm</Left>
               <Height>3.36987cm</Height>
               <Width>3.9023cm</Width>
@@ -2247,7 +2267,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>4.02291cm</Top>
+              <Top>4.0229cm</Top>
               <Left>0.54892cm</Left>
               <Height>0.6cm</Height>
               <Width>10.70847cm</Width>
@@ -2279,7 +2299,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>4.02291cm</Top>
+              <Top>4.0229cm</Top>
               <Left>14.76218cm</Left>
               <Height>0.6cm</Height>
               <Width>3.29847cm</Width>
@@ -2311,7 +2331,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>5.78827cm</Top>
+              <Top>5.78826cm</Top>
               <Left>0.54892cm</Left>
               <Height>0.6cm</Height>
               <Width>9.01cm</Width>
@@ -2348,7 +2368,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>1.34109cm</Top>
+              <Top>1.34108cm</Top>
               <Left>13.85445cm</Left>
               <Height>0.6cm</Height>
               <Width>2.96106cm</Width>
@@ -2387,7 +2407,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>0.74109cm</Top>
+              <Top>0.74108cm</Top>
               <Left>16.81946cm</Left>
               <Height>0.6cm</Height>
               <Width>3.61045cm</Width>
@@ -2423,7 +2443,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>0.74109cm</Top>
+              <Top>0.74108cm</Top>
               <Left>4.45122cm</Left>
               <Height>0.6cm</Height>
               <Width>3.01316cm</Width>
@@ -2459,7 +2479,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>TotalFinal</rd:DefaultName>
-              <Top>0.74109cm</Top>
+              <Top>0.74108cm</Top>
               <Left>0.51759cm</Left>
               <Height>0.6cm</Height>
               <Width>3.93363cm</Width>
@@ -2495,7 +2515,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Subtotal2</rd:DefaultName>
-              <Top>0.74109cm</Top>
+              <Top>0.74108cm</Top>
               <Left>7.46438cm</Left>
               <Height>0.6cm</Height>
               <Width>3.84173cm</Width>
@@ -2531,7 +2551,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Iva</rd:DefaultName>
-              <Top>0.74109cm</Top>
+              <Top>0.74108cm</Top>
               <Left>11.29662cm</Left>
               <Height>0.6cm</Height>
               <Width>2.56178cm</Width>
@@ -2569,7 +2589,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>0.74109cm</Top>
+              <Top>0.74108cm</Top>
               <Left>13.8584cm</Left>
               <Height>0.6cm</Height>
               <Width>2.95711cm</Width>
@@ -2594,7 +2614,7 @@
               <Value>=First(Fields!Imagen.Value, "dtImagen")</Value>
               <MIMEType>image/png</MIMEType>
               <Sizing>FitProportional</Sizing>
-              <Top>4.64679cm</Top>
+              <Top>4.64678cm</Top>
               <Left>0.51364cm</Left>
               <Height>0.85573cm</Height>
               <Width>13.19969cm</Width>
@@ -2620,7 +2640,7 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox12</rd:DefaultName>
-              <Top>4.64679cm</Top>
+              <Top>4.64678cm</Top>
               <Left>0.79753cm</Left>
               <Height>0.34654cm</Height>
               <Width>12.95109cm</Width>
@@ -2636,6 +2656,22 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Image Name="imgCodigoQr">
+              <Source>Database</Source>
+              <Value>=First(Fields!Imagen.Value, "dtCodigoQr")</Value>
+              <MIMEType>image/bmp</MIMEType>
+              <Sizing>FitProportional</Sizing>
+              <Top>5.6789cm</Top>
+              <Left>11.45328cm</Left>
+              <Height>1.5cm</Height>
+              <Width>1.5cm</Width>
+              <ZIndex>23</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
           </ReportItems>
           <Style>
             <Border>
@@ -2673,6 +2709,8 @@
     </ReportParameter>
     <ReportParameter Name="DomicilioEntrega">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="DomicilioLegal">
@@ -2729,6 +2767,8 @@
     </ReportParameter>
     <ReportParameter Name="ParamBarra">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamPtoVta">
@@ -2757,6 +2797,8 @@
     </ReportParameter>
     <ReportParameter Name="ParamImagen">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamTotalDolares">
