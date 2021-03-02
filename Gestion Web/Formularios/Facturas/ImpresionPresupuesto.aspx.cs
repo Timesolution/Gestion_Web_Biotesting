@@ -733,28 +733,7 @@ namespace Gestion_Web.Formularios.Facturas
                     condicionPago = fact.cliente.vencFC.ToString();
                 }
 
-                #region Codigo QR
-
-                string textQrCode = GenerarCadenaCodigoQr(fact, cuitEmpresa);
-
-                QRCoder.QRCodeGenerator qRCodeGenerator = new QRCoder.QRCodeGenerator();
-                QRCoder.QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(textQrCode, QRCoder.QRCodeGenerator.ECCLevel.Q);
-                QRCoder.QRCode qRCode = new QRCoder.QRCode(qRCodeData);
-                Bitmap bmp = qRCode.GetGraphic(7);
-
-                using(MemoryStream ms = new MemoryStream())
-                {
-                    bmp.Save(ms, ImageFormat.Bmp);
-                    dsPresupuesto dsP = new dsPresupuesto();
-                    dsPresupuesto.dtCodigoQrRow qrCodeRow = dsP.dtCodigoQr.NewdtCodigoQrRow();
-                    qrCodeRow.Imagen = ms.ToArray();
-                    dsp.
-                }
-
-                //VerificarDirectorioCodigoQR(fact);
                 
-
-                #endregion
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 if (letraDoc == "A" || letraDoc == "M")
@@ -781,12 +760,42 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
 
+                #region Codigo QR
+
+                string textQrCode = GenerarCadenaCodigoQr(fact, cuitEmpresa);
+
+                QRCoder.QRCodeGenerator qRCodeGenerator = new QRCoder.QRCodeGenerator();
+                QRCoder.QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(textQrCode, QRCoder.QRCodeGenerator.ECCLevel.Q);
+                QRCoder.QRCode qRCode = new QRCoder.QRCode(qRCodeData);
+                Bitmap bmp = qRCode.GetGraphic(7);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bmp.Save(ms, ImageFormat.Bmp);
+                    dsPresupuesto dsP = new dsPresupuesto();
+                    dsPresupuesto.dtCodigoQrRow qrCodeRow = dsP.dtCodigoQr.NewdtCodigoQrRow();
+                    qrCodeRow.Imagen = ms.ToArray();
+                    dsP.dtCodigoQr.AdddtCodigoQrRow(qrCodeRow);
+
+                    ReportDataSource rds6 = new ReportDataSource();
+                    rds6.Name = "dtCodigoQr";
+                    rds6.Value = dsP.dtCodigoQr;
+                    this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                    this.ReportViewer1.LocalReport.DataSources.Add(rds6);
+                }
+
+                //VerificarDirectorioCodigoQR(fact);
+
+
+                #endregion
+
                 ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosFactura", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("dtImagen", dtImagen);
                 ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
                 ReportDataSource rds5 = new ReportDataSource("NumeroRemito", dtNroRemito);
-                ReportDataSource rds6 = new ReportDataSource("",dtCodigoQr);
+                
 
                 ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
@@ -850,12 +859,12 @@ namespace Gestion_Web.Formularios.Facturas
                     ReportViewer1.LocalReport.SetParameters(param46);
                 }
 
-                this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds4);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds5);
+                
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
@@ -1916,12 +1925,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string Url = "https://www.afip.gob.ar/fe/qr/?p=";
                 string datos = "{ 'ver':1," +
-                    "'fecha':'" + factura.fecha + "'," +
+                    "'fecha':'" + factura.fecha.ToString() + "'," +
                     "'cuit':'" + cuitEmisor + "'," +
                     "'ptoVta':" + factura.ptoV.puntoVenta + "," +
                     "'tipoCmp':" + tipoCmp + "," +
-                    "'nroCmp':" + Convert.ToInt64(factura.numero) + "," +
-                    "'importe':" + factura.total + "," +
+                    "'nroCmp':" + factura.numero + "," +
+                    "'importe':" + factura.total.ToString() + "," +
                     "'moneda':'ARS'," +
                     "'ctz':1," +
                     "'tipoDocRec':80," +
