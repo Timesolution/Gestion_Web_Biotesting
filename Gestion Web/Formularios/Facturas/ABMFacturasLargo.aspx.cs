@@ -4556,19 +4556,6 @@ namespace Gestion_Web.Formularios.Facturas
                         #endregion
                         #endregion
 
-                        #region Generar Codigo QR
-
-                        //Verificar si los directorios para guardar la imagen existen, si no existe, los creo.
-                        if (VerificarDirectorioCodigoQR(fact) > 0)
-                        {
-                            //if (GenerarImagenCodigoQR(fact))
-                            //{
-                                
-                            //}
-                        }
-
-                        #endregion
-
                         //Elimina los datos del objeto Factura
                         Session.Remove("Factura");
                         string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");

@@ -760,35 +760,35 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
 
-                #region Codigo QR
+                //#region Codigo QR
 
-                string textQrCode = GenerarCadenaCodigoQr(fact, cuitEmpresa);
+                //string textQrCode = GenerarCadenaCodigoQr(fact, cuitEmpresa);
 
-                QRCoder.QRCodeGenerator qRCodeGenerator = new QRCoder.QRCodeGenerator();
-                QRCoder.QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(textQrCode, QRCoder.QRCodeGenerator.ECCLevel.Q);
-                QRCoder.QRCode qRCode = new QRCoder.QRCode(qRCodeData);
-                Bitmap bmp = qRCode.GetGraphic(7);
+                //QRCoder.QRCodeGenerator qRCodeGenerator = new QRCoder.QRCodeGenerator();
+                //QRCoder.QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(textQrCode, QRCoder.QRCodeGenerator.ECCLevel.Q);
+                //QRCoder.QRCode qRCode = new QRCoder.QRCode(qRCodeData);
+                //Bitmap bmp = qRCode.GetGraphic(7);
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    bmp.Save(ms, ImageFormat.Bmp);
-                    dsPresupuesto dsP = new dsPresupuesto();
-                    dsPresupuesto.dtCodigoQrRow qrCodeRow = dsP.dtCodigoQr.NewdtCodigoQrRow();
-                    qrCodeRow.Imagen = ms.ToArray();
-                    dsP.dtCodigoQr.AdddtCodigoQrRow(qrCodeRow);
+                //using (MemoryStream ms = new MemoryStream())
+                //{
+                //    bmp.Save(ms, ImageFormat.Bmp);
+                //    dsPresupuesto dsP = new dsPresupuesto();
+                //    dsPresupuesto.dtCodigoQrRow qrCodeRow = dsP.dtCodigoQr.NewdtCodigoQrRow();
+                //    qrCodeRow.Imagen = ms.ToArray();
+                //    dsP.dtCodigoQr.AdddtCodigoQrRow(qrCodeRow);
 
-                    ReportDataSource rds6 = new ReportDataSource();
-                    rds6.Name = "dtCodigoQr";
-                    rds6.Value = dsP.dtCodigoQr;
+                //    ReportDataSource rds6 = new ReportDataSource();
+                //    rds6.Name = "dtCodigoQr";
+                //    rds6.Value = dsP.dtCodigoQr;
                     this.ReportViewer1.LocalReport.DataSources.Clear();
 
-                    this.ReportViewer1.LocalReport.DataSources.Add(rds6);
-                }
+                //    this.ReportViewer1.LocalReport.DataSources.Add(rds6);
+                //}
 
-                //VerificarDirectorioCodigoQR(fact);
+                ////VerificarDirectorioCodigoQR(fact);
 
 
-                #endregion
+                //#endregion
 
                 ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosFactura", dtDatos);
