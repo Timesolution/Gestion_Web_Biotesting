@@ -19,17 +19,29 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using iTextSharp.text;
+using Image = iTextSharp.text.Image;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Gestion_Web.Formularios.Facturas
 {
     public partial class ImpresionPresupuesto : System.Web.UI.Page
     {
+        #region Atributos
+
         private int idPresupuesto;
         private int accion;
         private int original;
         private decimal imprimirOtraDivisa;
         private int idMoneda;
         Moneda monedaElegida = new Moneda();
+        Configuracion configuracion = new Configuracion();
+
+        #endregion
+
+        #region Controladores
+
         controladorFacturacion controlador = new controladorFacturacion();
         controladorCliente controlCliente = new controladorCliente();
         ControladorEmpresa controlEmpresa = new ControladorEmpresa();
@@ -42,7 +54,8 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
         controladorContacto controlContacto = new controladorContacto();
 
-        Configuracion configuracion = new Configuracion();
+        #endregion
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -208,12 +221,12 @@ namespace Gestion_Web.Formularios.Facturas
                         direLegal = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
                             drl[4].ToString() + " " + drl[5].ToString();
                     }
-                    if (drl[0].ToString() == "Entrega" && direccionEntrega==null)
+                    if (drl[0].ToString() == "Entrega" && direccionEntrega == null)
                     {
                         direEntrega = drl[1].ToString() + " " + drl[2].ToString() + " " + drl[3].ToString() + " " +
                             drl[4].ToString() + " " + drl[5].ToString();
                     }
-                    else if(drl[0].ToString() == "Entrega" && direccionEntrega != null)
+                    else if (drl[0].ToString() == "Entrega" && direccionEntrega != null)
                     {
                         direEntrega = direccionEntrega;
                     }
@@ -504,7 +517,7 @@ namespace Gestion_Web.Formularios.Facturas
                     letraDoc = "E";
                     CodigoDoc = "Cod. 19";
                 }
-                else if(tipoDoc.Contains("Factura M"))
+                else if (tipoDoc.Contains("Factura M"))
                 {
                     letraDoc = "M";
                     CodigoDoc = "Cod. 51";
@@ -720,6 +733,8 @@ namespace Gestion_Web.Formularios.Facturas
                     condicionPago = fact.cliente.vencFC.ToString();
                 }
 
+                
+
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 if (letraDoc == "A" || letraDoc == "M")
                 {
@@ -745,11 +760,42 @@ namespace Gestion_Web.Formularios.Facturas
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("FacturaR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
 
+                //#region Codigo QR
+
+                //string textQrCode = GenerarCadenaCodigoQr(fact, cuitEmpresa);
+
+                //QRCoder.QRCodeGenerator qRCodeGenerator = new QRCoder.QRCodeGenerator();
+                //QRCoder.QRCodeData qRCodeData = qRCodeGenerator.CreateQrCode(textQrCode, QRCoder.QRCodeGenerator.ECCLevel.Q);
+                //QRCoder.QRCode qRCode = new QRCoder.QRCode(qRCodeData);
+                //Bitmap bmp = qRCode.GetGraphic(7);
+
+                //using (MemoryStream ms = new MemoryStream())
+                //{
+                //    bmp.Save(ms, ImageFormat.Bmp);
+                //    dsPresupuesto dsP = new dsPresupuesto();
+                //    dsPresupuesto.dtCodigoQrRow qrCodeRow = dsP.dtCodigoQr.NewdtCodigoQrRow();
+                //    qrCodeRow.Imagen = ms.ToArray();
+                //    dsP.dtCodigoQr.AdddtCodigoQrRow(qrCodeRow);
+
+                //    ReportDataSource rds6 = new ReportDataSource();
+                //    rds6.Name = "dtCodigoQr";
+                //    rds6.Value = dsP.dtCodigoQr;
+                    this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                //    this.ReportViewer1.LocalReport.DataSources.Add(rds6);
+                //}
+
+                ////VerificarDirectorioCodigoQR(fact);
+
+
+                //#endregion
+
                 ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosFactura", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("dtImagen", dtImagen);
                 ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
                 ReportDataSource rds5 = new ReportDataSource("NumeroRemito", dtNroRemito);
+                
 
                 ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
@@ -813,12 +859,12 @@ namespace Gestion_Web.Formularios.Facturas
                     ReportViewer1.LocalReport.SetParameters(param46);
                 }
 
-                this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds4);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds5);
+                
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
@@ -1135,8 +1181,8 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     direEntrega = direLegal;
                 }
-               
-              
+
+
 
 
                 //Total equivalente en dolares
@@ -1214,7 +1260,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dtComentarios.Rows[0]["Observaciones"] += "\nPrecios calculados en base a la divisa seleccionada. (" + monedaElegida.moneda + ")";
                 }
 
-                
+
                 //obtengo id empresa para buscar el logo correspondiente
                 int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
                 //string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/Logo.jpg");
@@ -1441,11 +1487,12 @@ namespace Gestion_Web.Formularios.Facturas
                 //direccion cliente
                 string direLegal = "-";
                 string direEntrega = "-";
-                DataTable dtFactura=controlador.obtenerNroFacturaByRemito(idRemito);
+                DataTable dtFactura = controlador.obtenerNroFacturaByRemito(idRemito);
                 string direccionEntrega = null;
 
 
-                if (dtFactura.Rows.Count > 0) { 
+                if (dtFactura.Rows.Count > 0)
+                {
                     int idFactura = Convert.ToInt32(dtFactura.Rows[0][1]);
                     direccionEntrega = controlador.ObtenerDireccionEntregaFactura(idFactura);
                 }
@@ -1792,6 +1839,13 @@ namespace Gestion_Web.Formularios.Facturas
 
         }
 
+        #region Funciones para Codigo Barras/Qr
+
+        /// <summary>
+        /// Este metodo genera un codigo de barras
+        /// </summary>
+        /// <param name="idRemito"></param>
+        /// <returns></returns>
         public string generarCodigo(int idRemito)
         {
             try
@@ -1820,6 +1874,113 @@ namespace Gestion_Web.Formularios.Facturas
                 return null;
             }
         }
+
+        /// <summary>
+        /// Este metodo sirve para obtener el tipo de documento comparando nuestra base de datos en la tabla 'tipoDocumento' con la tabla publicada de la AFIP
+        /// con sus correspondientes codigos. Devolvemos un numerico porque asi lo indica la especificacion del codigo qr de la AFIP.
+        /// </summary>
+        /// <param name="idTipoDocumento"></param>
+        /// <returns></returns>
+        public int ObtenerCodigoComprobante(int idTipoDocumento)
+        {
+            switch (idTipoDocumento)
+            {
+                case 1: //Factura A
+                    return 1;
+
+                case 2: //Factura B
+                    return 6;
+
+                case 3://Factura C
+                    return 11;
+
+                case 4: //Nota debito A
+                    return 2;
+
+                case 5: //Nota debito B
+                    return 7;
+
+                case 6: //Nota debito C
+                    return 12;
+
+                case 7: //Nota credito C
+                    return 13;
+
+                case 8: //Nota credito B
+                    return 8;
+
+                case 9: //Nota credito A
+                    return 3;
+
+                default:
+                    return 0;
+            }
+        }
+
+        public string GenerarCadenaCodigoQr(Factura factura, string cuitEmisor)
+        {
+            try
+            {
+                int tipoCmp = ObtenerCodigoComprobante(factura.tipoFactura);
+
+                string Url = "https://www.afip.gob.ar/fe/qr/?p=";
+                string datos = "{ 'ver':1," +
+                    "'fecha':'" + factura.fecha.ToString() + "'," +
+                    "'cuit':'" + cuitEmisor + "'," +
+                    "'ptoVta':" + factura.ptoV.puntoVenta + "," +
+                    "'tipoCmp':" + tipoCmp + "," +
+                    "'nroCmp':" + factura.numero + "," +
+                    "'importe':" + factura.total.ToString() + "," +
+                    "'moneda':'ARS'," +
+                    "'ctz':1," +
+                    "'tipoDocRec':80," +
+                    "'nroDocRec':" + factura.cliente.cuit + "," +
+                    "'tipoCodAut':'E'," +
+                    "'codAut':" + factura.CAE + "}";
+
+                string cadena = Url + datos;
+
+                return cadena;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Esta funcion crea un directorio en cada carpeta de 'Punto de Venta' donde se guardaran todos los codigos QR como imagen,
+        /// cuyo nombre sera el numero del comprobante.
+        /// </summary>
+        /// <param name="factura"></param>
+        /// <returns></returns>
+        public int VerificarDirectorioCodigoQR(Factura factura)
+        {
+            try
+            {
+                //Verificamos la ruta
+                String rutaCodigoQR = HttpContext.Current.Server.MapPath(WebConfigurationManager.AppSettings["CodigoQR"].ToString() + factura.empresa.id + "/" + factura.sucursal.id + "/" + factura.ptoV.id + "/");
+                var folderCodigoQR = System.Web.HttpContext.Current.Server.MapPath(rutaCodigoQR);
+
+                //Verificamos si existe la carpeta
+                if (!Directory.Exists(folderCodigoQR))
+                {
+                    //La creamos
+                    Directory.CreateDirectory(folderCodigoQR);
+                    return 1;
+                }
+                else
+                    return 1;
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error. Ubicacion: ABMFacturasLargo.aspx. Metodo: VerificarDirectorioCodigoQR. Excepcion: " + ex.Message);
+                return -1;
+            }
+        }
+
+        #endregion
 
         private DataTable obtenerDTarticulos(DataTable dataTable)
         {

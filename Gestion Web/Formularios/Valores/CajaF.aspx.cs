@@ -1839,14 +1839,5 @@ namespace Gestion_Web.Formularios.Valores
                 return false;
             }
         }
-
-        //protected void ListPuntoVenta2_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    if(ListPuntoVenta2.SelectedValue == "VALES")
-        //    {
-        //        lblCajaOrigen.Visible = true;
-        //        listCajaOrigen.Visible = true;
-        //    }
-        //}
     }
 }

@@ -4556,6 +4556,7 @@ namespace Gestion_Web.Formularios.Facturas
                         #endregion
                         #endregion
 
+                        //Elimina los datos del objeto Factura
                         Session.Remove("Factura");
                         string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
                         if (imprimir == "1")
@@ -11867,5 +11868,53 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
         }
+
+        #region CodigoQR
+
+        /// <summary>
+        /// Esta funcion crea un directorio en cada carpeta de 'Punto de Venta' donde se guardaran todos los codigos QR como imagen,
+        /// cuyo nombre sera el numero del comprobante.
+        /// </summary>
+        /// <param name="factura"></param>
+        /// <returns></returns>
+        public int VerificarDirectorioCodigoQR(Factura factura)
+        {
+            try
+            {
+                //Verificamos la ruta
+                String rutaCodigoQR = HttpContext.Current.Server.MapPath(WebConfigurationManager.AppSettings["CodigoQR"].ToString() + factura.empresa.id + "/"+ factura.sucursal.id + "/" + factura.ptoV.id + "/");
+                var folderCodigoQR = System.Web.HttpContext.Current.Server.MapPath(rutaCodigoQR);
+
+                //Verificamos si existe la carpeta
+                if (!Directory.Exists(folderCodigoQR))
+                {
+                    //La creamos
+                    Directory.CreateDirectory(folderCodigoQR);
+                    return 1;
+                }
+                else
+                    return 1;
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error. Ubicacion: ABMFacturasLargo.aspx. Metodo: VerificarDirectorioCodigoQR. Excepcion: " + ex.Message);
+                return -1;
+            }
+        }
+
+        public int GenerarImagenCodigoQR(Factura factura)
+        {
+            try
+            {
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: Ocurrio un error. Ubicacion: ABMFacturasLargo.aspx. Metodo: GenerarImagenCodigoQR. Excepcion: " + ex.Message);
+                return -1;
+            }
+        }
+
+        #endregion
     }
 }
