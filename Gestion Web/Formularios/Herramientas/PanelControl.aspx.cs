@@ -1581,6 +1581,7 @@ namespace Gestion_Web.Formularios.Herramientas
 
                 controladorCobranza controladorCobranza = new controladorCobranza();
                 int i = configuracion.ModificarSumaPuntosCobros(ListPuntosCobro.SelectedValue);
+                int x = configuracion.ModificarRedimirPuntos(txtPesosPuntos.Text);
                 controladorCobranza.ModificarPorcentajesPuntos("Efectivo", this.txtPorcentajeEfectivo.Text == "" ? "0" : this.txtPorcentajeEfectivo.Text);
                 controladorCobranza.ModificarPorcentajesPuntos("Cheques", this.txtPorcentajeCheques.Text == "" ? "0" : this.txtPorcentajeCheques.Text);
                 controladorCobranza.ModificarPorcentajesPuntos("Transferencia", this.txtPorcentajeTransferencia.Text == "" ? "0" : this.txtPorcentajeTransferencia.Text);

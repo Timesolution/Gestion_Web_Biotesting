@@ -295,6 +295,9 @@ namespace Gestion_Web.Formularios.Facturas
                     //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
+                    int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                    CargarPuntosCliente(idCliente);
+
                 }
 
                 if (Session["FacturasABM_ArticuloModalMultiple"] != null)
@@ -330,6 +333,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (config.commitante != "1")
                             CargarProductoAFactura();
 
+
                         //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
                     }
 
@@ -337,6 +341,9 @@ namespace Gestion_Web.Formularios.Facturas
                     ActualizarTotales();
                     Session["FacturasABM_ArticuloModalMultiple"] = null;
                     Session["FacturasABM_ArticuloModal"] = null;
+
+                    int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                    CargarPuntosCliente(idCliente);
                 }
 
                 #region javascript calls
@@ -1904,6 +1911,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (this.cliente != null)
                 {
+
+                    //Cargo el total de los puntos.
+                    CargarPuntosCliente(idCliente);
+;
                     this.lblMovSolicitud.Text = "";
                     if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
@@ -2113,6 +2124,29 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
+            }
+        }
+
+        public void CargarPuntosCliente(int idCliente)
+        {
+            try
+            {
+                //Busco el total de los puntos.
+                DataTable puntosCliente = contCobranza.ObtenerTotalPuntosCliente(idCliente);
+
+                if (!string.IsNullOrEmpty(puntosCliente.Rows[0]["saldo"].ToString()))
+                {
+                    this.txtPuntosTotales.Text = puntosCliente.Rows[0]["saldo"].ToString();
+                }
+                else
+                {
+                    this.txtPuntosTotales.Text = "0";
+                }
+
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -2351,7 +2385,7 @@ namespace Gestion_Web.Formularios.Facturas
                         int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Factura A");
                         this.labelNroFactura.Text = "Factura A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                     }
-                    else if(cliente[1].Contains("Responsable Inscripto") && c.monotributo == "2")
+                    else if (cliente[1].Contains("Responsable Inscripto") && c.monotributo == "2")
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                         PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
@@ -2427,7 +2461,7 @@ namespace Gestion_Web.Formularios.Facturas
                             PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                             int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
 
-                            if(tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
+                            if (tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
                                 this.labelNroFactura.Text = "Nota de Credito M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                             else
                                 this.labelNroFactura.Text = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
@@ -3108,6 +3142,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (iec == 1)
                             {
                                 this.generarFactura(0);
+                                
                             }
                             else
                             {
@@ -3136,6 +3171,18 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error en el metodo btnAgregar_Click() " + ex.Message);
+            }
+        }
+
+        public void DescontarPuntos(int idCliente, int idDocumento, decimal puntos)
+        {
+            try
+            {
+                contCobranza.AgregarPuntosCanjeados(idCliente, idDocumento, puntos);
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -3436,9 +3483,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Si viene de Pedidos y existe criterio de ordenamiento en el web.config, ordeno los articulos segun ese criterio
                 if (this.accion == 5 && !string.IsNullOrEmpty(ordenar) && ordenar == "1")
-                    f.items = f.items.OrderBy(x => x.articulo.ubicacion ).ThenBy(x => x.articulo.descripcion).ToList();
-              
-          
+                    f.items = f.items.OrderBy(x => x.articulo.ubicacion).ThenBy(x => x.articulo.descripcion).ToList();
+
+
 
                 foreach (ItemFactura item in f.items)
                 {
@@ -3491,9 +3538,18 @@ namespace Gestion_Web.Formularios.Facturas
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
                 if (ListSucursalCliente.SelectedIndex > 0)
+                {
                     txtCant.Enabled = PuedeModificarCantidadDeItemSegunConfiguracion();
+                }
                 else
+                {
                     txtCant.Enabled = true;
+                }
+                if (item.articulo.codigo.Equals("puntos", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    txtCant.Enabled = false;
+                }
+
                 tr.Cells.Add(celCantidad);
 
                 TableCell celDescripcion = new TableCell();
@@ -4364,6 +4420,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (i > 0)
                     {
+                        decimal puntos = Convert.ToInt32(txtCanjearPuntos.Text) * -1;
+                        // se obtiene los puntos que se canjean y se  pone en negativo para poder descontarlos.
+                        // se utiliza el medio de pago de ID = 8 ya que es el de canje de puntos
+                        
+                        DescontarPuntos(fact.cliente.id, fact.id, puntos);
+
                         #region func post generarl
                         if (this.accion == 4)
                         {
@@ -4616,7 +4678,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-            
+
         }
 
         public void AgregarEventoCliente(int idCliente, string FactNumero)
@@ -4641,7 +4703,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
 
             }
-            
+
         }
 
         private void procesoFacturarPorcentual(Factura fact, DataTable dtPago, int user, int generaRemito)
@@ -4992,7 +5054,7 @@ namespace Gestion_Web.Formularios.Facturas
                 #region Articulos compuestos
                 Articulo articuloCompuesto = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
                 var articulos = contArticulo.obtenerArticulosYTriggerByArticuloCompuesto(articuloCompuesto.id);
-                if (articulos != null )
+                if (articulos != null)
                 {
 
                     foreach (var art in articulos)
@@ -5035,7 +5097,7 @@ namespace Gestion_Web.Formularios.Facturas
                         }
 
 
-                        else if(art.precioEnArticulo == 0  && ListSucursalCliente.Visible == false)
+                        else if (art.precioEnArticulo == 0 && ListSucursalCliente.Visible == false)
                         {
 
                             ItemFactura fact = new ItemFactura();
@@ -5063,7 +5125,7 @@ namespace Gestion_Web.Formularios.Facturas
                             fa.items = fa.items.Distinct().ToList();
                             Session.Add("Factura", fa);
                         }
-                     }
+                    }
                 }
                 #endregion
 
@@ -5171,6 +5233,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
                 this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+
+                if (idCodigo.Equals("puntos", StringComparison.InvariantCultureIgnoreCase))
+                {
+                     int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                    CargarPuntosCliente(idCliente);
+                }
+
 
             }
             catch (Exception ex)
@@ -5765,8 +5834,8 @@ namespace Gestion_Web.Formularios.Facturas
         protected void ListSucursal_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            if(ListSucursalCliente.SelectedIndex!=-1)
-            ListSucursalCliente.SelectedIndex = 0;
+            if (ListSucursalCliente.SelectedIndex != -1)
+                ListSucursalCliente.SelectedIndex = 0;
             //this.txtPtoVenta.Text = this.ListSucursal.SelectedValue;
             //cargarPuntoVta(Convert.ToInt32(this.ListSucursal.SelectedValue));
 
@@ -5775,7 +5844,7 @@ namespace Gestion_Web.Formularios.Facturas
             cargarVendedor();
             //Me fijo si hay que cargar un cliente por defecto
             this.verificarClienteDefecto();
-           
+
         }
         protected void ListPuntoVenta_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -6014,6 +6083,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.checkDatos.Checked)
                 {
                     this.phDatosEntrega.Visible = true;
+
                 }
                 else
                 {
@@ -11882,7 +11952,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 //Verificamos la ruta
-                String rutaCodigoQR = HttpContext.Current.Server.MapPath(WebConfigurationManager.AppSettings["CodigoQR"].ToString() + factura.empresa.id + "/"+ factura.sucursal.id + "/" + factura.ptoV.id + "/");
+                String rutaCodigoQR = HttpContext.Current.Server.MapPath(WebConfigurationManager.AppSettings["CodigoQR"].ToString() + factura.empresa.id + "/" + factura.sucursal.id + "/" + factura.ptoV.id + "/");
                 var folderCodigoQR = System.Web.HttpContext.Current.Server.MapPath(rutaCodigoQR);
 
                 //Verificamos si existe la carpeta
@@ -11916,5 +11986,114 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #endregion
+
+        protected void btnGuardarPuntosCanjear_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+
+                if (idCliente > 0)
+                {
+                    // le cargo el resto.
+                    txtPuntosTotales.Text = txtRestanPuntosTotales.Text;
+                    // buscamos el articulos de PUNTOS por descripcion. 
+                    var articulo = contArticulo.obtenerArticuloCodigo("PUNTOS");
+
+                    if (articulo != null)
+                    {
+
+                        //Factura f = Session["Factura"] as Factura;
+
+                        //if (!String.IsNullOrEmpty(this.txtRenglon.Text))
+                        //    item.nroRenglon = Convert.ToInt32(this.txtRenglon.Text);
+                        //else
+                        //    item.nroRenglon = f.items.Count() + 1;
+
+                        //f.items.Add(item);
+                        //f.items = f.items.Distinct().ToList();
+                        //Session.Add("Factura", f);
+
+                        // cargo el valor del punto
+
+                        ItemFactura fact = new ItemFactura();
+
+                        int valorPunto = Convert.ToInt32(c.RedimirPuntos1PtoPesos);
+
+                        if (valorPunto > 0)
+                        {
+
+                            int PuntosACanjear = Convert.ToInt32(txtCanjearPuntos.Text);
+
+                            fact.articulo = articulo;
+                            fact.cantidad = PuntosACanjear * -1;
+                            fact.precioUnitario = valorPunto;
+                            fact.total = (valorPunto * PuntosACanjear) * -1;
+                            fact.precioSinIva = valorPunto;
+
+                            this.nuevaFactura.items.Add(fact);
+
+                            //lo agrego al session
+                            if (Session["Factura"] == null)
+                            {
+                                Factura fac = new Factura();
+                                Session.Add("Factura", fac);
+                            }
+
+                            Factura fa = Session["Factura"] as Factura;
+
+                            fact.nroRenglon = fa.items.Count() + 1;
+
+                            fa.items.Add(fact);
+                            fa.items = fa.items.Distinct().ToList();
+                            Session.Add("Factura", fa);
+
+
+                            this.cargarItems();
+
+                            //agrego abajo
+                            //this.factura.items.Add(item);
+                            //actualizo totales
+                            this.ActualizarTotales();
+
+                            //borro los campos
+                            this.borrarCamposagregarItem();
+                            //this.UpdatePanel1.Update();
+                            this.txtCodigo.Focus();
+
+                            this.lblMontoOriginal.Text = fa.total.ToString();
+                            this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                            this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+
+
+
+                        }
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("El valor de 1 punto es 0, debe modificarlos en Herramientas - Panel de control - Puntos", null));
+                        }
+
+                    }
+                    else
+                    {
+                        //informar que no existe el articulo Puntos
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("No existe el articulo PUNTOS, debe crearlo para poder interactuar con los puntos, Genere el articulo con el codigo PUNTOS", null));
+                    }
+                }
+                else
+                {
+                    //informar debe seleccionar un cliente primero
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Debe seleccionar un cliente para poder ver sus puntos", null));
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
     }
 }

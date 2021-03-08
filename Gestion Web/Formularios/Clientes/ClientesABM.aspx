@@ -1409,9 +1409,8 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th style="width: 25%">Fecha</th>
-                                                                    <th style="width: 25%">Numero de cobro</th>
+                                                                    <th style="width: 25%">Numero de cobro/Canje</th>
                                                                     <th style="width: 25%">Puntos</th>
-                                                                    <
                                                                     <th style="width: 25%">Tipo de pago</th>
                                                                 </tr>
                                                             </thead>

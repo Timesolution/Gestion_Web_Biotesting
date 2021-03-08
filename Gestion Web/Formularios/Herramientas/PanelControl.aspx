@@ -790,6 +790,14 @@
                                         <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
+
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-8">Redimir Puntos 1 PTO = </label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtPesosPuntos" runat="server" class="form-control" TextMode="Number"  />
+                                        <span class="input-group-addon">$</span>
+                                        </div>
+                                    </div>
                                 </fieldset>
                             </ContentTemplate>
                             <Triggers>

@@ -403,7 +403,7 @@
                                         <div class="col-md-8">
                                             <div role="form" class="form-horizontal col-md-12">
                                                 <ul id="myTab" class="nav nav-tabs">
-                                                    <li class="active"><a href="#Comentarios" data-toggle="tab">Comentarios</a></li>
+                                                    <li class="active"><a href="#Comentarios" data-toggle="tab">Extras</a></li>
                                                     <li class=""><a href="#Combustible" runat="server" id="linkCombustible" visible="false" data-toggle="tab">Datos Combustible</a></li>
                                                 </ul>
                                                 <div class="tab-content">
@@ -415,6 +415,13 @@
                                                                         <asp:PlaceHolder ID="phDatosEntrega" Visible="false" runat="server">
                                                                             <asp:UpdatePanel ID="UpdatePanel123" UpdateMode="Always" runat="server">
                                                                                 <ContentTemplate>
+                                                                                    <div class="form-group">
+                                                                                        <label class="col-md-3">Puntos:</label>
+
+                                                                                        <div class="col-md-1">
+                                                                                            <asp:LinkButton ID="lbtnRedimirPuntos" runat="server" Text="Puntos" data-toggle="modal" href="#modalRedimirPuntos" class="btn btn-success" />
+                                                                                        </div>
+                                                                                    </div>
                                                                                     <div class="form-group">
                                                                                         <label class="col-md-3">Ticket de cambio:</label>
 
@@ -495,7 +502,7 @@
                                                                         </asp:PlaceHolder>
 
                                                                         <div class="col-md-12">
-                                                                            <asp:CheckBox ID="checkDatos" TextAlign="Left" CssClass="pull-right" Text="Comentarios&nbsp&nbsp" runat="server" AutoPostBack="True" OnCheckedChanged="checkDatos_CheckedChanged" />
+                                                                            <asp:CheckBox ID="checkDatos" TextAlign="Left" CssClass="pull-right" Text="Extras&nbsp&nbsp" runat="server" AutoPostBack="True" OnCheckedChanged="checkDatos_CheckedChanged" />
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -685,29 +692,29 @@
                                                                     <div class="col-md-4">
                                                                         <asp:TextBox ID="txtPorcRetencion" Style="text-align: right" runat="server" class="form-control" AutoPostBack="True" OnTextChanged="txtRetencion_TextChanged" TextMode="Number" Text="0"></asp:TextBox>
                                                                     </div>
-                                                                <div class="col-md-5">
-                                                                    <div class="input-group">
-                                                                        <a class="btn btn-info ui-tooltip input-group-addon" title data-original-title="Retencion" data-toggle="modal" href="#modalCalcularRetencionConUnMonto" runat="server" id="A3" visible="true">
-                                                                            <i class="shortcut-icon icon-money"></i>
-                                                                        </a>
-                                                                        <asp:TextBox ID="txtRetencion" Style="text-align: right" runat="server" class="form-control" Text="0.00" disabled></asp:TextBox>
-                                                                        <%--<span class="input-group-addon">$</span>--%>
+                                                                    <div class="col-md-5">
+                                                                        <div class="input-group">
+                                                                            <a class="btn btn-info ui-tooltip input-group-addon" title data-original-title="Retencion" data-toggle="modal" href="#modalCalcularRetencionConUnMonto" runat="server" id="A3" visible="true">
+                                                                                <i class="shortcut-icon icon-money"></i>
+                                                                            </a>
+                                                                            <asp:TextBox ID="txtRetencion" Style="text-align: right" runat="server" class="form-control" Text="0.00" disabled></asp:TextBox>
+                                                                            <%--<span class="input-group-addon">$</span>--%>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div class="form-group" style="text-align: left">
-                                                                <strong>
-                                                                    <label class="col-md-3">Total:</label></strong>
-                                                                <div class="col-md-9">
-                                                                    <div class="input-group">
-                                                                        <span class="input-group-addon">$</span>
-                                                                        <asp:TextBox ID="txtTotal" Style="text-align: right" runat="server" class="form-control" onchange="javascript:return ActualizarTotalArticulos();" Text="0.00" disabled Font-Bold="True"></asp:TextBox>
+                                                                <div class="form-group" style="text-align: left">
+                                                                    <strong>
+                                                                        <label class="col-md-3">Total:</label></strong>
+                                                                    <div class="col-md-9">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon">$</span>
+                                                                            <asp:TextBox ID="txtTotal" Style="text-align: right" runat="server" class="form-control" onchange="javascript:return ActualizarTotalArticulos();" Text="0.00" disabled Font-Bold="True"></asp:TextBox>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                        </div>
-                                        </td>
+                                                        </td>
                                                         <%--<td>
                                                             <div role="form" class="form-horizontal col-md-12">
                                                                 <div class="form-group" style="text-align: left">
@@ -789,7 +796,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                    </div>
+                                        </div>
                                     </div>
 
                                 </ContentTemplate>
@@ -825,6 +832,54 @@
             </div>
             <rsweb:ReportViewer ID="ReportViewer1" runat="server" Visible="false" Font-Names="Verdana" Font-Size="8pt" WaitMessageFont-Names="Verdana" WaitMessageFont-Size="14pt" Width="80%">
             </rsweb:ReportViewer>
+        </div>
+
+        <div id="modalRedimirPuntos" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 75%;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Redimir Puntos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel runat="server" UpdateMode="Always" ID="UpdatePanel16">
+                                <ContentTemplate>
+                                    <fieldset>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label class="col-md-8">Puntos</label>
+                                            <div class="input-group">
+                                                <asp:TextBox ID="txtPuntosTotales" disabled runat="server" class="form-control" TextMode="Number" />
+                                                <span class="input-group-addon">Ptos</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label class="col-md-8">Cajear</label>
+                                            <div class="input-group">
+                                                <asp:TextBox ID="txtCanjearPuntos" runat="server" onchange="test(this)" class="form-control" TextMode="Number" />
+                                                <span class="input-group-addon">Ptos</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 15px;">
+                                            <label class="col-md-8">Restan</label>
+                                            <div class="input-group">
+                                                <asp:TextBox ID="txtRestanPuntosTotales" disabled runat="server" class="form-control" TextMode="Number" />
+                                                <span class="input-group-addon">Ptos</span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:LinkButton ID="btnGuardarPuntosCanjear" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnGuardarPuntosCanjear_Click" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
@@ -2152,6 +2207,29 @@
     <script src="../../Scripts/demo/notifications.js"></script>
 
     <script src="../../Scripts/bootstrap.min.js"></script>
+
+
+    <script>
+
+        function test(txt) {
+            var totalPuntos = document.getElementById("<%= txtPuntosTotales.ClientID %>").value;
+            var totalCanjear = document.getElementById("<%= txtCanjearPuntos.ClientID %>").value;
+            var puntos = parseInt(totalPuntos);
+            var canje = parseInt(totalCanjear);
+
+            if (canje > puntos) {
+                alert('Los puntos a canjear tienen mas puntos que los totales.');
+            } else {
+                var restan = puntos - canje;
+
+                document.getElementById("<%= txtRestanPuntosTotales.ClientID %>").value = restan;
+            }
+
+            
+
+        }
+
+    </script>
 
     <script>
         function pageLoad() {
