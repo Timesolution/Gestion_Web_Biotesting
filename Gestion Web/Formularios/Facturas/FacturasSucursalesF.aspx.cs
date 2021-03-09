@@ -107,7 +107,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (s == "73")//Ventas.Ventas.Sucursales
                         {
                             string perfil = Session["Login_NombrePerfil"] as string;
-                            if (perfil == "SuperAdministrador")
+                            if (perfil == "SuperAdministrador" || perfil == "Control de Stock")
                             {
                                 this.DropListSucursalOrigen.Attributes.Remove("disabled");
                                 this.DropListSucursalDestino.Attributes.Remove("disabled");

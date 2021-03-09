@@ -115,7 +115,7 @@ namespace Gestion_Web.Formularios.Articulos
                         this.permisoEliminar = 1;
                     }
                     //verifico si puede cambiar sucursal
-                    if (perfil == "SuperAdministrador" || perfil == "Stock" || permiso2 != null)
+                    if (perfil == "SuperAdministrador" || perfil == "Stock" || permiso2 != null || perfil == "Control de Stock")
                     {
                         this.DropListSucursal_St2.Attributes.Remove("disabled");
                         this.DropListSucursalRef.Attributes.Remove("disabled");
