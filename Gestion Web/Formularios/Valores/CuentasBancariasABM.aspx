@@ -72,6 +72,13 @@
                                                             <asp:RequiredFieldValidator ControlToValidate="txtLibrador" ID="RequiredFieldValidator5" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                         </div>
                                                     </div>
+                                                              <div class="form-group">
+                                                        <label for="name" class="col-md-3">Plan de cuentas</label>
+
+                                                        <div class="col-md-6">
+                                                            <asp:DropDownList ID="ListPlanCuentas" runat="server" class="form-control" ></asp:DropDownList>
+                                                        </div>
+                                                    </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="ArticuloGroup" OnClick="btnAgregar_Click" />

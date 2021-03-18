@@ -1914,7 +1914,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //Cargo el total de los puntos.
                     CargarPuntosCliente(idCliente);
-;
+                    ;
                     this.lblMovSolicitud.Text = "";
                     if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
@@ -3142,7 +3142,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (iec == 1)
                             {
                                 this.generarFactura(0);
-                                
+
                             }
                             else
                             {
@@ -4412,7 +4412,6 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         divisaElegida = Convert.ToInt32(DropListDivisa.SelectedValue);
 
-
                         i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito, divisaElegida);
                     }
                     else
@@ -4420,11 +4419,19 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (i > 0)
                     {
-                        decimal puntos = Convert.ToInt32(txtCanjearPuntos.Text) * -1;
-                        // se obtiene los puntos que se canjean y se  pone en negativo para poder descontarlos.
-                        // se utiliza el medio de pago de ID = 8 ya que es el de canje de puntos
-                        
-                        DescontarPuntos(fact.cliente.id, fact.id, puntos);
+                        decimal puntos = 0.0m;
+
+                        if (!string.IsNullOrEmpty(txtCanjearPuntos.Text))
+                        {
+                            // se obtiene los puntos que se canjean y se  pone en negativo para poder descontarlos.
+                            // se utiliza el medio de pago de ID = 8 ya que es el de canje de puntos
+
+                            if (Convert.ToInt32(txtCanjearPuntos.Text) > 0)
+                            {
+                                puntos = Convert.ToInt32(txtCanjearPuntos.Text) * -1;
+                                DescontarPuntos(fact.cliente.id, fact.id, puntos);
+                            }
+                        }
 
                         #region func post generarl
                         if (this.accion == 4)
@@ -5236,7 +5243,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (idCodigo.Equals("puntos", StringComparison.InvariantCultureIgnoreCase))
                 {
-                     int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                    int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
                     CargarPuntosCliente(idCliente);
                 }
 
