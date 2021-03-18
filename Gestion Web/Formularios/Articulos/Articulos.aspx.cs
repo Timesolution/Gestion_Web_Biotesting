@@ -2203,7 +2203,46 @@ namespace Gestion_Web.Formularios.Articulos
         }
 
         #endregion
+        protected void btnModificarMargen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                decimal margen = Convert.ToDecimal(this.txtMargen.Text, CultureInfo.InvariantCulture);
+                string noActu = "";
 
+                foreach (var c in this.phArticulos.Controls)
+                {
+                    TableRow tr = c as TableRow;
+                    string id = tr.ID.Split('_')[1];
+                    int i = this.controlador.modificarMargenArticulo(Convert.ToInt32(id),margen);
+                    if (i <= 0)
+                    {
+                        //no se atualizo
+                        if (!String.IsNullOrEmpty(id))
+                        {
+                            Articulo art = this.controlador.obtenerArticuloByID(Convert.ToInt32(id));
+                            noActu += art.codigo + "; ";
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(noActu))
+                {
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Margenes modificados con exito\", {type: \"info\"});", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Margenes modificados con exito", null));
+                }
+                else
+                {
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel11, UpdatePanel11.GetType(), "alert", "$.msgbox(\"Los siguientes articulos no se actualizaron." + noActu + "\" , {type: \"error\"});", true);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los siguientes articulos no se actualizaron. " + noActu));
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+        }
         void CargarProveedor()
         {
             try
