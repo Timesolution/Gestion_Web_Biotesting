@@ -46,11 +46,10 @@
                                     <th>Fecha</th>
                                     <th>Tipo de movimiento</th>
                                     <th>Numero de Documento</th>
-                                    <th style="text-align: right">Debe</th>
-                                    <th style="text-align: right">Haber</th>
-                                    <th>Empresa</th>
-                                    <th>Sucursal</th>
-                                    <th style="text-align: right">Punto de Venta</th>
+                                    <th>Cliente</th>    
+                                    <th style="text-align: right">Debito</th>
+                                    <th style="text-align: right">Credito</th>
+                                    <th style="text-align: right">Saldo Acumulado</th>
                                     <th>Nivel 1</th>
                                     <th>Nivel 2</th>
                                     <th>Nivel 3</th>
@@ -579,11 +578,10 @@
                     "<td> " + obj[i].Fecha + "</td>" +
                     "<td> " + obj[i].TipoMovimiento + "</td>" +
                     "<td> " + obj[i].NumeroDocumento + "</td>" +
+                    "<td> " + obj[i].Cliente + "</td>" +
                     '<td style="text-align:right">' + obj[i].Debito + "</td>" +
                     '<td style="text-align:right">' + obj[i].Credito + "</td>" +
-                    "<td> " + obj[i].Empresa + "</td>" +
-                    "<td> " + obj[i].Sucursal + "</td>" +
-                    '<td style="text-align:right">' + obj[i].PuntoDeVenta + "</td>" +
+                    '<td style="text-align:right">' + obj[i].SaldoAcumulado + "</td>" +
                     "<td> " + obj[i].Nivel1 + "</td>" +
                     "<td> " + obj[i].Nivel2 + "</td>" +
                     "<td> " + obj[i].Nivel3 + "</td>" +

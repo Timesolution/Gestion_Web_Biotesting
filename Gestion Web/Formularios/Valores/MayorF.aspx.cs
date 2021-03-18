@@ -38,8 +38,10 @@ namespace Gestion_Web.Formularios.Valores
             public string Nivel5;
             public string Credito;
             public string Debito;
+            public string SaldoAcumulado;
             public string NumeroDocumento;
             public string Observaciones;
+            public string Cliente;
             
         }
         class ListItemTemporal
@@ -372,9 +374,24 @@ namespace Gestion_Web.Formularios.Valores
 
                 List<Mayor> listaMayor = contPlanCuentas.ObtenerTodosMayor(fechaDesde, fechaHasta.AddHours(23).AddMinutes(59), idTipoMovimiento, idEmpresa, idSucursal, idPuntoVenta);
                 List<MayorTemporal> listaMayorTemporal = new List<MayorTemporal>();
+                decimal saldoAcumulado = 0;
                 foreach (var item in listaMayor)
                 {
-                    
+                    if (Math.Abs(Convert.ToDecimal(item.Debito)) > 0)
+                    {
+                        saldoAcumulado += Convert.ToDecimal(item.Debito);
+                    }
+                    if (Math.Abs(Convert.ToDecimal(item.Credito)) > 0)
+                    {
+                        saldoAcumulado -= Convert.ToDecimal(item.Credito);
+                    }
+                    string razonSocial = "";
+                    if (item.Mayor_TipoMovimiento.Id == 7)
+                    {
+                        cliente cliente = new cliente();
+                        controladorCobranza controladorCobranza = new controladorCobranza();
+                         razonSocial = controladorCobranza.obtenerClienteByDocumento(item.NumeroDocumento);
+                    }
                     listaMayorTemporal.Add(new MayorTemporal
                     {
                         Fecha = item.Fecha.Value.ToString("dd/MM/yyyy"),
@@ -387,11 +404,15 @@ namespace Gestion_Web.Formularios.Valores
                         Nivel2 = item.Cuentas_Contables1.Descripcion,
                         Nivel3 = item.Cuentas_Contables2.Descripcion,
                         Nivel4 = item.Cuentas_Contables3.Descripcion,
-                        Nivel5 =  item.Cuentas_Contables4.Descripcion,
+                        Nivel5 = item.Cuentas_Contables4.Descripcion,
                         Debito = item.Debito.ToString(),
                         Credito = item.Credito.ToString(),
+                        SaldoAcumulado = saldoAcumulado.ToString(),
                         NumeroDocumento = item.NumeroDocumento,
-                        Observaciones = item.Observaciones ?? ""
+                        Observaciones = item.Observaciones ?? "",
+                        Cliente = razonSocial,
+
+
 
                     });;
                 }

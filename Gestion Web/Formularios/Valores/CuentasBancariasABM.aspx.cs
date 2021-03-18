@@ -26,6 +26,8 @@ namespace Gestion_Web.Formularios.Valores
                 if (!IsPostBack)
                 {
                     this.cargarBancos();
+                    cargarPlanCuentas();
+
                     if (this.accion == 2)
                     {
                         this.cargarCuenta(this.id);
@@ -43,6 +45,10 @@ namespace Gestion_Web.Formularios.Valores
             {
                 CuentasBancaria cb = this.controlador.obtenerCuentaBancariaByID(id);
                 this.ListBanco.SelectedValue = cb.Banco.Value.ToString();
+                if (controlador.obtenerPlanCuentaByIdBanco(id) != -1)
+                {
+                    ListPlanCuentas.SelectedValue = controlador.obtenerPlanCuentaByIdBanco(id).ToString();
+                }
                 this.txtNumero.Text = cb.Numero;
                 this.txtDescripcion.Text = cb.Descripcion;
                 this.txtCuit.Text = cb.Cuit;
@@ -94,6 +100,10 @@ namespace Gestion_Web.Formularios.Valores
                 int i = controlador.agregarCuenta(cb);
                 if (i > 0)
                 {
+                    if(ListPlanCuentas.SelectedValue != "")
+                    {
+                        controlador.agregarPlanCuentaBanco(Convert.ToInt32(ListPlanCuentas.SelectedValue));
+                    }
                     //limpiar
                     this.limpiarCampos();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Cuenta Cargada con exito. ", null));
@@ -120,8 +130,18 @@ namespace Gestion_Web.Formularios.Valores
                 cb.Librador = this.txtLibrador.Text;
 
                 int i = controlador.modificarCuenta(cb);
-                if (i > 0)
+                int j = 0;
+                if (ListPlanCuentas.SelectedValue != "" && controlador.obtenerPlanCuentaByIdBanco(id) != -1)
                 {
+                    j=controlador.modificarPlanCuentaBanco(Convert.ToInt32(ListPlanCuentas.SelectedValue), id);
+                }
+                else if (ListPlanCuentas.SelectedValue != "" && controlador.obtenerPlanCuentaByIdBanco(id) == -1)
+                {
+                    j=controlador.agregarPlanCuentaBanco(Convert.ToInt32(ListPlanCuentas.SelectedValue), id);
+                }
+                if (i > 0 || j > 0)
+                {
+                    
                     //limpiar
                     this.limpiarCampos();
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Cuenta modificada con exito. ", "CuentasBancariasF.aspx"));
@@ -165,6 +185,22 @@ namespace Gestion_Web.Formularios.Valores
             catch (Exception ex)
             {
  
+            }
+        }
+        protected void cargarPlanCuentas()
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlan = new ControladorPlanCuentas();
+                this.ListPlanCuentas.DataSource = controladorPlan.obtenerCuentasContables();
+                this.ListPlanCuentas.DataValueField = "id";
+                this.ListPlanCuentas.DataTextField = "descripcion";
+
+                this.ListPlanCuentas.DataBind();
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
