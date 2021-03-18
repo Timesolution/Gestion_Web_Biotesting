@@ -546,6 +546,24 @@ namespace Gestion_Web.Formularios.Articulos
         protected global::System.Web.UI.WebControls.Button btnSeteaPrecioventaPorcentual;
 
         /// <summary>
+        /// Control txtMargen.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMargen;
+
+        /// <summary>
+        /// Control btnModificarMargen.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnModificarMargen;
+
+        /// <summary>
         /// Control UpdatePanel9.
         /// </summary>
         /// <remarks>

@@ -4,7 +4,7 @@
 
     <div class="col-md-12 col-xs-12">
         <div class="widget stacked">
-            <div class="stat">
+            <div class="stat"> 
                 <h5><i class="icon-map-marker"></i>Maestro > Articulos > Articulos</h5>
             </div>
             <div class="widget-header">
@@ -469,6 +469,19 @@
                                 <asp:Button ID="btnSeteaPrecioventaPorcentual" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnSeteaPrecioventaPorcentual_Click" />
                             </div>
                         </div>
+
+                         <div class="form-group">
+                            <label class="col-md-4">Actualizar Margen</label>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <asp:TextBox ID="txtMargen" TextMode="Number" Style="text-align: right;" runat="server" class="form-control" Text="0"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <asp:Button ID="btnModificarMargen" runat="server" Text="Actualizar" class="btn btn-success" OnClick="btnModificarMargen_Click" />
+                            </div>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                     </div>
