@@ -589,10 +589,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //_idCliente = f.cliente.id;
                 //Session.Add("FacturasABM_ClienteModal", f.cliente.id);
 
-                var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), f.cliente.id);
+                //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), f.cliente.id);
 
-                if (usuario_cliente.IdCliente > 0)
-                    cargarClienteDesdeModal();
+                //if (usuario_cliente.IdCliente > 0)
+                //    cargarClienteDesdeModal();
 
                 //this.cargarClienteDesdeModal();
 
@@ -1647,8 +1647,13 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListFormaVenta.Items.Clear();
                     var forma = this.contClienteEntity.obtenerFormaVentaCliente(idC);
 
-                    this.ListFormaVenta.Items.Insert(0, new ListItem("NORMAL", "-1"));
-                    this.ListFormaVenta.Items.Insert(1, new ListItem(forma.Nombre, forma.Id.ToString()));
+                    if(forma != null)
+                    {
+                        this.ListFormaVenta.Items.Insert(0, new ListItem("NORMAL", "-1"));
+                        this.ListFormaVenta.Items.Insert(1, new ListItem(forma.Nombre, forma.Id.ToString()));
+                    }
+
+                    
                 }
                 else
                 {
@@ -1914,7 +1919,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //Cargo el total de los puntos.
                     CargarPuntosCliente(idCliente);
-                    ;
+                    cargarClienteEnLista(cliente.id);
                     this.lblMovSolicitud.Text = "";
                     if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
@@ -2134,9 +2139,12 @@ namespace Gestion_Web.Formularios.Facturas
                 //Busco el total de los puntos.
                 DataTable puntosCliente = contCobranza.ObtenerTotalPuntosCliente(idCliente);
 
-                if (!string.IsNullOrEmpty(puntosCliente.Rows[0]["saldo"].ToString()))
+                if(puntosCliente.Rows.Count > 0)
                 {
-                    this.txtPuntosTotales.Text = puntosCliente.Rows[0]["saldo"].ToString();
+                    if (!string.IsNullOrEmpty(puntosCliente.Rows[0]["saldo"].ToString()))
+                    {
+                        this.txtPuntosTotales.Text = puntosCliente.Rows[0]["saldo"].ToString();
+                    }
                 }
                 else
                 {
