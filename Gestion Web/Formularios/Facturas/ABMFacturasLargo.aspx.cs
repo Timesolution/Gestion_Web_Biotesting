@@ -4445,8 +4445,21 @@ namespace Gestion_Web.Formularios.Facturas
                         if (this.accion == 4)
                         {
                             controladorFactEntity contFcEnt = new controladorFactEntity();
-                            int idRemito = Convert.ToInt32(Request.QueryString["id_rem"]);
-                            contFcEnt.agregarFacturaRemito(fact.id, idRemito);
+                            string idRemito1 = Request.QueryString["id_rem"].ToString();
+                            
+                            var idsRemitos = idRemito1.Split(';').ToList();
+                            idsRemitos.Remove(idsRemitos.Last());
+
+                            for (int x = 0; x < idsRemitos.Count; x++)
+                            {
+                                if (string.IsNullOrEmpty(idsRemitos[i]))
+                                    continue;
+
+                                int idRemito = Convert.ToInt32(idsRemitos[i]);
+                                contFcEnt.agregarFacturaRemito(fact.id, idRemito);
+
+                            }
+
                         }
                         if (this.accion == 6)
                         {

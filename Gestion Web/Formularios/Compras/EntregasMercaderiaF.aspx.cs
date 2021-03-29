@@ -259,7 +259,7 @@ namespace Gestion_Web.Formularios.Compras
         }
 
         private void cargarEnPh(OrdenesCompra_Items ocItem, List<RemitoCompraOrdenCompra_Diferencias> diferencias = null)
-        {
+         {
             try
             {
                 //fila
@@ -268,7 +268,7 @@ namespace Gestion_Web.Formularios.Compras
 
                 //Celdas
                 TableCell celCodigo = new TableCell();
-                celCodigo.Text = contArticulos.obtenerArticuloByID(Convert.ToInt32(ocItem.Codigo)).codigo;
+                celCodigo.Text = ocItem.Codigo;
                 celCodigo.HorizontalAlign = HorizontalAlign.Left;
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
@@ -475,8 +475,8 @@ namespace Gestion_Web.Formularios.Compras
                 if (!String.IsNullOrEmpty(txt))
                 {
                     string idArt = txt;
-                    Articulo articulo = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArt));
-                    OrdenesCompra_Items ordenesCompra_Items = contComprasEnt.OrdenCompra_ItemGetOne(ordenCompra, articulo.id.ToString());
+                    Articulo articulo = contArticulos.obtenerArticuloCodigo(idArt);
+                    OrdenesCompra_Items ordenesCompra_Items = contComprasEnt.OrdenCompra_ItemGetOne(ordenCompra, articulo.codigo);
                     ordenesCompra_Items.CantidadYaRecibida += cantidadRecibida;
                 }
             }
@@ -1197,7 +1197,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArticulo));
+                Articulo A = contArticulos.obtenerArticuloCodigo(idArticulo);
                 RemitosCompras_Items remitosCompras_Items = new RemitosCompras_Items();
                 remitosCompras_Items.Codigo = A.id;
                 remitosCompras_Items.Cantidad = cantidadRecibida;
@@ -1219,7 +1219,7 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
-                Articulo A = contArticulos.obtenerArticuloByID(Convert.ToInt32(idArticulo));
+                Articulo A = contArticulos.obtenerArticuloCodigo(idArticulo);
                 RemitosCompras_Items remitosCompras_ItemsDevolucion = new RemitosCompras_Items();
                 remitosCompras_ItemsDevolucion.Codigo = A.id;
                 remitosCompras_ItemsDevolucion.Cantidad = cantidadRecibida * -1;
