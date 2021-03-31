@@ -37,6 +37,7 @@ namespace Gestion_Web.Formularios.Cobros
         private int idTipo;
         private int vendedor;
         private int filtro = 0;
+        int firstLoad = 0;//Esta variable sirve para indicar la primera carga de movimientos del dia actual
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -81,10 +82,10 @@ namespace Gestion_Web.Formularios.Cobros
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                 }
-                if (this.idCliente > -1)
-                {
-                    this.cargarMovimientos();
-                }
+                //if (this.idCliente > -1 && filtro == 1)
+                //{
+                this.cargarMovimientos();
+                //}
                 this.Form.DefaultButton = lbBuscar.UniqueID;
             }
             catch (Exception ex)
@@ -221,18 +222,16 @@ namespace Gestion_Web.Formularios.Cobros
                     this.fechaH = this.txtFechaHasta.Text;
                     //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                     //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
-                    List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
+                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
-                    if (Movimiento != null && Movimiento.Count <= 2000)
+                    if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     {
-                        foreach (Movimiento_Cobro m in Movimiento)
-                        {
-                            saldo += m.cob.total;
-                            this.cargarEnPh(m);
-                        }
+                        
+                            saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                            this.cargarEnPh(dtMovimiento);
 
                         this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
@@ -245,27 +244,24 @@ namespace Gestion_Web.Formularios.Cobros
                 }
                 else
                 {
-                    //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(idCliente));
-                    //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
-                    List<Movimiento_Cobro> Movimiento = this.contrCC.obtenerCobrosRealizados(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, puntoVenta, idEmpresa, idSucursal, idTipo, this.vendedor);
+                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
-                    if (Movimiento != null && Movimiento.Count <= 2000)
+                    if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     {
-                        foreach (Movimiento_Cobro m in Movimiento)
-                        {
-                            saldo += m.cob.total;
-                            this.cargarEnPh(m);
-                        }
-                        this.labelSaldo.Text = saldo.ToString("C");
-                        //this.lblSaldo.Text = "Saldo $ " + saldo.ToString("0.00");
-                        this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
+
+                        saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                        this.cargarEnPh(dtMovimiento);
+
+                        this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
                     }
                     else
                         generarReporte = 1;
+
+                    this.labelSaldo.Text = saldo.ToString("C");
                 }
 
                 if(generarReporte == 1 && filtro == 1)
@@ -553,76 +549,80 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
-        private void cargarEnPh(Movimiento_Cobro m)
+        private void cargarEnPh(DataTable dt)
         {
-            MovimientoView movV = new MovimientoView();
-            movV = m.ListarMovimiento();
+            //MovimientoView movV = new MovimientoView();
+            //movV = m.ListarMovimiento();
+
             try
             {
-                //fila
-                TableRow tr = new TableRow();
-                tr.ID = movV.id.ToString();
+                
+                foreach (DataRow row in dt.Rows)
+                {
+                    //fila
+                    TableRow tr = new TableRow();
+                    tr.ID = row["id"].ToString();
 
-                //Celdas
+                    TableCell celFecha = new TableCell();
+                    celFecha.Text = ((DateTime)(row["fecha"])).ToString("dd/MM/yyyy");
+                    celFecha.VerticalAlign = VerticalAlign.Middle;
+                    celFecha.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celFecha);
 
-                TableCell celFecha = new TableCell();
-                celFecha.Text = movV.fecha.ToString("dd/MM/yyyy");
-                celFecha.VerticalAlign = VerticalAlign.Middle;
-                celFecha.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celFecha);
+                    TableCell celNumero = new TableCell();
+                    celNumero.Text = row["TipoDocumento"].ToString() + " " + row["numero"].ToString().PadLeft(8, '0');
+                    celNumero.VerticalAlign = VerticalAlign.Middle;
+                    celNumero.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celNumero);
 
-                TableCell celNumero = new TableCell();
-                celNumero.Text = movV.tipo.tipo + " " + movV.numero.ToString().PadLeft(8, '0');
-                celNumero.VerticalAlign = VerticalAlign.Middle;
-                celNumero.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celNumero);
+                    TableCell celCliente = new TableCell();
+                    celCliente.Text = row["Cliente"].ToString();
+                    celCliente.VerticalAlign = VerticalAlign.Middle;
+                    celCliente.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celCliente);
 
-                TableCell celCliente = new TableCell();
-                celCliente.Text = m.cob.cliente.razonSocial;
-                celCliente.VerticalAlign = VerticalAlign.Middle;
-                celCliente.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celCliente);
+                    TableCell celHaber = new TableCell();
+                    celHaber.Text = "$" + row["haber"].ToString().Replace(',', '.');
+                    celHaber.VerticalAlign = VerticalAlign.Middle;
+                    celHaber.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celHaber);
 
-                TableCell celHaber = new TableCell();
-                celHaber.Text = "$" + movV.haber.ToString().Replace(',', '.');
-                celHaber.VerticalAlign = VerticalAlign.Middle;
-                celHaber.HorizontalAlign = HorizontalAlign.Right;
-                tr.Cells.Add(celHaber);
+                    TableCell celComentarios = new TableCell();
+                    celComentarios.Text = row["Observaciones"].ToString();
+                    celComentarios.VerticalAlign = VerticalAlign.Middle;
+                    celComentarios.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celComentarios);
 
-                TableCell celComentarios = new TableCell();
-                celComentarios.Text = m.cob.comentarios;
-                celComentarios.VerticalAlign = VerticalAlign.Middle;
-                celComentarios.HorizontalAlign = HorizontalAlign.Left;
-                tr.Cells.Add(celComentarios);
+                    //agrego fila a tabla
+                    TableCell celAccion = new TableCell();
+                    LinkButton btnDetalles = new LinkButton();
+                    btnDetalles.CssClass = "btn btn-info ui-tooltip";
+                    btnDetalles.Attributes.Add("data-toggle", "tooltip");
+                    btnDetalles.Attributes.Add("title data-original-title", "Detalles");
+                    btnDetalles.Attributes.Add("name", "btnNombre");
+                    btnDetalles.ID = "btnSelec_" + row["id"].ToString();
+                    btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
+                    btnDetalles.Click += new EventHandler(this.detalleCobro);
+                    celAccion.Controls.Add(btnDetalles);
 
-                //agrego fila a tabla
-                TableCell celAccion = new TableCell();
-                LinkButton btnDetalles = new LinkButton();
-                btnDetalles.CssClass = "btn btn-info ui-tooltip";
-                btnDetalles.Attributes.Add("data-toggle", "tooltip");
-                btnDetalles.Attributes.Add("title data-original-title", "Detalles");
-                btnDetalles.Attributes.Add("name", "btnNombre");
-                btnDetalles.ID = "btnSelec_" + movV.id_doc;
-                btnDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
-                btnDetalles.Click += new EventHandler(this.detalleCobro);
-                celAccion.Controls.Add(btnDetalles);
+                    Literal l2 = new Literal();
+                    l2.Text = "&nbsp";
+                    celAccion.Controls.Add(l2);
 
-                Literal l2 = new Literal();
-                l2.Text = "&nbsp";
-                celAccion.Controls.Add(l2);
+                    LinkButton btnEliminar = new LinkButton();
+                    btnEliminar.ID = "btnEliminar_" + row["id"].ToString();
+                    btnEliminar.CssClass = "btn btn-info";
+                    btnEliminar.Attributes.Add("data-toggle", "modal");
+                    btnEliminar.Attributes.Add("href", "#modalConfirmacion");
+                    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
+                    btnEliminar.OnClientClick = "abrirdialog(" + row["id"].ToString() + ");";
+                    celAccion.Controls.Add(btnEliminar);
+                    celAccion.Width = Unit.Percentage(10);
+                    tr.Cells.Add(celAccion);
 
-                LinkButton btnEliminar = new LinkButton();
-                btnEliminar.ID = "btnEliminar_" + movV.id;
-                btnEliminar.CssClass = "btn btn-info";
-                btnEliminar.Attributes.Add("data-toggle", "modal");
-                btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-                btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                btnEliminar.OnClientClick = "abrirdialog(" + movV.id + ");";
-                celAccion.Controls.Add(btnEliminar);
-                celAccion.Width = Unit.Percentage(10);
-                tr.Cells.Add(celAccion);
-
-                phCobrosRealizados.Controls.Add(tr);
+                    phCobrosRealizados.Controls.Add(tr);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -635,7 +635,7 @@ namespace Gestion_Web.Formularios.Cobros
             try
             {
                 Response.Redirect("CobrosRealizadosF.aspx?filtro=1&fechadesde=" + this.fechaD + "&fechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
-                cargarMovimientos();
+                //cargarMovimientos();
             }
             catch (Exception ex)
             {
