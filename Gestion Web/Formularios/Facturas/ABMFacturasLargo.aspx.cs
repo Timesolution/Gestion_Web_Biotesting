@@ -4452,10 +4452,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                             for (int x = 0; x < idsRemitos.Count; x++)
                             {
-                                if (string.IsNullOrEmpty(idsRemitos[i]))
+                                if (string.IsNullOrEmpty(idsRemitos[x]))
                                     continue;
 
-                                int idRemito = Convert.ToInt32(idsRemitos[i]);
+                                int idRemito = Convert.ToInt32(idsRemitos[x]);
                                 contFcEnt.agregarFacturaRemito(fact.id, idRemito);
 
                             }
