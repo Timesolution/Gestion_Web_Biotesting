@@ -62,6 +62,7 @@ namespace Gestion_Web.Formularios.Facturas
         int idPtoVentaUser;
         int idClientePadre;
         string mensajeActualizacionArticuloFecha = string.Empty;
+        int idPaciente;
 
         //flag si cambio la fecha de la factura
         int flag_cambioFecha = 0;
@@ -85,6 +86,10 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 accion = Convert.ToInt32(Request.QueryString["accion"]);
+
+                // este querystring funciona cuando se viene desde un acceso directo de estetica/clinico, desde la agenda
+                // carga el paciente/cliente apenas ingresamos a esta pagina en el dropdownlist.
+                idPaciente = Convert.ToInt32(Request.QueryString["pac"]);
 
                 VerificarLogin();
                 ConfigurarModoCredito();
@@ -168,6 +173,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //verifico que no este cerrada la caja para el punto de venta
                     this.verificarCierreCaja();
+
+                    if (idPaciente > 0)
+                    {
+                        this.cargarCliente(idPaciente);
+                    }
 
                     if (accion != 6 && accion != 7)
                     {
