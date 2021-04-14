@@ -461,34 +461,39 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtClientes = contrCliente.obtenerClientesAliasDT(buscar);
                 //controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
 
-                if (dtClientes == null)
-                    return;
-
-                DropListClientes.Items.Clear();
-                DropListClientes.DataSource = dtClientes;
-                DropListClientes.DataValueField = "id";
-                DropListClientes.DataTextField = "alias";
-                DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
-                DropListClientes.DataBind();
-
-                //_idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
-
-                //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
-                //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), _idCliente);
-
-                //if (usuario_cliente.IdCliente > 0)
-                //    cargarClienteDesdeModal();
-
-                if (!string.IsNullOrEmpty(DropListClientes.SelectedValue))
+                if (dtClientes.Rows.Count > 0)
                 {
-                    this.cargarClienteEnLista(Convert.ToInt32(DropListClientes.SelectedValue));
-                    this.cargarCliente(Convert.ToInt32(DropListClientes.SelectedValue));
+                    DropListClientes.Items.Clear();
+                    DropListClientes.DataSource = dtClientes;
+                    DropListClientes.DataValueField = "id";
+                    DropListClientes.DataTextField = "alias";
+                    DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
+                    DropListClientes.DataBind();
 
-                    CargarDropList_DireccionesDeEntregaDelCliente(Convert.ToInt32(DropListClientes.SelectedValue));
+                    //_idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+
+                    //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
+                    //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), _idCliente);
+
+                    //if (usuario_cliente.IdCliente > 0)
+                    //    cargarClienteDesdeModal();
+
+                    if (!string.IsNullOrEmpty(DropListClientes.SelectedValue))
+                    {
+                        this.cargarClienteEnLista(Convert.ToInt32(DropListClientes.SelectedValue));
+                        this.cargarCliente(Convert.ToInt32(DropListClientes.SelectedValue));
+
+                        CargarDropList_DireccionesDeEntregaDelCliente(Convert.ToInt32(DropListClientes.SelectedValue));
+
+                    }
+
+                    this.obtenerNroFactura();
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"No se encuentra cliente. \");", true);
 
                 }
-
-                this.obtenerNroFactura();
 
             }
             catch (Exception ex)
@@ -1657,13 +1662,13 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ListFormaVenta.Items.Clear();
                     var forma = this.contClienteEntity.obtenerFormaVentaCliente(idC);
 
-                    if(forma != null)
+                    if (forma != null)
                     {
                         this.ListFormaVenta.Items.Insert(0, new ListItem("NORMAL", "-1"));
                         this.ListFormaVenta.Items.Insert(1, new ListItem(forma.Nombre, forma.Id.ToString()));
                     }
 
-                    
+
                 }
                 else
                 {
@@ -2149,7 +2154,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //Busco el total de los puntos.
                 DataTable puntosCliente = contCobranza.ObtenerTotalPuntosCliente(idCliente);
 
-                if(puntosCliente.Rows.Count > 0)
+                if (puntosCliente.Rows.Count > 0)
                 {
                     if (!string.IsNullOrEmpty(puntosCliente.Rows[0]["saldo"].ToString()))
                     {
@@ -4456,7 +4461,7 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             controladorFactEntity contFcEnt = new controladorFactEntity();
                             string idRemito1 = Request.QueryString["id_rem"].ToString();
-                            
+
                             var idsRemitos = idRemito1.Split(';').ToList();
                             idsRemitos.Remove(idsRemitos.Last());
 
