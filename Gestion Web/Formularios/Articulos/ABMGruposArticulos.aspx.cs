@@ -1,5 +1,6 @@
 ﻿using Disipar.Models;
 using Gestion_Api.Controladores;
+using Gestion_Api.Entitys;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Modelo;
 using System;
@@ -35,11 +36,16 @@ namespace Gestion_Web.Formularios.Articulos
                 this.cargarGrupos();
                 if (!IsPostBack)
                 {
-                    
+                    cargarPlanCuentas();
                     this.idUsuario = (int)Session["Login_IdUser"];
                     if (valor == 2)
                     {
+                       
                         grupo sg = this.controlador.obtenerGrupoID(this.idGrupo);
+                        if (controlador.obtenerPlanCuentaByIdGrupoArticulo(sg.id) != -1)
+                        {
+                            ListPlanCuentas.SelectedValue = controlador.obtenerPlanCuentaByIdGrupoArticulo(sg.id).ToString();
+                        }
                         txtGrupo.Text = sg.descripcion;
                         //carga la imagen
                         cargarImagenGrupo(idGrupo.ToString());
@@ -214,6 +220,15 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarGrupos();
                     if (i > 0)
                     {
+                        int j = 0;
+                        if (ListPlanCuentas.SelectedValue != "" && controlador.obtenerPlanCuentaByIdGrupoArticulo(sg.id) != -1)
+                        {
+                            j = controlador.modificarPlanCuentaGrupoArticulo(Convert.ToInt32(ListPlanCuentas.SelectedValue), sg.id);
+                        }
+                        else if (ListPlanCuentas.SelectedValue != "" && controlador.obtenerPlanCuentaByIdGrupoArticulo(sg.id) == -1)
+                        {
+                            j = controlador.agregarPlanGrupoArticulo(Convert.ToInt32(ListPlanCuentas.SelectedValue), sg.id);
+                        }
                         //agrego bien
                         //Log.EscribirSQL(idUsuario, "INFO", "Modifico el Grupo de Articulo: " + this.idGrupo);
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico  Grupo de Articulo: " + sg.descripcion);
@@ -231,6 +246,10 @@ namespace Gestion_Web.Formularios.Articulos
                     int i = this.controlador.agregarGrupo(this.txtGrupo.Text);
                     if (i > 0)
                     {
+                        if (ListPlanCuentas.SelectedValue != "")
+                        {
+                            controlador.agregarPlanCuentaGrupoArticulo(Convert.ToInt32(ListPlanCuentas.SelectedValue));
+                        }
                         //agrego bien
                         //Log.EscribirSQL(idUsuario, "INFO", "Agrego el Grupo de Articulo: " + i);
                         Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Alta Grupo de Articulo: " + this.txtGrupo.Text);
@@ -295,6 +314,7 @@ namespace Gestion_Web.Formularios.Articulos
                 int i = this.controlador.eliminarGrupo(g);
                 if (i > 0)
                 {
+                    
                     //agrego bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Grupo de Articulo: " + g.descripcion);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Grupo eliminado con exito", null));
@@ -456,6 +476,50 @@ namespace Gestion_Web.Formularios.Articulos
                 throw;
             }
             
+        }
+        protected void cargarPlanCuentas()
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlan = new ControladorPlanCuentas();
+                this.ListPlanCuentas.DataSource = controladorPlan.obtenerCuentasContablesByJerarquia(5);
+                this.ListPlanCuentas.DataValueField = "id";
+                this.ListPlanCuentas.DataTextField = "descripcion";
+
+                this.ListPlanCuentas.DataBind();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        protected void lbtnBuscarNiveles_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlanCuentas = new ControladorPlanCuentas();
+                //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
+                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5,txtBusqueda.Text);
+
+                if (dtPlanCuentas != null)
+                {
+
+                    this.ListPlanCuentas.DataSource = dtPlanCuentas;
+                    this.ListPlanCuentas.DataValueField = "id";
+                    this.ListPlanCuentas.DataTextField = "Descripcion";
+
+                    this.ListPlanCuentas.DataBind();
+
+                }
+                else
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+            }
         }
     }
 }

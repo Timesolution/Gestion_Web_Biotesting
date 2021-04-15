@@ -24,13 +24,32 @@
                                             <asp:TextBox ID="txtGrupo" runat="server" class="form-control"></asp:TextBox>
                                         </div>
                                     </div>
-                                </td>
-
-                                <td style="width: 40%">
-                                    <div class="col-md-12">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtGrupo" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="GrupoGroup"></asp:RequiredFieldValidator>
+                                    <br />
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+                                        </div>
+                                        <div class="col-md-7">
+                                            <asp:TextBox ID="txtBusqueda" placeholder="Busqueda plan" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="lbtnNivelBusqueda" runat="server" class="btn btn-primary" OnClick="lbtnBuscarNiveles_Click">
+                                                                            <i class="shortcut-icon icon-search"></i></asp:LinkButton>
+                                        </div>
                                     </div>
-                                </td>
+                                    <br />
+                                    <div class="form-group">
+                                        <label for="name" class="col-md-2">Plan de cuentas</label>
+
+                                        <div class="col-md-7">
+                                            <asp:DropDownList ID="ListPlanCuentas" runat="server" class="form-control"></asp:DropDownList>
+                                        </div>
+                                    </div>
+
+                                    <td style="width: 40%">
+                                        <div class="col-md-12">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="txtGrupo" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" ValidationGroup="GrupoGroup"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </td>
                                 <td style="width: 10%">
                                     <div class="col-md-1">
                                         <div class="shortcuts">

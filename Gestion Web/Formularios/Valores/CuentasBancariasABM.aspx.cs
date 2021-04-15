@@ -192,7 +192,7 @@ namespace Gestion_Web.Formularios.Valores
             try
             {
                 ControladorPlanCuentas controladorPlan = new ControladorPlanCuentas();
-                this.ListPlanCuentas.DataSource = controladorPlan.obtenerCuentasContables();
+                this.ListPlanCuentas.DataSource = controladorPlan.obtenerCuentasContablesByJerarquia(5);
                 this.ListPlanCuentas.DataValueField = "id";
                 this.ListPlanCuentas.DataTextField = "descripcion";
 
@@ -200,6 +200,34 @@ namespace Gestion_Web.Formularios.Valores
             }
             catch (Exception ex)
             {
+
+            }
+        }
+        protected void lbtnBuscarNiveles_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlanCuentas = new ControladorPlanCuentas();
+                //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
+                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5,txtBusqueda.Text);
+
+                if (dtPlanCuentas != null)
+                {
+
+                    this.ListPlanCuentas.DataSource = dtPlanCuentas;
+                    this.ListPlanCuentas.DataValueField = "id";
+                    this.ListPlanCuentas.DataTextField = "Descripcion";
+
+                    this.ListPlanCuentas.DataBind();
+
+                }
+                else
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+
 
             }
         }
