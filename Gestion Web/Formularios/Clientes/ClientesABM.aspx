@@ -996,7 +996,7 @@
                                                         </div>
                                                         <div class="form-group" id="divVencimientoTarea" runat="server">
                                                             <label for="name" class="col-md-2">Vencimiento</label>
-                                                            <div class="col-md-10" style="float: right;width: 370px;">
+                                                            <div class="col-md-10" style="float: right; width: 370px;">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon"><i class="shortcut-icon icon-calendar"></i></span>
                                                                     <asp:TextBox ID="txtFechaVencimiento" runat="server" class="form-control"></asp:TextBox>
@@ -1333,6 +1333,31 @@
 
                                         <div class="form-group">
                                             <div class="col-md-12">
+                                                 <div class="col-md-1">
+                                                    <label for="name"></label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <asp:TextBox ID="txtBusqueda" placeholder="Busqueda plan" runat="server" class="form-control"></asp:TextBox>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <asp:LinkButton ID="lbtnNivelBusqueda" runat="server" class="btn btn-primary" OnClick="lbtnNivelBusqueda_Click">
+                                                                            <i class="shortcut-icon icon-search"></i></asp:LinkButton>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <div class="col-md-1">
+                                                    <label for="name">Plan de Cuentas</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <asp:DropDownList ID="ListPlanCuentas" runat="server" class="form-control"></asp:DropDownList>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
                                                 <div class="col-md-1">
                                                     <asp:Label ID="lbPercepcionORetencion" Font-Bold="true" runat="server"></asp:Label>
                                                 </div>
@@ -1361,6 +1386,7 @@
                                                                     <asp:Label ID="lbColumnaRetencionOPercepcion" runat="server"></asp:Label>
                                                                 </th>
                                                                 <th>Modo</th>
+                                                                <th>Plan de Cuentas</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -2083,6 +2109,7 @@
             var controlHiddenIdCliente = document.getElementById('<%= hiddenIdCliente.ClientID %>');
             var controlProvincia = document.getElementById('<%= IngresosBrutos_DropList_Provincias.ClientID %>');
             var controlTxtPercepcionORetencion = document.getElementById('<%= IngresosBrutos_TxtPercepcionORetencion.ClientID %>');
+            var controlPlanCuentas = document.getElementById('<%= ListPlanCuentas.ClientID %>');
             var controlModo = document.getElementById('<%= IngresosBrutos_DropList_Modo.ClientID %>');
             var modoText = controlModo.options[controlModo.selectedIndex].text;
 
@@ -2093,7 +2120,7 @@
             $.ajax({
                 type: "POST",
                 url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",
-                data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", IdProvincia: "' + controlProvincia.value +
+                data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", idPlanCuenta:"' + controlPlanCuentas.value + '", IdProvincia: "' + controlProvincia.value +
                     '", origenCliente: "' + hiddenOrigenCliente.value + '", percepcionORetencion: "' + Math.abs(controlTxtPercepcionORetencion.value) + '", modo: "' + modoText + '"}',
                 contentType: "application/json",
                 dataType: 'json',
@@ -2148,6 +2175,7 @@
                     "<td> " + obj[i].Provincia + "</td>" +
                     '<td style="text-align:right">' + percepcionORetencion + "</td>" +
                     '<td style="text-align:right">' + obj[i].Modo + "</td>" +
+                    "<td> " + obj[i].PlanCuentas + "</td>" +
                     '<td style="text-align:right"> <a "id = ' + obj[i].Id + ' class= "btn btn-danger" autopostback="false" onclick="javascript: return EliminarRegistroDeTabla(' + obj[i].Id + ',' + obj[i].IdCliente + ')"><span class="shortcut-icon icon-trash"></span></a></td>' +
                     "</tr> ");
             };

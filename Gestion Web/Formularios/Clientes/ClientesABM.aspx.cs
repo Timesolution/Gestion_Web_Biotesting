@@ -68,13 +68,14 @@ namespace Gestion_Web.Formularios.Clientes
             public string Retencion { get; set; }
             public string Modo { get; set; }
             public string IdCliente { get; set; }
+            public string PlanCuentas { get; set; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
-                if(esUruguay == 1)
+                if (esUruguay == 1)
                     txtCuit.Text = "Root";
 
                 //if (chbDisparaTarea.Checked == true)
@@ -165,6 +166,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarClientesReferir();
                     this.cargarBTB();
                     this.cargarEstadosFiltro();
+                    this.cargarPlanCuentas();
                     //this.cargarTipoContacto();
 
                     this.asignarNombreLabel(accion);
@@ -240,6 +242,23 @@ namespace Gestion_Web.Formularios.Clientes
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando formulario. " + ex.Message));
+            }
+        }
+
+        private void cargarPlanCuentas()
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlan = new ControladorPlanCuentas();
+                this.ListPlanCuentas.DataSource = controladorPlan.obtenerCuentasContablesByJerarquia(5);
+                this.ListPlanCuentas.DataValueField = "id";
+                this.ListPlanCuentas.DataTextField = "descripcion";
+
+                this.ListPlanCuentas.DataBind();
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -1580,7 +1599,7 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     cliente.cuit = cliente.cuit.PadLeft(8, '0');
                 }
-                
+
                 // si tiene 0, quiere decir que no es uruguay y tiene que corroborar que tenga 11 digitos, delo contrario si es uruguay no lo valida.
                 if (esUruguay == 0)
                 {
@@ -1620,7 +1639,7 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente.direcciones = this.obtenerListDirecciones();
 
 
-                if(esUruguay == 0)
+                if (esUruguay == 0)
                 {
                     if (this.controlador.validateCuit(this.txtCuit.Text, this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
                     {
@@ -1771,7 +1790,7 @@ namespace Gestion_Web.Formularios.Clientes
                     }
                 }
 
-                
+
 
             }
             catch (Exception ex)
@@ -1982,7 +2001,7 @@ namespace Gestion_Web.Formularios.Clientes
                     cliente.formaPago.id = this.controlador.obtenerPrimerFormaPago();
                 }
 
-                if(esUruguay == 0)
+                if (esUruguay == 0)
                 {
                     if (this.controlador.validateCuit(this.txtCuit.Text.Replace("-", String.Empty), this.DropListTipo.SelectedItem.Text) || this.DropListIva.SelectedValue == "1")
                     {
@@ -2509,7 +2528,7 @@ namespace Gestion_Web.Formularios.Clientes
                     Cliente c = Session["ClientesABM_Cliente"] as Cliente;
                     DataTable puntos = controladorCobranza.ObtenerPuntosCliente(c.id);
                     this.phPuntos.Controls.Clear();
-                    int id = 0; 
+                    int id = 0;
                     foreach (DataRow dt in puntos.Rows)
                     {
                         this.cargarPHPuntos(dt, id);
@@ -3720,7 +3739,7 @@ namespace Gestion_Web.Formularios.Clientes
                     {
                         if (txtEnviarMailCRM.Value.ToString() != "")
                         {
-                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto,esCCW) > 0)
+                            if (controladorFunciones.enviarMailCRM(cliente.razonSocial, usuario, txtFechaEvento.Text.ToString(), txtDetalleEvento.Text.ToString(), txtEnviarMailCRM.Value.ToString(), txtTarea.Text.ToString(), drpCRMSituacion.SelectedItem.ToString(), txtFechaVencimiento.Text, adjunto, esCCW) > 0)
                                 mensajeEnvioMail = "Correo enviado a " + txtEnviarMailCRM.Value.ToString() + " con exito.";
                             else
                                 mensajeEnvioMail = "No se pudo enviar email a " + txtEnviarMailCRM.Value.ToString() + ".";
@@ -3745,7 +3764,7 @@ namespace Gestion_Web.Formularios.Clientes
                 else
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE. No se pudo agregar el evento. Ubicacion: ClientesABM.agregarEventoCliente.");
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion","Disculpe, no se pudo guardar el evento. Por favor, contacte con el area de <strong><a href='/Formularios/Herramientas/Soporte.aspx'>soporte</a></strong>."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeGrowlWarning("Atencion", "Disculpe, no se pudo guardar el evento. Por favor, contacte con el area de <strong><a href='/Formularios/Herramientas/Soporte.aspx'>soporte</a></strong>."));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"No se pudo guardar.\");", true);
                 }
             }
@@ -3854,7 +3873,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 string id = (sender as LinkButton).ID;
                 int idEvento = Convert.ToInt32(id.Split('_')[1]);
-                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Voy a cargar el evento "+ idEvento.ToString() +" a editar. Ubicacion: ClientesABM.modificarEventoCliente.");
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Voy a cargar el evento " + idEvento.ToString() + " a editar. Ubicacion: ClientesABM.modificarEventoCliente.");
 
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
                 if (ev != null)
@@ -3929,7 +3948,7 @@ namespace Gestion_Web.Formularios.Clientes
                 int idEvento = Convert.ToInt32(id.Split('_')[1]);
                 Clientes_Eventos ev = this.contClienteEntity.obtenerEventosClienteByID(idEvento);
 
-                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a eliminar evento N# "+ idEvento.ToString());
+                Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Va a eliminar evento N# " + idEvento.ToString());
                 int i = this.contClienteEntity.eliminarEventoCliente(ev);
                 if (i > 0)
                 {
@@ -4483,11 +4502,12 @@ namespace Gestion_Web.Formularios.Clientes
 
         #region IngresosBrutos/Percepciones
         [WebMethod]
-        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion, string modo)
+        public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion, string modo, string idPlanCuenta)
         {
             try
             {
                 int idCliente = Convert.ToInt32(idClienteString);
+                int idPlan = Convert.ToInt32(idPlanCuenta);
                 int respuesta = 0;
                 decimal percepcion = 0;
                 decimal retencion = 0;
@@ -4498,6 +4518,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
                 ControladorProvincias controladorProvincias = new ControladorProvincias();
+                controladorCliente controladorCliente = new controladorCliente();
 
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                 var cliente = controladorClienteEntity.ObtenerClienteId(Convert.ToInt32(idCliente));
@@ -4514,7 +4535,7 @@ namespace Gestion_Web.Formularios.Clientes
                     }
 
                     ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion, modo);
+                    respuesta = contClienteEntity.AgregarIngresosBrutosAlCliente(Convert.ToInt32(idCliente), prov.Id, percepcion, retencion, modo, idPlan);
                 }
                 resultadoJSON = respuesta.ToString();
 
@@ -4523,6 +4544,10 @@ namespace Gestion_Web.Formularios.Clientes
                     List<Cliente_IIBB_Provincias> listaIIBB = controladorClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(idCliente);
                     foreach (var item in listaIIBB)
                     {
+                        string descripcionPlanCuentas = controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id) != null
+                        && controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows.Count > 0
+                        ? controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows[0][1].ToString()
+                        : "Sin Plan";
                         listaTemporal.Add(new IIBBTemporal
                         {
                             Id = item.Id.ToString(),
@@ -4530,7 +4555,8 @@ namespace Gestion_Web.Formularios.Clientes
                             Provincia = item.Provincia.Provincia1,
                             Percepcion = item.Percepcion.ToString(),
                             Retencion = item.Retencion.ToString(),
-                            Modo = item.Modo
+                            Modo = item.Modo,
+                            PlanCuentas = descripcionPlanCuentas
                         });
                     }
                     resultadoJSON = serializer.Serialize(listaTemporal);
@@ -4549,11 +4575,17 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+                controladorCliente controladorCliente = new controladorCliente();
 
                 List<Cliente_IIBB_Provincias> listaIIBB = controladorClienteEntity.ObtenerIngresoBrutosIIBB_Provincia_ByCliente(Convert.ToInt32(IdCliente));
                 List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
                 foreach (var item in listaIIBB)
                 {
+                    
+                    string descripcionPlanCuentas = controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id) != null
+                        && controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows.Count > 0  
+                        ? controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows[0][1].ToString() 
+                        : "Sin Plan" ;
                     listaTemporal.Add(new IIBBTemporal
                     {
                         Id = item.Id.ToString(),
@@ -4561,7 +4593,8 @@ namespace Gestion_Web.Formularios.Clientes
                         Provincia = item.Provincia.Provincia1,
                         Percepcion = item.Percepcion.ToString(),
                         Retencion = item.Retencion.ToString(),
-                        Modo = item.Modo
+                        Modo = item.Modo,
+                        PlanCuentas = descripcionPlanCuentas
                     });
                 }
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -4612,7 +4645,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                if(DropListIva.SelectedValue == "1")
+                if (DropListIva.SelectedValue == "1")
                 {
                     txtCuit.MaxLength = 20;
                 }
@@ -4624,6 +4657,66 @@ namespace Gestion_Web.Formularios.Clientes
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Ubicacion en ClientesABM.DropListIva_SelectedIndexChanged .Excepcion: " + ex.Message);
+            }
+        }
+
+        protected void lbtnBuscarNiveles_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlanCuentas = new ControladorPlanCuentas();
+                //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
+                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5,txtBusqueda.Text);
+
+                if (dtPlanCuentas != null)
+                {
+
+                    this.ListPlanCuentas.DataSource = dtPlanCuentas;
+                    this.ListPlanCuentas.DataValueField = "id";
+                    this.ListPlanCuentas.DataTextField = "Descripcion";
+
+                    this.ListPlanCuentas.DataBind();
+
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se encuentra plan de cuenta " + txtBusqueda.Text));
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando niveles de plan de cuentas. " + ex.Message));
+
+            }
+        }
+
+        protected void lbtnNivelBusqueda_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ControladorPlanCuentas controladorPlanCuentas = new ControladorPlanCuentas();
+                //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
+                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5,txtBusqueda.Text);
+
+                if (dtPlanCuentas != null)
+                {
+
+                    this.ListPlanCuentas.DataSource = dtPlanCuentas;
+                    this.ListPlanCuentas.DataValueField = "id";
+                    this.ListPlanCuentas.DataTextField = "Descripcion";
+
+                    this.ListPlanCuentas.DataBind();
+
+                }
+                else
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+
+
             }
         }
 
