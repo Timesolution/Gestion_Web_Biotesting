@@ -23,62 +23,74 @@
                                     <asp:UpdatePanel ID="UpdatePanel2" UpdateMode="Always" runat="server">
                                         <ContentTemplate>
                                             <div id="validation-form" role="form" class="form-horizontal col-md-7">
-                                                
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-md-3">Banco</label>
 
-                                                        <div class="col-md-6">
-                                                            <asp:DropDownList ID="ListBanco" runat="server" class="form-control" ></asp:DropDownList>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <asp:RequiredFieldValidator ControlToValidate="ListBanco" ID="RequiredFieldValidator18" runat="server" ErrorMessage="Seleccione Empresa" InitialValue="-1" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-3">Banco</label>
 
-                                                        </div>
+                                                    <div class="col-md-6">
+                                                        <asp:DropDownList ID="ListBanco" runat="server" class="form-control"></asp:DropDownList>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-md-3">Numero</label>
-                                                        <div class="col-md-6">
-                                                            <asp:TextBox ID="txtNumero" runat="server" class="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <asp:RequiredFieldValidator ControlToValidate="txtNumero" ID="RequiredFieldValidator29" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-md-3">Descripcion</label>
-                                                        <div class="col-md-6">
-                                                            <asp:TextBox ID="txtDescripcion" runat="server" class="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <asp:RequiredFieldValidator ControlToValidate="txtDescripcion" ID="RequiredFieldValidator1" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-md-3">Cuit</label>
-                                                        <div class="col-md-6">
-                                                            <asp:TextBox ID="txtCuit" runat="server" MaxLength="11" class="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <asp:RequiredFieldValidator ControlToValidate="txtCuit" ID="RequiredFieldValidator2" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="name" class="col-md-3">Librador</label>
+                                                    <div class="col-md-3">
+                                                        <asp:RequiredFieldValidator ControlToValidate="ListBanco" ID="RequiredFieldValidator18" runat="server" ErrorMessage="Seleccione Empresa" InitialValue="-1" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
 
-                                                        <div class="col-md-6">
-                                                            <asp:TextBox ID="txtLibrador" runat="server" class="form-control"></asp:TextBox>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <asp:RequiredFieldValidator ControlToValidate="txtLibrador" ID="RequiredFieldValidator5" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                                        </div>
                                                     </div>
-                                                              <div class="form-group">
-                                                        <label for="name" class="col-md-3">Plan de cuentas</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-3">Numero</label>
+                                                    <div class="col-md-6">
+                                                        <asp:TextBox ID="txtNumero" runat="server" class="form-control"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtNumero" ID="RequiredFieldValidator29" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-3">Descripcion</label>
+                                                    <div class="col-md-6">
+                                                        <asp:TextBox ID="txtDescripcion" runat="server" class="form-control"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtDescripcion" ID="RequiredFieldValidator1" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-3">Cuit</label>
+                                                    <div class="col-md-6">
+                                                        <asp:TextBox ID="txtCuit" runat="server" MaxLength="11" class="form-control"></asp:TextBox>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtCuit" ID="RequiredFieldValidator2" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-3">Librador</label>
 
-                                                        <div class="col-md-6">
-                                                            <asp:DropDownList ID="ListPlanCuentas" runat="server" class="form-control" ></asp:DropDownList>
-                                                        </div>
+                                                    <div class="col-md-6">
+                                                        <asp:TextBox ID="txtLibrador" runat="server" class="form-control"></asp:TextBox>
                                                     </div>
+                                                    <div class="col-md-4">
+                                                        <asp:RequiredFieldValidator ControlToValidate="txtLibrador" ID="RequiredFieldValidator5" runat="server" ErrorMessage="Campo obligatorio" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-3">
+                                                          
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <asp:TextBox ID="txtBusqueda"  placeholder="Busqueda plan" runat="server" class="form-control"></asp:TextBox>
+                                                        </div>
+                                                      <div class="col-md-2">
+                                                             <asp:LinkButton ID="LinkButton1" runat="server"  class="btn btn-primary" OnClick="lbtnBuscarNiveles_Click">
+                                                                            <i class="shortcut-icon icon-search"></i></asp:LinkButton>
+                                                    </div>
+                                                    </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="col-md-3">Plan de cuentas</label>
+
+                                                    <div class="col-md-6">
+                                                        <asp:DropDownList ID="ListPlanCuentas" runat="server" class="form-control"></asp:DropDownList>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="ArticuloGroup" OnClick="btnAgregar_Click" />
@@ -137,7 +149,7 @@
 
     </script>--%>
 
-   <%-- <script type="text/javascript">
+    <%-- <script type="text/javascript">
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endReq);
         function endReq(sender, args) {
             $(function () {
@@ -166,8 +178,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }

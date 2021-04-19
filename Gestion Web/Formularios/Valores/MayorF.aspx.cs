@@ -386,12 +386,22 @@ namespace Gestion_Web.Formularios.Valores
                         saldoAcumulado -= Convert.ToDecimal(item.Credito);
                     }
                     string razonSocial = "";
-                    if (item.Mayor_TipoMovimiento.Id == 7)
+                    if(item.IdDocumento > 0)
                     {
-                        cliente cliente = new cliente();
-                        controladorCobranza controladorCobranza = new controladorCobranza();
-                         razonSocial = controladorCobranza.obtenerClienteByDocumento(item.NumeroDocumento);
+                        if (item.Mayor_TipoMovimiento.Id == 7)
+                        {
+                            cliente cliente = new cliente();
+                            controladorCobranza controladorCobranza = new controladorCobranza();
+                            razonSocial = controladorCobranza.obtenerCobroID(item.IdDocumento).cliente.razonSocial;
+                        }
+                        if (item.Mayor_TipoMovimiento.Id == 8)
+                        {
+                            cliente cliente = new cliente();
+                            controladorFacturacion controladorFacturacion = new controladorFacturacion();
+                            razonSocial = controladorFacturacion.obtenerFacturaId(item.IdDocumento).cliente.razonSocial;
+                        }
                     }
+                    
                     listaMayorTemporal.Add(new MayorTemporal
                     {
                         Fecha = item.Fecha.Value.ToString("dd/MM/yyyy"),

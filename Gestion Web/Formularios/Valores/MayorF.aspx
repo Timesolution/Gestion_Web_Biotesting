@@ -570,8 +570,10 @@
             var data = response.d;
             var obj = JSON.parse(data);
 
-            document.getElementById('btnCerrarModalBusqueda').click();
+            $('#tablaMayor tr td').remove();
 
+            document.getElementById('btnCerrarModalBusqueda').click();
+ 
             for (var i = 0; i < obj.length; i++) {
                 $('#tablaMayor').append(
                     "<tr>" +
