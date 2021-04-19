@@ -25,6 +25,8 @@ namespace Gestion_Web.Formularios.Articulos
         private ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
         private controladorSucursal contSucursal = new controladorSucursal();
         private controladorCliente contCliente = new controladorCliente();
+        private ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+        private ControladorPedidoEntity contPedidoEntity = new ControladorPedidoEntity();
 
         Mensajes m = new Mensajes();
 
@@ -57,6 +59,7 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                     //cargo combos
                     this.cargarGruposArticulos();
+                    this.cargarClientes();
                     this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
                 }
                 this.lbtnVerPedido.Visible = true;
@@ -93,6 +96,8 @@ namespace Gestion_Web.Formularios.Articulos
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando pagina. " + ex.Message));
             }
         }
+
+      
 
         private void VerificarLogin()
         {
@@ -131,6 +136,39 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando grupos de articulos a la lista. " + ex.Message));
             }
+        }
+
+        private void cargarClientes()
+        {
+            try
+            {
+                
+                DataTable dt = contClienteEntity.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+                Gestion_Api.Entitys.cliente clienteUsuario = contClienteEntity.ObtenerClienteId(Convert.ToInt32((int)Session["Login_Vendedor"]));
+
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr2 = dt.NewRow();
+                dr2["alias"] = clienteUsuario.alias;
+                dr2["id"] = clienteUsuario.id;
+                dt.Rows.InsertAt(dr2, 1);
+                //agrego todos
+
+
+                this.ListClientes.DataSource = dt;
+                this.ListClientes.DataValueField = "id";
+                this.ListClientes.DataTextField = "alias";
+
+                this.ListClientes.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando grupos de articulos a la lista. " + ex.Message));
+            }
+
         }
 
         private void cargarSubGruposArticulos(int sGrupo)
@@ -497,7 +535,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        private void generarPedido()
+        private void generarPedido( int cliente = 0, int borrador = 0)
         {
             try
             {
@@ -515,7 +553,17 @@ namespace Gestion_Web.Formularios.Articulos
                     p.sucursal = this.contSucursal.obtenerSucursalID(idSucursal);
                     p.ptoV = this.contSucursal.obtenerPtoVentaId(idPtoVentaUser);
 
-                    p.cliente.id = (int)Session["Login_Vendedor"];
+                    if (borrador == 1)
+                    {
+                        p.estado = controladorPedido.obtenerEstadoDesc("Borrador");
+                        p.cliente.id = cliente;
+
+                    }
+                    else
+                    {
+                        p.cliente.id = (int)Session["Login_Vendedor"];
+
+                    }
 
                     Cliente c = this.contCliente.obtenerClienteID(p.cliente.id);
                     p.listaP.id = c.lisPrecio.id;
@@ -550,6 +598,7 @@ namespace Gestion_Web.Formularios.Articulos
                     p.comentario = "-";
                     p.tipo = controladorPedido.obtenerTipoDoc("Pedido");
                     p.estado = controladorPedido.obtenerEstadoDesc("A Autorizar");
+                    
 
                     foreach (var item in p.items)
                     {
@@ -559,6 +608,10 @@ namespace Gestion_Web.Formularios.Articulos
                     int i = controladorPedido.ProcesarPedido(p);
                     if (i > 0)
                     {
+                        if (contPedidoEntity.verificarPadre(p.cliente.id) > 0 )
+                        {
+                            int j = contPedidoEntity.agregarPedidoReferido(i, p.cliente.id);
+                        }
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Pedido generado con exito!. ", "../../Default.aspx"));
                     }
                     else
@@ -872,6 +925,32 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error en fun: cargarComentarioDesdeLaSession. " + ex.Message));
+            }
+        }
+
+        protected void lbtnGenerarPedidoBorrador_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalPedidoBorrador();", true);
+            }
+            catch (Exception ex)
+            {
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando pedido. " + ex.Message));
+            }
+
+        }
+
+        protected void lbtnGenerarPedidoModalBorrador_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                generarPedido(Convert.ToInt32(ListClientes.SelectedValue), 1);
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

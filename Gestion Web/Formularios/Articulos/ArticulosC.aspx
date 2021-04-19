@@ -91,6 +91,7 @@
                             </table>
                         </div>
                         <asp:LinkButton ID="lbtnGenerarPedido" Text="Generar pedido" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedido_Click" />
+                        <asp:LinkButton ID="lbtnGenerarPedidoBorrador" Text="Generar pedido borrador" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedidoBorrador_Click" />
                         <asp:LinkButton ID="lbtnVerPedido" Text="Ver pedido" runat="server" class="btn btn-default" OnClick="lbtnVerPedido_Click" />
                         <asp:LinkButton ID="lbtnContinuarPedido" Text="Continuar pedido" runat="server" class="btn btn-default" OnClick="lbtnContinuarPedido_Click" Visible="false" />
                         <div class="btn-group" style="height: 100%">
@@ -131,6 +132,36 @@
 
 
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <%--Fin modalGrupo--%>
+
+        <div id="modalPedidoBorrador" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de pedido</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+
+                                <asp:Label runat="server" ID="LabelCliente" Text="Cliente"></asp:Label>
+
+                                <asp:DropDownList runat="server" ID="ListClientes"></asp:DropDownList>
+                            </div>
+
+                        </div>
+
+                        
+                        <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnGenerarPedidoModalBorrador" Text="Generar pedido" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedidoModalBorrador_Click" />
                             <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                         </div>
                     </div>
@@ -255,6 +286,12 @@
         }
 
     </script>
+
+       <script>
+           function showModalPedidoBorrador() {
+               $("#modalPedidoBorrador").modal('show');
+           }
+       </script>
 
     <script>
         $(document).ready(function () {
