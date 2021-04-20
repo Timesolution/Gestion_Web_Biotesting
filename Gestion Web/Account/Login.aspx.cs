@@ -20,6 +20,7 @@ namespace Gestion_Web.Account
         public string passGestion;
         public int mascotasFc;
         public int cliente;
+        public int idArticulo;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -30,6 +31,7 @@ namespace Gestion_Web.Account
                 this.passGestion = Request.QueryString["pw"];
                 this.mascotasFc = Convert.ToInt32(Request.QueryString["mascotas"]);
                 this.cliente = Convert.ToInt32(Request.QueryString["cliente"]);
+                this.idArticulo = Convert.ToInt32(Request.QueryString["art"]);
 
                 if (this.cerrar == "si")
                 {
@@ -153,7 +155,7 @@ namespace Gestion_Web.Account
                     if (this.mascotasFc == 7)
                         Response.Redirect("../Formularios/Clientes/ClientesABM.aspx?accion=2&id=" + this.cliente);
                     if (this.mascotasFc == 8)
-                        Response.Redirect("../Formularios/Facturas/ABMFacturasLargo.aspx?pac=" + this.cliente);
+                        Response.Redirect("../Formularios/Facturas/ABMFacturasLargo.aspx?pac=" + this.cliente + "&artsub=" + idArticulo);
 
                 }
             }

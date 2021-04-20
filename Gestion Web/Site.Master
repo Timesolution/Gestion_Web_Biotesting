@@ -589,8 +589,9 @@
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">SMS</a>
+                                                <a tabindex="" href="#">Alertas</a>
                                                 <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Herramientas/PanelAlertasMail.aspx">Alertas x Mail</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/AdminSMS.aspx">SMS Creditos</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
                                                     <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
