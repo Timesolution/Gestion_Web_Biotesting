@@ -63,6 +63,7 @@ namespace Gestion_Web.Formularios.Facturas
         int idClientePadre;
         string mensajeActualizacionArticuloFecha = string.Empty;
         int idPaciente;
+        int idArticuloSubtratamiento;
 
         //flag si cambio la fecha de la factura
         int flag_cambioFecha = 0;
@@ -90,6 +91,7 @@ namespace Gestion_Web.Formularios.Facturas
                 // este querystring funciona cuando se viene desde un acceso directo de estetica/clinico, desde la agenda
                 // carga el paciente/cliente apenas ingresamos a esta pagina en el dropdownlist.
                 idPaciente = Convert.ToInt32(Request.QueryString["pac"]);
+                idArticuloSubtratamiento = Convert.ToInt32(Request.QueryString["artsub"]);
 
                 VerificarLogin();
                 ConfigurarModoCredito();
@@ -177,6 +179,7 @@ namespace Gestion_Web.Formularios.Facturas
                     if (idPaciente > 0)
                     {
                         this.cargarCliente(idPaciente);
+                        CargarArticuloSubtratamiento();
                     }
 
                     if (accion != 6 && accion != 7)
@@ -12128,6 +12131,73 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     //informar debe seleccionar un cliente primero
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Debe seleccionar un cliente para poder ver sus puntos", null));
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public void CargarArticuloSubtratamiento()
+        {
+            try
+            {
+                // buscamos el articulos de PUNTOS por descripcion. 
+                var articulo = contArticulo.obtenerArticuloByID(idArticuloSubtratamiento);
+
+                if (articulo != null)
+                {
+
+                    ItemFactura fact = new ItemFactura();
+
+                    fact.articulo = articulo;
+                    fact.cantidad = 1;
+                    fact.precioUnitario = articulo.precioSinIva;
+                    fact.total = (fact.precioUnitario * fact.cantidad);
+                    fact.precioSinIva = articulo.precioSinIva;
+
+                    this.nuevaFactura.items.Add(fact);
+
+                    //lo agrego al session
+                    if (Session["Factura"] == null)
+                    {
+                        Factura fac = new Factura();
+                        Session.Add("Factura", fac);
+                    }
+
+                    Factura fa = Session["Factura"] as Factura;
+
+                    fact.nroRenglon = fa.items.Count() + 1;
+
+                    fa.items.Add(fact);
+                    fa.items = fa.items.Distinct().ToList();
+                    Session.Add("Factura", fa);
+
+
+                    this.cargarItems();
+
+                    //agrego abajo
+                    //this.factura.items.Add(item);
+                    //actualizo totales
+                    this.ActualizarTotales();
+
+                    //borro los campos
+                    this.borrarCamposagregarItem();
+                    //this.UpdatePanel1.Update();
+                    this.txtCodigo.Focus();
+
+                    this.lblMontoOriginal.Text = fa.total.ToString();
+                    this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                    this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+
+                }
+                else
+                {
+                    //informar que no existe el articulo
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("No existe el articulo", null));
                 }
 
 
