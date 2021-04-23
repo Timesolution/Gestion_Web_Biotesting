@@ -227,17 +227,17 @@ namespace Gestion_Web.Formularios.Cobros
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
-                    if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
-                    {
+                    //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
+                    //{
                         
                             saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
                             this.cargarEnPh(dtMovimiento);
 
                         this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
-                    }
-                    else
-                        generarReporte = 1;
+                    //}
+                    //else
+                        //generarReporte = 1;
 
 
                     this.labelSaldo.Text = saldo.ToString("C");
@@ -249,25 +249,25 @@ namespace Gestion_Web.Formularios.Cobros
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
-                    if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
-                    {
+                    //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
+                    //{
 
                         saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
                         this.cargarEnPh(dtMovimiento);
 
                         this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
-                    }
-                    else
-                        generarReporte = 1;
+                    //}
+                    //else
+                        //generarReporte = 1;
 
                     this.labelSaldo.Text = saldo.ToString("C");
                 }
 
                 if(generarReporte == 1 && filtro == 1)
                 {
-                    SolicitarReporte_CobrosRealizados();
-                    filtro = 0;
+                    //SolicitarReporte_CobrosRealizados();
+                    //filtro = 0;
                 }
             }
             catch (Exception ex)
