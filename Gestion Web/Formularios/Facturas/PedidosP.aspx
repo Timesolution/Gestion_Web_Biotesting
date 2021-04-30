@@ -340,7 +340,7 @@
                                     <div class="form-group">
                                         <label class="col-md-3">Estado</label>
                                         <div class="col-md-6">
-                                            <asp:DropDownList ID="DropListEstado" runat="server" AutoPostBack="true" OnSelectedIndexChanged="DropListEstado_SelectedIndexChanged" class="form-control"></asp:DropDownList>
+                                            <asp:DropDownList ID="DropListEstado" runat="server" AutoPostBack="true" class="form-control"></asp:DropDownList>
                                             <!-- /input-group -->
                                         </div>
                                         <div class="col-md-2">

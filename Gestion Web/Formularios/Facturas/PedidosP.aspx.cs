@@ -146,14 +146,9 @@ namespace Gestion_Web.Formularios.Facturas
                     else if (perfil == "Cliente")
                     {
                         //deshabilito el list de vendedor
-                        this.ListVendedor.Attributes.Add("disabled", "true");
-                        //para asegurarme de cargar por defecto los pedidos del cliente
-                        if (idCliente > 0)
-                        {
+                        //para asegurarme de cargar por defecto los pedidos del 
                             this.idCliente = idCliente;
-                            this.clientePadre = Vendedor;
-
-                        }
+                            this.clientePadre = idVendedor;
                        
                         this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona, this.clientePadre);
                     }
@@ -960,6 +955,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string perfil = Session["Login_NombrePerfil"] as string;
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = p["id"].ToString();
@@ -1070,13 +1066,32 @@ namespace Gestion_Web.Formularios.Facturas
 
                 Literal lDetail = new Literal();
                 lDetail.ID = "btnEditar_" + p["id"].ToString();
-                lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
-                lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
-                lDetail.Text += "</a>";
+                if(perfil != "Cliente")
+                {
+                    lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                    lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
+                    lDetail.Text += "</a>";
+                }
+                else
+                {
+                    LinkButton btnEditar = new LinkButton();
+                    btnEditar.CssClass = "btn btn-info ui-tooltip";
+                    btnEditar.Attributes.Add("data-toggle", "tooltip");
+                    btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                    btnEditar.ID = "btnEditarArticuloC_" + p["id"].ToString();
+                    btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                    //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                    btnEditar.Font.Size = 12;
+                    btnEditar.Click += new EventHandler(this.detallePedidoEditar);
+                    celAccion.Controls.Add(btnEditar);
+                    celAccion.Width = Unit.Percentage(15);
+                    celAccion.VerticalAlign = VerticalAlign.Middle;
+                }
                 if (this.verificarPermisoEditar() > 0)
                 {
                     celAccion.Controls.Add(lDetail);
                 }
+
                 Literal l4 = new Literal();
                 l4.Text = "&nbsp";
                 celAccion.Controls.Add(l4);
@@ -1106,6 +1121,25 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
+        private void detallePedidoEditar(object sender, EventArgs e)
+        {
+            try
+            {
+                string idBoton = (sender as LinkButton).ID;
+                string[] atributos = idBoton.Split('_');
+                int idPedido = Convert.ToInt32(atributos[1]);
+                Pedido pedido = controlador.obtenerPedidoId(idPedido);
+                Session["PedidoCliente"] = pedido;
+                Response.Redirect("../Articulos/ArticulosC.aspx?accion=3");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         private void cargarEnPh(Pedido p)
         {
             try
@@ -1649,7 +1683,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                string perfil = Session["Login_NombrePerfil"] as string;
+                if(perfil != "Cliente")
+                {
+                    this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                }
             }
             catch
             {
@@ -2281,8 +2319,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Gestion_Api.Entitys.cliente clienteUsuario = contCliente.ObtenerClienteId(Convert.ToInt32((int)Session["Login_Vendedor"]));
 
                     DataRow dr3 = dt.NewRow();
-                    dr3["alias"] = "Todos";
-                    dr3["id"] = 0;
+                    dr3["alias"] = clienteUsuario.alias;
+                    dr3["id"] = clienteUsuario.id;
                     dt.Rows.InsertAt(dr3, 2);
 
                     this.DropListClientes.DataSource = dt;
@@ -2294,6 +2332,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     dt = controladorCliente.obtenerClientesByClienteDT(this.idVendedor);
+                    this.ListVendedor.Attributes.Add("disabled", "true");
                 }
                 return dt;
             }

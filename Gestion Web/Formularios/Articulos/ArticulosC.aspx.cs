@@ -27,6 +27,7 @@ namespace Gestion_Web.Formularios.Articulos
         private controladorCliente contCliente = new controladorCliente();
         private ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         private ControladorPedidoEntity contPedidoEntity = new ControladorPedidoEntity();
+        private ControladorPedido controladorPedido = new ControladorPedido();
 
         Mensajes m = new Mensajes();
 
@@ -86,6 +87,14 @@ namespace Gestion_Web.Formularios.Articulos
                     articulos = this.controlador.obtenerArticulosReducStore();
                     this.cargarArticulosTabla(articulos);
                 }
+                // editar
+                if (accion == 5)
+                {
+
+                    this.verCarroPedidoEditar();
+
+                }
+
                 this.cargarBotonesDeLosGrupos();
                 this.txtBusqueda.Focus();
                 Page.Form.DefaultButton = this.lbBuscar.UniqueID;
@@ -97,7 +106,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-      
+
 
         private void VerificarLogin()
         {
@@ -142,7 +151,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                
+
                 DataTable dt = contClienteEntity.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
                 Gestion_Api.Entitys.cliente clienteUsuario = contClienteEntity.ObtenerClienteId(Convert.ToInt32((int)Session["Login_Vendedor"]));
 
@@ -163,6 +172,12 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListClientes.DataTextField = "alias";
 
                 this.ListClientes.DataBind();
+                Pedido p = Session["PedidoCliente"] as Pedido;
+                if (p.cliente.id > 0)
+                {
+                    ListClientes.SelectedValue = p.cliente.id.ToString();
+                }
+
             }
             catch (Exception ex)
             {
@@ -341,7 +356,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        private void cargarCarroPh(Articulo art, int pos, decimal cantidad)
+        private void cargarCarroPh(Articulo art, int pos, decimal cantidad,Cliente cliente)
         {
             try
             {
@@ -421,9 +436,12 @@ namespace Gestion_Web.Formularios.Articulos
                 celSubGrupo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celSubGrupo);
 
+                Articulo articulo = this.controlador.obtenerArticuloFacturar(art.codigo, cliente.lisPrecio.id);
+                decimal totalSIva = (articulo.precioVenta / (1 + (articulo.porcentajeIva / 100)));
+
                 TableCell celPrecio = new TableCell();
                 //celPrecio.Text = art.precioVenta.ToString("C");
-                celPrecio.Text = art.precioSinIva.ToString("C");
+                celPrecio.Text = totalSIva.ToString("C");
                 celPrecio.Width = Unit.Percentage(5);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
@@ -474,10 +492,36 @@ namespace Gestion_Web.Formularios.Articulos
                 this.phCarro.Controls.Clear();
                 this.phArticulos.Controls.Clear();
                 Pedido p = Session["PedidoCliente"] as Pedido;
+                int idCliente = (int)Session["Login_Vendedor"];
+                Cliente cliente = contCliente.obtenerClienteID(idCliente);
+
 
                 foreach (ItemPedido item in p.items)
                 {
-                    this.cargarCarroPh(item.articulo, p.items.IndexOf(item), item.cantidad);
+                    this.cargarCarroPh(item.articulo, p.items.IndexOf(item), item.cantidad, cliente);
+                }
+
+                this.lbtnVerPedido.Visible = false;
+                this.lbtnGenerarPedido.Visible = true;
+                this.lbtnContinuarPedido.Visible = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void verCarroPedidoEditar()
+        {
+            try
+            {
+                this.phCarro.Controls.Clear();
+                //vacio place holder
+                Pedido p = Session["PedidoCliente"] as Pedido;
+
+                foreach (ItemPedido item in p.items)
+                {
+                    this.cargarCarroPh(item.articulo, p.items.IndexOf(item), item.cantidad,p.cliente);
                 }
 
                 this.lbtnVerPedido.Visible = false;
@@ -535,7 +579,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
-        private void generarPedido( int cliente = 0, int borrador = 0)
+        private void generarPedido(int cliente = 0, int borrador = 0)
         {
             try
             {
@@ -598,7 +642,7 @@ namespace Gestion_Web.Formularios.Articulos
                     p.comentario = "-";
                     p.tipo = controladorPedido.obtenerTipoDoc("Pedido");
                     p.estado = controladorPedido.obtenerEstadoDesc("A Autorizar");
-                    
+
 
                     foreach (var item in p.items)
                     {
@@ -608,7 +652,7 @@ namespace Gestion_Web.Formularios.Articulos
                     int i = controladorPedido.ProcesarPedido(p);
                     if (i > 0)
                     {
-                        if (contPedidoEntity.verificarPadre(p.cliente.id) > 0 )
+                        if (contPedidoEntity.verificarPadre(p.cliente.id) > 0)
                         {
                             int j = contPedidoEntity.agregarPedidoReferido(i, p.cliente.id);
                         }
@@ -674,11 +718,123 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                this.generarPedido();
+                Pedido p = Session["PedidoCliente"] as Pedido;
+                if (p.id <= 0)
+                {
+                    this.generarPedido();
+                }
+                else
+                {
+                    this.modificarPedido();
+                }
             }
             catch
             {
 
+            }
+        }
+
+        private void modificarPedido(int cliente = 0, int borrador = 0)
+        {
+            try
+            {
+                ControladorPedido controladorPedido = new ControladorPedido();
+
+                Pedido p = Session["PedidoCliente"] as Pedido;
+                int idPedidoOriginal = p.id;
+
+                if (p.items.Count > 0)
+                {
+                    int idEmpresa = (int)Session["Login_EmpUser"];
+                    int idSucursal = (int)Session["Login_SucUser"];
+                    int idPtoVentaUser = (int)Session["Login_PtoUser"];
+
+                    p.empresa = this.contSucursal.obtenerEmpresaID(idEmpresa);
+                    p.sucursal = this.contSucursal.obtenerSucursalID(idSucursal);
+                    p.ptoV = this.contSucursal.obtenerPtoVentaId(idPtoVentaUser);
+
+                    if (borrador == 1)
+                    {
+                        p.estado = controladorPedido.obtenerEstadoDesc("Borrador");
+                        p.cliente.id = cliente;
+
+                    }
+                    else
+                    {
+                        p.cliente.id = (int)Session["Login_Vendedor"];
+                        p.estado = controladorPedido.obtenerEstadoDesc("A Autorizar");
+
+                    }
+
+                    Cliente c = this.contCliente.obtenerClienteID(p.cliente.id);
+                    p.listaP.id = c.lisPrecio.id;
+                    p.formaPAgo.id = c.formaPago.id;
+                    p.vendedor.id = c.vendedor.id;
+
+                    //obtengo total de suma de item
+                    decimal totalC = p.obtenerTotalNeto();
+                    decimal total = decimal.Round(totalC, 2);
+                    p.neto = total;
+
+                    //Subtotal = neto menos el descuento
+                    p.descuento = 0;
+                    p.subTotal = p.neto - p.descuento;
+
+                    decimal iva = decimal.Round(p.obtenerTotalIva(), 2);
+                    p.neto21 = iva;
+                    p.totalSinDescuento = p.neto + p.obtenerTotalIva();
+                    //retencion sobre el sub total
+                    p.retencion = 0;
+
+                    //total: subtotal + iva + retencion 
+                    p.total = p.subTotal + p.neto21 + p.retencion;
+
+                    p.fecha = DateTime.Now;
+                    p.fechaEntrega = DateTime.Now;
+                    p.horaEntrega = "";
+                    p.domicilioEntrega = "";
+                    p.zonaEntrega = "-1";
+                    p.entrega.Id = -1;
+                    p.senia = "0";
+                    p.comentario = "-";
+                    p.tipo = controladorPedido.obtenerTipoDoc("Pedido");
+
+
+                    foreach (var item in p.items)
+                    {
+                        item.nroRenglon = p.items.IndexOf(item) + 1;
+                    }
+
+                    int i = controladorPedido.ProcesarPedido(p);
+                    if (i > 0)
+                    {
+                        ControladorPedidoEntity contPedEnt = new ControladorPedidoEntity();
+                        if (contPedidoEntity.verificarPadre(p.cliente.id) > 0)
+                        {
+                            int j = contPedEnt.agregarPedidoReferido(i, p.cliente.id);
+                            int k = contPedEnt.eliminarPedidoReferidoPorPedido(idPedidoOriginal);
+                        }
+
+                        contPedEnt.modificarNumeroPedidoEnt(p.id, p.numero);
+                        string original = idPedidoOriginal + ";";
+                        controladorPedido.anularPedidosModificados(original);
+                        Session.Remove("PedidoCliente");
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Pedido generado con exito!. ", "../../Default.aspx"));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("No se pudo generar pedido. "));
+                    }
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Debe cargar productos al pedido!. "));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error generando pedido. " + ex.Message));
             }
         }
 
@@ -946,8 +1102,21 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                generarPedido(Convert.ToInt32(ListClientes.SelectedValue), 1);
+                if (Session["PedidoCliente"] != null)
+                {
+                    Pedido p = Session["PedidoCliente"] as Pedido;
+                    if (p.id <= 0)
+                    {
+                        generarPedido(Convert.ToInt32(ListClientes.SelectedValue), 1);
+
+                    }
+                    else
+                    {
+                        this.modificarPedido(Convert.ToInt32(ListClientes.SelectedValue), 1);
+                    }
+                }
             }
+
             catch (Exception ex)
             {
 

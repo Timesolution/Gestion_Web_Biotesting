@@ -154,7 +154,7 @@
 
                                 <asp:Label runat="server" ID="LabelCliente" Text="Cliente"></asp:Label>
 
-                                <asp:DropDownList runat="server" ID="ListClientes"></asp:DropDownList>
+                                <asp:DropDownList runat="server" ID="ListClientes" class="form-control"></asp:DropDownList>
                             </div>
 
                         </div>
