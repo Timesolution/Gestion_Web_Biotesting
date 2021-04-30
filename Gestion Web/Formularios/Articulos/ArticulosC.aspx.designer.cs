@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Articulos {
-    
-    
-    public partial class ArticulosC {
-        
+namespace Gestion_Web.Formularios.Articulos
+{
+
+
+    public partial class ArticulosC
+    {
+
         /// <summary>
         /// lbBuscar control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbBuscar;
-        
+
         /// <summary>
         /// txtBusqueda control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
-        
+
         /// <summary>
         /// LitFiltro control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal LitFiltro;
-        
+
         /// <summary>
         /// PlaceHolder1 control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder1;
-        
+
         /// <summary>
         /// phBotonesGrupos control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phBotonesGrupos;
-        
+
         /// <summary>
         /// phArticulos control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phArticulos;
-        
+
         /// <summary>
         /// phCarro control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phCarro;
-        
+
         /// <summary>
         /// lbtnGenerarPedido control.
         /// </summary>
@@ -83,7 +85,16 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarPedido;
-        
+
+        /// <summary>
+        /// lbtnGenerarPedidoBorrador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarPedidoBorrador;
+
         /// <summary>
         /// lbtnVerPedido control.
         /// </summary>
@@ -92,7 +103,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnVerPedido;
-        
+
         /// <summary>
         /// lbtnContinuarPedido control.
         /// </summary>
@@ -101,7 +112,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnContinuarPedido;
-        
+
         /// <summary>
         /// lblMensaje control.
         /// </summary>
@@ -110,7 +121,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMensaje;
-        
+
         /// <summary>
         /// txtMovimiento control.
         /// </summary>
@@ -119,7 +130,34 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMovimiento;
-        
+
+        /// <summary>
+        /// LabelCliente control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelCliente;
+
+        /// <summary>
+        /// ListClientes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListClientes;
+
+        /// <summary>
+        /// lbtnGenerarPedidoModalBorrador control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarPedidoModalBorrador;
+
         /// <summary>
         /// UpdatePanel4 control.
         /// </summary>
@@ -128,7 +166,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel4;
-        
+
         /// <summary>
         /// ListGrupo control.
         /// </summary>
@@ -137,7 +175,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListGrupo;
-        
+
         /// <summary>
         /// ListSubGrupo control.
         /// </summary>
@@ -146,7 +184,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListSubGrupo;
-        
+
         /// <summary>
         /// btnFiltrar control.
         /// </summary>
@@ -155,7 +193,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnFiltrar;
-        
+
         /// <summary>
         /// UpdatePanel1 control.
         /// </summary>
@@ -164,7 +202,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
+
         /// <summary>
         /// txtComentarios control.
         /// </summary>
@@ -173,7 +211,7 @@ namespace Gestion_Web.Formularios.Articulos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtComentarios;
-        
+
         /// <summary>
         /// lbtnGuardarComentarios control.
         /// </summary>

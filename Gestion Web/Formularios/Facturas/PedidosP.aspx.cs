@@ -21,6 +21,7 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorPedidoEntity contPedEntity = new ControladorPedidoEntity();
         controladorArticulo contArticulos = new controladorArticulo();
         controladorRemitos contRemito = new controladorRemitos();
+        ControladorClienteEntity contCliente = new ControladorClienteEntity();
         Configuracion configuracion = new Configuracion();
 
         Mensajes m = new Mensajes();
@@ -32,10 +33,12 @@ namespace Gestion_Web.Formularios.Facturas
         private int idCliente;
         private int idEstado;
         private int zona;
+        private int clientePadre;
         int idVendedor;
         int tipoEntrega;
         int tipoFecha;
         int tipoFecha2;
+
         //int idArticulo;
 
         int accion;
@@ -138,14 +141,16 @@ namespace Gestion_Web.Formularios.Facturas
                         this.ListVendedor.Attributes.Add("disabled", "true");
                         this.ListVendedor.SelectedValue = this.idVendedor.ToString();
                         this.Vendedor = idVendedor;
-                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona);
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona, this.clientePadre);
                     }
                     else if (perfil == "Cliente")
                     {
                         //deshabilito el list de vendedor
-                        this.ListVendedor.Attributes.Add("disabled", "true");
-                        //para asegurarme de cargar por defecto los pedidos del cliente
-                        this.cargarPedidosRango(fechaD, fechaH, suc, this.idVendedor, idEstado, this.Vendedor, this.zona);
+                        //para asegurarme de cargar por defecto los pedidos del 
+                            this.idCliente = idCliente;
+                            this.clientePadre = idVendedor;
+                       
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona, this.clientePadre);
                     }
                     else if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
                     {
@@ -154,7 +159,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona);
+                        this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona, clientePadre);
                     }
 
                     //if (idCliente > 0)
@@ -209,7 +214,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (accion == 5)
                 {
-                    cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona);
+                    cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona, clientePadre);
                 }
 
                 if (idCliente > 0)
@@ -339,7 +344,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (perfil == "Cliente")
                 {
                     auxiliar = true;
-                    dt = contCliente.obtenerClientesByClienteDT(this.idVendedor);
+                    dt = cargarClientesFamilia();
                     this.btnBuscarCod.Visible = false;
                     this.txtCodCliente.Attributes.Add("disabled", "true");
                     //Oculto el Saldo en caso de que el logueado sea un Cliente
@@ -753,13 +758,19 @@ namespace Gestion_Web.Formularios.Facturas
 
         #region BUSQUEDAS
 
-        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor, int zona)
+        private void cargarPedidosRango(string fechaD, string fechaH, int idSuc, int idCliente, int idEstado, int vendedor, int zona, int clientePadre)
         {
             try
             {
-                if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
+                if (fechaD != null && fechaD != null && idSuc != 0 && idEstado != 0 && Session["Login_NombrePerfil"].ToString() == "Cliente")
                 {
-                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2);
+                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2, clientePadre);
+                    this.cargarPedidos(dt);
+                    this.cargarLabel(fechaD, fechaH, idSuc, idCliente, idEstado);
+                }
+                else if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
+                {
+                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2, clientePadre);
                     this.cargarPedidos(dt);
                     this.cargarLabel(fechaD, fechaH, idSuc, idCliente, idEstado);
                 }
@@ -768,7 +779,7 @@ namespace Gestion_Web.Formularios.Facturas
                     DataTable dt = this.controlador.obtenerPedidosRangoDT(this.txtFechaDesde.Text, this.txtFechaHasta.Text, this.txtFechaEntregaDesde.Text, this.txtFechaEntregaHasta.Text,
                     Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue),
                     Convert.ToInt32(this.DropListEstado.SelectedValue), Convert.ToInt32(this.ListVendedor.SelectedValue), Convert.ToInt32(this.ListTipoEntrega.SelectedValue),
-                    Convert.ToInt32(this.RadioFechaPedido.Checked), Convert.ToInt32(this.RadioFechaEntrega.Checked));
+                    Convert.ToInt32(this.RadioFechaPedido.Checked), Convert.ToInt32(this.RadioFechaEntrega.Checked), clientePadre);
                     this.cargarPedidos(dt);
                     this.cargarLabel(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListEstado.SelectedValue));
                 }
@@ -944,6 +955,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                string perfil = Session["Login_NombrePerfil"] as string;
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = p["id"].ToString();
@@ -1054,13 +1066,32 @@ namespace Gestion_Web.Formularios.Facturas
 
                 Literal lDetail = new Literal();
                 lDetail.ID = "btnEditar_" + p["id"].ToString();
-                lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
-                lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
-                lDetail.Text += "</a>";
+                if(perfil != "Cliente")
+                {
+                    lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                    lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
+                    lDetail.Text += "</a>";
+                }
+                else
+                {
+                    LinkButton btnEditar = new LinkButton();
+                    btnEditar.CssClass = "btn btn-info ui-tooltip";
+                    btnEditar.Attributes.Add("data-toggle", "tooltip");
+                    btnEditar.Attributes.Add("title data-original-title", "Detalles");
+                    btnEditar.ID = "btnEditarArticuloC_" + p["id"].ToString();
+                    btnEditar.Text = "<span class='shortcut-icon icon-pencil'></span>";
+                    //btnEliminar.PostBackUrl = "#modalFacturaDetalle";
+                    btnEditar.Font.Size = 12;
+                    btnEditar.Click += new EventHandler(this.detallePedidoEditar);
+                    celAccion.Controls.Add(btnEditar);
+                    celAccion.Width = Unit.Percentage(15);
+                    celAccion.VerticalAlign = VerticalAlign.Middle;
+                }
                 if (this.verificarPermisoEditar() > 0)
                 {
                     celAccion.Controls.Add(lDetail);
                 }
+
                 Literal l4 = new Literal();
                 l4.Text = "&nbsp";
                 celAccion.Controls.Add(l4);
@@ -1090,6 +1121,25 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
+
+        private void detallePedidoEditar(object sender, EventArgs e)
+        {
+            try
+            {
+                string idBoton = (sender as LinkButton).ID;
+                string[] atributos = idBoton.Split('_');
+                int idPedido = Convert.ToInt32(atributos[1]);
+                Pedido pedido = controlador.obtenerPedidoId(idPedido);
+                Session["PedidoCliente"] = pedido;
+                Response.Redirect("../Articulos/ArticulosC.aspx?accion=3");
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         private void cargarEnPh(Pedido p)
         {
             try
@@ -1359,13 +1409,13 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             Response.Redirect("PedidosP.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal="
                                 + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&art=");
+                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&cp=" + clientePadre + "&art=");
                         }
                         else
                         {
                             Response.Redirect("PedidosP.aspx?fechadesde=" + this.txtFechaEntregaDesde.Text + "&fechaHasta=" + this.txtFechaEntregaHasta.Text + "&Sucursal="
                                 + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&art=");
+                                + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&z=" + DropListZona.SelectedValue + "&cp=" + clientePadre + "&art=");
                         }
                     }
                     else
@@ -1633,7 +1683,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                string perfil = Session["Login_NombrePerfil"] as string;
+                if(perfil != "Cliente")
+                {
+                    this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
+                }
             }
             catch
             {
@@ -2065,7 +2119,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (DropListClientesFamilia.SelectedValue != "-1" && DropListClientesFamilia.SelectedValue != "0")
                     {
-                        Response.Redirect("PedidosP.aspx?a=3&fechadesde=" + txtFechaDesdeFamilia.Text + "&fechaHasta=" + txtFechaHastaFamilia.Text + "&Cliente=" + DropListClientesFamilia.SelectedValue + "&estado=" + DropListEstadoFamilia.SelectedValue);
+                        Response.Redirect("PedidosP.aspx?a=3&fechadesde=" + txtFechaDesdeFamilia.Text + "&fechaHasta=" + txtFechaHastaFamilia.Text + "&Cliente=" + DropListClientesFamilia.SelectedValue + "&estado=" + DropListEstadoFamilia.SelectedValue + "&cp=" + clientePadre);
                     }
                     else
                     {
@@ -2189,13 +2243,13 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     Response.Redirect("PedidosP.aspx?a=5&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal="
                         + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                        + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&art=");
+                        + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&cp=" + clientePadre + "&art=");
                 }
                 else
                 {
                     Response.Redirect("PedidosP.aspx?a=5&fechadesde=" + this.txtFechaEntregaDesde.Text + "&fechaHasta=" + this.txtFechaEntregaHasta.Text + "&Sucursal="
                         + DropListSucursal.SelectedValue + "&Cliente=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue
-                        + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&art=");
+                        + "&v=" + ListVendedor.SelectedValue + "&te=" + ListTipoEntrega.SelectedValue + "&tf=" + Convert.ToInt32(RadioFechaPedido.Checked) + "&tf2=" + Convert.ToInt32(RadioFechaEntrega.Checked) + "&cp=" + clientePadre + "&art=");
                 }
             }
             catch (Exception)
@@ -2243,6 +2297,49 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private DataTable cargarClientesFamilia()
+        {
+            try
+            {
+                controladorCliente controladorCliente = new controladorCliente();
+                DataTable dt = contCliente.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+                if (dt.Rows.Count > 0)
+                {
+                    //agrego todos
+                    DataRow dr = dt.NewRow();
+                    dr["alias"] = "Seleccione...";
+                    dr["id"] = -1;
+                    dt.Rows.InsertAt(dr, 0);
 
+                    DataRow dr2 = dt.NewRow();
+                    dr2["alias"] = "Todos";
+                    dr2["id"] = 0;
+                    dt.Rows.InsertAt(dr2, 1);
+
+                    Gestion_Api.Entitys.cliente clienteUsuario = contCliente.ObtenerClienteId(Convert.ToInt32((int)Session["Login_Vendedor"]));
+
+                    DataRow dr3 = dt.NewRow();
+                    dr3["alias"] = clienteUsuario.alias;
+                    dr3["id"] = clienteUsuario.id;
+                    dt.Rows.InsertAt(dr3, 2);
+
+                    this.DropListClientes.DataSource = dt;
+                    this.DropListClientes.DataValueField = "id";
+                    this.DropListClientes.DataTextField = "alias";
+
+                    this.DropListClientes.DataBind();
+                }
+                else
+                {
+                    dt = controladorCliente.obtenerClientesByClienteDT(this.idVendedor);
+                    this.ListVendedor.Attributes.Add("disabled", "true");
+                }
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

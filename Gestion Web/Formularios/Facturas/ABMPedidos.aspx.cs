@@ -2224,6 +2224,7 @@ namespace Gestion_Web.Formularios.Facturas
                             {
                                 int j = contPedEnt.agregarPedidoReferido(i, p.cliente.id);
                             }
+                            
 
                             Pedido pedido1 = Contpedido1.obtenerPedidoId(i);
 
