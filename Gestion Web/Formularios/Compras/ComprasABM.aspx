@@ -212,7 +212,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divNeto2">
                                                     <label for="name" class="col-md-3">Neto 2.5</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -236,7 +236,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divNeto5">
                                                     <label for="name" class="col-md-3">Neto 5</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -260,7 +260,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divNeto10">
                                                     <label for="name" class="col-md-3">Neto 10.5</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -284,7 +284,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divNeto21">
                                                     <label for="name" class="col-md-3">Neto 21</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -309,7 +309,7 @@
 
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divNeto27">
                                                     <label for="name" class="col-md-3">Neto 27</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -332,7 +332,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator13" runat="server" ControlToValidate="txtNeto27" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divIngBru">
                                                     <label for="name" class="col-md-3">Ingresos Brutos</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -348,7 +348,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator14" runat="server" ControlToValidate="txtPIB" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divPercepcionIVA">
                                                     <label for="name" class="col-md-3">Percepción IVA</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -364,7 +364,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator15" runat="server" ControlToValidate="txtPIva" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divImpInt">
                                                     <label for="name" class="col-md-3">Impuestos Internos</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -380,7 +380,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator16" runat="server" ControlToValidate="txtImpuestosInternos" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divRetIIBB">
                                                     <label for="name" class="col-md-3">Retencion de IIBB</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -396,7 +396,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txtRetencionIIBB" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divRetIVA">
                                                     <label for="name" class="col-md-3">Retencion de IVA</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -412,7 +412,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" ControlToValidate="txtRetencionIVA" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divRetGan">
                                                     <label for="name" class="col-md-3">Retencion de ganancias</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -428,7 +428,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" ControlToValidate="txtRetencionGanancias" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divRetSUSS">
                                                     <label for="name" class="col-md-3">Retencion SUSS</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -444,7 +444,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator18" runat="server" ControlToValidate="txtRetencionSuss" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divITC">
                                                     <label for="name" class="col-md-3">ITC</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">
@@ -460,7 +460,7 @@
                                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtITC" ValidationExpression="^(\d|-)?(\d|,)*\.?\d\,?\d*$" ErrorMessage="Formato incorrecto" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group" runat="server" id="divTasaCO2">
                                                     <label for="name" class="col-md-3">Tasa CO2</label>
                                                     <div class="col-md-3">
                                                         <div class="input-group">

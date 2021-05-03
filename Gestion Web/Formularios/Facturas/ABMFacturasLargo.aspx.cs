@@ -1,4 +1,4 @@
-﻿using Disipar.Models;
+﻿  using Disipar.Models;
 using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
@@ -180,6 +180,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.cargarCliente(idPaciente);
                         CargarArticuloSubtratamiento();
+
                     }
 
                     if (accion != 6 && accion != 7)
@@ -445,6 +446,15 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion(mensajeActualizacionArticuloFecha));
                     Session["ArticuloUltimaFechaActualizacion"] = null;
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                }
+
+
+                if(idPaciente > 0)
+                {
+                    // cargo para que sea un presupuesto.
+                    this.obtenerNroPresupuesto();
+                    this.lbtnAccion.Text = "PRP <span class='caret'></span>";
+                    this.ActualizarTotales();
                 }
             }
             catch (Exception ex)

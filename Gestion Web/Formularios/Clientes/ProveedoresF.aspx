@@ -109,7 +109,7 @@
                                             <th style="width: 25%">Razon Social</th>
                                             <th style="width: 25%">Alias</th>
                                             <th style="width: 15%">Tipo</th>
-                                            <th style="width: 15%">CUIT</th>
+                                            <th runat="server" id="thCuit" style="width: 15%">CUIT</th>
                                             <th class="td-actions" style="width: 10%"></th>
                                         </tr>
                                     </thead>

@@ -20,13 +20,19 @@ namespace Gestion_Web.Formularios.Seguridad
         controladorVendedor contVendedor = new controladorVendedor();
         private int idUsuario;
         private int valor;
+        private string perfil = "";
+        int idSucursal = 0;
+        int idEmpresa = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
             {
                 this.VerificarLogin();
+                this.perfil = Session["Login_NombrePerfil"] as string;
+                this.idSucursal = (int)Session["Login_SucUser"];
+                this.idEmpresa = (int)Session["Login_EmpUser"];
                 this.valor = Convert.ToInt32(Request.QueryString["valor"]);
-                this.idUsuario = Convert.ToInt32(Request.QueryString["id"]);                
+                this.idUsuario = Convert.ToInt32(Request.QueryString["id"]);
 
                 if (!IsPostBack)
                 {
@@ -46,9 +52,9 @@ namespace Gestion_Web.Formularios.Seguridad
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.EscribirSQL(1,"Error","Error en el pageload de usuarios. " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error en el pageload de usuarios. " + ex.Message);
             }
         }
 
@@ -111,7 +117,7 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 DataTable dt = contVendedor.obtenerVendedores();
 
-                Log.EscribirSQL(1,"vendedores", dt.Rows.Count.ToString());
+                Log.EscribirSQL(1, "vendedores", dt.Rows.Count.ToString());
 
                 //agrego todos
                 DataRow dr2 = dt.NewRow();
@@ -179,6 +185,15 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 this.DropListEmpresa.DataBind();
 
+                
+
+                if (this.perfil != "SuperAdministrador")
+                {
+
+                    this.DropListEmpresa.SelectedValue = idEmpresa.ToString();
+                    this.DropListEmpresa.Attributes.Add("disabled", "disabled");
+                }
+
             }
             catch (Exception ex)
             {
@@ -191,7 +206,10 @@ namespace Gestion_Web.Formularios.Seguridad
             try
             {
                 controladorSucursal contSucu = new controladorSucursal();
-                DataTable dt = contSucu.obtenerSucursalesDT(emp);
+                DataTable dt = new DataTable();
+                Sucursal sucursal = new Sucursal();
+
+                dt = contSucu.obtenerSucursalesDT(emp);
 
                 //agrego todos
                 DataRow dr = dt.NewRow();
@@ -199,14 +217,17 @@ namespace Gestion_Web.Formularios.Seguridad
                 dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
-
                 this.DropListSucursal.DataSource = dt;
                 this.DropListSucursal.DataValueField = "Id";
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();
 
-
+                if (this.perfil != "SuperAdministrador")
+                {
+                    this.DropListSucursal.SelectedValue = idSucursal.ToString();
+                    this.DropListSucursal.Attributes.Add("disabled", "disabled");
+                }
 
 
             }
@@ -233,7 +254,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 this.DropListPtoVenta.DataTextField = "NombreFantasia";
 
                 this.DropListPtoVenta.DataBind();
-                
+
             }
             catch (Exception ex)
             {
@@ -244,7 +265,18 @@ namespace Gestion_Web.Formularios.Seguridad
         {
             try
             {
-                DataTable dt = controlador.obtenerPerfiles();
+
+                DataTable dt = new DataTable();
+
+                if (this.perfil == "SuperAdministrador")
+                {
+                    dt = controlador.obtenerPerfiles();
+                }
+                else
+                {
+                    dt = controlador.obtenerPerfilesSinSuperAdministrador();
+                }
+
 
                 //agrego todos
                 DataRow dr = dt.NewRow();
@@ -369,7 +401,7 @@ namespace Gestion_Web.Formularios.Seguridad
                     if (this.DropListPerfil.SelectedItem.Text == "Vendedor")
                     {
                         this.panelVendedor.Visible = true;
-                        this.ListVendedores.SelectedValue = user.vendedor.id.ToString(); 
+                        this.ListVendedores.SelectedValue = user.vendedor.id.ToString();
                     }
                     if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor")
                     {
@@ -448,7 +480,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 user.empresa.id = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
                 user.perfil.id = Convert.ToInt32(this.DropListPerfil.SelectedValue);
                 user.ptoVenta.id = Convert.ToInt32(this.DropListPtoVenta.SelectedValue);
-                if(this.DropListPerfil.SelectedItem.Text == "Vendedor")
+                if (this.DropListPerfil.SelectedItem.Text == "Vendedor")
                 {
                     user.vendedor.id = Convert.ToInt32(this.ListVendedores.SelectedValue);
                 }
@@ -473,7 +505,7 @@ namespace Gestion_Web.Formularios.Seguridad
                     ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL(1, "ERROR", "Error agregando usuario. " + ex.Message);
             }
@@ -570,24 +602,24 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 if (this.DropListPerfil.SelectedItem.Text == "Vendedor" || this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                 {
-                    
+
                     if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                     {
-                        
+
                         //cargo clientes en vez de vendedores
                         this.panelClientes.Visible = true;
                         this.panelVendedor.Visible = false;
                     }
                     else
                     {
-                        
+
                         this.panelVendedor.Visible = true;
                         this.panelClientes.Visible = false;
                     }
                 }
                 else
                 {
-                    
+
                     this.panelVendedor.Visible = false;
                     this.panelClientes.Visible = false;
                 }
@@ -620,7 +652,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 cliente = contCliente.obtenerClienteID(user.vendedor.id);
 
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
-                
+
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
                 usuarioStore = controladorUsuarioStore.obtenerUsuario(user.usuario);
                 controladorStore contStore = new controladorStore();
@@ -649,8 +681,8 @@ namespace Gestion_Web.Formularios.Seguridad
                         this.txtCoeficienteStore.Text = usuarioStore.coeficiente.ToString();
                         this.DropPerfilStore.SelectedValue = controladorUsuarioStore.obtenerPerfilesStorePorID((int)usuarioStore.perfil).@int.ToString();
                         this.DropStore.SelectedValue = contStore.ObtenerStoresPorID((int)usuarioStore.store).Id.ToString();
-                    }                    
-                    
+                    }
+
                 }
                 else
                 {
@@ -663,7 +695,7 @@ namespace Gestion_Web.Formularios.Seguridad
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando campos del Usuario Store." + ex.Message));
             }
-            
+
         }
 
         public void btnAgregarUsuarioAlStore_Click(object sender, EventArgs e)
@@ -678,7 +710,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 Gestor_Solution.Modelo.Cliente cliente = new Gestor_Solution.Modelo.Cliente();
                 Log.EscribirSQL(1, "Info", "Voy a obtener el cliente");
                 cliente = contCliente.obtenerClienteID(user.vendedor.id);
-                
+
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore = new Store_Api.Controladores.ControladorUsuario();
                 Store_Api.Controladores.ControladorUsuario controladorUsuarioStore2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
                 Store_Api.Entidades.Usuario usuarioStore = new Store_Api.Entidades.Usuario();
@@ -688,14 +720,14 @@ namespace Gestion_Web.Formularios.Seguridad
                 Log.EscribirSQL(1, "Info", "Cargue todos los datos, voy a modificar el usuario");
                 if (usuarioStore.store == 1)
                 {
-                    AgregarOModificarUsuario(controladorUsuarioStore,user,usuarioStore,cliente);
+                    AgregarOModificarUsuario(controladorUsuarioStore, user, usuarioStore, cliente);
                 }
                 else if (usuarioStore.store == 2)
                 {
-                    AgregarOModificarUsuario(controladorUsuarioStore2, user, usuarioStore,cliente);
+                    AgregarOModificarUsuario(controladorUsuarioStore2, user, usuarioStore, cliente);
                 }
 
-                Log.EscribirSQL(1, "Info", "Usuario agregado o modificado");                
+                Log.EscribirSQL(1, "Info", "Usuario agregado o modificado");
 
                 CargarUsuariosEnPH();
 
@@ -707,7 +739,7 @@ namespace Gestion_Web.Formularios.Seguridad
             }
         }
 
-        public void AgregarOModificarUsuario(Store_Api.Controladores.ControladorUsuario controladorUsuarioStore,Usuario user, Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
+        public void AgregarOModificarUsuario(Store_Api.Controladores.ControladorUsuario controladorUsuarioStore, Usuario user, Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
         {
             try
             {
@@ -741,11 +773,11 @@ namespace Gestion_Web.Formularios.Seguridad
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error agregando o modificando usuario en el store." + ex.Message);
-            }           
-            
+            }
+
         }
 
         public void CargarDatosUsuarioStore(Store_Api.Entidades.Usuario usuarioStore, Gestor_Solution.Modelo.Cliente cliente)
@@ -782,7 +814,7 @@ namespace Gestion_Web.Formularios.Seguridad
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error cargando datos de usuario store." + ex.Message);
-            }            
+            }
         }
 
         public void VerificarEstadoAgregarStore()
@@ -802,7 +834,7 @@ namespace Gestion_Web.Formularios.Seguridad
                     PHUsuariosStore.Visible = false;
                     this.btnAgregarStore.Visible = false;
                 }
-                    
+
             }
             catch (Exception mensaje)
             {
@@ -836,26 +868,26 @@ namespace Gestion_Web.Formularios.Seguridad
                     SetearPH(usuarioStore, controladorUsuarioStore, contStore);
                     flag++;
                 }
-                    
-                if(usuarioStore2 != null)
+
+                if (usuarioStore2 != null)
                 {
                     SetearPH(usuarioStore2, controladorUsuarioStore2, contStore);
                     flag++;
                 }
-                
+
                 if (flag == 2)
                 {
                     btnAgregarStore.Visible = false;
-                }    
+                }
 
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando usuario en el PH" + ex.Message));
-                Log.EscribirSQL(1,"Error", "Error cargando usuario en el PH" + ex.Message);
-                Log.EscribirSQL(1,"Error", "Error cargando usuario en el PH, inner exception" + ex.InnerException.Message);
+                Log.EscribirSQL(1, "Error", "Error cargando usuario en el PH" + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error cargando usuario en el PH, inner exception" + ex.InnerException.Message);
             }
-            
+
         }
 
         public void SetearPH(Store_Api.Entidades.Usuario usuarioStore, Store_Api.Controladores.ControladorUsuario controladorUsuarioStore, controladorStore contStore)
@@ -955,7 +987,7 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 throw;
             }
-            
+
         }
 
         private void BorrarUsuario(int idUsuarioStore, int idStore)
@@ -965,13 +997,13 @@ namespace Gestion_Web.Formularios.Seguridad
                 Store_Api.Controladores.ControladorUsuario contUsuario = new Store_Api.Controladores.ControladorUsuario();
                 Store_Api.Controladores.ControladorUsuario contUsuario2 = new Store_Api.Controladores.ControladorUsuario("Store_Entities2");
                 //obtengo numero factura
-                
+
                 if (idStore == 1)
                     contUsuario.BorrarUsuarioStorePorID(idUsuarioStore);
                 else if (idStore == 2)
                     contUsuario2.BorrarUsuarioStorePorID(idUsuarioStore);
 
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario borrado con exito. ",null));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "info", mje.mensajeBoxInfo("Usuario borrado con exito. ", null));
 
                 Response.Redirect("ABMUsuarios.aspx?valor=2&id=" + idUsuario);
             }
@@ -996,7 +1028,7 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 throw;
             }
-            
+
         }
     }
 }

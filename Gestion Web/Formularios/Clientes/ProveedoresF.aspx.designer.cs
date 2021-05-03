@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Proveedores {
-    
-    
-    public partial class ProveedoresF {
-        
+namespace Gestion_Web.Formularios.Proveedores
+{
+
+
+    public partial class ProveedoresF
+    {
+
         /// <summary>
         /// lbBuscar control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbBuscar;
-        
+
         /// <summary>
         /// txtBusqueda control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
-        
+
         /// <summary>
         /// txtProveedores control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtProveedores;
-        
+
         /// <summary>
         /// Literal1 control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal Literal1;
-        
+
         /// <summary>
         /// lbtnImpresion control.
         /// </summary>
@@ -56,7 +58,16 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImpresion;
-        
+
+        /// <summary>
+        /// thCuit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell thCuit;
+
         /// <summary>
         /// phProveedores control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phProveedores;
-        
+
         /// <summary>
         /// lblMensaje control.
         /// </summary>
@@ -74,7 +85,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMensaje;
-        
+
         /// <summary>
         /// txtMovimiento control.
         /// </summary>
@@ -83,7 +94,7 @@ namespace Gestion_Web.Formularios.Proveedores {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMovimiento;
-        
+
         /// <summary>
         /// btnSi control.
         /// </summary>

@@ -130,7 +130,7 @@
 
                                                         <div class="col-md-4">
 
-                                                            <asp:TextBox ID="txtCuit" runat="server" class="form-control" MaxLength="11" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
+                                                            <asp:TextBox ID="txtCuit" runat="server" class="form-control" MaxLength="15" onkeypress="javascript:return validarSoloNro(event)"></asp:TextBox>
                                                             <asp:TextBox ID="txtID" runat="server" class="form-control" Visible="False"></asp:TextBox>
                                                             <%--<input type="text" class="form-control" name="name" id="name">--%>
                                                         </div>
