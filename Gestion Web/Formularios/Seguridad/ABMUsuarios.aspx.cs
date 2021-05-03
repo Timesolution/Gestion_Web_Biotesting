@@ -20,6 +20,7 @@ namespace Gestion_Web.Formularios.Seguridad
         controladorVendedor contVendedor = new controladorVendedor();
         private int idUsuario;
         private int valor;
+        private int SeguridadCambiosSucursal=0;
         private string perfil = "";
         int idSucursal = 0;
         int idEmpresa = 0;
@@ -87,6 +88,14 @@ namespace Gestion_Web.Formularios.Seguridad
             {
                 string permisos = Session["Login_Permisos"] as string;
                 string[] listPermisos = permisos.Split(';');
+
+                string PermisosCambiosSucursal = listPermisos.Where(x => x == "247").FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(PermisosCambiosSucursal))
+                {
+                    this.SeguridadCambiosSucursal = 1;
+                }
+
                 foreach (string s in listPermisos)
                 {
                     if (!String.IsNullOrEmpty(s))
@@ -185,11 +194,9 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 this.DropListEmpresa.DataBind();
 
-                
 
-                if (this.perfil != "SuperAdministrador")
+                if (this.SeguridadCambiosSucursal==0)
                 {
-
                     this.DropListEmpresa.SelectedValue = idEmpresa.ToString();
                     this.DropListEmpresa.Attributes.Add("disabled", "disabled");
                 }
@@ -223,12 +230,12 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 this.DropListSucursal.DataBind();
 
-                if (this.perfil != "SuperAdministrador")
+
+                if (this.SeguridadCambiosSucursal == 0)
                 {
                     this.DropListSucursal.SelectedValue = idSucursal.ToString();
                     this.DropListSucursal.Attributes.Add("disabled", "disabled");
                 }
-
 
             }
             catch (Exception ex)
