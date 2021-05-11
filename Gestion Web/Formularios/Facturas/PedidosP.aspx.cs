@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -147,9 +148,9 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         //deshabilito el list de vendedor
                         //para asegurarme de cargar por defecto los pedidos del 
-                            this.idCliente = idCliente;
-                            this.clientePadre = idVendedor;
-                       
+                        this.idCliente = idCliente;
+                        this.clientePadre = idVendedor;
+
                         this.cargarPedidosRango(fechaD, fechaH, suc, idCliente, idEstado, this.Vendedor, this.zona, this.clientePadre);
                     }
                     else if (perfil == "Distribuidor" || perfil == "Lider" || perfil == "Experta")
@@ -1066,7 +1067,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 Literal lDetail = new Literal();
                 lDetail.ID = "btnEditar_" + p["id"].ToString();
-                if(perfil != "Cliente")
+                if (perfil != "Cliente")
                 {
                     lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
                     lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
@@ -1684,7 +1685,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 string perfil = Session["Login_NombrePerfil"] as string;
-                if(perfil != "Cliente")
+                if (perfil != "Cliente")
                 {
                     this.obtenerVendedor(Convert.ToInt32(this.DropListClientes.SelectedValue));
                 }
@@ -2339,6 +2340,64 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+
+        
+
+        protected void lbtnImportarPedidos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Boolean fileOK = false;
+
+                if (FileUpload1.HasFile)
+                {
+                    String fileExtension = System.IO.Path.GetExtension(FileUpload1.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".txt" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+
+                if (fileOK)
+                {
+                    //guardo nombre archivo
+                    //string archivo = Server.MapPath("~/") + FileUpload1.FileName;
+                    Stream archivo = FileUpload1.FileContent;
+                    //lo subo
+                    //FileUpload1.PostedFile.SaveAs(path + FileUpload1.FileName);
+
+                    //int i = contPedEntity.
+                    contPedEntity.ImportarPedidosTXT(archivo);
+
+                    //if (i > 0)
+                    //{
+                    //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + i + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //}
+                    //else
+                    //{
+                    //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudieron importar una o mas pacientes. "));
+                    //}
+
+                    FileUpload1.Dispose();
+                    //File.Delete(Server.MapPath(".") + "/" + FileUpload1.FileName);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar un archivo '.txt'!. "));
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
