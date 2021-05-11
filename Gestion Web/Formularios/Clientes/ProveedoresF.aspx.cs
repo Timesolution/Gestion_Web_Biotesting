@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -15,6 +16,7 @@ namespace Gestion_Web.Formularios.Proveedores
 {
     public partial class ProveedoresF : System.Web.UI.Page
     {
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
         private controladorCliente controlador = new controladorCliente();
         private controladorUsuario contUser = new controladorUsuario();
         Mensajes m = new Mensajes();
@@ -25,6 +27,11 @@ namespace Gestion_Web.Formularios.Proveedores
         {
             try
             {
+                if (esUruguay == 1)
+                {
+                    thCuit.InnerText = "Root";
+                }
+
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.cargarClientes();

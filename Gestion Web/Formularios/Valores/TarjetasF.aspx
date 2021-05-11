@@ -6,7 +6,7 @@
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i> Valores > Tarjetas</h5>
+                        <h5><i class="icon-map-marker"></i>Valores > Tarjetas</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-wrench"></i>
@@ -27,10 +27,10 @@
                                                 <asp:LinkButton ID="btnLiquidar" runat="server" data-toggle="modal" href="#modalLiquidar">Liquidar</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="btnEditar" runat="server" OnClick="btnEditar_Click" >Editar</asp:LinkButton>
+                                                <asp:LinkButton ID="btnEditar" runat="server" OnClick="btnEditar_Click">Editar</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="btnLiquidarArchivo" runat="server" data-toggle="modal" href="#modalLiquidarArchivo" style="display:none;">Liquidar desde archivo</asp:LinkButton>
+                                                <asp:LinkButton ID="btnLiquidarArchivo" runat="server" data-toggle="modal" href="#modalLiquidarArchivo" Style="display: none;">Liquidar desde archivo</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="btnExportar" runat="server" OnClick="btnExportar_Click">Exportar</asp:LinkButton>
@@ -113,7 +113,7 @@
                                                     <th>Liquidacion</th>
                                                     <th>#Lote</th>
                                                     <th>#Cupon</th>
-                                                    <th>Ult. 4 digitos</th>                                                    
+                                                    <th>Ult. 4 digitos</th>
                                                     <th>Observaciones</th>
                                                     <th>Origen Pago</th>
                                                     <th></th>
@@ -245,7 +245,7 @@
                             <div class="form-group">
                                 <label class="col-md-3">Origen Pago tarjeta:</label>
                                 <div class="col-md-6">
-                                    <asp:DropDownList ID="ListOrigenPago" runat="server" class="form-control" >
+                                    <asp:DropDownList ID="ListOrigenPago" runat="server" class="form-control">
                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                         <asp:ListItem Text="Todos" Value="0" />
                                         <asp:ListItem Text="Por Venta" Value="1" />
@@ -315,7 +315,6 @@
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtUltimosDigitos" ValidationGroup="ImputarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
                             </div>--%>
-
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -343,7 +342,8 @@
                                         <span class="input-group-addon">
                                             <i class="fa fa-calendar" aria-hidden="true"></i>
                                         </span>
-                                        <asp:TextBox ID="txtFechaAgregar" runat="server" class="form-control" style="text-align:right;"></asp:TextBox>
+                                        <asp:TextBox ID="txtFechaAgregar" runat="server" class="form-control" onkeypress="return false"></asp:TextBox>
+
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -360,7 +360,7 @@
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListSucursalAgregar" InitialValue="-1" ValidationGroup="AgregarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="col-md-4">Tarjeta:</label>
                                 <div class="col-md-6">
@@ -369,7 +369,7 @@
                                 <div class="col-md-2">
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" InitialValue="-1" ErrorMessage="<h3>*</h3>" ControlToValidate="ListAgregarTarjeta" ValidationGroup="AgregarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="form-group">
                                 <label for="name" class="col-md-4">Importe</label>
                                 <div class="col-md-5">
@@ -385,7 +385,7 @@
                             <div class="form-group">
                                 <label class="col-md-4">Origen Pago tarjeta:</label>
                                 <div class="col-md-5">
-                                    <asp:DropDownList ID="ListAgregarOrigenTarjeta" runat="server" class="form-control" >
+                                    <asp:DropDownList ID="ListAgregarOrigenTarjeta" runat="server" class="form-control">
                                         <asp:ListItem Text="Seleccione..." Value="-1" />
                                         <asp:ListItem Text="Todos" Value="0" />
                                         <asp:ListItem Text="Por Venta" Value="1" />
@@ -418,7 +418,7 @@
                             <div class="form-group">
                                 <label class="col-md-4">Ultimos 4 dig. tarjeta:</label>
                                 <div class="col-md-5">
-                                    <asp:TextBox ID="txtAgregarUltimosDigitos" runat="server" class="form-control"  onkeypress="javascript:return validarNro(event)" maxlength="4"></asp:TextBox>
+                                    <asp:TextBox ID="txtAgregarUltimosDigitos" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" MaxLength="4"></asp:TextBox>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -431,7 +431,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="lbtnAgregarPagoTarjeta" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarPagoTarjeta_Click"  ValidationGroup="AgregarGroup" />
+                        <asp:LinkButton ID="lbtnAgregarPagoTarjeta" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnAgregarPagoTarjeta_Click" ValidationGroup="AgregarGroup" />
                     </div>
                 </div>
 
@@ -503,7 +503,7 @@
                             <div class="form-group">
                                 <label class="col-md-4">Ultimos 4 dig. tarjeta:</label>
                                 <div class="col-md-6">
-                                    <asp:TextBox ID="txtUltimosDigitos" runat="server" class="form-control" maxlength="4"></asp:TextBox>
+                                    <asp:TextBox ID="txtUltimosDigitos" runat="server" class="form-control" MaxLength="4"></asp:TextBox>
                                 </div>
                                 <div class="col-md-2">
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtUltimosDigitos" ValidationGroup="EditarGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
@@ -515,8 +515,8 @@
                                     <asp:TextBox ID="txtObservaciones" runat="server" class="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                                 </div>
                             </div>
-                            <asp:Label ID="lblIdPago" Text="0" runat="server" Visible="false"/>
-                            <asp:Label ID="lblIdTarjeta" Text="0" runat="server" Visible="false"/>
+                            <asp:Label ID="lblIdPago" Text="0" runat="server" Visible="false" />
+                            <asp:Label ID="lblIdTarjeta" Text="0" runat="server" Visible="false" />
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -526,13 +526,13 @@
 
             </div>
         </div>
-        
+
         <link href="../../css/pages/reports.css" rel="stylesheet">
 
 
         <!-- Core Scripts - Include with every page -->
         <%--<script src="../../Scripts/jquery-1.10.2.js"></script>--%>
-        <script src="../../Scripts/bootstrap.min.js"></script>        
+        <script src="../../Scripts/bootstrap.min.js"></script>
 
         <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
         <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
@@ -595,14 +595,13 @@
                 }
 
                 if (key < 48 || key > 57) {
-                    if (key == 46 || key == 8 ) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                    if (key == 46 || key == 8) // Detectar . (punto) , backspace (retroceso) y , (coma)
                     { return true; }
-                    else
-                    { return false; }
+                    else { return false; }
                 }
                 return true;
             }
-        </script>  
+        </script>
 
         <script>
             function pageLoad() {

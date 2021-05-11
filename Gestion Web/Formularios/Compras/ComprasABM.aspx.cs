@@ -10,6 +10,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -19,6 +20,7 @@ namespace Gestion_Web.Formularios.Compras
     {
         //mensajes popUp
         Mensajes m = new Mensajes();
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
         //controladores
         private controladorCompras controlador = new controladorCompras();
         private controladorCompraEntity contEntity = new controladorCompraEntity();
@@ -44,6 +46,24 @@ namespace Gestion_Web.Formularios.Compras
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
                 btnAgregarPagar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregarPagar, null) + ";");
+
+                if (esUruguay == 1)
+                {
+                    divNeto2.Visible = false;
+                    divNeto5.Visible = false;
+                    divNeto10.Visible = false;
+                    divNeto21.Visible = false;
+                    divNeto27.Visible = false;
+                    divIngBru.Visible = false;
+                    divPercepcionIVA.Visible = false;
+                    divImpInt.Visible = false;
+                    divRetIIBB.Visible = false;
+                    divRetIVA.Visible = false;
+                    divRetGan.Visible = false;
+                    divRetSUSS.Visible = false;
+                    divITC.Visible = false;
+                    divTasaCO2.Visible = false;
+                }
 
                 if (!IsPostBack)
                 {

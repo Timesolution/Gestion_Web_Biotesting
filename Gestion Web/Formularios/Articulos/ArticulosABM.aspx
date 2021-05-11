@@ -168,7 +168,7 @@
                                                             <asp:DropDownList ID="DropListPorcentajeIVA" runat="server" class="form-control">
                                                                 <asp:ListItem Value="-1">Seleccione..</asp:ListItem>
                                                                 <asp:ListItem Value="0">0%</asp:ListItem>
-                                                                <asp:ListItem Value="10.5">10,5%</asp:ListItem>
+                                                                <asp:ListItem Value="10.5">10.5%</asp:ListItem>
                                                                 <asp:ListItem Value="21">21%</asp:ListItem>
                                                             </asp:DropDownList>
 

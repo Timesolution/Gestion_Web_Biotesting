@@ -76,7 +76,9 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 if (esUruguay == 1)
-                    txtCuit.Text = "Root";
+                {
+                    lbCUITDNI.InnerText = "Root";
+                }
 
                 //if (chbDisparaTarea.Checked == true)
                 //{

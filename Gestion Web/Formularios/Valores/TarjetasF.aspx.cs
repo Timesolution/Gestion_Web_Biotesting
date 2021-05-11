@@ -52,10 +52,10 @@ namespace Gestion_Web.Formularios.Valores
                         //this.cargarClientes();
                         fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                        txtFechaAgregar.Text = DateTime.Today.ToString("dd/MM/yyyy");
                         tipoFecha = 1;
                         txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
-                        txtFechaAgregar.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtDesdeV.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         txtHastaV.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         DropListSucursal.SelectedValue = suc.ToString();
@@ -72,6 +72,7 @@ namespace Gestion_Web.Formularios.Valores
                     txtFechaHasta.Text = fechaH;
                     txtDesdeV.Text = fechaD;
                     txtHastaV.Text = fechaH;
+                    txtFechaAgregar.Text = fechaD;
                     //DropListClientes.SelectedValue = idCliente.ToString();
                     DropListSucursal.SelectedValue = suc.ToString();
                     ListSucursalAgregar.SelectedValue = suc.ToString();
