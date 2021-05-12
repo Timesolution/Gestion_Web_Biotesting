@@ -24,12 +24,30 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.VerificarLogin();
                 if (!IsPostBack)
                 {
+                    VerificarEnviosSMS();
                     CargarAlertasMail();
                 }
             }
             catch
             {
 
+            }
+        }
+
+        private void VerificarEnviosSMS()
+        {
+            if (this.configuracion.EnviarSMSRecordatorio == "1")
+            {
+                lbEnvioSMS.Attributes["class"] = "btn btn-success";
+                lbEnvioSMS.Text = "<span class='shortcut-icon icon-ok'></span>";
+                txtNombreFantasia.Text = configuracion.NombreFantasiaSMS; 
+                DivNombreFantasia.Visible = true;
+            }
+            else if (this.configuracion.EnviarSMSRecordatorio == "0") 
+            {
+                lbEnvioSMS.Attributes["class"] = "btn btn-danger";
+                lbEnvioSMS.Text = "<span class='shortcut-icon icon-remove'></span>";
+                DivNombreFantasia.Visible = false;
             }
         }
 
@@ -160,5 +178,79 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: DiasRecordatorioMail " + ex.Message);
             }
         }
+
+        protected void lbtnNombreFantasia_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(txtNombreFantasia.Text))
+                {
+                    this.configuracion.NombreFantasiaSMS = txtNombreFantasia.Text;
+
+                    int i = configuracion.ModificarEnviarNombreFantasiaSMS(configuracion.NombreFantasiaSMS);
+                    if (i > 0)
+                    {
+                     //   configuracion.ModificarEnviarEnvioSMSEstetica("1");
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Nombre de Fantasia.");
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion del Nombre de Fantasia. \", {type: \"info\"});", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la configuracion del Nombre de Fantasia \", {type: \"info\"});", true);
+                    }
+                }
+                else 
+                {
+                    lbEnvioSMS.Attributes["class"] = "btn btn-danger";
+                    lbEnvioSMS.Text = "<span class='shortcut-icon icon-remove'></span>";
+                    this.configuracion.EnviarSMSRecordatorio = "0";
+                    DivNombreFantasia.Visible = false;
+                    int i = configuracion.ModificarEnviarSMSRecordatorio(configuracion.EnviarSMSRecordatorio);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Debe completar en el campo Nombre Fantasia \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: NombreFantasiaSMS " + ex.Message);
+            }
+        }
+        protected void lbEnvioSMS_Click(object sender, EventArgs e)
+        {
+            try
+            {  
+                if (lbEnvioSMS.Attributes["class"] == "btn btn-success")
+                {
+                    lbEnvioSMS.Attributes["class"] = "btn btn-danger";
+                    lbEnvioSMS.Text = "<span class='shortcut-icon icon-remove'></span>";
+                    this.configuracion.EnviarSMSRecordatorio = "0";
+                    DivNombreFantasia.Visible = false;
+                    int i = configuracion.ModificarEnviarSMSRecordatorio(configuracion.EnviarSMSRecordatorio);
+                    if (i > 0)
+                    {
+                       Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Envio de SMS.");
+                       ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de Envio de SMS. \", {type: \"info\"});", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la configuracion de Envio de SMS \", {type: \"info\"});", true);
+                    }
+                }
+
+                else if(lbEnvioSMS.Attributes["class"] == "btn btn-danger")
+                {
+                    DivNombreFantasia.Visible = true;
+                    lbEnvioSMS.Attributes["class"] = "btn btn-success";
+                    lbEnvioSMS.Text = "<span class='shortcut-icon icon-ok'></span>";
+                    this.configuracion.EnviarSMSRecordatorio = "1";
+                    int i = configuracion.ModificarEnviarSMSRecordatorio(configuracion.EnviarSMSRecordatorio);
+                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de Envio de SMS \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: Envio de SMS " + ex.Message);
+            }
+        }
+
     }
 }
