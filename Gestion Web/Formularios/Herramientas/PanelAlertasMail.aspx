@@ -53,6 +53,24 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">¿Envio SMS?</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbEnvioSMS" runat="server" Text="<span class='shortcut-icon icon-remove'></span>" class="btn btn-danger" OnClick="lbEnvioSMS_Click"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" id ="DivNombreFantasia" runat="server">
+                                            <br />
+                                            <label for="validateSelect" class="col-md-4">Nombre Fantasia</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtNombreFantasia"  runat="server" class="form-control" ToolTip="Nombre Empresa"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnNombreFantasia" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnNombreFantasia_Click" ValidationGroup="EnvioSMSGroup"/>
+                                            </div>
+                                        </div>
+
                                     </asp:Panel>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
@@ -111,6 +129,23 @@
             }
             return true;
         }
+
+        function HabilitarNombreFantasia()
+        {
+            
+            var txt = document.getElementById('DivNombreFantasia');
+            if (chk.checked == true) {
+                txt.style.visibility = "visible";
+                txt.focus();
+            }
+            else
+            {
+                txt.disabled = true;
+                txt.style.visibility = "hidden";
+            }
+
+        }
+
     </script>
 
 
