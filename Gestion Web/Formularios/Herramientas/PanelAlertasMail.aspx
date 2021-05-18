@@ -53,6 +53,27 @@
                                             </div>
                                         </div>
 
+                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Observaciones del mail de envio de documentos</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtEnvioDocumento" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnEnvioDocumento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEnvioDocumento_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Observaciones del mail de envio de formulario</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtEnvioFormulario" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnEnvioFormulario" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEnvioFormulario_Click" />
+                                            </div>
+                                        </div>
+
+
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">¿Envio SMS?</label>
                                             <div class="col-md-2">
@@ -70,6 +91,8 @@
                                                 <asp:LinkButton ID="lbtnNombreFantasia" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnNombreFantasia_Click" ValidationGroup="EnvioSMSGroup"/>
                                             </div>
                                         </div>
+
+
 
                                     </asp:Panel>
                                 </ContentTemplate>
