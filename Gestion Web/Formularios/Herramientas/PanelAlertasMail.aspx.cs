@@ -119,8 +119,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarObservacionesMailAgenda(configuracion.ObservacionesMailAgenda);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de observaciones predeterminado para los mails de la agenda.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para los mails de la agenda.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -144,8 +144,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarObservacionesMailRecordatorio(configuracion.ObservacionesMailRecordatorio);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de observaciones predeterminado para los mails de la agenda.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para los mails de la agenda.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -167,8 +167,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarDiasRecordatorioMail(configuracion.DiasRecordatorioMail);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de dias para los recordatorio de los mails de la agenda.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de dias para los recordatorio de los mails de la agenda. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de dias para los recordatorio de los mails de la agenda.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de dias para los recordatorio de los mails de la agenda. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -193,7 +193,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                      //   configuracion.ModificarEnviarEnvioSMSEstetica("1");
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Nombre de Fantasia.");
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de Nombre de Fantasia.");
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion del Nombre de Fantasia. \", {type: \"info\"});", true);
                     }
                     else
@@ -264,8 +264,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarObservacionesMailDocumento(configuracion.ObservacionesMailDocumento);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de observaciones predeterminado para el envio de documentos.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de observaciones predeterminado para el envio de documentos. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para el envio de documentos.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de observaciones predeterminado para el envio de documentos. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -287,8 +287,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarObservacionesMailFormulario(configuracion.ObservacionesMailFormulario);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de observaciones predeterminado para el envio de formularios");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de observaciones predeterminado para el envio de formularios. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para el envio de formularios");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modificola  configuracion de observaciones predeterminado para el envio de formularios. \", {type: \"info\"});", true);
                 }
                 else
                 {
