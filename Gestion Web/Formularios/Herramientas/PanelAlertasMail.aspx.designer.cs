@@ -87,6 +87,42 @@ namespace Gestion_Web.Formularios.Herramientas
         protected global::System.Web.UI.WebControls.LinkButton lbtnObservacionesRecordatorioMail;
 
         /// <summary>
+        /// Control txtEnvioDocumento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEnvioDocumento;
+
+        /// <summary>
+        /// Control lbtnEnvioDocumento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEnvioDocumento;
+
+        /// <summary>
+        /// Control txtEnvioFormulario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEnvioFormulario;
+
+        /// <summary>
+        /// Control lbtnEnvioFormulario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEnvioFormulario;
+
+        /// <summary>
         /// Control lbEnvioSMS.
         /// </summary>
         /// <remarks>

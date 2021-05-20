@@ -101,6 +101,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 txtObservacionesAgenda.Text = this.configuracion.ObservacionesMailAgenda;
                 txtObservacionesRecordatorioMail.Text = this.configuracion.ObservacionesMailRecordatorio;
                 txtDiasRecordatorioMail.Text = this.configuracion.DiasRecordatorioMail;
+                txtEnvioDocumento.Text = this.configuracion.ObservacionesMailDocumento;
+                txtEnvioFormulario.Text = this.configuracion.ObservacionesMailFormulario;
             }
             catch (Exception ex)
             {
@@ -117,8 +119,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarObservacionesMailAgenda(configuracion.ObservacionesMailAgenda);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de obervaciones predeterminado para los mails de la agenda.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para los mails de la agenda.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -142,8 +144,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarObservacionesMailRecordatorio(configuracion.ObservacionesMailRecordatorio);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de obervaciones predeterminado para los mails de la agenda.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para los mails de la agenda.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de obervaciones predeterminado para los mails de la agenda. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -165,8 +167,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 int i = configuracion.ModificarDiasRecordatorioMail(configuracion.DiasRecordatorioMail);
                 if (i > 0)
                 {
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de dias para los recordatorio de los mails de la agenda.");
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico configuracion de dias para los recordatorio de los mails de la agenda. \", {type: \"info\"});", true);
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de dias para los recordatorio de los mails de la agenda.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de dias para los recordatorio de los mails de la agenda. \", {type: \"info\"});", true);
                 }
                 else
                 {
@@ -191,7 +193,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     if (i > 0)
                     {
                      //   configuracion.ModificarEnviarEnvioSMSEstetica("1");
-                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion de Nombre de Fantasia.");
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de Nombre de Fantasia.");
                         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion del Nombre de Fantasia. \", {type: \"info\"});", true);
                     }
                     else
@@ -249,6 +251,53 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: Envio de SMS " + ex.Message);
+            }
+        }
+
+
+        protected void lbtnEnvioDocumento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.ObservacionesMailDocumento = txtEnvioDocumento.Text;
+
+                int i = configuracion.ModificarObservacionesMailDocumento(configuracion.ObservacionesMailDocumento);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para el envio de documentos.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de observaciones predeterminado para el envio de documentos. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la observacion predeterminada para el envio de documentos \", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: DiasRecordatorioMail " + ex.Message);
+            }
+        }
+
+        protected void lbtnEnvioFormulario_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.ObservacionesMailFormulario = txtEnvioFormulario.Text;
+
+                int i = configuracion.ModificarObservacionesMailFormulario(configuracion.ObservacionesMailFormulario);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para el envio de formularios");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modificola  configuracion de observaciones predeterminado para el envio de formularios. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la observacion predeterminada para el envio de formularios\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: DiasRecordatorioMail " + ex.Message);
             }
         }
 
