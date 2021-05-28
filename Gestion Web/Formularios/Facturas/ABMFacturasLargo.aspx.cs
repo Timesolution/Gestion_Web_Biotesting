@@ -48,7 +48,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorFactEntity controladorFacturasEntity = new controladorFactEntity();
         controladorCuentaCorriente controladorCC = new controladorCuentaCorriente();
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
-
+        ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
         //factura
         Factura nuevaFactura = new Factura();
         Cliente cliente = new Cliente();
@@ -97,7 +97,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ConfigurarModoCredito();
 
                 idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
-
+                
                 _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true;  " + btnAgregarRemitir.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
@@ -137,6 +137,11 @@ namespace Gestion_Web.Formularios.Facturas
 
                     dtTrazasTemp = new DataTable();
                     //this.InicializarListaTrazas();
+
+                    if (c.monotributo == "3")
+                    {
+                        c.monotributo = controladorEmpresa.obtenerTipoFacturacionByEmpresa(this.idEmpresa);
+                    }
 
                     Factura fac = new Factura();
                     Session.Add("Factura", fac);
@@ -1939,7 +1944,11 @@ namespace Gestion_Web.Formularios.Facturas
                 this.cliente = contCliente.obtenerClienteID(idCliente);
                 Configuracion c = new Configuracion();
                 decimal saldoOperativo = ObtenerSaldoOperativo();
-
+                idEmpresa = (int)Session["Login_EmpUser"];
+                if (c.monotributo == "3")
+                {
+                    c.monotributo = controladorEmpresa.obtenerTipoFacturacionByEmpresa(this.idEmpresa);
+                }
 
 
                 if (this.cliente != null)
@@ -2347,6 +2356,11 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+
+                if (c.monotributo == "3")
+                {
+                    c.monotributo = controladorEmpresa.obtenerTipoFacturacionByEmpresa(this.idEmpresa);
+                }
                 string[] cliente = this.labelCliente.Text.Split('-');
                 if (cliente[1].TrimStart().TrimEnd() == "No Informa")
                 {
@@ -2409,7 +2423,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnFacturaE.Visible = false;
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
-
+               
                 if (accion != 6 && accion != 7)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
