@@ -888,7 +888,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 if (!String.IsNullOrEmpty(listaCobros))
                 {
-                    Session.Add("listaReporteDetalleCobros", listaCobros);
+                    Response.Cookies["listaReporteDetalleCobros"].Value = listaCobros;
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=10','_blank');", true);
                 }
                 else
