@@ -181,7 +181,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Movimiento_Cobro mov = this.controlador.obtenerMovimientoCobroByIDCobro(idCobro);
+                Movimiento_Cobro mov = this.controlador.obtenerMovimientoCobroByIDMovimiento(idCobro);
 
                 DataTable dtDatos = controlador.obtenerDatosCobro(mov.id);
                 DataTable dtDetalle = controlador.obtenerDetalleCobro(mov.id);
