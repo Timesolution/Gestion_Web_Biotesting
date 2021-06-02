@@ -1665,7 +1665,6 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al importar clientes"));
                 }
-
             }
             catch (Exception ex)
             {

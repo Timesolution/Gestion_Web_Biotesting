@@ -189,6 +189,38 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["PedidosABM_ArticuloModal"] = null;
                 }
 
+                //si viene de la pantalla de articulos, modal
+                if (Session["PedidosABM_ArticuloModal"] != null)
+                {
+                    string CodArt = Session["PedidosABM_ArticuloModal"] as string;
+                    txtCodigo.Text = CodArt;
+                    cargarProducto(txtCodigo.Text);
+                    actualizarTotales();
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModal"] = null;
+                }
+
+                if (Session["PedidosABM_ArticuloModalMultiple"] != null)
+                {
+                    List<string> CodigosArticulos = Session["PedidosABM_ArticuloModalMultiple"] as List<string>;
+                    Configuracion config = new Configuracion();
+                    foreach (var codigoArticulo in CodigosArticulos)
+                    {
+                        Session["PedidosABM_ArticuloModalMultiple"] = codigoArticulo;
+                        txtCodigo.Text = codigoArticulo;
+                        txtCantidad.Text = "1";
+                        cargarProducto(txtCodigo.Text);
+                        if (config.commitante != "1")
+                            cargarProductoAPedido();
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.foco(this.txtCantidad.ClientID));
+                    }
+                    txtCodigo.Text = "";
+                    actualizarTotales();
+                    Session["PedidosABM_ArticuloModalMultiple"] = null;
+                    Session["PedidosABM_ArticuloModal"] = null;
+                }
+
                 //Si es perfil vendedor bloqueo los droplist, dejo que solo pueda elegir el cliente
                 this.verificarVendedor();
                 if (txtFecha.Text == "")
@@ -366,7 +398,9 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListLista.SelectedValue = p.listaP.id.ToString();
                 this.ListSucursal.SelectedValue = p.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = p.ptoV.id.ToString();
+
                 this.txtFecha.Text = p.fecha.ToString("dd/MM/yyyy");
+
                 this.ListTipoEntrega.SelectedValue = p.tipoEntrega.ToString();
                 this.txtHorarioEntrega.Text = p.horaEntrega;
                 this.DropListZonaEntrega.SelectedValue = p.zonaEntrega.ToString();
@@ -1762,6 +1796,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                     celCodigo.Text = (pos + 1) + " - " + item.articulo.codigo;
                 //celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
+<
                 celCodigo.Width = Unit.Percentage(15);
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
@@ -2150,7 +2185,9 @@ namespace Gestion_Web.Formularios.Facturas
                         p.fechaEntrega = Convert.ToDateTime(this.txtFechaEntrega.Text, new CultureInfo("es-AR"));
                         //p.domicilioEntrega = this.txtDomicilioEntrega.Text;
                         //p.domicilioEntrega = this.dropList_DomicilioEntrega.Text;
+
                         p.domicilioEntrega = dropList_DomicilioEntrega.Items.Count > 1 ? dropList_DomicilioEntrega.SelectedItem.Text : "-";
+
                         //dropList_DomicilioEntrega.Items.Add(new ListItem(item.ItemArray[1] + ", " + item.ItemArray[2] + ", " + item.ItemArray[3], item.ItemArray[3].ToString()));
                         p.horaEntrega = this.txtHorarioEntrega.Text;
                         p.zonaEntrega = this.DropListZonaEntrega.SelectedValue;
@@ -3276,6 +3313,27 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
             catch (Exception Ex)
+            {
+
+            }
+        }
+
+        public void verificarModoBlanco()
+        {
+            try
+            {
+                Configuracion config = new Configuracion();
+                if (config.modoBlanco == "1")
+                {
+                    //this.lbtnPRP.Visible = false;
+                    //this.lbNC.Visible = false;
+                    //this.lbND.Visible = false;
+                    //this.lbtnPRP.Attributes.Add("style", "display:none");
+                    //this.lbNC.Attributes.Add("style", "display:none");
+                    //this.lbND.Attributes.Add("style", "display:none");
+                }
+            }
+            catch
             {
 
             }

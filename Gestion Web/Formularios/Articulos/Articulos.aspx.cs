@@ -2349,6 +2349,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+
         public void cargarDatosInformePedido(Informes_Pedidos ip)
         {
             try
@@ -2424,10 +2425,12 @@ namespace Gestion_Web.Formularios.Articulos
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
         protected void lbtnImportarArticulo_Click(object sender, EventArgs e)
         {
             try
             {
+
                 ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
                 Informes_Pedidos ip = new Informes_Pedidos();
 
@@ -2640,9 +2643,7 @@ namespace Gestion_Web.Formularios.Articulos
                 SolicitarReporteArticulosTxt();
             }
             catch (Exception ex)
-            {
-
-                
+            {           
             }
         }
     }

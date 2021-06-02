@@ -36,7 +36,9 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.cargarEstados();
                     this.CargarSucursalesParaGarantiaYServiceOficial();
                     this.CargarProveedores();
+
                     this.CargarPuntosCobro();
+
                 }
                 if (this.configuracion.editarArticulo == "1")
                 {
@@ -1142,6 +1144,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error al cargar proveedores" + ex.Message);
             }
         }
+
         public void CargarPuntosCobro()
         {
             try
@@ -1176,6 +1179,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error al cargar proveedores" + ex.Message);
             }
         }
+
 
         protected void lbtnTiempoLineas_Click(object sender, EventArgs e)
         {
@@ -1454,6 +1458,7 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
+
         public string FormatearObservacionParaServicioFiscal(string observacion)
         {
             if (observacion.Length > 22)
@@ -1680,5 +1685,6 @@ namespace Gestion_Web.Formularios.Herramientas
 
             }
         }
+
     }
 }

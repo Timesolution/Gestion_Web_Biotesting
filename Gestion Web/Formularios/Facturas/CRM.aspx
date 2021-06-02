@@ -38,6 +38,7 @@
                             <td style="width: 5%">
                      <%--           <div class="shortcuts" style="height: 100%">
 
+
                                     <div class="shortcuts" style="height: 100%">
                                         <asp:LinkButton ID="lbImpresion" class="btn btn-primary" runat="server" Text="<span class='shortcut-icon icon-print'></span>" Visible="false" Style="width: 100%" />
                                     </div>
@@ -46,13 +47,13 @@
                             <td style="width: 2%">
 
                               <%--  <div class="btn-group pull-right" style="width: 100%">
+
                                     <button type="button" class="btn btn-primary dropdown-toggle ui-tooltip" title data-original-title="Listados" data-toggle="dropdown">
                                         <i class="shortcut-icon icon-print"></i>&nbsp
                                        
                                         <asp:Literal ID="Literal1" runat="server"></asp:Literal>
                                         <span class="caret"></span>
                                     </button>
-
                                 </div>--%>
 
                             </td>
@@ -113,7 +114,9 @@
             <div class="widget widget-table">
                 <div class="widget-header">
                     <i class="icon-th-list" style="width: 2%"></i>
+
                     <h3 style="width: 75%">CRM
+
                     </h3>
                     <h3>
                         <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true" Visible="true"></asp:Label>
@@ -126,11 +129,13 @@
                             <div class="table-responsive">
                                 <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+
                                     <thead>
                                          <tr>
                                             <th>Codigo</th>
                                             <th>Cliente</th>
                                             <th>E-Mail</th>
+
                                             <th>Fecha</th>
                                             <th>Detalle</th>
                                             <th>Tarea</th>
@@ -139,6 +144,7 @@
                                             <th style="text-align: right;">Usuario</th>
                                             <th class="td-actions" style="width: 10%"></th>
                                         </tr>
+
                                     </thead>
                                     <tbody>
                                         <asp:PlaceHolder ID="phFacturas" runat="server"></asp:PlaceHolder>
@@ -245,6 +251,7 @@
                                             </asp:DropDownList>
                                         </div>
                                     </div>
+
 
                                     <div class="form-group">
                                         <label class="col-md-4">Descripcion</label>
