@@ -866,7 +866,7 @@ namespace Gestion_Web.Formularios.Valores
                 celAccion.Controls.Add(l3);
 
                 TextBox hiddenEstado = new TextBox();
-                hiddenEstado.ID = "hiddenEstado_" + ch.Cheque.estado.ToString();
+                hiddenEstado.ID = "hiddenEstado_" + ch.Cheque.estado.ToString()+ "_" + ch.Cheque.id.ToString();
                 //hiddenEstado.CssClass = "btn btn-info";
                 hiddenEstado.Font.Size = 13;
                 hiddenEstado.Visible = false;

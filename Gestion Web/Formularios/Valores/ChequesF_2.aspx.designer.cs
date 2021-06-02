@@ -51,13 +51,13 @@ namespace Gestion_Web.Formularios.Valores
         protected global::System.Web.UI.WebControls.LinkButton btnImputar;
 
         /// <summary>
-        /// Control c.
+        /// Control btnDebitar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton c;
+        protected global::System.Web.UI.WebControls.LinkButton btnDebitar;
 
         /// <summary>
         /// Control lblParametros.
