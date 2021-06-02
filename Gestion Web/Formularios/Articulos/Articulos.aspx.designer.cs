@@ -1687,5 +1687,4 @@ namespace Gestion_Web.Formularios.Articulos
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnImprimirActualizacionPreciosExcel;
-    }
 }
