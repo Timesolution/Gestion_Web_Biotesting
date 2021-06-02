@@ -528,11 +528,11 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control C in phCheques.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    String estadoCh = tr.Cells[12].Text;
-                    CheckBox ch = tr.Cells[14].Controls[2] as CheckBox;
+                    String estadoCh = tr.Cells[12].Controls[4].ID.Split('_')[1];
+                    CheckBox ch = tr.Cells[12].Controls[2] as CheckBox;
                     var cheque = this.controlador.obtenerChequeId(Convert.ToInt32(ch.ID.Split('_')[1]));
                     //Si esta seleccionado, tiene estado entregado .
-                    if (ch.Checked == true && estadoCh == "Entregado" && cheque.origen == "P")
+                    if (ch.Checked == true && estadoCh == "3" && cheque.origen == "P")
                     {
                         idtildado += ch.ID.Split('_')[1] + ";";
                     }
@@ -860,8 +860,22 @@ namespace Gestion_Web.Formularios.Valores
                 celAccion.Controls.Add(cbSeleccion);
                 celAccion.Width = Unit.Percentage(10);
                 tr.Cells.Add(celAccion);
+                
+                Literal l3 = new Literal();
+                l3.Text = "&nbsp";
+                celAccion.Controls.Add(l3);
+
+                TextBox hiddenEstado = new TextBox();
+                hiddenEstado.ID = "hiddenEstado_" + ch.Cheque.estado.ToString();
+                //hiddenEstado.CssClass = "btn btn-info";
+                hiddenEstado.Font.Size = 13;
+                hiddenEstado.Visible = false;
+
+                celAccion.Controls.Add(hiddenEstado);
 
                 phCheques.Controls.Add(tr);
+               
+
             }
             catch (Exception ex)
             {

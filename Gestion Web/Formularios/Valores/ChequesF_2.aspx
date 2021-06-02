@@ -34,7 +34,7 @@
                                                 <asp:LinkButton ID="btnImputar" runat="server" data-toggle="modal" href="#modalImputar">Imputar a</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <asp:LinkButton ID="btnDebitar" runat="server" data-toggle="modal" href="#modalDebitar">Debitar Cheques</asp:LinkButton>
+                                                <asp:LinkButton ID="c" runat="server" data-toggle="modal" href="#modalDebitar">Debitar Cheques</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
