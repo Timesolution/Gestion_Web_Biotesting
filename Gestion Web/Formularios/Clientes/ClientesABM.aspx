@@ -1050,6 +1050,7 @@
                                                             </div>
                                                             <!-- .widget-content -->
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </ContentTemplate>
@@ -2120,6 +2121,7 @@
             $.ajax({
                 type: "POST",
                 url: "ClientesABM.aspx/AgregarIngresosBrutosYObtenerLosRegistros",
+
                 data: '{ idClienteString: "' + controlHiddenIdCliente.value + '", idPlanCuenta:"' + controlPlanCuentas.value + '", IdProvincia: "' + controlProvincia.value +
                     '", origenCliente: "' + hiddenOrigenCliente.value + '", percepcionORetencion: "' + Math.abs(controlTxtPercepcionORetencion.value) + '", modo: "' + modoText + '"}',
                 contentType: "application/json",

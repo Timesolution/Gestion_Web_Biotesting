@@ -21,7 +21,7 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a id="hrefImportarArticulos" href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato" Visible="false">Importar - Articulos desde Base Externa</a>
+                                      <a id="hrefImportarArticulos" href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato" Visible="false">Importar - Articulos desde Base Externa</a>
                                     </li>
                                     <li>
                                         <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click1" ForeColor="OliveDrab">Reporte - Articulos (.txt)</asp:LinkButton>
@@ -31,6 +31,8 @@
                                     </li>
                                     <li>
                                         <asp:LinkButton ID="lbtnExportarArticulosMagento" runat="server" OnClick="lbtnExportarArticulosMagento_Click" ForeColor="OliveDrab" Visible="false">Reporte - Articulos Magento</asp:LinkButton>
+
+                                        <a href="#modalConfirmacionArticulo" data-toggle="modal" style="width: 90%">Importar Articulos</a>
                                     </li>
                                 </ul>
                             </div>
@@ -1309,7 +1311,9 @@
 
     <%-- Importacion de articulos --%>
 
+
     <div id="modalConfirmacionImportacionArticulos" class="modal fade" tabindex="-1" role="dialog">
+
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1324,19 +1328,23 @@
                                     <i class="icon-warning-sign" style="color: orange"></i>
                                 </h1>
                             </div>
+                         
                             <div class="form-group">
                                 <label class="col-md-9" style="text-align: justify;">Por la magnitud del proceso a ejecutar, se generara una solicitud de Importacion de Articulos para que trabaje en segundo plano. Mientras tanto, podra seguir haciendo uso del sistema.</label>
                             </div>
                             <div class="col-md-12">
                                 <h5>
                                     <asp:Label runat="server" ID="Label3" Text="" Style="text-align: right; font-size: 16px;">¿ Desea generar la solicitud ?</asp:Label>
+
                                 </h5>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+
                         <asp:Label ID="lblHabilitadoImportacionArticulos" runat="server" Style="float: left" Visible="true">*Opcion no habilitada*</asp:Label>
                         <asp:Button runat="server" ID="btnImportarArticulo" Text="Generar" class="btn btn-success" OnClick="lbtnImportarArticulo_Click" Visible="false" />
+
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
@@ -1624,4 +1632,5 @@
             btn2.disable = false;
         }
     </script>--%>
+
 </asp:Content>

@@ -44,6 +44,7 @@ namespace Gestion_Web.Formularios.Facturas
         private string fechaVencimientoH;
         private string estado;
         private string descripcion;
+
         private int cliente;
         private int filtroPorFecha;
         private int filtroPorFechaVencimiento;
@@ -59,13 +60,14 @@ namespace Gestion_Web.Formularios.Facturas
                 fechaH = Request.QueryString["FechaHasta"];
                 fechaVencimientoD = Request.QueryString["fechaVencimientoDesde"];
                 fechaVencimientoH = Request.QueryString["fechaVencimientoHasta"];
+
                 descripcion = Request.QueryString["des"];
+
                 estado = Request.QueryString["estado"];
                 cliente = Convert.ToInt32(Request.QueryString["cl"]);
                 filtroPorFecha = Convert.ToInt32(Request.QueryString["fpf"]);
                 filtroPorFechaVencimiento = Convert.ToInt32(Request.QueryString["fpfv"]);
                 idUsuario = Convert.ToInt32(Request.QueryString["us"]);
-                
 
                 if (!IsPostBack)
                 {
@@ -86,11 +88,13 @@ namespace Gestion_Web.Formularios.Facturas
                         txtVencimientoHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                         descripcion = "";
 
+
                     }
 
                     this.cargarEstadosEventos();
                     this.cargarClientes();
                     this.cargarUsuario();
+
 
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
@@ -103,6 +107,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 cargarEventoRango(fechaD, fechaH, fechaVencimientoD, fechaVencimientoH, cliente, Convert.ToInt32(estado), filtroPorFecha, filtroPorFechaVencimiento, idUsuario, descripcion);
+
                 this.Form.DefaultButton = this.btnBuscarCod.UniqueID;
             }
             catch (Exception ex)
@@ -162,7 +167,9 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         // seguir con esto
+
         private void cargarEventoRango(string fechaD, string fechaH, string fechaVencimientoD, string fechaVencimientoH, int idCliente, int estado, int filtroPorFecha, int filtroPorFechaVencimiento, int idUsuario, string descripcion)
+
         {
             try
             {
@@ -170,7 +177,9 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal saldo = 0;
                 string estados;
 
+
                 var clientesEventos = controladorClienteEntity.GetEventosClientesFilter(fechaD, fechaH, fechaVencimientoD, fechaVencimientoH, idCliente, estado, filtroPorFecha, filtroPorFechaVencimiento, idUsuario, descripcion);
+
 
                 foreach (var row in clientesEventos)
                 {
@@ -253,6 +262,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+
                 controladorContacto controladorContacto = new controladorContacto();
                 controladorUsuario controladorUsuario = new controladorUsuario();
                 controladorCliente controladorCliente = new controladorCliente();
@@ -263,6 +273,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (Convert.ToInt32(modificoHora) == 1)
                     restaHoras = WebConfigurationManager.AppSettings.Get("HorasDiferencia");
+
 
                 string mail = string.Empty;
                 List<contacto> contactos = this.contCliente.obtenerContactos((int)clientes_Eventos.Cliente);
@@ -281,11 +292,14 @@ namespace Gestion_Web.Formularios.Facturas
 
                 var cliente = controladorCliente.obtenerClienteID((int)clientes_Eventos.Cliente);
 
+
                 //fila
                 TableRow tr = new TableRow();
                 tr.ID = clientes_Eventos.Id.ToString();
 
+
                 //var email = controladorCliente.obtenerContactoCliente()
+
                 //int estaRefact = this.contFactEntity.verificarRefacturado(f.id);
                 //if (estaRefact > 0)
                 //{
@@ -309,6 +323,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celCliente.VerticalAlign = VerticalAlign.Middle;
                 celCliente.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celCliente);
+
 
                 TableCell celEmail = new TableCell();
                 celEmail.Text = mail;
@@ -385,6 +400,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celAccion.Controls.Add(btnRedireccionarCRM);
                 tr.Cells.Add(celAccion);
 
+
                 phFacturas.Controls.Add(tr);
             }
             catch (Exception ex)
@@ -425,6 +441,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!String.IsNullOrEmpty(txtFechaDesde.Text) && (!String.IsNullOrEmpty(txtFechaHasta.Text)))
                 {
                     Response.Redirect("CRM.aspx?fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&fechaVencimientoDesde=" + txtVencimientoDesde.Text + "&fechaVencimientoHasta=" + txtVencimientoHasta.Text + "&cl=" + DropListClientes.SelectedValue + "&estado=" + DropListEstado.SelectedValue + "&fpf=" + Convert.ToInt32(RdFecha.Checked) + "&fpfv=" + Convert.ToInt32(RdFechaVencimiento.Checked) + "&us=" + DropListUsuarios.SelectedValue + "&des=" + txtDescripcion.Text);
+
                 }
                 else
                 {

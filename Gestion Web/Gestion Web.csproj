@@ -55,10 +55,11 @@
     <Reference Include="Estetica Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Estetica_Api\Estetica Api\bin\Debug\Estetica Api.dll</HintPath>
+
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\GestionAPI\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -107,8 +108,10 @@
       <HintPath>..\..\..\..\..\..\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
       <Private>True</Private>
     </Reference>
+
     <Reference Include="Millas_Api">
       <HintPath>..\..\..\Millas\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -375,10 +378,12 @@
     <Content Include="Formularios\Clientes\ProspectosF.aspx" />
     <Content Include="Formularios\Clientes\ProspectosABM.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
+
     <Content Include="Formularios\Facturas\ConsolidarP.aspx" />
     <Content Include="Formularios\Facturas\ComisionesF.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
     <Content Include="Formularios\Facturas\ImpresionComisiones.aspx" />
+
     <Content Include="Formularios\Facturas\LiquidacionesABM.aspx" />
     <Content Include="Formularios\Facturas\CronogramaPagosF.aspx" />
     <Content Include="Formularios\Facturas\RetencionesF.aspx" />
@@ -476,8 +481,10 @@
     <Content Include="Formularios\MateriasPrimas\MateriasPrimasABM.aspx" />
     <Content Include="Formularios\MateriasPrimas\MateriasPrimasF.aspx" />
     <Content Include="Formularios\MateriasPrimas\MateriasPrimas_Composicion.aspx" />
+
     <Content Include="Formularios\MateriasPrimas\StockFMP.aspx" />
     <Content Include="Formularios\MateriasPrimas\StockPopUpMP.aspx" />
+
     <Content Include="Formularios\MateriasPrimas\UnidadMedida.aspx" />
     <Content Include="Formularios\OrdenReparacion\ImpresionOrdenReparacion.aspx" />
     <Content Include="Formularios\OrdenReparacion\OrdenReparacionABM.aspx" />
@@ -1526,6 +1533,7 @@
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.designer.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
     </Compile>
+
     <Compile Include="Formularios\Facturas\ConsolidarP.aspx.cs">
       <DependentUpon>ConsolidarP.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1540,6 +1548,7 @@
     <Compile Include="Formularios\Facturas\ComisionesF.aspx.designer.cs">
       <DependentUpon>ComisionesF.aspx</DependentUpon>
     </Compile>
+
     <Compile Include="Formularios\Facturas\CRM.aspx.cs">
       <DependentUpon>CRM.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1547,6 +1556,7 @@
     <Compile Include="Formularios\Facturas\CRM.aspx.designer.cs">
       <DependentUpon>CRM.aspx</DependentUpon>
     </Compile>
+
     <Compile Include="Formularios\Facturas\ImpresionComisiones.aspx.cs">
       <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1554,6 +1564,7 @@
     <Compile Include="Formularios\Facturas\ImpresionComisiones.aspx.designer.cs">
       <DependentUpon>ImpresionComisiones.aspx</DependentUpon>
     </Compile>
+
     <Compile Include="Formularios\Facturas\LiquidacionesABM.aspx.cs">
       <DependentUpon>LiquidacionesABM.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2024,6 +2035,7 @@
     <Compile Include="Formularios\MateriasPrimas\StockPopUpMP.aspx.designer.cs">
       <DependentUpon>StockPopUpMP.aspx</DependentUpon>
     </Compile>
+
     <Compile Include="Formularios\MateriasPrimas\UnidadMedida.aspx.cs">
       <DependentUpon>UnidadMedida.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

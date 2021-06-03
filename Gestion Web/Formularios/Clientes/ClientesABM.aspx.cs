@@ -93,6 +93,7 @@ namespace Gestion_Web.Formularios.Clientes
                 //    divSituacion.Visible = false;
                 //}
 
+
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.idCliente = Convert.ToInt32(Request.QueryString["id"]);
@@ -106,7 +107,6 @@ namespace Gestion_Web.Formularios.Clientes
 
                 if (!IsPostBack)
                 {
-
                     drpCRMSituacion.SelectedValue = "1";
                     txtFechaEvento.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     txtFechaVencimiento.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -168,7 +168,9 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarClientesReferir();
                     this.cargarBTB();
                     this.cargarEstadosFiltro();
+
                     this.cargarPlanCuentas();
+
                     //this.cargarTipoContacto();
 
                     this.asignarNombreLabel(accion);
@@ -3563,7 +3565,9 @@ namespace Gestion_Web.Formularios.Clientes
                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se va a cagar el CRM del cliente");
                 this.phEventos.Controls.Clear();
 
+
                 List<Clientes_Eventos> eventos = this.contClienteEntity.obtenerEventosClienteByClienteReducido(this.idCliente);
+
 
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
@@ -3585,6 +3589,7 @@ namespace Gestion_Web.Formularios.Clientes
         /// </summary>
         /// <param name="e">objeto de tipo Clientes_Eventos</param>
         /// <param name="estado">estado del evento</param>
+
         private void cargarEventosClientePH(Clientes_Eventos e, string estado)
         {
             try
@@ -3695,18 +3700,21 @@ namespace Gestion_Web.Formularios.Clientes
         private void agregarEventoCliente()
         {
             try
-            {
+            {          
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Busca al cliente a la BD para obtener la razonSocial e enviarla por mail. Ubicacion: ClientesABM.agregarEventoCliente.");
                 cliente cliente = controladorClienteEntity.ObtenerClienteId(this.idCliente);
                 eventos.Cliente = cliente.id;
+
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
                 eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
 
+
                 if (chbDisparaTarea.Checked == true)
+
                 {
                     eventos.Tarea = this.txtTarea.Text;
                     eventos.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
@@ -3760,6 +3768,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento guardado con exito! " + mensajeEnvioMail, null));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento guardado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
+
                     this.cargarEventosCliente();
                     limpiarCamposCRM();
                 }
@@ -3793,6 +3802,7 @@ namespace Gestion_Web.Formularios.Clientes
                 ev.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
 
                 if (chbDisparaTarea.Checked == true)
+
                 {
                     ev.Tarea = this.txtTarea.Text;
                     ev.Estado = Convert.ToInt32(drpCRMSituacion.SelectedValue);
@@ -3846,6 +3856,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Evento modificado con exito", null));
                     //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelTareas, UpdatePanelTareas.GetType(), "alert", "$.msgbox(\"Evento modificado. " + mensajeEnvioMail + "\", {type: \"info\"});", true);
+
                     this.cargarEventosCliente();
                     limpiarCamposCRM();
                 }
@@ -3885,12 +3896,14 @@ namespace Gestion_Web.Formularios.Clientes
                     this.txtDetalleEvento.Text = ev.Descripcion;
                     this.lblIdEventoCliente.Text = ev.Id.ToString();
 
+
                     if (ev.Tarea != null)
                     {
                         divVencimientoTarea.Visible = true;
                         divTarea.Visible = true;
                         divSituacion.Visible = true;
                         chbDisparaTarea.Checked = true;
+
                         drpCRMSituacion.SelectedIndex = (int)ev.Estado;
                     }
 
@@ -3935,6 +3948,7 @@ namespace Gestion_Web.Formularios.Clientes
         //        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Ocurrio un error. " + ex.Message));
         //    }
         //}
+
 
         /// <summary>
         /// Este metodo elimina el evento de la BD.
@@ -4505,6 +4519,7 @@ namespace Gestion_Web.Formularios.Clientes
         #region IngresosBrutos/Percepciones
         [WebMethod]
         public static string AgregarIngresosBrutosYObtenerLosRegistros(string idClienteString, string IdProvincia, string origenCliente, string percepcionORetencion, string modo, string idPlanCuenta)
+
         {
             try
             {

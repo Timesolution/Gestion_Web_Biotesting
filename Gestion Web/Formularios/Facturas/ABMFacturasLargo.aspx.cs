@@ -3232,7 +3232,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-
+                Log.EscribirSQL(1, "Error", "Error en el metodo btnAgregar_Click() " + ex.Message);
             }
         }
 
@@ -4665,7 +4665,6 @@ namespace Gestion_Web.Formularios.Facturas
                             this.agregarMovimientoMillas(fact);
                             this.EnviarSMSAviso(fact);
                         }
-
                         #region Creacionsesiones estetica
 
                         int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
@@ -5026,6 +5025,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //cargo la descripcion del articulo que tengo en pantalla
                 if (string.IsNullOrEmpty(item.articulo.descripcion))
+
                 {
                     item.articulo.descripcion = this.txtDescripcion.Text;
                 }
@@ -5035,7 +5035,6 @@ namespace Gestion_Web.Formularios.Facturas
                     if (descAux != this.txtDescripcion.Text)
                         item.articulo.descripcion = this.txtDescripcion.Text;
                 }
-
 
                 //agrego//costos
                 item.Costo = item.articulo.costo;

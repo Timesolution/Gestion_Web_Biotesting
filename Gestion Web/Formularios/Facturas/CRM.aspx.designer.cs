@@ -24,6 +24,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.Label lblParametros;
 
         /// <summary>
+
         /// Control labelSaldo.
         /// </summary>
         /// <remarks>
@@ -213,6 +214,7 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.DropDownList DropListUsuarios;
 
         /// <summary>
+
         /// Control txtDescripcion.
         /// </summary>
         /// <remarks>
