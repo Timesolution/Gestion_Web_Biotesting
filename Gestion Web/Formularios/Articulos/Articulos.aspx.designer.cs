@@ -1653,6 +1653,24 @@ namespace Gestion_Web.Formularios.Articulos
         protected global::System.Web.UI.WebControls.Button btnImportarArticulo;
 
         /// <summary>
+        /// Control DropListListaPrecios2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListListaPrecios2;
+
+        /// <summary>
+        /// Control RequiredFieldValidator9.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator9;
+
+        /// <summary>
         /// Control txtUltimaActualizacionDia.
         /// </summary>
         /// <remarks>

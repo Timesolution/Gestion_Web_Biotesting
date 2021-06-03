@@ -660,7 +660,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">Lista PRecios</label>
+                                    <label class="col-md-4">Lista Precios</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="ListListaPrecio" ValidationGroup="BusquedaEtiquetas" runat="server" class="form-control"></asp:DropDownList>
                                     </div>
@@ -1372,9 +1372,18 @@
                                 </h1>
                             </div>
                             <div class="col-md-10">
-                                <label style="text-align: justify">Eliga el dia de la ultima actualizacion de precios de los articulos con la que desea realizar la impresion. </label>
+                                <label style="text-align: justify">Eliga el dia de la ultima actualizacion de precios de los articulos y la lista con la que desea realizar la impresion. </label>
                             </div>
                         </div>
+                        <div class="form-group">
+                                    <label class="col-md-4">Lista de precios</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListListaPrecios2" ValidationGroup="BusquedaLista2" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                            <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListListaPrecios2" InitialValue="-1" ValidationGroup="BusquedaLista2" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
                         <div class="form-group col-md-12">
                             <div class="col-md-3">
                                 <asp:TextBox ID="txtUltimaActualizacionDia" runat="server" class="form-control" MaxLength="3" TextMode="Number" Style="width: 100px" PlaceHolder="Dias"></asp:TextBox>

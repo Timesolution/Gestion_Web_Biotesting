@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Gestor_Solution.Modelo;
 
 namespace Gestion_Web.Formularios.Articulos
 {
@@ -368,22 +369,27 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                controladorListaPrecio contList = new controladorListaPrecio();
+                listaPrecio lista = (contList.obtenerlistaPrecioID(this.lista));
+                int idLista = lista.id;
+
                 string sdias = null;
                 if (dias > 0)
                 {
-                    sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyyMMdd");
+                    sdias = DateTime.Today.AddDays(dias * -1).ToString("yyyy-MM-dd");
                 }
 
-                DateTime fechaBuscar = DateTime.Today.AddDays(dias * -1);
+                string fechaBuscar = DateTime.Today.AddDays(dias * -1).ToString("yyyy-MM-dd");
+            
 
-                DataTable dt = this.contArticulos.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
+                DataTable dt = this.contArticulos.ImprimirArticulosActualizadosXListaPrecio(fechaBuscar,idLista);
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Reporte_ArticulosPreciosActualizados.rdlc");
                 ReportDataSource rds = new ReportDataSource("ArticulosPreciosActualizados", dt);
 
                 string fecha = DateTime.Today.ToString("dd/MM/yyyy");
-                string fechaBuscarString = fechaBuscar.ToString("dd/MM/yyyy");
+                string fechaBuscarString = fechaBuscar;
                 ReportParameter rpTitulo = new ReportParameter("ParamTitulo", "Articulos - Precios Actualizados");
                 ReportParameter rpFechaTomada = new ReportParameter("ParamFechaTomada", fechaBuscarString);
                 ReportParameter rpFechaHoy = new ReportParameter("ParamFechaHoy", fecha);
