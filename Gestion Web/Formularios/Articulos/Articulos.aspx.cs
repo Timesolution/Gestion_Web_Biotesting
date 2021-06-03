@@ -986,6 +986,12 @@ namespace Gestion_Web.Formularios.Articulos
                 this.DropListListaPrecios.DataTextField = "nombre";
                 this.DropListListaPrecios.DataBind();
 
+                //controles modaListaPrecios2
+                this.DropListListaPrecios2.DataSource = dt;
+                this.DropListListaPrecios2.DataValueField = "id";
+                this.DropListListaPrecios2.DataTextField = "nombre";
+                this.DropListListaPrecios2.DataBind();
+
                 foreach (DataRow lista in dt.Rows)
                 {
                     if (lista["nombre"].ToString() != "Seleccione...")
@@ -2513,12 +2519,13 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 int cantidadDias = Convert.ToInt32(txtUltimaActualizacionDia.Text);
+                int idListap = Convert.ToInt32(this.DropListListaPrecios2.SelectedValue);
                 if (cantidadDias > 0)
                 {
                     DateTime fechaBuscar = DateTime.Today.AddDays(cantidadDias * -1);
                     DataTable dt = this.controlador.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
                     if (dt.Rows.Count > 0)
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=8&d=" + cantidadDias + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ReporteAF.aspx?accion=8&d=" + cantidadDias + "&l=" + DropListListaPrecios2.SelectedValue + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
                     else
                         ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se han encontrado resultados para imprimir."));
                 }
