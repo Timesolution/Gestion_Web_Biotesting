@@ -1794,9 +1794,8 @@ namespace Gestion_Web.Formularios.Facturas
                 if (item.nroRenglon > 0)
                     celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
                 else
-                    celCodigo.Text = (pos + 1) + " - " + item.articulo.codigo;
+                 celCodigo.Text = (pos + 1).ToString() + " - " + item.articulo.codigo; 
                 //celCodigo.Text = item.nroRenglon + " - " + item.articulo.codigo;
-<
                 celCodigo.Width = Unit.Percentage(15);
                 celCodigo.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celCodigo);
@@ -3339,28 +3338,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        public void verificarModoBlanco()
-        {
-            try
-            {
-                Configuracion config = new Configuracion();
-                if (config.modoBlanco == "1")
-                {
-                    //this.lbtnPRP.Visible = false;
-                    //this.lbNC.Visible = false;
-                    //this.lbND.Visible = false;
-                    //this.lbtnPRP.Attributes.Add("style", "display:none");
-                    //this.lbNC.Attributes.Add("style", "display:none");
-                    //this.lbND.Attributes.Add("style", "display:none");
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        #region importacion
+ #region importacion
         protected void btnImportarPedido_Click(object sender, EventArgs e)
         {
             try

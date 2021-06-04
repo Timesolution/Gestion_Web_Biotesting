@@ -1949,6 +1949,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (cobro.ingresado >= cobro.imputado)
                         {
                             int i = contCobranza.ProcesarCobro(cobro, -1, tipoDoc);
+                            int idMov = contCobranza.transformarIdCobroEnIdMov(i);
                             if (i > 0)
                             {
                                 //Verifico si se generó el cobro con algún cheque y lo guardo en la tabla Cheques_Datos
@@ -1984,9 +1985,9 @@ namespace Gestion_Web.Formularios.Facturas
                                 if (l > 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se liquidaron correctamente los pagarés en el cobro \", {type: \"info\"}); location.href = '../Valores/PagaresF.aspx';", true);
                                 if (l < 0)
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudieron liquidar los pagarés en el cobro. \", {type: \"alert\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudieron liquidar los pagarés en el cobro. \", {type: \"alert\"}); window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2');location.href = 'CobranzaF.aspx';", true);
 
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
                                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
                                 mostrarMensaje(c, cobro.id,i);
                             }
@@ -2118,6 +2119,8 @@ namespace Gestion_Web.Formularios.Facturas
                         else
                         {
                             int i = contCobranza.ProcesarCobroPagoCuenta(cobro);
+                            int idMov = contCobranza.transformarIdCobroEnIdMov(i);
+
                             if (i > 0)
                             {
                                 if (lstCheque.Rows.Count > 0)
@@ -2145,7 +2148,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Genero el Recibo de Cobro N°" + this.txtNumeroCobro.Text);
 
                                 int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
                                 this.mostrarMensaje(c, cobro.id, i);
                             }
                             else
