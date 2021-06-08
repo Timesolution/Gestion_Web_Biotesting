@@ -1268,9 +1268,13 @@ namespace Gestion_Web.Formularios.Valores
                 string[] atributos = idBoton.Split('_');
                 string idCobro = atributos[1];
 
-                var caja = this.controlador.obtenerCajaID(Convert.ToInt32(idCobro));
 
-                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "window.open('../Cobros/ImpresionCobro.aspx?Cobro=" + caja.cobro.id + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+                var caja = this.controlador.obtenerCajaID(Convert.ToInt32(idCobro));
+                
+                int idMov = contCobranza.transformarIdCobroEnIdMov(Convert.ToInt32(caja.cobro.id));
+
+
+                ScriptManager.RegisterClientScriptBlock(Page, this.GetType(), "alert", "window.open('../Cobros/ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
 
                 // ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + caja.cobro.id + "&valor=1', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
 
