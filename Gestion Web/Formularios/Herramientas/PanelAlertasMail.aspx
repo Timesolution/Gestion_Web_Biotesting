@@ -34,7 +34,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="validateSelect" class="col-md-4">Días antes del recordatorio de tuno</label>
+                                            <label for="validateSelect" class="col-md-4">Días antes del recordatorio de turno</label>
                                             <div class="col-md-4">
                                                 <asp:TextBox ID="txtDiasRecordatorioMail" TextMode="Number" runat="server" class="form-control" ToolTip="Dias" onkeypress="javascript:return ValidarSoloNumeros(event)"></asp:TextBox>
                                             </div>
@@ -56,7 +56,7 @@
                                          <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Observaciones del mail de envio de documentos</label>
                                             <div class="col-md-4">
-                                                <asp:TextBox ID="txtEnvioDocumento" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:TextBox>
+                                                <asp:TextBox ID="txtEnvioDocumento" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de envio de documentos"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnEnvioDocumento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEnvioDocumento_Click" />
@@ -66,13 +66,42 @@
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Observaciones del mail de envio de formulario</label>
                                             <div class="col-md-4">
-                                                <asp:TextBox ID="txtEnvioFormulario" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:TextBox>
+                                                <asp:TextBox ID="txtEnvioFormulario" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de envio de formularios"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnEnvioFormulario" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEnvioFormulario_Click" />
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Dias despues de ser atendido</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtDiasDespuesDeTurno" TextMode="Number" runat="server" class="form-control" ToolTip="Dias" onkeypress="javascript:return ValidarSoloNumeros(event)"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnDiasFinalizadoTurno" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnDiasFinalizadoTurno_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Notificación despues de ser atendido</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtEnvioNotificacion" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnEnvioNotificacion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEnvioNotificacion_Click" />
+                                            </div>
+                                        </div>
+
+                                       <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Formulario despues de ser atendido</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="ddlFormularioNotificacion" runat="server" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnFormularioNotificacion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnFormularioNotificacion_Click" />
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">¿Envio SMS?</label>
