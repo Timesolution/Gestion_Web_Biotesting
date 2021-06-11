@@ -701,7 +701,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ListPuntoVenta.DataSource = dt;
                 this.ListPuntoVenta.DataValueField = "Id";
                 this.ListPuntoVenta.DataTextField = "NombreFantasia";
-
+                this.ListPuntoVenta.SelectedIndex = -1;
                 this.ListPuntoVenta.DataBind();
             }
             catch (Exception ex)
