@@ -48,7 +48,7 @@
 
                                                         <div class="col-md-4">
 
-                                                            <asp:TextBox ID="txtCodArticulo" runat="server" class="form-control"></asp:TextBox>
+                                                            <asp:TextBox ID="txtCodArticulo"  runat="server" class="form-control"></asp:TextBox>
 
                                                         </div>
                                                         <div class="col-md-4">
@@ -1188,7 +1188,7 @@
                                                         <!-- .widget-content -->
 
                                                     </div>
-                                    
+
                                                 </div>
                                             </div>
 
@@ -2070,6 +2070,7 @@
                                                                     <label class="col-md-2">Atributo</label>
                                                                     <div class="col-md-4">
                                                                         <asp:TextBox ID="txtAtributo" runat="server" class="form-control"></asp:TextBox>
+                                                                      
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
@@ -2086,6 +2087,9 @@
                                                                     <div class="col-md-4">
                                                                         <asp:TextBox ID="txtCategoria" runat="server" class="form-control"></asp:TextBox>
                                                                     </div>
+                                                                      <div class="col-md-4">
+                                                                            <asp:LinkButton ID="btnVerificarMagento" data-toggle="tooltip" data-placement="bottom" title="Verificar codigo magento" Text="<i class='icon icon-refresh'></i>" runat="server" OnClick="btnVerificarMagento_Click" class="btn btn-success" />
+                                                                        </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label class="col-md-2">Peso</label>

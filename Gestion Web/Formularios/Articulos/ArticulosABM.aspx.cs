@@ -912,13 +912,11 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     this.generarCodigoNuevo();
                 }
-
                 if (!verificarIncidenciaMargenObligatorio())
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
                     return -1;
                 }
-
                 Articulo art = new Articulo();
                 art.codigo = this.txtCodArticulo.Text;
                 art.descripcion = this.txtDescripcion.Text;
@@ -1006,6 +1004,7 @@ namespace Gestion_Web.Formularios.Articulos
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Los valores de margen o incidencia deben ser mayor a 0."));
                     return;
                 }
+              
 
                 Articulo art = new Articulo();
 
@@ -4685,5 +4684,21 @@ namespace Gestion_Web.Formularios.Articulos
         }
 
       
+
+        protected void btnVerificarMagento_Click(object sender, EventArgs e)
+        {
+               bool VerificarArticuloMagento = controlador.VerificarCodigoArticuloMagento(this.id);
+            if (!VerificarArticuloMagento)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"El codigo del articulo no es valido.Vuelva a ingresarlo.\", {type: \"alert\"});", true);
+
+            }
+            else
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"El codigo del articulo es valido.\", {type: \"info\"});", true);
+
+            }
+
+        }
     }
 }
