@@ -123,6 +123,60 @@ namespace Gestion_Web.Formularios.Herramientas
         protected global::System.Web.UI.WebControls.LinkButton lbtnEnvioFormulario;
 
         /// <summary>
+        /// Control txtDiasDespuesDeTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDiasDespuesDeTurno;
+
+        /// <summary>
+        /// Control lbtnDiasFinalizadoTurno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnDiasFinalizadoTurno;
+
+        /// <summary>
+        /// Control txtEnvioNotificacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEnvioNotificacion;
+
+        /// <summary>
+        /// Control lbtnEnvioNotificacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEnvioNotificacion;
+
+        /// <summary>
+        /// Control ddlFormularioNotificacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlFormularioNotificacion;
+
+        /// <summary>
+        /// Control lbtnFormularioNotificacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnFormularioNotificacion;
+
+        /// <summary>
         /// Control lbEnvioSMS.
         /// </summary>
         /// <remarks>

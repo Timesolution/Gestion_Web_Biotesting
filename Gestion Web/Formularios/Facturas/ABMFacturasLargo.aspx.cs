@@ -61,6 +61,7 @@ namespace Gestion_Web.Formularios.Facturas
         int idSucursal;
         int idPtoVentaUser;
         int idClientePadre;
+        int idAgenda;
         string mensajeActualizacionArticuloFecha = string.Empty;
         int idPaciente;
         int idArticuloSubtratamiento;
@@ -92,6 +93,7 @@ namespace Gestion_Web.Formularios.Facturas
                 // carga el paciente/cliente apenas ingresamos a esta pagina en el dropdownlist.
                 idPaciente = Convert.ToInt32(Request.QueryString["pac"]);
                 idArticuloSubtratamiento = Convert.ToInt32(Request.QueryString["artsub"]);
+                idAgenda = Convert.ToInt32(Request.QueryString["idag"]);
 
                 VerificarLogin();
                 ConfigurarModoCredito();
@@ -3192,7 +3194,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (iec == 1)
                             {
                                 this.generarFactura(0);
-
+                                CambiarEstadoAgendaFacturado();
                             }
                             else
                             {
@@ -3235,6 +3237,23 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL(1, "Error", "Error en el metodo btnAgregar_Click() " + ex.Message);
             }
         }
+
+        public void CambiarEstadoAgendaFacturado() 
+        {
+            try
+            {
+                if (idAgenda != 0) 
+                {
+                    Estetica_Api.Controladores.ControladorAgenda controladorAgenda = new Estetica_Api.Controladores.ControladorAgenda();
+                    controladorAgenda.ModificarEstadoFacturado(idAgenda);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al modificar estado de la agenda: " + ex.Message);
+            }
+        }
+        
 
         void AgregarComentariosIvaYNetoDiscriminados(Factura factura = null)
         {
@@ -3961,6 +3980,7 @@ namespace Gestion_Web.Formularios.Facturas
                         Session["Factura"] = factE;//agrego los datos de la exportacion.
 
                         this.generarFactura(0);
+                        CambiarEstadoAgendaFacturado();
                     }
                     else
                     {
@@ -3971,6 +3991,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else
                 {
                     this.generarFactura(0);
+                    CambiarEstadoAgendaFacturado();
                 }
 
             }
@@ -4165,6 +4186,7 @@ namespace Gestion_Web.Formularios.Facturas
                             if (iec == 1)
                             {
                                 this.generarFactura(1);
+                                CambiarEstadoAgendaFacturado();
                             }
                             else
                             {
@@ -4206,6 +4228,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (iec == 1)
                         {
                             this.generarFactura(1);
+                            CambiarEstadoAgendaFacturado();
                         }
                         else
                         {

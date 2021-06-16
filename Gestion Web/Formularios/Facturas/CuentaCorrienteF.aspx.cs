@@ -19,6 +19,7 @@ namespace Gestion_Web.Formularios.Facturas
 {
     public partial class CuentaCorrienteF : System.Web.UI.Page
     {
+        controladorCobranza contCobranza = new controladorCobranza();
         controladorCuentaCorriente controlador = new controladorCuentaCorriente();
         controladorFacturacion contFact = new controladorFacturacion();
         controladorCliente contrCliente = new controladorCliente();
@@ -806,7 +807,8 @@ namespace Gestion_Web.Formularios.Facturas
                                 if (tipoDoc == 15 || tipoDoc == 18)
                                 {
                                     //recibo de cobro
-                                    script = "window.open('../Cobros/ImpresionCobro.aspx?valor=2&Cobro=" + idDoc + "','_blank');";
+                                    int idMov = contCobranza.transformarIdCobroEnIdMov(Convert.ToInt32(idDoc));
+                                    script = "window.open('../Cobros/ImpresionCobro.aspx?valor=2&Cobro=" + idMov + "','_blank');";
                                 }
                             }
                         }

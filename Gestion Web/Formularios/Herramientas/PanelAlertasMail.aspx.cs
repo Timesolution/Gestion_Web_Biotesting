@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Estetica_Api;
 
 namespace Gestion_Web.Formularios.Herramientas
 {
@@ -26,12 +27,44 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     VerificarEnviosSMS();
                     CargarAlertasMail();
+                    CargarFormularios();
                 }
             }
             catch
             {
 
             }
+        }
+
+
+        public void CargarFormularios() 
+        {
+            try
+            {
+                Estetica_Api.Controladores.ControladorHistorial contHist = new Estetica_Api.Controladores.ControladorHistorial();
+
+                List<Estetica_Api.Entity.Formularios> forms = contHist.obtenerFormularios();
+
+                ListItem items = new ListItem("Seleccionar...", "-1");
+                ddlFormularioNotificacion.Items.Add(items);
+                if (forms != null) 
+                {
+                    foreach (Estetica_Api.Entity.Formularios f in forms)
+                    {
+                        string text = f.IdFormulario + " - " + f.NombreFormulario;
+                        ListItem item = new ListItem(text, f.IdFormulario.ToString());
+                        ddlFormularioNotificacion.Items.Add(item);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+
         }
 
         private void VerificarEnviosSMS()
@@ -103,6 +136,9 @@ namespace Gestion_Web.Formularios.Herramientas
                 txtDiasRecordatorioMail.Text = this.configuracion.DiasRecordatorioMail;
                 txtEnvioDocumento.Text = this.configuracion.ObservacionesMailDocumento;
                 txtEnvioFormulario.Text = this.configuracion.ObservacionesMailFormulario;
+                txtDiasDespuesDeTurno.Text = this.configuracion.DiasDespuesAtendidoMail;
+                txtEnvioNotificacion.Text = this.configuracion.ObservacionDespuesAtendido;
+                ddlFormularioNotificacion.SelectedValue = this.configuracion.FormularioDespuesAtendido;
             }
             catch (Exception ex)
             {
@@ -132,8 +168,6 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: ObservacionesMailAgenda " + ex.Message);
             }
         }
-
-
 
         protected void lbtnObservacionesRecordatorioMail_Click(object sender, EventArgs e)
         {
@@ -216,6 +250,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: NombreFantasiaSMS " + ex.Message);
             }
         }
+
         protected void lbEnvioSMS_Click(object sender, EventArgs e)
         {
             try
@@ -253,7 +288,6 @@ namespace Gestion_Web.Formularios.Herramientas
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: Envio de SMS " + ex.Message);
             }
         }
-
 
         protected void lbtnEnvioDocumento_Click(object sender, EventArgs e)
         {
@@ -301,5 +335,73 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
+        protected void lbtnEnvioNotificacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.ObservacionDespuesAtendido = txtEnvioNotificacion.Text;
+
+                int i = configuracion.ModificarObservacionDespuesAtendido(configuracion.ObservacionDespuesAtendido);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para el envio de notificaciones despues de ser atendido");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de observaciones predeterminado para el envio de notificaciones despues de ser atendido. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la observacion predeterminada para el envio de notificaciones despues de ser atendido\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: ObservacionDespuesAtendido " + ex.Message);
+            }
+        }
+
+        protected void lbtnFormularioNotificacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.FormularioDespuesAtendido = ddlFormularioNotificacion.SelectedValue;
+
+                int i = configuracion.ModificarFormularioDespuesAtendido(configuracion.FormularioDespuesAtendido);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de observaciones predeterminado para el envio de formulario despues de ser atendido");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de observaciones predeterminado para el envio de formulario despues de ser atendido. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la observacion predeterminada para el envio de formularios despues de ser atendido\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: FormularioDespuesAtendido " + ex.Message);
+            }
+        }
+
+        protected void lbtnDiasFinalizadoTurno_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.DiasDespuesAtendidoMail = txtDiasDespuesDeTurno.Text;
+
+                int i = configuracion.ModificarDiasDespuesAtendidoMail(configuracion.DiasDespuesAtendidoMail);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de cantidad de dias para mandar la notificacion despues de ser atendido");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de cantidad de dias para mandar la notificacion despues de ser atendido. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la cantidad de dias para mandar la notificacion despues de ser atendido\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: DiasDespuesAtendidoMail " + ex.Message);
+            }
+        }
     }
 }
