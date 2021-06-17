@@ -165,7 +165,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarMonedasModalTarjetas();
                     this.cargarDivisas();
 
-                    if (accion != 6 && accion != 7 && accion != 9)
+                    if (accion != 6 && accion != 7 && accion != 9 && accion != 13)
                     {
                         //si el usuario tiene pto vta selecciono la del user
                         this.ListPuntoVenta.SelectedValue = this.idPtoVentaUser.ToString();
@@ -190,10 +190,17 @@ namespace Gestion_Web.Formularios.Facturas
 
                     }
 
-                    if (accion != 6 && accion != 7)
+                    if (accion != 6 && accion != 7 && accion != 13)
                     {
                         this.obtenerNroFacturaInicio();
                         this.verificarClienteDefecto();
+                    }
+                    else if (accion == 13)
+                    {
+                        //this.obtenerNroNotaDebitoInicio();
+                        string facturas = Request.QueryString["facturas"];
+                        this.GenerarNotaDebito(facturas);
+                        this.phDatosEntrega.Visible = true;
                     }
                     else
                     {
@@ -732,6 +739,67 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 Configuracion config = new Configuracion();
                 Factura f = controlador.GenerarNotaCredito(facturas);
+
+                Session.Add("Factura", f);
+
+                //pongo el iva del cliente que tenia al momento en que se le hizo esa fc
+                if (config.siemprePRP == "1")
+                {
+                    int idDoc = Convert.ToInt32(facturas.Split(';')[0]);
+                    int idIva = this.obtenerDatosIvasFactura(idDoc);
+                    if (idIva > 0)
+                        this.establecerIvaCliente(idIva, f.cliente.id);
+                }
+
+                this.nuevaFactura = Session["Factura"] as Factura;
+                this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
+                this.cargarSucursal(f.empresa.id);
+                this.cargarPuntoVta(f.sucursal.id);
+                this.cargarCliente(f.cliente.id);
+                this.cargarClienteEnLista(f.cliente.id);
+                this.DropListClientes.SelectedValue = f.cliente.id.ToString();
+                this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
+                this.DropListFormaPago.SelectedValue = f.formaPAgo.id.ToString();
+                this.DropListLista.SelectedValue = f.listaP.id.ToString();
+                this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
+                this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                if (!String.IsNullOrEmpty(f.comentario))
+                {
+                    this.checkDatos.Checked = true;
+                    this.txtComentarios.Text += "\n" + f.comentario;
+                }
+                if (f.formaPAgo.forma == "Tarjeta")
+                {
+                    this.cargarPagosTarjetasDesdeFactura(f);
+                }
+
+                this.cargarItems();
+                this.ActualizarTotales();
+                this.obtenerNroFactura();
+
+                this.lblSaldoTarjeta.Text = f.total.ToString();
+                this.lblMontoOriginal.Text = f.total.ToString();
+
+                this.DropListClientes.Attributes.Add("disabled", "disabled");
+
+                this.lbtnAccion.Visible = false;
+                this.panelBusquedaCliente.Visible = false;
+
+
+                CargarDropList_DireccionesDeEntregaDelCliente(f.cliente.id);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error asignando datos pedido a factura " + ex.Message));
+
+            }
+        }
+        public void GenerarNotaDebito(string facturas)
+        {
+            try
+            {
+                Configuracion config = new Configuracion();
+                Factura f = controlador.GenerarNotaDebito(facturas);
 
                 Session.Add("Factura", f);
 
@@ -2426,7 +2494,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
                
-                if (accion != 6 && accion != 7)
+                if (accion != 6 && accion != 7 && accion != 13)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
                     if (cliente[1].Contains("Responsable Inscripto") && (c.monotributo != "1" && c.monotributo != "2"))
@@ -2507,16 +2575,43 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
-                        if (tipoDoc.Contains("Factura A") || tipoDoc.Contains("Credito A") || tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
+                        if (tipoDoc.Contains("Factura A") || tipoDoc.Contains("Credito A") || tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M") || tipoDoc.Contains("Debito A"))
                         {
-                            int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
-                            PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
-                            int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
-
-                            if (tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
-                                this.labelNroFactura.Text = "Nota de Credito M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            if (accion == 13)
+                            {
+                                int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
+                                PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+                                int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Debito A");
+                                this.labelNroFactura.Text = "Nota de Debito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
                             else
-                                this.labelNroFactura.Text = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            {
+                                int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
+                                PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+                                int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
+
+                                if (tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
+                                    this.labelNroFactura.Text = "Nota de Credito M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                                else
+                                    this.labelNroFactura.Text = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                        }
+                        else if (tipoDoc.Contains("Factura B") || tipoDoc.Contains("Credito B") || tipoDoc.Contains("Debito B"))
+                        {
+                            if (accion == 13)
+                            {
+                                int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
+                                PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+                                int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Debito B");
+                                this.labelNroFactura.Text = "Nota de Debito B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                            else
+                            {
+                                int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
+                                PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
+                                int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito B");
+                                this.labelNroFactura.Text = "Nota de Credito B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
                         }
                         else
                         {
@@ -2542,13 +2637,6 @@ namespace Gestion_Web.Formularios.Facturas
                                     PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
                                     int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito C");
                                     this.labelNroFactura.Text = "Nota de Credito C N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
-                                }
-                                else
-                                {
-                                    int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
-                                    PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
-                                    int nro = this.controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito B");
-                                    this.labelNroFactura.Text = "Nota de Credito B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
                                 }
                             }
                         }
@@ -3885,7 +3973,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.txtTotalTasaMunicipal.Text = this.nuevaFactura.totalMunicipal.ToString();
                 this.txtTotalImpuestos.Text = impuestosCombustible.ToString();
 
-                string neto = decimal.Round(this.nuevaFactura.neto, 2).ToString();
+                //string neto = decimal.Round(this.nuevaFactura.neto, 2).ToString();
+                string neto = Convert.ToDecimal(this.nuevaFactura.neto).ToString("N2");
                 this.txtNeto.Text = neto;
 
                 this.txtDescuento.Text = decimal.Round(this.nuevaFactura.descuento, 2).ToString();
@@ -4488,7 +4577,14 @@ namespace Gestion_Web.Formularios.Facturas
                         i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito, divisaElegida);
                     }
                     else
+                    {
+                        if (accion == 13)
+                        {
+                            string idfacturas = Request.QueryString["facturas"].Replace(";", "");
+                            controlador.idFacturaParaHacerNotaDebito = Convert.ToInt32(idfacturas);
+                        }
                         i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito);
+                    }
 
                     if (i > 0)
                     {
