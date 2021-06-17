@@ -579,7 +579,7 @@
                                             <li><a href="/../../Formularios/Herramientas/ImportacionPedidosAPP.aspx">Procesar Pedidos</a></li>
                                             <li><a href="/../../Formularios/Herramientas/NumeracionDocumentos.aspx">Numeracion Documentos</a></li>
                                             <li><a href="/../../Formularios/Herramientas/PanelControl.aspx">Panel de Control</a></li>
-                                            <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Regimen Informativo</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Libro De IVA Digital</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Seguridad</a>
                                                 <ul class="dropdown-menu">

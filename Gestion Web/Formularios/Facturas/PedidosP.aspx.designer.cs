@@ -114,6 +114,24 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.LinkButton lbtnConsolidadosPDF;
 
         /// <summary>
+        /// ltbnEnPreparacion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton ltbnEnPreparacion;
+
+        /// <summary>
+        /// lbtnEnviado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnEnviado;
+
+        /// <summary>
         /// lbtnVistaAvanzada control.
         /// </summary>
         /// <remarks>
@@ -472,6 +490,15 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropListZona;
+
+        /// <summary>
+        /// DropListOrigen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropListOrigen;
 
         /// <summary>
         /// lbtnBuscar control.

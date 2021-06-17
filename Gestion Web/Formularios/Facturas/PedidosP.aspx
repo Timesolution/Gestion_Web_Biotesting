@@ -64,6 +64,22 @@
                                                     </li>
                                                 </ul>
                                             </li>
+                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Marcar como</a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <asp:LinkButton ID="ltbnEnPreparacion" runat="server" OnClick="ltbnMarcarComo_Click">
+                                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                    &nbsp En preparacion
+                                                        </asp:LinkButton>
+                                                    </li>
+                                                    <li>
+                                                        <asp:LinkButton ID="lbtnEnviado" runat="server" OnClick="ltbnMarcarComo_Click">
+                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    &nbsp Enviado
+                                                        </asp:LinkButton>
+                                                    </li>
+                                                </ul>
+                                            </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnVistaAvanzada" runat="server" OnClick="lbtnVistaAvanzada_Click">Vista Avanzada</asp:LinkButton>
                                             </li>
@@ -355,6 +371,17 @@
                                         <div class="col-md-6">
                                             <asp:DropDownList ID="DropListZona" runat="server" class="form-control"></asp:DropDownList>
                                             <!-- /input-group -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3">Origen</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList runat="server" ID="DropListOrigen" class="form-control">
+                                                <asp:ListItem Value="0" Text="Todos" />
+                                                <asp:ListItem Value="1" Text="Solo App" />
+                                                <asp:ListItem Value="2" Text="Solo Sistema" />
+                                            </asp:DropDownList>
+                                            
                                         </div>
                                     </div>
                                 </ContentTemplate>

@@ -5298,6 +5298,40 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-
+        protected void lbtnNotaDebito_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string idtildado = "";
+                string numero = "";
+                foreach (Control C in phFacturas.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+                    if (ch.Checked == true)
+                    {
+                        numero += tr.Cells[2].Text;
+                        idtildado += ch.ID.Split('_')[1] + ";";
+                    }
+                    if (idtildado.Split(';').Count() > 1 && idtildado.Split(';')[1] != "")
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar solo una Factura"));
+                        return;
+                    }
+                }
+                if (!String.IsNullOrEmpty(idtildado))
+                {
+                    Response.Redirect("ABMFacturas.aspx?accion=13&facturas=" + idtildado +"&numero="+numero);
+                }
+                else
+                {
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
+            }
+        }
     }
 }

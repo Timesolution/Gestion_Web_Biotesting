@@ -39,6 +39,9 @@
                                             <asp:LinkButton ID="lbtnNotaCredito" runat="server" OnClick="lbtnNotaCredito_Click">Nota de Credito</asp:LinkButton>
                                         </li>
                                         <li>
+                                            <asp:LinkButton ID="lbtnNotaDebito" runat="server" OnClick="lbtnNotaDebito_Click">Nota de Debito</asp:LinkButton>
+                                        </li>
+                                        <li>
                                             <asp:LinkButton ID="lbtnGuiaDespacho" runat="server" OnClick="lbtnGuiaDespacho_Click">Guia de Despacho</asp:LinkButton>
                                         </li>
                                         <li>

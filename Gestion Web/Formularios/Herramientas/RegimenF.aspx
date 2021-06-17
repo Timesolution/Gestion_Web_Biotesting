@@ -10,7 +10,7 @@
                 <div class="widget stacked">
 
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i>Herramientas > Regimen Informativo</h5>
+                        <h5><i class="icon-map-marker"></i>Herramientas > Libro De IVA Digital</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-pencil"></i>
