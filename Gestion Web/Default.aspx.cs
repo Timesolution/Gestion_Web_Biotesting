@@ -9,6 +9,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -33,9 +34,11 @@ namespace Gestion_Web
                 this.valor = Convert.ToInt32(Request.QueryString["m"]);
                 if (!IsPostBack)
                 {
+                    
                     this.VerificarLogin();
                     this.cargarSucursal();
                     this.cargarMemo();
+                    this.CargarBotonMuñoz();
                     this.obtenerAlertaPedidos();
                     this.cargarVencimientos();
                     this.cargarVencidos();
@@ -58,6 +61,24 @@ namespace Gestion_Web
             {
 
             }
+        }
+
+        private void CargarBotonMuñoz()
+        {
+            if (WebConfigurationManager.AppSettings["EsMunioz"] == "1"){
+                iconoMuñoz.Attributes.Add("class", "shortcut-icon icon-mobile-phone");
+                spanMuñoz.InnerText = "Consola Mobile";
+                etiquetaMuñoz.HRef = "Formularios/Articulos/ArticulosMobile.aspx";
+                
+            }
+            else
+            {
+                iconoMuñoz.Attributes.Add("class", "shortcut-icon  icon-adjust");
+                spanMuñoz.InnerText = "Balance";
+                etiquetaMuñoz.HRef = "Formularios / Reportes / BalanceF.aspx";
+            }
+        
+
         }
 
         private void VerificarLogin()
