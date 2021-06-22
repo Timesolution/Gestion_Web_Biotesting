@@ -76,7 +76,7 @@
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Dias despues de ser atendido</label>
                                             <div class="col-md-4">
-                                                <asp:TextBox ID="txtDiasDespuesDeTurno" TextMode="Number" runat="server" class="form-control" ToolTip="Dias" onkeypress="javascript:return ValidarSoloNumeros(event)"></asp:TextBox>
+                                                <asp:TextBox ID="txtDiasDespuesDeTurno" TextMode="Number" runat="server" class="form-control" ToolTip="Dias despues de ser atendido" onkeypress="javascript:return ValidarSoloNumeros(event)"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnDiasFinalizadoTurno" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnDiasFinalizadoTurno_Click" />
@@ -86,7 +86,7 @@
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Notificación despues de ser atendido</label>
                                             <div class="col-md-4">
-                                                <asp:TextBox ID="txtEnvioNotificacion" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:TextBox>
+                                                <asp:TextBox ID="txtEnvioNotificacion" TextMode="MultiLine" runat="server" Rows="6" class="form-control" ToolTip="Notificación despues de ser atendido"></asp:TextBox>
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnEnvioNotificacion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnEnvioNotificacion_Click" />
@@ -96,10 +96,20 @@
                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Formulario despues de ser atendido</label>
                                             <div class="col-md-4">
-                                                <asp:DropDownList ID="ddlFormularioNotificacion" runat="server" class="form-control" ToolTip="Observaciones del mail de recordatorio"></asp:DropDownList>
+                                                <asp:DropDownList ID="ddlFormularioNotificacion" runat="server" class="form-control" ToolTip="Formulario despues de ser atendido"></asp:DropDownList>
                                             </div>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnFormularioNotificacion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnFormularioNotificacion_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Pais predeterminado para los celulares</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="ddlPaisesCelular" runat="server" class="form-control" ToolTip="Pais predeterminado para los celulares"></asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnPaisesCelular" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnPaisesCelular_Click" />
                                             </div>
                                         </div>
 
