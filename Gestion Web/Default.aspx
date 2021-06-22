@@ -121,10 +121,9 @@
                                         <i class="shortcut-icon icon-th-list"></i>
                                         <span class="shortcut-label">Cta Cte</span>
                                     </a>
-
-                                    <a href="Formularios/Reportes/BalanceF.aspx" class="shortcut">
-                                        <i class="shortcut-icon  icon-adjust"></i>
-                                        <span class="shortcut-label">Balance</span>
+                                    <a runat="server" id="etiquetaMuñoz"  class="shortcut">
+                                        <i runat="server" id="iconoMuñoz"></i>
+                                        <span runat="server" id="spanMuñoz" class="shortcut-label"></span>
                                     </a>
                                 </div>
                                 <!-- /shortcuts -->
@@ -240,7 +239,7 @@
                                             <h3>CRM vencidos</h3>
                                         </td>
                                         <td style="width: 8%">
-                                            
+
                                             <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=<%=DateTime.Now.ToString("dd/MM/yyyy") %>&fechaVencimientoDesde=01/01/2000&fechaVencimientoHasta=<%=DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy") %>&cl=-1&estado=1&fpf=0&fpfv=1&us=-1" target="_blank" style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas">
                                                 <i class='fa fa-arrow-right'></i>
                                             </a>
@@ -377,19 +376,19 @@
                         <h4 class="modal-title">CRM</h4>
                     </div>
                     <div class="modal-body">
-                            <div class="form-group">
-                                <div class="col-md-2">
-                                    <h1>
-                                        <i class="icon-warning-sign" style="color: orange"></i>
-                                    </h1>
-                                </div>
-                                <div class="col-md-7">
-                                    <h5>
-                                        <asp:Label runat="server" ID="lblMensaje" Text="TIENE TAREAS PENDIENTES EN EL CRM" Style="text-align: center"></asp:Label>
-                                    </h5>
-                                </div>
-
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
                             </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="lblMensaje" Text="TIENE TAREAS PENDIENTES EN EL CRM" Style="text-align: center"></asp:Label>
+                                </h5>
+                            </div>
+
+                        </div>
 
                     </div>
                     <div class="modal-footer" style="background: #f7f7f7">
