@@ -375,6 +375,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 TableCell celPrecio = new TableCell();
                 celPrecio.Text = Convert.ToDecimal(row["precioVenta"]).ToString("C");
+                celPrecio.Font.Bold= true;
                 celPrecio.Width = Unit.Percentage(5);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;

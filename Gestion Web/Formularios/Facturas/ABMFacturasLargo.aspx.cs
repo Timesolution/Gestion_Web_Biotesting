@@ -2028,7 +2028,7 @@ namespace Gestion_Web.Formularios.Facturas
                     CargarPuntosCliente(idCliente);
                     cargarClienteEnLista(cliente.id);
                     this.lblMovSolicitud.Text = "";
-                    if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
+                    if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
                         this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
                     }
@@ -2497,7 +2497,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (accion != 6 && accion != 7 && accion != 13)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
-                    if (cliente[1].Contains("Responsable Inscripto") && (c.monotributo != "1" && c.monotributo != "2"))
+                    if ((cliente[1].Contains("Responsable Inscripto") || (cliente[1].Contains("Responsable Monotributo") || (cliente[1].Contains("Monotributista Social")))) && (c.monotributo != "1" && c.monotributo != "2"))
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
                         PuntoVenta pv = cs.obtenerPtoVentaId(Convert.ToInt32(ListPuntoVenta.SelectedValue));
