@@ -1312,7 +1312,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param10 = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param11 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
                 ReportParameter param12 = new ReportParameter("ParamFechaIni", fechaInicio);
-                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer + "\nDireccion Sucursal: " + pv.direccion);
+                ReportParameter param13 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param14 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param15 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
                 ReportParameter param16 = new ReportParameter("ParamNroFac", nroFactura);
