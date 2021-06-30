@@ -2028,7 +2028,7 @@ namespace Gestion_Web.Formularios.Facturas
                     CargarPuntosCliente(idCliente);
                     cargarClienteEnLista(cliente.id);
                     this.lblMovSolicitud.Text = "";
-                    if (this.accion != 9 && this.accion != 6 && c.siemprePRP == "1")//no es refact
+                    if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
                         this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
                     }
