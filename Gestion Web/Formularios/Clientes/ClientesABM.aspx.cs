@@ -170,6 +170,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarEstadosFiltro();
 
                     this.cargarPlanCuentas();
+                    this.cargarUsuarios();
 
                     //this.cargarTipoContacto();
 
@@ -431,6 +432,28 @@ namespace Gestion_Web.Formularios.Clientes
         #endregion
 
         #region carga datos
+
+        public void cargarUsuarios()
+        {
+            try
+            {
+                DataTable dt = contUser.obtenerUsuarios();
+                DataRow dr = dt.NewRow();
+                dr["usuario"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+                this.ddlUsuario.DataSource = dt;
+                this.ddlUsuario.DataValueField = "id";
+                this.ddlUsuario.DataTextField = "usuario";
+                this.ddlUsuario.DataBind();
+            }
+            catch (Exception)
+            {
+
+            }
+
+        }
+
         public void cargarFormaPAgo()
         {
             try
@@ -448,7 +471,7 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListFormaPago.DataValueField = "id";
                 this.DropListFormaPago.DataTextField = "forma";
 
-                this.DropListFormaPago.DataBind();
+                
 
 
             }
@@ -3710,7 +3733,17 @@ namespace Gestion_Web.Formularios.Clientes
 
                 eventos.Descripcion = this.txtDetalleEvento.Text;
                 eventos.Fecha = Convert.ToDateTime(this.txtFechaEvento.Text, new CultureInfo("es-AR"));
-                eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+                if (Convert.ToInt32((int)Session["Login_IdUser"]) == Convert.ToInt32(ddlUsuario.SelectedValue) || Convert.ToInt32(ddlUsuario.SelectedValue) == -1)
+                {
+                    eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
+                }
+                else 
+                {
+                    
+                    eventos.Descripcion = "Creado por " + Convert.ToString(Session["User"]) + ": " + eventos.Descripcion;
+                    eventos.Usuario = Convert.ToInt32(ddlUsuario.SelectedValue);
+                }
+                
 
 
                 if (chbDisparaTarea.Checked == true)

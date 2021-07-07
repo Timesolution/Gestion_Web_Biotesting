@@ -994,6 +994,13 @@
                                                                 </asp:DropDownList>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group" id="div1" runat="server">
+                                                            <label for="name" class="col-md-2">Usuario</label>
+                                                            <div class="col-md-10">
+                                                                <asp:DropDownList ID="ddlUsuario" runat="server" class="form-control">
+                                                                </asp:DropDownList>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group" id="divVencimientoTarea" runat="server">
                                                             <label for="name" class="col-md-2">Vencimiento</label>
                                                             <div class="col-md-10" style="float: right; width: 370px;">
