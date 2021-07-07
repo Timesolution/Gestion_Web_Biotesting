@@ -89,7 +89,7 @@ namespace Gestion_Web.Formularios.Seguridad
             try
             {
                 phUsuarios.Controls.Clear();
-                List<Usuario> usuarios = this.controlador.obtenerUsuariosBySucursalList(Convert.ToInt32(Session["Login_SucUser"]));
+                List<Usuario> usuarios = this.controlador.obtenerUsuariosByIdUser(Convert.ToInt32(Session["Login_IdUser"]));
                 foreach (Usuario user in usuarios)
                 {
                     this.cargarUsuarioTabla(user);
