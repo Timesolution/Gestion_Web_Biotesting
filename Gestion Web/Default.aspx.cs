@@ -75,7 +75,7 @@ namespace Gestion_Web
             {
                 iconoMuñoz.Attributes.Add("class", "shortcut-icon  icon-adjust");
                 spanMuñoz.InnerText = "Balance";
-                etiquetaMuñoz.HRef = "Formularios / Reportes / BalanceF.aspx";
+                etiquetaMuñoz.HRef = "Formularios/Reportes/BalanceF.aspx";
             }
         
 
