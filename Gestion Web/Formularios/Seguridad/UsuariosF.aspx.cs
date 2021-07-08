@@ -15,6 +15,8 @@ namespace Gestion_Web.Formularios.Seguridad
         Mensajes m = new Mensajes();
         //controlador
         controladorUsuario controlador = new controladorUsuario();
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -87,13 +89,13 @@ namespace Gestion_Web.Formularios.Seguridad
             try
             {
                 phUsuarios.Controls.Clear();
-                List<Usuario> usuarios = this.controlador.obtenerUsuariosList();
+                List<Usuario> usuarios = this.controlador.obtenerUsuariosByIdUser(Convert.ToInt32(Session["Login_IdUser"]));
                 foreach (Usuario user in usuarios)
                 {
                     this.cargarUsuarioTabla(user);
                 }
             }
-            catch
+            catch (Exception ex)
             {
 
             }

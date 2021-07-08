@@ -159,17 +159,16 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkIngresosBrutos;
 
         /// <summary>
-
-        /// linkPuntos control.
+        /// Control linkPuntos.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor linkPuntos;
 
         /// <summary>
-        /// UpdatePanel2 control.
+        /// Control UpdatePanel2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -592,17 +591,16 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox txtFechaNacimientoSMS;
 
         /// <summary>
-        /// txtFechaAlta control.
+        /// Control txtFechaAlta.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaAlta;
 
         /// <summary>
-        /// DropListEstado control.
-
+        /// Control DropListEstado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -737,16 +735,16 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator18;
 
         /// <summary>
-        /// txtLocalidad control.
+        /// Control txtLocalidad.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLocalidad;
 
         /// <summary>
-        /// ListLocalidad control.
+        /// Control ListLocalidad.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -1187,8 +1185,7 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox txtNroTarjetaMillas;
 
         /// <summary>
-        /// UpdatePanelTareas control.
-
+        /// Control UpdatePanelTareas.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -1224,56 +1221,52 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox txtDetalleEvento;
 
         /// <summary>
-
-        /// lblIdEventoCliente control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblIdEventoCliente;
-
-        /// <summary>
-        /// chbEnviarMailCRM control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chbEnviarMailCRM;
-
-        /// <summary>
-        /// txtEnviarMailCRM control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtEnviarMailCRM;
-
-        /// <summary>
-        /// FileUpload1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
-
-        /// <summary>
-        /// lbtnAgregarEventoCliente control.
-
+        /// Control lblIdEventoCliente.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblIdEventoCliente;
 
+        /// <summary>
+        /// Control chbEnviarMailCRM.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chbEnviarMailCRM;
+
+        /// <summary>
+        /// Control txtEnviarMailCRM.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtEnviarMailCRM;
+
+        /// <summary>
+        /// Control FileUpload1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
+
+        /// <summary>
+        /// Control lbtnAgregarEventoCliente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
         protected global::System.Web.UI.WebControls.Button lbtnAgregarEventoCliente;
 
         /// <summary>
-        /// chbDisparaTarea control.
-
+        /// Control chbDisparaTarea.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -1282,63 +1275,76 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.CheckBox chbDisparaTarea;
 
         /// <summary>
-        /// divTarea control.
+        /// Control divTarea.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTarea;
 
         /// <summary>
-        /// txtTarea control.
+        /// Control txtTarea.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtTarea;
 
         /// <summary>
-
-        /// divSituacion control.
+        /// Control divSituacion.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSituacion;
 
         /// <summary>
-        /// drpCRMSituacion control.
+        /// Control drpCRMSituacion.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList drpCRMSituacion;
 
         /// <summary>
-
-        /// divVencimientoTarea control.
+        /// Control div1.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl div1;
 
+        /// <summary>
+        /// Control ddlUsuario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlUsuario;
+
+        /// <summary>
+        /// Control divVencimientoTarea.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divVencimientoTarea;
 
         /// <summary>
-        /// txtFechaVencimiento control.
+        /// Control txtFechaVencimiento.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaVencimiento;
-
 
         /// <summary>
         /// Control phEventos.
@@ -1350,17 +1356,16 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.PlaceHolder phEventos;
 
         /// <summary>
-        /// TabName control.
+        /// Control TabName.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField TabName;
 
         /// <summary>
-        /// UpdatePanel13 control.
-
+        /// Control UpdatePanel13.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -1684,35 +1689,34 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.DropDownList IngresosBrutos_DropList_Modo;
 
         /// <summary>
-
-        /// txtBusqueda control.
+        /// Control txtBusqueda.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
 
         /// <summary>
-        /// lbtnNivelBusqueda control.
+        /// Control lbtnNivelBusqueda.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnNivelBusqueda;
 
         /// <summary>
-        /// ListPlanCuentas control.
+        /// Control ListPlanCuentas.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListPlanCuentas;
 
         /// <summary>
-        /// lbPercepcionORetencion control.
+        /// Control lbPercepcionORetencion.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -1757,34 +1761,34 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.Label lbColumnaRetencionOPercepcion;
 
         /// <summary>
-        /// UpdatePanel11 control.
+        /// Control UpdatePanel11.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel11;
 
         /// <summary>
-        /// labelPuntos control.
+        /// Control labelPuntos.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labelPuntos;
 
         /// <summary>
-        /// phPuntos control.
+        /// Control phPuntos.
         /// </summary>
         /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phPuntos;
 
         /// <summary>
-        /// txtTipoCliente2 control.
+        /// Control txtTipoCliente2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
@@ -2243,7 +2247,7 @@ namespace Gestion_Web.Formularios.Clientes
         protected global::System.Web.UI.WebControls.TextBox txtMovimientoEventoCliente;
 
         /// <summary>
-        /// UpdatePanel12 control.
+        /// Control UpdatePanel12.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.

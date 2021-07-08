@@ -28,6 +28,7 @@ namespace Gestion_Web.Formularios.Herramientas
                     VerificarEnviosSMS();
                     CargarAlertasMail();
                     CargarFormularios();
+                    CargarPrefijosCelular();
                 }
             }
             catch
@@ -37,7 +38,7 @@ namespace Gestion_Web.Formularios.Herramientas
         }
 
 
-        public void CargarFormularios() 
+        public void CargarFormularios()
         {
             try
             {
@@ -47,7 +48,7 @@ namespace Gestion_Web.Formularios.Herramientas
 
                 ListItem items = new ListItem("Seleccionar...", "-1");
                 ddlFormularioNotificacion.Items.Add(items);
-                if (forms != null) 
+                if (forms != null)
                 {
                     foreach (Estetica_Api.Entity.Formularios f in forms)
                     {
@@ -56,17 +57,40 @@ namespace Gestion_Web.Formularios.Herramientas
                         ddlFormularioNotificacion.Items.Add(item);
                     }
                 }
+                if (!String.IsNullOrEmpty(this.configuracion.FormularioDespuesAtendido)) 
+                {
+                    ddlFormularioNotificacion.SelectedValue = this.configuracion.FormularioDespuesAtendido;
+                }
 
 
             }
             catch (Exception ex)
             {
 
-                
+
             }
 
         }
 
+        public void CargarPrefijosCelular()
+        {
+            Estetica_Api.Controladores.ControladorFunciones contFun = new Estetica_Api.Controladores.ControladorFunciones();
+            var prefijos = contFun.ObtenerPrefijosTelefonicosPaises();
+
+            ddlPaisesCelular.DataSource = prefijos;
+            ddlPaisesCelular.DataValueField = "id";
+            ddlPaisesCelular.DataTextField = "Pais";
+
+            this.ddlPaisesCelular.DataBind();
+
+            this.ddlPaisesCelular.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+            if (!String.IsNullOrEmpty(this.configuracion.PaisCelularPrederminado))
+            {
+                ddlPaisesCelular.SelectedValue = this.configuracion.PaisCelularPrederminado;
+            }
+        }
+        
         private void VerificarEnviosSMS()
         {
             if (this.configuracion.EnviarSMSRecordatorio == "1")
@@ -401,6 +425,29 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: DiasDespuesAtendidoMail " + ex.Message);
+            }
+        }
+
+        protected void lbtnPaisesCelular_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.PaisCelularPrederminado = ddlPaisesCelular.SelectedValue;
+
+                int i = configuracion.ModificarPaisCelularPrederminado(configuracion.PaisCelularPrederminado);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de Pais predeterminado para los celulares");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de Pais predeterminado para los celulares. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la Pais predeterminado para los celulares\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: PaisCelularPrederminado " + ex.Message);
             }
         }
     }
