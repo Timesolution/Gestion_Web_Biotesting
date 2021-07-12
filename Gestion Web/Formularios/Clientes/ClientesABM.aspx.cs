@@ -470,7 +470,7 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListFormaPago.DataSource = dt;
                 this.DropListFormaPago.DataValueField = "id";
                 this.DropListFormaPago.DataTextField = "forma";
-
+                this.DropListFormaPago.DataBind();
                 
 
 
