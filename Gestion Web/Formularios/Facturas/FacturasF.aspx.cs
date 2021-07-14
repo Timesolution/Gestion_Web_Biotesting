@@ -2179,6 +2179,18 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        protected void btnExportarReporteVentaArticulos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.ExportToExcel(16);
+            }
+            catch
+            {
+
+            }
+        }
         protected void btnImprimirPantalla_Click(object sender, EventArgs e)
         {
             try
@@ -2451,6 +2463,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (accion == 14)
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        }
+                        if (accion == 16)
+                        {
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=16&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
 
                     }

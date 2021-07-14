@@ -187,7 +187,7 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Sucursal origen</label>
                                         <div class="col-md-6">                                            
-                                            <asp:DropDownList ID="DropListSucursalOrigen" runat="server" class="form-control" disabled></asp:DropDownList>
+                                            <asp:DropDownList ID="DropListSucursalOrigen" runat="server" class="form-control" ></asp:DropDownList>
                                             <!-- /input-group -->
                                         </div>
                                         <div class="col-md-1">
@@ -200,7 +200,7 @@
                                     <div class="form-group">
                                         <label class="col-md-4">Sucursal destino</label>
                                         <div class="col-md-6">                                            
-                                            <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control" disabled></asp:DropDownList>
+                                            <asp:DropDownList ID="DropListSucursalDestino" runat="server" class="form-control" ></asp:DropDownList>
                                             <!-- /input-group -->
                                         </div>
                                         <div class="col-md-1">

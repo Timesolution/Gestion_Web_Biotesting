@@ -122,6 +122,10 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte16(fechaD, fechaH, suc, tipo, cliente);//Detalle ventas de presupuestos facturados
                     }
+                    if (accion == 16)
+                    {
+                        this.generarReporte17(fechaD, fechaH, suc, tipofact, cliente);//Detalle ventas de presupuestos facturados
+                    }
                 }
             }
             catch (Exception ex)
@@ -1574,5 +1578,50 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        private void generarReporte17(string fechaD, string fechaH, int suc, int tipo, int cliente)
+        {
+            try
+            {
+                DataTable dtFacturas = this.controlador.ReporteVentaConArticulos(fechaD, fechaH, suc, tipo, this.emp);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Reporte_VentaConArticulos.rdlc");
+                ReportDataSource rds1 = new ReportDataSource("VentasConArticulos", dtFacturas);
+                
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds1);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+
+                //get xls content
+                Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                String filename = string.Format("{0}.{1}", "Reporte_VentasConArticulos", "xls");
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/ms-excel";
+                this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                this.Response.BinaryWrite(xlsContent);
+
+                this.Response.End();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
     }
 }

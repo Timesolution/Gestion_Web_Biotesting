@@ -93,7 +93,8 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarSucursal();
                     this.cargarStores();
                     this.cargarDropListSucursales();
-                    cargarSucursalesAlListBoxDeArticulo();
+                    this.cargarSucursalesAlListBoxDeArticulo();
+                    this.cargarIVA();
 
                     //cargo fecha de carga
                     //this.txtFechaAlta.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -1434,18 +1435,20 @@ namespace Gestion_Web.Formularios.Articulos
             string p = porcentaje.ToString();
             try
             {
-                if (p == "21.00" || p == "21,00")
-                {
-                    this.DropListPorcentajeIVA.SelectedValue = "21";
-                }
-                if (p == "10.50" || p == "10,50")
-                {
-                    this.DropListPorcentajeIVA.SelectedValue = "10.5";
-                }
-                if (p == "0.00" || p == "0,00")
-                {
-                    this.DropListPorcentajeIVA.SelectedValue = "0";
-                }
+                DropListPorcentajeIVA.SelectedValue = p;
+                
+                //if (p == "21.00" || p == "21,00")
+                //{
+                //    this.DropListPorcentajeIVA.SelectedValue = "21";
+                //}
+                //if (p == "10.50" || p == "10,50")
+                //{
+                //    this.DropListPorcentajeIVA.SelectedValue = "10.5";
+                //}
+                //if (p == "0.00" || p == "0,00")
+                //{
+                //    this.DropListPorcentajeIVA.SelectedValue = "0";
+                //}
             }
             catch (Exception ex)
             {
@@ -4488,6 +4491,29 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        public void cargarIVA()
+        {
+            try
+            {
+                DataTable dt = controlador.obtenerPorcentajesIVA(esUruguay);
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["iva"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListPorcentajeIVA.DataSource = dt;
+                this.DropListPorcentajeIVA.DataValueField = "id";
+                this.DropListPorcentajeIVA.DataTextField = "iva";
+                this.DropListPorcentajeIVA.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
             }
         }
 
