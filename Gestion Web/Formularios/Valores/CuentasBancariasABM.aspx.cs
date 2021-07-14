@@ -8,11 +8,15 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Configuration;
 
 namespace Gestion_Web.Formularios.Valores
 {
     public partial class CuentasBancariasABM : System.Web.UI.Page
     {
+        // verifico si el sistema es de Uruguay
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
+
         ControladorBanco controlador = new ControladorBanco();
         Mensajes mje = new Mensajes();
         int accion;
@@ -21,6 +25,11 @@ namespace Gestion_Web.Formularios.Valores
         {
             try
             {
+                if (esUruguay == 1) {
+                    txtCuit.MaxLength = 100;
+                    lbCUITDNI.InnerText = "RUT";
+                }
+                
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
                 this.id = Convert.ToInt32(Request.QueryString["id"]);
                 if (!IsPostBack)

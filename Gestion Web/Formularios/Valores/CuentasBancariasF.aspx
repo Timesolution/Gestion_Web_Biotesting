@@ -84,7 +84,7 @@
                                             <th>Banco</th>
                                             <th>Descripcion</th>
                                             <th>Numero</th>
-                                            <th>CUIT</th>
+                                            <th runat="server" id="thCUIT">CUIT</th>
                                             <th>Librador</th>
                                             <th></th>
                                         </tr>

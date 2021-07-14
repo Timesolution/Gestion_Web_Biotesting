@@ -7,11 +7,13 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Personal {
-    
-    
-    public partial class EmpleadosABM {
-        
+namespace Gestion_Web.Formularios.Personal
+{
+
+
+    public partial class EmpleadosABM
+    {
+
         /// <summary>
         /// Control txtLegajo.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLegajo;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator1.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// Control txtNombre.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator2.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
+
         /// <summary>
         /// Control txtApellido.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtApellido;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator9.
         /// </summary>
@@ -65,7 +67,16 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator9;
-        
+
+        /// <summary>
+        /// Control labelDNI.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl labelDNI;
+
         /// <summary>
         /// Control txtDni.
         /// </summary>
@@ -74,7 +85,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDni;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator10.
         /// </summary>
@@ -83,7 +94,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator10;
-        
+
         /// <summary>
         /// Control txtDireccion.
         /// </summary>
@@ -92,7 +103,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDireccion;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator11.
         /// </summary>
@@ -101,7 +112,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator11;
-        
+
         /// <summary>
         /// Control txtFechaNacimiento.
         /// </summary>
@@ -110,7 +121,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaNacimiento;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator6.
         /// </summary>
@@ -119,7 +130,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
-        
+
         /// <summary>
         /// Control txtFechaIngreso.
         /// </summary>
@@ -128,7 +139,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFechaIngreso;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator5.
         /// </summary>
@@ -137,7 +148,16 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
-        
+
+        /// <summary>
+        /// Control labelCUIT.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl labelCUIT;
+
         /// <summary>
         /// Control txtCuit.
         /// </summary>
@@ -146,7 +166,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCuit;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator4.
         /// </summary>
@@ -155,7 +175,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
-        
+
         /// <summary>
         /// Control RegularExpressionValidator4.
         /// </summary>
@@ -164,7 +184,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator4;
-        
+
         /// <summary>
         /// Control txtRemuneracion.
         /// </summary>
@@ -173,7 +193,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRemuneracion;
-        
+
         /// <summary>
         /// Control RequiredFieldValidator3.
         /// </summary>
@@ -182,7 +202,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-        
+
         /// <summary>
         /// Control txtObservaciones.
         /// </summary>
@@ -191,7 +211,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtObservaciones;
-        
+
         /// <summary>
         /// Control btnAgregar.
         /// </summary>
@@ -200,7 +220,7 @@ namespace Gestion_Web.Formularios.Personal {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregar;
-        
+
         /// <summary>
         /// Control btnCancelar.
         /// </summary>

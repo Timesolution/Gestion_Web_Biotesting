@@ -7,11 +7,13 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Valores {
-    
-    
-    public partial class CuentasBancariasF {
-        
+namespace Gestion_Web.Formularios.Valores
+{
+
+
+    public partial class CuentasBancariasF
+    {
+
         /// <summary>
         /// Control btnAccion.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
-        
+
         /// <summary>
         /// Control lblParametros.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblParametros;
-        
+
         /// <summary>
         /// Control lblSaldo.
         /// </summary>
@@ -38,7 +40,16 @@ namespace Gestion_Web.Formularios.Valores {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSaldo;
-        
+
+        /// <summary>
+        /// Control thCUIT.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell thCUIT;
+
         /// <summary>
         /// Control phCuentas.
         /// </summary>
@@ -47,7 +58,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phCuentas;
-        
+
         /// <summary>
         /// Control lblMensaje.
         /// </summary>
@@ -56,7 +67,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMensaje;
-        
+
         /// <summary>
         /// Control txtMovimiento.
         /// </summary>
@@ -65,7 +76,7 @@ namespace Gestion_Web.Formularios.Valores {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMovimiento;
-        
+
         /// <summary>
         /// Control btnSi.
         /// </summary>

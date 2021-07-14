@@ -154,7 +154,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div id="DivIIBB" runat="server" class="form-group" visible="true">
                                                         <label for="name" class="col-md-4">IIBB Pcia. Bs. As.</label>
                                                         <div class="col-md-4">
                                                             <div class="input-group">

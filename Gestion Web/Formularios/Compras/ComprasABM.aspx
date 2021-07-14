@@ -177,7 +177,7 @@
                                                 </asp:Panel>
 
                                                 <div class="form-group">
-                                                    <label for="name" class="col-md-3">Cuit</label>
+                                                    <label runat="server" id="TextCUIT"  for="name" class="col-md-3">CUIT</label>
 
                                                     <div class="col-md-6">
                                                         <asp:TextBox ID="txtCuit" runat="server" class="form-control" Text="0" disabled ViewStateMode="Enabled"></asp:TextBox>

@@ -21,6 +21,9 @@ namespace Gestion_Web.Formularios.Articulos
 {
     public partial class ArticulosABM : System.Web.UI.Page
     {
+        // verifico si el sistema es de Uruguay
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
+        //mensajes popUp
         Mensajes m = new Mensajes();
         //controlador
         controladorArticulo controlador = new controladorArticulo();
@@ -52,6 +55,12 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                if (esUruguay == 1) {
+                    DivTipoDistribucion.Style.Add("display", "none");
+                    DivTxtUbicacion.Style.Add("display", "none");
+                    DivListPresentaciones.Style.Add("display", "none");
+                    DivTxtImpInternos.Style.Add("display", "none");
+                }
 
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.id = Convert.ToInt32(Request.QueryString["id"]);

@@ -135,10 +135,10 @@
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="Seleccione un Sub-Grupo" ControlToValidate="DropDownSubGrupo" InitialValue="-1" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group" runat="server" id="DivTipoDistribucion">
                                                         <label for="validateSelect" class="col-md-4">Tipo</label>
                                                         <div class="col-md-4">
-                                                            <asp:DropDownList ID="ListTipoDistribucion" runat="server" class="form-control">
+                                                            <asp:DropDownList ID="ListTipoDistribucion" runat="server" class="form-control" Visible="true">
                                                                 <asp:ListItem Value="1">Distribución</asp:ListItem>
                                                                 <asp:ListItem Value="2">Fabricación</asp:ListItem>
                                                             </asp:DropDownList>
@@ -257,7 +257,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group">
+                                                        <div class="form-group" runat="server" id="DivTxtImpInternos">
                                                             <label for="name" class="col-md-4">Impuestos Internos</label>
 
                                                             <div class="col-md-4">
@@ -435,14 +435,14 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div class="form-group" runat="server" id="DivTxtUbicacion">
                                                         <label for="name" class="col-md-4">Ubicacion</label>
 
                                                         <div class="col-md-4">
                                                             <asp:TextBox ID="txtUbicacion" runat="server" class="form-control"></asp:TextBox>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group" runat="server" id="DivListPresentaciones">
                                                         <label for="name" class="col-md-4">Presentaciones</label>
                                                         <div class="col-md-4">
                                                             <asp:DropDownList ID="ListPresentaciones" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListPresentaciones_SelectedIndexChanged">

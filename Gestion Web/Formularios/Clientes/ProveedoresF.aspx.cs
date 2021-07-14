@@ -29,7 +29,7 @@ namespace Gestion_Web.Formularios.Proveedores
             {
                 if (esUruguay == 1)
                 {
-                    thCuit.InnerText = "Root";
+                    thCuit.InnerText = "RUT";
                 }
 
                 this.VerificarLogin();

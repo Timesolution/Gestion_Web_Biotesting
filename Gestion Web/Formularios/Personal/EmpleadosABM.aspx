@@ -66,7 +66,7 @@
                                             <br />
 
                                             <div class="form-group">
-                                                <label for="name" class="col-md-4">DNI</label>
+                                                <label id="labelDNI" runat="server" for="name" class="col-md-4">DNI</label>
                                                 <div class="col-md-4">
                                                     <asp:TextBox ID="txtDni" runat="server" MaxLength="8" class="form-control" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
                                                     <%--<input type="text" class="form-control" name="name" id="name">--%>
@@ -110,7 +110,7 @@
                                             </div>
                                             <br />
                                             <div class="form-group">
-                                                <label for="name" class="col-md-4">Cuit/Cuil</label>
+                                                <label id="labelCUIT" runat="server" for="name" class="col-md-4">CUIT</label>
                                                 <div class="col-md-4">
                                                     <asp:TextBox ID="txtCuit" runat="server" class="form-control" onkeypress="javascript:return validarNro(event)" MaxLength="11"></asp:TextBox>
 

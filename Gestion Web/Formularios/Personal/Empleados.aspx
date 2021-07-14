@@ -134,8 +134,8 @@
                                         <tr>
                                             <th style="width: 10%">Legajo</th>
                                             <th style="width: 30%">Nombre y Apellido</th>
-                                            <th style="width: 10%">DNI</th>
-                                            <th style="width: 15%">CUIT</th>
+                                            <th id="thTxtDNI" runat="server" style="width: 10%">DNI</th>
+                                            <th id="thTxtCUIT" runat="server" style ="width: 15%">CUIT</th>
                                             <th style="width: 10%">Fecha Ingreso</th>
                                             <th style="width: 10%">Remuneracion</th>
                                             <th class="td-actions" style="width: 10%"></th>

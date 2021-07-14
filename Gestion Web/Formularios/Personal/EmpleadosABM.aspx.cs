@@ -8,11 +8,14 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Configuration;
 
 namespace Gestion_Web.Formularios.Personal
 {
     public partial class EmpleadosABM : System.Web.UI.Page
     {
+
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
         Mensajes m = new Mensajes();
         //controlador
         controladorEmpleado controlador = new controladorEmpleado();
@@ -27,6 +30,14 @@ namespace Gestion_Web.Formularios.Personal
         {
             try
             {
+                if (esUruguay == 1)
+                {
+                    labelCUIT.InnerText = "RUT";
+                    labelDNI.InnerText = "C.I";
+                    txtDni.MaxLength = 20;
+                    txtCuit.MaxLength = 20;
+                }
+
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.codigo = Convert.ToInt32(Request.QueryString["codigo"]);
