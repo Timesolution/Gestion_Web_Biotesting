@@ -2054,6 +2054,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //SI ES CONSUMIDOR FINAL no permito venta en CTA CTE
                     this.cargarFormaPAgo();
+                    
+                    if (accion != 9)
                     this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
                     //CARGO LAS LISTAS DE PRECIO QUE TIENE LA FORMA DE PAGO QUE TIENE EL CLIENTE
                     this.cargarListaPrecio();
@@ -2093,7 +2095,8 @@ namespace Gestion_Web.Formularios.Facturas
 
                     try
                     {
-                        this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
+                        if (accion != 9)
+                            this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
                     }
                     catch { }
 
