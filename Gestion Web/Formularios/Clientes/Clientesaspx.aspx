@@ -107,7 +107,7 @@
                                                     <th style="width: 20%">Alias</th>
                                                     <th style="width: 12%">Mail</th>
                                                     <th style="width: 10%">Telefono</th>
-                                                    <th style="width: 10%">CUIT</th>
+                                                    <th id="thCUIT" runat="server" style="width: 10%">CUIT</th>
                                                     <th class="td-actions" style="width: 20%"></th>
                                                 </tr>
                                             </thead>
