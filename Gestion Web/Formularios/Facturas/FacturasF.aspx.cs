@@ -862,7 +862,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue), PRPFacturados);
                 decimal saldo = 0;
 
-                if (dtFacturas != null && dtFacturas.Rows.Count <= 2000)
+                if (dtFacturas != null && dtFacturas.Rows.Count <= 3000)
                 {
                     foreach (DataRow row in dtFacturas.Rows)
                     {
@@ -1459,7 +1459,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (modCliente < 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar datos del cliente a facturar. "));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El CUIT ingresado ya existe en la base de datos o es incorrecto."));
                         return;
                     }
 
@@ -1716,7 +1716,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (modCliente < 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar datos del cliente a facturar. "));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El CUIT ingresado ya existe en la base de datos o es incorrecto."));
                     return;
                 }
 
@@ -3564,40 +3564,45 @@ namespace Gestion_Web.Formularios.Facturas
                 c.alerta.idCliente = c.id;
                 c.iva = this.ListIvaFact.SelectedValue.ToString();
 
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
-                if (cMod > 0)
+                bool vCuit = contCliente.verificarCuitClienteParaRefacturarPRP(c.cuit);
+
+                if (vCuit == true)
                 {
-                    controladorDireccion contDir = new controladorDireccion();
-                    if (c.direcciones != null)
+                    int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                    if (cMod > 0)
                     {
-                        if (c.direcciones.Count == 0)
+                        controladorDireccion contDir = new controladorDireccion();
+                        if (c.direcciones != null)
                         {
-                            direccion dir = new direccion();
-                            dir.nombre = "Legal";
-                            dir.direc = this.txtDirFact.Text;
-                            dir.localidad = this.ListLocalidadFact.SelectedValue;
-                            dir.provincia = this.ListProvinciaFact.SelectedValue;
-                            dir.pais = "Argentina";
-                            dir.codPostal = "0000";
+                            if (c.direcciones.Count == 0)
+                            {
+                                direccion dir = new direccion();
+                                dir.nombre = "Legal";
+                                dir.direc = this.txtDirFact.Text;
+                                dir.localidad = this.ListLocalidadFact.SelectedValue;
+                                dir.provincia = this.ListProvinciaFact.SelectedValue;
+                                dir.pais = "Argentina";
+                                dir.codPostal = "0000";
 
-                            int i = this.contCliente.agregarDireccionReduc(c, dir);
+                                int i = this.contCliente.agregarDireccionReduc(c, dir);
 
-                            return i;
-                        }
-                        else
-                        {
-                            direccion d = contDir.obtenerContactoId(Convert.ToInt32(this.lblIdDirFact.Text));
-                            d.direc = this.txtDirFact.Text;
-                            d.localidad = this.ListLocalidadFact.SelectedValue;
-                            d.provincia = this.ListProvinciaFact.SelectedValue;
-                            int j = this.contCliente.ModificarDireccionMod(d, c.id);
-                            return j;
+                                return i;
+                            }
+                            else
+                            {
+                                direccion d = contDir.obtenerContactoId(Convert.ToInt32(this.lblIdDirFact.Text));
+                                d.direc = this.txtDirFact.Text;
+                                d.localidad = this.ListLocalidadFact.SelectedValue;
+                                d.provincia = this.ListProvinciaFact.SelectedValue;
+                                int j = this.contCliente.ModificarDireccionMod(d, c.id);
+                                return j;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    return -1;
+                    else
+                    {
+                        return -1;
+                    }
                 }
 
                 return -1;
@@ -4010,7 +4015,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
 
                     if (i > 0)
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 3000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
                     else
                     {
                         int idError = Log.ObtenerUltimoIDLog();

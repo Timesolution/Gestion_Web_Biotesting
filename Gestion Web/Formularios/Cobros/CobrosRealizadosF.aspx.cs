@@ -19,6 +19,7 @@ namespace Gestion_Web.Formularios.Cobros
 {
     public partial class CobrosRealizadosF : System.Web.UI.Page
     {
+        int TeamHermanos = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("ReporteVendedores"));
         controladorCobranza contCobranza = new controladorCobranza();
         controladorSucursal contSucursal = new controladorSucursal();
         controladorCuentaCorriente contrCC = new controladorCuentaCorriente();
@@ -44,6 +45,10 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
+                if (TeamHermanos == 1)
+                {
+                    BtnExcelVendedores.Visible = false;
+                }
                 this.VerificarLogin();
                 this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
                 this.idEmpresa = Convert.ToInt32(Request.QueryString["empresa"]);
@@ -230,15 +235,15 @@ namespace Gestion_Web.Formularios.Cobros
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
                     //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     //{
-                        
-                            saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
-                            this.cargarEnPh(dtMovimiento);
 
-                        this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
+                    saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                    this.cargarEnPh(dtMovimiento);
+
+                    this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
                     //}
                     //else
-                        //generarReporte = 1;
+                    //generarReporte = 1;
 
 
                     this.labelSaldo.Text = saldo.ToString("C");
@@ -253,19 +258,19 @@ namespace Gestion_Web.Formularios.Cobros
                     //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     //{
 
-                        saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
-                        this.cargarEnPh(dtMovimiento);
+                    saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                    this.cargarEnPh(dtMovimiento);
 
-                        this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
+                    this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
                     //}
                     //else
-                        //generarReporte = 1;
+                    //generarReporte = 1;
 
                     this.labelSaldo.Text = saldo.ToString("C");
                 }
 
-                if(generarReporte == 1 && filtro == 1)
+                if (generarReporte == 1 && filtro == 1)
                 {
                     //SolicitarReporte_CobrosRealizados();
                     //filtro = 0;
@@ -290,7 +295,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 int id_a_setear = controladorInformesEntity.ObtenerUltimoIdInformePedido();
 
-                if(id_a_setear >= 0)
+                if (id_a_setear >= 0)
                 {
                     ///Cargo el objeto Informes_Pedidos
                     cargarDatosInformePedido(ip, 1);
@@ -562,7 +567,7 @@ namespace Gestion_Web.Formularios.Cobros
 
             try
             {
-                
+
                 foreach (DataRow row in dt.Rows)
                 {
                     //fila
@@ -628,7 +633,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                     phCobrosRealizados.Controls.Add(tr);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -830,9 +835,9 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                
-                    Response.Redirect("ImpresionCobro.aspx?valor=7&ex=1&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);
-                
+
+                Response.Redirect("ImpresionCobro.aspx?valor=7&ex=1&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);
+
             }
             catch
             {
